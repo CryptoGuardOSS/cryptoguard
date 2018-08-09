@@ -1,0 +1,35 @@
+apply plugin: 'application'
+mainClassName = 'main.rule.engine.RuleEngine'
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+configurations.all {
+    resolutionStrategy {
+        // fail eagerly on version conflict (includes transitive dependencies)
+        // e.g. multiple different versions of the same dependency (group and name are equal)
+        failOnVersionConflict()
+    }
+}
+
+jar {
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+    manifest {
+        attributes(
+                'Main-Class': 'main.rule.engine.RuleEngine'
+        )
+    }
+}
+
+dependencies {
+    compile name: 'soot-trunk'
+}

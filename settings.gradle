@@ -1,0 +1,4 @@
+rootProject.name = 'rigorityj'
+include 'main', 'testable-jar'
+
+

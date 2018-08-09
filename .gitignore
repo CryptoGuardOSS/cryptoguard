@@ -1,0 +1,9 @@
+# Compiled class file
+!build.gradle
+.gradle
+out
+.idea
+*.iml
+build
+apk
+
