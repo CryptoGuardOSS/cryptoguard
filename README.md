@@ -7,7 +7,7 @@ An program analysis tool to find cryptographic misuse in Java and Android.
 This project uses gradle as the build tool.
 
 1. Install Gradle
-2. Run `cd /path/to/program-analysis-soot`
+2. Run `cd /path/to/rigorityj`
 3. Run `gradle clean build`
 
 ## Run
