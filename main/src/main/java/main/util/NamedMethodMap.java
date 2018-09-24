@@ -31,6 +31,11 @@ public class NamedMethodMap {
         }
     }
 
+    public static void clearCallerCalleeGraph() {
+        nameVsMethodMap = null;
+        isCallerCalleeBuilt = false;
+    }
+
     public static void addCriteriaClass(String className) {
 
         SootClass sClass = Scene.v().getSootClass(className);

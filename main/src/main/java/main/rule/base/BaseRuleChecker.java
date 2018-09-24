@@ -37,30 +37,30 @@ public abstract class BaseRuleChecker implements RuleChecker {
     }
 
     @Override
-    public void checkRule(EngineType type, String projectJarPath, String projectDependencyPath) throws IOException {
+    public void checkRule(EngineType type, List<String> projectPaths, String projectDependencyPath) throws IOException {
 
         String[] excludes = {"web.xml", "pom.xml"};
 
-        Map<String, String> xmlFileStr = Utils.getXmlFiles(projectJarPath, Arrays.asList(excludes));
+        Map<String, String> xmlFileStr = Utils.getXmlFiles(projectPaths.get(0), Arrays.asList(excludes));
 
         for (Criteria criteria : getCriteriaList()) {
             if (type == EngineType.JAR) {
                 JarAnalyzer.analyzeSlices(criteria.getClassName(),
                         criteria.getMethodName(),
                         criteria.getParam(),
-                        projectJarPath,
+                        projectPaths.get(0),
                         projectDependencyPath, this);
             } else if (type == EngineType.APK) {
 
                 ApkAnalyzer.analyzeSlices(criteria.getClassName(),
                         criteria.getMethodName(),
                         criteria.getParam(),
-                        projectJarPath, this);
-            } else if (type == EngineType.SNIPPET) {
+                        projectPaths.get(0), this);
+            } else if (type == EngineType.SOURCE) {
                 PartialCodeAnalyzer.analyzeSlices(criteria.getClassName(),
                         criteria.getMethodName(),
                         criteria.getParam(),
-                        projectJarPath, this);
+                        projectPaths, projectDependencyPath,this);
             }
         }
 

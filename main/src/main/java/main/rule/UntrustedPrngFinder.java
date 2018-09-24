@@ -21,16 +21,17 @@ public class UntrustedPrngFinder implements RuleChecker {
         UNTRUSTED_PRNGS.add("java.util.Random: void <init>");
     }
 
-    public void checkRule(EngineType type, String projectJarPath, String projectDependencyPath) throws IOException {
+    @Override
+    public void checkRule(EngineType type, List<String> projectJarPath, String projectDependencyPath) throws IOException {
 
         Map<String, List<Unit>> analysisLists;
 
         if (type == EngineType.JAR) {
-            analysisLists = analyzeJar(projectJarPath, projectDependencyPath);
+            analysisLists = analyzeJar(projectJarPath.get(0), projectDependencyPath);
         } else if (type == EngineType.APK) {
-            analysisLists = analyzeApk(projectJarPath);
+            analysisLists = analyzeApk(projectJarPath.get(0));
         } else {
-            analysisLists = analyzeSnippet(projectJarPath);
+            analysisLists = analyzeSnippet(projectJarPath, projectDependencyPath);
         }
 
         if (!analysisLists.isEmpty()) {
@@ -104,7 +105,7 @@ public class UntrustedPrngFinder implements RuleChecker {
         return getUntrustedPrngInstructions(classNames);
     }
 
-    private Map<String, List<Unit>> analyzeSnippet(String snippetPath) throws IOException {
+    private Map<String, List<Unit>> analyzeSnippet(List<String> snippetPath, String projectDependencyPath) throws IOException {
 
         String javaHome = System.getenv("JAVA7_HOME");
 
@@ -116,9 +117,15 @@ public class UntrustedPrngFinder implements RuleChecker {
 
         List<String> classNames = Utils.getClassNamesFromSnippet(snippetPath);
 
-        String sootClassPath = Utils.buildSootClassPath(snippetPath,
-                javaHome + "/jre/lib/rt.jar",
-                javaHome + "/jre/lib/jce.jar");
+        StringBuilder srcPaths = new StringBuilder();
+
+        for (String srcDir : snippetPath) {
+            srcPaths.append(srcDir)
+                    .append(":");
+        }
+
+        Options.v().set_soot_classpath(javaHome + "/jre/lib/rt.jar:"
+                + javaHome + "/jre/lib/jce.jar:" + srcPaths.toString() + projectDependencyPath);
 
         Options.v().set_output_format(Options.output_format_jimple);
         Options.v().set_src_prec(Options.src_prec_java);
@@ -129,7 +136,6 @@ public class UntrustedPrngFinder implements RuleChecker {
 
         Options.v().set_keep_line_number(true);
         Options.v().set_allow_phantom_refs(true);
-        Scene.v().setSootClassPath(sootClassPath);
 
         Scene.v().loadBasicClasses();
 

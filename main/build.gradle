@@ -32,4 +32,5 @@ jar {
 
 dependencies {
     compile name: 'soot-trunk'
+    compile "org.codehaus.groovy:groovy:2.5.2"
 }

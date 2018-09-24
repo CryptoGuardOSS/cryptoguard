@@ -14,12 +14,13 @@ public class PartialCodeAnalyzer {
     public static void analyzeSlices(String criteriaClass,
                                      String criteriaMethod,
                                      int criteriaParam,
-                                     String snippetPath,
+                                     List<String> snippetPath,
+                                     String projectDependency,
                                      BaseRuleChecker checker) throws IOException {
 
         String javaHome = System.getenv("JAVA7_HOME");
 
-        if (javaHome.isEmpty()) {
+        if (javaHome == null || javaHome.isEmpty()) {
 
             System.err.println("Please set JAVA7_HOME");
             System.exit(1);
@@ -29,7 +30,16 @@ public class PartialCodeAnalyzer {
         Options.v().set_keep_line_number(true);
         Options.v().set_output_format(Options.output_format_jimple);
         Options.v().set_src_prec(Options.src_prec_java);
-        Options.v().set_soot_classpath(javaHome + "/jre/lib/rt.jar:" + javaHome + "/jre/lib/jce.jar:" + snippetPath);
+
+        StringBuilder srcPaths = new StringBuilder();
+
+        for (String srcDir : snippetPath) {
+            srcPaths.append(srcDir)
+                    .append(":");
+        }
+
+        Options.v().set_soot_classpath(javaHome + "/jre/lib/rt.jar:"
+                + javaHome + "/jre/lib/jce.jar:" + srcPaths.toString() + projectDependency);
 
         List<String> classNames = Utils.getClassNamesFromSnippet(snippetPath);
 

@@ -1,12 +1,18 @@
 package main.rule.engine;
 
+import fj.function.Strings;
 import main.rule.*;
+import main.util.BuildFileParser;
+import main.util.BuildFileParserFactory;
+import main.util.NamedMethodMap;
 import main.util.Utils;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class RuleEngine {
     private static List<RuleChecker> ruleCheckerList = new ArrayList<>();
@@ -29,7 +35,7 @@ public class RuleEngine {
         ruleCheckerList.add(new HttpUrlFinder());
     }
 
-    public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
+    public static void main(String[] args) throws Exception {
 
         if (args.length < 2) {
             System.exit(1);
@@ -40,7 +46,7 @@ public class RuleEngine {
             String projectDependencyPath = args[2];
 
             for (RuleChecker ruleChecker : ruleCheckerList) {
-                ruleChecker.checkRule(EngineType.JAR, projectJarPath, projectDependencyPath);
+                ruleChecker.checkRule(EngineType.JAR, Arrays.asList(projectJarPath), projectDependencyPath);
             }
 
         } else if (args[0].equals("apk")) {
@@ -50,15 +56,39 @@ public class RuleEngine {
             System.out.println("*** Base package: " + basePackage);
 
             for (RuleChecker ruleChecker : ruleCheckerList) {
-                ruleChecker.checkRule(EngineType.APK, projectJarPath, null);
+                ruleChecker.checkRule(EngineType.APK, Arrays.asList(projectJarPath), null);
             }
-        } else if (args[0].equals("snippet")) {
+        } else if (args[0].equals("source")) {
 
-            String projectJarPath = args[1];
+            String projectRoot = args[1];
+            String projectDependencyPath = args[2];
 
-            for (RuleChecker ruleChecker : ruleCheckerList) {
-                ruleChecker.checkRule(EngineType.SNIPPET, projectJarPath, null);
+            BuildFileParser buildFileParser = BuildFileParserFactory.getBuildfileParser(projectRoot);
+
+            Map<String, List<String>> moduleVsDependency = buildFileParser.getDependencyList();
+
+            List<String> analyzedModules = new ArrayList<>();
+
+            for (String module : moduleVsDependency.keySet()) {
+
+                if (!analyzedModules.contains(module)) {
+
+                    List<String> dependencies = moduleVsDependency.get(module);
+
+                    for (String dependency : dependencies) {
+                        String dependencyModule = dependency.substring(dependency.lastIndexOf('/'), dependency.length());
+                        analyzedModules.add(dependencyModule);
+                    }
+
+                    for (RuleChecker ruleChecker : ruleCheckerList) {
+                        ruleChecker.checkRule(EngineType.SOURCE, dependencies, projectDependencyPath);
+                    }
+
+                    NamedMethodMap.clearCallerCalleeGraph();
+                }
+
             }
+
 
         }
     }

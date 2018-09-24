@@ -29,7 +29,7 @@ public class InsecureAssymCryptoFinder implements RuleChecker {
 
 
     @Override
-    public void checkRule(EngineType type, String projectJarPath, String projectDependencyPath) throws IOException {
+    public void checkRule(EngineType type, List<String> projectJarPath, String projectDependencyPath) throws IOException {
 
         checkAssym(type, projectJarPath, projectDependencyPath, AssymType.RSA);
         checkAssym(type, projectJarPath, projectDependencyPath, AssymType.EC);
@@ -37,9 +37,10 @@ public class InsecureAssymCryptoFinder implements RuleChecker {
     }
 
     private void checkAssym(EngineType type,
-                            String projectJarPath,
+                            List<String> projectJarPath,
                             String projectDependencyPath,
                             AssymType assymType) throws IOException {
+
         List<String> cryptoType = new ArrayList<>();
         cryptoType.add("\"" + assymType.name() + "\"");
 

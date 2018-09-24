@@ -34,18 +34,19 @@ public class DefaultExportGradeKeyFinder implements RuleChecker {
 
     private ArrayList<String> initializeCallsites = new ArrayList<>();
 
-    public void checkRule(EngineType type, String projectJarPath, String projectDependencyPath) throws IOException {
+    @Override
+    public void checkRule(EngineType type, List<String> projectJarPath, String projectDependencyPath) throws IOException {
 
         for (String slicing_criterion : SLICING_CRITERIA) {
 
             SlicingCriteria criteria = new SlicingCriteria(slicing_criterion);
             Map<String, List<Unit>> analysisLists;
             if (type == EngineType.JAR) {
-                analysisLists = analyzeJar(projectJarPath, projectDependencyPath, criteria);
+                analysisLists = analyzeJar(projectJarPath.get(0), projectDependencyPath, criteria);
             } else if (type == EngineType.APK) {
-                analysisLists = analyzeApk(projectJarPath, criteria);
+                analysisLists = analyzeApk(projectJarPath.get(0), criteria);
             } else {
-                analysisLists = analyzeSnippet(projectJarPath, criteria);
+                analysisLists = analyzeSnippet(projectJarPath, projectDependencyPath, criteria);
             }
 
             for (String method : analysisLists.keySet()) {
@@ -152,7 +153,7 @@ public class DefaultExportGradeKeyFinder implements RuleChecker {
         return getForwardSlice(classNames, slicingCriteria);
     }
 
-    private Map<String, List<Unit>> analyzeSnippet(String snippetPath, SlicingCriteria slicingCriteria) throws IOException {
+    private Map<String, List<Unit>> analyzeSnippet(List<String> snippetPath, String projectDependencyPath, SlicingCriteria slicingCriteria) throws IOException {
 
         String javaHome = System.getenv("JAVA7_HOME");
 
@@ -164,9 +165,15 @@ public class DefaultExportGradeKeyFinder implements RuleChecker {
 
         List<String> classNames = Utils.getClassNamesFromSnippet(snippetPath);
 
-        String sootClassPath = Utils.buildSootClassPath(snippetPath,
-                javaHome + "/jre/lib/rt.jar",
-                javaHome + "/jre/lib/jce.jar");
+        StringBuilder srcPaths = new StringBuilder();
+
+        for (String srcDir : snippetPath) {
+            srcPaths.append(srcDir)
+                    .append(":");
+        }
+
+        Options.v().set_soot_classpath(javaHome + "/jre/lib/rt.jar:"
+                + javaHome + "/jre/lib/jce.jar:" + srcPaths.toString() + projectDependencyPath);
 
         Options.v().set_output_format(Options.output_format_jimple);
         Options.v().set_src_prec(Options.src_prec_java);
@@ -177,7 +184,6 @@ public class DefaultExportGradeKeyFinder implements RuleChecker {
 
         Options.v().set_keep_line_number(true);
         Options.v().set_allow_phantom_refs(true);
-        Scene.v().setSootClassPath(sootClassPath);
 
         Scene.v().loadBasicClasses();
 

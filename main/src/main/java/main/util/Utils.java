@@ -270,24 +270,40 @@ public class Utils {
                 && currInstruction.toString().contains(usebox + ".<");
     }
 
-    public static List<String> getClassNamesFromSnippet(String snippetPath) {
+    public static List<File> listf(String directoryName) {
+        File directory = new File(directoryName);
+
+        List<File> resultList = new ArrayList<File>();
+
+        File[] fList = directory.listFiles();
+        resultList.addAll(Arrays.asList(fList));
+        for (File file : fList) {
+            if (file.isFile()) {
+            } else if (file.isDirectory()) {
+                resultList.addAll(listf(file.getAbsolutePath()));
+            }
+        }
+
+        return resultList;
+    }
+
+    public static List<String> getClassNamesFromSnippet(List<String> sourcePaths) {
 
         List<String> classNames = new ArrayList<>();
-        File dir = new File(snippetPath);
 
-        if (dir.isDirectory()) {
-            File[] files = dir.listFiles();
+        for (String sourcePath : sourcePaths) {
+
+            List<File> files = listf(sourcePath);
 
             if (files == null) {
                 return classNames;
             }
 
             for (File file : files) {
-                String name = file.getName();
+                String name = file.getAbsolutePath();
                 if (name.endsWith(".java")) {
-
-                    String className = name.substring(0, name.length() - 5);
-                    classNames.add(className);
+                    String className = name.substring(sourcePath.length() + 1, name.length() - 5);
+                    classNames.add(className.replaceAll("/", "."));
                 }
             }
         }
