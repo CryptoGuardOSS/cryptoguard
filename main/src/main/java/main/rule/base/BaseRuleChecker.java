@@ -37,7 +37,7 @@ public abstract class BaseRuleChecker implements RuleChecker {
     }
 
     @Override
-    public void checkRule(EngineType type, List<String> projectPaths, String projectDependencyPath) throws IOException {
+    public void checkRule(EngineType type, List<String> projectPaths, List<String> projectDependencyPath) throws IOException {
 
         String[] excludes = {"web.xml", "pom.xml"};
 
@@ -49,7 +49,7 @@ public abstract class BaseRuleChecker implements RuleChecker {
                         criteria.getMethodName(),
                         criteria.getParam(),
                         projectPaths.get(0),
-                        projectDependencyPath, this);
+                        projectDependencyPath.get(0), this);
             } else if (type == EngineType.APK) {
 
                 ApkAnalyzer.analyzeSlices(criteria.getClassName(),

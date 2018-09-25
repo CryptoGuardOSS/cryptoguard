@@ -23,11 +23,11 @@ public class HostNameVerifierFinder implements RuleChecker {
     private static final String SLICING_INSTRUCTION = "return";
 
     @Override
-    public void checkRule(EngineType type, List<String> projectJarPath, String projectDependencyPath) throws IOException {
+    public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath) throws IOException {
 
         Map<String, List<UnitContainer>> analysisLists;
         if (type == EngineType.JAR) {
-            analysisLists = analyzeJar(projectJarPath.get(0), projectDependencyPath);
+            analysisLists = analyzeJar(projectJarPath.get(0), projectDependencyPath.get(0));
         } else if (type == EngineType.APK) {
             analysisLists = analyzeApk(projectJarPath.get(0));
         } else {
@@ -125,7 +125,7 @@ public class HostNameVerifierFinder implements RuleChecker {
         return getHostNameVerifiers(classNames);
     }
 
-    private Map<String, List<UnitContainer>> analyzeSnippet(List<String> snippetPath, String projectDependencyPath) throws IOException {
+    private Map<String, List<UnitContainer>> analyzeSnippet(List<String> snippetPath, List<String> projectDependencyPath) throws IOException {
 
         String javaHome = System.getenv("JAVA7_HOME");
 

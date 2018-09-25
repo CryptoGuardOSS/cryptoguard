@@ -29,14 +29,11 @@ public class JarAnalyzer {
 
         List<String> classNames = Utils.getClassNamesFromJarArchive(projectJarPath);
 
-        for (String dependency : Utils.getJarsInDirectory(projectDependencyPath)) {
-            classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
-        }
-
         String sootClassPath = Utils.buildSootClassPath(projectJarPath,
                 javaHome + "/jre/lib/rt.jar",
                 javaHome + "/jre/lib/jce.jar",
                 projectDependencyPath);
+
         Options.v().set_keep_line_number(true);
         Options.v().set_allow_phantom_refs(true);
 

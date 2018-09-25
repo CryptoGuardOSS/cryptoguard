@@ -15,7 +15,7 @@ public class PartialCodeAnalyzer {
                                      String criteriaMethod,
                                      int criteriaParam,
                                      List<String> snippetPath,
-                                     String projectDependency,
+                                     List<String> projectDependency,
                                      BaseRuleChecker checker) throws IOException {
 
         String javaHome = System.getenv("JAVA7_HOME");
@@ -38,13 +38,19 @@ public class PartialCodeAnalyzer {
                     .append(":");
         }
 
-        Options.v().set_soot_classpath(javaHome + "/jre/lib/rt.jar:"
+
+        Scene.v().setSootClassPath(javaHome + "/jre/lib/rt.jar:"
                 + javaHome + "/jre/lib/jce.jar:" + srcPaths.toString() + Utils.buildSootClassPath(projectDependency));
 
         List<String> classNames = Utils.getClassNamesFromSnippet(snippetPath);
 
-        Options.v().classes().addAll(classNames);
-        Options.v().classes().addAll(BaseAnalyzer.CRITERIA_CLASSES);
+        for (String clazz : BaseAnalyzer.CRITERIA_CLASSES) {
+            Scene.v().loadClassAndSupport(clazz);
+        }
+
+        for (String clazz : classNames) {
+            Scene.v().loadClassAndSupport(clazz);
+        }
 
         Scene.v().loadNecessaryClasses();
 

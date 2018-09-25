@@ -109,6 +109,10 @@ public class Utils {
     }
 
     public static String buildSootClassPath(String... paths) {
+      return buildSootClassPath(Arrays.asList(paths));
+    }
+
+    public static String buildSootClassPath(List<String> paths) {
 
         StringBuilder classPath = new StringBuilder();
 

@@ -34,11 +34,11 @@ public class CustomTrustManagerFinder implements RuleChecker {
     }
 
     @Override
-    public void checkRule(EngineType type, List<String> projectJarPath, String projectDependencyPath) throws IOException {
+    public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath) throws IOException {
 
         Map<String, List<OtherAnalysisResult>> analysisLists;
         if (type == EngineType.JAR) {
-            analysisLists = analyzeJar(projectJarPath.get(0), projectDependencyPath);
+            analysisLists = analyzeJar(projectJarPath.get(0), projectDependencyPath.get(0));
         } else if (type == EngineType.APK) {
             analysisLists = analyzeApk(projectJarPath.get(0));
         } else {
@@ -125,7 +125,7 @@ public class CustomTrustManagerFinder implements RuleChecker {
         return b.getTraps().size() > 0;
     }
 
-    private Map<String, List<OtherAnalysisResult>> analyzeSnippet(List<String> snippetPath, String projectDependencyPath) {
+    private Map<String, List<OtherAnalysisResult>> analyzeSnippet(List<String> snippetPath, List<String> projectDependencyPath) {
 
         String javaHome = System.getenv("JAVA7_HOME");
 

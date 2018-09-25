@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface RuleChecker {
 
-    public void checkRule(EngineType type, List<String> projectJarPath, String projectDependencyPath) throws IOException;
+    public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath) throws IOException;
 }

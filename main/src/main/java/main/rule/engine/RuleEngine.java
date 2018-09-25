@@ -48,7 +48,7 @@ public class RuleEngine {
             System.out.println("Analyzing JAR: " + projectJarPath);
 
             for (RuleChecker ruleChecker : ruleCheckerList) {
-                ruleChecker.checkRule(EngineType.JAR, Arrays.asList(projectJarPath), projectDependencyPath);
+                ruleChecker.checkRule(EngineType.JAR, Arrays.asList(projectJarPath), Arrays.asList(projectDependencyPath));
             }
 
         } else if (args[0].equals("apk")) {
@@ -81,27 +81,26 @@ public class RuleEngine {
                     String output = "Analyzing Module: ";
 
                     List<String> dependencies = moduleVsDependency.get(module);
+                    List<String> otherdependencies = new ArrayList<>();
 
                     for (String dependency : dependencies) {
-                        String dependencyModule = dependency.substring(projectRoot.length() + 1, dependency.length() - 14);
 
+                        String dependencyModule = dependency.substring(projectRoot.length() + 1, dependency.length() - 14);
                         output += dependencyModule + ", ";
 
+                        otherdependencies.add(dependency.substring(0, dependency.length() - 13) + projectDependencyPath);
                         analyzedModules.add(dependencyModule);
                     }
 
                     System.out.println(output.substring(0, output.length() - 2));
 
                     for (RuleChecker ruleChecker : ruleCheckerList) {
-                        ruleChecker.checkRule(EngineType.SOURCE, dependencies, projectDependencyPath);
+                        ruleChecker.checkRule(EngineType.SOURCE, dependencies, otherdependencies);
                     }
 
                     NamedMethodMap.clearCallerCalleeGraph();
                 }
-
             }
-
-
         }
     }
 }

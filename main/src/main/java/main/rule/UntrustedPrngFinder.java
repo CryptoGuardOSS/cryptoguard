@@ -22,12 +22,12 @@ public class UntrustedPrngFinder implements RuleChecker {
     }
 
     @Override
-    public void checkRule(EngineType type, List<String> projectJarPath, String projectDependencyPath) throws IOException {
+    public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath) throws IOException {
 
         Map<String, List<Unit>> analysisLists;
 
         if (type == EngineType.JAR) {
-            analysisLists = analyzeJar(projectJarPath.get(0), projectDependencyPath);
+            analysisLists = analyzeJar(projectJarPath.get(0), projectDependencyPath.get(0));
         } else if (type == EngineType.APK) {
             analysisLists = analyzeApk(projectJarPath.get(0));
         } else {
@@ -104,7 +104,7 @@ public class UntrustedPrngFinder implements RuleChecker {
         return getUntrustedPrngInstructions(classNames);
     }
 
-    private Map<String, List<Unit>> analyzeSnippet(List<String> snippetPath, String projectDependencyPath) throws IOException {
+    private Map<String, List<Unit>> analyzeSnippet(List<String> snippetPath, List<String> projectDependencyPath) throws IOException {
 
         String javaHome = System.getenv("JAVA7_HOME");
 

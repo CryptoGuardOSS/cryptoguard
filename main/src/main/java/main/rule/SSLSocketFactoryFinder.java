@@ -34,7 +34,7 @@ public class SSLSocketFactoryFinder implements RuleChecker {
     private static final String METHOD_TO_FIND = "<javax.net.ssl.HostnameVerifier: boolean verify(java.lang.String,javax.net.ssl.SSLSession)>";
 
     @Override
-    public void checkRule(EngineType type, List<String> projectJarPath, String projectDependencyPath) throws IOException {
+    public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath) throws IOException {
 
         for (String slicing_criterion : SLICING_CRITERIA) {
 
@@ -42,7 +42,7 @@ public class SSLSocketFactoryFinder implements RuleChecker {
             SlicingCriteria criteria = new SlicingCriteria(slicing_criterion);
             Map<String, List<Unit>> analysisLists;
             if (type == EngineType.JAR) {
-                analysisLists = analyzeJar(projectJarPath.get(0), projectDependencyPath, criteria);
+                analysisLists = analyzeJar(projectJarPath.get(0), projectDependencyPath.get(0), criteria);
             } else if (type == EngineType.APK) {
                 analysisLists = analyzeApk(projectJarPath.get(0), criteria);
             } else {
@@ -154,7 +154,7 @@ public class SSLSocketFactoryFinder implements RuleChecker {
         return getForwardSlice(classNames, slicingCriteria);
     }
 
-    private Map<String, List<Unit>> analyzeSnippet(List<String> snippetPath, String projectDependencyPath, SlicingCriteria slicingCriteria) throws IOException {
+    private Map<String, List<Unit>> analyzeSnippet(List<String> snippetPath, List<String> projectDependencyPath, SlicingCriteria slicingCriteria) throws IOException {
 
         String javaHome = System.getenv("JAVA7_HOME");
 
