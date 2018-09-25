@@ -45,6 +45,8 @@ public class RuleEngine {
             String projectJarPath = args[1];
             String projectDependencyPath = args[2];
 
+            System.out.println("Analyzing JAR: " + projectJarPath);
+
             for (RuleChecker ruleChecker : ruleCheckerList) {
                 ruleChecker.checkRule(EngineType.JAR, Arrays.asList(projectJarPath), projectDependencyPath);
             }
@@ -52,8 +54,9 @@ public class RuleEngine {
         } else if (args[0].equals("apk")) {
             String projectJarPath = args[1];
 
+            System.out.println("Analyzing APK: " + projectJarPath);
+
             String basePackage = Utils.getBasePackageNameFromApk(projectJarPath);
-            System.out.println("*** Base package: " + basePackage);
 
             for (RuleChecker ruleChecker : ruleCheckerList) {
                 ruleChecker.checkRule(EngineType.APK, Arrays.asList(projectJarPath), null);
@@ -62,6 +65,8 @@ public class RuleEngine {
 
             String projectRoot = args[1];
             String projectDependencyPath = args[2];
+
+            System.out.println("Analyzing Project: " + projectRoot);
 
             BuildFileParser buildFileParser = BuildFileParserFactory.getBuildfileParser(projectRoot);
 
@@ -73,12 +78,19 @@ public class RuleEngine {
 
                 if (!analyzedModules.contains(module)) {
 
+                    String output = "Analyzing Module: ";
+
                     List<String> dependencies = moduleVsDependency.get(module);
 
                     for (String dependency : dependencies) {
-                        String dependencyModule = dependency.substring(dependency.lastIndexOf('/'), dependency.length());
+                        String dependencyModule = dependency.substring(projectRoot.length() + 1, dependency.length() - 14);
+
+                        output += dependencyModule + ", ";
+
                         analyzedModules.add(dependencyModule);
                     }
+
+                    System.out.println(output.substring(0, output.length() - 2));
 
                     for (RuleChecker ruleChecker : ruleCheckerList) {
                         ruleChecker.checkRule(EngineType.SOURCE, dependencies, projectDependencyPath);

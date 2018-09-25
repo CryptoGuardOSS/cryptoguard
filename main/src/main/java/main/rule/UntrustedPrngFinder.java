@@ -40,8 +40,7 @@ public class UntrustedPrngFinder implements RuleChecker {
 
                 if (!analysis.isEmpty()) {
                     System.out.println("=============================================");
-                    String output = "***Violated Rule 13: Untrused PRNG Found in " + method;
-                    output += " ***Output: " + analysis;
+                    String output = "***Violated Rule 13: Untrused PRNG (java.util.Random) Found in " + method;
                     System.out.println(output);
                     System.out.println("=============================================");
                 }

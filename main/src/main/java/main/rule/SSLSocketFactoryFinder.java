@@ -37,7 +37,8 @@ public class SSLSocketFactoryFinder implements RuleChecker {
     public void checkRule(EngineType type, List<String> projectJarPath, String projectDependencyPath) throws IOException {
 
         for (String slicing_criterion : SLICING_CRITERIA) {
-            System.out.println(slicing_criterion);
+
+//            System.out.println(slicing_criterion);
             SlicingCriteria criteria = new SlicingCriteria(slicing_criterion);
             Map<String, List<Unit>> analysisLists;
             if (type == EngineType.JAR) {
@@ -86,8 +87,8 @@ public class SSLSocketFactoryFinder implements RuleChecker {
 
                     if (getSocketAppeared && isVulnerable) {
                         System.out.println("=======================================");
-                        String output = "***Violated Rule 12: SSLSocketFactory and HostnameVerification in " + method;
-                        output += " ***Cause: should have manually verify hostname";
+                        String output = "***Violated Rule 12: Does not manually verify the hostname";
+                        output += "\n***Cause: should have manually verify hostname in " + method;
                         System.out.println(output);
                         System.out.println("=======================================");
                     }

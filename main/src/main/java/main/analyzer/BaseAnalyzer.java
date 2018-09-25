@@ -44,7 +44,7 @@ public class BaseAnalyzer {
                                      String endPoint,
                                      ArrayList<Integer> slicingParameters, BaseRuleChecker checker) {
 
-        System.out.println(endPoint);
+//        System.out.println(endPoint);
 
         SootClass criteriaClazz = Scene.v().getSootClass(criteriaClass);
 
@@ -52,19 +52,19 @@ public class BaseAnalyzer {
             return;
         }
 
-        System.out.println("Building caller-callee relationship ...");
-        System.out.println("Total classes: " + classNames.size());
+//        System.out.println("Building caller-callee relationship ...");
+//        System.out.println("Total classes: " + classNames.size());
 
         NamedMethodMap.build(classNames);
 
         NamedMethodMap.addCriteriaClasses(CRITERIA_CLASSES);
         NamedMethodMap.buildCallerCalleeRelation(classNames);
 
-        System.out.println("Initialize Field initialization map ...");
+//        System.out.println("Initialize Field initialization map ...");
 
         FieldInitializationInstructionMap.build(classNames);
 
-        System.out.println("Running Backward Program slicing ...");
+//        System.out.println("Running Backward Program slicing ...");
 
         runBackwardSlicingAnalysis(NamedMethodMap.getMethod(endPoint),
                 slicingParameters, null, null, checker);

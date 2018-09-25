@@ -74,8 +74,8 @@ public class DefaultExportGradeKeyFinder implements RuleChecker {
 
                     if (isDefault && !defaultSecure) {
                         System.out.println("=======================================");
-                        String output = "***Violated Rule 5: Used export grade public Key " + method;
-                        output += " ***Cause: used default key size";
+                        String output = "***Violated Rule 5: Used export grade public Key ";
+                        output += "\n***Cause: Used default key size in method: " + method;
                         System.out.println(output);
                         System.out.println("=======================================");
                     }
