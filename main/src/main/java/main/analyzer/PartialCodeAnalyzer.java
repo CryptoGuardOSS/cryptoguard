@@ -39,7 +39,7 @@ public class PartialCodeAnalyzer {
         }
 
         Options.v().set_soot_classpath(javaHome + "/jre/lib/rt.jar:"
-                + javaHome + "/jre/lib/jce.jar:" + srcPaths.toString() + projectDependency);
+                + javaHome + "/jre/lib/jce.jar:" + srcPaths.toString() + Utils.buildSootClassPath(projectDependency));
 
         List<String> classNames = Utils.getClassNamesFromSnippet(snippetPath);
 

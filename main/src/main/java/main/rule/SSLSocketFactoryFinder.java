@@ -174,7 +174,7 @@ public class SSLSocketFactoryFinder implements RuleChecker {
         }
 
         Options.v().set_soot_classpath(javaHome + "/jre/lib/rt.jar:"
-                + javaHome + "/jre/lib/jce.jar:" + srcPaths.toString() + projectDependencyPath);
+                + javaHome + "/jre/lib/jce.jar:" + srcPaths.toString() + Utils.buildSootClassPath(projectDependencyPath));
 
         Options.v().set_output_format(Options.output_format_jimple);
         Options.v().set_src_prec(Options.src_prec_java);

@@ -15,7 +15,7 @@ public class BuildFileParserFactory {
         File gradleFile = new File(projectRoot + "/" + "settings.gradle");
 
         if (gradleFile.exists()) {
-            return new MvnPomFileParser(projectRoot + "/" + "settings.gradle");
+            return new GradleBuildFileParser(projectRoot + "/" + "settings.gradle");
         }
 
         throw new RuntimeException("Only maven and gradle projects are supported ...");
