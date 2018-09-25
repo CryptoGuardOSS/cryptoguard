@@ -18,6 +18,11 @@ public class FieldInitializationInstructionMap {
     private static Map<String, List<PropertyAnalysisResult>> initializationInstructions = null;
     private static Map<String, List<MethodWrapper>> fieldVsMethodWrapper = null;
 
+    public static void reset() {
+        initializationInstructions = null;
+        fieldVsMethodWrapper = null;
+    }
+
     public static void build(List<String> classNames) {
 
         if (fieldVsMethodWrapper == null) {

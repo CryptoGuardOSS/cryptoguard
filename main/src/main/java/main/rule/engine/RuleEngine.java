@@ -2,10 +2,7 @@ package main.rule.engine;
 
 import fj.function.Strings;
 import main.rule.*;
-import main.util.BuildFileParser;
-import main.util.BuildFileParserFactory;
-import main.util.NamedMethodMap;
-import main.util.Utils;
+import main.util.*;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -99,6 +96,7 @@ public class RuleEngine {
                     }
 
                     NamedMethodMap.clearCallerCalleeGraph();
+                    FieldInitializationInstructionMap.reset();
                 }
             }
         }

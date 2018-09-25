@@ -83,8 +83,6 @@ public class NamedMethodMap {
         for (String className : classNames) {
             SootClass sClass = Scene.v().getSootClass(className);
 
-            System.out.println("sootclass: " + className + " : " + sClass.toString());
-
             Iterator methodIt = sClass.getMethods().iterator();
             while (methodIt.hasNext()) {
                 SootMethod m = (SootMethod) methodIt.next();

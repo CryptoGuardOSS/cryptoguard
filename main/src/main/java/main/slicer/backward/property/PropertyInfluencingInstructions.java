@@ -35,6 +35,7 @@ public class PropertyInfluencingInstructions {
             slicingResult.setMethodWrapper(initMethod);
             slicingResult.setSlicingResult(result);
             slicingResult.setInfluencingParams(Utils.findInfluencingParamters(result));
+            slicingResult.setPropertyUseMap(analysis.getPropertyUseMap());
         }
     }
 

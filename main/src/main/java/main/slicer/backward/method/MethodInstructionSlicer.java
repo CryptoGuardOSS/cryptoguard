@@ -102,6 +102,8 @@ public class MethodInstructionSlicer extends BackwardFlowAnalysis {
 
                     if (usebox.getValue().toString().startsWith("r0.")) {
                         specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString().substring(3));
+                    } else if (usebox.getValue().toString().startsWith("this.")) {
+                        specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString().substring(5));
                     } else {
                         specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString());
                     }

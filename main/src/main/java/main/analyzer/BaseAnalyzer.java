@@ -139,7 +139,7 @@ public class BaseAnalyzer {
                     List<Analysis> callerAnalysisList = methodVsAnalysisResult.get(propertyAnalysisResult.getMethodWrapper());
 
                     List<Analysis> newAnalysisList = buildNewPropertyAnalysisList(callSiteInfo, methodSlicingResult.getAnalysisResult(),
-                            propertyAnalysisResult.getSlicingResult(), calleeAnalysisList);
+                            propertyAnalysisResult, calleeAnalysisList);
 
                     if (callerAnalysisList == null) {
                         callerAnalysisList = new ArrayList<>();
@@ -174,7 +174,7 @@ public class BaseAnalyzer {
 
     private static List<Analysis> buildNewPropertyAnalysisList(MethodCallSiteInfo callSiteInfo,
                                                                List<UnitContainer> methodSlicingResult,
-                                                               List<UnitContainer> slicingResult,
+                                                               PropertyAnalysisResult slicingResult,
                                                                List<Analysis> calleeAnalysisList) {
 
         List<Analysis> newAnalysisList = new ArrayList<>();
@@ -198,7 +198,13 @@ public class BaseAnalyzer {
                 newAnalysis.setMethodChain(newChain.toString());
                 newAnalysis.setAnalysisResult(analysis.getAnalysisResult());
                 newAnalysis.getAnalysisResult().addAll(methodSlicingResult);
-                newAnalysis.getAnalysisResult().addAll(slicingResult);
+                newAnalysis.getAnalysisResult().addAll(slicingResult.getSlicingResult());
+
+                for (String key : slicingResult.getPropertyUseMap().keySet()) {
+                    for (PropertyAnalysisResult res : slicingResult.getPropertyUseMap().get(key))
+                        newAnalysis.getAnalysisResult().addAll(res.getSlicingResult());
+                }
+
                 newAnalysisList.add(newAnalysis);
             }
         } else {
@@ -215,7 +221,13 @@ public class BaseAnalyzer {
             newAnalysis.setMethodChain(newChain.toString());
             newAnalysis.setAnalysisResult(new ArrayList<UnitContainer>());
             newAnalysis.getAnalysisResult().addAll(methodSlicingResult);
-            newAnalysis.getAnalysisResult().addAll(slicingResult);
+            newAnalysis.getAnalysisResult().addAll(slicingResult.getSlicingResult());
+
+            for (String key : slicingResult.getPropertyUseMap().keySet()) { // TO-DO Recursively add all analysis
+                for (PropertyAnalysisResult res : slicingResult.getPropertyUseMap().get(key))
+                    newAnalysis.getAnalysisResult().addAll(res.getSlicingResult());
+            }
+
             newAnalysisList.add(newAnalysis);
         }
 

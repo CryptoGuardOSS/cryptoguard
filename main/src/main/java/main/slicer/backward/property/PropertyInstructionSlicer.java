@@ -3,6 +3,7 @@ package main.slicer.backward.property;
 import main.analyzer.backward.PropertyFakeUnitContainer;
 import main.analyzer.backward.UnitContainer;
 import main.slicer.ValueArraySparseSet;
+import main.util.FieldInitializationInstructionMap;
 import soot.ArrayType;
 import soot.Unit;
 import soot.Value;
@@ -14,19 +15,23 @@ import soot.toolkits.graph.DirectedGraph;
 import soot.toolkits.scalar.BackwardFlowAnalysis;
 import soot.toolkits.scalar.FlowSet;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PropertyInstructionSlicer extends BackwardFlowAnalysis {
 
     private FlowSet emptySet;
     private String slicingCriteria;
     private String initMethod;
+    private Map<String, List<PropertyAnalysisResult>> propertyUseMap;
 
     public PropertyInstructionSlicer(DirectedGraph g, String slicingCriteria, String initMethod) {
         super(g);
         this.emptySet = new ValueArraySparseSet();
         this.slicingCriteria = slicingCriteria;
         this.initMethod = initMethod;
+        this.propertyUseMap = new HashMap<>();
         doAnalysis();
     }
 
@@ -81,7 +86,22 @@ public class PropertyInstructionSlicer extends BackwardFlowAnalysis {
                         return;
                     }
 
+                    List<PropertyAnalysisResult> specialInitInsts;
+
+                    if (usebox.getValue().toString().startsWith("r0.")) {
+                        specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString().substring(3));
+                    } else if (usebox.getValue().toString().startsWith("this.")) {
+                        specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString().substring(5));
+                    } else {
+                        specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString());
+                    }
+
+                    if (specialInitInsts != null) {
+                        propertyUseMap.put(usebox.getValue().toString(), specialInitInsts);
+                    }
+
                     for (ValueBox defbox : currInstruction.getDefBoxes()) {
+
                         if (defbox.getValue().equivTo(usebox.getValue())) {
                             addCurrInstInOutSet(outSet, currInstruction);
                             return;
@@ -110,6 +130,8 @@ public class PropertyInstructionSlicer extends BackwardFlowAnalysis {
 
         if (original.startsWith("r0.")) {
             original = original.substring(3);
+        } else if (original.startsWith("this.")) {
+            original = original.substring(5);
         }
 
         PropertyFakeUnitContainer currUnitContainer = new PropertyFakeUnitContainer();
@@ -149,5 +171,9 @@ public class PropertyInstructionSlicer extends BackwardFlowAnalysis {
         FlowSet srcSet = (FlowSet) source,
                 destSet = (FlowSet) dest;
         srcSet.copy(destSet);
+    }
+
+    public Map<String, List<PropertyAnalysisResult>> getPropertyUseMap() {
+        return propertyUseMap;
     }
 }
