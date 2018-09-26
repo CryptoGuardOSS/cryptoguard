@@ -29,6 +29,14 @@ public class JarAnalyzer {
 
         List<String> classNames = Utils.getClassNamesFromJarArchive(projectJarPath);
 
+        for (String dependency : Utils.getJarsInDirectory(projectDependencyPath)) {
+            for (String dependencyClazz : Utils.getClassNamesFromJarArchive(dependency)) {
+                if (dependencyClazz.contains(basePackageName)) {
+                    classNames.add(dependencyClazz);
+                }
+            }
+        }
+
         String sootClassPath = Utils.buildSootClassPath(projectJarPath,
                 javaHome + "/jre/lib/rt.jar",
                 javaHome + "/jre/lib/jce.jar",

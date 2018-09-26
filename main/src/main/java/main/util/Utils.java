@@ -62,12 +62,18 @@ public class Utils {
                             .append(splits[1])
                             .append(".")
                             .append(splits[2]);
+                } else if (splits.length == 3) {
+                    basePackage.append(splits[0])
+                            .append(".")
+                            .append(splits[1]);
+                } else {
+                    basePackage.append(splits[0]);
+                }
 
-                    String basePackageStr = basePackage.toString();
+                String basePackageStr = basePackage.toString();
 
-                    if (!basePackages.toString().contains(basePackageStr)) {
-                        basePackages.add(basePackageStr);
-                    }
+                if (!basePackages.toString().contains(basePackageStr)) {
+                    basePackages.add(basePackageStr);
                 }
             }
         }
@@ -76,16 +82,15 @@ public class Utils {
             return basePackages.get(0);
         } else if (basePackages.size() > 1) {
 
-            if (isMain) {
-                System.out.println("***Multiple Base packages of " + jarPath + " : " + basePackages.toString());
-            }
+//            if (isMain) {
+//                System.out.println("***Multiple Base packages of " + jarPath + " : " + basePackages.toString());
+//            }
 
             for (String basePackage : basePackages) {
-                if (jarPath.contains(basePackage.split("\\.")[2])) {
+                if (basePackage.split("\\.").length > 2 && jarPath.contains(basePackage.split("\\.")[2])) {
                     return basePackage;
                 }
             }
-
         }
 
         return null;
@@ -109,7 +114,7 @@ public class Utils {
     }
 
     public static String buildSootClassPath(String... paths) {
-      return buildSootClassPath(Arrays.asList(paths));
+        return buildSootClassPath(Arrays.asList(paths));
     }
 
     public static String buildSootClassPath(List<String> paths) {

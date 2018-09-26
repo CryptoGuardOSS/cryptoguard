@@ -79,7 +79,7 @@ public class SSLSocketFactoryFinder implements RuleChecker {
 
                         if (defBox != null && unit instanceof IfStmt) {
                             IfStmt ifStmt = (IfStmt) unit;
-                            if (ifStmt.getConditionBox().getValue().toString().contains(defBox.getValue() + " != 0")) {
+                            if (ifStmt.getConditionBox().getValue().toString().contains(defBox.getValue().toString())) {
                                 isVulnerable = false;
                             }
                         }

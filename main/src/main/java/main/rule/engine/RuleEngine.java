@@ -82,10 +82,19 @@ public class RuleEngine {
 
                     for (String dependency : dependencies) {
 
-                        String dependencyModule = dependency.substring(projectRoot.length() + 1, dependency.length() - 14);
-                        output += dependencyModule + ", ";
+                        String dependencyModule = null;
 
-                        otherdependencies.add(dependency.substring(0, dependency.length() - 13) + projectDependencyPath);
+                        if (dependency.equals(projectRoot + "/src/main/java")) {
+                            dependencyModule = projectRoot.substring(projectRoot.lastIndexOf("/") + 1);
+                            otherdependencies.add(dependency.substring(0, dependency.length() - 13) + projectDependencyPath);
+
+                        } else {
+                            dependencyModule = dependency.substring(projectRoot.length() + 1, dependency.length() - 14);
+                            otherdependencies.add(dependency.substring(0, dependency.length() - 13) + projectDependencyPath);
+
+                        }
+
+                        output += dependencyModule + ", ";
                         analyzedModules.add(dependencyModule);
                     }
 
