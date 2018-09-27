@@ -2,21 +2,49 @@
 
 An program analysis tool to find cryptographic misuse in Java and Android.
 
-## Build
+###Prerequisites to use RigorityJ on Source code:
 
-This project uses gradle as the build tool.
+1. Download and Install JDK 7.
+2. Set `JAVA7_HOME` environment variable.
+3. Download and Install Gradle.
 
-1. Install Gradle
-2. Run `cd /path/to/rigorityj`
-3. Run `gradle clean build`
+###Prerequisites to use RigorityJ on Jar:
 
-## Run
+1. Download and Install JDK (version >= 7).
+2. Set `JAVA_HOME` environment variable.
+3. Download and Install Gradle.
 
-Make sure the project is build properly. Then run
+###Prerequisites to use RigorityJ on Apk:
 
-    ./run.sh
+1. Download and Install JDK (version >= 7).
+2. Set `JAVA_HOME` environment variable.
+3. Download and Install Android SDK
+4. Set `ANDROID_SDK_HOME`
+5. Download and Install Gradle.
 
-It will run the `main.rule.engine.RuleEngine` class.
+###Build RigorityJ
+1. Run `cd /path/to/rigorityj`
+2. Run `gradle clean build`
+
+###Run RigorityJ to analyze source code:
+
+You need to run RigorityJ on JDK 7 to analyze source codes. If the project does not have any external dependencies then run,
+     
+`cd /path/to/rigorityj &&  /usr/local/jdk1.7.0_80/bin/java -jar main/build/libs/main.jar "source" "/path/to/project/root" ""`
+
+If the project have external dependencies then first gather the dependencies under a folder that is relative to the project root (e.g., “build/dependencies”), then run
+
+`cd /path/to/rigorityj && /usr/local/jdk1.7.0_80/bin/java -jar main/build/libs/main.jar "source" "/path/to/project/root" "build/dependencies"`
+
+Note that if you have multiple subprojects with external dependencies, then you have to gather all the corresponding subproject dependencies under a path that is relative to each of the subprojects.
+
+###Run RigorityJ to analyze Jar:
+
+`cd /path/to/rigorityj && java -jar main/build/libs/main.jar "jar" "/path/to/jar/my-jar.jar" ""`
+
+###Run RigorityJ to analyze Apk:
+
+`cd /path/to/rigorityj && java -jar main/build/libs/main.jar "apk" "/path/to/apk/my-apk.apk" `
 
 If you have any questions or suggestions, please email to rigorityj@gmail.com.
 
