@@ -2,19 +2,19 @@
 
 An program analysis tool to find cryptographic misuse in Java and Android.
 
-###Prerequisites to use RigorityJ on Source code:
+### Prerequisites to use RigorityJ on Source code:
 
 1. Download and Install JDK 7.
 2. Set `JAVA7_HOME` environment variable.
 3. Download and Install Gradle.
 
-###Prerequisites to use RigorityJ on Jar:
+### Prerequisites to use RigorityJ on Jar:
 
 1. Download and Install JDK (version >= 7).
 2. Set `JAVA_HOME` environment variable.
 3. Download and Install Gradle.
 
-###Prerequisites to use RigorityJ on Apk:
+### Prerequisites to use RigorityJ on Apk:
 
 1. Download and Install JDK (version >= 7).
 2. Set `JAVA_HOME` environment variable.
@@ -22,11 +22,11 @@ An program analysis tool to find cryptographic misuse in Java and Android.
 4. Set `ANDROID_SDK_HOME`
 5. Download and Install Gradle.
 
-###Build RigorityJ
+### Build RigorityJ
 1. Run `cd /path/to/rigorityj`
 2. Run `gradle clean build`
 
-###Run RigorityJ to analyze source code:
+### Run RigorityJ to analyze source code:
 
 You need to run RigorityJ on JDK 7 to analyze source codes. If the project does not have any external dependencies then run,
      
@@ -38,11 +38,11 @@ If the project have external dependencies then first gather the dependencies und
 
 Note that if you have multiple subprojects with external dependencies, then you have to gather all the corresponding subproject dependencies under a path that is relative to each of the subprojects.
 
-###Run RigorityJ to analyze Jar:
+### Run RigorityJ to analyze Jar:
 
 `cd /path/to/rigorityj && java -jar main/build/libs/main.jar "jar" "/path/to/jar/my-jar.jar" ""`
 
-###Run RigorityJ to analyze Apk:
+### Run RigorityJ to analyze Apk:
 
 `cd /path/to/rigorityj && java -jar main/build/libs/main.jar "apk" "/path/to/apk/my-apk.apk" `
 
