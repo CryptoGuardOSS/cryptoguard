@@ -11,6 +11,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The point of entry for this library. This class instantiates all of the rules and
+ * passes them to the entry point of the program for processing.
+ *
+ * @author RigorityJTeam
+ * @since 1.0
+ */
 public class RuleEngine {
     private static List<RuleChecker> ruleCheckerList = new ArrayList<>();
 
@@ -32,6 +39,13 @@ public class RuleEngine {
         ruleCheckerList.add(new HttpUrlFinder());
     }
 
+    /**
+     * The point of entry for this library. Essentially the frontend, this will
+     * handle all of the arguments and routing for the operation required.
+     *
+     * @param args the arguments passed in from being called from the command line
+     * @throws Exception throws exceptions in case of extreme error of being called.
+     */
     public static void main(String[] args) throws Exception {
 
         if (args.length < 2) {

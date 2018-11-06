@@ -13,6 +13,12 @@ import main.util.Utils;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * This file checks on several of the main factors within the outputed Jimple format.
+ *
+ * @author RigorityJTeam
+ * @since 1.0
+ */
 public abstract class BaseRuleChecker implements RuleChecker {
 
     public static final Map<String, String> RULE_VS_DESCRIPTION = new HashMap<>();
