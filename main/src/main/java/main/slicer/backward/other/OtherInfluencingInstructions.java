@@ -12,29 +12,33 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-public class OtherInfluencingInstructions {
+public class OtherInfluencingInstructions
+{
 
-    private OtherAnalysisResult analysisResult;
+	private OtherAnalysisResult analysisResult;
 
-    public OtherInfluencingInstructions(SootMethod method, String slicingCriteria) {
+	public OtherInfluencingInstructions(SootMethod method, String slicingCriteria)
+	{
 
-        Body b = method.retrieveActiveBody();
-        DirectedGraph methodToSlice = new ExceptionalUnitGraph(b);
+		Body b = method.retrieveActiveBody();
+		DirectedGraph methodToSlice = new ExceptionalUnitGraph(b);
 
-        OtherInstructionSlicer analysis = new OtherInstructionSlicer(methodToSlice, slicingCriteria, method.toString());
+		OtherInstructionSlicer analysis = new OtherInstructionSlicer(methodToSlice, slicingCriteria, method.toString());
 
-        Iterator unitIt = methodToSlice.iterator();
-        if (unitIt.hasNext()) {
-            Unit s = (Unit) unitIt.next();
+		Iterator unitIt = methodToSlice.iterator();
+		if (unitIt.hasNext())
+		{
+			Unit s = (Unit) unitIt.next();
 
-            FlowSet set = (FlowSet) analysis.getFlowBefore(s);
-            List<UnitContainer> slicingResult = Collections.unmodifiableList(set.toList());
+			FlowSet set = (FlowSet) analysis.getFlowBefore(s);
+			List<UnitContainer> slicingResult = Collections.unmodifiableList(set.toList());
 
-            analysisResult = new OtherAnalysisResult(slicingCriteria, method, slicingResult);
-        }
-    }
+			analysisResult = new OtherAnalysisResult(slicingCriteria, method, slicingResult);
+		}
+	}
 
-    public OtherAnalysisResult getAnalysisResult() {
-        return analysisResult;
-    }
+	public OtherAnalysisResult getAnalysisResult()
+	{
+		return analysisResult;
+	}
 }

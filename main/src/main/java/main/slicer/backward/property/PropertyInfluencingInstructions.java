@@ -13,33 +13,37 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-public class PropertyInfluencingInstructions {
+public class PropertyInfluencingInstructions
+{
 
-    private PropertyAnalysisResult slicingResult;
+	private PropertyAnalysisResult slicingResult;
 
-    public PropertyInfluencingInstructions(MethodWrapper initMethod, String slicingCriteria) {
+	public PropertyInfluencingInstructions(MethodWrapper initMethod, String slicingCriteria)
+	{
 
-        Body initBody = initMethod.getMethod().retrieveActiveBody();
-        UnitGraph graph = new ExceptionalUnitGraph(initBody);
-        PropertyInstructionSlicer analysis = new PropertyInstructionSlicer(graph, slicingCriteria, initMethod.toString());
+		Body initBody = initMethod.getMethod().retrieveActiveBody();
+		UnitGraph graph = new ExceptionalUnitGraph(initBody);
+		PropertyInstructionSlicer analysis = new PropertyInstructionSlicer(graph, slicingCriteria, initMethod.toString());
 
-        Iterator unitIt = graph.iterator();
-        if (unitIt.hasNext()) {
-            Unit s = (Unit) unitIt.next();
+		Iterator unitIt = graph.iterator();
+		if (unitIt.hasNext())
+		{
+			Unit s = (Unit) unitIt.next();
 
-            FlowSet set = (FlowSet) analysis.getFlowBefore(s);
+			FlowSet set = (FlowSet) analysis.getFlowBefore(s);
 
-            List<UnitContainer> result = Collections.unmodifiableList(set.toList());
+			List<UnitContainer> result = Collections.unmodifiableList(set.toList());
 
-            slicingResult = new PropertyAnalysisResult();
-            slicingResult.setMethodWrapper(initMethod);
-            slicingResult.setSlicingResult(result);
-            slicingResult.setInfluencingParams(Utils.findInfluencingParamters(result));
-            slicingResult.setPropertyUseMap(analysis.getPropertyUseMap());
-        }
-    }
+			slicingResult = new PropertyAnalysisResult();
+			slicingResult.setMethodWrapper(initMethod);
+			slicingResult.setSlicingResult(result);
+			slicingResult.setInfluencingParams(Utils.findInfluencingParamters(result));
+			slicingResult.setPropertyUseMap(analysis.getPropertyUseMap());
+		}
+	}
 
-    public PropertyAnalysisResult getSlicingResult() {
-        return this.slicingResult;
-    }
+	public PropertyAnalysisResult getSlicingResult()
+	{
+		return this.slicingResult;
+	}
 }

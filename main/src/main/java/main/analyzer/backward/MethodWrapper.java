@@ -12,45 +12,54 @@ import java.util.Map;
 /**
  * Created by krishnokoli on 12/27/16.
  */
-public class MethodWrapper {
+public class MethodWrapper
+{
 
     private boolean isTopLevel = true;
     private SootMethod method;
     private List<MethodCallSiteInfo> calleeList;
     private List<MethodWrapper> callerList;
 
-    public MethodWrapper(SootMethod method) {
+    public MethodWrapper(SootMethod method)
+    {
         this.method = method;
         this.calleeList = new ArrayList<>();
         this.callerList = new ArrayList<>();
     }
 
-    public SootMethod getMethod() {
+    public SootMethod getMethod()
+    {
         return method;
     }
 
-    public List<MethodCallSiteInfo> getCalleeList() {
+    public List<MethodCallSiteInfo> getCalleeList()
+    {
         return calleeList;
     }
 
-    public void setMethod(SootMethod method) {
+    public void setMethod(SootMethod method)
+    {
         this.method = method;
     }
 
-    public boolean isTopLevel() {
+    public boolean isTopLevel()
+    {
         return isTopLevel;
     }
 
-    public void setTopLevel(boolean topLevel) {
+    public void setTopLevel(boolean topLevel)
+    {
         isTopLevel = topLevel;
     }
 
-    public List<MethodWrapper> getCallerList() {
+    public List<MethodWrapper> getCallerList()
+    {
         return callerList;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(Object o)
+    {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -60,12 +69,14 @@ public class MethodWrapper {
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         return method.toString().hashCode();
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return method.toString();
     }
 }

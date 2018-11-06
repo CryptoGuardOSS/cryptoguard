@@ -10,23 +10,27 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class ApkAnalyzer {
+public class ApkAnalyzer
+{
 
     public static void analyzeSlices(String criteriaClass,
                                      String criteriaMethod,
                                      int criteriaParam,
-                                     String projectJarPath, BaseRuleChecker checker) throws IOException {
+                                     String projectJarPath, BaseRuleChecker checker) throws IOException
+    {
 
         String javaHome = System.getenv("JAVA_HOME");
         String androidHome = System.getenv("ANDROID_SDK_HOME");
 
-        if (javaHome == null) {
+        if (javaHome == null)
+        {
 
             System.err.println("Please set JAVA_HOME");
             System.exit(1);
         }
 
-        if (androidHome == null) {
+        if (androidHome == null)
+        {
 
             System.err.println("Please set ANDROID_SDK_HOME");
             System.exit(1);
@@ -43,11 +47,13 @@ public class ApkAnalyzer {
         Options.v().set_whole_program(true);
         Options.v().set_allow_phantom_refs(true);
 
-        for (String clazz : BaseAnalyzer.CRITERIA_CLASSES) {
+        for (String clazz : BaseAnalyzer.CRITERIA_CLASSES)
+        {
             Scene.v().loadClassAndSupport(clazz);
         }
 
-        for (String clazz : classNames) {
+        for (String clazz : classNames)
+        {
             Scene.v().loadClassAndSupport(clazz);
         }
 

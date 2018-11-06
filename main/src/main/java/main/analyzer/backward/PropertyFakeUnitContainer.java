@@ -1,14 +1,17 @@
 package main.analyzer.backward;
 
-public class PropertyFakeUnitContainer extends UnitContainer {
+public class PropertyFakeUnitContainer extends UnitContainer
+{
 
-    private String originalProperty;
+	private String originalProperty;
 
-    public String getOriginalProperty() {
-        return originalProperty;
-    }
+	public String getOriginalProperty()
+	{
+		return originalProperty;
+	}
 
-    public void setOriginalProperty(String originalProperty) {
-        this.originalProperty = originalProperty;
-    }
+	public void setOriginalProperty(String originalProperty)
+	{
+		this.originalProperty = originalProperty;
+	}
 }

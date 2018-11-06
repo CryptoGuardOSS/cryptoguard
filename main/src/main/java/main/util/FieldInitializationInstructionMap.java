@@ -13,101 +13,123 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FieldInitializationInstructionMap {
+public class FieldInitializationInstructionMap
+{
 
-    private static Map<String, List<PropertyAnalysisResult>> initializationInstructions = null;
-    private static Map<String, List<MethodWrapper>> fieldVsMethodWrapper = null;
+	private static Map<String, List<PropertyAnalysisResult>> initializationInstructions = null;
+	private static Map<String, List<MethodWrapper>> fieldVsMethodWrapper = null;
 
-    public static void reset() {
-        initializationInstructions = null;
-        fieldVsMethodWrapper = null;
-    }
+	public static void reset()
+	{
+		initializationInstructions = null;
+		fieldVsMethodWrapper = null;
+	}
 
-    public static void build(List<String> classNames) {
+	public static void build(List<String> classNames)
+	{
 
-        if (fieldVsMethodWrapper == null) {
+		if (fieldVsMethodWrapper == null)
+		{
 
-            fieldVsMethodWrapper = new HashMap<>();
+			fieldVsMethodWrapper = new HashMap<>();
 
-            for (String className : classNames) {
+			for (String className : classNames)
+			{
 
-                SootClass sClass = Scene.v().loadClassAndSupport(className);
+				SootClass sClass = Scene.v().loadClassAndSupport(className);
 
-                Chain<SootField> sootFields = sClass.getFields();
+				Chain<SootField> sootFields = sClass.getFields();
 
-                for (SootField field : sootFields) {
+				for (SootField field : sootFields)
+				{
 
-                    List<MethodWrapper> initMethods = new ArrayList<>();
+					List<MethodWrapper> initMethods = new ArrayList<>();
 
-                    List<SootMethod> methodList = sClass.getMethods();
+					List<SootMethod> methodList = sClass.getMethods();
 
-                    for (SootMethod method : methodList) {
+					for (SootMethod method : methodList)
+					{
 
-                        if (method.isConcrete()) {
+						if (method.isConcrete())
+						{
 
-                            StringBuilder methodBody = new StringBuilder();
+							StringBuilder methodBody = new StringBuilder();
 
-                            try {
-                                Body initBody = method.retrieveActiveBody();
-                                UnitGraph graph = new ExceptionalUnitGraph(initBody);
+							try
+							{
+								Body initBody = method.retrieveActiveBody();
+								UnitGraph graph = new ExceptionalUnitGraph(initBody);
 
-                                for (Object aGraph : graph) {
-                                    methodBody.append(aGraph);
-                                }
+								for (Object aGraph : graph)
+								{
+									methodBody.append(aGraph);
+								}
 
-                                if (methodBody.toString().contains(field.toString() + " =")) {
-                                    initMethods.add(NamedMethodMap.getMethod(method.toString()));
-                                }
-                            } catch (RuntimeException e) {
-                                System.err.println(e);
-                                continue;
-                            }
-                        }
+								if (methodBody.toString().contains(field.toString() + " ="))
+								{
+									initMethods.add(NamedMethodMap.getMethod(method.toString()));
+								}
+							} catch (RuntimeException e)
+							{
+								System.err.println(e);
+								continue;
+							}
+						}
 
-                    }
+					}
 
-                    fieldVsMethodWrapper.put(field.toString(), initMethods);
-                }
+					fieldVsMethodWrapper.put(field.toString(), initMethods);
+				}
 
-            }
-        }
-    }
+			}
+		}
+	}
 
-    public static List<PropertyAnalysisResult> getInitInstructions(String fieldName) {
+	public static List<PropertyAnalysisResult> getInitInstructions(String fieldName)
+	{
 
-        if (fieldVsMethodWrapper == null) {
-            throw new RuntimeException("Execute build first ...");
-        }
+		if (fieldVsMethodWrapper == null)
+		{
+			throw new RuntimeException("Execute build first ...");
+		}
 
-        if (initializationInstructions == null) {
-            initializationInstructions = new HashMap<>();
-        }
+		if (initializationInstructions == null)
+		{
+			initializationInstructions = new HashMap<>();
+		}
 
-        if (!initializationInstructions.containsKey(fieldName)) {
-            List<MethodWrapper> initMethodList = fieldVsMethodWrapper.get(fieldName);
+		if (!initializationInstructions.containsKey(fieldName))
+		{
+			List<MethodWrapper> initMethodList = fieldVsMethodWrapper.get(fieldName);
 
-            if (initMethodList == null || initMethodList.isEmpty()) {
-                return null;
-            } else {
+			if (initMethodList == null || initMethodList.isEmpty())
+			{
+				return null;
+			}
+			else
+			{
 
-                List<PropertyAnalysisResult> analysisResultList = new ArrayList<>();
-                for (MethodWrapper method : initMethodList) {
-                    PropertyInfluencingInstructions simpleSlicerInstructions =
-                            new PropertyInfluencingInstructions(method, fieldName);
+				List<PropertyAnalysisResult> analysisResultList = new ArrayList<>();
+				for (MethodWrapper method : initMethodList)
+				{
+					PropertyInfluencingInstructions simpleSlicerInstructions =
+							new PropertyInfluencingInstructions(method, fieldName);
 
-                    PropertyAnalysisResult analysis = simpleSlicerInstructions.getSlicingResult();
+					PropertyAnalysisResult analysis = simpleSlicerInstructions.getSlicingResult();
 
-                    if (!analysis.getSlicingResult().isEmpty()) {
-                        analysisResultList.add(analysis);
-                    }
-                }
+					if (!analysis.getSlicingResult().isEmpty())
+					{
+						analysisResultList.add(analysis);
+					}
+				}
 
-                if (!analysisResultList.isEmpty()) {
-                    initializationInstructions.put(fieldName, analysisResultList);
-                }
-            }
-        }
+				if (!analysisResultList.isEmpty())
+				{
+					initializationInstructions.put(fieldName, analysisResultList);
+				}
+			}
+		}
 
-        return initializationInstructions.get(fieldName);
-    }
+		return initializationInstructions.get(fieldName);
+	}
 }

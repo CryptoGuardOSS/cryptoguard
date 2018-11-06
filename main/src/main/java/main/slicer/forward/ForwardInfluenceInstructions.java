@@ -10,30 +10,34 @@ import java.util.*;
 /**
  * Created by krishnokoli on 7/1/17.
  */
-public class ForwardInfluenceInstructions implements InfluenceInstructions {
+public class ForwardInfluenceInstructions implements InfluenceInstructions
+{
 
-    private SlicingResult slicingResult;
+	private SlicingResult slicingResult;
 
-    public ForwardInfluenceInstructions(DirectedGraph graph,
-                                        SlicingCriteria slicingCriteria) {
-        ForwardProgramSlicing analysis = new ForwardProgramSlicing(graph, slicingCriteria);
+	public ForwardInfluenceInstructions(DirectedGraph graph,
+										SlicingCriteria slicingCriteria)
+	{
+		ForwardProgramSlicing analysis = new ForwardProgramSlicing(graph, slicingCriteria);
 
-        for (Object aGraph : graph) {
-            Unit s = (Unit) aGraph;
+		for (Object aGraph : graph)
+		{
+			Unit s = (Unit) aGraph;
 
-            FlowSet set = (FlowSet) analysis.getFlowAfter(s);
-            List<Unit> analysisResult = Collections.unmodifiableList(set.toList());
+			FlowSet set = (FlowSet) analysis.getFlowAfter(s);
+			List<Unit> analysisResult = Collections.unmodifiableList(set.toList());
 
-            this.slicingResult = new SlicingResult();
+			this.slicingResult = new SlicingResult();
 
-            this.slicingResult.setAnalysisResult(analysisResult);
-            this.slicingResult.setCallSiteInfo(analysis.getMethodCallSiteInfo());
-        }
-    }
+			this.slicingResult.setAnalysisResult(analysisResult);
+			this.slicingResult.setCallSiteInfo(analysis.getMethodCallSiteInfo());
+		}
+	}
 
-    @Override
-    public SlicingResult getSlicingResult() {
-        return this.slicingResult;
-    }
+	@Override
+	public SlicingResult getSlicingResult()
+	{
+		return this.slicingResult;
+	}
 
 }

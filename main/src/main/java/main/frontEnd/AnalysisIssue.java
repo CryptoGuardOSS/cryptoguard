@@ -3,10 +3,12 @@ package main.frontEnd;
 /**
  * The class containing the specific analysis issue information.
  * <p>STATUS: IC</p>
+ *
  * @author RigorityJTeam
  * @since 1.0
  */
-public class AnalysisIssue {
+public class AnalysisIssue
+{
 
     private Integer lineNumber;
     private String method;
@@ -29,29 +31,33 @@ public class AnalysisIssue {
      * <p>Replicates the structure: ***Found: ["\s"] [in Line \d] in Method: \s</p>
      *
      * @param capturedInformation the message containing the string that broke the rule
-     * @param lineNumber the line number within the method the string is located at
-     * @param method the method where the string is
+     * @param lineNumber          the line number within the method the string is located at
+     * @param method              the method where the string is
      */
-    public AnalysisIssue(String method,Integer lineNumber,String capturedInformation)
+    public AnalysisIssue(String method, Integer lineNumber, String capturedInformation)
     {
         this.method = method;
         this.lineNumber = lineNumber;
         this.capturedInformation = capturedInformation;
     }
 
-    public Integer getLineNumber() {
+    public Integer getLineNumber()
+    {
         return lineNumber;
     }
 
-    public String getMethod() {
+    public String getMethod()
+    {
         return method;
     }
 
-    public String getCapturedInformation() {
+    public String getCapturedInformation()
+    {
         return capturedInformation;
     }
 
-    public String getCauseMessage() {
+    public String getCauseMessage()
+    {
         return causeMessage;
     }
 }
