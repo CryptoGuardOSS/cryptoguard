@@ -1,20 +1,21 @@
 package main.rule.base;
 
 import main.analyzer.backward.Analysis;
-import main.analyzer.backward.ParamFakeUnitContainer;
-import main.analyzer.backward.PropertyFakeUnitContainer;
 import main.analyzer.backward.UnitContainer;
-import main.util.Utils;
-import soot.*;
+import soot.ByteType;
+import soot.IntegerType;
+import soot.Value;
+import soot.ValueBox;
 import soot.jimple.AssignStmt;
 import soot.jimple.Constant;
 import soot.jimple.InvokeExpr;
 import soot.jimple.internal.JAssignStmt;
-import soot.jimple.internal.JInvokeStmt;
 import soot.jimple.internal.RValueBox;
 
-import java.util.*;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by krishnokoli on 11/26/17.

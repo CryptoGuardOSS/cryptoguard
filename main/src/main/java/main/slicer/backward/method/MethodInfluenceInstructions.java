@@ -2,7 +2,6 @@ package main.slicer.backward.method;
 
 import main.analyzer.backward.UnitContainer;
 import main.slicer.backward.MethodCallSiteInfo;
-import main.slicer.backward.property.PropertyAnalysisResult;
 import main.util.Utils;
 import soot.Unit;
 import soot.toolkits.graph.DirectedGraph;
@@ -11,7 +10,6 @@ import soot.toolkits.scalar.FlowSet;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by krishnokoli on 7/1/17.

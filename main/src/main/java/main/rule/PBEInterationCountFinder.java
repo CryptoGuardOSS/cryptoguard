@@ -7,12 +7,12 @@ import main.rule.base.MajorHeuristics;
 import main.rule.engine.Criteria;
 import soot.IntType;
 import soot.ValueBox;
-import soot.jimple.AssignStmt;
 import soot.jimple.Constant;
-import soot.jimple.internal.RValueBox;
 
-import java.util.*;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by krishnokoli on 10/22/17.

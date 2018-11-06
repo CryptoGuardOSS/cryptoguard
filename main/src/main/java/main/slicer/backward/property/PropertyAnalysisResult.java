@@ -3,7 +3,6 @@ package main.slicer.backward.property;
 import main.analyzer.backward.MethodWrapper;
 import main.analyzer.backward.UnitContainer;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

@@ -1,12 +1,10 @@
 package main.rule;
 
-import main.analyzer.backward.Analysis;
-import main.analyzer.backward.UnitContainer;
-import main.rule.base.BaseRuleChecker;
 import main.rule.base.PredictableSourceRuleChecker;
 import main.rule.engine.Criteria;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by krishnokoli on 11/15/17.

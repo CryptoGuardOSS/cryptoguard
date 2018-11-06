@@ -1,11 +1,11 @@
 package main.slicer.forward;
 
 import soot.Unit;
-import soot.ValueBox;
 import soot.toolkits.graph.DirectedGraph;
 import soot.toolkits.scalar.FlowSet;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by krishnokoli on 7/1/17.

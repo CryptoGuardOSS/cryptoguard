@@ -1,13 +1,10 @@
 package main.analyzer.backward;
 
 import main.slicer.backward.MethodCallSiteInfo;
-import main.slicer.backward.method.MethodSlicingResult;
 import soot.SootMethod;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by krishnokoli on 12/27/16.

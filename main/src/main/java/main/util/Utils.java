@@ -1,16 +1,15 @@
 package main.util;
 
-import main.analyzer.backward.MethodWrapper;
 import main.analyzer.backward.UnitContainer;
-import main.slicer.backward.MethodCallSiteInfo;
 import main.util.manifest.ProcessManifest;
 import org.jf.dexlib2.DexFileFactory;
 import org.jf.dexlib2.Opcodes;
 import org.jf.dexlib2.iface.ClassDef;
 import org.jf.dexlib2.iface.DexFile;
-import soot.*;
-import soot.toolkits.graph.ExceptionalUnitGraph;
-import soot.toolkits.graph.UnitGraph;
+import soot.Scene;
+import soot.SootClass;
+import soot.Unit;
+import soot.ValueBox;
 import soot.util.Chain;
 
 import java.io.File;

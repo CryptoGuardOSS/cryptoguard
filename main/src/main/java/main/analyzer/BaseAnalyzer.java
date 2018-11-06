@@ -11,7 +11,10 @@ import main.slicer.backward.method.MethodSlicingResult;
 import main.slicer.backward.property.PropertyAnalysisResult;
 import main.util.FieldInitializationInstructionMap;
 import main.util.NamedMethodMap;
-import soot.*;
+import soot.Body;
+import soot.Scene;
+import soot.SootClass;
+import soot.SootMethod;
 import soot.toolkits.graph.ExceptionalUnitGraph;
 import soot.toolkits.graph.UnitGraph;
 

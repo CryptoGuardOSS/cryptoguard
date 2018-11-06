@@ -1,7 +1,5 @@
 package main.slicer.forward;
 
-import java.util.List;
-
 /**
  * Created by krishnokoli on 7/3/17.
  */

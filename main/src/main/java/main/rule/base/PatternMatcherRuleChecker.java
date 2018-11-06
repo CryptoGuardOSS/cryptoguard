@@ -5,8 +5,10 @@ import main.analyzer.backward.UnitContainer;
 import soot.ValueBox;
 import soot.jimple.Constant;
 
-import java.util.*;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class PatternMatcherRuleChecker extends BaseRuleChecker
 {

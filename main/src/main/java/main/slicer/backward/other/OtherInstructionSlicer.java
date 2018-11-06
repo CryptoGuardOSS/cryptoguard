@@ -12,7 +12,6 @@ import soot.toolkits.scalar.BackwardFlowAnalysis;
 import soot.toolkits.scalar.FlowSet;
 
 import java.util.List;
-import java.util.Map;
 
 public class OtherInstructionSlicer extends BackwardFlowAnalysis
 {
