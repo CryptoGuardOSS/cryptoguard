@@ -3,6 +3,8 @@ package main.rule.engine;
 import main.rule.*;
 import main.util.*;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -47,7 +49,6 @@ public class RuleEngine
 	 */
 	public static void main(String[] args) throws Exception
 	{
-
 		if (args.length < 2)
 		{
 			System.exit(1);

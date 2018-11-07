@@ -10,11 +10,14 @@ package main.frontEnd;
 public class AnalysisIssue
 {
 
-    private Integer lineNumber;
+	//region Attributes
+	private Integer lineNumber;
     private String method;
     private String capturedInformation;
     private String causeMessage;
+	//endregion
 
+	//region Constructors
     /**
      * The issue that was caused by a more generic reason instead of a specific line.
      * <p>Replicates the structure: ***Cause: ...</p>
@@ -40,24 +43,48 @@ public class AnalysisIssue
         this.lineNumber = lineNumber;
         this.capturedInformation = capturedInformation;
     }
+	//endregion
 
-    public Integer getLineNumber()
-    {
-        return lineNumber;
-    }
+	//region Getters
 
-    public String getMethod()
+	/**
+	 * The getter for the Line Number
+	 *
+	 * @return Integer - the line number of the rule break
+	 */
+	public Integer getLineNumber()
+	{
+		return lineNumber;
+	}
+
+	/**
+	 * The getter for the method name
+	 *
+	 * @return string - the name of the method
+	 */
+	public String getMethod()
     {
         return method;
-    }
+	}
 
-    public String getCapturedInformation()
+	/**
+	 * The getter for the Captured Information
+	 *
+	 * @return string - returns any error information
+	 */
+	public String getCapturedInformation()
     {
         return capturedInformation;
-    }
+	}
 
-    public String getCauseMessage()
-    {
-        return causeMessage;
-    }
+	/**
+	 * The getter for the cause message
+	 *
+	 * @return string - a generalized String set for a common error message, a less detailed error message
+	 */
+	public String getCauseMessage()
+	{
+		return causeMessage;
+	}
+	//endregion
 }

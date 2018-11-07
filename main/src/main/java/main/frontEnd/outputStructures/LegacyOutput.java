@@ -1,6 +1,12 @@
-package main.frontEnd;
+package main.frontEnd.outputStructures;
 
+import main.frontEnd.AnalysisIssue;
+import main.frontEnd.AnalysisRule;
+import main.frontEnd.OutputStructure;
 import main.rule.engine.EngineType;
+
+import java.io.PrintStream;
+import java.util.ArrayList;
 
 /**
  * The class containing the implementation of the legacy output.
@@ -9,19 +15,9 @@ import main.rule.engine.EngineType;
  * @author RigorityJTeam
  * @since 1.0
  */
-public class LegacyOutput extends MessageRepresentation
+public class LegacyOutput implements OutputStructure
 {
-
-	/**
-	 * The constructor of the current type of output.
-	 *
-	 * @param type   the type of engine to be used for the processing
-	 * @param source the name of the source being examined
-	 */
-	public LegacyOutput(String source, EngineType type)
-	{
-		super(source, type);
-	}
+	public final Listing typeOfStructure = Listing.LegacyOutput;
 
 	/***
 	 *  The overridden method for the Legacy output. Currently mimics the output as best seen.
@@ -29,11 +25,12 @@ public class LegacyOutput extends MessageRepresentation
 	 * @return Object nothing is returned in legacy as legacy only prints
 	 * information out to the console
 	 */
-	@Override
-	public Object getOutput()
+	public Object getOutput(String source, EngineType type, ArrayList<AnalysisRule> brokenRules, PrintStream internalWarnings)
 	{
-		System.out.println("Analyzing " + this.getType() + ": " + this.getSource());
-		for (AnalysisRule rule : this.getAnalysisIssues())
+		System.out.println("Type of messaging structure being used: " + this.typeOfStructure);
+		System.out.println("Internal Warnings: " + internalWarnings.toString());
+		System.out.println("Analyzing " + type + ": " + source);
+		for (AnalysisRule rule : brokenRules)
 		{
 			System.out.println("=======================================");
 			System.out.println("***Violated Rule " + rule.getRuleNumber() + ": " + rule.getRuleType());
