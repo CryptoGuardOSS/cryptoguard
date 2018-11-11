@@ -85,18 +85,18 @@ public class LegacyOutputTest
 
 		//region Adding Rules
 		//region Rule 1
-		AnalysisRule brokenOne = new AnalysisRule(1, "Found broken crypto schemes", "Found broken crypto schemes");
+		AnalysisRule brokenOne = new AnalysisRule(1);
 		brokenOne.addIssue(new AnalysisIssue("<tester.Crypto: void <init>()>", "AES/ECB/PKCS5PADDING", true));
 		brokenOne.addIssue(new AnalysisIssue("<tester.PasswordUtils: void <init>(java.lang.String)>", "PBEWithMD5AndDES", true));
 		//endregion
 		//region Rule 2
-		AnalysisRule brokenTwo = new AnalysisRule(2, "Found broken hash functions", "Found broken hash functions");
+		AnalysisRule brokenTwo = new AnalysisRule(2);
 		brokenTwo.addIssue(new AnalysisIssue("<tester.PBEUsage: javax.crypto.spec.PBEKeySpec getPBEParameterSpec(java.lang.String)>", "MD5", true));
 		brokenTwo.addIssue(new AnalysisIssue("<tester.Crypto: void main(java.lang.String[])>", "SHA", true));
 		brokenTwo.addIssue(new AnalysisIssue("<tester.Crypto: void main(java.lang.String[])>", "SHA1", true));
 		//endregion
 		//region Rule 3
-		AnalysisRule brokenThree = new AnalysisRule(3, "Used constant keys in code", "Used constant keys in code");
+		AnalysisRule brokenThree = new AnalysisRule(3);
 		brokenThree.addIssue(new AnalysisIssue("<tester.LiveVarsClass: void <clinit>()>", "aaaaaaa", true));
 		brokenThree.addIssue(new AnalysisIssue("<tester.PasswordUtils: void <init>(java.lang.String)>", 79, "tzL1AKl5uc4NKYaoQ4P3WLGIBFPXWPWdu1fRm9004jtQiV"));
 		brokenThree.addIssue(new AnalysisIssue("<tester.LiveVarsClass: void <clinit>()>", 4, "aaaaaaa"));
@@ -104,12 +104,12 @@ public class LegacyOutputTest
 		brokenThree.addIssue(new AnalysisIssue("<tester.Crypto: void main(java.lang.String[])>", 152, "Bar12345Bar12345"));
 		//endregion
 		//region Rule 4
-		AnalysisRule brokenFour = new AnalysisRule(4, "Uses untrusted TrustManager", "Uses untrusted TrustManager");
+		AnalysisRule brokenFour = new AnalysisRule(4);
 		brokenFour.addIssue(new AnalysisIssue("tester.Crypto$2", "Should at least get One accepted Issuer from Other Sources in getAcceptedIssuers method of ", false));
 		brokenFour.addIssue(new AnalysisIssue("tester.Crypto$2", "Should not use unpinned self-signed certification in ", false));
 		//endregion
 		//region Rule 5
-		AnalysisRule brokenFive = new AnalysisRule(5, "Used export grade public Key", "Used export grade public Key");
+		AnalysisRule brokenFive = new AnalysisRule(5);
 		brokenFive.addIssue(new AnalysisIssue("Used default key size in method: <tester.Crypto: java.security.KeyPair generateKeyPairDefaultKeySize()>[122]"));
 		brokenFive.addIssue(new AnalysisIssue("<tester.Crypto: java.security.KeyPair generateKeyPair()>", "1024", true));
 		//endregion

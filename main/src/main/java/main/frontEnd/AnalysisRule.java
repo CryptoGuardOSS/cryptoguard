@@ -1,5 +1,7 @@
 package main.frontEnd;
 
+import main.rule.engine.RuleList;
+
 import java.util.ArrayList;
 
 /**
@@ -14,7 +16,6 @@ public class AnalysisRule
 
 	//region Attributes
 	private Integer ruleNumber;
-	private String ruleType;
 	private String message;
 	private ArrayList<AnalysisIssue> issues;
 	//endregion
@@ -26,14 +27,10 @@ public class AnalysisRule
 	 * Will set all of the necessary parameters to be returned to the user as well as instantiate a new list of issues
 	 *
 	 * @param ruleNumber - the rule number that was broken
-	 * @param ruleType   - the type of rule that was broken
-	 * @param message    - the message about the broken rule
 	 */
-	public AnalysisRule(Integer ruleNumber, String ruleType, String message)
+	public AnalysisRule(Integer ruleNumber)
 	{
 		this.ruleNumber = ruleNumber;
-		this.ruleType = ruleType;
-		this.message = message;
 		this.issues = new ArrayList<>();
 	}
 	//endregion
@@ -57,7 +54,7 @@ public class AnalysisRule
 	 */
 	public String getRuleType()
 	{
-		return ruleType;
+		return RuleList.getDescByRuleNumber(this.ruleNumber);
 	}
 
 	/**
@@ -88,6 +85,16 @@ public class AnalysisRule
 	public void addIssue(AnalysisIssue issue)
 	{
 		this.issues.add(issue);
+	}
+
+	/**
+	 * The adder for the list of issues
+	 *
+	 * @param issues - a list of notices of the location of the broken rule
+	 */
+	public void addIssue(ArrayList<AnalysisIssue> issues)
+	{
+		this.issues.addAll(issues);
 	}
 	//endregion
 }

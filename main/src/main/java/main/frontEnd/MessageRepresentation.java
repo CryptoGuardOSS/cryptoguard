@@ -2,6 +2,7 @@ package main.frontEnd;
 
 import main.frontEnd.outputStructures.Listing;
 import main.rule.engine.EngineType;
+import main.rule.engine.RuleList;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -22,7 +23,7 @@ public class MessageRepresentation
 	private EngineType type;
 	private ArrayList<AnalysisRule> analysisIssues;
 	private PrintStream internalMessages;
-	private OutputStructure messageEngine;//Defined as such for now
+	private OutputStructure messageEngine;
 	//endregion
 
 	//region Constructor
@@ -35,7 +36,7 @@ public class MessageRepresentation
 	 * @param source                   the name of the source being examined
 	 * @param typeOfMessagingStructure the flag used to determine the type of messaging structure to be used
 	 */
-	MessageRepresentation(String source, EngineType type, String typeOfMessagingStructure)
+	public MessageRepresentation(String source, EngineType type, String typeOfMessagingStructure)
 	{
 		this.Source = source;
 		this.type = type;
@@ -43,29 +44,77 @@ public class MessageRepresentation
 		this.internalMessages = new PrintStream(new ByteArrayOutputStream());
 		System.setOut(this.internalMessages);
 		this.analysisIssues = new ArrayList<>();
+
+		for (RuleList rule : RuleList.values())
+			this.analysisIssues.add(new AnalysisRule(rule.getRuleId()));
 	}
 	//endregion
 
 	//region Getters/Setters/Adders
+
+	/**
+	 * The getter for the source
+	 *
+	 * @return string - the source
+	 */
+	public String getSource()
+	{
+		return Source;
+	}
+
+	/**
+	 * The getter for the type
+	 *
+	 * @return EngineType - the type of engine running
+	 */
+	public EngineType getType()
+	{
+		return type;
+	}
+
+	/**
+	 * The getter for the Analysis Issues
+	 *
+	 * @return AnalysisRules - the list of broken rules
+	 */
+	public ArrayList<AnalysisRule> getAnalysisIssues()
+	{
+		return analysisIssues;
+	}
+
+	/**
+	 * The getter for the Messaging Engine
+	 *
+	 * @return OutputStructure - the messaging engine being used
+	 */
+	public OutputStructure getMessageEngine()
+	{
+		return messageEngine;
+	}
+
 	/**
 	 * A simple method to allow additional rule breaks to be added into the output.
 	 * This method will add a single Analysis Rule
 	 *
-	 * @param ruleInfo the information about the rule being broken
+	 * @param ruleNumber - the rule number to add the issue to
+	 * @param issue - the specific issue being added
 	 */
-	public void addRuleAnalysis(AnalysisRule ruleInfo)
+	public void addRuleAnalysis(Integer ruleNumber, AnalysisIssue issue)
 	{
-		this.analysisIssues.add(ruleInfo);
+		this.analysisIssues.get(ruleNumber-1).addIssue(issue);
+
 	}
 
 	/**
 	 * A simple overloaded method to add an arraylist of rule breaks into the output.
 	 *
-	 * @param ruleInfo the array list of the information about the rule being broken
+	 *
+	 *    @param ruleNumber - the rule number to add the issue to
+	 * 	@param issues - the specific issues being added
 	 */
-	public void addRuleAnalysis(ArrayList<AnalysisRule> ruleInfo)
+	public void addRuleAnalysis(Integer ruleNumber, ArrayList<AnalysisIssue> issues)
 	{
-		this.analysisIssues.addAll(ruleInfo);
+		this.analysisIssues.get(ruleNumber-1).addIssue(issues);
 	}
 
 	/**
@@ -75,7 +124,7 @@ public class MessageRepresentation
 	 */
 	public Object getMessage()
 	{
-		return messageEngine.getOutput(Source, type, analysisIssues, internalMessages);
+		return messageEngine.getOutput(this.Source, this.type, this.analysisIssues, this.internalMessages);
 	}
 	//endregion
 }
