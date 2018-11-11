@@ -12,9 +12,10 @@ public class AnalysisIssue
 
 	//region Attributes
 	private Integer lineNumber;
-    private String method;
+	private String locationName;
     private String capturedInformation;
     private String causeMessage;
+	private Boolean describingMethod;
 	//endregion
 
 	//region Constructors
@@ -34,15 +35,31 @@ public class AnalysisIssue
      * <p>Replicates the structure: ***Found: ["\s"] [in Line \d] in Method: \s</p>
      *
      * @param capturedInformation the message containing the string that broke the rule
-     * @param lineNumber          the line number within the method the string is located at
-     * @param method              the method where the string is
+	 * @param lineNumber          the line number within the locationName the string is located at
+	 * @param locationName              the locationName where the string is
      */
-    public AnalysisIssue(String method, Integer lineNumber, String capturedInformation)
+	public AnalysisIssue(String locationName, Integer lineNumber, String capturedInformation)
     {
-        this.method = method;
+		this.locationName = locationName;
         this.lineNumber = lineNumber;
         this.capturedInformation = capturedInformation;
-    }
+		this.describingMethod = true;
+	}
+
+	/**
+	 * The issue that was caused by a specific reason (a specific string).
+	 * <p>Replicates the structure: ***Found: ["\s"] [in Line \d] in Method: \s</p>
+	 *
+	 * @param capturedInformation the message containing the string that broke the rule
+	 * @param locationName        the locationName where the string is
+	 * @param describingMethod    the boolean to indicate whether or not the issue is describing a method or class
+	 */
+	public AnalysisIssue(String locationName, String capturedInformation, boolean describingMethod)
+	{
+		this.locationName = locationName;
+		this.capturedInformation = capturedInformation;
+		this.describingMethod = describingMethod;
+	}
 	//endregion
 
 	//region Getters
@@ -58,13 +75,13 @@ public class AnalysisIssue
 	}
 
 	/**
-	 * The getter for the method name
+	 * The getter for the locationName name
 	 *
-	 * @return string - the name of the method
+	 * @return string - the name of the locationName
 	 */
-	public String getMethod()
-    {
-        return method;
+	public String getLocationName()
+	{
+		return locationName;
 	}
 
 	/**
@@ -85,6 +102,17 @@ public class AnalysisIssue
 	public String getCauseMessage()
 	{
 		return causeMessage;
+	}
+
+
+	/**
+	 * The getter for the Message First Boolean
+	 *
+	 * @return boolean - the indicator whether or not the message is describing a method or not
+	 */
+	public Boolean getDescribingMethod()
+	{
+		return describingMethod;
 	}
 	//endregion
 }

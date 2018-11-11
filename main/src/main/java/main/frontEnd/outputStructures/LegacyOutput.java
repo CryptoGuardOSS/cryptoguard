@@ -27,35 +27,81 @@ public class LegacyOutput implements OutputStructure
 	 */
 	public Object getOutput(String source, EngineType type, ArrayList<AnalysisRule> brokenRules, PrintStream internalWarnings)
 	{
-		System.out.println("Type of messaging structure being used: " + this.typeOfStructure);
-		System.out.println("Internal Warnings: " + internalWarnings.toString());
-		System.out.println("Analyzing " + type + ": " + source);
+		StringBuilder output = new StringBuilder();
+
+		if (internalWarnings != null)
+		{
+			output.append("Internal Warnings: " + internalWarnings.toString() + "\n");
+		}
+
+		output.append("Analyzing " + type + ": " + source + "\n");
+
+		//region Broken Rule Cycle
 		for (AnalysisRule rule : brokenRules)
 		{
-			System.out.println("=======================================");
-			System.out.println("***Violated Rule " + rule.getRuleNumber() + ": " + rule.getRuleType());
+			output.append("=======================================\n");
+			output.append("***Violated Rule " + rule.getRuleNumber() + ": " + rule.getRuleType() + "\n");
+			//region Specific Rule Broken
 			if (rule.getIssues().size() > 0)
 			{
 				for (AnalysisIssue issue : rule.getIssues())
 				{
-					StringBuilder message = new StringBuilder("***Found: ");
-
-					message.append("[" + issue.getCapturedInformation() + "] ");
-					if (issue.getLineNumber() != null)
+					String outputMessage;
+					//region For no general cause message
+					if (issue.getCauseMessage() == null)
 					{
-						message.append("in line " + issue.getLineNumber() + " ");
-					}
-					message.append("in Method: " + issue.getMethod());
+						//region Describing A Method Location
+						if (issue.getDescribingMethod())
+						{
+							StringBuilder message = new StringBuilder("***Found: ");
 
-					System.out.println(message.toString());
+							message.append("[\"" + issue.getCapturedInformation() + "\"] ");
+
+							if (issue.getLineNumber() != null)
+							{
+								message.append("in Line " + issue.getLineNumber() + " ");
+							}
+
+							message.append("in Method: " + issue.getLocationName());
+
+							outputMessage = message.toString();
+						}
+						//endregion
+						//region Describing Class Location
+						else
+						{
+							StringBuilder message = new StringBuilder("***");
+							message.append(issue.getCapturedInformation());
+							message.append(issue.getLocationName());
+
+							outputMessage = message.toString();
+						}
+						//endregion
+					}
+					//endregion
+					//region Describing a general cause message
+					else
+					{
+						StringBuilder message = new StringBuilder("***Cause: ");
+						message.append(issue.getCauseMessage());
+
+						outputMessage = message.toString();
+					}
+					//endregion
+					output.append(outputMessage + "\n");
 				}
 			}
+			//endregion
+			//region General Message
 			else
 			{
-				System.out.println("***" + rule.getMessage());
+				output.append("***" + rule.getMessage() + "\n");
 			}
-			System.out.println("=======================================");
+			//endregion
+			output.append("=======================================\n");
 		}
-		return null;
+		//endregion
+
+		return output.toString();
 	}
 }
