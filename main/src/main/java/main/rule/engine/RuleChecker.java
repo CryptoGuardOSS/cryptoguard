@@ -21,5 +21,6 @@ public interface RuleChecker
 	 * @param projectDependencyPath the path to the dependencies of the project
 	 * @throws IOException            In case there is an issue interpreting the project
 	 */
+	//public AnalysisRule checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath) throws IOException;
 	public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath) throws IOException;
 }

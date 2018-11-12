@@ -126,6 +126,26 @@ public class MessageRepresentation
 	}
 
 	/**
+	 * A simple overloaded method to add an arraylist of rule breaks into the output.
+	 * This has been changed to a lazy-loading approach to ensure there is no time wasted
+	 * instantiating extra objects or trimming empty objects
+	 * This will integrate a found and created rule into the overall rule grouping
+	 *
+	 * @param rule - the created rule to add into the rule grouping
+	 */
+	public void addRuleAnalysis(AnalysisRule rule)
+	{
+		if (!this.analysisIssues.containsKey(rule.getRuleNumber()))
+		{
+			this.analysisIssues.put(rule.getRuleNumber(), rule);
+		}
+		else
+		{
+			this.analysisIssues.get(rule.getRuleNumber()).addIssue(rule.getIssues());
+		}
+	}
+
+	/**
 	 * The method to get the structure of the output.
 	 *
 	 * @return Object - the overloaded output is determined by the type of messaging system used

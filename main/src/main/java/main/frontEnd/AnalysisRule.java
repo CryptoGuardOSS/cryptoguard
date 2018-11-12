@@ -3,6 +3,7 @@ package main.frontEnd;
 import main.rule.engine.RuleList;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * The class containing the analysis rule information.
@@ -23,7 +24,7 @@ public class AnalysisRule
 	//region Constructor
 
 	/**
-	 * The constructor for the Analysis Rule
+	 * A constructor for the Analysis Rule
 	 * Will set all of the necessary parameters to be returned to the user as well as instantiate a new list of issues
 	 *
 	 * @param ruleNumber - the rule number that was broken
@@ -32,6 +33,19 @@ public class AnalysisRule
 	{
 		this.ruleNumber = ruleNumber;
 		this.issues = new ArrayList<>();
+	}
+
+	/**
+	 * A constructor for the Analysis Rule
+	 * Will set all of the necessary parameters to be returned to the user as well as instantiate a new list of issues
+	 *
+	 * @param ruleNumber - the rule number that was broken
+	 * @param issues     - the issues being dynamically added
+	 */
+	public AnalysisRule(Integer ruleNumber, AnalysisIssue... issues)
+	{
+		this.ruleNumber = ruleNumber;
+		this.issues = new ArrayList<>(Arrays.asList(issues));
 	}
 	//endregion
 

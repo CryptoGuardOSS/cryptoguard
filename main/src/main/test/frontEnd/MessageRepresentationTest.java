@@ -1,6 +1,7 @@
 package frontEnd;
 
 import main.frontEnd.AnalysisIssue;
+import main.frontEnd.AnalysisRule;
 import main.frontEnd.MessageRepresentation;
 import main.frontEnd.outputStructures.LegacyOutput;
 import main.rule.engine.EngineType;
@@ -53,7 +54,7 @@ public class MessageRepresentationTest
 		assertEquals(this.jarOneName, this.outputEngine.getSource());
 		assertEquals(this.jarType, this.outputEngine.getType());
 		assertTrue(this.outputEngine.getMessageEngine() instanceof LegacyOutput);
-		assertTrue(this.outputEngine.getAnalysisIssues().size() == 0);
+		assertEquals(0, this.outputEngine.getAnalysisIssues().size());
 	}
 
 	@Test
@@ -78,6 +79,27 @@ public class MessageRepresentationTest
 		issues.add(this.ruleTwoIssue);
 
 		this.outputEngine.addRuleAnalysis(1, issues);
+
+		assertEquals(2, this.outputEngine.getAnalysisIssues().get(0).getIssues().size());
+
+		assertEquals(this.ruleOneIssue.getLocationName(), this.outputEngine.getAnalysisIssues().get(0).getIssues().get(0).getLocationName());
+		assertEquals(this.ruleOneIssue.getCapturedInformation(), this.outputEngine.getAnalysisIssues().get(0).getIssues().get(0).getCapturedInformation());
+
+		assertEquals(this.ruleTwoIssue.getLocationName(), this.outputEngine.getAnalysisIssues().get(0).getIssues().get(1).getLocationName());
+		assertEquals(this.ruleTwoIssue.getCapturedInformation(), this.outputEngine.getAnalysisIssues().get(0).getIssues().get(1).getCapturedInformation());
+
+	}
+
+	@Test
+	public void addLegacyRuleAnalysis2()
+	{
+		this.outputEngine = new MessageRepresentation(this.jarOneName, this.jarType, "L");
+
+		AnalysisRule newRule = new AnalysisRule(1, new AnalysisIssue[]{this.ruleOneIssue, this.ruleTwoIssue});
+
+		this.outputEngine.addRuleAnalysis(newRule);
+
+		assertEquals(1, this.outputEngine.getAnalysisIssues().size());
 
 		assertEquals(2, this.outputEngine.getAnalysisIssues().get(0).getIssues().size());
 
