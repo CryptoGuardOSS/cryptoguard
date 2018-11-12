@@ -19,7 +19,8 @@ public class MessageRepresentationTest
 {
 	//region Attributes
 	private MessageRepresentation outputEngine;
-	private final String jarName = "testable-jar/build/libs/testable-jar.jar";
+	private final String jarOneName = "testable-jar/build/libs/testable-jar.jar";
+	private final String jarOneAnalysis = "Analyzing JAR: testable-jar/build/libs/testable-jar.jar\n";
 	private final EngineType jarType = EngineType.JAR;
 	private AnalysisIssue ruleOneIssue;
 	private AnalysisIssue ruleTwoIssue;
@@ -46,10 +47,10 @@ public class MessageRepresentationTest
 	@Test
 	public void legacyTest0()
 	{
-		this.outputEngine = new MessageRepresentation(this.jarName, this.jarType, "L");
+		this.outputEngine = new MessageRepresentation(this.jarOneName, this.jarType, "L");
 
 		assertNotNull(this.outputEngine);
-		assertEquals(this.jarName, this.outputEngine.getSource());
+		assertEquals(this.jarOneName, this.outputEngine.getSource());
 		assertEquals(this.jarType, this.outputEngine.getType());
 		assertTrue(this.outputEngine.getMessageEngine() instanceof LegacyOutput);
 		assertTrue(this.outputEngine.getAnalysisIssues().size() == 0);
@@ -58,7 +59,7 @@ public class MessageRepresentationTest
 	@Test
 	public void addLegacyRuleAnalysis()
 	{
-		this.outputEngine = new MessageRepresentation(this.jarName, this.jarType, "L");
+		this.outputEngine = new MessageRepresentation(this.jarOneName, this.jarType, "L");
 
 		this.outputEngine.addRuleAnalysis(1, this.ruleOneIssue);
 
@@ -70,7 +71,7 @@ public class MessageRepresentationTest
 	@Test
 	public void addLegacyRuleAnalysis1()
 	{
-		this.outputEngine = new MessageRepresentation(this.jarName, this.jarType, "L");
+		this.outputEngine = new MessageRepresentation(this.jarOneName, this.jarType, "L");
 
 		ArrayList<AnalysisIssue> issues = new ArrayList<>();
 		issues.add(this.ruleOneIssue);
@@ -91,15 +92,14 @@ public class MessageRepresentationTest
 	@Test
 	public void getLegacyMessage()
 	{
-		this.outputEngine = new MessageRepresentation(this.jarName, this.jarType, "L");
+		this.outputEngine = new MessageRepresentation(this.jarOneName, this.jarType, "L");
 		String message = (String) this.outputEngine.getMessage();
 
 		System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
-		String result = "Analyzing JAR: testable-jar/build/libs/testable-jar.jar\n";
 
 		assertNotNull(message);
 
-		assertEquals(result, message);
+		assertEquals(this.jarOneAnalysis, message);
 
 	}
 	//endregion
