@@ -12,7 +12,7 @@ import java.util.List;
  * <ol>
  * <li>The contains method has been modified to check whether the element being compared
  * implements the soot.EquivTo interface, and if so then use the soot.EquivTo.equivTo
- * method for comparison.<br/>
+ * method for comparison.
  * soot.Value extends soot.EquivTo, so it only makes sense to take advantage of that
  * instead of using the more naiive equals method inherited from Object (only comparing
  * references).</li>
@@ -44,6 +44,9 @@ public class ValueArraySparseSet extends ArraySparseSet
 
 	/**
 	 * Returns true if flowSet is the same type of flow set as this.
+	 *
+	 * @param flowSet  - The generic object to be used for comparison
+	 * @return boolean - Indicating whether or not the flowset is the of the same type
 	 */
 	protected boolean sameType(Object flowSet)
 	{

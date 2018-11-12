@@ -19,6 +19,7 @@ public interface RuleChecker
 	 * @param type                  the type of engine to be used for the processing
 	 * @param projectJarPath        the path to the used jar(s)
 	 * @param projectDependencyPath the path to the dependencies of the project
+	 * @throws IOException            In case there is an issue interpreting the project
 	 */
 	public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath) throws IOException;
 }
