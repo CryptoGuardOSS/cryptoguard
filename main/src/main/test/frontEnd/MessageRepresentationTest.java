@@ -19,7 +19,7 @@ public class MessageRepresentationTest
 {
 	//region Attributes
 	private MessageRepresentation outputEngine;
-	private final String jarName = "testable-jar/build/libs/testable-jar-01.01.jar";
+	private final String jarName = "testable-jar/build/libs/testable-jar.jar";
 	private final EngineType jarType = EngineType.JAR;
 	private AnalysisIssue ruleOneIssue;
 	private AnalysisIssue ruleTwoIssue;
@@ -52,7 +52,7 @@ public class MessageRepresentationTest
 		assertEquals(this.jarName, this.outputEngine.getSource());
 		assertEquals(this.jarType, this.outputEngine.getType());
 		assertTrue(this.outputEngine.getMessageEngine() instanceof LegacyOutput);
-		assertTrue(this.outputEngine.getAnalysisIssues().size() > 0);
+		assertTrue(this.outputEngine.getAnalysisIssues().size() == 0);
 	}
 
 	@Test
@@ -95,9 +95,10 @@ public class MessageRepresentationTest
 		String message = (String) this.outputEngine.getMessage();
 
 		System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
-		String result = "Internal Warnings: java.io.PrintStream@25bbe1b6\nAnalyzing JAR: testable-jar/build/libs/testable-jar-01.01.jar";
+		String result = "Analyzing JAR: testable-jar/build/libs/testable-jar.jar\n";
 
 		assertNotNull(message);
+
 		assertEquals(result, message);
 
 	}

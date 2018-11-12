@@ -2,11 +2,11 @@ package main.frontEnd;
 
 import main.frontEnd.outputStructures.Listing;
 import main.rule.engine.EngineType;
-import main.rule.engine.RuleList;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * The interface for the different types of output used for the library.
@@ -21,7 +21,7 @@ public class MessageRepresentation
 	//region Attributes
 	private String Source;
 	private EngineType type;
-	private ArrayList<AnalysisRule> analysisIssues;
+	private HashMap<Integer, AnalysisRule> analysisIssues;
 	private PrintStream internalMessages;
 	private OutputStructure messageEngine;
 	//endregion
@@ -43,10 +43,7 @@ public class MessageRepresentation
 		this.messageEngine = Listing.getTypeOfMessaging(typeOfMessagingStructure);
 		this.internalMessages = new PrintStream(new ByteArrayOutputStream());
 		System.setOut(this.internalMessages);
-		this.analysisIssues = new ArrayList<>();
-
-		for (RuleList rule : RuleList.values())
-			this.analysisIssues.add(new AnalysisRule(rule.getRuleId()));
+		this.analysisIssues = new HashMap<>();
 	}
 	//endregion
 
@@ -79,7 +76,7 @@ public class MessageRepresentation
 	 */
 	public ArrayList<AnalysisRule> getAnalysisIssues()
 	{
-		return analysisIssues;
+		return new ArrayList<>(analysisIssues.values());
 	}
 
 	/**
@@ -95,26 +92,37 @@ public class MessageRepresentation
 	/**
 	 * A simple method to allow additional rule breaks to be added into the output.
 	 * This method will add a single Analysis Rule
-	 *
+	 * This has been changed to a lazy-loading approach to ensure there is no time wasted
+	 * 	 instantiating extra objects or trimming empty objects
 	 * @param ruleNumber - the rule number to add the issue to
 	 * @param issue - the specific issue being added
 	 */
 	public void addRuleAnalysis(Integer ruleNumber, AnalysisIssue issue)
 	{
-		this.analysisIssues.get(ruleNumber-1).addIssue(issue);
+		if (!this.analysisIssues.containsKey(ruleNumber))
+		{
+			this.analysisIssues.put(ruleNumber, new AnalysisRule(ruleNumber));
+		}
 
+		this.analysisIssues.get(ruleNumber).addIssue(issue);
 	}
 
 	/**
 	 * A simple overloaded method to add an arraylist of rule breaks into the output.
+	 * This has been changed to a lazy-loading approach to ensure there is no time wasted
+	 * 	instantiating extra objects or trimming empty objects
 	 *
-	 *
-	 *    @param ruleNumber - the rule number to add the issue to
+	 *  @param ruleNumber - the rule number to add the issue to
 	 * 	@param issues - the specific issues being added
 	 */
 	public void addRuleAnalysis(Integer ruleNumber, ArrayList<AnalysisIssue> issues)
 	{
-		this.analysisIssues.get(ruleNumber-1).addIssue(issues);
+		if (!this.analysisIssues.containsKey(ruleNumber))
+		{
+			this.analysisIssues.put(ruleNumber, new AnalysisRule(ruleNumber));
+		}
+
+		this.analysisIssues.get(ruleNumber).addIssue(issues);
 	}
 
 	/**
@@ -124,7 +132,7 @@ public class MessageRepresentation
 	 */
 	public Object getMessage()
 	{
-		return messageEngine.getOutput(this.Source, this.type, this.analysisIssues, this.internalMessages);
+		return messageEngine.getOutput(this.Source, this.type, this.getAnalysisIssues(), this.internalMessages);
 	}
 	//endregion
 }

@@ -29,7 +29,8 @@ public class LegacyOutput implements OutputStructure
 	{
 		StringBuilder output = new StringBuilder();
 
-		if (internalWarnings != null)
+		//Only printing console output if it is set and there is output captured
+		if (internalWarnings != null && internalWarnings.toString().split("\n").length > 1)
 		{
 			output.append("Internal Warnings: " + internalWarnings.toString() + "\n");
 		}
