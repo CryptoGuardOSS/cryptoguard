@@ -27,6 +27,7 @@ public class MessageRepresentation
 	//endregion
 
 	//region Constructor
+
 	/**
 	 * The construction of the Message Represention, containing all of the pertinent information.
 	 * <p>Used to funnel all of the output.</p>
@@ -93,9 +94,10 @@ public class MessageRepresentation
 	 * A simple method to allow additional rule breaks to be added into the output.
 	 * This method will add a single Analysis Rule
 	 * This has been changed to a lazy-loading approach to ensure there is no time wasted
-	 * 	 instantiating extra objects or trimming empty objects
+	 * instantiating extra objects or trimming empty objects
+	 *
 	 * @param ruleNumber - the rule number to add the issue to
-	 * @param issue - the specific issue being added
+	 * @param issue      - the specific issue being added
 	 */
 	public void addRuleAnalysis(Integer ruleNumber, AnalysisIssue issue)
 	{
@@ -110,10 +112,10 @@ public class MessageRepresentation
 	/**
 	 * A simple overloaded method to add an arraylist of rule breaks into the output.
 	 * This has been changed to a lazy-loading approach to ensure there is no time wasted
-	 * 	instantiating extra objects or trimming empty objects
+	 * instantiating extra objects or trimming empty objects
 	 *
-	 *  @param ruleNumber - the rule number to add the issue to
-	 * 	@param issues - the specific issues being added
+	 * @param ruleNumber - the rule number to add the issue to
+	 * @param issues     - the specific issues being added
 	 */
 	public void addRuleAnalysis(Integer ruleNumber, ArrayList<AnalysisIssue> issues)
 	{

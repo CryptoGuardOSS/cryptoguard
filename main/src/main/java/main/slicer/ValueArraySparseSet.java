@@ -45,7 +45,7 @@ public class ValueArraySparseSet extends ArraySparseSet
 	/**
 	 * Returns true if flowSet is the same type of flow set as this.
 	 *
-	 * @param flowSet  - The generic object to be used for comparison
+	 * @param flowSet - The generic object to be used for comparison
 	 * @return boolean - Indicating whether or not the flowset is the of the same type
 	 */
 	protected boolean sameType(Object flowSet)

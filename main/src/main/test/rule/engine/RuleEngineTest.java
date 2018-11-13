@@ -15,8 +15,10 @@ public class RuleEngineTest
 	//region Attributes
 	private final String basePath = System.getProperty("user.dir");
 	private final String jarOne = basePath + "/rsc/test/" + "testable-jar.jar";
+	private final String srcOneGrv = basePath.replace("/main", "");
 	private String jarOneResults;
 	private final EngineType jarType = EngineType.JAR;
+	private final EngineType srcType = EngineType.SOURCE;
 	private String[] args;
 	private RuleEngine engine;
 	private ByteArrayOutputStream customStream;
@@ -137,7 +139,7 @@ public class RuleEngineTest
 
 		assertTrue(temp.isFile());
 
-		args = new String[]{jarType.getFlag(), jarOne, ""};
+		args = new String[]{jarType.getFlag(), srcOneGrv, ""};
 
 		redirectOutput();
 
@@ -156,6 +158,35 @@ public class RuleEngineTest
 			assertNull(e);
 		}
 
+	}
+
+	@Test
+	public void testSelfProject()
+	{
+		System.out.println(srcOneGrv);
+
+		args = new String[]{srcType.getFlag(), srcOneGrv, ""};
+
+		System.out.println(System.getenv("JAVA7_HOME"));
+
+		//redirectOutput();
+
+		try
+		{
+			this.engine.main(args);
+
+			//resetOutput();
+
+			//System.out.println(this.customStream);
+
+			//assertTrue(this.customStream.toString().split("\n").length > 1);
+
+			//assertEquals(jarOneResults, this.customStream.toString());
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+			assertNull(e);
+		}
 	}
 	//endregion
 }

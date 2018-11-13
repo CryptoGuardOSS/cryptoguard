@@ -23,7 +23,8 @@ public enum RuleList
 	PredictableSeed(11, "Found predictable seeds in code"),
 	CheckHostname(12, "Should check HostnameVerification manually"),
 	UntrustedPRNG(13, "Used untrusted PRNG"),
-	PredictableKeyStore(14, "Used Predictable KeyStore Password");
+	PredictableKeyStore(14, "Used Predictable KeyStore Password"),
+	UNCREATEDRULE(-1, "Used as a placeholder as the default search value");
 	//endregion
 
 	//region Attributes
@@ -52,14 +53,14 @@ public enum RuleList
 	//endregion
 
 	//region Accessors
-	public static String getDescByRuleNumber(Integer ruleNumber)
+	public static RuleList getRuleByRuleNumber(Integer ruleNumber)
 	{
 		for (RuleList rule : RuleList.values())
 			if (rule.getRuleId().equals(ruleNumber))
 			{
-				return rule.getDesc();
+				return rule;
 			}
-		return "RULE NOT FOUND";
+		return RuleList.UNCREATEDRULE;
 	}
 	//endregion
 

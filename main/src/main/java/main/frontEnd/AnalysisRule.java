@@ -68,7 +68,7 @@ public class AnalysisRule
 	 */
 	public String getRuleType()
 	{
-		return RuleList.getDescByRuleNumber(this.ruleNumber);
+		return RuleList.getRuleByRuleNumber(this.ruleNumber).getDesc();
 	}
 
 	/**

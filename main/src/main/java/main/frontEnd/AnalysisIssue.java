@@ -13,36 +13,37 @@ public class AnalysisIssue
 	//region Attributes
 	private Integer lineNumber;
 	private String locationName;
-    private String capturedInformation;
-    private String causeMessage;
+	private String capturedInformation;
+	private String causeMessage;
 	private Boolean describingMethod;
 	//endregion
 
 	//region Constructors
-    /**
-     * The issue that was caused by a more generic reason instead of a specific line.
-     * <p>Replicates the structure: ***Cause: ...</p>
-     *
-     * @param causeMessage a message explaining the reason why the rule was broken
-     */
-    public AnalysisIssue(String causeMessage)
-    {
-        this.causeMessage = causeMessage;
-    }
 
-    /**
-     * The issue that was caused by a specific reason (a specific string).
-     * <p>Replicates the structure: ***Found: ["\s"] [in Line \d] in Method: \s</p>
-     *
-     * @param capturedInformation the message containing the string that broke the rule
+	/**
+	 * The issue that was caused by a more generic reason instead of a specific line.
+	 * <p>Replicates the structure: ***Cause: ...</p>
+	 *
+	 * @param causeMessage a message explaining the reason why the rule was broken
+	 */
+	public AnalysisIssue(String causeMessage)
+	{
+		this.causeMessage = causeMessage;
+	}
+
+	/**
+	 * The issue that was caused by a specific reason (a specific string).
+	 * <p>Replicates the structure: ***Found: ["\s"] [in Line \d] in Method: \s</p>
+	 *
+	 * @param capturedInformation the message containing the string that broke the rule
 	 * @param lineNumber          the line number within the locationName the string is located at
-	 * @param locationName              the locationName where the string is
-     */
+	 * @param locationName        the locationName where the string is
+	 */
 	public AnalysisIssue(String locationName, Integer lineNumber, String capturedInformation)
-    {
+	{
 		this.locationName = locationName;
-        this.lineNumber = lineNumber;
-        this.capturedInformation = capturedInformation;
+		this.lineNumber = lineNumber;
+		this.capturedInformation = capturedInformation;
 		this.describingMethod = true;
 	}
 
@@ -90,8 +91,8 @@ public class AnalysisIssue
 	 * @return string - returns any error information
 	 */
 	public String getCapturedInformation()
-    {
-        return capturedInformation;
+	{
+		return capturedInformation;
 	}
 
 	/**
