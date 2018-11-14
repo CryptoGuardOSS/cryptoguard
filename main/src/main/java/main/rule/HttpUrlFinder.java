@@ -6,14 +6,12 @@ import main.rule.engine.Criteria;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HttpUrlFinder extends PatternMatcherRuleChecker
-{
+public class HttpUrlFinder extends PatternMatcherRuleChecker {
 
 	private static final List<String> HTTP_URL_PATTERN = new ArrayList<>();
 	private static final List<Criteria> CRITERIA_LIST = new ArrayList<>();
 
-	static
-	{
+	static {
 		HTTP_URL_PATTERN.add("\"http:(.)*");
 		HTTP_URL_PATTERN.add("\"http$");
 
@@ -51,20 +49,17 @@ public class HttpUrlFinder extends PatternMatcherRuleChecker
 
 
 	@Override
-	public List<Criteria> getCriteriaList()
-	{
+	public List<Criteria> getCriteriaList() {
 		return CRITERIA_LIST;
 	}
 
 	@Override
-	public List<String> getPatternsToMatch()
-	{
+	public List<String> getPatternsToMatch() {
 		return HTTP_URL_PATTERN;
 	}
 
 	@Override
-	public String getRuleId()
-	{
+	public String getRuleId() {
 		return "7";
 	}
 }

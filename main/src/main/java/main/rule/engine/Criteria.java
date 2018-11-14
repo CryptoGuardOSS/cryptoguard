@@ -6,8 +6,7 @@ package main.rule.engine;
  * @author RigorityJTeam
  * @since 1.0
  */
-public class Criteria
-{
+public class Criteria {
 
 	private String className;
 	private String methodName;
@@ -18,8 +17,7 @@ public class Criteria
 	 *
 	 * @return String the name of the class in the criteria
 	 */
-	public String getClassName()
-	{
+	public String getClassName() {
 		return className;
 	}
 
@@ -28,8 +26,7 @@ public class Criteria
 	 *
 	 * @param className the name of the class in the criteria
 	 */
-	public void setClassName(String className)
-	{
+	public void setClassName(String className) {
 		this.className = className;
 	}
 
@@ -38,8 +35,7 @@ public class Criteria
 	 *
 	 * @return String the name of the method in the criteria
 	 */
-	public String getMethodName()
-	{
+	public String getMethodName() {
 		return methodName;
 	}
 
@@ -48,8 +44,7 @@ public class Criteria
 	 *
 	 * @param methodName the name of the method in the criteria
 	 */
-	public void setMethodName(String methodName)
-	{
+	public void setMethodName(String methodName) {
 		this.methodName = methodName;
 	}
 
@@ -58,8 +53,7 @@ public class Criteria
 	 *
 	 * @return int the parameter type in the criteria
 	 */
-	public int getParam()
-	{
+	public int getParam() {
 		return param;
 	}
 
@@ -68,8 +62,7 @@ public class Criteria
 	 *
 	 * @param param the parameter type in the criteria
 	 */
-	public void setParam(int param)
-	{
+	public void setParam(int param) {
 		this.param = param;
 	}
 }

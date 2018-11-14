@@ -2,35 +2,29 @@ package main.analyzer.backward;
 
 import soot.Unit;
 
-public class UnitContainer
-{
+public class UnitContainer {
 
 	private Unit unit;
 	private String method;
 
-	public Unit getUnit()
-	{
+	public Unit getUnit() {
 		return unit;
 	}
 
-	public void setUnit(Unit unit)
-	{
+	public void setUnit(Unit unit) {
 		this.unit = unit;
 	}
 
-	public String getMethod()
-	{
+	public String getMethod() {
 		return method;
 	}
 
-	public void setMethod(String method)
-	{
+	public void setMethod(String method) {
 		this.method = method;
 	}
 
 	@Override
-	public boolean equals(Object o)
-	{
+	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 
@@ -40,14 +34,12 @@ public class UnitContainer
 	}
 
 	@Override
-	public int hashCode()
-	{
+	public int hashCode() {
 		return unit.toString().hashCode();
 	}
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return "UnitContainer{" +
 				"unit=" + unit +
 				", method='" + method + '\'' +

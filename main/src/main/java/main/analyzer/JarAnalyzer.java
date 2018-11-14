@@ -9,20 +9,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JarAnalyzer
-{
+public class JarAnalyzer {
 
 	public static void analyzeSlices(String criteriaClass,
 									 String criteriaMethod,
 									 int criteriaParam,
 									 String projectJarPath,
-									 String projectDependencyPath, BaseRuleChecker checker) throws IOException
-	{
+									 String projectDependencyPath, BaseRuleChecker checker) throws IOException {
 
 		String javaHome = System.getenv("JAVA_HOME");
 
-		if (javaHome.isEmpty())
-		{
+		if (javaHome.isEmpty()) {
 
 			System.err.println("Please set JAVA_HOME");
 			System.exit(1);
@@ -32,12 +29,9 @@ public class JarAnalyzer
 
 		List<String> classNames = Utils.getClassNamesFromJarArchive(projectJarPath);
 
-		for (String dependency : Utils.getJarsInDirectory(projectDependencyPath))
-		{
-			for (String dependencyClazz : Utils.getClassNamesFromJarArchive(dependency))
-			{
-				if (dependencyClazz.contains(basePackageName))
-				{
+		for (String dependency : Utils.getJarsInDirectory(projectDependencyPath)) {
+			for (String dependencyClazz : Utils.getClassNamesFromJarArchive(dependency)) {
+				if (dependencyClazz.contains(basePackageName)) {
 					classNames.add(dependencyClazz);
 				}
 			}
@@ -57,13 +51,11 @@ public class JarAnalyzer
 		ArrayList<Integer> slicingParameters = new ArrayList<>();
 		slicingParameters.add(criteriaParam);
 
-		for (String clazz : BaseAnalyzer.CRITERIA_CLASSES)
-		{
+		for (String clazz : BaseAnalyzer.CRITERIA_CLASSES) {
 			Scene.v().loadClassAndSupport(clazz);
 		}
 
-		for (String clazz : classNames)
-		{
+		for (String clazz : classNames) {
 			Scene.v().loadClassAndSupport(clazz);
 		}
 

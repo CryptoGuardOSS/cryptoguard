@@ -9,13 +9,11 @@ import java.util.List;
 /**
  * https://www.javamex.com/tutorials/cryptography/pbe_salt.shtml
  */
-public class PBESaltFinder extends PredictableSourceRuleChecker
-{
+public class PBESaltFinder extends PredictableSourceRuleChecker {
 
 	private static final List<Criteria> CRITERIA_LIST = new ArrayList<>();
 
-	static
-	{
+	static {
 
 		Criteria criteria2 = new Criteria();
 		criteria2.setClassName("javax.crypto.spec.PBEParameterSpec");
@@ -44,14 +42,12 @@ public class PBESaltFinder extends PredictableSourceRuleChecker
 	}
 
 	@Override
-	public List<Criteria> getCriteriaList()
-	{
+	public List<Criteria> getCriteriaList() {
 		return CRITERIA_LIST;
 	}
 
 	@Override
-	public String getRuleId()
-	{
+	public String getRuleId() {
 		return "9";
 	}
 }

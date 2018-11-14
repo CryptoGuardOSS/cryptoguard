@@ -10,8 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class PatternMatcherRuleChecker extends BaseRuleChecker
-{
+public abstract class PatternMatcherRuleChecker extends BaseRuleChecker {
 
 	//Todo: Add a field to keep track of all the found patterns ...
 
@@ -19,33 +18,25 @@ public abstract class PatternMatcherRuleChecker extends BaseRuleChecker
 	private Map<UnitContainer, List<String>> othersSourceMap = new HashMap<>();
 
 	@Override
-	public void analyzeSlice(Analysis analysis)
-	{
-		if (analysis.getAnalysisResult().isEmpty())
-		{
+	public void analyzeSlice(Analysis analysis) {
+		if (analysis.getAnalysisResult().isEmpty()) {
 			return;
 		}
 
-		for (UnitContainer e : analysis.getAnalysisResult())
-		{
-			for (ValueBox usebox : e.getUnit().getUseBoxes())
-			{
-				if (usebox.getValue() instanceof Constant)
-				{
+		for (UnitContainer e : analysis.getAnalysisResult()) {
+			for (ValueBox usebox : e.getUnit().getUseBoxes()) {
+				if (usebox.getValue() instanceof Constant) {
 					boolean found = false;
 
-					for (String regex : getPatternsToMatch())
-					{
-						if (usebox.getValue().toString().matches(regex))
-						{
+					for (String regex : getPatternsToMatch()) {
+						if (usebox.getValue().toString().matches(regex)) {
 							putIntoMap(predictableSourcMap, e, usebox.getValue().toString());
 							found = true;
 							break;
 						}
 					}
 
-					if (!found)
-					{
+					if (!found) {
 						putIntoMap(othersSourceMap, e, usebox.getValue().toString());
 					}
 				}
@@ -53,8 +44,7 @@ public abstract class PatternMatcherRuleChecker extends BaseRuleChecker
 		}
 	}
 
-	public void printAnalysisOutput(Map<String, String> configFiles)
-	{
+	public void printAnalysisOutput(Map<String, String> configFiles) {
 
 		String rule = getRuleId();
 		String ruleDesc = RULE_VS_DESCRIPTION.get(rule);
@@ -63,19 +53,16 @@ public abstract class PatternMatcherRuleChecker extends BaseRuleChecker
 		List<UnitContainer> predictableSourceInst = new ArrayList<>();
 		List<String> others = new ArrayList<>();
 
-		for (List<String> values : predictableSourcMap.values())
-		{
+		for (List<String> values : predictableSourcMap.values()) {
 			predictableSources.addAll(values);
 		}
 		predictableSourceInst.addAll(predictableSourcMap.keySet());
 
-		for (List<String> values : othersSourceMap.values())
-		{
+		for (List<String> values : othersSourceMap.values()) {
 			others.addAll(values);
 		}
 
-		if (!predictableSources.isEmpty())
-		{
+		if (!predictableSources.isEmpty()) {
 			System.out.println("=======================================");
 			String output = getPrintableMsg(predictableSourcMap, rule, ruleDesc);
 			System.out.println(output);
@@ -84,18 +71,15 @@ public abstract class PatternMatcherRuleChecker extends BaseRuleChecker
 		}
 	}
 
-	private String getPrintableMsg(Map<UnitContainer, List<String>> predictableSourcMap, String rule, String ruleDesc)
-	{
+	private String getPrintableMsg(Map<UnitContainer, List<String>> predictableSourcMap, String rule, String ruleDesc) {
 		String output = "***Violated Rule " +
 				rule + ": " +
 				ruleDesc;
 
-		for (UnitContainer unit : predictableSourcMap.keySet())
-		{
+		for (UnitContainer unit : predictableSourcMap.keySet()) {
 
 			output += "\n***Found: " + predictableSourcMap.get(unit);
-			if (unit.getUnit().getJavaSourceStartLineNumber() >= 0)
-			{
+			if (unit.getUnit().getJavaSourceStartLineNumber() >= 0) {
 				output += " in Line " + unit.getUnit().getJavaSourceStartLineNumber();
 			}
 

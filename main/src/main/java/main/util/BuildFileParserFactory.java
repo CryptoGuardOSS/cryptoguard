@@ -2,23 +2,19 @@ package main.util;
 
 import java.io.File;
 
-public class BuildFileParserFactory
-{
+public class BuildFileParserFactory {
 
-	public static BuildFileParser getBuildfileParser(String projectRoot) throws Exception
-	{
+	public static BuildFileParser getBuildfileParser(String projectRoot) throws Exception {
 
 		File pomFile = new File(projectRoot + "/" + "pom.xml");
 
-		if (pomFile.exists())
-		{
+		if (pomFile.exists()) {
 			return new MvnPomFileParser(projectRoot + "/" + "pom.xml");
 		}
 
 		File gradleFile = new File(projectRoot + "/" + "settings.gradle");
 
-		if (gradleFile.exists())
-		{
+		if (gradleFile.exists()) {
 			return new GradleBuildFileParser(projectRoot + "/" + "settings.gradle");
 		}
 

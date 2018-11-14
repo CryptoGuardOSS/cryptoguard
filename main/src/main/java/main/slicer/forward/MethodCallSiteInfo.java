@@ -3,57 +3,47 @@ package main.slicer.forward;
 /**
  * Created by krishnokoli on 7/3/17.
  */
-public class MethodCallSiteInfo
-{
+public class MethodCallSiteInfo {
 
 	private SlicingCriteria slicingCriteria;
 	private int lineNumber;
 	private int columnNumber;
 
-	public MethodCallSiteInfo()
-	{
+	public MethodCallSiteInfo() {
 	}
 
-	public MethodCallSiteInfo(SlicingCriteria slicingCriteria, int lineNumber, int columnNumber)
-	{
+	public MethodCallSiteInfo(SlicingCriteria slicingCriteria, int lineNumber, int columnNumber) {
 		this.slicingCriteria = slicingCriteria;
 		this.lineNumber = lineNumber;
 		this.columnNumber = columnNumber;
 	}
 
-	public SlicingCriteria getSlicingCriteria()
-	{
+	public SlicingCriteria getSlicingCriteria() {
 		return slicingCriteria;
 	}
 
-	public void setSlicingCriteria(SlicingCriteria slicingCriteria)
-	{
+	public void setSlicingCriteria(SlicingCriteria slicingCriteria) {
 		this.slicingCriteria = slicingCriteria;
 	}
 
-	public int getLineNumber()
-	{
+	public int getLineNumber() {
 		return lineNumber;
 	}
 
-	public void setLineNumber(int lineNumber)
-	{
+	public void setLineNumber(int lineNumber) {
 		this.lineNumber = lineNumber;
 	}
 
-	public int getColumnNumber()
-	{
+	public int getColumnNumber() {
 		return columnNumber;
 	}
 
-	public void setColumnNumber(int columnNumber)
-	{
+	public void setColumnNumber(int columnNumber) {
 		this.columnNumber = columnNumber;
 	}
 
 	@Override
-	public boolean equals(Object o)
-	{
+	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 
@@ -66,8 +56,7 @@ public class MethodCallSiteInfo
 	}
 
 	@Override
-	public int hashCode()
-	{
+	public int hashCode() {
 		int result = slicingCriteria.hashCode();
 		result = 31 * result + lineNumber;
 		result = 31 * result + columnNumber;

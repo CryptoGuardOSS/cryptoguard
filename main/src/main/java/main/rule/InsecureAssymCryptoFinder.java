@@ -9,11 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class InsecureAssymCryptoFinder implements RuleChecker
-{
+public class InsecureAssymCryptoFinder implements RuleChecker {
 
-	private enum AssymType
-	{
+	private enum AssymType {
 		RSA,
 		EC;
 	}
@@ -21,8 +19,7 @@ public class InsecureAssymCryptoFinder implements RuleChecker
 	private static final Map<AssymType, Integer> SIZE_MAP = new HashMap<>();
 	private static final Map<AssymType, Boolean> IS_DEFAULT_SECURE_MAP = new HashMap<>();
 
-	static
-	{
+	static {
 		SIZE_MAP.put(AssymType.RSA, 2048);
 		SIZE_MAP.put(AssymType.EC, 512);
 
@@ -32,8 +29,7 @@ public class InsecureAssymCryptoFinder implements RuleChecker
 
 
 	@Override
-	public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath) throws IOException
-	{
+	public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath) throws IOException {
 
 		checkAssym(type, projectJarPath, projectDependencyPath, AssymType.RSA);
 		checkAssym(type, projectJarPath, projectDependencyPath, AssymType.EC);
@@ -43,8 +39,7 @@ public class InsecureAssymCryptoFinder implements RuleChecker
 	private void checkAssym(EngineType type,
 							List<String> projectJarPath,
 							List<String> projectDependencyPath,
-							AssymType assymType) throws IOException
-	{
+							AssymType assymType) throws IOException {
 
 		List<String> cryptoType = new ArrayList<>();
 		cryptoType.add("\"" + assymType.name() + "\"");

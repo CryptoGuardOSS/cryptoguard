@@ -16,65 +16,52 @@ import java.util.*;
 
 import static main.util.Utils.getClassNamesFromApkArchive;
 
-public class HostNameVerifierFinder implements RuleChecker
-{
+public class HostNameVerifierFinder implements RuleChecker {
 
 	private static final String HOST_NAME_VERIFIER = "HostnameVerifier";
 	private static final String METHOD_TO_SLICE = "boolean verify(java.lang.String,javax.net.ssl.SSLSession)";
 	private static final String SLICING_INSTRUCTION = "return";
 
 	@Override
-	public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath) throws IOException
-	{
+	public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath) throws IOException {
 
 		Map<String, List<UnitContainer>> analysisLists;
-		if (type == EngineType.JAR)
-		{
+		if (type == EngineType.JAR) {
 			analysisLists = analyzeJar(projectJarPath.get(0), projectDependencyPath.get(0));
 		}
-		else if (type == EngineType.APK)
-		{
+		else if (type == EngineType.APK) {
 			analysisLists = analyzeApk(projectJarPath.get(0));
 		}
-		else
-		{
+		else {
 			analysisLists = analyzeSnippet(projectJarPath, projectDependencyPath);
 		}
 
-		for (String className : analysisLists.keySet())
-		{
+		for (String className : analysisLists.keySet()) {
 			List<UnitContainer> analysis = analysisLists.get(className);
-			if (!analysis.isEmpty())
-			{
+			if (!analysis.isEmpty()) {
 
 				List<Value> constants = new ArrayList<>();
 
 				boolean usedFirstParam = false;
 				boolean usedSecondParam = false;
 
-				for (UnitContainer unit : analysis)
-				{
+				for (UnitContainer unit : analysis) {
 
-					if (unit.toString().contains("@parameter1: javax.net.ssl.SSLSession"))
-					{
+					if (unit.toString().contains("@parameter1: javax.net.ssl.SSLSession")) {
 						usedSecondParam = true;
 					}
 
-					for (ValueBox usebox : unit.getUnit().getUseBoxes())
-					{
-						if (usebox.getValue() instanceof Constant)
-						{
+					for (ValueBox usebox : unit.getUnit().getUseBoxes()) {
+						if (usebox.getValue() instanceof Constant) {
 							constants.add(usebox.getValue());
 						}
 					}
 				}
 
-				if (!usedSecondParam)
-				{
+				if (!usedSecondParam) {
 					System.out.println("=======================================");
 					String output = "*** Violated Rule 6: Uses untrusted HostNameVerifier";
-					if (!constants.isEmpty())
-					{
+					if (!constants.isEmpty()) {
 						output += "\n***Cause: Fixed " + constants.toString() + " used in " + className;
 					}
 					System.out.println(output);
@@ -85,12 +72,10 @@ public class HostNameVerifierFinder implements RuleChecker
 
 	}
 
-	private Map<String, List<UnitContainer>> analyzeJar(String projectJarPath, String projectDependencyPath) throws IOException
-	{
+	private Map<String, List<UnitContainer>> analyzeJar(String projectJarPath, String projectDependencyPath) throws IOException {
 		String javaHome = System.getenv("JAVA_HOME");
 
-		if (javaHome.isEmpty())
-		{
+		if (javaHome.isEmpty()) {
 
 			System.err.println("Please set JAVA_HOME");
 			System.exit(1);
@@ -111,20 +96,17 @@ public class HostNameVerifierFinder implements RuleChecker
 		return getHostNameVerifiers(classNames);
 	}
 
-	private Map<String, List<UnitContainer>> analyzeApk(String projectJarPath) throws IOException
-	{
+	private Map<String, List<UnitContainer>> analyzeApk(String projectJarPath) throws IOException {
 		String javaHome = System.getenv("JAVA_HOME");
 		String androidHome = System.getenv("ANDROID_SDK_HOME");
 
-		if (javaHome == null)
-		{
+		if (javaHome == null) {
 
 			System.err.println("Please set JAVA_HOME");
 			System.exit(1);
 		}
 
-		if (androidHome == null)
-		{
+		if (androidHome == null) {
 
 			System.err.println("Please set ANDROID_SDK_HOME");
 			System.exit(1);
@@ -145,13 +127,11 @@ public class HostNameVerifierFinder implements RuleChecker
 		return getHostNameVerifiers(classNames);
 	}
 
-	private Map<String, List<UnitContainer>> analyzeSnippet(List<String> snippetPath, List<String> projectDependencyPath) throws IOException
-	{
+	private Map<String, List<UnitContainer>> analyzeSnippet(List<String> snippetPath, List<String> projectDependencyPath) throws IOException {
 
 		String javaHome = System.getenv("JAVA7_HOME");
 
-		if (javaHome.isEmpty())
-		{
+		if (javaHome.isEmpty()) {
 
 			System.err.println("Please set JAVA7_HOME");
 			System.exit(1);
@@ -161,8 +141,7 @@ public class HostNameVerifierFinder implements RuleChecker
 
 		StringBuilder srcPaths = new StringBuilder();
 
-		for (String srcDir : snippetPath)
-		{
+		for (String srcDir : snippetPath) {
 			srcPaths.append(srcDir)
 					.append(":");
 		}
@@ -173,8 +152,7 @@ public class HostNameVerifierFinder implements RuleChecker
 		Options.v().set_output_format(Options.output_format_jimple);
 		Options.v().set_src_prec(Options.src_prec_java);
 
-		for (String className : classNames)
-		{
+		for (String className : classNames) {
 			Options.v().classes().add(className);
 		}
 
@@ -186,25 +164,21 @@ public class HostNameVerifierFinder implements RuleChecker
 		return getHostNameVerifiers(classNames);
 	}
 
-	private static Map<String, List<UnitContainer>> getHostNameVerifiers(List<String> classNames)
-	{
+	private static Map<String, List<UnitContainer>> getHostNameVerifiers(List<String> classNames) {
 
 		Map<String, List<UnitContainer>> analysisList = new HashMap<>();
 
 		NamedMethodMap.build(classNames);
 		FieldInitializationInstructionMap.build(classNames);
 
-		for (String className : classNames)
-		{
+		for (String className : classNames) {
 			SootClass sClass = Scene.v().loadClassAndSupport(className);
 
-			if (sClass.getInterfaces().toString().contains(HOST_NAME_VERIFIER))
-			{
+			if (sClass.getInterfaces().toString().contains(HOST_NAME_VERIFIER)) {
 
 				SootMethod method = sClass.getMethod(METHOD_TO_SLICE);
 
-				if (method.isConcrete())
-				{
+				if (method.isConcrete()) {
 
 					OtherInfluencingInstructions returnInfluencingInstructions = new OtherInfluencingInstructions(method,
 																												  SLICING_INSTRUCTION);

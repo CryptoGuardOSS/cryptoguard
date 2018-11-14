@@ -13,21 +13,18 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-public class PropertyInfluencingInstructions
-{
+public class PropertyInfluencingInstructions {
 
 	private PropertyAnalysisResult slicingResult;
 
-	public PropertyInfluencingInstructions(MethodWrapper initMethod, String slicingCriteria)
-	{
+	public PropertyInfluencingInstructions(MethodWrapper initMethod, String slicingCriteria) {
 
 		Body initBody = initMethod.getMethod().retrieveActiveBody();
 		UnitGraph graph = new ExceptionalUnitGraph(initBody);
 		PropertyInstructionSlicer analysis = new PropertyInstructionSlicer(graph, slicingCriteria, initMethod.toString());
 
 		Iterator unitIt = graph.iterator();
-		if (unitIt.hasNext())
-		{
+		if (unitIt.hasNext()) {
 			Unit s = (Unit) unitIt.next();
 
 			FlowSet set = (FlowSet) analysis.getFlowBefore(s);
@@ -42,8 +39,7 @@ public class PropertyInfluencingInstructions
 		}
 	}
 
-	public PropertyAnalysisResult getSlicingResult()
-	{
+	public PropertyAnalysisResult getSlicingResult() {
 		return this.slicingResult;
 	}
 }

@@ -14,8 +14,7 @@ import java.util.ArrayList;
 import static org.junit.Assert.assertEquals;
 
 
-public class LegacyOutputTest
-{
+public class LegacyOutputTest {
 
 	//region Attributes
 	private String result;
@@ -27,8 +26,7 @@ public class LegacyOutputTest
 
 	//region Test Environment Setup
 	@Before
-	public void setUp()
-	{
+	public void setUp() {
 		this.source = "testable-jar/build/libs/testable-jar.jar";
 		this.type = EngineType.JAR;
 
@@ -123,8 +121,7 @@ public class LegacyOutputTest
 	}
 
 	@After
-	public void tearDown()
-	{
+	public void tearDown() {
 		this.result = null;
 		this.messagingSystem = null;
 		this.source = null;
@@ -134,8 +131,7 @@ public class LegacyOutputTest
 	//endregion
 
 	@Test
-	public void getOutputTest()
-	{
+	public void getOutputTest() {
 		assertEquals(this.result, this.messagingSystem.getOutput(this.source, this.type, this.brokenRules, null));
 	}
 }

@@ -5,32 +5,27 @@ import soot.SootMethod;
 
 import java.util.List;
 
-public class OtherAnalysisResult
-{
+public class OtherAnalysisResult {
 
 	private String instruction;
 	private SootMethod method;
 	private List<UnitContainer> analysis;
 
-	public OtherAnalysisResult(String instruction, SootMethod method, List<UnitContainer> analysis)
-	{
+	public OtherAnalysisResult(String instruction, SootMethod method, List<UnitContainer> analysis) {
 		this.instruction = instruction;
 		this.method = method;
 		this.analysis = analysis;
 	}
 
-	public String getInstruction()
-	{
+	public String getInstruction() {
 		return instruction;
 	}
 
-	public SootMethod getMethod()
-	{
+	public SootMethod getMethod() {
 		return method;
 	}
 
-	public List<UnitContainer> getAnalysis()
-	{
+	public List<UnitContainer> getAnalysis() {
 		return analysis;
 	}
 }

@@ -7,13 +7,11 @@ import main.rule.engine.Criteria;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConstantKeyFinder extends PredictableSourceRuleChecker
-{
+public class ConstantKeyFinder extends PredictableSourceRuleChecker {
 
 	private static final List<Criteria> CRITERIA_LIST = new ArrayList<>();
 
-	static
-	{
+	static {
 		Criteria criteria1 = new Criteria();
 		criteria1.setClassName("javax.crypto.spec.SecretKeySpec");
 		criteria1.setMethodName("void <init>(byte[],java.lang.String)");
@@ -46,15 +44,13 @@ public class ConstantKeyFinder extends PredictableSourceRuleChecker
 	}
 
 	@Override
-	public List<Criteria> getCriteriaList()
-	{
+	public List<Criteria> getCriteriaList() {
 		return CRITERIA_LIST;
 	}
 
 
 	@Override
-	public String getRuleId()
-	{
+	public String getRuleId() {
 		return "3";
 	}
 }

@@ -7,8 +7,7 @@ import java.io.InputStream;
  *
  * @author Steven Arzt
  */
-public interface IManifestHandler
-{
+public interface IManifestHandler {
 
 	/**
 	 * Called when the contents of the Android manifest file shall be processed

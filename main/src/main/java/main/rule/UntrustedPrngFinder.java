@@ -13,43 +13,34 @@ import java.util.*;
 
 import static main.util.Utils.getClassNamesFromApkArchive;
 
-public class UntrustedPrngFinder implements RuleChecker
-{
+public class UntrustedPrngFinder implements RuleChecker {
 
 	private static final List<String> UNTRUSTED_PRNGS = new ArrayList<>();
 
-	static
-	{
+	static {
 		UNTRUSTED_PRNGS.add("java.util.Random: void <init>");
 	}
 
 	@Override
-	public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath) throws IOException
-	{
+	public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath) throws IOException {
 
 		Map<String, List<Unit>> analysisLists;
 
-		if (type == EngineType.JAR)
-		{
+		if (type == EngineType.JAR) {
 			analysisLists = analyzeJar(projectJarPath.get(0), projectDependencyPath.get(0));
 		}
-		else if (type == EngineType.APK)
-		{
+		else if (type == EngineType.APK) {
 			analysisLists = analyzeApk(projectJarPath.get(0));
 		}
-		else
-		{
+		else {
 			analysisLists = analyzeSnippet(projectJarPath, projectDependencyPath);
 		}
 
-		if (!analysisLists.isEmpty())
-		{
-			for (String method : analysisLists.keySet())
-			{
+		if (!analysisLists.isEmpty()) {
+			for (String method : analysisLists.keySet()) {
 				List<Unit> analysis = analysisLists.get(method);
 
-				if (!analysis.isEmpty())
-				{
+				if (!analysis.isEmpty()) {
 					System.out.println("=============================================");
 					String output = "***Violated Rule 13: Untrused PRNG (java.util.Random) Found in " + method;
 					System.out.println(output);
@@ -60,12 +51,10 @@ public class UntrustedPrngFinder implements RuleChecker
 
 	}
 
-	private Map<String, List<Unit>> analyzeJar(String projectJarPath, String projectDependencyPath) throws IOException
-	{
+	private Map<String, List<Unit>> analyzeJar(String projectJarPath, String projectDependencyPath) throws IOException {
 		String javaHome = System.getenv("JAVA_HOME");
 
-		if (javaHome.isEmpty())
-		{
+		if (javaHome.isEmpty()) {
 
 			System.err.println("Please set JAVA_HOME");
 			System.exit(1);
@@ -86,20 +75,17 @@ public class UntrustedPrngFinder implements RuleChecker
 		return getUntrustedPrngInstructions(classNames);
 	}
 
-	private Map<String, List<Unit>> analyzeApk(String projectJarPath) throws IOException
-	{
+	private Map<String, List<Unit>> analyzeApk(String projectJarPath) throws IOException {
 		String javaHome = System.getenv("JAVA_HOME");
 		String androidHome = System.getenv("ANDROID_SDK_HOME");
 
-		if (javaHome == null)
-		{
+		if (javaHome == null) {
 
 			System.err.println("Please set JAVA_HOME");
 			System.exit(1);
 		}
 
-		if (androidHome == null)
-		{
+		if (androidHome == null) {
 
 			System.err.println("Please set ANDROID_SDK_HOME");
 			System.exit(1);
@@ -120,13 +106,11 @@ public class UntrustedPrngFinder implements RuleChecker
 		return getUntrustedPrngInstructions(classNames);
 	}
 
-	private Map<String, List<Unit>> analyzeSnippet(List<String> snippetPath, List<String> projectDependencyPath) throws IOException
-	{
+	private Map<String, List<Unit>> analyzeSnippet(List<String> snippetPath, List<String> projectDependencyPath) throws IOException {
 
 		String javaHome = System.getenv("JAVA7_HOME");
 
-		if (javaHome.isEmpty())
-		{
+		if (javaHome.isEmpty()) {
 
 			System.err.println("Please set JAVA7_HOME");
 			System.exit(1);
@@ -136,8 +120,7 @@ public class UntrustedPrngFinder implements RuleChecker
 
 		StringBuilder srcPaths = new StringBuilder();
 
-		for (String srcDir : snippetPath)
-		{
+		for (String srcDir : snippetPath) {
 			srcPaths.append(srcDir)
 					.append(":");
 		}
@@ -148,8 +131,7 @@ public class UntrustedPrngFinder implements RuleChecker
 		Options.v().set_output_format(Options.output_format_jimple);
 		Options.v().set_src_prec(Options.src_prec_java);
 
-		for (String className : classNames)
-		{
+		for (String className : classNames) {
 			Options.v().classes().add(className);
 		}
 
@@ -161,33 +143,26 @@ public class UntrustedPrngFinder implements RuleChecker
 		return getUntrustedPrngInstructions(classNames);
 	}
 
-	private static Map<String, List<Unit>> getUntrustedPrngInstructions(List<String> classNames)
-	{
+	private static Map<String, List<Unit>> getUntrustedPrngInstructions(List<String> classNames) {
 
 		Map<String, List<Unit>> analysisList = new HashMap<>();
 
-		for (String className : classNames)
-		{
+		for (String className : classNames) {
 			SootClass sClass = Scene.v().loadClassAndSupport(className);
 
-			for (SootMethod method : sClass.getMethods())
-			{
-				if (method.isConcrete())
-				{
+			for (SootMethod method : sClass.getMethods()) {
+				if (method.isConcrete()) {
 
 					List<Unit> analysis = new ArrayList<>();
 
 					Body b = method.retrieveActiveBody();
 					DirectedGraph g = new ExceptionalUnitGraph(b);
 					Iterator gitr = g.iterator();
-					while (gitr.hasNext())
-					{
+					while (gitr.hasNext()) {
 						Unit unit = (Unit) gitr.next();
 
-						for (String prng : UNTRUSTED_PRNGS)
-						{
-							if (unit.toString().contains(prng))
-							{
+						for (String prng : UNTRUSTED_PRNGS) {
+							if (unit.toString().contains(prng)) {
 								analysis.add(unit);
 							}
 						}

@@ -6,13 +6,11 @@ import main.rule.engine.Criteria;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PredictableIVFinder extends PredictableSourceRuleChecker
-{
+public class PredictableIVFinder extends PredictableSourceRuleChecker {
 
 	private static final List<Criteria> CRITERIA_LIST = new ArrayList<>();
 
-	static
-	{
+	static {
 
 		Criteria criteria2 = new Criteria();
 		criteria2.setClassName("javax.crypto.spec.IvParameterSpec");
@@ -28,14 +26,12 @@ public class PredictableIVFinder extends PredictableSourceRuleChecker
 	}
 
 	@Override
-	public List<Criteria> getCriteriaList()
-	{
+	public List<Criteria> getCriteriaList() {
 		return CRITERIA_LIST;
 	}
 
 	@Override
-	public String getRuleId()
-	{
+	public String getRuleId() {
 		return "10";
 	}
 }

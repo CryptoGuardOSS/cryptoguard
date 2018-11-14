@@ -9,13 +9,11 @@ import java.util.List;
 /**
  * Created by krishnokoli on 11/15/17.
  */
-public class PredictableSeedFinder extends PredictableSourceRuleChecker
-{
+public class PredictableSeedFinder extends PredictableSourceRuleChecker {
 
 	private static final List<Criteria> CRITERIA_LIST = new ArrayList<>();
 
-	static
-	{
+	static {
 
 		Criteria criteria2 = new Criteria();
 		criteria2.setClassName("java.security.SecureRandom");
@@ -37,14 +35,12 @@ public class PredictableSeedFinder extends PredictableSourceRuleChecker
 	}
 
 	@Override
-	public List<Criteria> getCriteriaList()
-	{
+	public List<Criteria> getCriteriaList() {
 		return CRITERIA_LIST;
 	}
 
 	@Override
-	public String getRuleId()
-	{
+	public String getRuleId() {
 		return "11";
 	}
 }

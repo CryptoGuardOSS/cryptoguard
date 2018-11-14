@@ -11,15 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class AssymCryptoFinder extends BaseRuleChecker
-{
+public class AssymCryptoFinder extends BaseRuleChecker {
 
 	private static final List<Criteria> CRITERIA_LIST = new ArrayList<>();
 
 	private List<String> crypto;
 
-	static
-	{
+	static {
 
 		Criteria criteria1 = new Criteria();
 		criteria1.setClassName("java.security.KeyPairGenerator");
@@ -43,26 +41,19 @@ public class AssymCryptoFinder extends BaseRuleChecker
 	private ArrayList<String> occurrences = new ArrayList<>();
 
 	@Override
-	public void analyzeSlice(Analysis analysis)
-	{
-		if (analysis.getAnalysisResult().isEmpty())
-		{
+	public void analyzeSlice(Analysis analysis) {
+		if (analysis.getAnalysisResult().isEmpty()) {
 			return;
 		}
 
 		String[] splits = analysis.getMethodChain().split("--->");
 
-		for (UnitContainer e : analysis.getAnalysisResult())
-		{
-			for (ValueBox usebox : e.getUnit().getUseBoxes())
-			{
-				if (usebox.getValue() instanceof Constant)
-				{
+		for (UnitContainer e : analysis.getAnalysisResult()) {
+			for (ValueBox usebox : e.getUnit().getUseBoxes()) {
+				if (usebox.getValue() instanceof Constant) {
 
-					for (String regex : crypto)
-					{
-						if (usebox.getValue().toString().matches(regex))
-						{
+					for (String regex : crypto) {
+						if (usebox.getValue().toString().matches(regex)) {
 							occurrences.add(splits[splits.length - 2]);
 							break;
 						}
@@ -72,24 +63,20 @@ public class AssymCryptoFinder extends BaseRuleChecker
 		}
 	}
 
-	public ArrayList<String> getOccurrenceSites()
-	{
+	public ArrayList<String> getOccurrenceSites() {
 		return occurrences;
 	}
 
 	@Override
-	public List<Criteria> getCriteriaList()
-	{
+	public List<Criteria> getCriteriaList() {
 		return CRITERIA_LIST;
 	}
 
-	public void setCrypto(List<String> crypto)
-	{
+	public void setCrypto(List<String> crypto) {
 		this.crypto = crypto;
 	}
 
 	@Override
-	public void printAnalysisOutput(Map<String, String> xmlFileStr)
-	{
+	public void printAnalysisOutput(Map<String, String> xmlFileStr) {
 	}
 }

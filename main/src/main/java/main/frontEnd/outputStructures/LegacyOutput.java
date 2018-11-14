@@ -15,8 +15,7 @@ import java.util.ArrayList;
  * @author RigorityJTeam
  * @since 1.0
  */
-public class LegacyOutput implements OutputStructure
-{
+public class LegacyOutput implements OutputStructure {
 	public final Listing typeOfStructure = Listing.LegacyOutput;
 
 	/***
@@ -25,41 +24,33 @@ public class LegacyOutput implements OutputStructure
 	 * @return Object nothing is returned in legacy as legacy only prints
 	 * information out to the console
 	 */
-	public Object getOutput(String source, EngineType type, ArrayList<AnalysisRule> brokenRules, PrintStream internalWarnings)
-	{
+	public Object getOutput(String source, EngineType type, ArrayList<AnalysisRule> brokenRules, PrintStream internalWarnings) {
 		StringBuilder output = new StringBuilder();
 
 		//Only printing console output if it is set and there is output captured
-		if (internalWarnings != null && internalWarnings.toString().split("\n").length > 1)
-		{
+		if (internalWarnings != null && internalWarnings.toString().split("\n").length > 1) {
 			output.append("Internal Warnings: " + internalWarnings.toString() + "\n");
 		}
 
 		output.append("Analyzing " + type + ": " + source + "\n");
 
 		//region Broken Rule Cycle
-		for (AnalysisRule rule : brokenRules)
-		{
+		for (AnalysisRule rule : brokenRules) {
 			output.append("=======================================\n");
 			output.append("***Violated Rule " + rule.getRuleNumber() + ": " + rule.getRuleType() + "\n");
 			//region Specific Rule Broken
-			if (rule.getIssues().size() > 0)
-			{
-				for (AnalysisIssue issue : rule.getIssues())
-				{
+			if (rule.getIssues().size() > 0) {
+				for (AnalysisIssue issue : rule.getIssues()) {
 					String outputMessage;
 					//region For no general cause message
-					if (issue.getCauseMessage() == null)
-					{
+					if (issue.getCauseMessage() == null) {
 						//region Describing A Method Location
-						if (issue.getDescribingMethod())
-						{
+						if (issue.getDescribingMethod()) {
 							StringBuilder message = new StringBuilder("***Found: ");
 
 							message.append("[\"" + issue.getCapturedInformation() + "\"] ");
 
-							if (issue.getLineNumber() != null)
-							{
+							if (issue.getLineNumber() != null) {
 								message.append("in Line " + issue.getLineNumber() + " ");
 							}
 
@@ -69,8 +60,7 @@ public class LegacyOutput implements OutputStructure
 						}
 						//endregion
 						//region Describing Class Location
-						else
-						{
+						else {
 							StringBuilder message = new StringBuilder("***");
 							message.append(issue.getCapturedInformation());
 							message.append(issue.getLocationName());
@@ -81,8 +71,7 @@ public class LegacyOutput implements OutputStructure
 					}
 					//endregion
 					//region Describing a general cause message
-					else
-					{
+					else {
 						StringBuilder message = new StringBuilder("***Cause: ");
 						message.append(issue.getCauseMessage());
 
@@ -94,8 +83,7 @@ public class LegacyOutput implements OutputStructure
 			}
 			//endregion
 			//region General Message
-			else
-			{
+			else {
 				output.append("***" + rule.getMessage() + "\n");
 			}
 			//endregion

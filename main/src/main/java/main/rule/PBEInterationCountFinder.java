@@ -17,8 +17,7 @@ import java.util.Map;
 /**
  * Created by krishnokoli on 10/22/17.
  */
-public class PBEInterationCountFinder extends BaseRuleChecker
-{
+public class PBEInterationCountFinder extends BaseRuleChecker {
 
 	private static final List<Criteria> CRITERIA_LIST = new ArrayList<>();
 
@@ -26,8 +25,7 @@ public class PBEInterationCountFinder extends BaseRuleChecker
 	private Map<UnitContainer, List<String>> predictableSourcMap = new HashMap<>();
 	private Map<UnitContainer, List<String>> othersSourceMap = new HashMap<>();
 
-	static
-	{
+	static {
 
 		Criteria criteria2 = new Criteria();
 		criteria2.setClassName("javax.crypto.spec.PBEParameterSpec");
@@ -56,44 +54,34 @@ public class PBEInterationCountFinder extends BaseRuleChecker
 	}
 
 	@Override
-	public List<Criteria> getCriteriaList()
-	{
+	public List<Criteria> getCriteriaList() {
 		return CRITERIA_LIST;
 	}
 
 	@Override
-	public void analyzeSlice(Analysis analysis)
-	{
-		if (analysis.getAnalysisResult().isEmpty())
-		{
+	public void analyzeSlice(Analysis analysis) {
+		if (analysis.getAnalysisResult().isEmpty()) {
 			return;
 		}
 
-		for (int index = 0; index < analysis.getAnalysisResult().size(); index++)
-		{
+		for (int index = 0; index < analysis.getAnalysisResult().size(); index++) {
 
 			UnitContainer e = analysis.getAnalysisResult().get(index);
-			for (ValueBox usebox : e.getUnit().getUseBoxes())
-			{
-				if (usebox.getValue() instanceof Constant)
-				{
+			for (ValueBox usebox : e.getUnit().getUseBoxes()) {
+				if (usebox.getValue() instanceof Constant) {
 
-					if (usebox.getValue().getType() instanceof IntType && Integer.valueOf(usebox.getValue().toString()) < 1000)
-					{
+					if (usebox.getValue().getType() instanceof IntType && Integer.valueOf(usebox.getValue().toString()) < 1000) {
 
 						List<UnitContainer> outSet = new ArrayList<>();
 						outSet.add(e);
 
-						if (MajorHeuristics.isArgumentOfInvoke(analysis, index, outSet))
-						{
+						if (MajorHeuristics.isArgumentOfInvoke(analysis, index, outSet)) {
 							putIntoMap(othersSourceMap, e, usebox.getValue().toString());
 						}
-						else if (MajorHeuristics.isArgumentOfByteArrayCreation(analysis, index, outSet))
-						{
+						else if (MajorHeuristics.isArgumentOfByteArrayCreation(analysis, index, outSet)) {
 							putIntoMap(othersSourceMap, e, usebox.getValue().toString());
 						}
-						else
-						{
+						else {
 							putIntoMap(predictableSourcMap, e, usebox.getValue().toString());
 						}
 					}
@@ -102,8 +90,7 @@ public class PBEInterationCountFinder extends BaseRuleChecker
 		}
 	}
 
-	public void printAnalysisOutput(Map<String, String> configFiles)
-	{
+	public void printAnalysisOutput(Map<String, String> configFiles) {
 
 		String rule = "8";
 		String ruleDesc = RULE_VS_DESCRIPTION.get(rule);
@@ -112,19 +99,16 @@ public class PBEInterationCountFinder extends BaseRuleChecker
 		List<UnitContainer> predictableSourceInst = new ArrayList<>();
 		List<String> others = new ArrayList<>();
 
-		for (List<String> values : predictableSourcMap.values())
-		{
+		for (List<String> values : predictableSourcMap.values()) {
 			predictableSources.addAll(values);
 		}
 		predictableSourceInst.addAll(predictableSourcMap.keySet());
 
-		for (List<String> values : othersSourceMap.values())
-		{
+		for (List<String> values : othersSourceMap.values()) {
 			others.addAll(values);
 		}
 
-		if (!predictableSources.isEmpty())
-		{
+		if (!predictableSources.isEmpty()) {
 			System.out.println("=======================================");
 			String output = getPrintableMsg(predictableSourcMap, rule, ruleDesc);
 			System.out.println(output);
@@ -139,18 +123,15 @@ public class PBEInterationCountFinder extends BaseRuleChecker
 //        }
 	}
 
-	private String getPrintableMsg(Map<UnitContainer, List<String>> predictableSourcMap, String rule, String ruleDesc)
-	{
+	private String getPrintableMsg(Map<UnitContainer, List<String>> predictableSourcMap, String rule, String ruleDesc) {
 		String output = "***Violated Rule " +
 				rule + ": " +
 				ruleDesc;
 
-		for (UnitContainer unit : predictableSourcMap.keySet())
-		{
+		for (UnitContainer unit : predictableSourcMap.keySet()) {
 
 			output += "\n***Found: " + predictableSourcMap.get(unit);
-			if (unit.getUnit().getJavaSourceStartLineNumber() >= 0)
-			{
+			if (unit.getUnit().getJavaSourceStartLineNumber() >= 0) {
 				output += " in Line " + unit.getUnit().getJavaSourceStartLineNumber();
 			}
 

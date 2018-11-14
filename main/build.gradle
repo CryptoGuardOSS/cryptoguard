@@ -17,6 +17,33 @@ configurations.all {
     }
 }
 
+configurations {
+    xsd2java
+}
+
+dependencies {
+    xsd2java "com.sun.xml.bind:jaxb-xjc:2.2.6"
+    xsd2java "com.sun.xml.bind:jaxb-impl:2.2.6"
+}
+
+//Only Run this command to re-generate the schema files
+task xsd2java() {
+
+    doLast {
+        file("src/main/java").mkdirs()
+
+        ant.taskdef(name: 'xjc', classname: 'com.sun.tools.xjc.XJCTask', classpath: configurations.xsd2java.asPath)
+        ant.jaxbTargetDir = file("src/main/java")
+
+        ant.xjc(
+                destdir: '${jaxbTargetDir}',
+                package: 'com.example.response',
+                schema: 'src/main/schema/xsd/Scarf/Scarf.xsd'
+        )
+
+    }
+}
+
 jar {
 
     from {
@@ -45,3 +72,5 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     compile group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '2.3.0'
 }
+
+//compileJava.dependsOn xsd2java

@@ -16,8 +16,7 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
-public class MessageRepresentationTest
-{
+public class MessageRepresentationTest {
 	//region Attributes
 	private MessageRepresentation outputEngine;
 	private final String jarOneName = "testable-jar/build/libs/testable-jar.jar";
@@ -29,15 +28,13 @@ public class MessageRepresentationTest
 
 	//region Test Environment Creation
 	@Before
-	public void setUp() throws Exception
-	{
+	public void setUp() throws Exception {
 		this.ruleOneIssue = new AnalysisIssue("<tester.Crypto: void <init>()>", "AES/ECB/PKCS5PADDING", true);
 		this.ruleTwoIssue = new AnalysisIssue("<tester.PasswordUtils: void <init>(java.lang.String)>", "PBEWithMD5AndDES", true);
 	}
 
 	@After
-	public void tearDown() throws Exception
-	{
+	public void tearDown() throws Exception {
 		this.outputEngine = null;
 		this.ruleOneIssue = null;
 		this.ruleTwoIssue = null;
@@ -46,8 +43,7 @@ public class MessageRepresentationTest
 
 	//region Tests
 	@Test
-	public void legacyTest0()
-	{
+	public void legacyTest0() {
 		this.outputEngine = new MessageRepresentation(this.jarOneName, this.jarType, "L");
 
 		assertNotNull(this.outputEngine);
@@ -58,8 +54,7 @@ public class MessageRepresentationTest
 	}
 
 	@Test
-	public void addLegacyRuleAnalysis()
-	{
+	public void addLegacyRuleAnalysis() {
 		this.outputEngine = new MessageRepresentation(this.jarOneName, this.jarType, "L");
 
 		this.outputEngine.addRuleAnalysis(1, this.ruleOneIssue);
@@ -70,8 +65,7 @@ public class MessageRepresentationTest
 	}
 
 	@Test
-	public void addLegacyRuleAnalysis1()
-	{
+	public void addLegacyRuleAnalysis1() {
 		this.outputEngine = new MessageRepresentation(this.jarOneName, this.jarType, "L");
 
 		ArrayList<AnalysisIssue> issues = new ArrayList<>();
@@ -91,8 +85,7 @@ public class MessageRepresentationTest
 	}
 
 	@Test
-	public void addLegacyRuleAnalysis2()
-	{
+	public void addLegacyRuleAnalysis2() {
 		this.outputEngine = new MessageRepresentation(this.jarOneName, this.jarType, "L");
 
 		AnalysisRule newRule = new AnalysisRule(1, new AnalysisIssue[]{this.ruleOneIssue, this.ruleTwoIssue});
@@ -112,8 +105,7 @@ public class MessageRepresentationTest
 	}
 
 	@Test
-	public void getLegacyMessage()
-	{
+	public void getLegacyMessage() {
 		this.outputEngine = new MessageRepresentation(this.jarOneName, this.jarType, "L");
 		String message = (String) this.outputEngine.getMessage();
 

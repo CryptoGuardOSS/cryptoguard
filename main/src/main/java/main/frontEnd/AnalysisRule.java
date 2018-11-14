@@ -12,8 +12,7 @@ import java.util.Arrays;
  * @author RigorityJTeam
  * @since 1.0
  */
-public class AnalysisRule
-{
+public class AnalysisRule {
 
 	//region Attributes
 	private Integer ruleNumber;
@@ -29,8 +28,7 @@ public class AnalysisRule
 	 *
 	 * @param ruleNumber - the rule number that was broken
 	 */
-	public AnalysisRule(Integer ruleNumber)
-	{
+	public AnalysisRule(Integer ruleNumber) {
 		this.ruleNumber = ruleNumber;
 		this.issues = new ArrayList<>();
 	}
@@ -42,8 +40,7 @@ public class AnalysisRule
 	 * @param ruleNumber - the rule number that was broken
 	 * @param issues     - the issues being dynamically added
 	 */
-	public AnalysisRule(Integer ruleNumber, AnalysisIssue... issues)
-	{
+	public AnalysisRule(Integer ruleNumber, AnalysisIssue... issues) {
 		this.ruleNumber = ruleNumber;
 		this.issues = new ArrayList<>(Arrays.asList(issues));
 	}
@@ -56,8 +53,7 @@ public class AnalysisRule
 	 *
 	 * @return Integer - the number of the specified rule
 	 */
-	public Integer getRuleNumber()
-	{
+	public Integer getRuleNumber() {
 		return ruleNumber;
 	}
 
@@ -66,8 +62,7 @@ public class AnalysisRule
 	 *
 	 * @return Integer - the type of rule
 	 */
-	public String getRuleType()
-	{
+	public String getRuleType() {
 		return RuleList.getRuleByRuleNumber(this.ruleNumber).getDesc();
 	}
 
@@ -76,8 +71,7 @@ public class AnalysisRule
 	 *
 	 * @return String - the message associated with the rule break
 	 */
-	public String getMessage()
-	{
+	public String getMessage() {
 		return message;
 	}
 
@@ -86,8 +80,7 @@ public class AnalysisRule
 	 *
 	 * @return ArrayList Issue - the list of issues
 	 */
-	public ArrayList<AnalysisIssue> getIssues()
-	{
+	public ArrayList<AnalysisIssue> getIssues() {
 		return issues;
 	}
 
@@ -96,8 +89,7 @@ public class AnalysisRule
 	 *
 	 * @param issue - an notice of the location of the broken rule
 	 */
-	public void addIssue(AnalysisIssue issue)
-	{
+	public void addIssue(AnalysisIssue issue) {
 		this.issues.add(issue);
 	}
 
@@ -106,8 +98,7 @@ public class AnalysisRule
 	 *
 	 * @param issues - a list of notices of the location of the broken rule
 	 */
-	public void addIssue(ArrayList<AnalysisIssue> issues)
-	{
+	public void addIssue(ArrayList<AnalysisIssue> issues) {
 		this.issues.addAll(issues);
 	}
 	//endregion

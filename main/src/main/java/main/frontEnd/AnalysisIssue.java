@@ -7,8 +7,7 @@ package main.frontEnd;
  * @author RigorityJTeam
  * @since 1.0
  */
-public class AnalysisIssue
-{
+public class AnalysisIssue {
 
 	//region Attributes
 	private Integer lineNumber;
@@ -26,8 +25,7 @@ public class AnalysisIssue
 	 *
 	 * @param causeMessage a message explaining the reason why the rule was broken
 	 */
-	public AnalysisIssue(String causeMessage)
-	{
+	public AnalysisIssue(String causeMessage) {
 		this.causeMessage = causeMessage;
 	}
 
@@ -39,8 +37,7 @@ public class AnalysisIssue
 	 * @param lineNumber          the line number within the locationName the string is located at
 	 * @param locationName        the locationName where the string is
 	 */
-	public AnalysisIssue(String locationName, Integer lineNumber, String capturedInformation)
-	{
+	public AnalysisIssue(String locationName, Integer lineNumber, String capturedInformation) {
 		this.locationName = locationName;
 		this.lineNumber = lineNumber;
 		this.capturedInformation = capturedInformation;
@@ -55,8 +52,7 @@ public class AnalysisIssue
 	 * @param locationName        the locationName where the string is
 	 * @param describingMethod    the boolean to indicate whether or not the issue is describing a method or class
 	 */
-	public AnalysisIssue(String locationName, String capturedInformation, boolean describingMethod)
-	{
+	public AnalysisIssue(String locationName, String capturedInformation, boolean describingMethod) {
 		this.locationName = locationName;
 		this.capturedInformation = capturedInformation;
 		this.describingMethod = describingMethod;
@@ -70,8 +66,7 @@ public class AnalysisIssue
 	 *
 	 * @return Integer - the line number of the rule break
 	 */
-	public Integer getLineNumber()
-	{
+	public Integer getLineNumber() {
 		return lineNumber;
 	}
 
@@ -80,8 +75,7 @@ public class AnalysisIssue
 	 *
 	 * @return string - the name of the locationName
 	 */
-	public String getLocationName()
-	{
+	public String getLocationName() {
 		return locationName;
 	}
 
@@ -90,8 +84,7 @@ public class AnalysisIssue
 	 *
 	 * @return string - returns any error information
 	 */
-	public String getCapturedInformation()
-	{
+	public String getCapturedInformation() {
 		return capturedInformation;
 	}
 
@@ -100,8 +93,7 @@ public class AnalysisIssue
 	 *
 	 * @return string - a generalized String set for a common error message, a less detailed error message
 	 */
-	public String getCauseMessage()
-	{
+	public String getCauseMessage() {
 		return causeMessage;
 	}
 
@@ -111,8 +103,7 @@ public class AnalysisIssue
 	 *
 	 * @return boolean - the indicator whether or not the message is describing a method or not
 	 */
-	public Boolean getDescribingMethod()
-	{
+	public Boolean getDescribingMethod() {
 		return describingMethod;
 	}
 	//endregion

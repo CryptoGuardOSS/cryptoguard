@@ -14,8 +14,7 @@ import java.util.List;
  * @author RigorityJTeam
  * @since 1.0
  */
-public enum EngineType
-{
+public enum EngineType {
 	//region Values
 	JAR("JAR File", "jar"),
 	APK("APK File", "apk"),
@@ -35,8 +34,7 @@ public enum EngineType
 	 * @param name - the human readable name of the engine type
 	 * @param flag - the flag used to identify the engine type
 	 */
-	EngineType(String name, String flag)
-	{
+	EngineType(String name, String flag) {
 		this.name = name;
 		this.flag = flag;
 	}
@@ -49,8 +47,7 @@ public enum EngineType
 	 *
 	 * @return string - the flag of the engine type
 	 */
-	public String getFlag()
-	{
+	public String getFlag() {
 		return this.flag;
 	}
 
@@ -59,8 +56,7 @@ public enum EngineType
 	 *
 	 * @return string - the name of the engine type
 	 */
-	public String getName()
-	{
+	public String getName() {
 		return this.name;
 	}
 
@@ -70,11 +66,9 @@ public enum EngineType
 	 * @param flag - the flag used to look for the specified engine type
 	 * @return - either null if no flag matched or the engine type
 	 */
-	public static EngineType getFromFlag(String flag)
-	{
+	public static EngineType getFromFlag(String flag) {
 		for (EngineType type : EngineType.values())
-			if (type.flag.equals(flag))
-			{
+			if (type.flag.equals(flag)) {
 				return type;
 			}
 
@@ -86,8 +80,7 @@ public enum EngineType
 	 *
 	 * @return list string - the different available engine type flags
 	 */
-	public static List<String> flagTypes()
-	{
+	public static List<String> flagTypes() {
 		List<String> flags = new ArrayList<>();
 		for (EngineType type : EngineType.values())
 			flags.add(type.flag);

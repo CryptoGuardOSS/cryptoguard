@@ -23,13 +23,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BaseAnalyzer
-{
+public class BaseAnalyzer {
 
 	public static final List<String> CRITERIA_CLASSES = new ArrayList<>();
 
-	static
-	{
+	static {
 		CRITERIA_CLASSES.add("javax.crypto.Cipher");
 		CRITERIA_CLASSES.add("java.security.MessageDigest");
 		CRITERIA_CLASSES.add("javax.crypto.spec.SecretKeySpec");
@@ -47,13 +45,11 @@ public class BaseAnalyzer
 	static void analyzeSliceInternal(String criteriaClass,
 									 List<String> classNames,
 									 String endPoint,
-									 ArrayList<Integer> slicingParameters, BaseRuleChecker checker)
-	{
+									 ArrayList<Integer> slicingParameters, BaseRuleChecker checker) {
 
 		SootClass criteriaClazz = Scene.v().getSootClass(criteriaClass);
 
-		if (criteriaClazz.isPhantomClass() || !criteriaClazz.getMethods().toString().contains(endPoint))
-		{
+		if (criteriaClazz.isPhantomClass() || !criteriaClazz.getMethods().toString().contains(endPoint)) {
 			return;
 		}
 
@@ -71,50 +67,40 @@ public class BaseAnalyzer
 	private static void runBackwardSlicingAnalysis(MethodWrapper criteria,
 												   List<Integer> slicingParams,
 												   Map<MethodWrapper, List<Analysis>> methodVsAnalysisResult,
-												   Map<SlicingCriteria, Boolean> slicingCriteriaMap, BaseRuleChecker checker)
-	{
+												   Map<SlicingCriteria, Boolean> slicingCriteriaMap, BaseRuleChecker checker) {
 
 		List<MethodWrapper> callers = criteria.getCallerList();
-		if (callers.isEmpty() || slicingParams == null || slicingParams.isEmpty())
-		{
+		if (callers.isEmpty() || slicingParams == null || slicingParams.isEmpty()) {
 			return;
 		}
 
 		List<MethodCallSiteInfo> callSites = new ArrayList<>();
 
-		for (MethodWrapper caller : callers)
-		{
-			for (MethodCallSiteInfo site : caller.getCalleeList())
-			{
-				if (site.getCallee().toString().equals(criteria.toString()))
-				{
+		for (MethodWrapper caller : callers) {
+			for (MethodCallSiteInfo site : caller.getCalleeList()) {
+				if (site.getCallee().toString().equals(criteria.toString())) {
 					callSites.add(site);
 				}
 			}
 		}
 
-		for (MethodCallSiteInfo callSiteInfo : callSites)
-		{
+		for (MethodCallSiteInfo callSiteInfo : callSites) {
 			SlicingCriteria slicingCriteria = new SlicingCriteria(callSiteInfo, slicingParams);
 
-			if (methodVsAnalysisResult == null)
-			{
+			if (methodVsAnalysisResult == null) {
 				Map<MethodWrapper, List<Analysis>> newResult = new HashMap<>();
 				runBackwardSlicingAnalysisInternal(slicingCriteria, newResult, slicingCriteriaMap, checker);
 
-				for (MethodWrapper methodWrapper : newResult.keySet())
-				{
+				for (MethodWrapper methodWrapper : newResult.keySet()) {
 					List<Analysis> analysisList = newResult.get(methodWrapper);
-					for (Analysis analysis : analysisList)
-					{
+					for (Analysis analysis : analysisList) {
 						checker.analyzeSlice(analysis);
 					}
 				}
 
 				System.gc();
 			}
-			else
-			{
+			else {
 				runBackwardSlicingAnalysisInternal(slicingCriteria, methodVsAnalysisResult, slicingCriteriaMap, checker);
 			}
 		}
@@ -122,19 +108,16 @@ public class BaseAnalyzer
 
 	private static void runBackwardSlicingAnalysisInternal(SlicingCriteria slicingCriteria,
 														   Map<MethodWrapper, List<Analysis>> methodVsAnalysisResult,
-														   Map<SlicingCriteria, Boolean> slicingCriteriaMap, BaseRuleChecker checker)
-	{
+														   Map<SlicingCriteria, Boolean> slicingCriteriaMap, BaseRuleChecker checker) {
 
-		if (slicingCriteriaMap == null)
-		{
+		if (slicingCriteriaMap == null) {
 			slicingCriteriaMap = new HashMap<>();
 		}
 
 		MethodCallSiteInfo callSiteInfo = slicingCriteria.getMethodCallSiteInfo();
 		List<Integer> slicingParams = slicingCriteria.getParameters();
 
-		if (slicingCriteriaMap.get(slicingCriteria) != null)
-		{
+		if (slicingCriteriaMap.get(slicingCriteria) != null) {
 			return;
 		}
 
@@ -142,13 +125,10 @@ public class BaseAnalyzer
 
 		MethodSlicingResult methodSlicingResult = getInfluencingInstructions(callSiteInfo, slicingParams, callSiteInfo.getCaller().getMethod());
 
-		if (methodSlicingResult.getPropertyUseMap() != null)
-		{
-			for (String property : methodSlicingResult.getPropertyUseMap().keySet())
-			{
+		if (methodSlicingResult.getPropertyUseMap() != null) {
+			for (String property : methodSlicingResult.getPropertyUseMap().keySet()) {
 				List<PropertyAnalysisResult> propertyAnalysisResults = methodSlicingResult.getPropertyUseMap().get(property);
-				for (PropertyAnalysisResult propertyAnalysisResult : propertyAnalysisResults)
-				{
+				for (PropertyAnalysisResult propertyAnalysisResult : propertyAnalysisResults) {
 
 					List<Analysis> calleeAnalysisList = methodVsAnalysisResult.get(callSiteInfo.getCallee());
 					List<Analysis> callerAnalysisList = methodVsAnalysisResult.get(propertyAnalysisResult.getMethodWrapper());
@@ -156,8 +136,7 @@ public class BaseAnalyzer
 					List<Analysis> newAnalysisList = buildNewPropertyAnalysisList(callSiteInfo, methodSlicingResult.getAnalysisResult(),
 																				  propertyAnalysisResult, calleeAnalysisList);
 
-					if (callerAnalysisList == null)
-					{
+					if (callerAnalysisList == null) {
 						callerAnalysisList = new ArrayList<>();
 						methodVsAnalysisResult.put(propertyAnalysisResult.getMethodWrapper(), callerAnalysisList);
 					}
@@ -177,8 +156,7 @@ public class BaseAnalyzer
 		List<Analysis> newAnalysisList = buildNewAnalysisList(callSiteInfo,
 															  methodSlicingResult.getAnalysisResult(), calleeAnalysisList);
 
-		if (callerAnalysisList == null)
-		{
+		if (callerAnalysisList == null) {
 			callerAnalysisList = new ArrayList<>();
 			methodVsAnalysisResult.put(callSiteInfo.getCaller(), callerAnalysisList);
 		}
@@ -192,15 +170,12 @@ public class BaseAnalyzer
 	private static List<Analysis> buildNewPropertyAnalysisList(MethodCallSiteInfo callSiteInfo,
 															   List<UnitContainer> methodSlicingResult,
 															   PropertyAnalysisResult slicingResult,
-															   List<Analysis> calleeAnalysisList)
-	{
+															   List<Analysis> calleeAnalysisList) {
 
 		List<Analysis> newAnalysisList = new ArrayList<>();
 
-		if (calleeAnalysisList != null && !calleeAnalysisList.isEmpty())
-		{
-			for (Analysis analysis : calleeAnalysisList)
-			{
+		if (calleeAnalysisList != null && !calleeAnalysisList.isEmpty()) {
+			for (Analysis analysis : calleeAnalysisList) {
 				Analysis newAnalysis = new Analysis();
 
 				StringBuilder newChain = new StringBuilder(callSiteInfo.getCaller().toString().length()
@@ -220,8 +195,7 @@ public class BaseAnalyzer
 				newAnalysis.getAnalysisResult().addAll(methodSlicingResult);
 				newAnalysis.getAnalysisResult().addAll(slicingResult.getSlicingResult());
 
-				for (String key : slicingResult.getPropertyUseMap().keySet())
-				{
+				for (String key : slicingResult.getPropertyUseMap().keySet()) {
 					for (PropertyAnalysisResult res : slicingResult.getPropertyUseMap().get(key))
 						newAnalysis.getAnalysisResult().addAll(res.getSlicingResult());
 				}
@@ -229,8 +203,7 @@ public class BaseAnalyzer
 				newAnalysisList.add(newAnalysis);
 			}
 		}
-		else
-		{
+		else {
 			Analysis newAnalysis = new Analysis();
 
 			StringBuilder newChain = new StringBuilder();
@@ -246,8 +219,7 @@ public class BaseAnalyzer
 			newAnalysis.getAnalysisResult().addAll(methodSlicingResult);
 			newAnalysis.getAnalysisResult().addAll(slicingResult.getSlicingResult());
 
-			for (String key : slicingResult.getPropertyUseMap().keySet())
-			{ // TO-DO Recursively add all analysis
+			for (String key : slicingResult.getPropertyUseMap().keySet()) { // TO-DO Recursively add all analysis
 				for (PropertyAnalysisResult res : slicingResult.getPropertyUseMap().get(key))
 					newAnalysis.getAnalysisResult().addAll(res.getSlicingResult());
 			}
@@ -260,14 +232,11 @@ public class BaseAnalyzer
 
 	private static List<Analysis> buildNewAnalysisList(MethodCallSiteInfo callSiteInfo,
 													   List<UnitContainer> slicingResult,
-													   List<Analysis> calleeAnalysisList)
-	{
+													   List<Analysis> calleeAnalysisList) {
 		List<Analysis> newAnalysisList = new ArrayList<>();
 
-		if (calleeAnalysisList != null && !calleeAnalysisList.isEmpty())
-		{
-			for (Analysis analysis : calleeAnalysisList)
-			{
+		if (calleeAnalysisList != null && !calleeAnalysisList.isEmpty()) {
+			for (Analysis analysis : calleeAnalysisList) {
 				Analysis newAnalysis = new Analysis();
 				StringBuilder newChain = new StringBuilder();
 
@@ -284,8 +253,7 @@ public class BaseAnalyzer
 				newAnalysisList.add(newAnalysis);
 			}
 		}
-		else
-		{
+		else {
 			Analysis newAnalysis = new Analysis();
 
 			StringBuilder newChain = new StringBuilder();
@@ -307,8 +275,7 @@ public class BaseAnalyzer
 
 	private static MethodSlicingResult getInfluencingInstructions(MethodCallSiteInfo methodCallSiteInfo,
 																  List<Integer> slicingParams,
-																  SootMethod m)
-	{
+																  SootMethod m) {
 		Body b = m.retrieveActiveBody();
 
 		UnitGraph graph = new ExceptionalUnitGraph(b);

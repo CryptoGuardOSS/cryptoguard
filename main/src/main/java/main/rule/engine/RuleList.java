@@ -7,8 +7,7 @@ package main.rule.engine;
  * @author RigorityJTeam
  * @since 1.0
  */
-public enum RuleList
-{
+public enum RuleList {
 	//region Values
 	BrokenCrypto(1, "Found broken crypto schemes"),
 	BrokenHash(2, "Found broken hash functions"),
@@ -33,31 +32,26 @@ public enum RuleList
 	//endregion
 
 	//region Constructor
-	RuleList(Integer ruleId, String desc)
-	{
+	RuleList(Integer ruleId, String desc) {
 		this.ruleId = ruleId;
 		this.desc = desc;
 	}
 	//endregion
 
 	//region Getters
-	public Integer getRuleId()
-	{
+	public Integer getRuleId() {
 		return ruleId;
 	}
 
-	public String getDesc()
-	{
+	public String getDesc() {
 		return desc;
 	}
 	//endregion
 
 	//region Accessors
-	public static RuleList getRuleByRuleNumber(Integer ruleNumber)
-	{
+	public static RuleList getRuleByRuleNumber(Integer ruleNumber) {
 		for (RuleList rule : RuleList.values())
-			if (rule.getRuleId().equals(ruleNumber))
-			{
+			if (rule.getRuleId().equals(ruleNumber)) {
 				return rule;
 			}
 		return RuleList.UNCREATEDRULE;

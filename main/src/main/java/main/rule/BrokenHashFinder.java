@@ -6,14 +6,12 @@ import main.rule.engine.Criteria;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BrokenHashFinder extends PatternMatcherRuleChecker
-{
+public class BrokenHashFinder extends PatternMatcherRuleChecker {
 
 	private static final List<String> BROKEN_HASH = new ArrayList<>();
 	private static final List<Criteria> CRITERIA_LIST = new ArrayList<>();
 
-	static
-	{
+	static {
 		BROKEN_HASH.add("\"MD2\"");
 		BROKEN_HASH.add("(.)*MD5\"");
 		BROKEN_HASH.add("(.)*SHA-1\"");
@@ -40,20 +38,17 @@ public class BrokenHashFinder extends PatternMatcherRuleChecker
 	}
 
 	@Override
-	public List<Criteria> getCriteriaList()
-	{
+	public List<Criteria> getCriteriaList() {
 		return CRITERIA_LIST;
 	}
 
 	@Override
-	public List<String> getPatternsToMatch()
-	{
+	public List<String> getPatternsToMatch() {
 		return BROKEN_HASH;
 	}
 
 	@Override
-	public String getRuleId()
-	{
+	public String getRuleId() {
 		return "2";
 	}
 }

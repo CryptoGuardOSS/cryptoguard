@@ -9,8 +9,7 @@ import java.util.List;
  * @author RigorityJTeam
  * @since 1.0
  */
-public interface RuleChecker
-{
+public interface RuleChecker {
 
 	/**
 	 * The checkRule will verify the allocated rules for the given source.

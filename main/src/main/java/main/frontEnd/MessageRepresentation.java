@@ -15,8 +15,7 @@ import java.util.HashMap;
  * @author RigorityJTeam
  * @since 1.0
  */
-public class MessageRepresentation
-{
+public class MessageRepresentation {
 
 	//region Attributes
 	private String Source;
@@ -37,8 +36,7 @@ public class MessageRepresentation
 	 * @param source                   the name of the source being examined
 	 * @param typeOfMessagingStructure the flag used to determine the type of messaging structure to be used
 	 */
-	public MessageRepresentation(String source, EngineType type, String typeOfMessagingStructure)
-	{
+	public MessageRepresentation(String source, EngineType type, String typeOfMessagingStructure) {
 		this.Source = source;
 		this.type = type;
 		this.messageEngine = Listing.getTypeOfMessaging(typeOfMessagingStructure);
@@ -55,8 +53,7 @@ public class MessageRepresentation
 	 *
 	 * @return string - the source
 	 */
-	public String getSource()
-	{
+	public String getSource() {
 		return Source;
 	}
 
@@ -65,8 +62,7 @@ public class MessageRepresentation
 	 *
 	 * @return EngineType - the type of engine running
 	 */
-	public EngineType getType()
-	{
+	public EngineType getType() {
 		return type;
 	}
 
@@ -75,8 +71,7 @@ public class MessageRepresentation
 	 *
 	 * @return AnalysisRules - the list of broken rules
 	 */
-	public ArrayList<AnalysisRule> getAnalysisIssues()
-	{
+	public ArrayList<AnalysisRule> getAnalysisIssues() {
 		return new ArrayList<>(analysisIssues.values());
 	}
 
@@ -85,8 +80,7 @@ public class MessageRepresentation
 	 *
 	 * @return OutputStructure - the messaging engine being used
 	 */
-	public OutputStructure getMessageEngine()
-	{
+	public OutputStructure getMessageEngine() {
 		return messageEngine;
 	}
 
@@ -99,10 +93,8 @@ public class MessageRepresentation
 	 * @param ruleNumber - the rule number to add the issue to
 	 * @param issue      - the specific issue being added
 	 */
-	public void addRuleAnalysis(Integer ruleNumber, AnalysisIssue issue)
-	{
-		if (!this.analysisIssues.containsKey(ruleNumber))
-		{
+	public void addRuleAnalysis(Integer ruleNumber, AnalysisIssue issue) {
+		if (!this.analysisIssues.containsKey(ruleNumber)) {
 			this.analysisIssues.put(ruleNumber, new AnalysisRule(ruleNumber));
 		}
 
@@ -117,10 +109,8 @@ public class MessageRepresentation
 	 * @param ruleNumber - the rule number to add the issue to
 	 * @param issues     - the specific issues being added
 	 */
-	public void addRuleAnalysis(Integer ruleNumber, ArrayList<AnalysisIssue> issues)
-	{
-		if (!this.analysisIssues.containsKey(ruleNumber))
-		{
+	public void addRuleAnalysis(Integer ruleNumber, ArrayList<AnalysisIssue> issues) {
+		if (!this.analysisIssues.containsKey(ruleNumber)) {
 			this.analysisIssues.put(ruleNumber, new AnalysisRule(ruleNumber));
 		}
 
@@ -135,14 +125,11 @@ public class MessageRepresentation
 	 *
 	 * @param rule - the created rule to add into the rule grouping
 	 */
-	public void addRuleAnalysis(AnalysisRule rule)
-	{
-		if (!this.analysisIssues.containsKey(rule.getRuleNumber()))
-		{
+	public void addRuleAnalysis(AnalysisRule rule) {
+		if (!this.analysisIssues.containsKey(rule.getRuleNumber())) {
 			this.analysisIssues.put(rule.getRuleNumber(), rule);
 		}
-		else
-		{
+		else {
 			this.analysisIssues.get(rule.getRuleNumber()).addIssue(rule.getIssues());
 		}
 	}
@@ -152,8 +139,7 @@ public class MessageRepresentation
 	 *
 	 * @return Object - the overloaded output is determined by the type of messaging system used
 	 */
-	public Object getMessage()
-	{
+	public Object getMessage() {
 		return messageEngine.getOutput(this.Source, this.type, this.getAnalysisIssues(), this.internalMessages);
 	}
 	//endregion

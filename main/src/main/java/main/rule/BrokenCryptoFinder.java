@@ -6,14 +6,12 @@ import main.rule.engine.Criteria;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BrokenCryptoFinder extends PatternMatcherRuleChecker
-{
+public class BrokenCryptoFinder extends PatternMatcherRuleChecker {
 
 	private static final List<String> BROKEN_CRYPTO = new ArrayList<>();
 	private static final List<Criteria> CRITERIA_LIST = new ArrayList<>();
 
-	static
-	{
+	static {
 		BROKEN_CRYPTO.add("(.)*DES(.)*");
 		BROKEN_CRYPTO.add("(.)*DESede(.)*");
 		BROKEN_CRYPTO.add("\"AES\"");
@@ -48,20 +46,17 @@ public class BrokenCryptoFinder extends PatternMatcherRuleChecker
 	}
 
 	@Override
-	public List<Criteria> getCriteriaList()
-	{
+	public List<Criteria> getCriteriaList() {
 		return CRITERIA_LIST;
 	}
 
 	@Override
-	public List<String> getPatternsToMatch()
-	{
+	public List<String> getPatternsToMatch() {
 		return BROKEN_CRYPTO;
 	}
 
 	@Override
-	public String getRuleId()
-	{
+	public String getRuleId() {
 		return "1";
 	}
 }

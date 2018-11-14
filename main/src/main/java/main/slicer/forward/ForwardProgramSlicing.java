@@ -15,15 +15,13 @@ import soot.toolkits.scalar.ForwardFlowAnalysis;
 
 import java.util.List;
 
-public class ForwardProgramSlicing extends ForwardFlowAnalysis
-{
+public class ForwardProgramSlicing extends ForwardFlowAnalysis {
 
 	private FlowSet emptySet;
 	private MethodCallSiteInfo methodCallSiteInfo;
 
 	public ForwardProgramSlicing(DirectedGraph g,
-								 SlicingCriteria slicingCriteria)
-	{
+								 SlicingCriteria slicingCriteria) {
 		super(g);
 		this.emptySet = new ValueArraySparseSet();
 		this.methodCallSiteInfo = new MethodCallSiteInfo();
@@ -32,8 +30,7 @@ public class ForwardProgramSlicing extends ForwardFlowAnalysis
 	}
 
 	@Override
-	protected void flowThrough(Object in, Object node, Object out)
-	{
+	protected void flowThrough(Object in, Object node, Object out) {
 		FlowSet inSet = (FlowSet) in,
 				outSet = (FlowSet) out;
 		Unit currInstruction = (Unit) node;
@@ -41,8 +38,7 @@ public class ForwardProgramSlicing extends ForwardFlowAnalysis
 		SlicingCriteria slicingCriteria = methodCallSiteInfo.getSlicingCriteria();
 
 		if (currInstruction.toString().contains(slicingCriteria.getMethodName()) &&
-				(currInstruction instanceof JAssignStmt || currInstruction instanceof JInvokeStmt))
-		{
+				(currInstruction instanceof JAssignStmt || currInstruction instanceof JInvokeStmt)) {
 
 			methodCallSiteInfo.setColumnNumber(currInstruction.getJavaSourceStartColumnNumber());
 			methodCallSiteInfo.setLineNumber(currInstruction.getJavaSourceStartLineNumber());
@@ -55,22 +51,17 @@ public class ForwardProgramSlicing extends ForwardFlowAnalysis
 			return;
 		}
 
-		if (!inSet.isEmpty())
-		{
+		if (!inSet.isEmpty()) {
 			outSet.union(inSet);
 
-			for (Object anInSet : inSet.toList())
-			{
+			for (Object anInSet : inSet.toList()) {
 
 
 				Unit insetInstruction = (Unit) anInSet;
 				List<ValueBox> defBoxes = insetInstruction.getDefBoxes();
-				for (ValueBox defbox : defBoxes)
-				{
-					for (ValueBox usebox : currInstruction.getUseBoxes())
-					{
-						if (defbox.getValue().equivTo(usebox.getValue()))
-						{
+				for (ValueBox defbox : defBoxes) {
+					for (ValueBox usebox : currInstruction.getUseBoxes()) {
+						if (defbox.getValue().equivTo(usebox.getValue())) {
 							outSet.add(currInstruction);
 							return;
 						}
@@ -82,20 +73,17 @@ public class ForwardProgramSlicing extends ForwardFlowAnalysis
 	}
 
 	@Override
-	protected Object newInitialFlow()
-	{
+	protected Object newInitialFlow() {
 		return emptySet.clone();
 	}
 
 	@Override
-	protected Object entryInitialFlow()
-	{
+	protected Object entryInitialFlow() {
 		return emptySet.clone();
 	}
 
 	@Override
-	protected void merge(Object in1, Object in2, Object out)
-	{
+	protected void merge(Object in1, Object in2, Object out) {
 		FlowSet inSet1 = (FlowSet) in1,
 				inSet2 = (FlowSet) in2,
 				outSet = (FlowSet) out;
@@ -104,15 +92,13 @@ public class ForwardProgramSlicing extends ForwardFlowAnalysis
 	}
 
 	@Override
-	protected void copy(Object source, Object dest)
-	{
+	protected void copy(Object source, Object dest) {
 		FlowSet srcSet = (FlowSet) source,
 				destSet = (FlowSet) dest;
 		srcSet.copy(destSet);
 	}
 
-	public MethodCallSiteInfo getMethodCallSiteInfo()
-	{
+	public MethodCallSiteInfo getMethodCallSiteInfo() {
 		return methodCallSiteInfo;
 	}
 

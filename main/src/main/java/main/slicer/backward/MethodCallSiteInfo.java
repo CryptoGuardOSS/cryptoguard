@@ -5,65 +5,54 @@ import main.analyzer.backward.MethodWrapper;
 /**
  * Created by krishnokoli on 7/3/17.
  */
-public class MethodCallSiteInfo
-{
+public class MethodCallSiteInfo {
 
 	private MethodWrapper callee;
 	private MethodWrapper caller;
 	private int lineNumber;
 	private int columnNumber;
 
-	public MethodCallSiteInfo(MethodWrapper caller, MethodWrapper callee, int lineNumber, int columnNumber)
-	{
+	public MethodCallSiteInfo(MethodWrapper caller, MethodWrapper callee, int lineNumber, int columnNumber) {
 		this.caller = caller;
 		this.callee = callee;
 		this.lineNumber = lineNumber;
 		this.columnNumber = columnNumber;
 	}
 
-	public MethodWrapper getCallee()
-	{
+	public MethodWrapper getCallee() {
 		return callee;
 	}
 
-	public void setCallee(MethodWrapper callee)
-	{
+	public void setCallee(MethodWrapper callee) {
 		this.callee = callee;
 	}
 
-	public int getLineNumber()
-	{
+	public int getLineNumber() {
 		return lineNumber;
 	}
 
-	public void setLineNumber(int lineNumber)
-	{
+	public void setLineNumber(int lineNumber) {
 		this.lineNumber = lineNumber;
 	}
 
-	public int getColumnNumber()
-	{
+	public int getColumnNumber() {
 		return columnNumber;
 	}
 
-	public void setColumnNumber(int columnNumber)
-	{
+	public void setColumnNumber(int columnNumber) {
 		this.columnNumber = columnNumber;
 	}
 
-	public MethodWrapper getCaller()
-	{
+	public MethodWrapper getCaller() {
 		return caller;
 	}
 
-	public void setCaller(MethodWrapper caller)
-	{
+	public void setCaller(MethodWrapper caller) {
 		this.caller = caller;
 	}
 
 	@Override
-	public boolean equals(Object o)
-	{
+	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 
@@ -75,8 +64,7 @@ public class MethodCallSiteInfo
 	}
 
 	@Override
-	public int hashCode()
-	{
+	public int hashCode() {
 		int result = callee.hashCode();
 		result = 31 * result + caller.hashCode();
 		result = 31 * result + lineNumber;
@@ -85,8 +73,7 @@ public class MethodCallSiteInfo
 	}
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return "MethodCallSiteInfo{" +
 				"callee=" + callee +
 				", caller=" + caller +

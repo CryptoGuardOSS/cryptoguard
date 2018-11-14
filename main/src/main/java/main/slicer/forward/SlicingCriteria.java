@@ -3,29 +3,24 @@ package main.slicer.forward;
 /**
  * Created by krishnokoli on 7/3/17.
  */
-public class SlicingCriteria
-{
+public class SlicingCriteria {
 
 	private String methodName;
 
-	public SlicingCriteria(String methodName)
-	{
+	public SlicingCriteria(String methodName) {
 		this.methodName = methodName;
 	}
 
-	public String getMethodName()
-	{
+	public String getMethodName() {
 		return methodName;
 	}
 
-	public void setMethodName(String methodName)
-	{
+	public void setMethodName(String methodName) {
 		this.methodName = methodName;
 	}
 
 	@Override
-	public boolean equals(Object o)
-	{
+	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 
@@ -35,8 +30,7 @@ public class SlicingCriteria
 	}
 
 	@Override
-	public int hashCode()
-	{
+	public int hashCode() {
 		return methodName.hashCode();
 	}
 }

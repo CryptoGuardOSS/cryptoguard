@@ -19,13 +19,11 @@ import java.util.*;
  * @author RigorityJTeam
  * @since 1.0
  */
-public abstract class BaseRuleChecker implements RuleChecker
-{
+public abstract class BaseRuleChecker implements RuleChecker {
 
 	public static final Map<String, String> RULE_VS_DESCRIPTION = new HashMap<>();
 
-	static
-	{
+	static {
 
 		RULE_VS_DESCRIPTION.put("1", "Found broken crypto schemes"); // Rule 11, 14
 		RULE_VS_DESCRIPTION.put("2", "Found broken hash functions"); // Rule 16
@@ -45,33 +43,28 @@ public abstract class BaseRuleChecker implements RuleChecker
 	}
 
 	@Override
-	public void checkRule(EngineType type, List<String> projectPaths, List<String> projectDependencyPath) throws IOException
-	{
+	public void checkRule(EngineType type, List<String> projectPaths, List<String> projectDependencyPath) throws IOException {
 
 		String[] excludes = {"web.xml", "pom.xml"};
 
 		Map<String, String> xmlFileStr = Utils.getXmlFiles(projectPaths.get(0), Arrays.asList(excludes));
 
-		for (Criteria criteria : getCriteriaList())
-		{
-			if (type == EngineType.JAR)
-			{
+		for (Criteria criteria : getCriteriaList()) {
+			if (type == EngineType.JAR) {
 				JarAnalyzer.analyzeSlices(criteria.getClassName(),
 										  criteria.getMethodName(),
 										  criteria.getParam(),
 										  projectPaths.get(0),
 										  projectDependencyPath.get(0), this);
 			}
-			else if (type == EngineType.APK)
-			{
+			else if (type == EngineType.APK) {
 
 				ApkAnalyzer.analyzeSlices(criteria.getClassName(),
 										  criteria.getMethodName(),
 										  criteria.getParam(),
 										  projectPaths.get(0), this);
 			}
-			else if (type == EngineType.SOURCE)
-			{
+			else if (type == EngineType.SOURCE) {
 				PartialCodeAnalyzer.analyzeSlices(criteria.getClassName(),
 												  criteria.getMethodName(),
 												  criteria.getParam(),
@@ -88,20 +81,17 @@ public abstract class BaseRuleChecker implements RuleChecker
 
 	public abstract void printAnalysisOutput(Map<String, String> xmlFileStr);
 
-	protected void putIntoMap(Map<UnitContainer, List<String>> unitStringMap, UnitContainer e, String value)
-	{
+	protected void putIntoMap(Map<UnitContainer, List<String>> unitStringMap, UnitContainer e, String value) {
 
 		List<String> values = unitStringMap.get(e);
-		if (values == null)
-		{
+		if (values == null) {
 			values = new ArrayList<>();
 			values.add(value);
 			unitStringMap.put(e, values);
 			return;
 		}
 
-		if (!values.toString().contains(value))
-		{
+		if (!values.toString().contains(value)) {
 			values.add(value);
 		}
 	}

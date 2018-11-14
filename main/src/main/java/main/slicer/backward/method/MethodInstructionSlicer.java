@@ -21,8 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MethodInstructionSlicer extends BackwardFlowAnalysis
-{
+public class MethodInstructionSlicer extends BackwardFlowAnalysis {
 
 	private FlowSet emptySet;
 	private MethodCallSiteInfo methodCallSiteInfo;
@@ -30,8 +29,7 @@ public class MethodInstructionSlicer extends BackwardFlowAnalysis
 	private Map<String, List<PropertyAnalysisResult>> propertyUseMap;
 
 	public MethodInstructionSlicer(DirectedGraph g,
-								   MethodCallSiteInfo methodCallSiteInfo, List<Integer> slicingParams)
-	{
+								   MethodCallSiteInfo methodCallSiteInfo, List<Integer> slicingParams) {
 		super(g);
 		this.emptySet = new ValueArraySparseSet();
 		this.methodCallSiteInfo = methodCallSiteInfo;
@@ -41,18 +39,15 @@ public class MethodInstructionSlicer extends BackwardFlowAnalysis
 	}
 
 	@Override
-	protected void flowThrough(Object in, Object node, Object out)
-	{
+	protected void flowThrough(Object in, Object node, Object out) {
 		FlowSet inSet = (FlowSet) in,
 				outSet = (FlowSet) out;
 		Unit currInstruction = (Unit) node;
 
 		if (currInstruction.toString().contains(methodCallSiteInfo.getCallee().toString()) &&
-				currInstruction.getJavaSourceStartLineNumber() == methodCallSiteInfo.getLineNumber())
-		{
+				currInstruction.getJavaSourceStartLineNumber() == methodCallSiteInfo.getLineNumber()) {
 
-			for (Integer slicingParam : slicingParams)
-			{
+			for (Integer slicingParam : slicingParams) {
 
 				/*
 				 *  Replace the instruction with new instruction(s) to precisely track the provided parameters.
@@ -60,19 +55,16 @@ public class MethodInstructionSlicer extends BackwardFlowAnalysis
 				 */
 				Value valueToAssign = null;
 
-				for (ValueBox usebox : currInstruction.getUseBoxes())
-				{
+				for (ValueBox usebox : currInstruction.getUseBoxes()) {
 
 					if (usebox.getValue().toString().contains("invoke ") &&
-							usebox.getValue().getUseBoxes().size() > slicingParam)
-					{
+							usebox.getValue().getUseBoxes().size() > slicingParam) {
 						valueToAssign = usebox.getValue().getUseBoxes().get(slicingParam).getValue();
 						break;
 					}
 				}
 
-				if (valueToAssign != null)
-				{
+				if (valueToAssign != null) {
 
 					Value localValue = new BafLocal("$fakeLocal_" + methodCallSiteInfo.getLineNumber() + slicingParams, valueToAssign.getType());
 					AssignStmt assignStmt = Jimple.v().newAssignStmt(localValue, valueToAssign);
@@ -91,57 +83,45 @@ public class MethodInstructionSlicer extends BackwardFlowAnalysis
 			return;
 		}
 
-		if (!inSet.isEmpty())
-		{
-			for (Object anInSet : inSet.toList())
-			{
+		if (!inSet.isEmpty()) {
+			for (Object anInSet : inSet.toList()) {
 
 				UnitContainer insetInstruction = (UnitContainer) anInSet;
 				List<ValueBox> useBoxes = insetInstruction.getUnit().getUseBoxes();
 
 				outSet.union(inSet);
 
-				for (ValueBox usebox : useBoxes)
-				{
+				for (ValueBox usebox : useBoxes) {
 
-					if (isSpecialInvokeOn(currInstruction, usebox))
-					{
+					if (isSpecialInvokeOn(currInstruction, usebox)) {
 						addCurrInstInOutSet(outSet, currInstruction);
 						return;
 					}
 
 					List<PropertyAnalysisResult> specialInitInsts;
 
-					if (usebox.getValue().toString().startsWith("r0."))
-					{
+					if (usebox.getValue().toString().startsWith("r0.")) {
 						specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString().substring(3));
 					}
-					else if (usebox.getValue().toString().startsWith("this."))
-					{
+					else if (usebox.getValue().toString().startsWith("this.")) {
 						specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString().substring(5));
 					}
-					else
-					{
+					else {
 						specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString());
 					}
 
-					if (specialInitInsts != null)
-					{
+					if (specialInitInsts != null) {
 						propertyUseMap.put(usebox.getValue().toString(), specialInitInsts);
 					}
 
-					for (ValueBox defbox : currInstruction.getDefBoxes())
-					{
+					for (ValueBox defbox : currInstruction.getDefBoxes()) {
 
-						if (defbox.getValue().equivTo(usebox.getValue()))
-						{
+						if (defbox.getValue().equivTo(usebox.getValue())) {
 							addCurrInstInOutSet(outSet, currInstruction);
 							return;
 						}
-						else if (defbox.getValue().toString().contains(usebox.getValue().toString()))
-						{
-							if (usebox.getValue().getType() instanceof ArrayType)
-							{
+						else if (defbox.getValue().toString().contains(usebox.getValue().toString())) {
+							if (usebox.getValue().getType() instanceof ArrayType) {
 								addCurrInstInOutSet(outSet, currInstruction);
 								return;
 							}
@@ -153,8 +133,7 @@ public class MethodInstructionSlicer extends BackwardFlowAnalysis
 
 	}
 
-	private void addCurrInstInOutSet(FlowSet outSet, Unit currInstruction)
-	{
+	private void addCurrInstInOutSet(FlowSet outSet, Unit currInstruction) {
 		UnitContainer currUnitContainer = new UnitContainer();
 		currUnitContainer.setUnit(currInstruction);
 		currUnitContainer.setMethod(methodCallSiteInfo.getCaller().toString());
@@ -162,27 +141,23 @@ public class MethodInstructionSlicer extends BackwardFlowAnalysis
 		outSet.add(currUnitContainer);
 	}
 
-	private boolean isSpecialInvokeOn(Unit currInstruction, ValueBox usebox)
-	{
+	private boolean isSpecialInvokeOn(Unit currInstruction, ValueBox usebox) {
 		return currInstruction.toString().contains("specialinvoke")
 				&& currInstruction.toString().contains(usebox.getValue().toString() + ".<");
 	}
 
 	@Override
-	protected Object newInitialFlow()
-	{
+	protected Object newInitialFlow() {
 		return emptySet.clone();
 	}
 
 	@Override
-	protected Object entryInitialFlow()
-	{
+	protected Object entryInitialFlow() {
 		return emptySet.clone();
 	}
 
 	@Override
-	protected void merge(Object in1, Object in2, Object out)
-	{
+	protected void merge(Object in1, Object in2, Object out) {
 		FlowSet inSet1 = (FlowSet) in1,
 				inSet2 = (FlowSet) in2,
 				outSet = (FlowSet) out;
@@ -191,20 +166,17 @@ public class MethodInstructionSlicer extends BackwardFlowAnalysis
 	}
 
 	@Override
-	protected void copy(Object source, Object dest)
-	{
+	protected void copy(Object source, Object dest) {
 		FlowSet srcSet = (FlowSet) source,
 				destSet = (FlowSet) dest;
 		srcSet.copy(destSet);
 	}
 
-	public MethodCallSiteInfo getMethodCallSiteInfo()
-	{
+	public MethodCallSiteInfo getMethodCallSiteInfo() {
 		return methodCallSiteInfo;
 	}
 
-	public Map<String, List<PropertyAnalysisResult>> getPropertyUseMap()
-	{
+	public Map<String, List<PropertyAnalysisResult>> getPropertyUseMap() {
 		return propertyUseMap;
 	}
 }

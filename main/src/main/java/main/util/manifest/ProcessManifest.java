@@ -30,8 +30,7 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-public class ProcessManifest
-{
+public class ProcessManifest {
 
 	private final Set<String> entryPointsClasses = new HashSet<String>();
 	private String applicationName = "";
@@ -53,89 +52,70 @@ public class ProcessManifest
 	 * @param handler The handler for processing the apk file
 	 * @author Steven Arzt
 	 */
-	private void handleAndroidManifestFile(String apk, IManifestHandler handler)
-	{
+	private void handleAndroidManifestFile(String apk, IManifestHandler handler) {
 		File apkF = new File(apk);
-		if (!apkF.exists())
-		{
+		if (!apkF.exists()) {
 			throw new RuntimeException("file '" + apk + "' does not exist!");
 		}
 
 		boolean found = false;
-		try
-		{
+		try {
 			ZipFile archive = null;
-			try
-			{
+			try {
 				archive = new ZipFile(apkF);
 				Enumeration<?> entries = archive.entries();
-				while (entries.hasMoreElements())
-				{
+				while (entries.hasMoreElements()) {
 					ZipEntry entry = (ZipEntry) entries.nextElement();
 					String entryName = entry.getName();
 					// We are dealing with the Android manifest
-					if (entryName.equals("AndroidManifest.xml"))
-					{
+					if (entryName.equals("AndroidManifest.xml")) {
 						found = true;
 						handler.handleManifest(archive.getInputStream(entry));
 						break;
 					}
 				}
-			} finally
-			{
-				if (archive != null)
-				{
+			} finally {
+				if (archive != null) {
 					archive.close();
 				}
 			}
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			throw new RuntimeException(
 					"Error when looking for manifest in apk: " + e);
 		}
-		if (!found)
-		{
+		if (!found) {
 			throw new RuntimeException("No manifest file found in apk");
 		}
 	}
 
-	public void loadManifestFile(String apk)
-	{
-		handleAndroidManifestFile(apk, new IManifestHandler()
-		{
+	public void loadManifestFile(String apk) {
+		handleAndroidManifestFile(apk, new IManifestHandler() {
 
 			@Override
-			public void handleManifest(InputStream stream)
-			{
+			public void handleManifest(InputStream stream) {
 				loadClassesFromBinaryManifest(stream);
 			}
 
 		});
 	}
 
-	protected void loadClassesFromBinaryManifest(InputStream manifestIS)
-	{
-		try
-		{
+	protected void loadClassesFromBinaryManifest(InputStream manifestIS) {
+		try {
 			AXmlResourceParser parser = new AXmlResourceParser();
 			parser.open(manifestIS);
 
 			int type = -1;
 			boolean applicationEnabled = true;
-			while ((type = parser.next()) != XmlPullParser.END_DOCUMENT)
-			{
-				switch (type)
-				{
+			while ((type = parser.next()) != XmlPullParser.END_DOCUMENT) {
+				switch (type) {
 					case XmlPullParser.START_DOCUMENT:
 						break;
 					case XmlPullParser.START_TAG:
 						String tagName = parser.getName();
-						if (tagName.equals("manifest"))
-						{
+						if (tagName.equals("manifest")) {
 							this.packageName = getAttributeValue(parser, "package");
 							String versionCode = getAttributeValue(parser, "versionCode");
-							if (versionCode != null && versionCode.length() > 0)
-							{
+							if (versionCode != null && versionCode.length() > 0) {
 								this.versionCode = Integer.valueOf(versionCode);
 							}
 							this.versionName = getAttributeValue(parser, "versionName");
@@ -143,16 +123,13 @@ public class ProcessManifest
 						else if (tagName.equals("activity")
 								|| tagName.equals("receiver")
 								|| tagName.equals("service")
-								|| tagName.equals("provider"))
-						{
+								|| tagName.equals("provider")) {
 							// We ignore disabled activities
-							if (!applicationEnabled)
-							{
+							if (!applicationEnabled) {
 								continue;
 							}
 							String attrValue = getAttributeValue(parser, "enabled");
-							if (attrValue != null && attrValue.equals("false"))
-							{
+							if (attrValue != null && attrValue.equals("false")) {
 								continue;
 							}
 
@@ -160,29 +137,24 @@ public class ProcessManifest
 							attrValue = getAttributeValue(parser, "name");
 							entryPointsClasses.add(expandClassName(attrValue));
 						}
-						else if (tagName.equals("uses-permission"))
-						{
+						else if (tagName.equals("uses-permission")) {
 							String permissionName = getAttributeValue(parser, "name");
 							// We probably don't want to do this in some cases, so leave it
 							// to the user
 							// permissionName = permissionName.substring(permissionName.lastIndexOf(".") + 1);
 							this.permissions.add(permissionName);
 						}
-						else if (tagName.equals("uses-sdk"))
-						{
+						else if (tagName.equals("uses-sdk")) {
 							String minVersion = getAttributeValue(parser, "minSdkVersion");
-							if (minVersion != null && minVersion.length() > 0)
-							{
+							if (minVersion != null && minVersion.length() > 0) {
 								this.minSdkVersion = Integer.valueOf(minVersion);
 							}
 							String targetVersion = getAttributeValue(parser, "targetSdkVersion");
-							if (targetVersion != null && targetVersion.length() > 0)
-							{
+							if (targetVersion != null && targetVersion.length() > 0) {
 								this.targetSdkVersion = Integer.valueOf(targetVersion);
 							}
 						}
-						else if (tagName.equals("application"))
-						{
+						else if (tagName.equals("application")) {
 							// Check whether the application is disabled
 							String attrValue = getAttributeValue(parser, "enabled");
 							applicationEnabled = (attrValue == null || !attrValue.equals("false"));
@@ -190,8 +162,7 @@ public class ProcessManifest
 							// Get the application name which is also the fully-qualified
 							// name of the custom application object
 							this.applicationName = getAttributeValue(parser, "name");
-							if (this.applicationName != null && !this.applicationName.isEmpty())
-							{
+							if (this.applicationName != null && !this.applicationName.isEmpty()) {
 								this.entryPointsClasses.add(expandClassName(this.applicationName));
 							}
 						}
@@ -202,8 +173,7 @@ public class ProcessManifest
 						break;
 				}
 			}
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -215,60 +185,48 @@ public class ProcessManifest
 	 * @param className The class name to expand
 	 * @return The expanded class name for the given short name
 	 */
-	private String expandClassName(String className)
-	{
-		if (className.startsWith("."))
-		{
+	private String expandClassName(String className) {
+		if (className.startsWith(".")) {
 			return this.packageName + className;
 		}
-		else if (className.substring(0, 1).equals(className.substring(0, 1).toUpperCase()))
-		{
+		else if (className.substring(0, 1).equals(className.substring(0, 1).toUpperCase())) {
 			return this.packageName + "." + className;
 		}
-		else
-		{
+		else {
 			return className;
 		}
 	}
 
-	private String getAttributeValue(AXmlResourceParser parser, String attributeName)
-	{
+	private String getAttributeValue(AXmlResourceParser parser, String attributeName) {
 		for (int i = 0; i < parser.getAttributeCount(); i++)
-			if (parser.getAttributeName(i).equals(attributeName))
-			{
+			if (parser.getAttributeName(i).equals(attributeName)) {
 				return AXMLPrinter.getAttributeValue(parser, i);
 			}
 		return "";
 	}
 
-	protected void loadClassesFromTextManifest(InputStream manifestIS)
-	{
-		try
-		{
+	protected void loadClassesFromTextManifest(InputStream manifestIS) {
+		try {
 			DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			Document doc = db.parse(manifestIS);
 
 			Element rootElement = doc.getDocumentElement();
 			this.packageName = rootElement.getAttribute("package");
 			String versionCode = rootElement.getAttribute("android:versionCode");
-			if (versionCode != null && versionCode.length() > 0)
-			{
+			if (versionCode != null && versionCode.length() > 0) {
 				this.versionCode = Integer.valueOf(versionCode);
 			}
 			this.versionName = rootElement.getAttribute("android:versionName");
 
 			NodeList appsElement = rootElement.getElementsByTagName("application");
-			if (appsElement.getLength() > 1)
-			{
+			if (appsElement.getLength() > 1) {
 				throw new RuntimeException("More than one application tag in manifest");
 			}
-			for (int appIdx = 0; appIdx < appsElement.getLength(); appIdx++)
-			{
+			for (int appIdx = 0; appIdx < appsElement.getLength(); appIdx++) {
 				Element appElement = (Element) appsElement.item(appIdx);
 
 				this.applicationName = appElement.getAttribute("android:name");
-				if (this.applicationName != null && !this.applicationName.isEmpty())
-				{
+				if (this.applicationName != null && !this.applicationName.isEmpty()) {
 					this.entryPointsClasses.add(expandClassName(this.applicationName));
 				}
 
@@ -276,64 +234,52 @@ public class ProcessManifest
 				NodeList receivers = appElement.getElementsByTagName("receiver");
 				NodeList services = appElement.getElementsByTagName("service");
 
-				for (int i = 0; i < activities.getLength(); i++)
-				{
+				for (int i = 0; i < activities.getLength(); i++) {
 					Element activity = (Element) activities.item(i);
 					loadManifestEntry(activity, "android.app.Activity", this.packageName);
 				}
-				for (int i = 0; i < receivers.getLength(); i++)
-				{
+				for (int i = 0; i < receivers.getLength(); i++) {
 					Element receiver = (Element) receivers.item(i);
 					loadManifestEntry(receiver, "android.content.BroadcastReceiver", this.packageName);
 				}
-				for (int i = 0; i < services.getLength(); i++)
-				{
+				for (int i = 0; i < services.getLength(); i++) {
 					Element service = (Element) services.item(i);
 					loadManifestEntry(service, "android.app.Service", this.packageName);
 				}
 
 				NodeList permissions = appElement.getElementsByTagName("uses-permission");
-				for (int i = 0; i < permissions.getLength(); i++)
-				{
+				for (int i = 0; i < permissions.getLength(); i++) {
 					Element permission = (Element) permissions.item(i);
 					this.permissions.add(permission.getAttribute("android:name"));
 				}
 
 				NodeList usesSdkList = appElement.getElementsByTagName("uses-sdk");
-				for (int i = 0; i < usesSdkList.getLength(); i++)
-				{
+				for (int i = 0; i < usesSdkList.getLength(); i++) {
 					Element usesSdk = (Element) usesSdkList.item(i);
 					String minVersion = usesSdk.getAttribute("android:minSdkVersion");
-					if (minVersion != null && minVersion.length() > 0)
-					{
+					if (minVersion != null && minVersion.length() > 0) {
 						this.minSdkVersion = Integer.valueOf(minVersion);
 					}
 					String targetVersion = usesSdk.getAttribute("android:targetSdkVersion");
-					if (targetVersion != null && targetVersion.length() > 0)
-					{
+					if (targetVersion != null && targetVersion.length() > 0) {
 						this.targetSdkVersion = Integer.valueOf(targetVersion);
 					}
 				}
 			}
-		} catch (IOException ex)
-		{
+		} catch (IOException ex) {
 			System.err.println("Could not parse manifest: " + ex.getMessage());
 			ex.printStackTrace();
-		} catch (ParserConfigurationException ex)
-		{
+		} catch (ParserConfigurationException ex) {
 			System.err.println("Could not parse manifest: " + ex.getMessage());
 			ex.printStackTrace();
-		} catch (SAXException ex)
-		{
+		} catch (SAXException ex) {
 			System.err.println("Could not parse manifest: " + ex.getMessage());
 			ex.printStackTrace();
 		}
 	}
 
-	private void loadManifestEntry(Element activity, String baseClass, String packageName)
-	{
-		if (activity.getAttribute("android:enabled").equals("false"))
-		{
+	private void loadManifestEntry(Element activity, String baseClass, String packageName) {
+		if (activity.getAttribute("android:enabled").equals("false")) {
 			return;
 		}
 
@@ -341,53 +287,43 @@ public class ProcessManifest
 		entryPointsClasses.add(expandClassName(className));
 	}
 
-	public void setApplicationName(String name)
-	{
+	public void setApplicationName(String name) {
 		this.applicationName = name;
 	}
 
-	public void setPackageName(String name)
-	{
+	public void setPackageName(String name) {
 		this.packageName = name;
 	}
 
-	public Set<String> getEntryPointClasses()
-	{
+	public Set<String> getEntryPointClasses() {
 		return this.entryPointsClasses;
 	}
 
-	public String getApplicationName()
-	{
+	public String getApplicationName() {
 		return this.applicationName;
 	}
 
-	public Set<String> getPermissions()
-	{
+	public Set<String> getPermissions() {
 		return this.permissions;
 	}
 
-	public int getVersionCode()
-	{
+	public int getVersionCode() {
 		return this.versionCode;
 	}
 
-	public String getVersionName()
-	{
+	public String getVersionName() {
 		return this.versionName;
 	}
 
-	public String getPackageName()
-	{
+	public String getPackageName() {
 		return this.packageName;
 	}
 
-	public int getMinSdkVersion()
-	{
+	public int getMinSdkVersion() {
 		return this.minSdkVersion;
 	}
 
-	public int targetSdkVersion()
-	{
+	public int targetSdkVersion() {
 		return this.targetSdkVersion;
 	}
 

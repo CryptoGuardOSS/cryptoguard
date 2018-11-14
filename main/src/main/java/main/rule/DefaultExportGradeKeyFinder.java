@@ -16,13 +16,11 @@ import java.util.*;
 
 import static main.util.Utils.getClassNamesFromApkArchive;
 
-public class DefaultExportGradeKeyFinder implements RuleChecker
-{
+public class DefaultExportGradeKeyFinder implements RuleChecker {
 
 	private static final List<String> SLICING_CRITERIA = new ArrayList<>();
 
-	static
-	{
+	static {
 		SLICING_CRITERIA.add("<java.security.KeyPairGenerator: java.security.KeyPairGenerator getInstance(java.lang.String)>");
 		SLICING_CRITERIA.add("<java.security.KeyPairGenerator: java.security.KeyPairGenerator getInstance(java.lang.String,java.lang.String)>");
 		SLICING_CRITERIA.add("<java.security.KeyPairGenerator: java.security.KeyPairGenerator getInstance(java.lang.String,java.security.Provider)>");
@@ -37,47 +35,37 @@ public class DefaultExportGradeKeyFinder implements RuleChecker
 	private ArrayList<String> initializeCallsites = new ArrayList<>();
 
 	@Override
-	public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath) throws IOException
-	{
+	public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath) throws IOException {
 
-		for (String slicing_criterion : SLICING_CRITERIA)
-		{
+		for (String slicing_criterion : SLICING_CRITERIA) {
 
 			SlicingCriteria criteria = new SlicingCriteria(slicing_criterion);
 			Map<String, List<Unit>> analysisLists;
-			if (type == EngineType.JAR)
-			{
+			if (type == EngineType.JAR) {
 				analysisLists = analyzeJar(projectJarPath.get(0), projectDependencyPath.get(0), criteria);
 			}
-			else if (type == EngineType.APK)
-			{
+			else if (type == EngineType.APK) {
 				analysisLists = analyzeApk(projectJarPath.get(0), criteria);
 			}
-			else
-			{
+			else {
 				analysisLists = analyzeSnippet(projectJarPath, projectDependencyPath, criteria);
 			}
 
-			for (String method : analysisLists.keySet())
-			{
+			for (String method : analysisLists.keySet()) {
 
-				if (!methodsToLook.toString().contains(method))
-				{
+				if (!methodsToLook.toString().contains(method)) {
 					continue;
 				}
 
 				List<Unit> analysis = analysisLists.get(method);
 
-				if (!analysis.isEmpty())
-				{
+				if (!analysis.isEmpty()) {
 
 					boolean isDefault = true;
 
-					for (Unit unit : analysis)
-					{
+					for (Unit unit : analysis) {
 
-						if (unit.toString().contains(METHOD_TO_FIND))
-						{
+						if (unit.toString().contains(METHOD_TO_FIND)) {
 
 							String containingMethod = method.substring(0, method.indexOf('['));
 							initializeCallsites.add(containingMethod + "[" + unit.getJavaSourceStartLineNumber() + "]");
@@ -86,8 +74,7 @@ public class DefaultExportGradeKeyFinder implements RuleChecker
 						}
 					}
 
-					if (isDefault && !defaultSecure)
-					{
+					if (isDefault && !defaultSecure) {
 						System.out.println("=======================================");
 						String output = "***Violated Rule 5: Used export grade public Key ";
 						output += "\n***Cause: Used default key size in method: " + method;
@@ -101,27 +88,22 @@ public class DefaultExportGradeKeyFinder implements RuleChecker
 
 	}
 
-	public void setMethodsToLook(ArrayList<String> methodsToLook)
-	{
+	public void setMethodsToLook(ArrayList<String> methodsToLook) {
 		this.methodsToLook = methodsToLook;
 	}
 
-	public ArrayList<String> getInitializationCallsites()
-	{
+	public ArrayList<String> getInitializationCallsites() {
 		return this.initializeCallsites;
 	}
 
-	public void setDefaultSecure(boolean defaultSecure)
-	{
+	public void setDefaultSecure(boolean defaultSecure) {
 		this.defaultSecure = defaultSecure;
 	}
 
-	private Map<String, List<Unit>> analyzeJar(String projectJarPath, String projectDependencyPath, SlicingCriteria slicingCriteria) throws IOException
-	{
+	private Map<String, List<Unit>> analyzeJar(String projectJarPath, String projectDependencyPath, SlicingCriteria slicingCriteria) throws IOException {
 		String javaHome = System.getenv("JAVA_HOME");
 
-		if (javaHome.isEmpty())
-		{
+		if (javaHome.isEmpty()) {
 
 			System.err.println("Please set JAVA_HOME");
 			System.exit(1);
@@ -142,20 +124,17 @@ public class DefaultExportGradeKeyFinder implements RuleChecker
 		return getForwardSlice(classNames, slicingCriteria);
 	}
 
-	private Map<String, List<Unit>> analyzeApk(String projectJarPath, SlicingCriteria slicingCriteria) throws IOException
-	{
+	private Map<String, List<Unit>> analyzeApk(String projectJarPath, SlicingCriteria slicingCriteria) throws IOException {
 		String javaHome = System.getenv("JAVA_HOME");
 		String androidHome = System.getenv("ANDROID_SDK_HOME");
 
-		if (javaHome == null)
-		{
+		if (javaHome == null) {
 
 			System.err.println("Please set JAVA_HOME");
 			System.exit(1);
 		}
 
-		if (androidHome == null)
-		{
+		if (androidHome == null) {
 
 			System.err.println("Please set ANDROID_SDK_HOME");
 			System.exit(1);
@@ -176,13 +155,11 @@ public class DefaultExportGradeKeyFinder implements RuleChecker
 		return getForwardSlice(classNames, slicingCriteria);
 	}
 
-	private Map<String, List<Unit>> analyzeSnippet(List<String> snippetPath, List<String> projectDependencyPath, SlicingCriteria slicingCriteria) throws IOException
-	{
+	private Map<String, List<Unit>> analyzeSnippet(List<String> snippetPath, List<String> projectDependencyPath, SlicingCriteria slicingCriteria) throws IOException {
 
 		String javaHome = System.getenv("JAVA7_HOME");
 
-		if (javaHome.isEmpty())
-		{
+		if (javaHome.isEmpty()) {
 
 			System.err.println("Please set JAVA7_HOME");
 			System.exit(1);
@@ -192,8 +169,7 @@ public class DefaultExportGradeKeyFinder implements RuleChecker
 
 		StringBuilder srcPaths = new StringBuilder();
 
-		for (String srcDir : snippetPath)
-		{
+		for (String srcDir : snippetPath) {
 			srcPaths.append(srcDir)
 					.append(":");
 		}
@@ -204,8 +180,7 @@ public class DefaultExportGradeKeyFinder implements RuleChecker
 		Options.v().set_output_format(Options.output_format_jimple);
 		Options.v().set_src_prec(Options.src_prec_java);
 
-		for (String className : classNames)
-		{
+		for (String className : classNames) {
 			Options.v().classes().add(className);
 		}
 
@@ -217,24 +192,20 @@ public class DefaultExportGradeKeyFinder implements RuleChecker
 		return getForwardSlice(classNames, slicingCriteria);
 	}
 
-	private static Map<String, List<Unit>> getForwardSlice(List<String> classNames, SlicingCriteria slicingCriteria)
-	{
+	private static Map<String, List<Unit>> getForwardSlice(List<String> classNames, SlicingCriteria slicingCriteria) {
 
 		Map<String, List<Unit>> analysisListMap = new HashMap<>();
 
-		for (String className : classNames)
-		{
+		for (String className : classNames) {
 
 			SootClass sClass = Scene.v().loadClassAndSupport(className);
 
 			sClass.setApplicationClass();
 
-			for (SootMethod method : sClass.getMethods())
-			{
+			for (SootMethod method : sClass.getMethods()) {
 				SlicingResult slicingResult = getInfluencingInstructions(slicingCriteria, method);
 
-				if (slicingResult != null)
-				{
+				if (slicingResult != null) {
 					analysisListMap.put(method.toString() + "[" + slicingResult.getCallSiteInfo().getLineNumber() + "]", slicingResult.getAnalysisResult());
 				}
 			}
@@ -244,10 +215,8 @@ public class DefaultExportGradeKeyFinder implements RuleChecker
 	}
 
 	public static SlicingResult getInfluencingInstructions(SlicingCriteria slicingCriteria,
-														   SootMethod m)
-	{
-		if (m.isConcrete())
-		{
+														   SootMethod m) {
+		if (m.isConcrete()) {
 
 			Body b = m.retrieveActiveBody();
 

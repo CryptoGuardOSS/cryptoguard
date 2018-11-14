@@ -10,18 +10,15 @@ import java.util.List;
 /**
  * Created by krishnokoli on 7/1/17.
  */
-public class ForwardInfluenceInstructions implements InfluenceInstructions
-{
+public class ForwardInfluenceInstructions implements InfluenceInstructions {
 
 	private SlicingResult slicingResult;
 
 	public ForwardInfluenceInstructions(DirectedGraph graph,
-										SlicingCriteria slicingCriteria)
-	{
+										SlicingCriteria slicingCriteria) {
 		ForwardProgramSlicing analysis = new ForwardProgramSlicing(graph, slicingCriteria);
 
-		for (Object aGraph : graph)
-		{
+		for (Object aGraph : graph) {
 			Unit s = (Unit) aGraph;
 
 			FlowSet set = (FlowSet) analysis.getFlowAfter(s);
@@ -35,8 +32,7 @@ public class ForwardInfluenceInstructions implements InfluenceInstructions
 	}
 
 	@Override
-	public SlicingResult getSlicingResult()
-	{
+	public SlicingResult getSlicingResult() {
 		return this.slicingResult;
 	}
 

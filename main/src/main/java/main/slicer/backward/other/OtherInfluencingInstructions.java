@@ -12,13 +12,11 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-public class OtherInfluencingInstructions
-{
+public class OtherInfluencingInstructions {
 
 	private OtherAnalysisResult analysisResult;
 
-	public OtherInfluencingInstructions(SootMethod method, String slicingCriteria)
-	{
+	public OtherInfluencingInstructions(SootMethod method, String slicingCriteria) {
 
 		Body b = method.retrieveActiveBody();
 		DirectedGraph methodToSlice = new ExceptionalUnitGraph(b);
@@ -26,8 +24,7 @@ public class OtherInfluencingInstructions
 		OtherInstructionSlicer analysis = new OtherInstructionSlicer(methodToSlice, slicingCriteria, method.toString());
 
 		Iterator unitIt = methodToSlice.iterator();
-		if (unitIt.hasNext())
-		{
+		if (unitIt.hasNext()) {
 			Unit s = (Unit) unitIt.next();
 
 			FlowSet set = (FlowSet) analysis.getFlowBefore(s);
@@ -37,8 +34,7 @@ public class OtherInfluencingInstructions
 		}
 	}
 
-	public OtherAnalysisResult getAnalysisResult()
-	{
+	public OtherAnalysisResult getAnalysisResult() {
 		return analysisResult;
 	}
 }

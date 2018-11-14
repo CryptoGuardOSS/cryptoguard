@@ -5,10 +5,10 @@ import main.frontEnd.OutputStructure;
 /**
  * The enum containing all of the different messaging types available for the user.
  */
-public enum Listing
-{
+public enum Listing {
 	//region Different Values
-	LegacyOutput("LegacyOutput", "L");
+	LegacyOutput("LegacyOutput", "L"),
+	ScarfXMLOutput("ScarfXMLOutput", "SX");
 	//endregion
 
 	//region Attributes
@@ -24,8 +24,7 @@ public enum Listing
 	 * @param Type - the string value of the type of
 	 * @param Flag - the flag used to identify the specific messaging type
 	 */
-	Listing(String Type, String Flag)
-	{
+	Listing(String Type, String Flag) {
 		this.type = Type;
 		this.flag = Flag;
 	}
@@ -33,8 +32,7 @@ public enum Listing
 
 	//region Overridden Methods
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return "{ \"type\": \"" + this.type + "\", \"flag\": \"" + this.flag + "\"}";
 	}
 	//endregion
@@ -46,13 +44,13 @@ public enum Listing
 	 * @param flag - the type of Messaging Structure asked for
 	 * @return outputStructure - the type of messaging structure to be used to return information
 	 */
-	public static OutputStructure getTypeOfMessaging(String flag)
-	{
-		try
-		{
+	public static OutputStructure getTypeOfMessaging(String flag) {
+		try {
 			String className;
-			switch (flag)
-			{
+			switch (flag) {
+				case "SX":
+					className = ScarfXMLOutput.type;
+					break;
 				default:
 					className = LegacyOutput.type;
 					break;
@@ -62,8 +60,7 @@ public enum Listing
 			return (OutputStructure) Class.forName("main.frontEnd.outputStructures." + className).newInstance();
 		}
 		//In Case of any error, default to the Legacy Output
-		catch (Exception e)
-		{
+		catch (Exception e) {
 			return new main.frontEnd.outputStructures.LegacyOutput();
 		}
 	}

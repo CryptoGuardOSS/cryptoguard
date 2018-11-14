@@ -19,13 +19,11 @@ import java.util.Map;
 /**
  * Created by krishnokoli on 11/15/17.
  */
-public class ExportGradeKeyInitializationFinder extends BaseRuleChecker
-{
+public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
 
 	private static final List<Criteria> CRITERIA_LIST = new ArrayList<>();
 
-	static
-	{
+	static {
 
 		Criteria criteria2 = new Criteria();
 		criteria2.setClassName("java.security.KeyPairGenerator");
@@ -61,56 +59,44 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker
 	private ArrayList<String> initializationCallsites;
 
 	@Override
-	public List<Criteria> getCriteriaList()
-	{
+	public List<Criteria> getCriteriaList() {
 		return CRITERIA_LIST;
 	}
 
 	@Override
-	public void analyzeSlice(Analysis analysis)
-	{
-		if (analysis.getAnalysisResult().isEmpty())
-		{
+	public void analyzeSlice(Analysis analysis) {
+		if (analysis.getAnalysisResult().isEmpty()) {
 			return;
 		}
 
 		String[] splits = analysis.getMethodChain().split("--->");
 		String keyInitializationSite = splits[splits.length - 2];
 
-		if (!initializationCallsites.toString().contains(keyInitializationSite))
-		{
+		if (!initializationCallsites.toString().contains(keyInitializationSite)) {
 			return;
 		}
 
-		for (int index = 0; index < analysis.getAnalysisResult().size(); index++)
-		{
+		for (int index = 0; index < analysis.getAnalysisResult().size(); index++) {
 			UnitContainer e = analysis.getAnalysisResult().get(index);
 
-			for (ValueBox usebox : e.getUnit().getUseBoxes())
-			{
-				if (usebox.getValue() instanceof Constant)
-				{
-					if (e.getUnit() instanceof AssignStmt && usebox.getValue().getType() instanceof IntegerType)
-					{
+			for (ValueBox usebox : e.getUnit().getUseBoxes()) {
+				if (usebox.getValue() instanceof Constant) {
+					if (e.getUnit() instanceof AssignStmt && usebox.getValue().getType() instanceof IntegerType) {
 
 						int value = Integer.valueOf(usebox.getValue().toString());
 
-						if (usebox instanceof RValueBox && value != 0 && value % 2 == 0 && value < minSize)
-						{
+						if (usebox instanceof RValueBox && value != 0 && value % 2 == 0 && value < minSize) {
 
 							List<UnitContainer> outSet = new ArrayList<>();
 							outSet.add(e);
 
-							if (MajorHeuristics.isArgumentOfInvoke(analysis, index, outSet))
-							{
+							if (MajorHeuristics.isArgumentOfInvoke(analysis, index, outSet)) {
 								putIntoMap(othersSourceMap, e, usebox.getValue().toString());
 							}
-							else if (MajorHeuristics.isArgumentOfByteArrayCreation(analysis, index, outSet))
-							{
+							else if (MajorHeuristics.isArgumentOfByteArrayCreation(analysis, index, outSet)) {
 								putIntoMap(othersSourceMap, e, e.getUnit().toString());
 							}
-							else
-							{
+							else {
 								putIntoMap(predictableSourcMap, e, usebox.getValue().toString());
 							}
 						}
@@ -120,34 +106,29 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker
 		}
 	}
 
-	public void setMinSize(int minSize)
-	{
+	public void setMinSize(int minSize) {
 		this.minSize = minSize;
 	}
 
-	public void setInitializationCallsites(ArrayList<String> initializationCallsites)
-	{
+	public void setInitializationCallsites(ArrayList<String> initializationCallsites) {
 		this.initializationCallsites = initializationCallsites;
 	}
 
 	@Override
-	public void printAnalysisOutput(Map<String, String> xmlFileStr)
-	{
+	public void printAnalysisOutput(Map<String, String> xmlFileStr) {
 		String rule = "5";
 		String ruleDesc = RULE_VS_DESCRIPTION.get(rule);
 
 		List<String> predictableSources = new ArrayList<>();
 		List<UnitContainer> predictableSourceInsts = new ArrayList<>();
 
-		for (List<String> values : predictableSourcMap.values())
-		{
+		for (List<String> values : predictableSourcMap.values()) {
 			predictableSources.addAll(values);
 		}
 
 		predictableSourceInsts.addAll(predictableSourcMap.keySet());
 
-		if (!predictableSources.isEmpty())
-		{
+		if (!predictableSources.isEmpty()) {
 			System.out.println("=======================================");
 			String output = getPrintableMsg(predictableSourcMap, rule, ruleDesc);
 			System.out.println(output);
@@ -155,18 +136,15 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker
 		}
 	}
 
-	private String getPrintableMsg(Map<UnitContainer, List<String>> predictableSourcMap, String rule, String ruleDesc)
-	{
+	private String getPrintableMsg(Map<UnitContainer, List<String>> predictableSourcMap, String rule, String ruleDesc) {
 		String output = "***Violated Rule " +
 				rule + ": " +
 				ruleDesc;
 
-		for (UnitContainer unit : predictableSourcMap.keySet())
-		{
+		for (UnitContainer unit : predictableSourcMap.keySet()) {
 
 			output += "\n***Found: " + predictableSourcMap.get(unit);
-			if (unit.getUnit().getJavaSourceStartLineNumber() >= 0)
-			{
+			if (unit.getUnit().getJavaSourceStartLineNumber() >= 0) {
 				output += " in Line " + unit.getUnit().getJavaSourceStartLineNumber();
 			}
 

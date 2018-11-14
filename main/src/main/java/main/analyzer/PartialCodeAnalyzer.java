@@ -9,21 +9,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PartialCodeAnalyzer
-{
+public class PartialCodeAnalyzer {
 
 	public static void analyzeSlices(String criteriaClass,
 									 String criteriaMethod,
 									 int criteriaParam,
 									 List<String> snippetPath,
 									 List<String> projectDependency,
-									 BaseRuleChecker checker) throws IOException
-	{
+									 BaseRuleChecker checker) throws IOException {
 
 		String javaHome = System.getenv("JAVA7_HOME");
 
-		if (javaHome == null || javaHome.isEmpty())
-		{
+		if (javaHome == null || javaHome.isEmpty()) {
 
 			System.err.println("Please set JAVA7_HOME");
 			System.exit(1);
@@ -36,8 +33,7 @@ public class PartialCodeAnalyzer
 
 		StringBuilder srcPaths = new StringBuilder();
 
-		for (String srcDir : snippetPath)
-		{
+		for (String srcDir : snippetPath) {
 			srcPaths.append(srcDir)
 					.append(":");
 		}
@@ -48,13 +44,11 @@ public class PartialCodeAnalyzer
 
 		List<String> classNames = Utils.getClassNamesFromSnippet(snippetPath);
 
-		for (String clazz : BaseAnalyzer.CRITERIA_CLASSES)
-		{
+		for (String clazz : BaseAnalyzer.CRITERIA_CLASSES) {
 			Scene.v().loadClassAndSupport(clazz);
 		}
 
-		for (String clazz : classNames)
-		{
+		for (String clazz : classNames) {
 			Scene.v().loadClassAndSupport(clazz);
 		}
 

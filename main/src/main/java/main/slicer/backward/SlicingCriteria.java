@@ -2,41 +2,34 @@ package main.slicer.backward;
 
 import java.util.List;
 
-public class SlicingCriteria
-{
+public class SlicingCriteria {
 
 	private MethodCallSiteInfo methodCallSiteInfo;
 	private List<Integer> parameters;
 
-	public SlicingCriteria(MethodCallSiteInfo methodCallSiteInfo, List<Integer> parameters)
-	{
+	public SlicingCriteria(MethodCallSiteInfo methodCallSiteInfo, List<Integer> parameters) {
 		this.methodCallSiteInfo = methodCallSiteInfo;
 		this.parameters = parameters;
 	}
 
-	public MethodCallSiteInfo getMethodCallSiteInfo()
-	{
+	public MethodCallSiteInfo getMethodCallSiteInfo() {
 		return methodCallSiteInfo;
 	}
 
-	public void setMethodCallSiteInfo(MethodCallSiteInfo methodCallSiteInfo)
-	{
+	public void setMethodCallSiteInfo(MethodCallSiteInfo methodCallSiteInfo) {
 		this.methodCallSiteInfo = methodCallSiteInfo;
 	}
 
-	public List<Integer> getParameters()
-	{
+	public List<Integer> getParameters() {
 		return parameters;
 	}
 
-	public void setParameters(List<Integer> parameters)
-	{
+	public void setParameters(List<Integer> parameters) {
 		this.parameters = parameters;
 	}
 
 	@Override
-	public boolean equals(Object o)
-	{
+	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 
@@ -48,16 +41,14 @@ public class SlicingCriteria
 	}
 
 	@Override
-	public int hashCode()
-	{
+	public int hashCode() {
 		int result = methodCallSiteInfo.hashCode();
 		result = 31 * result + parameters.toString().hashCode();
 		return result;
 	}
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return "SlicingCriteria{" +
 				"methodCallSiteInfo=" + methodCallSiteInfo +
 				", parameters=" + parameters +

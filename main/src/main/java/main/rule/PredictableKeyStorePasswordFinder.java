@@ -6,13 +6,11 @@ import main.rule.engine.Criteria;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PredictableKeyStorePasswordFinder extends PredictableSourceRuleChecker
-{
+public class PredictableKeyStorePasswordFinder extends PredictableSourceRuleChecker {
 
 	private static final List<Criteria> CRITERIA_LIST = new ArrayList<>();
 
-	static
-	{
+	static {
 		Criteria criteria1 = new Criteria();
 		criteria1.setClassName("java.security.KeyStore");
 		criteria1.setMethodName("void load(java.io.InputStream,char[])");
@@ -39,14 +37,12 @@ public class PredictableKeyStorePasswordFinder extends PredictableSourceRuleChec
 	}
 
 	@Override
-	public String getRuleId()
-	{
+	public String getRuleId() {
 		return "14";
 	}
 
 	@Override
-	public List<Criteria> getCriteriaList()
-	{
+	public List<Criteria> getCriteriaList() {
 		return CRITERIA_LIST;
 	}
 }

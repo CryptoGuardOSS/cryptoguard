@@ -18,14 +18,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GradleBuildFileParser implements BuildFileParser
-{
+public class GradleBuildFileParser implements BuildFileParser {
 
 
 	Map<String, String> moduleVsPath = new HashMap<>();
 
-	public GradleBuildFileParser(String fileName) throws Exception
-	{
+	public GradleBuildFileParser(String fileName) throws Exception {
 
 		final String content = new String(Files.readAllBytes(Paths.get(fileName)), "UTF-8");
 
@@ -35,42 +33,35 @@ public class GradleBuildFileParser implements BuildFileParser
 		String projectName = splits[splits.length - 2];
 		final String projectRoot = fileName.substring(0, fileName.lastIndexOf('/'));
 
-		GroovyCodeVisitor visitor = new CodeVisitorSupport()
-		{
+		GroovyCodeVisitor visitor = new CodeVisitorSupport() {
 
 			@Override
-			public void visitMethodCallExpression(MethodCallExpression call)
-			{
+			public void visitMethodCallExpression(MethodCallExpression call) {
 
 				List<Expression> args = ((ArgumentListExpression) call.getArguments()).getExpressions();
 
-				for (Expression arg : args)
-				{
+				for (Expression arg : args) {
 
 					moduleVsPath.put(arg.getText(), projectRoot + "/" + arg.getText());
 				}
 			}
 		};
 
-		for (ASTNode astNode : astNodes)
-		{
+		for (ASTNode astNode : astNodes) {
 			astNode.visit(visitor);
 		}
 
-		if (moduleVsPath.isEmpty())
-		{
+		if (moduleVsPath.isEmpty()) {
 			moduleVsPath.put(projectName, projectRoot);
 		}
 	}
 
 	@Override
-	public Map<String, List<String>> getDependencyList() throws Exception
-	{
+	public Map<String, List<String>> getDependencyList() throws Exception {
 
 		Map<String, List<String>> moduleVsDependencies = new HashMap<>();
 
-		for (String module : moduleVsPath.keySet())
-		{
+		for (String module : moduleVsPath.keySet()) {
 
 			final List<String> dependencies = new ArrayList<>();
 
@@ -80,24 +71,19 @@ public class GradleBuildFileParser implements BuildFileParser
 
 			List<ASTNode> astNodes = new AstBuilder().buildFromString(content);
 
-			GroovyCodeVisitor visitor = new CodeVisitorSupport()
-			{
+			GroovyCodeVisitor visitor = new CodeVisitorSupport() {
 
 				@Override
-				public void visitClosureExpression(ClosureExpression expression)
-				{
+				public void visitClosureExpression(ClosureExpression expression) {
 
 					Statement block = expression.getCode();
-					if (block instanceof BlockStatement)
-					{
+					if (block instanceof BlockStatement) {
 						BlockStatement bs = (BlockStatement) block;
-						for (Statement statement : bs.getStatements())
-						{
+						for (Statement statement : bs.getStatements()) {
 
 							String stmtStr = statement.getText();
 
-							if (stmtStr.contains("this.compile(this.project(:"))
-							{
+							if (stmtStr.contains("this.compile(this.project(:")) {
 								String dependency = stmtStr.substring(stmtStr.indexOf(':') + 1, stmtStr.indexOf(')'));
 								dependencies.add(dependency);
 							}
@@ -106,8 +92,7 @@ public class GradleBuildFileParser implements BuildFileParser
 				}
 			};
 
-			for (ASTNode astNode : astNodes)
-			{
+			for (ASTNode astNode : astNodes) {
 				astNode.visit(visitor);
 			}
 
@@ -116,8 +101,7 @@ public class GradleBuildFileParser implements BuildFileParser
 
 		Map<String, List<String>> moduleVsDependencyPaths = new HashMap<>();
 
-		for (String module : moduleVsDependencies.keySet())
-		{
+		for (String module : moduleVsDependencies.keySet()) {
 			List<String> dependencyPaths = new ArrayList<>();
 			calcAlldependenciesForModule(module, moduleVsDependencies, dependencyPaths);
 			dependencyPaths.add(moduleVsPath.get(module) + "/src/main/java");
@@ -127,17 +111,14 @@ public class GradleBuildFileParser implements BuildFileParser
 		return moduleVsDependencyPaths;
 	}
 
-	private void calcAlldependenciesForModule(String module, Map<String, List<String>> mVsds, List<String> dependencyPaths)
-	{
-		for (String dependency : mVsds.get(module))
-		{
+	private void calcAlldependenciesForModule(String module, Map<String, List<String>> mVsds, List<String> dependencyPaths) {
+		for (String dependency : mVsds.get(module)) {
 			dependencyPaths.add(moduleVsPath.get(dependency) + "/src/main/java");
 			calcAlldependenciesForModule(dependency, mVsds, dependencyPaths);
 		}
 	}
 
-	public static void main(String[] args) throws Exception
-	{
+	public static void main(String[] args) throws Exception {
 
 		GradleBuildFileParser buildFileParser = new GradleBuildFileParser("/home/krishnokoli/projects/gradle-sample/settings.gradle");
 		System.out.println(buildFileParser.getDependencyList());
