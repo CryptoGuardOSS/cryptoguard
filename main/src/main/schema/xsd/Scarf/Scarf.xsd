@@ -13,21 +13,21 @@
                 <xsd:element name="Metric" type="swmp:MetricType" minOccurs="0" maxOccurs="unbounded"/>
                 <xsd:element name="MetricSummaries" type="swmp:MetricSummariesType" minOccurs="0" maxOccurs="1"/>
             </xsd:sequence>
-            <xsd:attribute name="assess_fw" type="xsd:string" use="required"/>
-            <xsd:attribute name="assess_fw_version" type="xsd:string" use="required"/>
-            <xsd:attribute name="assessment_start_ts" type="xsd:string" use="required"/>
-            <xsd:attribute name="build_fw" type="xsd:string" use="required"/>
-            <xsd:attribute name="build_fw_version" type="xsd:string" use="required"/>
-            <xsd:attribute name="package_name" type="xsd:string" use="required"/>
-            <xsd:attribute name="package_version" type="xsd:string" use="required"/>
-            <xsd:attribute name="build_root_dir" type="xsd:string" use="required"/>
-            <xsd:attribute name="package_root_dir" type="xsd:string" use="required"/>
-            <xsd:attribute name="parser_fw" type="xsd:string" use="required"/>
-            <xsd:attribute name="parser_fw_version" type="xsd:string" use="required"/>
-            <xsd:attribute name="platform_name" type="xsd:string" use="required"/>
-            <xsd:attribute name="tool_name" type="xsd:string" use="required"/>
-            <xsd:attribute name="tool_version" type="xsd:string" use="required"/>
-            <xsd:attribute name="uuid" type="xsd:string" use="required"/>
+            <xsd:attribute name="assess_fw" type="xsd:normalizedString" use="required"/>
+            <xsd:attribute name="assess_fw_version" type="xsd:normalizedString" use="required"/>
+            <xsd:attribute name="assessment_start_ts" type="xsd:dateTime" use="required"/>
+            <xsd:attribute name="build_fw" type="xsd:normalizedString" use="required"/>
+            <xsd:attribute name="build_fw_version" type="xsd:normalizedString" use="required"/>
+            <xsd:attribute name="package_name" type="xsd:normalizedString" use="required"/>
+            <xsd:attribute name="package_version" type="xsd:normalizedString" use="required"/>
+            <xsd:attribute name="build_root_dir" type="xsd:normalizedString" use="required"/>
+            <xsd:attribute name="package_root_dir" type="xsd:normalizedString" use="required"/>
+            <xsd:attribute name="parser_fw" type="xsd:normalizedString" use="required"/>
+            <xsd:attribute name="parser_fw_version" type="xsd:normalizedString" use="required"/>
+            <xsd:attribute name="platform_name" type="xsd:normalizedString" use="required"/>
+            <xsd:attribute name="tool_name" type="xsd:normalizedString" use="required"/>
+            <xsd:attribute name="tool_version" type="xsd:normalizedString" use="required"/>
+            <xsd:attribute name="uuid" type="xsd:normalizedString" use="required"/>
         </xsd:complexType>
     </xsd:element>
 
@@ -41,17 +41,17 @@
             </xsd:documentation>
         </xsd:annotation>
         <xsd:sequence>
-            <xsd:element name="ClassName" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="ClassName" type="xsd:normalizedString" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="Methods" type="swmp:MethodsType" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="BugLocations" type="swmp:BugLocationsType" minOccurs="1" maxOccurs="1"/>
-            <xsd:element name="BugGroup" type="xsd:string" minOccurs="0" maxOccurs="1"/>
-            <xsd:element name="BugRank" type="xsd:string" minOccurs="0" maxOccurs="1"/>
-            <xsd:element name="BugSeverity" type="xsd:string" minOccurs="0" maxOccurs="1"/>
-            <xsd:element name="Cweld" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
-            <xsd:element name="BugMessage" type="xsd:string" minOccurs="0" maxOccurs="1"/>
-            <xsd:element name="ResolutionSuggestion" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="BugGroup" type="xsd:normalizedString" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="BugRank" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="BugSeverity" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="Cweld" type="xsd:normalizedString" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="BugMessage" type="xsd:normalizedString" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="ResolutionSuggestion" type="xsd:normalizedString" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="BugTrace" type="swmp:BugTraceType" minOccurs="0" maxOccurs="1"/>
-            <xsd:element name="BugCode" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="BugCode" type="xsd:normalizedString" minOccurs="1" maxOccurs="1"/>
         </xsd:sequence>
         <xsd:attribute name="id" type="xsd:int" use="required"/>
     </xsd:complexType>
@@ -77,7 +77,7 @@
 
     <xsd:complexType name="MethodType">
         <xsd:simpleContent>
-            <xsd:extension base="xsd:string">
+            <xsd:extension base="xsd:normalizedString">
                 <xsd:attribute name="id" type="xsd:int" use="required"/>
                 <xsd:attribute name="primary" type="xsd:boolean" use="required"/>
             </xsd:extension>
@@ -92,12 +92,12 @@
 
     <xsd:complexType name="LocationType">
         <xsd:sequence>
-            <xsd:element name="SourceFile" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="SourceFile" type="xsd:normalizedString" minOccurs="1" maxOccurs="1"/>
             <xsd:element name="StartLine" type="xsd:int" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="EndLine" type="xsd:int" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="StartColumn" type="xsd:int" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="EndColumn" type="xsd:int" minOccurs="0" maxOccurs="1"/>
-            <xsd:element name="Explanation" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="Explanation" type="xsd:normalizedString" minOccurs="0" maxOccurs="1"/>
         </xsd:sequence>
         <xsd:attribute name="id" type="xsd:int" use="required"/>
         <xsd:attribute name="primary" type="xsd:boolean" use="required"/>
@@ -105,15 +105,15 @@
 
     <xsd:complexType name="BugTraceType">
         <xsd:sequence>
-            <xsd:element name="BuildId" type="xsd:string" minOccurs="0" maxOccurs="1"/>
-            <xsd:element name="AssessmentReportFile" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="BuildId" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="AssessmentReportFile" type="xsd:normalizedString" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="InstanceLocation" type="swmp:InstanceLocationType" minOccurs="0" maxOccurs="1"/>
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="InstanceLocationType">
         <xsd:sequence>
-            <xsd:element name="Xpath" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="Xpath" type="xsd:normalizedString" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="LineNum" type="swmp:LineNumType" minOccurs="0" maxOccurs="1"/>
         </xsd:sequence>
     </xsd:complexType>
@@ -127,10 +127,10 @@
 
     <xsd:complexType name="BugCategoryType">
         <xsd:sequence>
-            <xsd:element name="group" type="xsd:string" minOccurs="1" maxOccurs="1"/>
-            <xsd:element name="code" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="group" type="xsd:normalizedString" minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="code" type="xsd:normalizedString" minOccurs="1" maxOccurs="1"/>
             <xsd:element name="count" type="xsd:int" minOccurs="1" maxOccurs="1"/>
-            <xsd:element name="bytes" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="bytes" type="xsd:int" minOccurs="0" maxOccurs="1"/>
         </xsd:sequence>
     </xsd:complexType>
 
@@ -144,11 +144,11 @@
             </xsd:documentation>
         </xsd:annotation>
         <xsd:sequence>
-            <xsd:element name="Location" type="xsd:string" minOccurs="1" maxOccurs="1"/>
-            <xsd:element name="Class" type="xsd:string" minOccurs="0" maxOccurs="1"/>
-            <xsd:element name="Method" type="xsd:string" minOccurs="0" maxOccurs="1"/>
-            <xsd:element name="Type" type="xsd:string" minOccurs="1" maxOccurs="1"/>
-            <xsd:element name="Value" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="Location" type="xsd:normalizedString" minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="Class" type="xsd:normalizedString" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="Method" type="xsd:normalizedString" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="Type" type="xsd:normalizedString" minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="Value" type="xsd:normalizedString" minOccurs="1" maxOccurs="1"/>
         </xsd:sequence>
         <xsd:attribute name="id" type="xsd:int" use="required"/>
     </xsd:complexType>
@@ -168,7 +168,7 @@
 
     <xsd:complexType name="MetricSummaryType">
         <xsd:sequence>
-            <xsd:element name="Type" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="Type" type="xsd:normalizedString" minOccurs="1" maxOccurs="1"/>
             <xsd:element name="Count" type="xsd:int" minOccurs="1" maxOccurs="1"/>
             <xsd:element name="Sum" type="xsd:int" minOccurs="1" maxOccurs="1"/>
             <xsd:element name="SumOfSquares" type="xsd:int" minOccurs="1" maxOccurs="1"/>
