@@ -6,7 +6,8 @@ import main.rule.engine.EngineType;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * The interface for the different types of output used for the library.
@@ -18,9 +19,9 @@ import java.util.HashMap;
 public class MessageRepresentation {
 
 	//region Attributes
-	private String Source;
+	private EnvironmentInformation env;
 	private EngineType type;
-	private HashMap<Integer, AnalysisRule> analysisIssues;
+	private Queue analysisIssues;
 	private PrintStream internalMessages;
 	private OutputStructure messageEngine;
 	//endregion
@@ -36,13 +37,13 @@ public class MessageRepresentation {
 	 * @param source                   the name of the source being examined
 	 * @param typeOfMessagingStructure the flag used to determine the type of messaging structure to be used
 	 */
-	public MessageRepresentation(String source, EngineType type, String typeOfMessagingStructure) {
-		this.Source = source;
+	public MessageRepresentation(EnvironmentInformation source, EngineType type, String typeOfMessagingStructure) {
+		this.env = source;
 		this.type = type;
 		this.messageEngine = Listing.getTypeOfMessaging(typeOfMessagingStructure);
 		this.internalMessages = new PrintStream(new ByteArrayOutputStream());
 		System.setOut(this.internalMessages);
-		this.analysisIssues = new HashMap<>();
+		this.analysisIssues = new LinkedList<>();
 	}
 	//endregion
 
@@ -51,10 +52,10 @@ public class MessageRepresentation {
 	/**
 	 * The getter for the source
 	 *
-	 * @return string - the source
+	 * @return EnvironmentInformation - the source
 	 */
-	public String getSource() {
-		return Source;
+	public EnvironmentInformation getEnvironment() {
+		return env;
 	}
 
 	/**
@@ -71,76 +72,26 @@ public class MessageRepresentation {
 	 *
 	 * @return AnalysisRules - the list of broken rules
 	 */
-	public ArrayList<AnalysisRule> getAnalysisIssues() {
-		return new ArrayList<>(analysisIssues.values());
+	public ArrayList<AnalysisIssue> getAnalysisIssues() {
+		return new ArrayList<>(analysisIssues);
 	}
 
-	/**
-	 * The getter for the Messaging Engine
-	 *
-	 * @return OutputStructure - the messaging engine being used
-	 */
 	public OutputStructure getMessageEngine() {
 		return messageEngine;
 	}
 
-	/**
-	 * A simple method to allow additional rule breaks to be added into the output.
-	 * This method will add a single Analysis Rule
-	 * This has been changed to a lazy-loading approach to ensure there is no time wasted
-	 * instantiating extra objects or trimming empty objects
-	 *
-	 * @param ruleNumber - the rule number to add the issue to
-	 * @param issue      - the specific issue being added
-	 */
-	public void addRuleAnalysis(Integer ruleNumber, AnalysisIssue issue) {
-		if (!this.analysisIssues.containsKey(ruleNumber)) {
-			this.analysisIssues.put(ruleNumber, new AnalysisRule(ruleNumber));
-		}
 
-		this.analysisIssues.get(ruleNumber).addIssue(issue);
-	}
-
-	/**
-	 * A simple overloaded method to add an arraylist of rule breaks into the output.
-	 * This has been changed to a lazy-loading approach to ensure there is no time wasted
-	 * instantiating extra objects or trimming empty objects
-	 *
-	 * @param ruleNumber - the rule number to add the issue to
-	 * @param issues     - the specific issues being added
-	 */
-	public void addRuleAnalysis(Integer ruleNumber, ArrayList<AnalysisIssue> issues) {
-		if (!this.analysisIssues.containsKey(ruleNumber)) {
-			this.analysisIssues.put(ruleNumber, new AnalysisRule(ruleNumber));
-		}
-
-		this.analysisIssues.get(ruleNumber).addIssue(issues);
-	}
-
-	/**
-	 * A simple overloaded method to add an arraylist of rule breaks into the output.
-	 * This has been changed to a lazy-loading approach to ensure there is no time wasted
-	 * instantiating extra objects or trimming empty objects
-	 * This will integrate a found and created rule into the overall rule grouping
-	 *
-	 * @param rule - the created rule to add into the rule grouping
-	 */
-	public void addRuleAnalysis(AnalysisRule rule) {
-		if (!this.analysisIssues.containsKey(rule.getRuleNumber())) {
-			this.analysisIssues.put(rule.getRuleNumber(), rule);
-		}
-		else {
-			this.analysisIssues.get(rule.getRuleNumber()).addIssue(rule.getIssues());
-		}
+	public void addAnalysis(AnalysisIssue issue) {
+		this.analysisIssues.add(issue);
 	}
 
 	/**
 	 * The method to get the structure of the output.
 	 *
-	 * @return Object - the overloaded output is determined by the type of messaging system used
+	 * @return String - the string output is determined by the type of messaging system used
 	 */
-	public Object getMessage() {
-		return messageEngine.getOutput(this.Source, this.type, this.getAnalysisIssues(), this.internalMessages);
+	public String getMessage() {
+		return messageEngine.getOutput(this.env, this.type, this.getAnalysisIssues(), this.internalMessages);
 	}
 	//endregion
 }

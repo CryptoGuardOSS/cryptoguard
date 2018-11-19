@@ -1,7 +1,14 @@
 package main.frontEnd;
 
+import main.rule.engine.RuleList;
+
+import java.util.ArrayList;
+import java.util.Stack;
+
 /**
  * The class containing the specific analysis issue information.
+ * The "flat" structure to be transformed to various formats.
+ *
  * <p>STATUS: IC</p>
  *
  * @author RigorityJTeam
@@ -10,101 +17,102 @@ package main.frontEnd;
 public class AnalysisIssue {
 
 	//region Attributes
-	private Integer lineNumber;
-	private String locationName;
-	private String capturedInformation;
-	private String causeMessage;
-	private Boolean describingMethod;
+	private String fullPathName = "";
+	private String className = "";
+	private RuleList rule;
+	private Stack methods;
+	private ArrayList<AnalysisLocation> locations;
+	private String issueInformation = "";
+	private String issueCause = "";
 	//endregion
 
 	//region Constructors
-
-	/**
-	 * The issue that was caused by a more generic reason instead of a specific line.
-	 * <p>Replicates the structure: ***Cause: ...</p>
-	 *
-	 * @param causeMessage a message explaining the reason why the rule was broken
-	 */
-	public AnalysisIssue(String causeMessage) {
-		this.causeMessage = causeMessage;
+	public AnalysisIssue(String className, Integer ruleNumber, String information) {
+		this.fullPathName = className;
+		this.className = className;
+		this.issueInformation = information;
+		this.rule = RuleList.getRuleByRuleNumber(ruleNumber);
 	}
 
-	/**
-	 * The issue that was caused by a specific reason (a specific string).
-	 * <p>Replicates the structure: ***Found: ["\s"] [in Line \d] in Method: \s</p>
-	 *
-	 * @param capturedInformation the message containing the string that broke the rule
-	 * @param lineNumber          the line number within the locationName the string is located at
-	 * @param locationName        the locationName where the string is
-	 */
-	public AnalysisIssue(String locationName, Integer lineNumber, String capturedInformation) {
-		this.locationName = locationName;
-		this.lineNumber = lineNumber;
-		this.capturedInformation = capturedInformation;
-		this.describingMethod = true;
+	public AnalysisIssue(Integer ruleNumber, String methodName, String information) {
+		this.getMethods().push(methodName);
+		this.issueInformation = information;
+		this.rule = RuleList.getRuleByRuleNumber(ruleNumber);
 	}
 
-	/**
-	 * The issue that was caused by a specific reason (a specific string).
-	 * <p>Replicates the structure: ***Found: ["\s"] [in Line \d] in Method: \s</p>
-	 *
-	 * @param capturedInformation the message containing the string that broke the rule
-	 * @param locationName        the locationName where the string is
-	 * @param describingMethod    the boolean to indicate whether or not the issue is describing a method or class
-	 */
-	public AnalysisIssue(String locationName, String capturedInformation, boolean describingMethod) {
-		this.locationName = locationName;
-		this.capturedInformation = capturedInformation;
-		this.describingMethod = describingMethod;
+	public AnalysisIssue(Integer ruleNumber, String methodName, String information, AnalysisLocation location) {
+		this.addMethod(methodName, location);
+		this.issueInformation = information;
+		this.rule = RuleList.getRuleByRuleNumber(ruleNumber);
+	}
+
+	public AnalysisIssue(Integer ruleNumber, String cause) {
+		this.issueCause = cause;
+		this.rule = RuleList.getRuleByRuleNumber(ruleNumber);
 	}
 	//endregion
 
-	//region Getters
-
-	/**
-	 * The getter for the Line Number
-	 *
-	 * @return Integer - the line number of the rule break
-	 */
-	public Integer getLineNumber() {
-		return lineNumber;
-	}
-
-	/**
-	 * The getter for the locationName name
-	 *
-	 * @return string - the name of the locationName
-	 */
-	public String getLocationName() {
-		return locationName;
-	}
-
-	/**
-	 * The getter for the Captured Information
-	 *
-	 * @return string - returns any error information
-	 */
-	public String getCapturedInformation() {
-		return capturedInformation;
-	}
-
-	/**
-	 * The getter for the cause message
-	 *
-	 * @return string - a generalized String set for a common error message, a less detailed error message
-	 */
-	public String getCauseMessage() {
-		return causeMessage;
+	//region Getters/Setters
+	public void setFullPathName(String fullPathName) {
+		this.fullPathName = fullPathName;
 	}
 
 
-	/**
-	 * The getter for the Message First Boolean
-	 *
-	 * @return boolean - the indicator whether or not the message is describing a method or not
-	 */
-	public Boolean getDescribingMethod() {
-		return describingMethod;
+	public String getFullPathName() {
+		return fullPathName;
+	}
+
+	public String getClassName() {
+		return className;
+	}
+
+	public RuleList getRule() {
+		return rule;
+	}
+
+	public Integer getRuleId() {
+		return rule.getRuleId();
+	}
+
+	public Stack getMethods() {
+
+		if (this.methods == null) {
+			this.methods = new Stack();
+		}
+
+		return this.methods;
+	}
+
+	public ArrayList<AnalysisLocation> getLocations() {
+
+		if (this.locations == null) {
+			this.locations = new ArrayList<AnalysisLocation>();
+		}
+
+		return locations;
+	}
+
+	public void addLocation(AnalysisLocation newLocation) {
+		this.getLocations().add(newLocation);
+	}
+
+	public void addMethod(String methodName) {
+		this.getMethods().push(String.valueOf(methodName));
+	}
+
+	public void addMethod(String methodName, AnalysisLocation location) {
+		location.setMethodNumber(this.getMethods().size());
+		this.getMethods().push(String.valueOf(methodName));
+
+		this.addLocation(location);
+	}
+
+	public String getIssueInformation() {
+		return issueInformation;
+	}
+
+	public String getIssueCause() {
+		return issueCause;
 	}
 	//endregion
 }

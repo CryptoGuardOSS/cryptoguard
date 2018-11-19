@@ -1,12 +1,19 @@
 package main.frontEnd.outputStructures;
 
 import main.frontEnd.AnalysisIssue;
-import main.frontEnd.AnalysisRule;
+import main.frontEnd.AnalysisLocation;
+import main.frontEnd.EnvironmentInformation;
 import main.frontEnd.OutputStructure;
 import main.rule.engine.EngineType;
+import main.rule.engine.RuleList;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * The class containing the implementation of the legacy output.
@@ -18,75 +25,70 @@ import java.util.ArrayList;
 public class LegacyOutput implements OutputStructure {
 	public final Listing typeOfStructure = Listing.LegacyOutput;
 
+
 	/***
 	 *  The overridden method for the Legacy output. Currently mimics the output as best seen.
 	 *
 	 * @return Object nothing is returned in legacy as legacy only prints
 	 * information out to the console
 	 */
-	public Object getOutput(String source, EngineType type, ArrayList<AnalysisRule> brokenRules, PrintStream internalWarnings) {
+	public String getOutput(EnvironmentInformation source, EngineType type, ArrayList<AnalysisIssue> brokenRules, PrintStream internalWarnings) {
 		StringBuilder output = new StringBuilder();
+
 
 		//Only printing console output if it is set and there is output captured
 		if (internalWarnings != null && internalWarnings.toString().split("\n").length > 1) {
 			output.append("Internal Warnings: " + internalWarnings.toString() + "\n");
 		}
+		output.append("Analyzing " + type + ": " + source.getSource() + "\n");
 
-		output.append("Analyzing " + type + ": " + source + "\n");
+		Map<Integer, List<AnalysisIssue>> groupedRules = brokenRules.stream().collect(Collectors.groupingBy(AnalysisIssue::getRuleId));
 
 		//region Broken Rule Cycle
-		for (AnalysisRule rule : brokenRules) {
+		for (Integer ruleNumber : groupedRules.keySet()) {
 			output.append("=======================================\n");
-			output.append("***Violated Rule " + rule.getRuleNumber() + ": " + rule.getRuleType() + "\n");
-			//region Specific Rule Broken
-			if (rule.getIssues().size() > 0) {
-				for (AnalysisIssue issue : rule.getIssues()) {
-					String outputMessage;
-					//region For no general cause message
-					if (issue.getCauseMessage() == null) {
-						//region Describing A Method Location
-						if (issue.getDescribingMethod()) {
-							StringBuilder message = new StringBuilder("***Found: ");
+			output.append("***Violated Rule " + RuleList.getRuleByRuleNumber(ruleNumber).getRuleId() + ": " + RuleList.getRuleByRuleNumber(ruleNumber).getDesc() + "\n");
 
-							message.append("[\"" + issue.getCapturedInformation() + "\"] ");
+			for (AnalysisIssue issue : groupedRules.get(ruleNumber)) {
+				StringBuilder outputMessage = new StringBuilder();
 
-							if (issue.getLineNumber() != null) {
-								message.append("in Line " + issue.getLineNumber() + " ");
+				//region for no general cause
+				if (StringUtils.isBlank(issue.getIssueCause())) {
+
+					if (StringUtils.isNotBlank(issue.getClassName())) {
+						outputMessage.append("***");
+						outputMessage.append(issue.getIssueInformation());
+						outputMessage.append(issue.getClassName());
+					}
+					else if (issue.getMethods().size() > 0) {
+						outputMessage.append("***Found: ");
+						outputMessage.append("[\"" + issue.getIssueInformation() + "\"] ");
+
+						if (issue.getLocations().size() > 0) {
+							Predicate<AnalysisLocation> matchByCurrentMethod = loc -> loc.getMethodNumber() == issue.getMethods().size() - 1;
+							List<AnalysisLocation> issueLocations = issue.getLocations().stream().filter(matchByCurrentMethod).collect(Collectors.toList());
+
+							if (!issueLocations.isEmpty()) {
+								outputMessage.append("in Line " + issueLocations.toString().replace("[", "").replace("]", "") + " ");
 							}
-
-							message.append("in Method: " + issue.getLocationName());
-
-							outputMessage = message.toString();
 						}
-						//endregion
-						//region Describing Class Location
-						else {
-							StringBuilder message = new StringBuilder("***");
-							message.append(issue.getCapturedInformation());
-							message.append(issue.getLocationName());
+						outputMessage.append("in Method: " + issue.getMethods().pop());
 
-							outputMessage = message.toString();
-						}
-						//endregion
 					}
-					//endregion
-					//region Describing a general cause message
 					else {
-						StringBuilder message = new StringBuilder("***Cause: ");
-						message.append(issue.getCauseMessage());
-
-						outputMessage = message.toString();
+						outputMessage.append("***Cause: ");
+						outputMessage.append(issue.getIssueCause());
 					}
-					//endregion
-					output.append(outputMessage + "\n");
 				}
+				//endregion
+				//region only general cause
+				else {
+					output.append("***Cause: " + issue.getIssueCause());
+				}
+				//endregion
+				output.append(outputMessage + "\n");
 			}
-			//endregion
-			//region General Message
-			else {
-				output.append("***" + rule.getMessage() + "\n");
-			}
-			//endregion
+
 			output.append("=======================================\n");
 		}
 		//endregion

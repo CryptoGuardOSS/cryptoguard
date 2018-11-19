@@ -1,7 +1,8 @@
 package main.frontEnd.outputStructures;
 
 import com.example.response.AnalyzerReport;
-import main.frontEnd.AnalysisRule;
+import main.frontEnd.AnalysisIssue;
+import main.frontEnd.EnvironmentInformation;
 import main.frontEnd.OutputStructure;
 import main.rule.engine.EngineType;
 
@@ -28,7 +29,7 @@ public class ScarfXMLOutput implements OutputStructure {
 	 *
 	 * @return Object The raw stream of the xml
 	 */
-	public Object getOutput(String source, EngineType type, ArrayList<AnalysisRule> brokenRules, PrintStream internalWarnings) {
+	public String getOutput(EnvironmentInformation source, EngineType type, ArrayList<AnalysisIssue> brokenRules, PrintStream internalWarnings) {
 		try {
 			AnalyzerReport report = new AnalyzerReport();
 

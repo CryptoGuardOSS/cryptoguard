@@ -10,5 +10,5 @@ import java.util.ArrayList;
  * This will be implemented by the different type of messaging structures
  */
 public interface OutputStructure {
-	Object getOutput(String source, EngineType type, ArrayList<AnalysisRule> brokenRules, PrintStream internalWarnings);
+	String getOutput(EnvironmentInformation source, EngineType type, ArrayList<AnalysisIssue> brokenRules, PrintStream internalWarnings);
 }
