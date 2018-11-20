@@ -5,5 +5,5 @@
 // Generated on: 2018.11.15 at 07:34:01 PM EST 
 //
 
-@javax.xml.bind.annotation.XmlSchema(namespace = "https://www.swamp.com/com/scarf/struct", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+@javax.xml.bind.annotation.XmlSchema(elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
 package com.example.response;

@@ -1,5 +1,7 @@
 package main.frontEnd;
 
+import org.apache.commons.lang3.StringUtils;
+
 import javax.annotation.Nonnull;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -33,6 +35,9 @@ public class EnvironmentInformation {
 	private final String BuildFrameworkVersion;
 	private final String platformName = System.getProperty("os.name") + "-" + System.getProperty("os.version");
 	private final String Source;
+	private final Boolean prettyPrint;
+	private String packageName;
+	private String packageVersion;
 	//endregion
 	//region From Outside
 	private final String AssessmentFramework;
@@ -43,6 +48,11 @@ public class EnvironmentInformation {
 	private final String ParserVersion;
 
 	private final String UUID;
+
+	//TODO
+	private final String packageRootDir;
+	private final Integer buildId;
+	private final String xPath;
 	//endregion
 
 	private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
@@ -60,7 +70,7 @@ public class EnvironmentInformation {
 	 * @param parserVersion              - String, can't be null, the version of the parser being used
 	 * @param givenUUID                  - String, the unique ID for this particular validation, if null a sudo number will be generated
 	 */
-	public EnvironmentInformation(@Nonnull String source, @Nonnull String assessmentFramework, @Nonnull String assessmentFrameworkVersion, @Nonnull String assessmentStartTime, @Nonnull String parserName, @Nonnull String parserVersion, String givenUUID) {
+	public EnvironmentInformation(@Nonnull String source, @Nonnull String assessmentFramework, @Nonnull String assessmentFrameworkVersion, @Nonnull String assessmentStartTime, @Nonnull String parserName, @Nonnull String parserVersion, String givenUUID, boolean printFormatted, String fileXPath) {
 		//region Setting Internal Settings
 		String tempToolFrameworkVersion;
 		String tempToolFramework;
@@ -90,6 +100,7 @@ public class EnvironmentInformation {
 		startTimeStamp = getCurrentDate();
 		BuildFramework = tempBuildFramework;
 		BuildFrameworkVersion = tempBuildFrameworkVersion;
+		prettyPrint = printFormatted;
 		//endregion
 
 		//region Setting External Based Properties
@@ -105,6 +116,14 @@ public class EnvironmentInformation {
 		}
 		else {
 			UUID = givenUUID;
+		}
+		packageRootDir = "";
+		buildId = -1;
+		if (StringUtils.isNotBlank(fileXPath)) {
+			xPath = fileXPath;
+		}
+		else {
+			xPath = "Not Found";
 		}
 		//endregion
 	}
@@ -146,6 +165,10 @@ public class EnvironmentInformation {
 		return Long.valueOf(date.toString());
 	}
 
+	//region Getters and Setters
+	public String getPackageRootDir() {
+		return packageRootDir;
+	}
 
 	public String getToolFramework() {
 		return ToolFramework;
@@ -202,4 +225,33 @@ public class EnvironmentInformation {
 	public SimpleDateFormat getDateFormat() {
 		return dateFormat;
 	}
+
+	public String getPackageName() {
+		return packageName;
+	}
+
+	public void setPackageName(String packageName) {
+		this.packageName = packageName;
+	}
+
+	public String getPackageVersion() {
+		return packageVersion;
+	}
+
+	public void setPackageVersion(String packageVersion) {
+		this.packageVersion = packageVersion;
+	}
+
+	public Integer getBuildId() {
+		return buildId;
+	}
+
+	public String getxPath() {
+		return xPath;
+	}
+
+	public Boolean prettyPrint() {
+		return prettyPrint;
+	}
+	//endregion
 }

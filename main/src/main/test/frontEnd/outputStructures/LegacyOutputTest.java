@@ -30,7 +30,7 @@ public class LegacyOutputTest {
 	@Before
 	public void setUp() {
 		this.source = "testable-jar/build/libs/testable-jar.jar";
-		this.env = new EnvironmentInformation(this.source, "", "", "", "", "", null);
+		this.env = new EnvironmentInformation(this.source, "", "", "", "", "", null, false, "");
 		this.type = EngineType.JAR;
 
 		StringBuilder sampleOne = new StringBuilder();
