@@ -1,16 +1,38 @@
 package frontEnd.outputStructures;
 
+import com.example.response.AnalyzerReport;
+import com.example.response.BugCategoryType;
+import com.example.response.BugInstanceType;
+import com.example.response.LocationType;
 import main.frontEnd.AnalysisIssue;
 import main.frontEnd.AnalysisLocation;
 import main.frontEnd.EnvironmentInformation;
 import main.frontEnd.OutputStructure;
 import main.frontEnd.outputStructures.ScarfXMLOutput;
+import main.rule.engine.Criteria;
 import main.rule.engine.EngineType;
+import main.rule.engine.RuleList;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.xml.sax.SAXException;
 
+import javax.xml.XMLConstants;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import static junit.framework.TestCase.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class ScarfXMLOutputTest {
 
@@ -19,10 +41,14 @@ public class ScarfXMLOutputTest {
 	private String marshallErrorMessage;
 	private String result;
 	private OutputStructure messagingSystem;
-	private String source;
 	private EnvironmentInformation env;
 	private EngineType type;
 	private ArrayList<AnalysisIssue> brokenRules;
+	private final String SchemaPath = System.getProperty("user.dir") + "/src/main/";
+	private final File ScarfSchema = new File(SchemaPath + "schema/xsd/Scarf/Scarf.xsd");
+	private final String jar = "testable-jar.jar";
+	private final String pathToJar = "testable-jar/build/libs/";
+	private String source = this.pathToJar + this.jar;
 	//endregion
 
 	//region Test Environment Management
@@ -32,8 +58,10 @@ public class ScarfXMLOutputTest {
 		marshallErrorMessage = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ERROR>\nThere has been an issue marshalling the output.\n</ERROR>";
 
 
-		this.source = "testable-jar/build/libs/testable-jar.jar";
-		this.env = new EnvironmentInformation(this.source, "", "", "", "", "", null, true, "");
+		this.env = new EnvironmentInformation(this.source, "STUBBED", "STUBBED", "STUBBED", "STUBBED", "STUBBED", null, true, "STUBBED");
+		this.env.setPackageName(this.jar);
+		this.env.setPackageVersion("0.0");
+
 
 		this.type = EngineType.JAR;
 
@@ -99,17 +127,9 @@ public class ScarfXMLOutputTest {
 		this.brokenRules = new ArrayList<>();
 
 		//region Adding Rules
-		//region Rule 5
-		brokenRules.add(new AnalysisIssue(5, "Used default key size in method: <tester.Crypto: java.security.KeyPair generateKeyPairDefaultKeySize()>[122]"));
-		brokenRules.add(new AnalysisIssue(5, "<tester.Crypto: java.security.KeyPair generateKeyPair()>", "1024"));
-		//endregion
 		//region Rule 1
 		brokenRules.add(new AnalysisIssue(1, "<tester.Crypto: void <init>()>", "AES/ECB/PKCS5PADDING"));
 		brokenRules.add(new AnalysisIssue(1, "<tester.PasswordUtils: void <init>(java.lang.String)>", "PBEWithMD5AndDES"));
-		//endregion
-		//region Rule 4
-		brokenRules.add(new AnalysisIssue("tester.Crypto$2", 4, "Should at least get One accepted Issuer from Other Sources in getAcceptedIssuers method of "));
-		brokenRules.add(new AnalysisIssue("tester.Crypto$2", 4, "Should not use unpinned self-signed certification in "));
 		//endregion
 		//region Rule 2
 		brokenRules.add(new AnalysisIssue(2, "<tester.PBEUsage: javax.crypto.spec.PBEKeySpec getPBEParameterSpec(java.lang.String)>", "MD5"));
@@ -122,6 +142,31 @@ public class ScarfXMLOutputTest {
 		brokenRules.add(new AnalysisIssue(3, "<tester.LiveVarsClass: void <clinit>()>", "aaaaaaa", new AnalysisLocation(4, 4)));
 		brokenRules.add(new AnalysisIssue(3, "<tester.VeryBusyClass: void main(java.lang.String[])>", "helloworld"));
 		brokenRules.add(new AnalysisIssue(3, "<tester.Crypto: void main(java.lang.String[])>", "Bar12345Bar12345", new AnalysisLocation(152, 152)));
+		//endregion
+		//region Rule 4
+		brokenRules.add(new AnalysisIssue("tester.Crypto$2", 4, "Should at least get One accepted Issuer from Other Sources in getAcceptedIssuers method of "));
+		brokenRules.add(new AnalysisIssue("tester.Crypto$2", 4, "Should not use unpinned self-signed certification in "));
+		//endregion
+		//region Rule 5
+		brokenRules.add(new AnalysisIssue(5, "Used default key size in method: <tester.Crypto: java.security.KeyPair generateKeyPairDefaultKeySize()>[122]"));
+		brokenRules.add(new AnalysisIssue(5, "<tester.Crypto: java.security.KeyPair generateKeyPair()>", "1024"));
+		//endregion
+		//region Rule 6
+		Criteria simpleCriteriaOne = new Criteria();
+		simpleCriteriaOne.setClassName("ClassOne");
+		simpleCriteriaOne.setMethodName("MethodOne");
+
+		Criteria simpleCriteriaTwo = new Criteria();
+		simpleCriteriaTwo.setClassName("ClassTwo");
+		simpleCriteriaTwo.setMethodName("MethodTwo");
+
+		Criteria simpleCriteriaThree = new Criteria();
+		simpleCriteriaThree.setClassName("ClassThree");
+		simpleCriteriaThree.setMethodName("MethodThree");
+
+		brokenRules.add(new AnalysisIssue(simpleCriteriaOne, "Borked Message Here", 6));
+		brokenRules.add(new AnalysisIssue(simpleCriteriaTwo, "New Borked Message Here", 6));
+		brokenRules.add(new AnalysisIssue(simpleCriteriaThree, "The Borked Message Here", 6));
 		//endregion
 		//endregion
 	}
@@ -156,7 +201,73 @@ public class ScarfXMLOutputTest {
 	@Test
 	public void simpleFiveRuleTest() {
 		String xmlStream = this.messagingSystem.getOutput(this.env, this.type, this.brokenRules, null);
-		System.out.println(xmlStream);
+
+		assertTrue(StringUtils.isNoneBlank(xmlStream));
+		assertFalse(xmlStream.contains("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"));
+
+		try {
+			//Creating the settings for the unmarshaller
+			Unmarshaller unmarshaller = JAXBContext.newInstance(AnalyzerReport.class).createUnmarshaller();
+			Schema schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(ScarfSchema);
+			unmarshaller.setSchema(schema);
+
+			//Unmarshalling the AnalyzerReport from the stream, as well validating the xml
+			AnalyzerReport report = (AnalyzerReport) unmarshaller.unmarshal(new ByteArrayInputStream(xmlStream.getBytes(StandardCharsets.UTF_8)));
+			assertNotNull(report);
+
+			//Keeping the dictionary of the bugs
+			HashMap<Integer, Integer> countOfBugs = new HashMap<Integer, Integer>();
+
+			//region Validating the bugs from the AnalyzerReport
+			assertEquals(brokenRules.size(), report.getBugInstance().size());
+			for (int bugNumber = 0; bugNumber < brokenRules.size(); bugNumber++) {
+				AnalysisIssue currentIssue = brokenRules.get(bugNumber);
+				BugInstanceType currentBug = report.getBugInstance().get(bugNumber);
+
+				//region Adding a dictionary of bugs
+				if (!countOfBugs.containsKey(Integer.valueOf(currentBug.getBugCode()))) {
+					countOfBugs.put(Integer.valueOf(currentBug.getBugCode()), 1);
+				}
+
+				else {
+					countOfBugs.put(Integer.valueOf(currentBug.getBugCode()), countOfBugs.get(Integer.valueOf(currentBug.getBugCode())) + 1);
+				}
+
+				//endregion
+
+				assertEquals(StringUtils.trimToNull(currentIssue.getClassName()), currentBug.getClassName());
+				if (!currentIssue.getMethods().isEmpty()) {
+					assertEquals(currentIssue.getMethods().size(), currentBug.getMethods().getMethod().size());
+				}
+
+				for (int methodNumber = 0; methodNumber < currentIssue.getMethods().size(); methodNumber++)
+					assertEquals(currentIssue.getMethods().get(methodNumber), currentBug.getMethods().getMethod().get(methodNumber).getValue());
+
+				for (int locNumber = 0; locNumber < currentIssue.getLocations().size(); locNumber++) {
+					AnalysisLocation currentLoc = currentIssue.getLocations().get(locNumber);
+					LocationType currentBugLoc = currentBug.getBugLocations().getLocation().get(locNumber);
+
+					assertEquals(currentLoc.getLineStart(), currentBugLoc.getStartLine());
+
+					if (!currentLoc.getLineStart().equals(currentLoc.getLineEnd())) {
+						assertEquals(currentLoc.getLineEnd(), currentBugLoc.getEndLine());
+					}
+
+				}
+			}
+			//endregion
+
+			//region Validating the Bug Summary
+			assertEquals(countOfBugs.size(), report.getBugSummary().getBugCategory().size());
+			for (BugCategoryType bugCategory : report.getBugSummary().getBugCategory()) {
+				assertEquals(RuleList.getRuleByRuleNumber(Integer.valueOf(bugCategory.getCode())).getDesc(), bugCategory.getGroup());
+				assertEquals(countOfBugs.get(Integer.valueOf(bugCategory.getCode())).intValue(), bugCategory.getCount());
+			}
+			//endregion
+		} catch (JAXBException | SAXException e) {
+			assertNull(e);
+			e.printStackTrace();
+		}
 	}
 	//endregion
 }

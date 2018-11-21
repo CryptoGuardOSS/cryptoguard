@@ -51,6 +51,7 @@ public class EnvironmentInformation {
 
 	//TODO
 	private final String packageRootDir;
+	private final String buildRootDir;
 	private final Integer buildId;
 	private final String xPath;
 	//endregion
@@ -125,6 +126,7 @@ public class EnvironmentInformation {
 		else {
 			xPath = "Not Found";
 		}
+		buildRootDir = "";
 		//endregion
 	}
 
@@ -252,6 +254,10 @@ public class EnvironmentInformation {
 
 	public Boolean prettyPrint() {
 		return prettyPrint;
+	}
+
+	public String getBuildRootDir() {
+		return buildRootDir;
 	}
 	//endregion
 }

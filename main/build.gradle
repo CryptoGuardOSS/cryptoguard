@@ -42,7 +42,7 @@ task xsd2java() {
         )
 
         //Heavily Hard Coded, removes the namespace so the xml output doesn't have a namespace : nmls
-        ant.replace(file:"src/main/java/com/example/response/package-info.java",token:"namespace = \"https://www.swamp.com/com/scarf/struct\", ",value:"")
+        //ant.replace(file:"src/main/java/com/example/response/package-info.java",token:"namespace = \"https://www.swamp.com/com/scarf/struct\", ",value:"")
 
     }
 }

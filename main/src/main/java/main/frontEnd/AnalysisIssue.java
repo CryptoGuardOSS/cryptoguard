@@ -1,5 +1,6 @@
 package main.frontEnd;
 
+import main.rule.engine.Criteria;
 import main.rule.engine.RuleList;
 
 import java.util.ArrayList;
@@ -27,6 +28,13 @@ public class AnalysisIssue {
 	//endregion
 
 	//region Constructors
+	public AnalysisIssue(Criteria bugLocationInformation, String information, Integer ruleNumber) {
+		this.fullPathName = bugLocationInformation.getClassName();
+		this.className = bugLocationInformation.getClassName();
+		this.addMethod(bugLocationInformation.getMethodName());
+		this.issueInformation = information;
+		this.rule = RuleList.getRuleByRuleNumber(ruleNumber);
+	}
 	public AnalysisIssue(String className, Integer ruleNumber, String information) {
 		this.fullPathName = className;
 		this.className = className;
@@ -35,18 +43,21 @@ public class AnalysisIssue {
 	}
 
 	public AnalysisIssue(Integer ruleNumber, String methodName, String information) {
+		this.fullPathName = "Unknown";
 		this.getMethods().push(methodName);
 		this.issueInformation = information;
 		this.rule = RuleList.getRuleByRuleNumber(ruleNumber);
 	}
 
 	public AnalysisIssue(Integer ruleNumber, String methodName, String information, AnalysisLocation location) {
+		this.fullPathName = "Unknown";
 		this.addMethod(methodName, location);
 		this.issueInformation = information;
 		this.rule = RuleList.getRuleByRuleNumber(ruleNumber);
 	}
 
 	public AnalysisIssue(Integer ruleNumber, String cause) {
+		this.fullPathName = "Unknown";
 		this.issueCause = cause;
 		this.rule = RuleList.getRuleByRuleNumber(ruleNumber);
 	}

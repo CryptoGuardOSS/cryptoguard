@@ -53,6 +53,7 @@ public class ScarfXMLOutput implements OutputStructure {
 			report.setToolName(source.getToolFramework());
 			report.setToolVersion(source.getToolFrameworkVersion());
 			report.setUuid(source.getUUID());
+			report.setBuildRootDir(source.getBuildRootDir());
 			//endregion
 
 			HashMap<Integer, Integer> countOfBugs = new HashMap<Integer, Integer>();
@@ -79,7 +80,6 @@ public class ScarfXMLOutput implements OutputStructure {
 				trace.setAssessmentReportFile(source.getxPath());
 				instance.setBugTrace(trace);
 
-
 				if (StringUtils.isNotBlank(issue.getClassName())) {
 					instance.setClassName(issue.getClassName());
 				}
@@ -101,8 +101,8 @@ public class ScarfXMLOutput implements OutputStructure {
 				//endregion
 
 				//region Setting Bug Locations
-				if (!issue.getLocations().isEmpty()) {
-					BugLocationsType bugLocations = new BugLocationsType();
+				BugLocationsType bugLocations = new BugLocationsType();
+				if (!issue.getLocations().isEmpty())
 					for (int locationKtr = 0; locationKtr < issue.getLocations().size(); locationKtr++) {
 						LocationType newLocation = new LocationType();
 						AnalysisLocation createdLoc = issue.getLocations().get(locationKtr);
@@ -110,6 +110,7 @@ public class ScarfXMLOutput implements OutputStructure {
 						newLocation.setId(locationKtr);
 						newLocation.setPrimary(locationKtr == 0);
 						newLocation.setStartLine(createdLoc.getLineStart());
+						newLocation.setSourceFile(issue.getFullPathName());
 
 						if (createdLoc.getLineEnd() > 0 && !createdLoc.getLineEnd().equals(createdLoc.getLineStart())) {
 							newLocation.setEndLine(createdLoc.getLineEnd());
@@ -117,8 +118,12 @@ public class ScarfXMLOutput implements OutputStructure {
 
 						bugLocations.getLocation().add(newLocation);
 					}
-					instance.setBugLocations(bugLocations);
+				else {
+					LocationType newLocation = new LocationType();
+					newLocation.setSourceFile(issue.getFullPathName());
+					bugLocations.getLocation().add(newLocation);
 				}
+				instance.setBugLocations(bugLocations);
 				//endregion
 
 				String outputMessage = issue.getIssueCause() + " " + issue.getIssueInformation();
