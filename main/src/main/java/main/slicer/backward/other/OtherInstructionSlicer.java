@@ -13,12 +13,25 @@ import soot.toolkits.scalar.FlowSet;
 
 import java.util.List;
 
+/**
+ * <p>OtherInstructionSlicer class.</p>
+ *
+ * @author RigorityJTeam
+ * @since V01.00
+ */
 public class OtherInstructionSlicer extends BackwardFlowAnalysis {
 
 	private FlowSet emptySet;
 	private String slicingCriteria;
 	private String method;
 
+	/**
+	 * <p>Constructor for OtherInstructionSlicer.</p>
+	 *
+	 * @param g               a {@link soot.toolkits.graph.DirectedGraph} object.
+	 * @param slicingCriteria a {@link java.lang.String} object.
+	 * @param method          a {@link java.lang.String} object.
+	 */
 	public OtherInstructionSlicer(DirectedGraph g, String slicingCriteria, String method) {
 		super(g);
 		this.emptySet = new ValueArraySparseSet();
@@ -27,6 +40,9 @@ public class OtherInstructionSlicer extends BackwardFlowAnalysis {
 		doAnalysis();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void flowThrough(Object in, Object node, Object out) {
 		FlowSet inSet = (FlowSet) in,
@@ -93,16 +109,25 @@ public class OtherInstructionSlicer extends BackwardFlowAnalysis {
 				&& currInstruction.toString().contains(usebox.getValue().toString() + ".<");
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected Object newInitialFlow() {
 		return emptySet.clone();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected Object entryInitialFlow() {
 		return emptySet.clone();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void merge(Object in1, Object in2, Object out) {
 		FlowSet inSet1 = (FlowSet) in1,
@@ -112,6 +137,9 @@ public class OtherInstructionSlicer extends BackwardFlowAnalysis {
 		inSet1.union(inSet2, outSet);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void copy(Object source, Object dest) {
 		FlowSet srcSet = (FlowSet) source,

@@ -34,6 +34,12 @@ import static junit.framework.TestCase.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+/**
+ * <p>MessageRepresentationTest class.</p>
+ *
+ * @author RigorityJTeam
+ * @since 01.03
+ */
 public class ScarfXMLOutputTest {
 
 	//region Test Attributes
@@ -204,7 +210,6 @@ public class ScarfXMLOutputTest {
 
 		assertTrue(StringUtils.isNoneBlank(xmlStream));
 		assertFalse(xmlStream.contains("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"));
-
 		try {
 			//Creating the settings for the unmarshaller
 			Unmarshaller unmarshaller = JAXBContext.newInstance(AnalyzerReport.class).createUnmarshaller();

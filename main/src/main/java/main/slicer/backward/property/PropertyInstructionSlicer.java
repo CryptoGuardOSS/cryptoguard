@@ -19,6 +19,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * <p>PropertyInstructionSlicer class.</p>
+ *
+ * @author RigorityJTeam
+ * @since V01.00
+ */
 public class PropertyInstructionSlicer extends BackwardFlowAnalysis {
 
 	private FlowSet emptySet;
@@ -26,6 +32,13 @@ public class PropertyInstructionSlicer extends BackwardFlowAnalysis {
 	private String initMethod;
 	private Map<String, List<PropertyAnalysisResult>> propertyUseMap;
 
+	/**
+	 * <p>Constructor for PropertyInstructionSlicer.</p>
+	 *
+	 * @param g               a {@link soot.toolkits.graph.DirectedGraph} object.
+	 * @param slicingCriteria a {@link java.lang.String} object.
+	 * @param initMethod      a {@link java.lang.String} object.
+	 */
 	public PropertyInstructionSlicer(DirectedGraph g, String slicingCriteria, String initMethod) {
 		super(g);
 		this.emptySet = new ValueArraySparseSet();
@@ -35,6 +48,9 @@ public class PropertyInstructionSlicer extends BackwardFlowAnalysis {
 		doAnalysis();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void flowThrough(Object in, Object node, Object out) {
 		FlowSet inSet = (FlowSet) in,
@@ -153,16 +169,25 @@ public class PropertyInstructionSlicer extends BackwardFlowAnalysis {
 				&& currInstruction.toString().contains(usebox.getValue().toString() + ".<");
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected Object newInitialFlow() {
 		return emptySet.clone();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected Object entryInitialFlow() {
 		return emptySet.clone();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void merge(Object in1, Object in2, Object out) {
 		FlowSet inSet1 = (FlowSet) in1,
@@ -172,6 +197,9 @@ public class PropertyInstructionSlicer extends BackwardFlowAnalysis {
 		inSet1.union(inSet2, outSet);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void copy(Object source, Object dest) {
 		FlowSet srcSet = (FlowSet) source,
@@ -179,6 +207,11 @@ public class PropertyInstructionSlicer extends BackwardFlowAnalysis {
 		srcSet.copy(destSet);
 	}
 
+	/**
+	 * <p>Getter for the field <code>propertyUseMap</code>.</p>
+	 *
+	 * @return a {@link java.util.Map} object.
+	 */
 	public Map<String, List<PropertyAnalysisResult>> getPropertyUseMap() {
 		return propertyUseMap;
 	}

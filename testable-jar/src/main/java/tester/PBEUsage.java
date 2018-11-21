@@ -10,10 +10,13 @@ import javax.crypto.spec.PBEParameterSpec;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 
 /**
  * Created by krishnokoli on 11/15/17.
+ *
+ *
+ * @author krishnokoli
+ * @since V01.00
  */
 public class PBEUsage {
 

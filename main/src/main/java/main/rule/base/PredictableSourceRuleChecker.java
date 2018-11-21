@@ -19,9 +19,15 @@ import java.util.Map;
 
 /**
  * Created by krishnokoli on 11/26/17.
+ *
+ * @author krishnokoli
+ * @since V01.00
  */
 public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
 
+	/**
+	 * Constant <code>PREDICTABLE_SOURCES</code>
+	 */
 	public static final List<String> PREDICTABLE_SOURCES = new ArrayList<>();
 
 	static {
@@ -35,6 +41,9 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
 	private Map<UnitContainer, List<String>> predictableSourcMap = new HashMap<>();
 	private Map<UnitContainer, List<String>> othersSourceMap = new HashMap<>();
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void analyzeSlice(Analysis analysis) {
 
@@ -136,6 +145,9 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void printAnalysisOutput(Map<String, String> configFiles) {
 
 		String rule = getRuleId();
@@ -182,5 +194,10 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
 		return output;
 	}
 
+	/**
+	 * <p>getRuleId.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	abstract public String getRuleId();
 }

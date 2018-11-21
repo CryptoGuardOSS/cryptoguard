@@ -13,7 +13,7 @@ import java.util.Map;
  * passes them to the entry point of the program for processing.
  *
  * @author RigorityJTeam
- * @since 1.0
+ * @since 01.00
  */
 public class RuleEngine {
 	private static List<RuleChecker> ruleCheckerList = new ArrayList<>();
@@ -41,7 +41,7 @@ public class RuleEngine {
 	 * handle all of the arguments and routing for the operation required.
 	 *
 	 * @param args the arguments passed in from being called from the command line
-	 * @throws Exception throws exceptions in case of extreme error of being called.
+	 * @throws java.lang.Exception throws exceptions in case of extreme error of being called.
 	 */
 	public static void main(String[] args) throws Exception {
 		if (args.length < 2) {

@@ -10,6 +10,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * <p>Abstract PatternMatcherRuleChecker class.</p>
+ *
+ * @author RigorityJTeam
+ * @since V01.00
+ */
 public abstract class PatternMatcherRuleChecker extends BaseRuleChecker {
 
 	//Todo: Add a field to keep track of all the found patterns ...
@@ -17,6 +23,9 @@ public abstract class PatternMatcherRuleChecker extends BaseRuleChecker {
 	private Map<UnitContainer, List<String>> predictableSourcMap = new HashMap<>();
 	private Map<UnitContainer, List<String>> othersSourceMap = new HashMap<>();
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void analyzeSlice(Analysis analysis) {
 		if (analysis.getAnalysisResult().isEmpty()) {
@@ -44,6 +53,9 @@ public abstract class PatternMatcherRuleChecker extends BaseRuleChecker {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void printAnalysisOutput(Map<String, String> configFiles) {
 
 		String rule = getRuleId();
@@ -89,7 +101,17 @@ public abstract class PatternMatcherRuleChecker extends BaseRuleChecker {
 		return output;
 	}
 
+	/**
+	 * <p>getPatternsToMatch.</p>
+	 *
+	 * @return a {@link java.util.List} object.
+	 */
 	abstract public List<String> getPatternsToMatch();
 
+	/**
+	 * <p>getRuleId.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	abstract public String getRuleId();
 }

@@ -15,8 +15,22 @@ import soot.jimple.internal.JInvokeStmt;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <p>MajorHeuristics class.</p>
+ *
+ * @author RigorityJTeam
+ * @since V01.00
+ */
 public class MajorHeuristics {
 
+	/**
+	 * <p>isArgumentOfInvoke.</p>
+	 *
+	 * @param analysis a {@link main.analyzer.backward.Analysis} object.
+	 * @param index    a int.
+	 * @param outSet   a {@link java.util.List} object.
+	 * @return a boolean.
+	 */
 	public static boolean isArgumentOfInvoke(Analysis analysis, int index, List<UnitContainer> outSet) {
 		for (int i = index; i >= 0; i--) {
 
@@ -152,6 +166,14 @@ public class MajorHeuristics {
 				&& useBox.getType() instanceof ArrayType);
 	}
 
+	/**
+	 * <p>isArgumentOfByteArrayCreation.</p>
+	 *
+	 * @param analysis a {@link main.analyzer.backward.Analysis} object.
+	 * @param index    a int.
+	 * @param outSet   a {@link java.util.List} object.
+	 * @return a boolean.
+	 */
 	public static boolean isArgumentOfByteArrayCreation(Analysis analysis, int index, List<UnitContainer> outSet) {
 
 		for (int i = index; i >= 0; i--) {

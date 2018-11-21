@@ -13,6 +13,12 @@ import java.util.*;
 
 import static main.util.Utils.getClassNamesFromApkArchive;
 
+/**
+ * <p>UntrustedPrngFinder class.</p>
+ *
+ * @author RigorityJTeam
+ * @since V01.00
+ */
 public class UntrustedPrngFinder implements RuleChecker {
 
 	private static final List<String> UNTRUSTED_PRNGS = new ArrayList<>();
@@ -21,6 +27,9 @@ public class UntrustedPrngFinder implements RuleChecker {
 		UNTRUSTED_PRNGS.add("java.util.Random: void <init>");
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath) throws IOException {
 

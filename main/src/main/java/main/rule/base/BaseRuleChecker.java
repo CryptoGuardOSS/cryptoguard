@@ -17,10 +17,13 @@ import java.util.*;
  * This file checks on several of the main factors within the outputed Jimple format.
  *
  * @author RigorityJTeam
- * @since 1.0
+ * @since 01.00
  */
 public abstract class BaseRuleChecker implements RuleChecker {
 
+	/**
+	 * Constant <code>RULE_VS_DESCRIPTION</code>
+	 */
 	public static final Map<String, String> RULE_VS_DESCRIPTION = new HashMap<>();
 
 	static {
@@ -42,6 +45,9 @@ public abstract class BaseRuleChecker implements RuleChecker {
 
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void checkRule(EngineType type, List<String> projectPaths, List<String> projectDependencyPath) throws IOException {
 
@@ -75,12 +81,34 @@ public abstract class BaseRuleChecker implements RuleChecker {
 		printAnalysisOutput(xmlFileStr);
 	}
 
+	/**
+	 * <p>getCriteriaList.</p>
+	 *
+	 * @return a {@link java.util.List} object.
+	 */
 	public abstract List<Criteria> getCriteriaList();
 
+	/**
+	 * <p>analyzeSlice.</p>
+	 *
+	 * @param analysis a {@link main.analyzer.backward.Analysis} object.
+	 */
 	public abstract void analyzeSlice(Analysis analysis);
 
+	/**
+	 * <p>printAnalysisOutput.</p>
+	 *
+	 * @param xmlFileStr a {@link java.util.Map} object.
+	 */
 	public abstract void printAnalysisOutput(Map<String, String> xmlFileStr);
 
+	/**
+	 * <p>putIntoMap.</p>
+	 *
+	 * @param unitStringMap a {@link java.util.Map} object.
+	 * @param e             a {@link main.analyzer.backward.UnitContainer} object.
+	 * @param value         a {@link java.lang.String} object.
+	 */
 	protected void putIntoMap(Map<UnitContainer, List<String>> unitStringMap, UnitContainer e, String value) {
 
 		List<String> values = unitStringMap.get(e);

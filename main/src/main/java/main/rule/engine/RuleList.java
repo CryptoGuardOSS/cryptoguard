@@ -4,8 +4,8 @@ package main.rule.engine;
  * The class containing the Rule Translations.
  * <p>STATUS: IC</p>
  *
- * @author RigorityJTeam
- * @since 1.0
+ * @author franceme
+ * @since 01.01
  */
 public enum RuleList {
 	//region Values
@@ -39,16 +39,34 @@ public enum RuleList {
 	//endregion
 
 	//region Getters
+
+	/**
+	 * <p>Getter for the field <code>ruleId</code>.</p>
+	 *
+	 * @return a {@link java.lang.Integer} object.
+	 */
 	public Integer getRuleId() {
 		return ruleId;
 	}
 
+	/**
+	 * <p>Getter for the field <code>desc</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getDesc() {
 		return desc;
 	}
 	//endregion
 
 	//region Accessors
+
+	/**
+	 * <p>getRuleByRuleNumber.</p>
+	 *
+	 * @param ruleNumber a {@link java.lang.Integer} object.
+	 * @return a {@link main.rule.engine.RuleList} object.
+	 */
 	public static RuleList getRuleByRuleNumber(Integer ruleNumber) {
 		for (RuleList rule : RuleList.values())
 			if (rule.getRuleId().equals(ruleNumber)) {

@@ -10,6 +10,12 @@ import java.io.*;
 
 import static org.junit.Assert.*;
 
+/**
+ * <p>MessageRepresentationTest class.</p>
+ *
+ * @author RigorityJTeam
+ * @since 01.02
+ */
 public class RuleEngineTest {
 	//region Attributes
 	private final String basePath = System.getProperty("user.dir");

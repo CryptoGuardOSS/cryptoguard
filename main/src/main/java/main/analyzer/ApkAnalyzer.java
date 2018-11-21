@@ -10,8 +10,24 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * <p>ApkAnalyzer class.</p>
+ *
+ * @author RigorityJTeam
+ * @since V01.00
+ */
 public class ApkAnalyzer {
 
+	/**
+	 * <p>analyzeSlices.</p>
+	 *
+	 * @param criteriaClass  a {@link java.lang.String} object.
+	 * @param criteriaMethod a {@link java.lang.String} object.
+	 * @param criteriaParam  a int.
+	 * @param projectJarPath a {@link java.lang.String} object.
+	 * @param checker        a {@link main.rule.base.BaseRuleChecker} object.
+	 * @throws java.io.IOException if any.
+	 */
 	public static void analyzeSlices(String criteriaClass,
 									 String criteriaMethod,
 									 int criteriaParam,

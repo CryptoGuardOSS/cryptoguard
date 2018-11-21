@@ -12,8 +12,8 @@ import java.util.Stack;
  *
  * <p>STATUS: IC</p>
  *
- * @author RigorityJTeam
- * @since 1.0
+ * @author franceme
+ * @since 01.01
  */
 public class AnalysisIssue {
 
@@ -28,6 +28,14 @@ public class AnalysisIssue {
 	//endregion
 
 	//region Constructors
+
+	/**
+	 * <p>Constructor for AnalysisIssue.</p>
+	 *
+	 * @param bugLocationInformation a {@link main.rule.engine.Criteria} object.
+	 * @param information            a {@link java.lang.String} object.
+	 * @param ruleNumber             a {@link java.lang.Integer} object.
+	 */
 	public AnalysisIssue(Criteria bugLocationInformation, String information, Integer ruleNumber) {
 		this.fullPathName = bugLocationInformation.getClassName();
 		this.className = bugLocationInformation.getClassName();
@@ -35,6 +43,14 @@ public class AnalysisIssue {
 		this.issueInformation = information;
 		this.rule = RuleList.getRuleByRuleNumber(ruleNumber);
 	}
+
+	/**
+	 * <p>Constructor for AnalysisIssue.</p>
+	 *
+	 * @param className   a {@link java.lang.String} object.
+	 * @param ruleNumber  a {@link java.lang.Integer} object.
+	 * @param information a {@link java.lang.String} object.
+	 */
 	public AnalysisIssue(String className, Integer ruleNumber, String information) {
 		this.fullPathName = className;
 		this.className = className;
@@ -42,6 +58,13 @@ public class AnalysisIssue {
 		this.rule = RuleList.getRuleByRuleNumber(ruleNumber);
 	}
 
+	/**
+	 * <p>Constructor for AnalysisIssue.</p>
+	 *
+	 * @param ruleNumber  a {@link java.lang.Integer} object.
+	 * @param methodName  a {@link java.lang.String} object.
+	 * @param information a {@link java.lang.String} object.
+	 */
 	public AnalysisIssue(Integer ruleNumber, String methodName, String information) {
 		this.fullPathName = "Unknown";
 		this.getMethods().push(methodName);
@@ -49,6 +72,14 @@ public class AnalysisIssue {
 		this.rule = RuleList.getRuleByRuleNumber(ruleNumber);
 	}
 
+	/**
+	 * <p>Constructor for AnalysisIssue.</p>
+	 *
+	 * @param ruleNumber  a {@link java.lang.Integer} object.
+	 * @param methodName  a {@link java.lang.String} object.
+	 * @param information a {@link java.lang.String} object.
+	 * @param location    a {@link main.frontEnd.AnalysisLocation} object.
+	 */
 	public AnalysisIssue(Integer ruleNumber, String methodName, String information, AnalysisLocation location) {
 		this.fullPathName = "Unknown";
 		this.addMethod(methodName, location);
@@ -56,6 +87,12 @@ public class AnalysisIssue {
 		this.rule = RuleList.getRuleByRuleNumber(ruleNumber);
 	}
 
+	/**
+	 * <p>Constructor for AnalysisIssue.</p>
+	 *
+	 * @param ruleNumber a {@link java.lang.Integer} object.
+	 * @param cause      a {@link java.lang.String} object.
+	 */
 	public AnalysisIssue(Integer ruleNumber, String cause) {
 		this.fullPathName = "Unknown";
 		this.issueCause = cause;
@@ -64,27 +101,58 @@ public class AnalysisIssue {
 	//endregion
 
 	//region Getters/Setters
+
+	/**
+	 * <p>Setter for the field <code>fullPathName</code>.</p>
+	 *
+	 * @param fullPathName a {@link java.lang.String} object.
+	 */
 	public void setFullPathName(String fullPathName) {
 		this.fullPathName = fullPathName;
 	}
 
 
+	/**
+	 * <p>Getter for the field <code>fullPathName</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getFullPathName() {
 		return fullPathName;
 	}
 
+	/**
+	 * <p>Getter for the field <code>className</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getClassName() {
 		return className;
 	}
 
+	/**
+	 * <p>Getter for the field <code>rule</code>.</p>
+	 *
+	 * @return a {@link main.rule.engine.RuleList} object.
+	 */
 	public RuleList getRule() {
 		return rule;
 	}
 
+	/**
+	 * <p>getRuleId.</p>
+	 *
+	 * @return a {@link java.lang.Integer} object.
+	 */
 	public Integer getRuleId() {
 		return rule.getRuleId();
 	}
 
+	/**
+	 * <p>Getter for the field <code>methods</code>.</p>
+	 *
+	 * @return a {@link java.util.Stack} object.
+	 */
 	public Stack getMethods() {
 
 		if (this.methods == null) {
@@ -94,6 +162,11 @@ public class AnalysisIssue {
 		return this.methods;
 	}
 
+	/**
+	 * <p>Getter for the field <code>locations</code>.</p>
+	 *
+	 * @return a {@link java.util.ArrayList} object.
+	 */
 	public ArrayList<AnalysisLocation> getLocations() {
 
 		if (this.locations == null) {
@@ -103,14 +176,30 @@ public class AnalysisIssue {
 		return locations;
 	}
 
+	/**
+	 * <p>addLocation.</p>
+	 *
+	 * @param newLocation a {@link main.frontEnd.AnalysisLocation} object.
+	 */
 	public void addLocation(AnalysisLocation newLocation) {
 		this.getLocations().add(newLocation);
 	}
 
+	/**
+	 * <p>addMethod.</p>
+	 *
+	 * @param methodName a {@link java.lang.String} object.
+	 */
 	public void addMethod(String methodName) {
 		this.getMethods().push(String.valueOf(methodName));
 	}
 
+	/**
+	 * <p>addMethod.</p>
+	 *
+	 * @param methodName a {@link java.lang.String} object.
+	 * @param location   a {@link main.frontEnd.AnalysisLocation} object.
+	 */
 	public void addMethod(String methodName, AnalysisLocation location) {
 		location.setMethodNumber(this.getMethods().size());
 		this.getMethods().push(String.valueOf(methodName));
@@ -118,10 +207,20 @@ public class AnalysisIssue {
 		this.addLocation(location);
 	}
 
+	/**
+	 * <p>Getter for the field <code>issueInformation</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getIssueInformation() {
 		return issueInformation;
 	}
 
+	/**
+	 * <p>Getter for the field <code>issueCause</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getIssueCause() {
 		return issueCause;
 	}

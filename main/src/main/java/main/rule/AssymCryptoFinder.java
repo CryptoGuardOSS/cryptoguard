@@ -11,6 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * <p>AssymCryptoFinder class.</p>
+ *
+ * @author RigorityJTeam
+ * @since V01.00
+ */
 public class AssymCryptoFinder extends BaseRuleChecker {
 
 	private static final List<Criteria> CRITERIA_LIST = new ArrayList<>();
@@ -40,6 +46,9 @@ public class AssymCryptoFinder extends BaseRuleChecker {
 
 	private ArrayList<String> occurrences = new ArrayList<>();
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void analyzeSlice(Analysis analysis) {
 		if (analysis.getAnalysisResult().isEmpty()) {
@@ -63,19 +72,35 @@ public class AssymCryptoFinder extends BaseRuleChecker {
 		}
 	}
 
+	/**
+	 * <p>getOccurrenceSites.</p>
+	 *
+	 * @return a {@link java.util.ArrayList} object.
+	 */
 	public ArrayList<String> getOccurrenceSites() {
 		return occurrences;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<Criteria> getCriteriaList() {
 		return CRITERIA_LIST;
 	}
 
+	/**
+	 * <p>Setter for the field <code>crypto</code>.</p>
+	 *
+	 * @param crypto a {@link java.util.List} object.
+	 */
 	public void setCrypto(List<String> crypto) {
 		this.crypto = crypto;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void printAnalysisOutput(Map<String, String> xmlFileStr) {
 	}

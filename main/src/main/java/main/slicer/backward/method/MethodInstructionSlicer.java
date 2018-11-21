@@ -21,6 +21,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * <p>MethodInstructionSlicer class.</p>
+ *
+ * @author RigorityJTeam
+ * @since V01.00
+ */
 public class MethodInstructionSlicer extends BackwardFlowAnalysis {
 
 	private FlowSet emptySet;
@@ -28,6 +34,13 @@ public class MethodInstructionSlicer extends BackwardFlowAnalysis {
 	private List<Integer> slicingParams;
 	private Map<String, List<PropertyAnalysisResult>> propertyUseMap;
 
+	/**
+	 * <p>Constructor for MethodInstructionSlicer.</p>
+	 *
+	 * @param g                  a {@link soot.toolkits.graph.DirectedGraph} object.
+	 * @param methodCallSiteInfo a {@link main.slicer.backward.MethodCallSiteInfo} object.
+	 * @param slicingParams      a {@link java.util.List} object.
+	 */
 	public MethodInstructionSlicer(DirectedGraph g,
 								   MethodCallSiteInfo methodCallSiteInfo, List<Integer> slicingParams) {
 		super(g);
@@ -38,6 +51,9 @@ public class MethodInstructionSlicer extends BackwardFlowAnalysis {
 		doAnalysis();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void flowThrough(Object in, Object node, Object out) {
 		FlowSet inSet = (FlowSet) in,
@@ -146,16 +162,25 @@ public class MethodInstructionSlicer extends BackwardFlowAnalysis {
 				&& currInstruction.toString().contains(usebox.getValue().toString() + ".<");
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected Object newInitialFlow() {
 		return emptySet.clone();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected Object entryInitialFlow() {
 		return emptySet.clone();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void merge(Object in1, Object in2, Object out) {
 		FlowSet inSet1 = (FlowSet) in1,
@@ -165,6 +190,9 @@ public class MethodInstructionSlicer extends BackwardFlowAnalysis {
 		inSet1.union(inSet2, outSet);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void copy(Object source, Object dest) {
 		FlowSet srcSet = (FlowSet) source,
@@ -172,10 +200,20 @@ public class MethodInstructionSlicer extends BackwardFlowAnalysis {
 		srcSet.copy(destSet);
 	}
 
+	/**
+	 * <p>Getter for the field <code>methodCallSiteInfo</code>.</p>
+	 *
+	 * @return a {@link main.slicer.backward.MethodCallSiteInfo} object.
+	 */
 	public MethodCallSiteInfo getMethodCallSiteInfo() {
 		return methodCallSiteInfo;
 	}
 
+	/**
+	 * <p>Getter for the field <code>propertyUseMap</code>.</p>
+	 *
+	 * @return a {@link java.util.Map} object.
+	 */
 	public Map<String, List<PropertyAnalysisResult>> getPropertyUseMap() {
 		return propertyUseMap;
 	}

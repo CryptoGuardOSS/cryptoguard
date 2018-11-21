@@ -12,7 +12,12 @@ import java.util.ArrayList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-
+/**
+ * <p>MessageRepresentationTest class.</p>
+ *
+ * @author RigorityJTeam
+ * @since 01.02
+ */
 public class ListingTest {
 	//region Test Attributes
 	private ArrayList<Listing> ListingSet;

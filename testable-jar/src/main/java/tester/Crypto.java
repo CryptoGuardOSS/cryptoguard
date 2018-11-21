@@ -7,8 +7,6 @@ import javax.net.SocketFactory;
 import javax.net.ssl.*;
 import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -16,6 +14,9 @@ import java.util.Random;
 
 /**
  * Created by krishnokoli on 7/2/17.
+ *
+ * @author krishnokoli
+ * @since V01.00
  */
 public class Crypto {
 

@@ -18,6 +18,12 @@ import java.util.*;
 
 import static main.util.Utils.getClassNamesFromApkArchive;
 
+/**
+ * <p>SSLSocketFactoryFinder class.</p>
+ *
+ * @author RigorityJTeam
+ * @since V01.00
+ */
 public class SSLSocketFactoryFinder implements RuleChecker {
 
 //  Ref:  https://developer.android.com/training/articles/security-ssl.html
@@ -33,6 +39,9 @@ public class SSLSocketFactoryFinder implements RuleChecker {
 
 	private static final String METHOD_TO_FIND = "<javax.net.ssl.HostnameVerifier: boolean verify(java.lang.String,javax.net.ssl.SSLSession)>";
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath) throws IOException {
 
@@ -220,6 +229,13 @@ public class SSLSocketFactoryFinder implements RuleChecker {
 		return analysisListMap;
 	}
 
+	/**
+	 * <p>getInfluencingInstructions.</p>
+	 *
+	 * @param slicingCriteria a {@link main.slicer.forward.SlicingCriteria} object.
+	 * @param m               a {@link soot.SootMethod} object.
+	 * @return a {@link main.slicer.forward.SlicingResult} object.
+	 */
 	public static SlicingResult getInfluencingInstructions(SlicingCriteria slicingCriteria,
 														   SootMethod m) {
 		if (m.isConcrete()) {

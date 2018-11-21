@@ -23,8 +23,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * <p>BaseAnalyzer class.</p>
+ *
+ * @author RigorityJTeam
+ * @since V01.00
+ */
 public class BaseAnalyzer {
 
+	/**
+	 * Constant <code>CRITERIA_CLASSES</code>
+	 */
 	public static final List<String> CRITERIA_CLASSES = new ArrayList<>();
 
 	static {

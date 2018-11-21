@@ -22,16 +22,17 @@ import java.util.HashMap;
  * The class containing the implementation of the Scarf XML output.
  * <p>STATUS: IC</p>
  *
- * @author RigorityJTeam
- * @since 1.0
+ * @author franceme
+ * @since 01.03
  */
 public class ScarfXMLOutput implements OutputStructure {
 	public final Listing typeOfStructure = Listing.LegacyOutput;
 
-	/***
-	 *  The overridden method for the Scarf XML output.
-	 *
-	 * @return Object The raw stream of the xml
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * <p>
+	 * The overridden method for the Scarf XML output.
 	 */
 	public String getOutput(EnvironmentInformation source, EngineType type, ArrayList<AnalysisIssue> brokenRules, PrintStream internalWarnings) {
 		try {
@@ -102,7 +103,7 @@ public class ScarfXMLOutput implements OutputStructure {
 
 				//region Setting Bug Locations
 				BugLocationsType bugLocations = new BugLocationsType();
-				if (!issue.getLocations().isEmpty())
+				if (!issue.getLocations().isEmpty()) {
 					for (int locationKtr = 0; locationKtr < issue.getLocations().size(); locationKtr++) {
 						LocationType newLocation = new LocationType();
 						AnalysisLocation createdLoc = issue.getLocations().get(locationKtr);
@@ -118,6 +119,7 @@ public class ScarfXMLOutput implements OutputStructure {
 
 						bugLocations.getLocation().add(newLocation);
 					}
+				}
 				else {
 					LocationType newLocation = new LocationType();
 					newLocation.setSourceFile(issue.getFullPathName());
@@ -162,6 +164,12 @@ public class ScarfXMLOutput implements OutputStructure {
 		}
 	}
 
+	/**
+	 * <p>createBugSummary.</p>
+	 *
+	 * @param brokenRuleCount a {@link java.util.HashMap} object.
+	 * @return a {@link com.example.response.BugSummaryType} object.
+	 */
 	public BugSummaryType createBugSummary(HashMap<Integer, Integer> brokenRuleCount) {
 		BugSummaryType bugDict = new BugSummaryType();
 

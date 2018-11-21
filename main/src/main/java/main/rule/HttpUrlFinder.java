@@ -6,6 +6,12 @@ import main.rule.engine.Criteria;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <p>HttpUrlFinder class.</p>
+ *
+ * @author RigorityJTeam
+ * @since V01.00
+ */
 public class HttpUrlFinder extends PatternMatcherRuleChecker {
 
 	private static final List<String> HTTP_URL_PATTERN = new ArrayList<>();
@@ -48,16 +54,25 @@ public class HttpUrlFinder extends PatternMatcherRuleChecker {
 	}
 
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<Criteria> getCriteriaList() {
 		return CRITERIA_LIST;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<String> getPatternsToMatch() {
 		return HTTP_URL_PATTERN;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getRuleId() {
 		return "7";

@@ -8,6 +8,9 @@ import java.util.List;
 
 /**
  * Created by krishnokoli on 11/15/17.
+ *
+ * @author krishnokoli
+ * @since V01.00
  */
 public class PredictableSeedFinder extends PredictableSourceRuleChecker {
 
@@ -34,11 +37,17 @@ public class PredictableSeedFinder extends PredictableSourceRuleChecker {
 		CRITERIA_LIST.add(criteria4);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<Criteria> getCriteriaList() {
 		return CRITERIA_LIST;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getRuleId() {
 		return "11";

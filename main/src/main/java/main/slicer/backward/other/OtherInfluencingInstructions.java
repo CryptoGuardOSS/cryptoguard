@@ -12,10 +12,22 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * <p>OtherInfluencingInstructions class.</p>
+ *
+ * @author RigorityJTeam
+ * @since V01.00
+ */
 public class OtherInfluencingInstructions {
 
 	private OtherAnalysisResult analysisResult;
 
+	/**
+	 * <p>Constructor for OtherInfluencingInstructions.</p>
+	 *
+	 * @param method          a {@link soot.SootMethod} object.
+	 * @param slicingCriteria a {@link java.lang.String} object.
+	 */
 	public OtherInfluencingInstructions(SootMethod method, String slicingCriteria) {
 
 		Body b = method.retrieveActiveBody();
@@ -34,6 +46,11 @@ public class OtherInfluencingInstructions {
 		}
 	}
 
+	/**
+	 * <p>Getter for the field <code>analysisResult</code>.</p>
+	 *
+	 * @return a {@link main.slicer.backward.other.OtherAnalysisResult} object.
+	 */
 	public OtherAnalysisResult getAnalysisResult() {
 		return analysisResult;
 	}

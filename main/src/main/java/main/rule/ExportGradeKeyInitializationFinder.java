@@ -18,6 +18,9 @@ import java.util.Map;
 
 /**
  * Created by krishnokoli on 11/15/17.
+ *
+ * @author krishnokoli
+ * @since V01.00
  */
 public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
 
@@ -58,11 +61,17 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
 
 	private ArrayList<String> initializationCallsites;
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<Criteria> getCriteriaList() {
 		return CRITERIA_LIST;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void analyzeSlice(Analysis analysis) {
 		if (analysis.getAnalysisResult().isEmpty()) {
@@ -106,14 +115,27 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
 		}
 	}
 
+	/**
+	 * <p>Setter for the field <code>minSize</code>.</p>
+	 *
+	 * @param minSize a int.
+	 */
 	public void setMinSize(int minSize) {
 		this.minSize = minSize;
 	}
 
+	/**
+	 * <p>Setter for the field <code>initializationCallsites</code>.</p>
+	 *
+	 * @param initializationCallsites a {@link java.util.ArrayList} object.
+	 */
 	public void setInitializationCallsites(ArrayList<String> initializationCallsites) {
 		this.initializationCallsites = initializationCallsites;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void printAnalysisOutput(Map<String, String> xmlFileStr) {
 		String rule = "5";

@@ -15,6 +15,12 @@ import java.io.PrintStream;
 
 import static org.junit.Assert.*;
 
+/**
+ * <p>MessageRepresentationTest class.</p>
+ *
+ * @author RigorityJTeam
+ * @since V01.01
+ */
 public class MessageRepresentationTest {
 	//region Attributes
 	private MessageRepresentation outputEngine;

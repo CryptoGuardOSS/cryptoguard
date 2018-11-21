@@ -6,6 +6,12 @@ import main.rule.engine.Criteria;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <p>PredictableKeyStorePasswordFinder class.</p>
+ *
+ * @author RigorityJTeam
+ * @since V01.00
+ */
 public class PredictableKeyStorePasswordFinder extends PredictableSourceRuleChecker {
 
 	private static final List<Criteria> CRITERIA_LIST = new ArrayList<>();
@@ -36,11 +42,17 @@ public class PredictableKeyStorePasswordFinder extends PredictableSourceRuleChec
 		CRITERIA_LIST.add(criteria5);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getRuleId() {
 		return "14";
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<Criteria> getCriteriaList() {
 		return CRITERIA_LIST;

@@ -9,6 +9,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * <p>InsecureAssymCryptoFinder class.</p>
+ *
+ * @author RigorityJTeam
+ * @since V01.00
+ */
 public class InsecureAssymCryptoFinder implements RuleChecker {
 
 	private enum AssymType {
@@ -28,6 +34,9 @@ public class InsecureAssymCryptoFinder implements RuleChecker {
 	}
 
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath) throws IOException {
 

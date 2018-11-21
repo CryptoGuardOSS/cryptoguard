@@ -30,6 +30,12 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+/**
+ * <p>ProcessManifest class.</p>
+ *
+ * @author RigorityJTeam
+ * @since V01.00
+ */
 public class ProcessManifest {
 
 	private final Set<String> entryPointsClasses = new HashSet<String>();
@@ -88,6 +94,11 @@ public class ProcessManifest {
 		}
 	}
 
+	/**
+	 * <p>loadManifestFile.</p>
+	 *
+	 * @param apk a {@link java.lang.String} object.
+	 */
 	public void loadManifestFile(String apk) {
 		handleAndroidManifestFile(apk, new IManifestHandler() {
 
@@ -99,6 +110,11 @@ public class ProcessManifest {
 		});
 	}
 
+	/**
+	 * <p>loadClassesFromBinaryManifest.</p>
+	 *
+	 * @param manifestIS a {@link java.io.InputStream} object.
+	 */
 	protected void loadClassesFromBinaryManifest(InputStream manifestIS) {
 		try {
 			AXmlResourceParser parser = new AXmlResourceParser();
@@ -205,6 +221,11 @@ public class ProcessManifest {
 		return "";
 	}
 
+	/**
+	 * <p>loadClassesFromTextManifest.</p>
+	 *
+	 * @param manifestIS a {@link java.io.InputStream} object.
+	 */
 	protected void loadClassesFromTextManifest(InputStream manifestIS) {
 		try {
 			DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -287,42 +308,92 @@ public class ProcessManifest {
 		entryPointsClasses.add(expandClassName(className));
 	}
 
+	/**
+	 * <p>Setter for the field <code>applicationName</code>.</p>
+	 *
+	 * @param name a {@link java.lang.String} object.
+	 */
 	public void setApplicationName(String name) {
 		this.applicationName = name;
 	}
 
+	/**
+	 * <p>Setter for the field <code>packageName</code>.</p>
+	 *
+	 * @param name a {@link java.lang.String} object.
+	 */
 	public void setPackageName(String name) {
 		this.packageName = name;
 	}
 
+	/**
+	 * <p>getEntryPointClasses.</p>
+	 *
+	 * @return a {@link java.util.Set} object.
+	 */
 	public Set<String> getEntryPointClasses() {
 		return this.entryPointsClasses;
 	}
 
+	/**
+	 * <p>Getter for the field <code>applicationName</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getApplicationName() {
 		return this.applicationName;
 	}
 
+	/**
+	 * <p>Getter for the field <code>permissions</code>.</p>
+	 *
+	 * @return a {@link java.util.Set} object.
+	 */
 	public Set<String> getPermissions() {
 		return this.permissions;
 	}
 
+	/**
+	 * <p>Getter for the field <code>versionCode</code>.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getVersionCode() {
 		return this.versionCode;
 	}
 
+	/**
+	 * <p>Getter for the field <code>versionName</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getVersionName() {
 		return this.versionName;
 	}
 
+	/**
+	 * <p>Getter for the field <code>packageName</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getPackageName() {
 		return this.packageName;
 	}
 
+	/**
+	 * <p>Getter for the field <code>minSdkVersion</code>.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getMinSdkVersion() {
 		return this.minSdkVersion;
 	}
 
+	/**
+	 * <p>targetSdkVersion.</p>
+	 *
+	 * @return a int.
+	 */
 	public int targetSdkVersion() {
 		return this.targetSdkVersion;
 	}

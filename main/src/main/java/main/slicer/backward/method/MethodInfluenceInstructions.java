@@ -13,11 +13,21 @@ import java.util.List;
 
 /**
  * Created by krishnokoli on 7/1/17.
+ *
+ * @author krishnokoli
+ * @since V01.00
  */
 public class MethodInfluenceInstructions implements InfluenceInstructions {
 
 	private MethodSlicingResult methodSlicingResult;
 
+	/**
+	 * <p>Constructor for MethodInfluenceInstructions.</p>
+	 *
+	 * @param graph              a {@link soot.toolkits.graph.DirectedGraph} object.
+	 * @param methodCallSiteInfo a {@link main.slicer.backward.MethodCallSiteInfo} object.
+	 * @param slicingParams      a {@link java.util.List} object.
+	 */
 	public MethodInfluenceInstructions(DirectedGraph graph,
 									   MethodCallSiteInfo methodCallSiteInfo, List<Integer> slicingParams) {
 		MethodInstructionSlicer analysis = new MethodInstructionSlicer(graph, methodCallSiteInfo, slicingParams);
@@ -38,6 +48,11 @@ public class MethodInfluenceInstructions implements InfluenceInstructions {
 		}
 	}
 
+	/**
+	 * <p>Getter for the field <code>methodSlicingResult</code>.</p>
+	 *
+	 * @return a {@link main.slicer.backward.method.MethodSlicingResult} object.
+	 */
 	public MethodSlicingResult getMethodSlicingResult() {
 		return this.methodSlicingResult;
 	}

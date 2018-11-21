@@ -14,10 +14,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * <p>MvnPomFileParser class.</p>
+ *
+ * @author RigorityJTeam
+ * @since V01.00
+ */
 public class MvnPomFileParser implements BuildFileParser {
 
 	Map<String, String> moduleVsPath = new HashMap<>();
 
+	/**
+	 * <p>Constructor for MvnPomFileParser.</p>
+	 *
+	 * @param fileName a {@link java.lang.String} object.
+	 * @throws java.lang.Exception if any.
+	 */
 	public MvnPomFileParser(String fileName) throws Exception {
 
 		File xmlFile = new File(fileName);
@@ -43,6 +55,9 @@ public class MvnPomFileParser implements BuildFileParser {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Map<String, List<String>> getDependencyList() throws Exception {
 
@@ -93,6 +108,12 @@ public class MvnPomFileParser implements BuildFileParser {
 		}
 	}
 
+	/**
+	 * <p>main.</p>
+	 *
+	 * @param args an array of {@link java.lang.String} objects.
+	 * @throws java.lang.Exception if any.
+	 */
 	public static void main(String[] args) throws Exception {
 		MvnPomFileParser pomFileParser = new MvnPomFileParser("/home/krishnokoli/projects/mvn-sample/pom.xml");
 		System.out.println(pomFileParser.getDependencyList());

@@ -21,8 +21,21 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
+/**
+ * <p>Utils class.</p>
+ *
+ * @author RigorityJTeam
+ * @since V01.00
+ */
 public class Utils {
 
+	/**
+	 * <p>getClassNamesFromJarArchive.</p>
+	 *
+	 * @param jarPath a {@link java.lang.String} object.
+	 * @return a {@link java.util.List} object.
+	 * @throws java.io.IOException if any.
+	 */
 	public static List<String> getClassNamesFromJarArchive(String jarPath) throws IOException {
 		List<String> classNames = new ArrayList<>();
 		ZipInputStream zip = new ZipInputStream(new FileInputStream(jarPath));
@@ -35,12 +48,27 @@ public class Utils {
 		return classNames;
 	}
 
+	/**
+	 * <p>getBasePackageNameFromApk.</p>
+	 *
+	 * @param apkPath a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 * @throws java.io.IOException if any.
+	 */
 	public static String getBasePackageNameFromApk(String apkPath) throws IOException {
 		ProcessManifest processManifest = new ProcessManifest();
 		processManifest.loadManifestFile(apkPath);
 		return processManifest.getPackageName();
 	}
 
+	/**
+	 * <p>getBasePackageNameFromJar.</p>
+	 *
+	 * @param jarPath a {@link java.lang.String} object.
+	 * @param isMain  a boolean.
+	 * @return a {@link java.lang.String} object.
+	 * @throws java.io.IOException if any.
+	 */
 	public static String getBasePackageNameFromJar(String jarPath, boolean isMain) throws IOException {
 
 		ZipInputStream zip = new ZipInputStream(new FileInputStream(jarPath));
@@ -99,6 +127,13 @@ public class Utils {
 
 	}
 
+	/**
+	 * <p>getClassNamesFromApkArchive.</p>
+	 *
+	 * @param apkfile a {@link java.lang.String} object.
+	 * @return a {@link java.util.List} object.
+	 * @throws java.io.IOException if any.
+	 */
 	public static List<String> getClassNamesFromApkArchive(String apkfile) throws IOException {
 		List<String> classNames = new ArrayList<>();
 
@@ -116,10 +151,22 @@ public class Utils {
 		return classNames;
 	}
 
+	/**
+	 * <p>buildSootClassPath.</p>
+	 *
+	 * @param paths a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String buildSootClassPath(String... paths) {
 		return buildSootClassPath(Arrays.asList(paths));
 	}
 
+	/**
+	 * <p>buildSootClassPath.</p>
+	 *
+	 * @param paths a {@link java.util.List} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String buildSootClassPath(List<String> paths) {
 
 		StringBuilder classPath = new StringBuilder();
@@ -153,6 +200,12 @@ public class Utils {
 		return classPath.toString();
 	}
 
+	/**
+	 * <p>getJarsInDirectory.</p>
+	 *
+	 * @param path a {@link java.lang.String} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	public static List<String> getJarsInDirectory(String path) {
 
 		List<String> jarFiles = new ArrayList<>();
@@ -175,6 +228,12 @@ public class Utils {
 		return jarFiles;
 	}
 
+	/**
+	 * <p>getClassHierarchyAnalysis.</p>
+	 *
+	 * @param classNames a {@link java.util.List} object.
+	 * @return a {@link java.util.Map} object.
+	 */
 	public static Map<String, List<SootClass>> getClassHierarchyAnalysis(List<String> classNames) {
 
 		Map<String, List<SootClass>> classHierarchyMap = new HashMap<>();
@@ -218,6 +277,14 @@ public class Utils {
 		return classHierarchyMap;
 	}
 
+	/**
+	 * <p>getXmlFiles.</p>
+	 *
+	 * @param projectJarPath a {@link java.lang.String} object.
+	 * @param excludes       a {@link java.util.List} object.
+	 * @return a {@link java.util.Map} object.
+	 * @throws java.io.IOException if any.
+	 */
 	public static Map<String, String> getXmlFiles(String projectJarPath, List<String> excludes) throws IOException {
 		Map<String, String> fileStrs = new HashMap<>();
 
@@ -260,6 +327,12 @@ public class Utils {
 		return s.hasNext() ? s.next() : "";
 	}
 
+	/**
+	 * <p>findInfluencingParamters.</p>
+	 *
+	 * @param analysisResult a {@link java.util.List} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	public static List<Integer> findInfluencingParamters(List<UnitContainer> analysisResult) {
 		List<Integer> influencingParam = new ArrayList<>();
 
@@ -278,11 +351,24 @@ public class Utils {
 		return influencingParam;
 	}
 
+	/**
+	 * <p>isSpecialInvokeOn.</p>
+	 *
+	 * @param currInstruction a {@link soot.Unit} object.
+	 * @param usebox          a {@link java.lang.String} object.
+	 * @return a boolean.
+	 */
 	public static boolean isSpecialInvokeOn(Unit currInstruction, String usebox) {
 		return currInstruction.toString().contains("specialinvoke")
 				&& currInstruction.toString().contains(usebox + ".<");
 	}
 
+	/**
+	 * <p>listf.</p>
+	 *
+	 * @param directoryName a {@link java.lang.String} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	public static List<File> listf(String directoryName) {
 		File directory = new File(directoryName);
 
@@ -301,6 +387,12 @@ public class Utils {
 		return resultList;
 	}
 
+	/**
+	 * <p>getClassNamesFromSnippet.</p>
+	 *
+	 * @param sourcePaths a {@link java.util.List} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	public static List<String> getClassNamesFromSnippet(List<String> sourcePaths) {
 
 		List<String> classNames = new ArrayList<>();

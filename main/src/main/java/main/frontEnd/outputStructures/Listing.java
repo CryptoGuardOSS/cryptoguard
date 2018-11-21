@@ -4,13 +4,15 @@ import main.frontEnd.OutputStructure;
 
 /**
  * The enum containing all of the different messaging types available for the user.
+ *
+ * @author franceme
+ * @since V01.00
  */
 public enum Listing {
 	//region Different Values
 	LegacyOutput("LegacyOutput", "L"),
 	ScarfXMLOutput("ScarfXMLOutput", "SX");
 	//endregion
-
 	//region Attributes
 	private String type;
 	private String flag;
@@ -31,6 +33,10 @@ public enum Listing {
 	//endregion
 
 	//region Overridden Methods
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String toString() {
 		return "{ \"type\": \"" + this.type + "\", \"flag\": \"" + this.flag + "\"}";

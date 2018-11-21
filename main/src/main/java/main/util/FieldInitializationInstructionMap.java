@@ -13,16 +13,30 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * <p>FieldInitializationInstructionMap class.</p>
+ *
+ * @author RigorityJTeam
+ * @since V01.00
+ */
 public class FieldInitializationInstructionMap {
 
 	private static Map<String, List<PropertyAnalysisResult>> initializationInstructions = null;
 	private static Map<String, List<MethodWrapper>> fieldVsMethodWrapper = null;
 
+	/**
+	 * <p>reset.</p>
+	 */
 	public static void reset() {
 		initializationInstructions = null;
 		fieldVsMethodWrapper = null;
 	}
 
+	/**
+	 * <p>build.</p>
+	 *
+	 * @param classNames a {@link java.util.List} object.
+	 */
 	public static void build(List<String> classNames) {
 
 		if (fieldVsMethodWrapper == null) {
@@ -73,6 +87,12 @@ public class FieldInitializationInstructionMap {
 		}
 	}
 
+	/**
+	 * <p>getInitInstructions.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	public static List<PropertyAnalysisResult> getInitInstructions(String fieldName) {
 
 		if (fieldVsMethodWrapper == null) {

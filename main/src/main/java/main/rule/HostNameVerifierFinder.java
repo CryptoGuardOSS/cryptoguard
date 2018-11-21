@@ -16,12 +16,21 @@ import java.util.*;
 
 import static main.util.Utils.getClassNamesFromApkArchive;
 
+/**
+ * <p>HostNameVerifierFinder class.</p>
+ *
+ * @author RigorityJTeam
+ * @since V01.00
+ */
 public class HostNameVerifierFinder implements RuleChecker {
 
 	private static final String HOST_NAME_VERIFIER = "HostnameVerifier";
 	private static final String METHOD_TO_SLICE = "boolean verify(java.lang.String,javax.net.ssl.SSLSession)";
 	private static final String SLICING_INSTRUCTION = "return";
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath) throws IOException {
 

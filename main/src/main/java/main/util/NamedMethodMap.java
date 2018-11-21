@@ -11,12 +11,23 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * <p>NamedMethodMap class.</p>
+ *
+ * @author RigorityJTeam
+ * @since V01.00
+ */
 public class NamedMethodMap {
 
 	private static Map<String, MethodWrapper> nameVsMethodMap = null;
 
 	private static boolean isCallerCalleeBuilt = false;
 
+	/**
+	 * <p>build.</p>
+	 *
+	 * @param classNames a {@link java.util.List} object.
+	 */
 	public static void build(List<String> classNames) {
 
 		if (nameVsMethodMap == null) {
@@ -31,11 +42,19 @@ public class NamedMethodMap {
 		}
 	}
 
+	/**
+	 * <p>clearCallerCalleeGraph.</p>
+	 */
 	public static void clearCallerCalleeGraph() {
 		nameVsMethodMap = null;
 		isCallerCalleeBuilt = false;
 	}
 
+	/**
+	 * <p>addCriteriaClass.</p>
+	 *
+	 * @param className a {@link java.lang.String} object.
+	 */
 	public static void addCriteriaClass(String className) {
 
 		SootClass sClass = Scene.v().getSootClass(className);
@@ -46,12 +65,23 @@ public class NamedMethodMap {
 		fillMethodMapForClass(sClass);
 	}
 
+	/**
+	 * <p>addCriteriaClasses.</p>
+	 *
+	 * @param classNames a {@link java.util.List} object.
+	 */
 	public static void addCriteriaClasses(List<String> classNames) {
 		for (String clazz : classNames) {
 			addCriteriaClass(clazz);
 		}
 	}
 
+	/**
+	 * <p>getMethod.</p>
+	 *
+	 * @param methodName a {@link java.lang.String} object.
+	 * @return a {@link main.analyzer.backward.MethodWrapper} object.
+	 */
 	public static MethodWrapper getMethod(String methodName) {
 
 		if (nameVsMethodMap == null) {
@@ -71,6 +101,11 @@ public class NamedMethodMap {
 		}
 	}
 
+	/**
+	 * <p>buildCallerCalleeRelation.</p>
+	 *
+	 * @param classNames a {@link java.util.List} object.
+	 */
 	public static void buildCallerCalleeRelation(List<String> classNames) {
 
 		if (isCallerCalleeBuilt) {

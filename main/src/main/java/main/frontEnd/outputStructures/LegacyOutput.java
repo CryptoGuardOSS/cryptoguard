@@ -19,18 +19,18 @@ import java.util.stream.Collectors;
  * The class containing the implementation of the legacy output.
  * <p>STATUS: IC</p>
  *
- * @author RigorityJTeam
- * @since 1.0
+ * @author franceme
+ * @since 01.01
  */
 public class LegacyOutput implements OutputStructure {
 	public final Listing typeOfStructure = Listing.LegacyOutput;
 
 
-	/***
-	 *  The overridden method for the Legacy output. Currently mimics the output as best seen.
-	 *
-	 * @return Object nothing is returned in legacy as legacy only prints
-	 * information out to the console
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * <p>
+	 * The overridden method for the Legacy output. Currently mimics the output as best seen.
 	 */
 	public String getOutput(EnvironmentInformation source, EngineType type, ArrayList<AnalysisIssue> brokenRules, PrintStream internalWarnings) {
 		StringBuilder output = new StringBuilder();

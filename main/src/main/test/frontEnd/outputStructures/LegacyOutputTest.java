@@ -14,7 +14,12 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 
-
+/**
+ * <p>MessageRepresentationTest class.</p>
+ *
+ * @author RigorityJTeam
+ * @since 01.01
+ */
 public class LegacyOutputTest {
 
 	//region Attributes

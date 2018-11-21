@@ -13,10 +13,22 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * <p>PropertyInfluencingInstructions class.</p>
+ *
+ * @author RigorityJTeam
+ * @since V01.00
+ */
 public class PropertyInfluencingInstructions {
 
 	private PropertyAnalysisResult slicingResult;
 
+	/**
+	 * <p>Constructor for PropertyInfluencingInstructions.</p>
+	 *
+	 * @param initMethod      a {@link main.analyzer.backward.MethodWrapper} object.
+	 * @param slicingCriteria a {@link java.lang.String} object.
+	 */
 	public PropertyInfluencingInstructions(MethodWrapper initMethod, String slicingCriteria) {
 
 		Body initBody = initMethod.getMethod().retrieveActiveBody();
@@ -39,6 +51,11 @@ public class PropertyInfluencingInstructions {
 		}
 	}
 
+	/**
+	 * <p>Getter for the field <code>slicingResult</code>.</p>
+	 *
+	 * @return a {@link main.slicer.backward.property.PropertyAnalysisResult} object.
+	 */
 	public PropertyAnalysisResult getSlicingResult() {
 		return this.slicingResult;
 	}

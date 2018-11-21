@@ -13,8 +13,8 @@ import java.util.Queue;
  * The interface for the different types of output used for the library.
  * <p>STATUS: IC</p>
  *
- * @author RigorityJTeam
- * @since 1.0
+ * @author franceme
+ * @since 01.01
  */
 public class MessageRepresentation {
 
@@ -34,6 +34,7 @@ public class MessageRepresentation {
 	 * Also creates a buffer to rewrite the system out internally.
 	 *
 	 * @param type                     the type of engine to be used for the processing
+	 * @param typeOfMessagingStructure the flag used to determine the type of messaging structure to be used
 	 * @param source                   the name of the source being examined
 	 * @param typeOfMessagingStructure the flag used to determine the type of messaging structure to be used
 	 */
@@ -76,11 +77,21 @@ public class MessageRepresentation {
 		return new ArrayList<>(analysisIssues);
 	}
 
+	/**
+	 * <p>Getter for the field <code>messageEngine</code>.</p>
+	 *
+	 * @return a {@link main.frontEnd.OutputStructure} object.
+	 */
 	public OutputStructure getMessageEngine() {
 		return messageEngine;
 	}
 
 
+	/**
+	 * <p>addAnalysis.</p>
+	 *
+	 * @param issue a {@link main.frontEnd.AnalysisIssue} object.
+	 */
 	public void addAnalysis(AnalysisIssue issue) {
 		this.analysisIssues.add(issue);
 	}

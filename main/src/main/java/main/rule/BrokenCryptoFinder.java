@@ -6,6 +6,12 @@ import main.rule.engine.Criteria;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <p>BrokenCryptoFinder class.</p>
+ *
+ * @author RigorityJTeam
+ * @since V01.00
+ */
 public class BrokenCryptoFinder extends PatternMatcherRuleChecker {
 
 	private static final List<String> BROKEN_CRYPTO = new ArrayList<>();
@@ -45,16 +51,25 @@ public class BrokenCryptoFinder extends PatternMatcherRuleChecker {
 		CRITERIA_LIST.add(criteria3);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<Criteria> getCriteriaList() {
 		return CRITERIA_LIST;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<String> getPatternsToMatch() {
 		return BROKEN_CRYPTO;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getRuleId() {
 		return "1";

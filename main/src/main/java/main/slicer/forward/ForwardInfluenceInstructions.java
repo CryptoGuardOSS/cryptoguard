@@ -9,11 +9,20 @@ import java.util.List;
 
 /**
  * Created by krishnokoli on 7/1/17.
+ *
+ * @author krishnokoli
+ * @since V01.00
  */
 public class ForwardInfluenceInstructions implements InfluenceInstructions {
 
 	private SlicingResult slicingResult;
 
+	/**
+	 * <p>Constructor for ForwardInfluenceInstructions.</p>
+	 *
+	 * @param graph           a {@link soot.toolkits.graph.DirectedGraph} object.
+	 * @param slicingCriteria a {@link main.slicer.forward.SlicingCriteria} object.
+	 */
 	public ForwardInfluenceInstructions(DirectedGraph graph,
 										SlicingCriteria slicingCriteria) {
 		ForwardProgramSlicing analysis = new ForwardProgramSlicing(graph, slicingCriteria);
@@ -31,6 +40,9 @@ public class ForwardInfluenceInstructions implements InfluenceInstructions {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public SlicingResult getSlicingResult() {
 		return this.slicingResult;

@@ -18,11 +18,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * <p>GradleBuildFileParser class.</p>
+ *
+ * @author RigorityJTeam
+ * @since V01.00
+ */
 public class GradleBuildFileParser implements BuildFileParser {
 
 
 	Map<String, String> moduleVsPath = new HashMap<>();
 
+	/**
+	 * <p>Constructor for GradleBuildFileParser.</p>
+	 *
+	 * @param fileName a {@link java.lang.String} object.
+	 * @throws java.lang.Exception if any.
+	 */
 	public GradleBuildFileParser(String fileName) throws Exception {
 
 		final String content = new String(Files.readAllBytes(Paths.get(fileName)), "UTF-8");
@@ -56,6 +68,9 @@ public class GradleBuildFileParser implements BuildFileParser {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Map<String, List<String>> getDependencyList() throws Exception {
 
@@ -118,6 +133,12 @@ public class GradleBuildFileParser implements BuildFileParser {
 		}
 	}
 
+	/**
+	 * <p>main.</p>
+	 *
+	 * @param args an array of {@link java.lang.String} objects.
+	 * @throws java.lang.Exception if any.
+	 */
 	public static void main(String[] args) throws Exception {
 
 		GradleBuildFileParser buildFileParser = new GradleBuildFileParser("/home/krishnokoli/projects/gradle-sample/settings.gradle");

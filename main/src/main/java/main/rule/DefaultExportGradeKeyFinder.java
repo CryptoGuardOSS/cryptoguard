@@ -16,6 +16,12 @@ import java.util.*;
 
 import static main.util.Utils.getClassNamesFromApkArchive;
 
+/**
+ * <p>DefaultExportGradeKeyFinder class.</p>
+ *
+ * @author RigorityJTeam
+ * @since V01.00
+ */
 public class DefaultExportGradeKeyFinder implements RuleChecker {
 
 	private static final List<String> SLICING_CRITERIA = new ArrayList<>();
@@ -34,6 +40,9 @@ public class DefaultExportGradeKeyFinder implements RuleChecker {
 
 	private ArrayList<String> initializeCallsites = new ArrayList<>();
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath) throws IOException {
 
@@ -88,14 +97,29 @@ public class DefaultExportGradeKeyFinder implements RuleChecker {
 
 	}
 
+	/**
+	 * <p>Setter for the field <code>methodsToLook</code>.</p>
+	 *
+	 * @param methodsToLook a {@link java.util.ArrayList} object.
+	 */
 	public void setMethodsToLook(ArrayList<String> methodsToLook) {
 		this.methodsToLook = methodsToLook;
 	}
 
+	/**
+	 * <p>getInitializationCallsites.</p>
+	 *
+	 * @return a {@link java.util.ArrayList} object.
+	 */
 	public ArrayList<String> getInitializationCallsites() {
 		return this.initializeCallsites;
 	}
 
+	/**
+	 * <p>Setter for the field <code>defaultSecure</code>.</p>
+	 *
+	 * @param defaultSecure a boolean.
+	 */
 	public void setDefaultSecure(boolean defaultSecure) {
 		this.defaultSecure = defaultSecure;
 	}
@@ -214,6 +238,13 @@ public class DefaultExportGradeKeyFinder implements RuleChecker {
 		return analysisListMap;
 	}
 
+	/**
+	 * <p>getInfluencingInstructions.</p>
+	 *
+	 * @param slicingCriteria a {@link main.slicer.forward.SlicingCriteria} object.
+	 * @param m               a {@link soot.SootMethod} object.
+	 * @return a {@link main.slicer.forward.SlicingResult} object.
+	 */
 	public static SlicingResult getInfluencingInstructions(SlicingCriteria slicingCriteria,
 														   SootMethod m) {
 		if (m.isConcrete()) {

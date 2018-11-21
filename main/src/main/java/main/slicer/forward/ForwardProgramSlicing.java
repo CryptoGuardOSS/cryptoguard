@@ -15,11 +15,23 @@ import soot.toolkits.scalar.ForwardFlowAnalysis;
 
 import java.util.List;
 
+/**
+ * <p>ForwardProgramSlicing class.</p>
+ *
+ * @author RigorityJTeam
+ * @since V01.00
+ */
 public class ForwardProgramSlicing extends ForwardFlowAnalysis {
 
 	private FlowSet emptySet;
 	private MethodCallSiteInfo methodCallSiteInfo;
 
+	/**
+	 * <p>Constructor for ForwardProgramSlicing.</p>
+	 *
+	 * @param g               a {@link soot.toolkits.graph.DirectedGraph} object.
+	 * @param slicingCriteria a {@link main.slicer.forward.SlicingCriteria} object.
+	 */
 	public ForwardProgramSlicing(DirectedGraph g,
 								 SlicingCriteria slicingCriteria) {
 		super(g);
@@ -29,6 +41,9 @@ public class ForwardProgramSlicing extends ForwardFlowAnalysis {
 		doAnalysis();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void flowThrough(Object in, Object node, Object out) {
 		FlowSet inSet = (FlowSet) in,
@@ -72,16 +87,25 @@ public class ForwardProgramSlicing extends ForwardFlowAnalysis {
 
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected Object newInitialFlow() {
 		return emptySet.clone();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected Object entryInitialFlow() {
 		return emptySet.clone();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void merge(Object in1, Object in2, Object out) {
 		FlowSet inSet1 = (FlowSet) in1,
@@ -91,6 +115,9 @@ public class ForwardProgramSlicing extends ForwardFlowAnalysis {
 		inSet1.union(inSet2, outSet);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void copy(Object source, Object dest) {
 		FlowSet srcSet = (FlowSet) source,
@@ -98,6 +125,11 @@ public class ForwardProgramSlicing extends ForwardFlowAnalysis {
 		srcSet.copy(destSet);
 	}
 
+	/**
+	 * <p>Getter for the field <code>methodCallSiteInfo</code>.</p>
+	 *
+	 * @return a {@link main.slicer.forward.MethodCallSiteInfo} object.
+	 */
 	public MethodCallSiteInfo getMethodCallSiteInfo() {
 		return methodCallSiteInfo;
 	}

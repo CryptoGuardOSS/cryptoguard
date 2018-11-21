@@ -6,6 +6,12 @@ import main.rule.engine.Criteria;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <p>PredictableIVFinder class.</p>
+ *
+ * @author RigorityJTeam
+ * @since V01.00
+ */
 public class PredictableIVFinder extends PredictableSourceRuleChecker {
 
 	private static final List<Criteria> CRITERIA_LIST = new ArrayList<>();
@@ -25,11 +31,17 @@ public class PredictableIVFinder extends PredictableSourceRuleChecker {
 		CRITERIA_LIST.add(criteria4);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<Criteria> getCriteriaList() {
 		return CRITERIA_LIST;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getRuleId() {
 		return "10";

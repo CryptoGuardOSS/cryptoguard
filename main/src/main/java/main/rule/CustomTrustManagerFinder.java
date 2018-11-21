@@ -20,6 +20,12 @@ import java.util.*;
 
 import static main.util.Utils.getClassNamesFromApkArchive;
 
+/**
+ * <p>CustomTrustManagerFinder class.</p>
+ *
+ * @author RigorityJTeam
+ * @since V01.00
+ */
 public class CustomTrustManagerFinder implements RuleChecker {
 
 	private static final String TRUST_MANAGER = "TrustManager";
@@ -33,6 +39,9 @@ public class CustomTrustManagerFinder implements RuleChecker {
 		METHOD_VS_SLICING_CRITERIA.put("java.security.cert.X509Certificate[] getAcceptedIssuers()", "return");
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath) throws IOException {
 
