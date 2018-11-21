@@ -121,6 +121,7 @@ public class ScarfXMLOutput implements OutputStructure {
 				else {
 					LocationType newLocation = new LocationType();
 					newLocation.setSourceFile(issue.getFullPathName());
+					newLocation.setPrimary(true);
 					bugLocations.getLocation().add(newLocation);
 				}
 				instance.setBugLocations(bugLocations);
