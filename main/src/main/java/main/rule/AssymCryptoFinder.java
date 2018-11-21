@@ -15,7 +15,7 @@ import java.util.Map;
  * <p>AssymCryptoFinder class.</p>
  *
  * @author RigorityJTeam
- * @since V01.00
+ * @since V01.00.00
  */
 public class AssymCryptoFinder extends BaseRuleChecker {
 

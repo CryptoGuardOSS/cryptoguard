@@ -4,7 +4,7 @@ package main.analyzer.backward;
  * <p>PropertyFakeUnitContainer class.</p>
  *
  * @author RigorityJTeam
- * @since V01.00
+ * @since V01.00.00
  */
 public class PropertyFakeUnitContainer extends UnitContainer {
 

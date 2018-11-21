@@ -7,7 +7,7 @@ import java.util.Map;
  * <p>BuildFileParser interface.</p>
  *
  * @author RigorityJTeam
- * @since V01.00
+ * @since V01.00.00
  */
 public interface BuildFileParser {
 

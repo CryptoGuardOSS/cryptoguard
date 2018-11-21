@@ -17,7 +17,7 @@ import java.util.*;
  * This file checks on several of the main factors within the outputed Jimple format.
  *
  * @author RigorityJTeam
- * @since 01.00
+ * @since V01.00.00
  */
 public abstract class BaseRuleChecker implements RuleChecker {
 

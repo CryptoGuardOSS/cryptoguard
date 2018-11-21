@@ -10,7 +10,7 @@ import java.util.List;
  * <p>PredictableIVFinder class.</p>
  *
  * @author RigorityJTeam
- * @since V01.00
+ * @since V01.00.00
  */
 public class PredictableIVFinder extends PredictableSourceRuleChecker {
 

@@ -13,7 +13,7 @@ import java.util.Map;
  * passes them to the entry point of the program for processing.
  *
  * @author RigorityJTeam
- * @since 01.00
+ * @since V01.00.00
  */
 public class RuleEngine {
 	private static List<RuleChecker> ruleCheckerList = new ArrayList<>();

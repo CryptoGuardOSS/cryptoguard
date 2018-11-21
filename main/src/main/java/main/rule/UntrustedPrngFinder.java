@@ -17,7 +17,7 @@ import static main.util.Utils.getClassNamesFromApkArchive;
  * <p>UntrustedPrngFinder class.</p>
  *
  * @author RigorityJTeam
- * @since V01.00
+ * @since V01.00.00
  */
 public class UntrustedPrngFinder implements RuleChecker {
 

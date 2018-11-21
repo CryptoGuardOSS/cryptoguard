@@ -22,7 +22,7 @@ import static main.util.Utils.getClassNamesFromApkArchive;
  * <p>SSLSocketFactoryFinder class.</p>
  *
  * @author RigorityJTeam
- * @since V01.00
+ * @since V01.00.00
  */
 public class SSLSocketFactoryFinder implements RuleChecker {
 

@@ -6,7 +6,7 @@ import main.frontEnd.OutputStructure;
  * The enum containing all of the different messaging types available for the user.
  *
  * @author franceme
- * @since V01.00
+ * @since V01.00.00
  */
 public enum Listing {
 	//region Different Values

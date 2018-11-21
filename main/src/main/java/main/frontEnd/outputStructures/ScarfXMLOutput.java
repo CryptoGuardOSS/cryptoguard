@@ -23,7 +23,7 @@ import java.util.HashMap;
  * <p>STATUS: IC</p>
  *
  * @author franceme
- * @since 01.03
+ * @since V01.00.03
  */
 public class ScarfXMLOutput implements OutputStructure {
 	public final Listing typeOfStructure = Listing.LegacyOutput;

@@ -6,7 +6,7 @@ import java.util.List;
  * <p>Analysis class.</p>
  *
  * @author RigorityJTeam
- * @since V01.00
+ * @since V01.00.00
  */
 public class Analysis {
 	private String methodChain;

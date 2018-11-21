@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * This will be implemented by the different type of messaging structures
  *
  * @author franceme
- * @since V01.00
+ * @since V01.00.00
  */
 public interface OutputStructure {
 	/**

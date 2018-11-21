@@ -20,7 +20,7 @@ import static main.util.Utils.getClassNamesFromApkArchive;
  * <p>DefaultExportGradeKeyFinder class.</p>
  *
  * @author RigorityJTeam
- * @since V01.00
+ * @since V01.00.00
  */
 public class DefaultExportGradeKeyFinder implements RuleChecker {
 

@@ -18,7 +18,7 @@ import java.util.Map;
  * <p>MvnPomFileParser class.</p>
  *
  * @author RigorityJTeam
- * @since V01.00
+ * @since V01.00.00
  */
 public class MvnPomFileParser implements BuildFileParser {
 

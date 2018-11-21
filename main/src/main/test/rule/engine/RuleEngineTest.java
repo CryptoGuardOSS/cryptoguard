@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
  * <p>MessageRepresentationTest class.</p>
  *
  * @author RigorityJTeam
- * @since 01.02
+ * @since V01.00.02
  */
 public class RuleEngineTest {
 	//region Attributes

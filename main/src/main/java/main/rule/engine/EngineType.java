@@ -12,7 +12,7 @@ import java.util.List;
  * </ul>
  *
  * @author RigorityJTeam
- * @since 01.00
+ * @since V01.00.00
  */
 public enum EngineType {
 	//region Values

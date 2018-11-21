@@ -4,7 +4,7 @@ package main.frontEnd;
  * <p>AnalysisLocation class.</p>
  *
  * @author franceme
- * @since V01.00
+ * @since V01.00.00
  */
 public class AnalysisLocation {
 

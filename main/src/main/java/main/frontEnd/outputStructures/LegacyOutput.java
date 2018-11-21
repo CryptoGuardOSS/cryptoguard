@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  * <p>STATUS: IC</p>
  *
  * @author franceme
- * @since 01.01
+ * @since V01.00.01
  */
 public class LegacyOutput implements OutputStructure {
 	public final Listing typeOfStructure = Listing.LegacyOutput;

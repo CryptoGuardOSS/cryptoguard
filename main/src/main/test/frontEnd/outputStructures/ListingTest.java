@@ -16,7 +16,7 @@ import static org.junit.Assert.assertTrue;
  * <p>MessageRepresentationTest class.</p>
  *
  * @author RigorityJTeam
- * @since 01.02
+ * @since V01.00.02
  */
 public class ListingTest {
 	//region Test Attributes

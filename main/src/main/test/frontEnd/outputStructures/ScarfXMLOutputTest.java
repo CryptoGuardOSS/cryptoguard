@@ -38,7 +38,7 @@ import static org.junit.Assert.assertNull;
  * <p>MessageRepresentationTest class.</p>
  *
  * @author RigorityJTeam
- * @since 01.03
+ * @since V01.00.03
  */
 public class ScarfXMLOutputTest {
 

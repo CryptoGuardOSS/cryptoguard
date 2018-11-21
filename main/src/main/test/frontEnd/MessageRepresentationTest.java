@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
  * <p>MessageRepresentationTest class.</p>
  *
  * @author RigorityJTeam
- * @since V01.01
+ * @since V01.00.01
  */
 public class MessageRepresentationTest {
 	//region Attributes

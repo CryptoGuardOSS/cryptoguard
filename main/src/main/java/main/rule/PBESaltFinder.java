@@ -10,7 +10,7 @@ import java.util.List;
  * https://www.javamex.com/tutorials/cryptography/pbe_salt.shtml
  *
  * @author RigorityJTeam
- * @since V01.00
+ * @since V01.00.00
  */
 public class PBESaltFinder extends PredictableSourceRuleChecker {
 

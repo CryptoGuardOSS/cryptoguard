@@ -20,7 +20,7 @@ import java.util.Random;
  * <p>STATUS: IC</p>
  *
  * @author franceme
- * @since 01.04
+ * @since V01.00.04
  */
 public class EnvironmentInformation {
 

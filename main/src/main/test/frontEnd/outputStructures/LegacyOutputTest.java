@@ -18,7 +18,7 @@ import static org.junit.Assert.assertEquals;
  * <p>MessageRepresentationTest class.</p>
  *
  * @author RigorityJTeam
- * @since 01.01
+ * @since V01.00.01
  */
 public class LegacyOutputTest {
 

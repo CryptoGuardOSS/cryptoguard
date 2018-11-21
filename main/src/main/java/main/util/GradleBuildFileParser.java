@@ -22,7 +22,7 @@ import java.util.Map;
  * <p>GradleBuildFileParser class.</p>
  *
  * @author RigorityJTeam
- * @since V01.00
+ * @since V01.00.00
  */
 public class GradleBuildFileParser implements BuildFileParser {
 

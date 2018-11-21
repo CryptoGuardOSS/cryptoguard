@@ -25,7 +25,7 @@ import java.util.zip.ZipInputStream;
  * <p>Utils class.</p>
  *
  * @author RigorityJTeam
- * @since V01.00
+ * @since V01.00.00
  */
 public class Utils {
 

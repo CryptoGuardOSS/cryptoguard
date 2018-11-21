@@ -7,7 +7,7 @@ import java.util.List;
  * The interface of the RuleChecker class. Used to generate the structure of the various rules being checked.
  *
  * @author RigorityJTeam
- * @since 01.00
+ * @since V01.00.00
  */
 public interface RuleChecker {
 
