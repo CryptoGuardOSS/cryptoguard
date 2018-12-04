@@ -24,155 +24,153 @@ import java.util.Map;
  */
 public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
 
-	private static final List<Criteria> CRITERIA_LIST = new ArrayList<>();
+    private static final List<Criteria> CRITERIA_LIST = new ArrayList<>();
 
-	static {
+    static {
 
-		Criteria criteria2 = new Criteria();
-		criteria2.setClassName("java.security.KeyPairGenerator");
-		criteria2.setMethodName("void initialize(int)");
-		criteria2.setParam(0);
-		CRITERIA_LIST.add(criteria2);
+        Criteria criteria2 = new Criteria();
+        criteria2.setClassName("java.security.KeyPairGenerator");
+        criteria2.setMethodName("void initialize(int)");
+        criteria2.setParam(0);
+        CRITERIA_LIST.add(criteria2);
 
-		Criteria criteria3 = new Criteria();
-		criteria3.setClassName("java.security.KeyPairGenerator");
-		criteria3.setMethodName("void initialize(int,java.security.SecureRandom)");
-		criteria3.setParam(0);
-		CRITERIA_LIST.add(criteria3);
+        Criteria criteria3 = new Criteria();
+        criteria3.setClassName("java.security.KeyPairGenerator");
+        criteria3.setMethodName("void initialize(int,java.security.SecureRandom)");
+        criteria3.setParam(0);
+        CRITERIA_LIST.add(criteria3);
 
-		Criteria criteria4 = new Criteria();
-		criteria4.setClassName("java.security.KeyPairGenerator");
-		criteria4.setMethodName("void initialize(java.security.spec.AlgorithmParameterSpec)");
-		criteria4.setParam(0);
-		CRITERIA_LIST.add(criteria4);
+        Criteria criteria4 = new Criteria();
+        criteria4.setClassName("java.security.KeyPairGenerator");
+        criteria4.setMethodName("void initialize(java.security.spec.AlgorithmParameterSpec)");
+        criteria4.setParam(0);
+        CRITERIA_LIST.add(criteria4);
 
-		Criteria criteria5 = new Criteria();
-		criteria5.setClassName("java.security.KeyPairGenerator");
-		criteria5.setMethodName("void initialize(java.security.spec.AlgorithmParameterSpec,java.security.SecureRandom)");
-		criteria5.setParam(0);
-		CRITERIA_LIST.add(criteria5);
+        Criteria criteria5 = new Criteria();
+        criteria5.setClassName("java.security.KeyPairGenerator");
+        criteria5.setMethodName("void initialize(java.security.spec.AlgorithmParameterSpec,java.security.SecureRandom)");
+        criteria5.setParam(0);
+        CRITERIA_LIST.add(criteria5);
 
-	}
+    }
 
-	private Map<UnitContainer, List<String>> predictableSourcMap = new HashMap<>();
-	private Map<UnitContainer, List<String>> othersSourceMap = new HashMap<>();
+    private Map<UnitContainer, List<String>> predictableSourcMap = new HashMap<>();
+    private Map<UnitContainer, List<String>> othersSourceMap = new HashMap<>();
 
-	private int minSize;
+    private int minSize;
 
-	private ArrayList<String> initializationCallsites;
+    private ArrayList<String> initializationCallsites;
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<Criteria> getCriteriaList() {
-		return CRITERIA_LIST;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Criteria> getCriteriaList() {
+        return CRITERIA_LIST;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void analyzeSlice(Analysis analysis) {
-		if (analysis.getAnalysisResult().isEmpty()) {
-			return;
-		}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void analyzeSlice(Analysis analysis) {
+        if (analysis.getAnalysisResult().isEmpty()) {
+            return;
+        }
 
-		String[] splits = analysis.getMethodChain().split("--->");
-		String keyInitializationSite = splits[splits.length - 2];
+        String[] splits = analysis.getMethodChain().split("--->");
+        String keyInitializationSite = splits[splits.length - 2];
 
-		if (!initializationCallsites.toString().contains(keyInitializationSite)) {
-			return;
-		}
+        if (!initializationCallsites.toString().contains(keyInitializationSite)) {
+            return;
+        }
 
-		for (int index = 0; index < analysis.getAnalysisResult().size(); index++) {
-			UnitContainer e = analysis.getAnalysisResult().get(index);
+        for (int index = 0; index < analysis.getAnalysisResult().size(); index++) {
+            UnitContainer e = analysis.getAnalysisResult().get(index);
 
-			for (ValueBox usebox : e.getUnit().getUseBoxes()) {
-				if (usebox.getValue() instanceof Constant) {
-					if (e.getUnit() instanceof AssignStmt && usebox.getValue().getType() instanceof IntegerType) {
+            for (ValueBox usebox : e.getUnit().getUseBoxes()) {
+                if (usebox.getValue() instanceof Constant) {
+                    if (e.getUnit() instanceof AssignStmt && usebox.getValue().getType() instanceof IntegerType) {
 
-						int value = Integer.valueOf(usebox.getValue().toString());
+                        int value = Integer.valueOf(usebox.getValue().toString());
 
-						if (usebox instanceof RValueBox && value != 0 && value % 2 == 0 && value < minSize) {
+                        if (usebox instanceof RValueBox && value != 0 && value % 2 == 0 && value < minSize) {
 
-							List<UnitContainer> outSet = new ArrayList<>();
-							outSet.add(e);
+                            List<UnitContainer> outSet = new ArrayList<>();
+                            outSet.add(e);
 
-							if (MajorHeuristics.isArgumentOfInvoke(analysis, index, outSet)) {
-								putIntoMap(othersSourceMap, e, usebox.getValue().toString());
-							}
-							else if (MajorHeuristics.isArgumentOfByteArrayCreation(analysis, index, outSet)) {
-								putIntoMap(othersSourceMap, e, e.getUnit().toString());
-							}
-							else {
-								putIntoMap(predictableSourcMap, e, usebox.getValue().toString());
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+                            if (MajorHeuristics.isArgumentOfInvoke(analysis, index, outSet)) {
+                                putIntoMap(othersSourceMap, e, usebox.getValue().toString());
+                            } else if (MajorHeuristics.isArgumentOfByteArrayCreation(analysis, index, outSet)) {
+                                putIntoMap(othersSourceMap, e, e.getUnit().toString());
+                            } else {
+                                putIntoMap(predictableSourcMap, e, usebox.getValue().toString());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
-	/**
-	 * <p>Setter for the field <code>minSize</code>.</p>
-	 *
-	 * @param minSize a int.
-	 */
-	public void setMinSize(int minSize) {
-		this.minSize = minSize;
-	}
+    /**
+     * <p>Setter for the field <code>minSize</code>.</p>
+     *
+     * @param minSize a int.
+     */
+    public void setMinSize(int minSize) {
+        this.minSize = minSize;
+    }
 
-	/**
-	 * <p>Setter for the field <code>initializationCallsites</code>.</p>
-	 *
-	 * @param initializationCallsites a {@link java.util.ArrayList} object.
-	 */
-	public void setInitializationCallsites(ArrayList<String> initializationCallsites) {
-		this.initializationCallsites = initializationCallsites;
-	}
+    /**
+     * <p>Setter for the field <code>initializationCallsites</code>.</p>
+     *
+     * @param initializationCallsites a {@link java.util.ArrayList} object.
+     */
+    public void setInitializationCallsites(ArrayList<String> initializationCallsites) {
+        this.initializationCallsites = initializationCallsites;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void printAnalysisOutput(Map<String, String> xmlFileStr) {
-		String rule = "5";
-		String ruleDesc = RULE_VS_DESCRIPTION.get(rule);
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void printAnalysisOutput(Map<String, String> xmlFileStr) {
+        String rule = "5";
+        String ruleDesc = RULE_VS_DESCRIPTION.get(rule);
 
-		List<String> predictableSources = new ArrayList<>();
-		List<UnitContainer> predictableSourceInsts = new ArrayList<>();
+        List<String> predictableSources = new ArrayList<>();
+        List<UnitContainer> predictableSourceInsts = new ArrayList<>();
 
-		for (List<String> values : predictableSourcMap.values()) {
-			predictableSources.addAll(values);
-		}
+        for (List<String> values : predictableSourcMap.values()) {
+            predictableSources.addAll(values);
+        }
 
-		predictableSourceInsts.addAll(predictableSourcMap.keySet());
+        predictableSourceInsts.addAll(predictableSourcMap.keySet());
 
-		if (!predictableSources.isEmpty()) {
-			System.out.println("=======================================");
-			String output = getPrintableMsg(predictableSourcMap, rule, ruleDesc);
-			System.out.println(output);
-			System.out.println("=======================================");
-		}
-	}
+        if (!predictableSources.isEmpty()) {
+            System.out.println("=======================================");
+            String output = getPrintableMsg(predictableSourcMap, rule, ruleDesc);
+            System.out.println(output);
+            System.out.println("=======================================");
+        }
+    }
 
-	private String getPrintableMsg(Map<UnitContainer, List<String>> predictableSourcMap, String rule, String ruleDesc) {
-		String output = "***Violated Rule " +
-				rule + ": " +
-				ruleDesc;
+    private String getPrintableMsg(Map<UnitContainer, List<String>> predictableSourcMap, String rule, String ruleDesc) {
+        String output = "***Violated Rule " +
+                rule + ": " +
+                ruleDesc;
 
-		for (UnitContainer unit : predictableSourcMap.keySet()) {
+        for (UnitContainer unit : predictableSourcMap.keySet()) {
 
-			output += "\n***Found: " + predictableSourcMap.get(unit);
-			if (unit.getUnit().getJavaSourceStartLineNumber() >= 0) {
-				output += " in Line " + unit.getUnit().getJavaSourceStartLineNumber();
-			}
+            output += "\n***Found: " + predictableSourcMap.get(unit);
+            if (unit.getUnit().getJavaSourceStartLineNumber() >= 0) {
+                output += " in Line " + unit.getUnit().getJavaSourceStartLineNumber();
+            }
 
-			output += " in Method: " + unit.getMethod();
-		}
+            output += " in Method: " + unit.getMethod();
+        }
 
-		return output;
-	}
+        return output;
+    }
 }

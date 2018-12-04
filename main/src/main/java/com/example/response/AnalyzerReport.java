@@ -18,9 +18,9 @@ import java.util.List;
 
 /**
  * <p>Java class for anonymous complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -50,479 +50,477 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-		"bugInstance",
-		"bugSummary",
-		"metric",
-		"metricSummaries"
+        "bugInstance",
+        "bugSummary",
+        "metric",
+        "metricSummaries"
 })
 @XmlRootElement(name = "AnalyzerReport")
 public class AnalyzerReport {
 
-	@XmlElement(name = "BugInstance")
-	protected List<BugInstanceType> bugInstance;
-	@XmlElement(name = "BugSummary", required = true)
-	protected BugSummaryType bugSummary;
-	@XmlElement(name = "Metric")
-	protected List<MetricType> metric;
-	@XmlElement(name = "MetricSummaries")
-	protected MetricSummariesType metricSummaries;
-	@XmlAttribute(name = "assess_fw", required = true)
-	@XmlJavaTypeAdapter(NormalizedStringAdapter.class)
-	@XmlSchemaType(name = "normalizedString")
-	protected String assessFw;
-	@XmlAttribute(name = "assess_fw_version", required = true)
-	@XmlJavaTypeAdapter(NormalizedStringAdapter.class)
-	@XmlSchemaType(name = "normalizedString")
-	protected String assessFwVersion;
-	@XmlAttribute(name = "assessment_start_ts", required = true)
-	@XmlSchemaType(name = "dateTime")
-	protected XMLGregorianCalendar assessmentStartTs;
-	@XmlAttribute(name = "build_fw", required = true)
-	@XmlJavaTypeAdapter(NormalizedStringAdapter.class)
-	@XmlSchemaType(name = "normalizedString")
-	protected String buildFw;
-	@XmlAttribute(name = "build_fw_version", required = true)
-	@XmlJavaTypeAdapter(NormalizedStringAdapter.class)
-	@XmlSchemaType(name = "normalizedString")
-	protected String buildFwVersion;
-	@XmlAttribute(name = "package_name", required = true)
-	@XmlJavaTypeAdapter(NormalizedStringAdapter.class)
-	@XmlSchemaType(name = "normalizedString")
-	protected String packageName;
-	@XmlAttribute(name = "package_version", required = true)
-	@XmlJavaTypeAdapter(NormalizedStringAdapter.class)
-	@XmlSchemaType(name = "normalizedString")
-	protected String packageVersion;
-	@XmlAttribute(name = "build_root_dir", required = true)
-	@XmlJavaTypeAdapter(NormalizedStringAdapter.class)
-	@XmlSchemaType(name = "normalizedString")
-	protected String buildRootDir;
-	@XmlAttribute(name = "package_root_dir", required = true)
-	@XmlJavaTypeAdapter(NormalizedStringAdapter.class)
-	@XmlSchemaType(name = "normalizedString")
-	protected String packageRootDir;
-	@XmlAttribute(name = "parser_fw", required = true)
-	@XmlJavaTypeAdapter(NormalizedStringAdapter.class)
-	@XmlSchemaType(name = "normalizedString")
-	protected String parserFw;
-	@XmlAttribute(name = "parser_fw_version", required = true)
-	@XmlJavaTypeAdapter(NormalizedStringAdapter.class)
-	@XmlSchemaType(name = "normalizedString")
-	protected String parserFwVersion;
-	@XmlAttribute(name = "platform_name", required = true)
-	@XmlJavaTypeAdapter(NormalizedStringAdapter.class)
-	@XmlSchemaType(name = "normalizedString")
-	protected String platformName;
-	@XmlAttribute(name = "tool_name", required = true)
-	@XmlJavaTypeAdapter(NormalizedStringAdapter.class)
-	@XmlSchemaType(name = "normalizedString")
-	protected String toolName;
-	@XmlAttribute(name = "tool_version", required = true)
-	@XmlJavaTypeAdapter(NormalizedStringAdapter.class)
-	@XmlSchemaType(name = "normalizedString")
-	protected String toolVersion;
-	@XmlAttribute(name = "uuid", required = true)
-	@XmlJavaTypeAdapter(NormalizedStringAdapter.class)
-	@XmlSchemaType(name = "normalizedString")
-	protected String uuid;
+    @XmlElement(name = "BugInstance")
+    protected List<BugInstanceType> bugInstance;
+    @XmlElement(name = "BugSummary", required = true)
+    protected BugSummaryType bugSummary;
+    @XmlElement(name = "Metric")
+    protected List<MetricType> metric;
+    @XmlElement(name = "MetricSummaries")
+    protected MetricSummariesType metricSummaries;
+    @XmlAttribute(name = "assess_fw", required = true)
+    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
+    @XmlSchemaType(name = "normalizedString")
+    protected String assessFw;
+    @XmlAttribute(name = "assess_fw_version", required = true)
+    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
+    @XmlSchemaType(name = "normalizedString")
+    protected String assessFwVersion;
+    @XmlAttribute(name = "assessment_start_ts", required = true)
+    @XmlSchemaType(name = "dateTime")
+    protected XMLGregorianCalendar assessmentStartTs;
+    @XmlAttribute(name = "build_fw", required = true)
+    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
+    @XmlSchemaType(name = "normalizedString")
+    protected String buildFw;
+    @XmlAttribute(name = "build_fw_version", required = true)
+    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
+    @XmlSchemaType(name = "normalizedString")
+    protected String buildFwVersion;
+    @XmlAttribute(name = "package_name", required = true)
+    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
+    @XmlSchemaType(name = "normalizedString")
+    protected String packageName;
+    @XmlAttribute(name = "package_version", required = true)
+    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
+    @XmlSchemaType(name = "normalizedString")
+    protected String packageVersion;
+    @XmlAttribute(name = "build_root_dir", required = true)
+    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
+    @XmlSchemaType(name = "normalizedString")
+    protected String buildRootDir;
+    @XmlAttribute(name = "package_root_dir", required = true)
+    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
+    @XmlSchemaType(name = "normalizedString")
+    protected String packageRootDir;
+    @XmlAttribute(name = "parser_fw", required = true)
+    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
+    @XmlSchemaType(name = "normalizedString")
+    protected String parserFw;
+    @XmlAttribute(name = "parser_fw_version", required = true)
+    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
+    @XmlSchemaType(name = "normalizedString")
+    protected String parserFwVersion;
+    @XmlAttribute(name = "platform_name", required = true)
+    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
+    @XmlSchemaType(name = "normalizedString")
+    protected String platformName;
+    @XmlAttribute(name = "tool_name", required = true)
+    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
+    @XmlSchemaType(name = "normalizedString")
+    protected String toolName;
+    @XmlAttribute(name = "tool_version", required = true)
+    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
+    @XmlSchemaType(name = "normalizedString")
+    protected String toolVersion;
+    @XmlAttribute(name = "uuid", required = true)
+    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
+    @XmlSchemaType(name = "normalizedString")
+    protected String uuid;
 
-	/**
-	 * Gets the value of the bugInstance property.
-	 *
-	 * <p>
-	 * This accessor method returns a reference to the live list,
-	 * not a snapshot. Therefore any modification you make to the
-	 * returned list will be present inside the JAXB object.
-	 * This is why there is not a <CODE>set</CODE> method for the bugInstance property.
-	 *
-	 * <p>
-	 * For example, to add a new item, do as follows:
-	 * <pre>
-	 *    getBugInstance().add(newItem);
-	 * </pre>
-	 *
-	 *
-	 * <p>
-	 * Objects of the following type(s) are allowed in the list
-	 * {@link BugInstanceType }
-	 */
-	public List<BugInstanceType> getBugInstance() {
-		if (bugInstance == null) {
-			bugInstance = new ArrayList<BugInstanceType>();
-		}
-		return this.bugInstance;
-	}
+    /**
+     * Gets the value of the bugInstance property.
+     *
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the bugInstance property.
+     *
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getBugInstance().add(newItem);
+     * </pre>
+     *
+     *
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link BugInstanceType }
+     */
+    public List<BugInstanceType> getBugInstance() {
+        if (bugInstance == null) {
+            bugInstance = new ArrayList<BugInstanceType>();
+        }
+        return this.bugInstance;
+    }
 
-	/**
-	 * Gets the value of the bugSummary property.
-	 *
-	 * @return possible object is
-	 * {@link BugSummaryType }
-	 */
-	public BugSummaryType getBugSummary() {
-		return bugSummary;
-	}
+    /**
+     * Gets the value of the bugSummary property.
+     *
+     * @return possible object is
+     * {@link BugSummaryType }
+     */
+    public BugSummaryType getBugSummary() {
+        return bugSummary;
+    }
 
-	/**
-	 * Sets the value of the bugSummary property.
-	 *
-	 * @param value allowed object is
-	 *              {@link BugSummaryType }
-	 */
-	public void setBugSummary(BugSummaryType value) {
-		this.bugSummary = value;
-	}
+    /**
+     * Sets the value of the bugSummary property.
+     *
+     * @param value allowed object is
+     *              {@link BugSummaryType }
+     */
+    public void setBugSummary(BugSummaryType value) {
+        this.bugSummary = value;
+    }
 
-	/**
-	 * Gets the value of the metric property.
-	 *
-	 * <p>
-	 * This accessor method returns a reference to the live list,
-	 * not a snapshot. Therefore any modification you make to the
-	 * returned list will be present inside the JAXB object.
-	 * This is why there is not a <CODE>set</CODE> method for the metric property.
-	 *
-	 * <p>
-	 * For example, to add a new item, do as follows:
-	 * <pre>
-	 *    getMetric().add(newItem);
-	 * </pre>
-	 *
-	 *
-	 * <p>
-	 * Objects of the following type(s) are allowed in the list
-	 * {@link MetricType }
-	 */
-	public List<MetricType> getMetric() {
-		if (metric == null) {
-			metric = new ArrayList<MetricType>();
-		}
-		return this.metric;
-	}
+    /**
+     * Gets the value of the metric property.
+     *
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the metric property.
+     *
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getMetric().add(newItem);
+     * </pre>
+     *
+     *
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link MetricType }
+     */
+    public List<MetricType> getMetric() {
+        if (metric == null) {
+            metric = new ArrayList<MetricType>();
+        }
+        return this.metric;
+    }
 
-	/**
-	 * Gets the value of the metricSummaries property.
-	 *
-	 * @return possible object is
-	 * {@link MetricSummariesType }
-	 */
-	public MetricSummariesType getMetricSummaries() {
-		return metricSummaries;
-	}
+    /**
+     * Gets the value of the metricSummaries property.
+     *
+     * @return possible object is
+     * {@link MetricSummariesType }
+     */
+    public MetricSummariesType getMetricSummaries() {
+        return metricSummaries;
+    }
 
-	/**
-	 * Sets the value of the metricSummaries property.
-	 *
-	 * @param value allowed object is
-	 *              {@link MetricSummariesType }
-	 */
-	public void setMetricSummaries(MetricSummariesType value) {
-		this.metricSummaries = value;
-	}
+    /**
+     * Sets the value of the metricSummaries property.
+     *
+     * @param value allowed object is
+     *              {@link MetricSummariesType }
+     */
+    public void setMetricSummaries(MetricSummariesType value) {
+        this.metricSummaries = value;
+    }
 
-	/**
-	 * Gets the value of the assessFw property.
-	 *
-	 * @return possible object is
-	 * {@link String }
-	 */
-	public String getAssessFw() {
-		return assessFw;
-	}
+    /**
+     * Gets the value of the assessFw property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getAssessFw() {
+        return assessFw;
+    }
 
-	/**
-	 * Sets the value of the assessFw property.
-	 *
-	 * @param value allowed object is
-	 *              {@link String }
-	 */
-	public void setAssessFw(String value) {
-		this.assessFw = value;
-	}
+    /**
+     * Sets the value of the assessFw property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setAssessFw(String value) {
+        this.assessFw = value;
+    }
 
-	/**
-	 * Gets the value of the assessFwVersion property.
-	 *
-	 * @return possible object is
-	 * {@link String }
-	 */
-	public String getAssessFwVersion() {
-		return assessFwVersion;
-	}
+    /**
+     * Gets the value of the assessFwVersion property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getAssessFwVersion() {
+        return assessFwVersion;
+    }
 
-	/**
-	 * Sets the value of the assessFwVersion property.
-	 *
-	 * @param value allowed object is
-	 *              {@link String }
-	 */
-	public void setAssessFwVersion(String value) {
-		this.assessFwVersion = value;
-	}
+    /**
+     * Sets the value of the assessFwVersion property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setAssessFwVersion(String value) {
+        this.assessFwVersion = value;
+    }
 
-	/**
-	 * Gets the value of the assessmentStartTs property.
-	 *
-	 * @return possible object is
-	 * {@link XMLGregorianCalendar }
-	 */
-	public XMLGregorianCalendar getAssessmentStartTs() {
-		return assessmentStartTs;
-	}
+    /**
+     * Gets the value of the assessmentStartTs property.
+     *
+     * @return possible object is
+     * {@link XMLGregorianCalendar }
+     */
+    public XMLGregorianCalendar getAssessmentStartTs() {
+        return assessmentStartTs;
+    }
 
-	/**
-	 * Sets the value of the assessmentStartTs property.
-	 *
-	 * @param value allowed object is
-	 *              {@link XMLGregorianCalendar }
-	 */
-	public void setAssessmentStartTs(XMLGregorianCalendar value) {
-		this.assessmentStartTs = value;
-	}
+    /**
+     * Sets the value of the assessmentStartTs property.
+     *
+     * @param value allowed object is
+     *              {@link XMLGregorianCalendar }
+     */
+    public void setAssessmentStartTs(XMLGregorianCalendar value) {
+        this.assessmentStartTs = value;
+    }
 
-	/**
-	 * Gets the value of the buildFw property.
-	 *
-	 * @return possible object is
-	 * {@link String }
-	 */
-	public String getBuildFw() {
-		return buildFw;
-	}
+    /**
+     * Gets the value of the buildFw property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getBuildFw() {
+        return buildFw;
+    }
 
-	/**
-	 * Sets the value of the buildFw property.
-	 *
-	 * @param value allowed object is
-	 *              {@link String }
-	 */
-	public void setBuildFw(String value) {
-		this.buildFw = value;
-	}
+    /**
+     * Sets the value of the buildFw property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setBuildFw(String value) {
+        this.buildFw = value;
+    }
 
-	/**
-	 * Gets the value of the buildFwVersion property.
-	 *
-	 * @return possible object is
-	 * {@link String }
-	 */
-	public String getBuildFwVersion() {
-		return buildFwVersion;
-	}
+    /**
+     * Gets the value of the buildFwVersion property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getBuildFwVersion() {
+        return buildFwVersion;
+    }
 
-	/**
-	 * Sets the value of the buildFwVersion property.
-	 *
-	 * @param value allowed object is
-	 *              {@link String }
-	 */
-	public void setBuildFwVersion(String value) {
-		this.buildFwVersion = value;
-	}
+    /**
+     * Sets the value of the buildFwVersion property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setBuildFwVersion(String value) {
+        this.buildFwVersion = value;
+    }
 
-	/**
-	 * Gets the value of the packageName property.
-	 *
-	 * @return possible object is
-	 * {@link String }
-	 */
-	public String getPackageName() {
-		return packageName;
-	}
+    /**
+     * Gets the value of the packageName property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getPackageName() {
+        return packageName;
+    }
 
-	/**
-	 * Sets the value of the packageName property.
-	 *
-	 * @param value allowed object is
-	 *              {@link String }
-	 */
-	public void setPackageName(String value) {
-		this.packageName = value;
-	}
+    /**
+     * Sets the value of the packageName property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setPackageName(String value) {
+        this.packageName = value;
+    }
 
-	/**
-	 * Gets the value of the packageVersion property.
-	 *
-	 * @return possible object is
-	 * {@link String }
-	 */
-	public String getPackageVersion() {
-		return packageVersion;
-	}
+    /**
+     * Gets the value of the packageVersion property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getPackageVersion() {
+        return packageVersion;
+    }
 
-	/**
-	 * Sets the value of the packageVersion property.
-	 *
-	 * @param value allowed object is
-	 *              {@link String }
-	 */
-	public void setPackageVersion(String value) {
-		this.packageVersion = value;
-	}
+    /**
+     * Sets the value of the packageVersion property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setPackageVersion(String value) {
+        this.packageVersion = value;
+    }
 
-	/**
-	 * Gets the value of the buildRootDir property.
-	 *
-	 * @return possible object is
-	 * {@link String }
-	 */
-	public String getBuildRootDir() {
-		return buildRootDir;
-	}
+    /**
+     * Gets the value of the buildRootDir property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getBuildRootDir() {
+        return buildRootDir;
+    }
 
-	/**
-	 * Sets the value of the buildRootDir property.
-	 *
-	 * @param value allowed object is
-	 *              {@link String }
-	 */
-	public void setBuildRootDir(String value) {
-		this.buildRootDir = value;
-	}
+    /**
+     * Sets the value of the buildRootDir property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setBuildRootDir(String value) {
+        this.buildRootDir = value;
+    }
 
-	/**
-	 * Gets the value of the packageRootDir property.
-	 *
-	 * @return possible object is
-	 * {@link String }
-	 */
-	public String getPackageRootDir() {
-		return packageRootDir;
-	}
+    /**
+     * Gets the value of the packageRootDir property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getPackageRootDir() {
+        return packageRootDir;
+    }
 
-	/**
-	 * Sets the value of the packageRootDir property.
-	 *
-	 * @param value allowed object is
-	 *              {@link String }
-	 */
-	public void setPackageRootDir(String value) {
-		this.packageRootDir = value;
-	}
+    /**
+     * Sets the value of the packageRootDir property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setPackageRootDir(String value) {
+        this.packageRootDir = value;
+    }
 
-	/**
-	 * Gets the value of the parserFw property.
-	 *
-	 * @return possible object is
-	 * {@link String }
-	 */
-	public String getParserFw() {
-		return parserFw;
-	}
+    /**
+     * Gets the value of the parserFw property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getParserFw() {
+        return parserFw;
+    }
 
-	/**
-	 * Sets the value of the parserFw property.
-	 *
-	 * @param value allowed object is
-	 *              {@link String }
-	 */
-	public void setParserFw(String value) {
-		this.parserFw = value;
-	}
+    /**
+     * Sets the value of the parserFw property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setParserFw(String value) {
+        this.parserFw = value;
+    }
 
-	/**
-	 * Gets the value of the parserFwVersion property.
-	 *
-	 * @return possible object is
-	 * {@link String }
-	 */
-	public String getParserFwVersion() {
-		return parserFwVersion;
-	}
+    /**
+     * Gets the value of the parserFwVersion property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getParserFwVersion() {
+        return parserFwVersion;
+    }
 
-	/**
-	 * Sets the value of the parserFwVersion property.
-	 *
-	 * @param value allowed object is
-	 *              {@link String }
-	 */
-	public void setParserFwVersion(String value) {
-		this.parserFwVersion = value;
-	}
+    /**
+     * Sets the value of the parserFwVersion property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setParserFwVersion(String value) {
+        this.parserFwVersion = value;
+    }
 
-	/**
-	 * Gets the value of the platformName property.
-	 *
-	 * @return possible object is
-	 * {@link String }
-	 */
-	public String getPlatformName() {
-		return platformName;
-	}
+    /**
+     * Gets the value of the platformName property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getPlatformName() {
+        return platformName;
+    }
 
-	/**
-	 * Sets the value of the platformName property.
-	 *
-	 * @param value allowed object is
-	 *              {@link String }
-	 */
-	public void setPlatformName(String value) {
-		this.platformName = value;
-	}
+    /**
+     * Sets the value of the platformName property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setPlatformName(String value) {
+        this.platformName = value;
+    }
 
-	/**
-	 * Gets the value of the toolName property.
-	 *
-	 * @return possible object is
-	 * {@link String }
-	 */
-	public String getToolName() {
-		return toolName;
-	}
+    /**
+     * Gets the value of the toolName property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getToolName() {
+        return toolName;
+    }
 
-	/**
-	 * Sets the value of the toolName property.
-	 *
-	 * @param value allowed object is
-	 *              {@link String }
-	 */
-	public void setToolName(String value) {
-		this.toolName = value;
-	}
+    /**
+     * Sets the value of the toolName property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setToolName(String value) {
+        this.toolName = value;
+    }
 
-	/**
-	 * Gets the value of the toolVersion property.
-	 *
-	 * @return possible object is
-	 * {@link String }
-	 */
-	public String getToolVersion() {
-		return toolVersion;
-	}
+    /**
+     * Gets the value of the toolVersion property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getToolVersion() {
+        return toolVersion;
+    }
 
-	/**
-	 * Sets the value of the toolVersion property.
-	 *
-	 * @param value allowed object is
-	 *              {@link String }
-	 */
-	public void setToolVersion(String value) {
-		this.toolVersion = value;
-	}
+    /**
+     * Sets the value of the toolVersion property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setToolVersion(String value) {
+        this.toolVersion = value;
+    }
 
-	/**
-	 * Gets the value of the uuid property.
-	 *
-	 * @return possible object is
-	 * {@link String }
-	 */
-	public String getUuid() {
-		return uuid;
-	}
+    /**
+     * Gets the value of the uuid property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getUuid() {
+        return uuid;
+    }
 
-	/**
-	 * Sets the value of the uuid property.
-	 *
-	 * @param value allowed object is
-	 *              {@link String }
-	 */
-	public void setUuid(String value) {
-		this.uuid = value;
-	}
+    /**
+     * Sets the value of the uuid property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setUuid(String value) {
+        this.uuid = value;
+    }
 
 }

@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * <p>Java class for MethodType complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="MethodType">
  *   &lt;simpleContent>
@@ -28,70 +28,68 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/simpleContent>
  * &lt;/complexType>
  * </pre>
- *
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "MethodType", propOrder = {
-		"value"
+        "value"
 })
 public class MethodType {
 
-	@XmlValue
-	@XmlJavaTypeAdapter(NormalizedStringAdapter.class)
-	@XmlSchemaType(name = "normalizedString")
-	protected String value;
-	@XmlAttribute(name = "id", required = true)
-	protected int id;
-	@XmlAttribute(name = "primary", required = true)
-	protected boolean primary;
+    @XmlValue
+    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
+    @XmlSchemaType(name = "normalizedString")
+    protected String value;
+    @XmlAttribute(name = "id", required = true)
+    protected int id;
+    @XmlAttribute(name = "primary", required = true)
+    protected boolean primary;
 
-	/**
-	 * Gets the value of the value property.
-	 *
-	 * @return possible object is
-	 * {@link String }
-	 */
-	public String getValue() {
-		return value;
-	}
+    /**
+     * Gets the value of the value property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getValue() {
+        return value;
+    }
 
-	/**
-	 * Sets the value of the value property.
-	 *
-	 * @param value allowed object is
-	 *              {@link String }
-	 */
-	public void setValue(String value) {
-		this.value = value;
-	}
+    /**
+     * Sets the value of the value property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setValue(String value) {
+        this.value = value;
+    }
 
-	/**
-	 * Gets the value of the id property.
-	 */
-	public int getId() {
-		return id;
-	}
+    /**
+     * Gets the value of the id property.
+     */
+    public int getId() {
+        return id;
+    }
 
-	/**
-	 * Sets the value of the id property.
-	 */
-	public void setId(int value) {
-		this.id = value;
-	}
+    /**
+     * Sets the value of the id property.
+     */
+    public void setId(int value) {
+        this.id = value;
+    }
 
-	/**
-	 * Gets the value of the primary property.
-	 */
-	public boolean isPrimary() {
-		return primary;
-	}
+    /**
+     * Gets the value of the primary property.
+     */
+    public boolean isPrimary() {
+        return primary;
+    }
 
-	/**
-	 * Sets the value of the primary property.
-	 */
-	public void setPrimary(boolean value) {
-		this.primary = value;
-	}
+    /**
+     * Sets the value of the primary property.
+     */
+    public void setPrimary(boolean value) {
+        this.primary = value;
+    }
 
 }

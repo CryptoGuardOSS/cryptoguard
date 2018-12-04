@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * <p>Java class for BugTraceType complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="BugTraceType">
  *   &lt;complexContent>
@@ -31,84 +31,82 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "BugTraceType", propOrder = {
-		"buildId",
-		"assessmentReportFile",
-		"instanceLocation"
+        "buildId",
+        "assessmentReportFile",
+        "instanceLocation"
 })
 public class BugTraceType {
 
-	@XmlElement(name = "BuildId")
-	protected Integer buildId;
-	@XmlElement(name = "AssessmentReportFile")
-	@XmlJavaTypeAdapter(NormalizedStringAdapter.class)
-	@XmlSchemaType(name = "normalizedString")
-	protected String assessmentReportFile;
-	@XmlElement(name = "InstanceLocation")
-	protected InstanceLocationType instanceLocation;
+    @XmlElement(name = "BuildId")
+    protected Integer buildId;
+    @XmlElement(name = "AssessmentReportFile")
+    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
+    @XmlSchemaType(name = "normalizedString")
+    protected String assessmentReportFile;
+    @XmlElement(name = "InstanceLocation")
+    protected InstanceLocationType instanceLocation;
 
-	/**
-	 * Gets the value of the buildId property.
-	 *
-	 * @return possible object is
-	 * {@link Integer }
-	 */
-	public Integer getBuildId() {
-		return buildId;
-	}
+    /**
+     * Gets the value of the buildId property.
+     *
+     * @return possible object is
+     * {@link Integer }
+     */
+    public Integer getBuildId() {
+        return buildId;
+    }
 
-	/**
-	 * Sets the value of the buildId property.
-	 *
-	 * @param value allowed object is
-	 *              {@link Integer }
-	 */
-	public void setBuildId(Integer value) {
-		this.buildId = value;
-	}
+    /**
+     * Sets the value of the buildId property.
+     *
+     * @param value allowed object is
+     *              {@link Integer }
+     */
+    public void setBuildId(Integer value) {
+        this.buildId = value;
+    }
 
-	/**
-	 * Gets the value of the assessmentReportFile property.
-	 *
-	 * @return possible object is
-	 * {@link String }
-	 */
-	public String getAssessmentReportFile() {
-		return assessmentReportFile;
-	}
+    /**
+     * Gets the value of the assessmentReportFile property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getAssessmentReportFile() {
+        return assessmentReportFile;
+    }
 
-	/**
-	 * Sets the value of the assessmentReportFile property.
-	 *
-	 * @param value allowed object is
-	 *              {@link String }
-	 */
-	public void setAssessmentReportFile(String value) {
-		this.assessmentReportFile = value;
-	}
+    /**
+     * Sets the value of the assessmentReportFile property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setAssessmentReportFile(String value) {
+        this.assessmentReportFile = value;
+    }
 
-	/**
-	 * Gets the value of the instanceLocation property.
-	 *
-	 * @return possible object is
-	 * {@link InstanceLocationType }
-	 */
-	public InstanceLocationType getInstanceLocation() {
-		return instanceLocation;
-	}
+    /**
+     * Gets the value of the instanceLocation property.
+     *
+     * @return possible object is
+     * {@link InstanceLocationType }
+     */
+    public InstanceLocationType getInstanceLocation() {
+        return instanceLocation;
+    }
 
-	/**
-	 * Sets the value of the instanceLocation property.
-	 *
-	 * @param value allowed object is
-	 *              {@link InstanceLocationType }
-	 */
-	public void setInstanceLocation(InstanceLocationType value) {
-		this.instanceLocation = value;
-	}
+    /**
+     * Sets the value of the instanceLocation property.
+     *
+     * @param value allowed object is
+     *              {@link InstanceLocationType }
+     */
+    public void setInstanceLocation(InstanceLocationType value) {
+        this.instanceLocation = value;
+    }
 
 }

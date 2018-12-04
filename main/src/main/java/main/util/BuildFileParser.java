@@ -11,12 +11,12 @@ import java.util.Map;
  */
 public interface BuildFileParser {
 
-	/**
-	 * <p>getDependencyList.</p>
-	 *
-	 * @return a {@link java.util.Map} object.
-	 * @throws java.lang.Exception if any.
-	 */
-	Map<String, List<String>> getDependencyList() throws Exception;
+    /**
+     * <p>getDependencyList.</p>
+     *
+     * @return a {@link java.util.Map} object.
+     * @throws java.lang.Exception if any.
+     */
+    Map<String, List<String>> getDependencyList() throws Exception;
 
 }

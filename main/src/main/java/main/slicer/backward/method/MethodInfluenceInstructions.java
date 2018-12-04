@@ -19,41 +19,41 @@ import java.util.List;
  */
 public class MethodInfluenceInstructions implements InfluenceInstructions {
 
-	private MethodSlicingResult methodSlicingResult;
+    private MethodSlicingResult methodSlicingResult;
 
-	/**
-	 * <p>Constructor for MethodInfluenceInstructions.</p>
-	 *
-	 * @param graph              a {@link soot.toolkits.graph.DirectedGraph} object.
-	 * @param methodCallSiteInfo a {@link main.slicer.backward.MethodCallSiteInfo} object.
-	 * @param slicingParams      a {@link java.util.List} object.
-	 */
-	public MethodInfluenceInstructions(DirectedGraph graph,
-									   MethodCallSiteInfo methodCallSiteInfo, List<Integer> slicingParams) {
-		MethodInstructionSlicer analysis = new MethodInstructionSlicer(graph, methodCallSiteInfo, slicingParams);
+    /**
+     * <p>Constructor for MethodInfluenceInstructions.</p>
+     *
+     * @param graph              a {@link soot.toolkits.graph.DirectedGraph} object.
+     * @param methodCallSiteInfo a {@link main.slicer.backward.MethodCallSiteInfo} object.
+     * @param slicingParams      a {@link java.util.List} object.
+     */
+    public MethodInfluenceInstructions(DirectedGraph graph,
+                                       MethodCallSiteInfo methodCallSiteInfo, List<Integer> slicingParams) {
+        MethodInstructionSlicer analysis = new MethodInstructionSlicer(graph, methodCallSiteInfo, slicingParams);
 
-		Iterator unitIt = graph.iterator();
+        Iterator unitIt = graph.iterator();
 
-		if (unitIt.hasNext()) {
-			Unit s = (Unit) unitIt.next();
+        if (unitIt.hasNext()) {
+            Unit s = (Unit) unitIt.next();
 
-			FlowSet set = (FlowSet) analysis.getFlowBefore(s);
-			List<UnitContainer> analysisResult = Collections.unmodifiableList(set.toList());
+            FlowSet set = (FlowSet) analysis.getFlowBefore(s);
+            List<UnitContainer> analysisResult = Collections.unmodifiableList(set.toList());
 
-			this.methodSlicingResult = new MethodSlicingResult();
-			this.methodSlicingResult.setPropertyUseMap(analysis.getPropertyUseMap());
-			this.methodSlicingResult.setAnalysisResult(analysisResult);
-			this.methodSlicingResult.setCallSiteInfo(analysis.getMethodCallSiteInfo());
-			this.methodSlicingResult.setInfluencingParameters(Utils.findInfluencingParamters(analysisResult));
-		}
-	}
+            this.methodSlicingResult = new MethodSlicingResult();
+            this.methodSlicingResult.setPropertyUseMap(analysis.getPropertyUseMap());
+            this.methodSlicingResult.setAnalysisResult(analysisResult);
+            this.methodSlicingResult.setCallSiteInfo(analysis.getMethodCallSiteInfo());
+            this.methodSlicingResult.setInfluencingParameters(Utils.findInfluencingParamters(analysisResult));
+        }
+    }
 
-	/**
-	 * <p>Getter for the field <code>methodSlicingResult</code>.</p>
-	 *
-	 * @return a {@link main.slicer.backward.method.MethodSlicingResult} object.
-	 */
-	public MethodSlicingResult getMethodSlicingResult() {
-		return this.methodSlicingResult;
-	}
+    /**
+     * <p>Getter for the field <code>methodSlicingResult</code>.</p>
+     *
+     * @return a {@link main.slicer.backward.method.MethodSlicingResult} object.
+     */
+    public MethodSlicingResult getMethodSlicingResult() {
+        return this.methodSlicingResult;
+    }
 }

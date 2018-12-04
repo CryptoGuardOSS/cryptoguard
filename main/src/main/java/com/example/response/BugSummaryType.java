@@ -17,16 +17,15 @@ import java.util.List;
 
 
 /**
+ * The root tag AnalyzerReport can have a child element
+ * with BugSummary tag. There can be only one occurrence of
+ * BugSummary.
  *
- *                 The root tag AnalyzerReport can have a child element
- *                 with BugSummary tag. There can be only one occurrence of
- *                 BugSummary.
  *
- * 
  * <p>Java class for BugSummaryType complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="BugSummaryType">
  *   &lt;complexContent>
@@ -38,43 +37,41 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "BugSummaryType", propOrder = {
-		"bugCategory"
+        "bugCategory"
 })
 public class BugSummaryType {
 
-	@XmlElement(name = "BugCategory", required = true)
-	protected List<BugCategoryType> bugCategory;
+    @XmlElement(name = "BugCategory", required = true)
+    protected List<BugCategoryType> bugCategory;
 
-	/**
-	 * Gets the value of the bugCategory property.
-	 *
-	 * <p>
-	 * This accessor method returns a reference to the live list,
-	 * not a snapshot. Therefore any modification you make to the
-	 * returned list will be present inside the JAXB object.
-	 * This is why there is not a <CODE>set</CODE> method for the bugCategory property.
-	 *
-	 * <p>
-	 * For example, to add a new item, do as follows:
-	 * <pre>
-	 *    getBugCategory().add(newItem);
-	 * </pre>
-	 *
-	 *
-	 * <p>
-	 * Objects of the following type(s) are allowed in the list
-	 * {@link BugCategoryType }
-	 */
-	public List<BugCategoryType> getBugCategory() {
-		if (bugCategory == null) {
-			bugCategory = new ArrayList<BugCategoryType>();
-		}
-		return this.bugCategory;
-	}
+    /**
+     * Gets the value of the bugCategory property.
+     *
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the bugCategory property.
+     *
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getBugCategory().add(newItem);
+     * </pre>
+     *
+     *
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link BugCategoryType }
+     */
+    public List<BugCategoryType> getBugCategory() {
+        if (bugCategory == null) {
+            bugCategory = new ArrayList<BugCategoryType>();
+        }
+        return this.bugCategory;
+    }
 
 }

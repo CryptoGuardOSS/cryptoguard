@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * <p>Java class for InstanceLocationType complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="InstanceLocationType">
  *   &lt;complexContent>
@@ -30,61 +30,59 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "InstanceLocationType", propOrder = {
-		"xpath",
-		"lineNum"
+        "xpath",
+        "lineNum"
 })
 public class InstanceLocationType {
 
-	@XmlElement(name = "Xpath")
-	@XmlJavaTypeAdapter(NormalizedStringAdapter.class)
-	@XmlSchemaType(name = "normalizedString")
-	protected String xpath;
-	@XmlElement(name = "LineNum")
-	protected LineNumType lineNum;
+    @XmlElement(name = "Xpath")
+    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
+    @XmlSchemaType(name = "normalizedString")
+    protected String xpath;
+    @XmlElement(name = "LineNum")
+    protected LineNumType lineNum;
 
-	/**
-	 * Gets the value of the xpath property.
-	 *
-	 * @return possible object is
-	 * {@link String }
-	 */
-	public String getXpath() {
-		return xpath;
-	}
+    /**
+     * Gets the value of the xpath property.
+     *
+     * @return possible object is
+     * {@link String }
+     */
+    public String getXpath() {
+        return xpath;
+    }
 
-	/**
-	 * Sets the value of the xpath property.
-	 *
-	 * @param value allowed object is
-	 *              {@link String }
-	 */
-	public void setXpath(String value) {
-		this.xpath = value;
-	}
+    /**
+     * Sets the value of the xpath property.
+     *
+     * @param value allowed object is
+     *              {@link String }
+     */
+    public void setXpath(String value) {
+        this.xpath = value;
+    }
 
-	/**
-	 * Gets the value of the lineNum property.
-	 *
-	 * @return possible object is
-	 * {@link LineNumType }
-	 */
-	public LineNumType getLineNum() {
-		return lineNum;
-	}
+    /**
+     * Gets the value of the lineNum property.
+     *
+     * @return possible object is
+     * {@link LineNumType }
+     */
+    public LineNumType getLineNum() {
+        return lineNum;
+    }
 
-	/**
-	 * Sets the value of the lineNum property.
-	 *
-	 * @param value allowed object is
-	 *              {@link LineNumType }
-	 */
-	public void setLineNum(LineNumType value) {
-		this.lineNum = value;
-	}
+    /**
+     * Sets the value of the lineNum property.
+     *
+     * @param value allowed object is
+     *              {@link LineNumType }
+     */
+    public void setLineNum(LineNumType value) {
+        this.lineNum = value;
+    }
 
 }

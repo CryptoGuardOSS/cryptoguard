@@ -8,10 +8,10 @@ package main.slicer.forward;
  */
 public interface InfluenceInstructions {
 
-	/**
-	 * <p>getSlicingResult.</p>
-	 *
-	 * @return a {@link main.slicer.forward.SlicingResult} object.
-	 */
-	SlicingResult getSlicingResult();
+    /**
+     * <p>getSlicingResult.</p>
+     *
+     * @return a {@link main.slicer.forward.SlicingResult} object.
+     */
+    SlicingResult getSlicingResult();
 }

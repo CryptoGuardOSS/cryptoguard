@@ -8,10 +8,10 @@ package main.slicer.backward.method;
  */
 public interface InfluenceInstructions {
 
-	/**
-	 * <p>getMethodSlicingResult.</p>
-	 *
-	 * @return a {@link main.slicer.backward.method.MethodSlicingResult} object.
-	 */
-	MethodSlicingResult getMethodSlicingResult();
+    /**
+     * <p>getMethodSlicingResult.</p>
+     *
+     * @return a {@link main.slicer.backward.method.MethodSlicingResult} object.
+     */
+    MethodSlicingResult getMethodSlicingResult();
 }

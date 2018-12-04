@@ -14,102 +14,102 @@ import java.util.List;
  */
 public class MethodWrapper {
 
-	private boolean isTopLevel = true;
-	private SootMethod method;
-	private List<MethodCallSiteInfo> calleeList;
-	private List<MethodWrapper> callerList;
+    private boolean isTopLevel = true;
+    private SootMethod method;
+    private List<MethodCallSiteInfo> calleeList;
+    private List<MethodWrapper> callerList;
 
-	/**
-	 * <p>Constructor for MethodWrapper.</p>
-	 *
-	 * @param method a {@link soot.SootMethod} object.
-	 */
-	public MethodWrapper(SootMethod method) {
-		this.method = method;
-		this.calleeList = new ArrayList<>();
-		this.callerList = new ArrayList<>();
-	}
+    /**
+     * <p>Constructor for MethodWrapper.</p>
+     *
+     * @param method a {@link soot.SootMethod} object.
+     */
+    public MethodWrapper(SootMethod method) {
+        this.method = method;
+        this.calleeList = new ArrayList<>();
+        this.callerList = new ArrayList<>();
+    }
 
-	/**
-	 * <p>Getter for the field <code>method</code>.</p>
-	 *
-	 * @return a {@link soot.SootMethod} object.
-	 */
-	public SootMethod getMethod() {
-		return method;
-	}
+    /**
+     * <p>Getter for the field <code>method</code>.</p>
+     *
+     * @return a {@link soot.SootMethod} object.
+     */
+    public SootMethod getMethod() {
+        return method;
+    }
 
-	/**
-	 * <p>Getter for the field <code>calleeList</code>.</p>
-	 *
-	 * @return a {@link java.util.List} object.
-	 */
-	public List<MethodCallSiteInfo> getCalleeList() {
-		return calleeList;
-	}
+    /**
+     * <p>Getter for the field <code>calleeList</code>.</p>
+     *
+     * @return a {@link java.util.List} object.
+     */
+    public List<MethodCallSiteInfo> getCalleeList() {
+        return calleeList;
+    }
 
-	/**
-	 * <p>Setter for the field <code>method</code>.</p>
-	 *
-	 * @param method a {@link soot.SootMethod} object.
-	 */
-	public void setMethod(SootMethod method) {
-		this.method = method;
-	}
+    /**
+     * <p>Setter for the field <code>method</code>.</p>
+     *
+     * @param method a {@link soot.SootMethod} object.
+     */
+    public void setMethod(SootMethod method) {
+        this.method = method;
+    }
 
-	/**
-	 * <p>isTopLevel.</p>
-	 *
-	 * @return a boolean.
-	 */
-	public boolean isTopLevel() {
-		return isTopLevel;
-	}
+    /**
+     * <p>isTopLevel.</p>
+     *
+     * @return a boolean.
+     */
+    public boolean isTopLevel() {
+        return isTopLevel;
+    }
 
-	/**
-	 * <p>setTopLevel.</p>
-	 *
-	 * @param topLevel a boolean.
-	 */
-	public void setTopLevel(boolean topLevel) {
-		isTopLevel = topLevel;
-	}
+    /**
+     * <p>setTopLevel.</p>
+     *
+     * @param topLevel a boolean.
+     */
+    public void setTopLevel(boolean topLevel) {
+        isTopLevel = topLevel;
+    }
 
-	/**
-	 * <p>Getter for the field <code>callerList</code>.</p>
-	 *
-	 * @return a {@link java.util.List} object.
-	 */
-	public List<MethodWrapper> getCallerList() {
-		return callerList;
-	}
+    /**
+     * <p>Getter for the field <code>callerList</code>.</p>
+     *
+     * @return a {@link java.util.List} object.
+     */
+    public List<MethodWrapper> getCallerList() {
+        return callerList;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-		MethodWrapper methodWrapper = (MethodWrapper) o;
-		return method.toString().equals(methodWrapper.method.toString());
+        MethodWrapper methodWrapper = (MethodWrapper) o;
+        return method.toString().equals(methodWrapper.method.toString());
 
-	}
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public int hashCode() {
-		return method.toString().hashCode();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        return method.toString().hashCode();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String toString() {
-		return method.toString();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return method.toString();
+    }
 }

@@ -17,16 +17,15 @@ import java.util.List;
 
 
 /**
+ * The root tag AnalyzerReport can have MetricSummaries as a child element. There
+ * can be only one occurrence of MetricSummaries, if and only if there is at least one
+ * Metric.
  *
- *                 The root tag AnalyzerReport can have MetricSummaries as a child element. There
- *                 can be only one occurrence of MetricSummaries, if and only if there is at least one
- *                 Metric.
  *
- * 
  * <p>Java class for MetricSummariesType complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="MetricSummariesType">
  *   &lt;complexContent>
@@ -38,43 +37,41 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "MetricSummariesType", propOrder = {
-		"metricSummary"
+        "metricSummary"
 })
 public class MetricSummariesType {
 
-	@XmlElement(name = "MetricSummary", required = true)
-	protected List<MetricSummaryType> metricSummary;
+    @XmlElement(name = "MetricSummary", required = true)
+    protected List<MetricSummaryType> metricSummary;
 
-	/**
-	 * Gets the value of the metricSummary property.
-	 *
-	 * <p>
-	 * This accessor method returns a reference to the live list,
-	 * not a snapshot. Therefore any modification you make to the
-	 * returned list will be present inside the JAXB object.
-	 * This is why there is not a <CODE>set</CODE> method for the metricSummary property.
-	 *
-	 * <p>
-	 * For example, to add a new item, do as follows:
-	 * <pre>
-	 *    getMetricSummary().add(newItem);
-	 * </pre>
-	 *
-	 *
-	 * <p>
-	 * Objects of the following type(s) are allowed in the list
-	 * {@link MetricSummaryType }
-	 */
-	public List<MetricSummaryType> getMetricSummary() {
-		if (metricSummary == null) {
-			metricSummary = new ArrayList<MetricSummaryType>();
-		}
-		return this.metricSummary;
-	}
+    /**
+     * Gets the value of the metricSummary property.
+     *
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the metricSummary property.
+     *
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getMetricSummary().add(newItem);
+     * </pre>
+     *
+     *
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link MetricSummaryType }
+     */
+    public List<MetricSummaryType> getMetricSummary() {
+        if (metricSummary == null) {
+            metricSummary = new ArrayList<MetricSummaryType>();
+        }
+        return this.metricSummary;
+    }
 
 }

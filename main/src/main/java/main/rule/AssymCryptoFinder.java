@@ -19,89 +19,89 @@ import java.util.Map;
  */
 public class AssymCryptoFinder extends BaseRuleChecker {
 
-	private static final List<Criteria> CRITERIA_LIST = new ArrayList<>();
+    private static final List<Criteria> CRITERIA_LIST = new ArrayList<>();
 
-	private List<String> crypto;
+    private List<String> crypto;
 
-	static {
+    static {
 
-		Criteria criteria1 = new Criteria();
-		criteria1.setClassName("java.security.KeyPairGenerator");
-		criteria1.setMethodName("java.security.KeyPairGenerator getInstance(java.lang.String)");
-		criteria1.setParam(0);
-		CRITERIA_LIST.add(criteria1);
+        Criteria criteria1 = new Criteria();
+        criteria1.setClassName("java.security.KeyPairGenerator");
+        criteria1.setMethodName("java.security.KeyPairGenerator getInstance(java.lang.String)");
+        criteria1.setParam(0);
+        CRITERIA_LIST.add(criteria1);
 
-		Criteria criteria2 = new Criteria();
-		criteria2.setClassName("java.security.KeyPairGenerator");
-		criteria2.setMethodName("java.security.KeyPairGenerator getInstance(java.lang.String,java.lang.String)");
-		criteria2.setParam(0);
-		CRITERIA_LIST.add(criteria2);
+        Criteria criteria2 = new Criteria();
+        criteria2.setClassName("java.security.KeyPairGenerator");
+        criteria2.setMethodName("java.security.KeyPairGenerator getInstance(java.lang.String,java.lang.String)");
+        criteria2.setParam(0);
+        CRITERIA_LIST.add(criteria2);
 
-		Criteria criteria3 = new Criteria();
-		criteria3.setClassName("java.security.KeyPairGenerator");
-		criteria3.setMethodName("java.security.KeyPairGenerator getInstance(java.lang.String,java.security.Provider)");
-		criteria3.setParam(0);
-		CRITERIA_LIST.add(criteria3);
-	}
+        Criteria criteria3 = new Criteria();
+        criteria3.setClassName("java.security.KeyPairGenerator");
+        criteria3.setMethodName("java.security.KeyPairGenerator getInstance(java.lang.String,java.security.Provider)");
+        criteria3.setParam(0);
+        CRITERIA_LIST.add(criteria3);
+    }
 
-	private ArrayList<String> occurrences = new ArrayList<>();
+    private ArrayList<String> occurrences = new ArrayList<>();
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void analyzeSlice(Analysis analysis) {
-		if (analysis.getAnalysisResult().isEmpty()) {
-			return;
-		}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void analyzeSlice(Analysis analysis) {
+        if (analysis.getAnalysisResult().isEmpty()) {
+            return;
+        }
 
-		String[] splits = analysis.getMethodChain().split("--->");
+        String[] splits = analysis.getMethodChain().split("--->");
 
-		for (UnitContainer e : analysis.getAnalysisResult()) {
-			for (ValueBox usebox : e.getUnit().getUseBoxes()) {
-				if (usebox.getValue() instanceof Constant) {
+        for (UnitContainer e : analysis.getAnalysisResult()) {
+            for (ValueBox usebox : e.getUnit().getUseBoxes()) {
+                if (usebox.getValue() instanceof Constant) {
 
-					for (String regex : crypto) {
-						if (usebox.getValue().toString().matches(regex)) {
-							occurrences.add(splits[splits.length - 2]);
-							break;
-						}
-					}
-				}
-			}
-		}
-	}
+                    for (String regex : crypto) {
+                        if (usebox.getValue().toString().matches(regex)) {
+                            occurrences.add(splits[splits.length - 2]);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
 
-	/**
-	 * <p>getOccurrenceSites.</p>
-	 *
-	 * @return a {@link java.util.ArrayList} object.
-	 */
-	public ArrayList<String> getOccurrenceSites() {
-		return occurrences;
-	}
+    /**
+     * <p>getOccurrenceSites.</p>
+     *
+     * @return a {@link java.util.ArrayList} object.
+     */
+    public ArrayList<String> getOccurrenceSites() {
+        return occurrences;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<Criteria> getCriteriaList() {
-		return CRITERIA_LIST;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Criteria> getCriteriaList() {
+        return CRITERIA_LIST;
+    }
 
-	/**
-	 * <p>Setter for the field <code>crypto</code>.</p>
-	 *
-	 * @param crypto a {@link java.util.List} object.
-	 */
-	public void setCrypto(List<String> crypto) {
-		this.crypto = crypto;
-	}
+    /**
+     * <p>Setter for the field <code>crypto</code>.</p>
+     *
+     * @param crypto a {@link java.util.List} object.
+     */
+    public void setCrypto(List<String> crypto) {
+        this.crypto = crypto;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void printAnalysisOutput(Map<String, String> xmlFileStr) {
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void printAnalysisOutput(Map<String, String> xmlFileStr) {
+    }
 }
