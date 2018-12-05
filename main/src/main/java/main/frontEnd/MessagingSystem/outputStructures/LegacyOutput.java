@@ -1,9 +1,9 @@
-package main.frontEnd.outputStructures;
+package main.frontEnd.MessagingSystem.outputStructures;
 
-import main.frontEnd.AnalysisIssue;
-import main.frontEnd.AnalysisLocation;
-import main.frontEnd.EnvironmentInformation;
-import main.frontEnd.OutputStructure;
+import main.frontEnd.MessagingSystem.AnalysisIssue;
+import main.frontEnd.MessagingSystem.AnalysisLocation;
+import main.frontEnd.MessagingSystem.EnvironmentInformation;
+import main.frontEnd.MessagingSystem.OutputStructure;
 import main.rule.engine.EngineType;
 import main.rule.engine.RuleList;
 import org.apache.commons.lang3.StringUtils;

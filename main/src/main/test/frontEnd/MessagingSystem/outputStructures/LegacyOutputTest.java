@@ -1,10 +1,10 @@
-package frontEnd.outputStructures;
+package frontEnd.MessagingSystem.outputStructures;
 
-import main.frontEnd.AnalysisIssue;
-import main.frontEnd.AnalysisLocation;
-import main.frontEnd.EnvironmentInformation;
-import main.frontEnd.OutputStructure;
-import main.frontEnd.outputStructures.LegacyOutput;
+import main.frontEnd.MessagingSystem.AnalysisIssue;
+import main.frontEnd.MessagingSystem.AnalysisLocation;
+import main.frontEnd.MessagingSystem.EnvironmentInformation;
+import main.frontEnd.MessagingSystem.OutputStructure;
+import main.frontEnd.MessagingSystem.outputStructures.LegacyOutput;
 import main.rule.engine.EngineType;
 import org.junit.After;
 import org.junit.Before;
@@ -139,6 +139,7 @@ public class LegacyOutputTest {
 
     @Test
     public void getOutputTest() {
-        assertEquals(this.result, this.messagingSystem.getOutput(env, this.type, this.brokenRules, null));
+        String output = this.messagingSystem.getOutput(env, this.type, this.brokenRules, null);
+        assertEquals(this.result, output);
     }
 }

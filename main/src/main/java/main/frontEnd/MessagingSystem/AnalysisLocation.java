@@ -1,4 +1,4 @@
-package main.frontEnd;
+package main.frontEnd.MessagingSystem;
 
 /**
  * <p>AnalysisLocation class.</p>

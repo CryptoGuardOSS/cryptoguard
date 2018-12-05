@@ -1,4 +1,4 @@
-package main.frontEnd;
+package main.frontEnd.MessagingSystem;
 
 import main.rule.engine.Criteria;
 import main.rule.engine.RuleList;
@@ -78,7 +78,7 @@ public class AnalysisIssue {
      * @param ruleNumber  a {@link java.lang.Integer} object.
      * @param methodName  a {@link java.lang.String} object.
      * @param information a {@link java.lang.String} object.
-     * @param location    a {@link main.frontEnd.AnalysisLocation} object.
+     * @param location    a {@link AnalysisLocation} object.
      */
     public AnalysisIssue(Integer ruleNumber, String methodName, String information, AnalysisLocation location) {
         this.fullPathName = "Unknown";
@@ -179,7 +179,7 @@ public class AnalysisIssue {
     /**
      * <p>addLocation.</p>
      *
-     * @param newLocation a {@link main.frontEnd.AnalysisLocation} object.
+     * @param newLocation a {@link AnalysisLocation} object.
      */
     public void addLocation(AnalysisLocation newLocation) {
         this.getLocations().add(newLocation);
@@ -198,7 +198,7 @@ public class AnalysisIssue {
      * <p>addMethod.</p>
      *
      * @param methodName a {@link java.lang.String} object.
-     * @param location   a {@link main.frontEnd.AnalysisLocation} object.
+     * @param location   a {@link AnalysisLocation} object.
      */
     public void addMethod(String methodName, AnalysisLocation location) {
         location.setMethodNumber(this.getMethods().size());

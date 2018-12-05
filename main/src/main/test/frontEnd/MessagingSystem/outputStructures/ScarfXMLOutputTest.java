@@ -1,14 +1,14 @@
-package frontEnd.outputStructures;
+package frontEnd.MessagingSystem.outputStructures;
 
 import com.example.response.AnalyzerReport;
 import com.example.response.BugCategoryType;
 import com.example.response.BugInstanceType;
 import com.example.response.LocationType;
-import main.frontEnd.AnalysisIssue;
-import main.frontEnd.AnalysisLocation;
-import main.frontEnd.EnvironmentInformation;
-import main.frontEnd.OutputStructure;
-import main.frontEnd.outputStructures.ScarfXMLOutput;
+import main.frontEnd.MessagingSystem.AnalysisIssue;
+import main.frontEnd.MessagingSystem.AnalysisLocation;
+import main.frontEnd.MessagingSystem.EnvironmentInformation;
+import main.frontEnd.MessagingSystem.OutputStructure;
+import main.frontEnd.MessagingSystem.outputStructures.ScarfXMLOutput;
 import main.rule.engine.Criteria;
 import main.rule.engine.EngineType;
 import main.rule.engine.RuleList;

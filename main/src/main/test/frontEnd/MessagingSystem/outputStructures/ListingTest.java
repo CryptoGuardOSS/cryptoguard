@@ -1,8 +1,8 @@
-package frontEnd.outputStructures;
+package frontEnd.MessagingSystem.outputStructures;
 
-import main.frontEnd.outputStructures.LegacyOutput;
-import main.frontEnd.outputStructures.Listing;
-import main.frontEnd.outputStructures.ScarfXMLOutput;
+import main.frontEnd.MessagingSystem.outputStructures.LegacyOutput;
+import main.frontEnd.MessagingSystem.outputStructures.Listing;
+import main.frontEnd.MessagingSystem.outputStructures.ScarfXMLOutput;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

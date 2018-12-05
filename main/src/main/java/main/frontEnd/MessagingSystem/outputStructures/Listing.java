@@ -1,6 +1,6 @@
-package main.frontEnd.outputStructures;
+package main.frontEnd.MessagingSystem.outputStructures;
 
-import main.frontEnd.OutputStructure;
+import main.frontEnd.MessagingSystem.OutputStructure;
 
 /**
  * The enum containing all of the different messaging types available for the user.
@@ -63,11 +63,11 @@ public enum Listing {
             }
 
             //Return a dynamically loaded instantiation of the class
-            return (OutputStructure) Class.forName("main.frontEnd.outputStructures." + className).newInstance();
+            return (OutputStructure) Class.forName("main.frontEnd.MessagingSystem.outputStructures." + className).newInstance();
         }
         //In Case of any error, default to the Legacy Output
         catch (Exception e) {
-            return new main.frontEnd.outputStructures.LegacyOutput();
+            return new main.frontEnd.MessagingSystem.outputStructures.LegacyOutput();
         }
     }
 }

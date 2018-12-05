@@ -1,9 +1,9 @@
-package frontEnd;
+package frontEnd.MessagingSystem;
 
-import main.frontEnd.AnalysisIssue;
-import main.frontEnd.EnvironmentInformation;
-import main.frontEnd.MessageRepresentation;
-import main.frontEnd.outputStructures.LegacyOutput;
+import main.frontEnd.MessagingSystem.AnalysisIssue;
+import main.frontEnd.MessagingSystem.EnvironmentInformation;
+import main.frontEnd.MessagingSystem.MessageRepresentation;
+import main.frontEnd.MessagingSystem.outputStructures.LegacyOutput;
 import main.rule.engine.EngineType;
 import org.junit.After;
 import org.junit.Before;

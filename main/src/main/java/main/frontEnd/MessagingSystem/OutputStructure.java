@@ -1,4 +1,4 @@
-package main.frontEnd;
+package main.frontEnd.MessagingSystem;
 
 import main.rule.engine.EngineType;
 
@@ -16,7 +16,7 @@ public interface OutputStructure {
     /**
      * <p>getOutput.</p>
      *
-     * @param source           a {@link main.frontEnd.EnvironmentInformation} object.
+     * @param source           a {@link EnvironmentInformation} object.
      * @param type             a {@link main.rule.engine.EngineType} object.
      * @param brokenRules      a {@link java.util.ArrayList} object.
      * @param internalWarnings a {@link java.io.PrintStream} object.

@@ -1,6 +1,6 @@
-package main.frontEnd;
+package main.frontEnd.MessagingSystem;
 
-import main.frontEnd.outputStructures.Listing;
+import main.frontEnd.MessagingSystem.outputStructures.Listing;
 import main.rule.engine.EngineType;
 
 import java.io.ByteArrayOutputStream;
@@ -80,7 +80,7 @@ public class MessageRepresentation {
     /**
      * <p>Getter for the field <code>messageEngine</code>.</p>
      *
-     * @return a {@link main.frontEnd.OutputStructure} object.
+     * @return a {@link OutputStructure} object.
      */
     public OutputStructure getMessageEngine() {
         return messageEngine;
@@ -90,7 +90,7 @@ public class MessageRepresentation {
     /**
      * <p>addAnalysis.</p>
      *
-     * @param issue a {@link main.frontEnd.AnalysisIssue} object.
+     * @param issue a {@link AnalysisIssue} object.
      */
     public void addAnalysis(AnalysisIssue issue) {
         this.analysisIssues.add(issue);

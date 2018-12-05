@@ -1,4 +1,4 @@
-package main.frontEnd;
+package main.frontEnd.MessagingSystem;
 
 import org.apache.commons.lang3.StringUtils;
 
