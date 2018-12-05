@@ -106,15 +106,4 @@ public class MvnPomFileParser implements BuildFileParser {
             calcAlldependenciesForModule(dependency, mVsds, dependencyPaths);
         }
     }
-
-    /**
-     * <p>main.</p>
-     *
-     * @param args an array of {@link java.lang.String} objects.
-     * @throws java.lang.Exception if any.
-     */
-    public static void main(String[] args) throws Exception {
-        MvnPomFileParser pomFileParser = new MvnPomFileParser("/home/krishnokoli/projects/mvn-sample/pom.xml");
-        System.out.println(pomFileParser.getDependencyList());
-    }
 }
