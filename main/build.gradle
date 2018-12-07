@@ -28,6 +28,12 @@ dependencies {
 
 //Only Run this command to re-generate the schema files
 task xsd2java() {
+    ext {
+        scarfPackage = 'com.example.response'
+        scarfSchema = 'src/main/schema/xsd/Scarf/Scarf.xsd'
+    }
+
+    System.setProperty('javax.xml.accessExternalSchema', 'all')
 
     doLast {
         file("src/main/java").mkdirs()
@@ -37,9 +43,11 @@ task xsd2java() {
 
         ant.xjc(
                 destdir: '${jaxbTargetDir}',
-                package: 'com.example.response',
-                schema: 'src/main/schema/xsd/Scarf/Scarf.xsd'
-        )
+                package: scarfPackage,
+                schema: scarfSchema
+        ){
+            //arg(value: "-Xannotate")
+        }
 
         //Heavily Hard Coded, removes the namespace so the xml output doesn't have a namespace : nmls
         //ant.replace(file:"src/main/java/com/example/response/package-info.java",token:"namespace = \"https://www.swamp.com/com/scarf/struct\", ",value:"")
