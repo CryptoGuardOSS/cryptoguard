@@ -13,71 +13,71 @@ import java.util.List;
  * <p>JarAnalyzer class.</p>
  *
  * @author RigorityJTeam
- * @since V01.00
+ * @since V01.00.00
  */
 public class JarAnalyzer {
 
-	/**
-	 * <p>analyzeSlices.</p>
-	 *
-	 * @param criteriaClass         a {@link java.lang.String} object.
-	 * @param criteriaMethod        a {@link java.lang.String} object.
-	 * @param criteriaParam         a int.
-	 * @param projectJarPath        a {@link java.lang.String} object.
-	 * @param projectDependencyPath a {@link java.lang.String} object.
-	 * @param checker               a {@link main.rule.base.BaseRuleChecker} object.
-	 * @throws java.io.IOException if any.
-	 */
-	public static void analyzeSlices(String criteriaClass,
-									 String criteriaMethod,
-									 int criteriaParam,
-									 String projectJarPath,
-									 String projectDependencyPath, BaseRuleChecker checker) throws IOException {
+    /**
+     * <p>analyzeSlices.</p>
+     *
+     * @param criteriaClass         a {@link java.lang.String} object.
+     * @param criteriaMethod        a {@link java.lang.String} object.
+     * @param criteriaParam         a int.
+     * @param projectJarPath        a {@link java.lang.String} object.
+     * @param projectDependencyPath a {@link java.lang.String} object.
+     * @param checker               a {@link main.rule.base.BaseRuleChecker} object.
+     * @throws java.io.IOException if any.
+     */
+    public static void analyzeSlices(String criteriaClass,
+                                     String criteriaMethod,
+                                     int criteriaParam,
+                                     String projectJarPath,
+                                     String projectDependencyPath, BaseRuleChecker checker) throws IOException {
 
-		String javaHome = System.getenv("JAVA_HOME");
+        String javaHome = System.getenv("JAVA_HOME");
 
-		if (javaHome.isEmpty()) {
+        if (javaHome.isEmpty()) {
 
-			System.err.println("Please set JAVA_HOME");
-			System.exit(1);
-		}
+            System.err.println("Please set JAVA_HOME");
+            System.exit(1);
+        }
 
-		String basePackageName = Utils.getBasePackageNameFromJar(projectJarPath, true);
+        String basePackageName = Utils.getBasePackageNameFromJar(projectJarPath, true);
 
-		List<String> classNames = Utils.getClassNamesFromJarArchive(projectJarPath);
+        List<String> classNames = Utils.getClassNamesFromJarArchive(projectJarPath);
 
-		for (String dependency : Utils.getJarsInDirectory(projectDependencyPath)) {
-			for (String dependencyClazz : Utils.getClassNamesFromJarArchive(dependency)) {
-				if (dependencyClazz.contains(basePackageName)) {
-					classNames.add(dependencyClazz);
-				}
-			}
-		}
+        for (String dependency : Utils.getJarsInDirectory(projectDependencyPath)) {
+            for (String dependencyClazz : Utils.getClassNamesFromJarArchive(dependency)) {
+                if (dependencyClazz.contains(basePackageName)) {
+                    classNames.add(dependencyClazz);
+                }
+            }
+        }
 
-		String sootClassPath = Utils.buildSootClassPath(projectJarPath,
-														javaHome + "/jre/lib/rt.jar",
-														javaHome + "/jre/lib/jce.jar",
-														projectDependencyPath);
+        String sootClassPath = Utils.buildSootClassPath(projectJarPath,
+                javaHome + "/jre/lib/rt.jar",
+                javaHome + "/jre/lib/jce.jar",
+                projectDependencyPath);
 
-		Options.v().set_keep_line_number(true);
-		Options.v().set_allow_phantom_refs(true);
+        Options.v().set_keep_line_number(true);
+        Options.v().set_allow_phantom_refs(true);
 
-		Scene.v().setSootClassPath(sootClassPath);
+        Scene.v().setSootClassPath(sootClassPath);
 
-		String endPoint = "<" + criteriaClass + ": " + criteriaMethod + ">";
-		ArrayList<Integer> slicingParameters = new ArrayList<>();
-		slicingParameters.add(criteriaParam);
+        String endPoint = "<" + criteriaClass + ": " + criteriaMethod + ">";
+        ArrayList<Integer> slicingParameters = new ArrayList<>();
+        slicingParameters.add(criteriaParam);
 
-		for (String clazz : BaseAnalyzer.CRITERIA_CLASSES) {
-			Scene.v().loadClassAndSupport(clazz);
-		}
+        for (String clazz : BaseAnalyzer.CRITERIA_CLASSES) {
+            Scene.v().loadClassAndSupport(clazz);
+        }
 
-		for (String clazz : classNames) {
-			Scene.v().loadClassAndSupport(clazz);
-		}
+        for (String clazz : classNames) {
+            Scene.v().loadClassAndSupport(clazz);
+        }
 
-		Scene.v().loadNecessaryClasses();
+        Scene.v().loadNecessaryClasses();
 
-		BaseAnalyzer.analyzeSliceInternal(criteriaClass, classNames, endPoint, slicingParameters, checker);
-	}
+        BaseAnalyzer.analyzeSliceInternal(criteriaClass, classNames, endPoint, slicingParameters, checker);
+    }
 }

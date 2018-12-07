@@ -16,9 +16,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for LineNumType complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="LineNumType">
  *   &lt;complexContent>
@@ -31,47 +31,45 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "LineNumType", propOrder = {
-		"start",
-		"end"
+        "start",
+        "end"
 })
 public class LineNumType {
 
-	@XmlElement(name = "Start")
-	protected int start;
-	@XmlElement(name = "End")
-	protected int end;
+    @XmlElement(name = "Start")
+    protected int start;
+    @XmlElement(name = "End")
+    protected int end;
 
-	/**
-	 * Gets the value of the start property.
-	 */
-	public int getStart() {
-		return start;
-	}
+    /**
+     * Gets the value of the start property.
+     */
+    public int getStart() {
+        return start;
+    }
 
-	/**
-	 * Sets the value of the start property.
-	 */
-	public void setStart(int value) {
-		this.start = value;
-	}
+    /**
+     * Sets the value of the start property.
+     */
+    public void setStart(int value) {
+        this.start = value;
+    }
 
-	/**
-	 * Gets the value of the end property.
-	 */
-	public int getEnd() {
-		return end;
-	}
+    /**
+     * Gets the value of the end property.
+     */
+    public int getEnd() {
+        return end;
+    }
 
-	/**
-	 * Sets the value of the end property.
-	 */
-	public void setEnd(int value) {
-		this.end = value;
-	}
+    /**
+     * Sets the value of the end property.
+     */
+    public void setEnd(int value) {
+        this.end = value;
+    }
 
 }

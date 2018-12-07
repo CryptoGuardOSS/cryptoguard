@@ -13,114 +13,111 @@ import java.util.Map;
  * passes them to the entry point of the program for processing.
  *
  * @author RigorityJTeam
- * @since 01.00
+ * @since V01.00.00
  */
 public class RuleEngine {
-	private static List<RuleChecker> ruleCheckerList = new ArrayList<>();
+    private static List<RuleChecker> ruleCheckerList = new ArrayList<>();
 
-	static {
+    static {
 
-		ruleCheckerList.add(new InsecureAssymCryptoFinder());
-		ruleCheckerList.add(new BrokenCryptoFinder());
-		ruleCheckerList.add(new UntrustedPrngFinder());
-		ruleCheckerList.add(new SSLSocketFactoryFinder());
-		ruleCheckerList.add(new CustomTrustManagerFinder());
-		ruleCheckerList.add(new HostNameVerifierFinder());
-		ruleCheckerList.add(new BrokenHashFinder());
-		ruleCheckerList.add(new ConstantKeyFinder());
-		ruleCheckerList.add(new PredictableIVFinder());
-		ruleCheckerList.add(new PBESaltFinder());
-		ruleCheckerList.add(new PBEInterationCountFinder());
-		ruleCheckerList.add(new PredictableSeedFinder());
-		ruleCheckerList.add(new PredictableKeyStorePasswordFinder());
-		ruleCheckerList.add(new HttpUrlFinder());
-	}
+        ruleCheckerList.add(new InsecureAssymCryptoFinder());
+        ruleCheckerList.add(new BrokenCryptoFinder());
+        ruleCheckerList.add(new UntrustedPrngFinder());
+        ruleCheckerList.add(new SSLSocketFactoryFinder());
+        ruleCheckerList.add(new CustomTrustManagerFinder());
+        ruleCheckerList.add(new HostNameVerifierFinder());
+        ruleCheckerList.add(new BrokenHashFinder());
+        ruleCheckerList.add(new ConstantKeyFinder());
+        ruleCheckerList.add(new PredictableIVFinder());
+        ruleCheckerList.add(new PBESaltFinder());
+        ruleCheckerList.add(new PBEInterationCountFinder());
+        ruleCheckerList.add(new PredictableSeedFinder());
+        ruleCheckerList.add(new PredictableKeyStorePasswordFinder());
+        ruleCheckerList.add(new HttpUrlFinder());
+    }
 
-	/**
-	 * The point of entry for this library. Essentially the frontend, this will
-	 * handle all of the arguments and routing for the operation required.
-	 *
-	 * @param args the arguments passed in from being called from the command line
-	 * @throws java.lang.Exception throws exceptions in case of extreme error of being called.
-	 */
-	public static void main(String[] args) throws Exception {
-		if (args.length < 2) {
-			System.exit(1);
-		}
+    /**
+     * The point of entry for this library. Essentially the frontend, this will
+     * handle all of the arguments and routing for the operation required.
+     *
+     * @param args the arguments passed in from being called from the command line
+     * @throws java.lang.Exception throws exceptions in case of extreme error of being called.
+     */
+    public static void main(String[] args) throws Exception {
+        if (args.length < 2) {
+            System.exit(1);
+        }
 
-		if (args[0].equals("jar")) {
-			String projectJarPath = args[1];
-			String projectDependencyPath = args[2];
+        if (args[0].equals("jar")) {
+            String projectJarPath = args[1];
+            String projectDependencyPath = args[2];
 
-			System.out.println("Analyzing JAR: " + projectJarPath);
+            System.out.println("Analyzing JAR: " + projectJarPath);
 
-			for (RuleChecker ruleChecker : ruleCheckerList) {
-				ruleChecker.checkRule(EngineType.JAR, Arrays.asList(projectJarPath), Arrays.asList(projectDependencyPath));
-			}
+            for (RuleChecker ruleChecker : ruleCheckerList) {
+                ruleChecker.checkRule(EngineType.JAR, Arrays.asList(projectJarPath), Arrays.asList(projectDependencyPath));
+            }
 
-		}
-		else if (args[0].equals("apk")) {
-			String projectJarPath = args[1];
+        } else if (args[0].equals("apk")) {
+            String projectJarPath = args[1];
 
-			System.out.println("Analyzing APK: " + projectJarPath);
+            System.out.println("Analyzing APK: " + projectJarPath);
 
-			String basePackage = Utils.getBasePackageNameFromApk(projectJarPath);
+            String basePackage = Utils.getBasePackageNameFromApk(projectJarPath);
 
-			for (RuleChecker ruleChecker : ruleCheckerList) {
-				ruleChecker.checkRule(EngineType.APK, Arrays.asList(projectJarPath), null);
-			}
-		}
-		else if (args[0].equals("source")) {
+            for (RuleChecker ruleChecker : ruleCheckerList) {
+                ruleChecker.checkRule(EngineType.APK, Arrays.asList(projectJarPath), null);
+            }
+        } else if (args[0].equals("source")) {
 
-			String projectRoot = args[1];
-			String projectDependencyPath = args[2];
+            String projectRoot = args[1];
+            String projectDependencyPath = args[2];
 
-			System.out.println("Analyzing Project: " + projectRoot);
+            System.out.println("Analyzing Project: " + projectRoot);
 
-			BuildFileParser buildFileParser = BuildFileParserFactory.getBuildfileParser(projectRoot);
+            BuildFileParser buildFileParser = BuildFileParserFactory.getBuildfileParser(projectRoot);
 
-			Map<String, List<String>> moduleVsDependency = buildFileParser.getDependencyList();
+            Map<String, List<String>> moduleVsDependency = buildFileParser.getDependencyList();
 
-			List<String> analyzedModules = new ArrayList<>();
+            List<String> analyzedModules = new ArrayList<>();
 
-			for (String module : moduleVsDependency.keySet()) {
+            for (String module : moduleVsDependency.keySet()) {
 
-				if (!analyzedModules.contains(module)) {
+                if (!analyzedModules.contains(module)) {
 
-					String output = "Analyzing Module: ";
+                    String output = "Analyzing Module: ";
 
-					List<String> dependencies = moduleVsDependency.get(module);
-					List<String> otherdependencies = new ArrayList<>();
+                    List<String> dependencies = moduleVsDependency.get(module);
+                    List<String> otherdependencies = new ArrayList<>();
 
-					for (String dependency : dependencies) {
+                    for (String dependency : dependencies) {
 
-						String dependencyModule = null;
+                        String dependencyModule = null;
 
-						if (dependency.equals(projectRoot + "/src/main/java")) {
-							dependencyModule = projectRoot.substring(projectRoot.lastIndexOf("/") + 1);
-							otherdependencies.add(dependency.substring(0, dependency.length() - 13) + projectDependencyPath);
+                        if (dependency.equals(projectRoot + "/src/main/java")) {
+                            dependencyModule = projectRoot.substring(projectRoot.lastIndexOf("/") + 1);
+                            otherdependencies.add(dependency.substring(0, dependency.length() - 13) + projectDependencyPath);
 
-						}
-						else {
-							dependencyModule = dependency.substring(projectRoot.length() + 1, dependency.length() - 14);
-							otherdependencies.add(dependency.substring(0, dependency.length() - 13) + projectDependencyPath);
+                        } else {
+                            dependencyModule = dependency.substring(projectRoot.length() + 1, dependency.length() - 14);
+                            otherdependencies.add(dependency.substring(0, dependency.length() - 13) + projectDependencyPath);
 
-						}
+                        }
 
-						output += dependencyModule + ", ";
-						analyzedModules.add(dependencyModule);
-					}
+                        output += dependencyModule + ", ";
+                        analyzedModules.add(dependencyModule);
+                    }
 
-					System.out.println(output.substring(0, output.length() - 2));
+                    System.out.println(output.substring(0, output.length() - 2));
 
-					for (RuleChecker ruleChecker : ruleCheckerList) {
-						ruleChecker.checkRule(EngineType.SOURCE, dependencies, otherdependencies);
-					}
+                    for (RuleChecker ruleChecker : ruleCheckerList) {
+                        ruleChecker.checkRule(EngineType.SOURCE, dependencies, otherdependencies);
+                    }
 
-					NamedMethodMap.clearCallerCalleeGraph();
-					FieldInitializationInstructionMap.reset();
-				}
-			}
-		}
-	}
+                    NamedMethodMap.clearCallerCalleeGraph();
+                    FieldInitializationInstructionMap.reset();
+                }
+            }
+        }
+    }
 }

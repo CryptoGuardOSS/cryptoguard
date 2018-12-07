@@ -9,12 +9,12 @@ import java.io.InputStream;
  */
 public interface IManifestHandler {
 
-	/**
-	 * Called when the contents of the Android manifest file shall be processed
-	 *
-	 * @param stream The stream through which the manifest file can be accesses
-	 */
-	public void handleManifest(InputStream stream);
+    /**
+     * Called when the contents of the Android manifest file shall be processed
+     *
+     * @param stream The stream through which the manifest file can be accesses
+     */
+    public void handleManifest(InputStream stream);
 
 }
 

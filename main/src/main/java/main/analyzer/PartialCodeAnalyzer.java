@@ -13,68 +13,68 @@ import java.util.List;
  * <p>PartialCodeAnalyzer class.</p>
  *
  * @author RigorityJTeam
- * @since V01.00
+ * @since V01.00.00
  */
 public class PartialCodeAnalyzer {
 
-	/**
-	 * <p>analyzeSlices.</p>
-	 *
-	 * @param criteriaClass     a {@link java.lang.String} object.
-	 * @param criteriaMethod    a {@link java.lang.String} object.
-	 * @param criteriaParam     a int.
-	 * @param snippetPath       a {@link java.util.List} object.
-	 * @param projectDependency a {@link java.util.List} object.
-	 * @param checker           a {@link main.rule.base.BaseRuleChecker} object.
-	 * @throws java.io.IOException if any.
-	 */
-	public static void analyzeSlices(String criteriaClass,
-									 String criteriaMethod,
-									 int criteriaParam,
-									 List<String> snippetPath,
-									 List<String> projectDependency,
-									 BaseRuleChecker checker) throws IOException {
+    /**
+     * <p>analyzeSlices.</p>
+     *
+     * @param criteriaClass     a {@link java.lang.String} object.
+     * @param criteriaMethod    a {@link java.lang.String} object.
+     * @param criteriaParam     a int.
+     * @param snippetPath       a {@link java.util.List} object.
+     * @param projectDependency a {@link java.util.List} object.
+     * @param checker           a {@link main.rule.base.BaseRuleChecker} object.
+     * @throws java.io.IOException if any.
+     */
+    public static void analyzeSlices(String criteriaClass,
+                                     String criteriaMethod,
+                                     int criteriaParam,
+                                     List<String> snippetPath,
+                                     List<String> projectDependency,
+                                     BaseRuleChecker checker) throws IOException {
 
-		String javaHome = System.getenv("JAVA7_HOME");
+        String javaHome = System.getenv("JAVA7_HOME");
 
-		if (javaHome == null || javaHome.isEmpty()) {
+        if (javaHome == null || javaHome.isEmpty()) {
 
-			System.err.println("Please set JAVA7_HOME");
-			System.exit(1);
-		}
+            System.err.println("Please set JAVA7_HOME");
+            System.exit(1);
+        }
 
-		Options.v().set_allow_phantom_refs(true);
-		Options.v().set_keep_line_number(true);
-		Options.v().set_output_format(Options.output_format_jimple);
-		Options.v().set_src_prec(Options.src_prec_java);
+        Options.v().set_allow_phantom_refs(true);
+        Options.v().set_keep_line_number(true);
+        Options.v().set_output_format(Options.output_format_jimple);
+        Options.v().set_src_prec(Options.src_prec_java);
 
-		StringBuilder srcPaths = new StringBuilder();
+        StringBuilder srcPaths = new StringBuilder();
 
-		for (String srcDir : snippetPath) {
-			srcPaths.append(srcDir)
-					.append(":");
-		}
+        for (String srcDir : snippetPath) {
+            srcPaths.append(srcDir)
+                    .append(":");
+        }
 
 
-		Scene.v().setSootClassPath(javaHome + "/jre/lib/rt.jar:"
-										   + javaHome + "/jre/lib/jce.jar:" + srcPaths.toString() + Utils.buildSootClassPath(projectDependency));
+        Scene.v().setSootClassPath(javaHome + "/jre/lib/rt.jar:"
+                + javaHome + "/jre/lib/jce.jar:" + srcPaths.toString() + Utils.buildSootClassPath(projectDependency));
 
-		List<String> classNames = Utils.getClassNamesFromSnippet(snippetPath);
+        List<String> classNames = Utils.getClassNamesFromSnippet(snippetPath);
 
-		for (String clazz : BaseAnalyzer.CRITERIA_CLASSES) {
-			Scene.v().loadClassAndSupport(clazz);
-		}
+        for (String clazz : BaseAnalyzer.CRITERIA_CLASSES) {
+            Scene.v().loadClassAndSupport(clazz);
+        }
 
-		for (String clazz : classNames) {
-			Scene.v().loadClassAndSupport(clazz);
-		}
+        for (String clazz : classNames) {
+            Scene.v().loadClassAndSupport(clazz);
+        }
 
-		Scene.v().loadNecessaryClasses();
+        Scene.v().loadNecessaryClasses();
 
-		String endPoint = "<" + criteriaClass + ": " + criteriaMethod + ">";
-		ArrayList<Integer> slicingParameters = new ArrayList<>();
-		slicingParameters.add(criteriaParam);
+        String endPoint = "<" + criteriaClass + ": " + criteriaMethod + ">";
+        ArrayList<Integer> slicingParameters = new ArrayList<>();
+        slicingParameters.add(criteriaParam);
 
-		BaseAnalyzer.analyzeSliceInternal(criteriaClass, classNames, endPoint, slicingParameters, checker);
-	}
+        BaseAnalyzer.analyzeSliceInternal(criteriaClass, classNames, endPoint, slicingParameters, checker);
+    }
 }

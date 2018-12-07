@@ -22,126 +22,114 @@ import java.util.Map;
  * <p>GradleBuildFileParser class.</p>
  *
  * @author RigorityJTeam
- * @since V01.00
+ * @since V01.00.00
  */
 public class GradleBuildFileParser implements BuildFileParser {
 
 
-	Map<String, String> moduleVsPath = new HashMap<>();
+    Map<String, String> moduleVsPath = new HashMap<>();
 
-	/**
-	 * <p>Constructor for GradleBuildFileParser.</p>
-	 *
-	 * @param fileName a {@link java.lang.String} object.
-	 * @throws java.lang.Exception if any.
-	 */
-	public GradleBuildFileParser(String fileName) throws Exception {
+    /**
+     * <p>Constructor for GradleBuildFileParser.</p>
+     *
+     * @param fileName a {@link java.lang.String} object.
+     * @throws java.lang.Exception if any.
+     */
+    public GradleBuildFileParser(String fileName) throws Exception {
 
-		final String content = new String(Files.readAllBytes(Paths.get(fileName)), "UTF-8");
+        final String content = new String(Files.readAllBytes(Paths.get(fileName)), "UTF-8");
 
-		List<ASTNode> astNodes = new AstBuilder().buildFromString(content);
+        List<ASTNode> astNodes = new AstBuilder().buildFromString(content);
 
-		String[] splits = fileName.split("/");
-		String projectName = splits[splits.length - 2];
-		final String projectRoot = fileName.substring(0, fileName.lastIndexOf('/'));
+        String[] splits = fileName.split("/");
+        String projectName = splits[splits.length - 2];
+        final String projectRoot = fileName.substring(0, fileName.lastIndexOf('/'));
 
-		GroovyCodeVisitor visitor = new CodeVisitorSupport() {
+        GroovyCodeVisitor visitor = new CodeVisitorSupport() {
 
-			@Override
-			public void visitMethodCallExpression(MethodCallExpression call) {
+            @Override
+            public void visitMethodCallExpression(MethodCallExpression call) {
 
-				List<Expression> args = ((ArgumentListExpression) call.getArguments()).getExpressions();
+                List<Expression> args = ((ArgumentListExpression) call.getArguments()).getExpressions();
 
-				for (Expression arg : args) {
+                for (Expression arg : args) {
 
-					moduleVsPath.put(arg.getText(), projectRoot + "/" + arg.getText());
-				}
-			}
-		};
+                    moduleVsPath.put(arg.getText(), projectRoot + "/" + arg.getText());
+                }
+            }
+        };
 
-		for (ASTNode astNode : astNodes) {
-			astNode.visit(visitor);
-		}
+        for (ASTNode astNode : astNodes) {
+            astNode.visit(visitor);
+        }
 
-		if (moduleVsPath.isEmpty()) {
-			moduleVsPath.put(projectName, projectRoot);
-		}
-	}
+        if (moduleVsPath.isEmpty()) {
+            moduleVsPath.put(projectName, projectRoot);
+        }
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Map<String, List<String>> getDependencyList() throws Exception {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Map<String, List<String>> getDependencyList() throws Exception {
 
-		Map<String, List<String>> moduleVsDependencies = new HashMap<>();
+        Map<String, List<String>> moduleVsDependencies = new HashMap<>();
 
-		for (String module : moduleVsPath.keySet()) {
+        for (String module : moduleVsPath.keySet()) {
 
-			final List<String> dependencies = new ArrayList<>();
+            final List<String> dependencies = new ArrayList<>();
 
-			String buildFile = moduleVsPath.get(module) + "/build.gradle";
+            String buildFile = moduleVsPath.get(module) + "/build.gradle";
 
-			String content = new String(Files.readAllBytes(Paths.get(buildFile)), "UTF-8");
+            String content = new String(Files.readAllBytes(Paths.get(buildFile)), "UTF-8");
 
-			List<ASTNode> astNodes = new AstBuilder().buildFromString(content);
+            List<ASTNode> astNodes = new AstBuilder().buildFromString(content);
 
-			GroovyCodeVisitor visitor = new CodeVisitorSupport() {
+            GroovyCodeVisitor visitor = new CodeVisitorSupport() {
 
-				@Override
-				public void visitClosureExpression(ClosureExpression expression) {
+                @Override
+                public void visitClosureExpression(ClosureExpression expression) {
 
-					Statement block = expression.getCode();
-					if (block instanceof BlockStatement) {
-						BlockStatement bs = (BlockStatement) block;
-						for (Statement statement : bs.getStatements()) {
+                    Statement block = expression.getCode();
+                    if (block instanceof BlockStatement) {
+                        BlockStatement bs = (BlockStatement) block;
+                        for (Statement statement : bs.getStatements()) {
 
-							String stmtStr = statement.getText();
+                            String stmtStr = statement.getText();
 
-							if (stmtStr.contains("this.compile(this.project(:")) {
-								String dependency = stmtStr.substring(stmtStr.indexOf(':') + 1, stmtStr.indexOf(')'));
-								dependencies.add(dependency);
-							}
-						}
-					}
-				}
-			};
+                            if (stmtStr.contains("this.compile(this.project(:")) {
+                                String dependency = stmtStr.substring(stmtStr.indexOf(':') + 1, stmtStr.indexOf(')'));
+                                dependencies.add(dependency);
+                            }
+                        }
+                    }
+                }
+            };
 
-			for (ASTNode astNode : astNodes) {
-				astNode.visit(visitor);
-			}
+            for (ASTNode astNode : astNodes) {
+                astNode.visit(visitor);
+            }
 
-			moduleVsDependencies.put(module, dependencies);
-		}
+            moduleVsDependencies.put(module, dependencies);
+        }
 
-		Map<String, List<String>> moduleVsDependencyPaths = new HashMap<>();
+        Map<String, List<String>> moduleVsDependencyPaths = new HashMap<>();
 
-		for (String module : moduleVsDependencies.keySet()) {
-			List<String> dependencyPaths = new ArrayList<>();
-			calcAlldependenciesForModule(module, moduleVsDependencies, dependencyPaths);
-			dependencyPaths.add(moduleVsPath.get(module) + "/src/main/java");
-			moduleVsDependencyPaths.put(module, dependencyPaths);
-		}
+        for (String module : moduleVsDependencies.keySet()) {
+            List<String> dependencyPaths = new ArrayList<>();
+            calcAlldependenciesForModule(module, moduleVsDependencies, dependencyPaths);
+            dependencyPaths.add(moduleVsPath.get(module) + "/src/main/java");
+            moduleVsDependencyPaths.put(module, dependencyPaths);
+        }
 
-		return moduleVsDependencyPaths;
-	}
+        return moduleVsDependencyPaths;
+    }
 
-	private void calcAlldependenciesForModule(String module, Map<String, List<String>> mVsds, List<String> dependencyPaths) {
-		for (String dependency : mVsds.get(module)) {
-			dependencyPaths.add(moduleVsPath.get(dependency) + "/src/main/java");
-			calcAlldependenciesForModule(dependency, mVsds, dependencyPaths);
-		}
-	}
-
-	/**
-	 * <p>main.</p>
-	 *
-	 * @param args an array of {@link java.lang.String} objects.
-	 * @throws java.lang.Exception if any.
-	 */
-	public static void main(String[] args) throws Exception {
-
-		GradleBuildFileParser buildFileParser = new GradleBuildFileParser("/home/krishnokoli/projects/gradle-sample/settings.gradle");
-		System.out.println(buildFileParser.getDependencyList());
-	}
+    private void calcAlldependenciesForModule(String module, Map<String, List<String>> mVsds, List<String> dependencyPaths) {
+        for (String dependency : mVsds.get(module)) {
+            dependencyPaths.add(moduleVsPath.get(dependency) + "/src/main/java");
+            calcAlldependenciesForModule(dependency, mVsds, dependencyPaths);
+        }
+    }
 }

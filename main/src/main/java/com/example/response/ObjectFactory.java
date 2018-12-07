@@ -12,125 +12,124 @@ import javax.xml.bind.annotation.XmlRegistry;
 
 
 /**
- * This object contains factory methods for each 
- * Java content interface and Java element interface 
- * generated in the com.example.response package. 
- * <p>An ObjectFactory allows you to programatically 
- * construct new instances of the Java representation 
- * for XML content. The Java representation of XML 
- * content can consist of schema derived interfaces 
- * and classes representing the binding of schema 
- * type definitions, element declarations and model 
- * groups.  Factory methods for each of these are 
+ * This object contains factory methods for each
+ * Java content interface and Java element interface
+ * generated in the com.example.response package.
+ * <p>An ObjectFactory allows you to programatically
+ * construct new instances of the Java representation
+ * for XML content. The Java representation of XML
+ * content can consist of schema derived interfaces
+ * and classes representing the binding of schema
+ * type definitions, element declarations and model
+ * groups.  Factory methods for each of these are
  * provided in this class.
- * 
  */
 @XmlRegistry
 public class ObjectFactory {
 
 
-	/**
-	 * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: com.example.response
-	 */
-	public ObjectFactory() {
-	}
+    /**
+     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: com.example.response
+     */
+    public ObjectFactory() {
+    }
 
-	/**
-	 * Create an instance of {@link AnalyzerReport }
-	 */
-	public AnalyzerReport createAnalyzerReport() {
-		return new AnalyzerReport();
-	}
+    /**
+     * Create an instance of {@link AnalyzerReport }
+     */
+    public AnalyzerReport createAnalyzerReport() {
+        return new AnalyzerReport();
+    }
 
-	/**
-	 * Create an instance of {@link BugInstanceType }
-	 */
-	public BugInstanceType createBugInstanceType() {
-		return new BugInstanceType();
-	}
+    /**
+     * Create an instance of {@link BugInstanceType }
+     */
+    public BugInstanceType createBugInstanceType() {
+        return new BugInstanceType();
+    }
 
-	/**
-	 * Create an instance of {@link BugSummaryType }
-	 */
-	public BugSummaryType createBugSummaryType() {
-		return new BugSummaryType();
-	}
+    /**
+     * Create an instance of {@link BugSummaryType }
+     */
+    public BugSummaryType createBugSummaryType() {
+        return new BugSummaryType();
+    }
 
-	/**
-	 * Create an instance of {@link MetricType }
-	 */
-	public MetricType createMetricType() {
-		return new MetricType();
-	}
+    /**
+     * Create an instance of {@link MetricType }
+     */
+    public MetricType createMetricType() {
+        return new MetricType();
+    }
 
-	/**
-	 * Create an instance of {@link MetricSummariesType }
-	 */
-	public MetricSummariesType createMetricSummariesType() {
-		return new MetricSummariesType();
-	}
+    /**
+     * Create an instance of {@link MetricSummariesType }
+     */
+    public MetricSummariesType createMetricSummariesType() {
+        return new MetricSummariesType();
+    }
 
-	/**
-	 * Create an instance of {@link MethodType }
-	 */
-	public MethodType createMethodType() {
-		return new MethodType();
-	}
+    /**
+     * Create an instance of {@link MethodType }
+     */
+    public MethodType createMethodType() {
+        return new MethodType();
+    }
 
-	/**
-	 * Create an instance of {@link MetricSummaryType }
-	 */
-	public MetricSummaryType createMetricSummaryType() {
-		return new MetricSummaryType();
-	}
+    /**
+     * Create an instance of {@link MetricSummaryType }
+     */
+    public MetricSummaryType createMetricSummaryType() {
+        return new MetricSummaryType();
+    }
 
-	/**
-	 * Create an instance of {@link BugCategoryType }
-	 */
-	public BugCategoryType createBugCategoryType() {
-		return new BugCategoryType();
-	}
+    /**
+     * Create an instance of {@link BugCategoryType }
+     */
+    public BugCategoryType createBugCategoryType() {
+        return new BugCategoryType();
+    }
 
-	/**
-	 * Create an instance of {@link InstanceLocationType }
-	 */
-	public InstanceLocationType createInstanceLocationType() {
-		return new InstanceLocationType();
-	}
+    /**
+     * Create an instance of {@link InstanceLocationType }
+     */
+    public InstanceLocationType createInstanceLocationType() {
+        return new InstanceLocationType();
+    }
 
-	/**
-	 * Create an instance of {@link BugLocationsType }
-	 */
-	public BugLocationsType createBugLocationsType() {
-		return new BugLocationsType();
-	}
+    /**
+     * Create an instance of {@link BugLocationsType }
+     */
+    public BugLocationsType createBugLocationsType() {
+        return new BugLocationsType();
+    }
 
-	/**
-	 * Create an instance of {@link BugTraceType }
-	 */
-	public BugTraceType createBugTraceType() {
-		return new BugTraceType();
-	}
+    /**
+     * Create an instance of {@link BugTraceType }
+     */
+    public BugTraceType createBugTraceType() {
+        return new BugTraceType();
+    }
 
-	/**
-	 * Create an instance of {@link MethodsType }
-	 */
-	public MethodsType createMethodsType() {
-		return new MethodsType();
-	}
+    /**
+     * Create an instance of {@link MethodsType }
+     */
+    public MethodsType createMethodsType() {
+        return new MethodsType();
+    }
 
-	/**
-	 * Create an instance of {@link LineNumType }
-	 */
-	public LineNumType createLineNumType() {
-		return new LineNumType();
-	}
+    /**
+     * Create an instance of {@link LineNumType }
+     */
+    public LineNumType createLineNumType() {
+        return new LineNumType();
+    }
 
-	/**
-	 * Create an instance of {@link LocationType }
-	 */
-	public LocationType createLocationType() {
-		return new LocationType();
-	}
+    /**
+     * Create an instance of {@link LocationType }
+     */
+    public LocationType createLocationType() {
+        return new LocationType();
+    }
 
 }

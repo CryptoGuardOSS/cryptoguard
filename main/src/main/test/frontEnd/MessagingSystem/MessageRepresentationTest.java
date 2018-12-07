@@ -1,9 +1,9 @@
-package frontEnd;
+package frontEnd.MessagingSystem;
 
-import main.frontEnd.AnalysisIssue;
-import main.frontEnd.EnvironmentInformation;
-import main.frontEnd.MessageRepresentation;
-import main.frontEnd.outputStructures.LegacyOutput;
+import main.frontEnd.MessagingSystem.AnalysisIssue;
+import main.frontEnd.MessagingSystem.EnvironmentInformation;
+import main.frontEnd.MessagingSystem.MessageRepresentation;
+import main.frontEnd.MessagingSystem.outputStructures.LegacyOutput;
 import main.rule.engine.EngineType;
 import org.junit.After;
 import org.junit.Before;
@@ -19,49 +19,49 @@ import static org.junit.Assert.*;
  * <p>MessageRepresentationTest class.</p>
  *
  * @author RigorityJTeam
- * @since V01.01
+ * @since V01.00.01
  */
 public class MessageRepresentationTest {
-	//region Attributes
-	private MessageRepresentation outputEngine;
-	private final String jarOneName = "testable-jar/build/libs/testable-jar.jar";
-	private final String jarOneAnalysis = "Analyzing JAR: testable-jar/build/libs/testable-jar.jar\n";
-	private final EngineType jarType = EngineType.JAR;
-	private EnvironmentInformation env;
-	private AnalysisIssue ruleOneIssue;
-	private AnalysisIssue ruleTwoIssue;
-	//endregion
+    //region Attributes
+    private MessageRepresentation outputEngine;
+    private final String jarOneName = "testable-jar/build/libs/testable-jar.jar";
+    private final String jarOneAnalysis = "Analyzing JAR: testable-jar/build/libs/testable-jar.jar\n";
+    private final EngineType jarType = EngineType.JAR;
+    private EnvironmentInformation env;
+    private AnalysisIssue ruleOneIssue;
+    private AnalysisIssue ruleTwoIssue;
+    //endregion
 
-	//region Test Environment Creation
-	@Before
-	public void setUp() throws Exception {
-		this.env = new EnvironmentInformation(jarOneName, "", "", "", "", "", null, false, "");
-		this.ruleOneIssue = new AnalysisIssue(1, "<tester.Crypto: void <init>()>", "AES/ECB/PKCS5PADDING");
-		this.ruleTwoIssue = new AnalysisIssue(1, "<tester.PasswordUtils: void <init>(java.lang.String)>", "PBEWithMD5AndDES");
-	}
+    //region Test Environment Creation
+    @Before
+    public void setUp() throws Exception {
+        this.env = new EnvironmentInformation(jarOneName, "", "", "", "", "", null, false, "");
+        this.ruleOneIssue = new AnalysisIssue(1, "<tester.Crypto: void <init>()>", "AES/ECB/PKCS5PADDING");
+        this.ruleTwoIssue = new AnalysisIssue(1, "<tester.PasswordUtils: void <init>(java.lang.String)>", "PBEWithMD5AndDES");
+    }
 
-	@After
-	public void tearDown() throws Exception {
-		this.outputEngine = null;
-		this.ruleOneIssue = null;
-		this.ruleTwoIssue = null;
-		this.env = null;
-	}
-	//endregion
+    @After
+    public void tearDown() throws Exception {
+        this.outputEngine = null;
+        this.ruleOneIssue = null;
+        this.ruleTwoIssue = null;
+        this.env = null;
+    }
+    //endregion
 
-	//region Tests
-	@Test
-	public void legacyTest0() {
-		this.outputEngine = new MessageRepresentation(this.env, this.jarType, "L");
+    //region Tests
+    @Test
+    public void legacyTest0() {
+        this.outputEngine = new MessageRepresentation(this.env, this.jarType, "L");
 
-		assertNotNull(this.outputEngine);
-		assertEquals(this.jarOneName, this.outputEngine.getEnvironment().getSource());
-		assertEquals(this.jarType, this.outputEngine.getType());
-		assertTrue(this.outputEngine.getMessageEngine() instanceof LegacyOutput);
-		assertEquals(0, this.outputEngine.getAnalysisIssues().size());
-	}
+        assertNotNull(this.outputEngine);
+        assertEquals(this.jarOneName, this.outputEngine.getEnvironment().getSource());
+        assertEquals(this.jarType, this.outputEngine.getType());
+        assertTrue(this.outputEngine.getMessageEngine() instanceof LegacyOutput);
+        assertEquals(0, this.outputEngine.getAnalysisIssues().size());
+    }
 
-	//TODO - Update these tests
+    //TODO - Update these tests
 	/*
 	@Test
 	public void addLegacyRuleAnalysis() {
@@ -115,17 +115,17 @@ public class MessageRepresentationTest {
 	}
 	*/
 
-	@Test
-	public void getLegacyMessage() {
-		this.outputEngine = new MessageRepresentation(this.env, this.jarType, "L");
-		String message = (String) this.outputEngine.getMessage();
+    @Test
+    public void getLegacyMessage() {
+        this.outputEngine = new MessageRepresentation(this.env, this.jarType, "L");
+        String message = (String) this.outputEngine.getMessage();
 
-		System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
+        System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
 
-		assertNotNull(message);
+        assertNotNull(message);
 
-		assertEquals(this.jarOneAnalysis, message);
+        assertEquals(this.jarOneAnalysis, message);
 
-	}
-	//endregion
+    }
+    //endregion
 }

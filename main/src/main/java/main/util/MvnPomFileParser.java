@@ -18,104 +18,92 @@ import java.util.Map;
  * <p>MvnPomFileParser class.</p>
  *
  * @author RigorityJTeam
- * @since V01.00
+ * @since V01.00.00
  */
 public class MvnPomFileParser implements BuildFileParser {
 
-	Map<String, String> moduleVsPath = new HashMap<>();
+    Map<String, String> moduleVsPath = new HashMap<>();
 
-	/**
-	 * <p>Constructor for MvnPomFileParser.</p>
-	 *
-	 * @param fileName a {@link java.lang.String} object.
-	 * @throws java.lang.Exception if any.
-	 */
-	public MvnPomFileParser(String fileName) throws Exception {
+    /**
+     * <p>Constructor for MvnPomFileParser.</p>
+     *
+     * @param fileName a {@link java.lang.String} object.
+     * @throws java.lang.Exception if any.
+     */
+    public MvnPomFileParser(String fileName) throws Exception {
 
-		File xmlFile = new File(fileName);
-		DocumentBuilderFactory docbuildFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder docBuilder = docbuildFactory.newDocumentBuilder();
-		Document document = docBuilder.parse(xmlFile);
+        File xmlFile = new File(fileName);
+        DocumentBuilderFactory docbuildFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder = docbuildFactory.newDocumentBuilder();
+        Document document = docBuilder.parse(xmlFile);
 
-		NodeList nodeList = document.getElementsByTagName("module");
+        NodeList nodeList = document.getElementsByTagName("module");
 
-		String[] splits = fileName.split("/");
-		String projectName = splits[splits.length - 2];
-		String projectRoot = fileName.substring(0, fileName.lastIndexOf('/'));
+        String[] splits = fileName.split("/");
+        String projectName = splits[splits.length - 2];
+        String projectRoot = fileName.substring(0, fileName.lastIndexOf('/'));
 
-		if (nodeList.getLength() == 0) {
-			moduleVsPath.put(projectName, projectRoot);
-		}
-		else {
+        if (nodeList.getLength() == 0) {
+            moduleVsPath.put(projectName, projectRoot);
+        } else {
 
-			for (int i = 0; i < nodeList.getLength(); i++) {
-				String moduleName = nodeList.item(i).getTextContent();
-				moduleVsPath.put(moduleName, projectRoot + "/" + moduleName);
-			}
-		}
-	}
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                String moduleName = nodeList.item(i).getTextContent();
+                moduleVsPath.put(moduleName, projectRoot + "/" + moduleName);
+            }
+        }
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Map<String, List<String>> getDependencyList() throws Exception {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Map<String, List<String>> getDependencyList() throws Exception {
 
-		Map<String, List<String>> moduleVsDependencies = new HashMap<>();
+        Map<String, List<String>> moduleVsDependencies = new HashMap<>();
 
-		for (String module : moduleVsPath.keySet()) {
+        for (String module : moduleVsPath.keySet()) {
 
-			File xmlFile = new File(moduleVsPath.get(module) + "/pom.xml");
-			DocumentBuilderFactory docbuildFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder docBuilder = docbuildFactory.newDocumentBuilder();
-			Document document = docBuilder.parse(xmlFile);
+            File xmlFile = new File(moduleVsPath.get(module) + "/pom.xml");
+            DocumentBuilderFactory docbuildFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docbuildFactory.newDocumentBuilder();
+            Document document = docBuilder.parse(xmlFile);
 
-			XPath xPath = XPathFactory.newInstance().newXPath();
-			NodeList nodeList = (NodeList) xPath.compile("/project/dependencies/dependency/artifactId")
-					.evaluate(document, XPathConstants.NODESET);
+            XPath xPath = XPathFactory.newInstance().newXPath();
+            NodeList nodeList = (NodeList) xPath.compile("/project/dependencies/dependency/artifactId")
+                    .evaluate(document, XPathConstants.NODESET);
 
-			List<String> dependencies = new ArrayList<>();
+            List<String> dependencies = new ArrayList<>();
 
-			for (int i = 0; i < nodeList.getLength(); i++) {
-				String dependency = nodeList.item(i).getTextContent();
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                String dependency = nodeList.item(i).getTextContent();
 
-				if (moduleVsPath.keySet().contains(dependency)) {
-					dependencies.add(dependency);
-				}
-			}
+                if (moduleVsPath.keySet().contains(dependency)) {
+                    dependencies.add(dependency);
+                }
+            }
 
-			moduleVsDependencies.put(module, dependencies);
-		}
+            moduleVsDependencies.put(module, dependencies);
+        }
 
-		Map<String, List<String>> moduleVsDependencyPaths = new HashMap<>();
+        Map<String, List<String>> moduleVsDependencyPaths = new HashMap<>();
 
-		for (String module : moduleVsDependencies.keySet()) {
-			List<String> dependencyPaths = new ArrayList<>();
-			calcAlldependenciesForModule(module, moduleVsDependencies, dependencyPaths);
-			dependencyPaths.add(moduleVsPath.get(module) + "/src/main/java");
-			moduleVsDependencyPaths.put(module, dependencyPaths);
-		}
+        for (String module : moduleVsDependencies.keySet()) {
+            List<String> dependencyPaths = new ArrayList<>();
+            calcAlldependenciesForModule(module, moduleVsDependencies, dependencyPaths);
+            dependencyPaths.add(moduleVsPath.get(module) + "/src/main/java");
+            moduleVsDependencyPaths.put(module, dependencyPaths);
+        }
 
-		return moduleVsDependencyPaths;
+        return moduleVsDependencyPaths;
 
-	}
+    }
 
 
-	private void calcAlldependenciesForModule(String module, Map<String, List<String>> mVsds, List<String> dependencyPaths) {
-		for (String dependency : mVsds.get(module)) {
-			dependencyPaths.add(moduleVsPath.get(dependency) + "/src/main/java");
-			calcAlldependenciesForModule(dependency, mVsds, dependencyPaths);
-		}
-	}
-
-	/**
-	 * <p>main.</p>
-	 *
-	 * @param args an array of {@link java.lang.String} objects.
-	 * @throws java.lang.Exception if any.
-	 */
-	public static void main(String[] args) throws Exception {
-		MvnPomFileParser pomFileParser = new MvnPomFileParser("/home/krishnokoli/projects/mvn-sample/pom.xml");
-		System.out.println(pomFileParser.getDependencyList());
-	}
+    private void calcAlldependenciesForModule(String module, Map<String, List<String>> mVsds, List<String> dependencyPaths) {
+        for (String dependency : mVsds.get(module)) {
+            dependencyPaths.add(moduleVsPath.get(dependency) + "/src/main/java");
+            calcAlldependenciesForModule(dependency, mVsds, dependencyPaths);
+        }
+    }
 }

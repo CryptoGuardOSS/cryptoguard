@@ -24,250 +24,248 @@ import static main.util.Utils.getClassNamesFromApkArchive;
  * <p>CustomTrustManagerFinder class.</p>
  *
  * @author RigorityJTeam
- * @since V01.00
+ * @since V01.00.00
  */
 public class CustomTrustManagerFinder implements RuleChecker {
 
-	private static final String TRUST_MANAGER = "TrustManager";
-	private static final Map<String, String> METHOD_VS_SLICING_CRITERIA = new HashMap<>();
-
-	static {
-
-		METHOD_VS_SLICING_CRITERIA.put("void checkClientTrusted(java.security.cert.X509Certificate[],java.lang.String)", "throw");
-		METHOD_VS_SLICING_CRITERIA.put("void checkServerTrusted(java.security.cert.X509Certificate[],java.lang.String)", "throw");
-		METHOD_VS_SLICING_CRITERIA.put("void checkServerTrusted(java.security.cert.X509Certificate[],java.lang.String)", "checkValidity()");
-		METHOD_VS_SLICING_CRITERIA.put("java.security.cert.X509Certificate[] getAcceptedIssuers()", "return");
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath) throws IOException {
-
-		Map<String, List<OtherAnalysisResult>> analysisLists;
-		if (type == EngineType.JAR) {
-			analysisLists = analyzeJar(projectJarPath.get(0), projectDependencyPath.get(0));
-		}
-		else if (type == EngineType.APK) {
-			analysisLists = analyzeApk(projectJarPath.get(0));
-		}
-		else {
-			analysisLists = analyzeSnippet(projectJarPath, projectDependencyPath);
-		}
-
-		for (String className : analysisLists.keySet()) {
-
-			List<OtherAnalysisResult> analysisList = analysisLists.get(className);
-
-			for (OtherAnalysisResult analysis : analysisList) {
-
-				if (analysis.getInstruction().equals("throw") &&
-						analysis.getAnalysis().isEmpty() &&
-						(!isThrowException(analysis.getMethod()) ||
-								hasTryCatch(analysis.getMethod()))) {
-
-					System.out.println("=======================================");
-					String output = "***Violated Rule 4: Uses untrusted TrustManager";
-					output += " ***Should throw java.security.cert.CertificateException in check(Client|Server)Trusted method of " + className;
-					System.out.println(output);
-					System.out.println("=======================================");
-				}
-
-				if (analysis.getInstruction().equals("checkValidity()") &&
-						!analysis.getAnalysis().isEmpty()) {
+    private static final String TRUST_MANAGER = "TrustManager";
+    private static final Map<String, String> METHOD_VS_SLICING_CRITERIA = new HashMap<>();
+
+    static {
+
+        METHOD_VS_SLICING_CRITERIA.put("void checkClientTrusted(java.security.cert.X509Certificate[],java.lang.String)", "throw");
+        METHOD_VS_SLICING_CRITERIA.put("void checkServerTrusted(java.security.cert.X509Certificate[],java.lang.String)", "throw");
+        METHOD_VS_SLICING_CRITERIA.put("void checkServerTrusted(java.security.cert.X509Certificate[],java.lang.String)", "checkValidity()");
+        METHOD_VS_SLICING_CRITERIA.put("java.security.cert.X509Certificate[] getAcceptedIssuers()", "return");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath) throws IOException {
+
+        Map<String, List<OtherAnalysisResult>> analysisLists;
+        if (type == EngineType.JAR) {
+            analysisLists = analyzeJar(projectJarPath.get(0), projectDependencyPath.get(0));
+        } else if (type == EngineType.APK) {
+            analysisLists = analyzeApk(projectJarPath.get(0));
+        } else {
+            analysisLists = analyzeSnippet(projectJarPath, projectDependencyPath);
+        }
+
+        for (String className : analysisLists.keySet()) {
+
+            List<OtherAnalysisResult> analysisList = analysisLists.get(className);
+
+            for (OtherAnalysisResult analysis : analysisList) {
+
+                if (analysis.getInstruction().equals("throw") &&
+                        analysis.getAnalysis().isEmpty() &&
+                        (!isThrowException(analysis.getMethod()) ||
+                                hasTryCatch(analysis.getMethod()))) {
+
+                    System.out.println("=======================================");
+                    String output = "***Violated Rule 4: Uses untrusted TrustManager";
+                    output += " ***Should throw java.security.cert.CertificateException in check(Client|Server)Trusted method of " + className;
+                    System.out.println(output);
+                    System.out.println("=======================================");
+                }
 
-					for (UnitContainer unit : analysis.getAnalysis()) {
-						if (unit.getUnit() instanceof JAssignStmt &&
-								unit.getUnit().toString().contains("[0]")) {
-							System.out.println("=======================================");
-							String output = "***Violated Rule 4: Uses untrusted TrustManager";
-							output += " ***Should not use unpinned self-signed certification in " + className;
-							System.out.println(output);
-							System.out.println("=======================================");
-						}
-					}
-				}
-
-				if (analysis.getInstruction().equals("return") && !analysis.getAnalysis().isEmpty()) {
-					boolean callsGetAcceptedIssuers = false;
-					for (UnitContainer unit : analysis.getAnalysis()) {
+                if (analysis.getInstruction().equals("checkValidity()") &&
+                        !analysis.getAnalysis().isEmpty()) {
 
-						if (unit.getUnit().toString().contains("getAcceptedIssuers()")) {
-							callsGetAcceptedIssuers = true;
-							break;
-						}
-					}
+                    for (UnitContainer unit : analysis.getAnalysis()) {
+                        if (unit.getUnit() instanceof JAssignStmt &&
+                                unit.getUnit().toString().contains("[0]")) {
+                            System.out.println("=======================================");
+                            String output = "***Violated Rule 4: Uses untrusted TrustManager";
+                            output += " ***Should not use unpinned self-signed certification in " + className;
+                            System.out.println(output);
+                            System.out.println("=======================================");
+                        }
+                    }
+                }
+
+                if (analysis.getInstruction().equals("return") && !analysis.getAnalysis().isEmpty()) {
+                    boolean callsGetAcceptedIssuers = false;
+                    for (UnitContainer unit : analysis.getAnalysis()) {
 
-					if (!callsGetAcceptedIssuers) {
-						System.out.println("=======================================");
-						String output = "***Violated Rule 4: Uses untrusted TrustManager";
-						output += " ***Should at least get One accepted Issuer from Other Sources in getAcceptedIssuers method of " + className;
-						System.out.println(output);
-						System.out.println("=======================================");
-					}
-				}
-			}
-		}
+                        if (unit.getUnit().toString().contains("getAcceptedIssuers()")) {
+                            callsGetAcceptedIssuers = true;
+                            break;
+                        }
+                    }
 
-	}
+                    if (!callsGetAcceptedIssuers) {
+                        System.out.println("=======================================");
+                        String output = "***Violated Rule 4: Uses untrusted TrustManager";
+                        output += " ***Should at least get One accepted Issuer from Other Sources in getAcceptedIssuers method of " + className;
+                        System.out.println(output);
+                        System.out.println("=======================================");
+                    }
+                }
+            }
+        }
 
-	private boolean isThrowException(SootMethod method) {
-		Body b = method.retrieveActiveBody();
-		DirectedGraph graph = new ExceptionalUnitGraph(b);
+    }
 
-		Iterator unitIt = graph.iterator();
+    private boolean isThrowException(SootMethod method) {
+        Body b = method.retrieveActiveBody();
+        DirectedGraph graph = new ExceptionalUnitGraph(b);
 
-		while (unitIt.hasNext()) {
-			Unit unit = (Unit) unitIt.next();
+        Iterator unitIt = graph.iterator();
 
-			if (unit instanceof JInvokeStmt) {
-				List<SootClass> exceptions = ((JInvokeStmt) unit).getInvokeExpr().getMethod().getExceptions();
+        while (unitIt.hasNext()) {
+            Unit unit = (Unit) unitIt.next();
 
-				return exceptions.toString().contains("CertificateException");
-			}
-		}
+            if (unit instanceof JInvokeStmt) {
+                List<SootClass> exceptions = ((JInvokeStmt) unit).getInvokeExpr().getMethod().getExceptions();
 
-		return false;
-	}
+                return exceptions.toString().contains("CertificateException");
+            }
+        }
 
-	private boolean hasTryCatch(SootMethod method) {
-		Body b = method.retrieveActiveBody();
-		return b.getTraps().size() > 0;
-	}
+        return false;
+    }
 
-	private Map<String, List<OtherAnalysisResult>> analyzeSnippet(List<String> snippetPath, List<String> projectDependencyPath) {
+    private boolean hasTryCatch(SootMethod method) {
+        Body b = method.retrieveActiveBody();
+        return b.getTraps().size() > 0;
+    }
 
-		String javaHome = System.getenv("JAVA7_HOME");
+    private Map<String, List<OtherAnalysisResult>> analyzeSnippet(List<String> snippetPath, List<String> projectDependencyPath) {
 
-		if (javaHome.isEmpty()) {
+        String javaHome = System.getenv("JAVA7_HOME");
 
-			System.err.println("Please set JAVA7_HOME");
-			System.exit(1);
-		}
+        if (javaHome.isEmpty()) {
 
-		List<String> classNames = Utils.getClassNamesFromSnippet(snippetPath);
+            System.err.println("Please set JAVA7_HOME");
+            System.exit(1);
+        }
 
-		StringBuilder srcPaths = new StringBuilder();
+        List<String> classNames = Utils.getClassNamesFromSnippet(snippetPath);
 
-		for (String srcDir : snippetPath) {
-			srcPaths.append(srcDir)
-					.append(":");
-		}
+        StringBuilder srcPaths = new StringBuilder();
 
-		Options.v().set_soot_classpath(javaHome + "/jre/lib/rt.jar:"
-											   + javaHome + "/jre/lib/jce.jar:" + srcPaths.toString() + Utils.buildSootClassPath(projectDependencyPath));
+        for (String srcDir : snippetPath) {
+            srcPaths.append(srcDir)
+                    .append(":");
+        }
 
-		Options.v().set_output_format(Options.output_format_jimple);
-		Options.v().set_src_prec(Options.src_prec_java);
+        Options.v().set_soot_classpath(javaHome + "/jre/lib/rt.jar:"
+                + javaHome + "/jre/lib/jce.jar:" + srcPaths.toString() + Utils.buildSootClassPath(projectDependencyPath));
 
-		for (String className : classNames) {
-			Options.v().classes().add(className);
-		}
+        Options.v().set_output_format(Options.output_format_jimple);
+        Options.v().set_src_prec(Options.src_prec_java);
 
-		Options.v().set_keep_line_number(true);
-		Options.v().set_allow_phantom_refs(true);
+        for (String className : classNames) {
+            Options.v().classes().add(className);
+        }
 
-		Scene.v().loadBasicClasses();
+        Options.v().set_keep_line_number(true);
+        Options.v().set_allow_phantom_refs(true);
 
-		return getAnalysisForTrustManager(classNames);
-	}
+        Scene.v().loadBasicClasses();
 
-	private Map<String, List<OtherAnalysisResult>> analyzeJar(String projectJarPath, String projectDependencyPath) throws IOException {
-		String javaHome = System.getenv("JAVA_HOME");
+        return getAnalysisForTrustManager(classNames);
+    }
 
-		if (javaHome.isEmpty()) {
+    private Map<String, List<OtherAnalysisResult>> analyzeJar(String projectJarPath, String projectDependencyPath) throws IOException {
+        String javaHome = System.getenv("JAVA_HOME");
 
-			System.err.println("Please set JAVA_HOME");
-			System.exit(1);
-		}
+        if (javaHome.isEmpty()) {
 
-		String sootClassPath = Utils.buildSootClassPath(projectJarPath,
-														javaHome + "/jre/lib/rt.jar",
-														javaHome + "/jre/lib/jce.jar",
-														projectDependencyPath);
-		Options.v().set_keep_line_number(true);
-		Options.v().set_allow_phantom_refs(true);
+            System.err.println("Please set JAVA_HOME");
+            System.exit(1);
+        }
 
-		Scene.v().setSootClassPath(sootClassPath);
+        String sootClassPath = Utils.buildSootClassPath(projectJarPath,
+                javaHome + "/jre/lib/rt.jar",
+                javaHome + "/jre/lib/jce.jar",
+                projectDependencyPath);
+        Options.v().set_keep_line_number(true);
+        Options.v().set_allow_phantom_refs(true);
 
-		Scene.v().loadBasicClasses();
+        Scene.v().setSootClassPath(sootClassPath);
 
-		List<String> classNames = Utils.getClassNamesFromJarArchive(projectJarPath);
-		return getAnalysisForTrustManager(classNames);
-	}
+        Scene.v().loadBasicClasses();
 
-	private Map<String, List<OtherAnalysisResult>> analyzeApk(String projectJarPath) throws IOException {
-		String javaHome = System.getenv("JAVA_HOME");
-		String androidHome = System.getenv("ANDROID_SDK_HOME");
+        List<String> classNames = Utils.getClassNamesFromJarArchive(projectJarPath);
+        return getAnalysisForTrustManager(classNames);
+    }
 
-		if (javaHome == null) {
+    private Map<String, List<OtherAnalysisResult>> analyzeApk(String projectJarPath) throws IOException {
+        String javaHome = System.getenv("JAVA_HOME");
+        String androidHome = System.getenv("ANDROID_SDK_HOME");
 
-			System.err.println("Please set JAVA_HOME");
-			System.exit(1);
-		}
+        if (javaHome == null) {
 
-		if (androidHome == null) {
+            System.err.println("Please set JAVA_HOME");
+            System.exit(1);
+        }
 
-			System.err.println("Please set ANDROID_SDK_HOME");
-			System.exit(1);
-		}
+        if (androidHome == null) {
 
-		Options.v().set_keep_line_number(true);
-		Options.v().set_src_prec(Options.src_prec_apk);
-		Options.v().set_android_jars(androidHome + "/platforms");
-		Options.v().set_soot_classpath(javaHome + "/jre/lib/rt.jar:" + javaHome + "/jre/lib/jce.jar");
+            System.err.println("Please set ANDROID_SDK_HOME");
+            System.exit(1);
+        }
 
-		Options.v().set_process_dir(Collections.singletonList(projectJarPath));
-		Options.v().set_whole_program(true);
-		Options.v().set_allow_phantom_refs(true);
+        Options.v().set_keep_line_number(true);
+        Options.v().set_src_prec(Options.src_prec_apk);
+        Options.v().set_android_jars(androidHome + "/platforms");
+        Options.v().set_soot_classpath(javaHome + "/jre/lib/rt.jar:" + javaHome + "/jre/lib/jce.jar");
 
-		Scene.v().loadBasicClasses();
+        Options.v().set_process_dir(Collections.singletonList(projectJarPath));
+        Options.v().set_whole_program(true);
+        Options.v().set_allow_phantom_refs(true);
 
-		List<String> classNames = getClassNamesFromApkArchive(projectJarPath);
-		return getAnalysisForTrustManager(classNames);
-	}
+        Scene.v().loadBasicClasses();
 
-	private static Map<String, List<OtherAnalysisResult>> getAnalysisForTrustManager(List<String> classNames) {
+        List<String> classNames = getClassNamesFromApkArchive(projectJarPath);
+        return getAnalysisForTrustManager(classNames);
+    }
 
-		Map<String, List<OtherAnalysisResult>> analysisList = new HashMap<>();
+    private static Map<String, List<OtherAnalysisResult>> getAnalysisForTrustManager(List<String> classNames) {
 
-		NamedMethodMap.build(classNames);
-		FieldInitializationInstructionMap.build(classNames);
+        Map<String, List<OtherAnalysisResult>> analysisList = new HashMap<>();
 
-		for (String className : classNames) {
-			SootClass sClass = Scene.v().loadClassAndSupport(className);
+        NamedMethodMap.build(classNames);
+        FieldInitializationInstructionMap.build(classNames);
 
-			if (sClass.getInterfaces().toString().contains(TRUST_MANAGER)) {
+        for (String className : classNames) {
+            SootClass sClass = Scene.v().loadClassAndSupport(className);
 
-				List<OtherAnalysisResult> otherAnalysisResults = new ArrayList<>();
+            if (sClass.getInterfaces().toString().contains(TRUST_MANAGER)) {
 
-				for (String methodName : METHOD_VS_SLICING_CRITERIA.keySet()) {
+                List<OtherAnalysisResult> otherAnalysisResults = new ArrayList<>();
 
-					SootMethod method;
-					try {
+                for (String methodName : METHOD_VS_SLICING_CRITERIA.keySet()) {
 
-						method = sClass.getMethod(methodName);
-					} catch (RuntimeException e) {
-						continue;
-					}
+                    SootMethod method;
+                    try {
 
-					if (method.isConcrete()) {
+                        method = sClass.getMethod(methodName);
+                    } catch (RuntimeException e) {
+                        continue;
+                    }
 
-						String slicingInstruction = METHOD_VS_SLICING_CRITERIA.get(methodName);
+                    if (method.isConcrete()) {
 
-						OtherInfluencingInstructions returnInfluencingInstructions =
-								new OtherInfluencingInstructions(method, slicingInstruction);
+                        String slicingInstruction = METHOD_VS_SLICING_CRITERIA.get(methodName);
 
-						OtherAnalysisResult analysis = returnInfluencingInstructions.getAnalysisResult();
-						otherAnalysisResults.add(analysis);
-					}
-				}
+                        OtherInfluencingInstructions returnInfluencingInstructions =
+                                new OtherInfluencingInstructions(method, slicingInstruction);
 
-				analysisList.put(sClass.getName(), otherAnalysisResults);
-			}
-		}
+                        OtherAnalysisResult analysis = returnInfluencingInstructions.getAnalysisResult();
+                        otherAnalysisResults.add(analysis);
+                    }
+                }
 
-		return analysisList;
-	}
+                analysisList.put(sClass.getName(), otherAnalysisResults);
+            }
+        }
+
+        return analysisList;
+    }
 }
