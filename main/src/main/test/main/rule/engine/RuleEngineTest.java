@@ -1,7 +1,5 @@
-package rule.engine;
+package main.rule.engine;
 
-import main.rule.engine.EngineType;
-import main.rule.engine.RuleEngine;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

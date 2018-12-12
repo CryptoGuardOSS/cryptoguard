@@ -7,7 +7,7 @@ package main.CWE_Reader;
  *
  * <p>The Class containing the CWE Info</p>
  */
-public class CWE_Class {
+public class CWE {
 
     //region Attributes
     private Integer id;
@@ -27,7 +27,7 @@ public class CWE_Class {
      * @param description
      * @param extendedDescription
      */
-    public CWE_Class(Integer id, String name, String weaknessAbstraction, String description, String extendedDescription) {
+    public CWE(Integer id, String name, String weaknessAbstraction, String description, String extendedDescription) {
         this.id = id;
         this.name = name;
         this.weaknessAbstraction = weaknessAbstraction;
@@ -36,6 +36,7 @@ public class CWE_Class {
     }
 
     //region Getters
+
     /**
      * Getter for id
      *

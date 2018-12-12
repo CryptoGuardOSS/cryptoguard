@@ -45,7 +45,7 @@ task xsd2java() {
                 destdir: '${jaxbTargetDir}',
                 package: scarfPackage,
                 schema: scarfSchema
-        ){
+        ) {
             //arg(value: "-Xannotate")
         }
 
