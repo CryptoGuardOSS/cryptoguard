@@ -1,14 +1,13 @@
-package main.frontEnd.MessagingSystem;
+package main.frontEnd.MessagingSystem.routing;
 
+import main.rule.engine.EngineType;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nonnull;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -38,6 +37,9 @@ public class EnvironmentInformation {
     private final Boolean prettyPrint;
     private String packageName;
     private String packageVersion;
+    private PrintStream internalErrors;
+    private String sourceDependencies;
+    private EngineType sourceType;
     //endregion
     //region From Outside
     private final String AssessmentFramework;
@@ -74,7 +76,7 @@ public class EnvironmentInformation {
      * @param printFormatted             a boolean.
      * @param fileXPath                  a {@link java.lang.String} object.
      */
-    public EnvironmentInformation(@Nonnull String source, @Nonnull String assessmentFramework, @Nonnull String assessmentFrameworkVersion, @Nonnull String assessmentStartTime, @Nonnull String parserName, @Nonnull String parserVersion, String givenUUID, boolean printFormatted, String fileXPath) {
+    public EnvironmentInformation(@Nonnull String source, @Nonnull EngineType sourceType, String dependencies, String assessmentFramework, String assessmentFrameworkVersion, String assessmentStartTime, String parserName, String parserVersion, String givenUUID, boolean printFormatted, String fileXPath) {
         //region Setting Internal Settings
         String tempToolFrameworkVersion;
         String tempToolFramework;
@@ -105,6 +107,12 @@ public class EnvironmentInformation {
         BuildFramework = tempBuildFramework;
         BuildFrameworkVersion = tempBuildFrameworkVersion;
         prettyPrint = printFormatted;
+
+
+        internalErrors = new PrintStream(new ByteArrayOutputStream());
+        System.setOut(internalErrors);
+        this.sourceType = sourceType;
+        this.sourceDependencies = dependencies;
         //endregion
 
         //region Setting External Based Properties

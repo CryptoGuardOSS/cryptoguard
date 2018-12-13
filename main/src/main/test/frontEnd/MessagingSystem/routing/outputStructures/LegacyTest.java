@@ -1,10 +1,10 @@
-package frontEnd.MessagingSystem.outputStructures;
+package frontEnd.MessagingSystem.routing.outputStructures;
 
 import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.AnalysisLocation;
-import main.frontEnd.MessagingSystem.EnvironmentInformation;
-import main.frontEnd.MessagingSystem.OutputStructure;
-import main.frontEnd.MessagingSystem.outputStructures.LegacyOutput;
+import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
+import main.frontEnd.MessagingSystem.routing.outputStructures.Legacy;
+import main.frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import main.rule.engine.EngineType;
 import org.junit.After;
 import org.junit.Before;
@@ -20,7 +20,7 @@ import static org.junit.Assert.assertEquals;
  * @author RigorityJTeam
  * @since V01.00.01
  */
-public class LegacyOutputTest {
+public class LegacyTest {
 
     //region Attributes
     private String result;
@@ -35,8 +35,9 @@ public class LegacyOutputTest {
     @Before
     public void setUp() {
         this.source = "testable-jar/build/libs/testable-jar.jar";
-        this.env = new EnvironmentInformation(this.source, "", "", "", "", "", null, false, "");
         this.type = EngineType.JAR;
+
+        this.env = new EnvironmentInformation(this.source, this.type, null, "", "", "", "", "", null, false, "");
 
         StringBuilder sampleOne = new StringBuilder();
 
@@ -95,7 +96,7 @@ public class LegacyOutputTest {
 
         this.result = sampleOne.toString();
 
-        this.messagingSystem = new LegacyOutput();
+        this.messagingSystem = new Legacy();
 
         this.brokenRules = new ArrayList<>();
 

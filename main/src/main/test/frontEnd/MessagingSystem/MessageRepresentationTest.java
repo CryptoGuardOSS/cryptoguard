@@ -1,9 +1,9 @@
 package frontEnd.MessagingSystem;
 
 import main.frontEnd.MessagingSystem.AnalysisIssue;
-import main.frontEnd.MessagingSystem.EnvironmentInformation;
 import main.frontEnd.MessagingSystem.MessageRepresentation;
-import main.frontEnd.MessagingSystem.outputStructures.LegacyOutput;
+import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
+import main.frontEnd.MessagingSystem.routing.outputStructures.Legacy;
 import main.rule.engine.EngineType;
 import org.junit.After;
 import org.junit.Before;
@@ -35,7 +35,7 @@ public class MessageRepresentationTest {
     //region Test Environment Creation
     @Before
     public void setUp() throws Exception {
-        this.env = new EnvironmentInformation(jarOneName, "", "", "", "", "", null, false, "");
+        this.env = new EnvironmentInformation(jarOneName, jarType, null, "", "", "", "", "", null, false, "");
         this.ruleOneIssue = new AnalysisIssue(1, "<tester.Crypto: void <init>()>", "AES/ECB/PKCS5PADDING");
         this.ruleTwoIssue = new AnalysisIssue(1, "<tester.PasswordUtils: void <init>(java.lang.String)>", "PBEWithMD5AndDES");
     }
@@ -57,7 +57,7 @@ public class MessageRepresentationTest {
         assertNotNull(this.outputEngine);
         assertEquals(this.jarOneName, this.outputEngine.getEnvironment().getSource());
         assertEquals(this.jarType, this.outputEngine.getType());
-        assertTrue(this.outputEngine.getMessageEngine() instanceof LegacyOutput);
+        assertTrue(this.outputEngine.getMessageEngine() instanceof Legacy);
         assertEquals(0, this.outputEngine.getAnalysisIssues().size());
     }
 

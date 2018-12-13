@@ -16,14 +16,15 @@ import java.util.List;
  */
 public enum EngineType {
     //region Values
-    JAR("JAR File", "jar"),
-    APK("APK File", "apk"),
-    SOURCE("Source Code", "source");
+    JAR("JAR File", "jar", ".jar"),
+    APK("APK File", "apk", ".apk"),
+    SOURCE("Source Code", "source", "dir");
     //endregion
 
     //region Attributes
     private String name;
     private String flag;
+    private String inputExtension;
     //endregion
 
     //region Constructor
@@ -34,9 +35,10 @@ public enum EngineType {
      * @param name - the human readable name of the engine type
      * @param flag - the flag used to identify the engine type
      */
-    EngineType(String name, String flag) {
+    EngineType(String name, String flag, String extension) {
         this.name = name;
         this.flag = flag;
+        this.inputExtension = extension;
     }
     //endregion
 
@@ -60,15 +62,25 @@ public enum EngineType {
         return this.name;
     }
 
+
+    /**
+     * The getter for the extension
+     *
+     * @return {@link java.lang.String} - The extension for the engine Type
+     */
+    public String getInputExtension() {
+        return this.inputExtension;
+    }
+
     /**
      * The method to retrieve the engine type from the flag
      *
      * @param flag - the flag used to look for the specified engine type
      * @return - either null if no flag matched or the engine type
      */
-    public static EngineType getFromFlag(String flag) {
+    public static EngineType getFromExt(String flag) {
         for (EngineType type : EngineType.values())
-            if (type.flag.equals(flag)) {
+            if (type.inputExtension.equals(flag)) {
                 return type;
             }
 

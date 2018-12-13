@@ -1,5 +1,7 @@
-package main.frontEnd.MessagingSystem;
+package main.frontEnd.MessagingSystem.routing.outputStructures;
 
+import main.frontEnd.MessagingSystem.AnalysisIssue;
+import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import main.rule.engine.EngineType;
 
 import java.io.PrintStream;

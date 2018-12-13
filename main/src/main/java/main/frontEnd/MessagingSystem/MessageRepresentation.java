@@ -1,6 +1,8 @@
 package main.frontEnd.MessagingSystem;
 
-import main.frontEnd.MessagingSystem.outputStructures.Listing;
+import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
+import main.frontEnd.MessagingSystem.routing.Listing;
+import main.frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import main.rule.engine.EngineType;
 
 import java.io.ByteArrayOutputStream;
@@ -41,7 +43,7 @@ public class MessageRepresentation {
     public MessageRepresentation(EnvironmentInformation source, EngineType type, String typeOfMessagingStructure) {
         this.env = source;
         this.type = type;
-        this.messageEngine = Listing.getTypeOfMessaging(typeOfMessagingStructure);
+        this.messageEngine = Listing.getTypeOfMessagingOutput(typeOfMessagingStructure);
         this.internalMessages = new PrintStream(new ByteArrayOutputStream());
         System.setOut(this.internalMessages);
         this.analysisIssues = new LinkedList<>();

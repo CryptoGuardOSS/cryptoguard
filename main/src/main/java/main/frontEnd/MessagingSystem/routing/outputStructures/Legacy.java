@@ -1,9 +1,9 @@
-package main.frontEnd.MessagingSystem.outputStructures;
+package main.frontEnd.MessagingSystem.routing.outputStructures;
 
 import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.AnalysisLocation;
-import main.frontEnd.MessagingSystem.EnvironmentInformation;
-import main.frontEnd.MessagingSystem.OutputStructure;
+import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
+import main.frontEnd.MessagingSystem.routing.Listing;
 import main.rule.engine.EngineType;
 import main.rule.engine.RuleList;
 import org.apache.commons.lang3.StringUtils;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  * @author franceme
  * @since V01.00.01
  */
-public class LegacyOutput implements OutputStructure {
+public class Legacy implements OutputStructure {
     public final Listing typeOfStructure = Listing.LegacyOutput;
 
 

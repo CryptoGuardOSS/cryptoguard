@@ -1,10 +1,10 @@
-package main.frontEnd.MessagingSystem.outputStructures;
+package main.frontEnd.MessagingSystem.routing.outputStructures;
 
 import com.example.response.*;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.AnalysisLocation;
-import main.frontEnd.MessagingSystem.EnvironmentInformation;
-import main.frontEnd.MessagingSystem.OutputStructure;
+import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
+import main.frontEnd.MessagingSystem.routing.Listing;
 import main.rule.engine.EngineType;
 import main.rule.engine.RuleList;
 import org.apache.commons.lang3.StringUtils;
@@ -25,7 +25,7 @@ import java.util.HashMap;
  * @author franceme
  * @since V01.00.03
  */
-public class ScarfXMLOutput implements OutputStructure {
+public class ScarfXML implements OutputStructure {
     public final Listing typeOfStructure = Listing.LegacyOutput;
 
     /**
