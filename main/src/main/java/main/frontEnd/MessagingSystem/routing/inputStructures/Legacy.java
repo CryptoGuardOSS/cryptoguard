@@ -15,8 +15,6 @@ public class Legacy implements InputStructure {
 
     /**
      * {@inheritDoc}
-     * <p>
-     * <p>
      * The overridden method for the Legacy output.
      */
     public EnvironmentInformation inputValidation(String[] args, String dependencies, EngineType type) {
@@ -25,8 +23,6 @@ public class Legacy implements InputStructure {
 
     /**
      * {@inheritDoc}
-     * <p>
-     * <p>
      * The overridden method for the Legacy output.
      */
     public String helpInfo() {

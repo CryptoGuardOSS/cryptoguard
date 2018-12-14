@@ -25,8 +25,6 @@ public class CWEList {
 
     /**
      * The empty constructor for this class
-     *
-     * @return a {@link CWEList} object.
      */
     public CWEList() {
 
@@ -38,7 +36,7 @@ public class CWEList {
      *
      * <p>getCweList()</p>
      *
-     * @return a {@link Map< Integer,  CWE >} object.
+     * @return a {@link Map} object.
      */
     public Map<Integer, CWE> getCweList() {
 

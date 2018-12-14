@@ -29,8 +29,6 @@ public class ScarfXML implements OutputStructure {
 
     /**
      * {@inheritDoc}
-     * <p>
-     * <p>
      * The overridden method for the Scarf XML output.
      */
     public String getOutput(EnvironmentInformation source, ArrayList<AnalysisIssue> brokenRules) {

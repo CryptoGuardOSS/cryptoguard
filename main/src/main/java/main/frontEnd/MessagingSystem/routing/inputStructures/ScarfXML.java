@@ -19,8 +19,6 @@ public class ScarfXML implements InputStructure {
 
     /**
      * {@inheritDoc}
-     * <p>
-     * <p>
      * The overridden method for the ScarfXML output.
      */
     public EnvironmentInformation inputValidation(String[] args, String dependencies, EngineType type) {
@@ -40,8 +38,6 @@ public class ScarfXML implements InputStructure {
 
     /**
      * {@inheritDoc}
-     * <p>
-     * <p>
      * The overridden method for the Legacy output.
      */
     public String helpInfo() {

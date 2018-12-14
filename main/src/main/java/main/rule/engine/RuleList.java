@@ -97,7 +97,7 @@ public enum RuleList {
      * <p>retrieveCWEInfo({@link CWEList})</p>
      *
      * @param list a {@link CWEList} object.
-     * @return a {@link ArrayList<CWE>} object.
+     * @return {@link ArrayList} object.
      */
     public ArrayList<CWE> retrieveCWEInfo(CWEList list) {
         ArrayList<CWE> out = new ArrayList<>();

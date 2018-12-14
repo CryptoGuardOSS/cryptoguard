@@ -23,8 +23,6 @@ public class Legacy implements OutputStructure {
 
     /**
      * {@inheritDoc}
-     * <p>
-     * <p>
      * The overridden method for the Legacy output. Currently mimics the output as best seen.
      */
     public String getOutput(EnvironmentInformation source, ArrayList<AnalysisIssue> brokenRules) {

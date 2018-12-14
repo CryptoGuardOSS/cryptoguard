@@ -19,13 +19,14 @@ public class CWE {
 
 
     /**
-     * TODO - SET THIS INFO
+     * The cwe general info body
+     * This class only carries a brief subset of the full information of a CWE
      *
-     * @param id
-     * @param name
-     * @param weaknessAbstraction
-     * @param description
-     * @param extendedDescription
+     * @param id {@link Integer} - The id of the CWE
+     * @param name {@link String} - The name of the CWE
+     * @param weaknessAbstraction {@link String} - The weakness type of the CWE
+     * @param description {@link String} - The short description of the CWE
+     * @param extendedDescription {@link String} - The extended description of the CWE
      */
     public CWE(Integer id, String name, String weaknessAbstraction, String description, String extendedDescription) {
         this.id = id;
