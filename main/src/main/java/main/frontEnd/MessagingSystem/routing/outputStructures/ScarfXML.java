@@ -1,6 +1,8 @@
 package main.frontEnd.MessagingSystem.routing.outputStructures;
 
 import com.example.response.*;
+import main.CWE_Reader.CWE;
+import main.CWE_Reader.CWEList;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.AnalysisLocation;
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
@@ -35,7 +37,7 @@ public class ScarfXML implements OutputStructure {
 
         //reopening the console stream
         source.openConsoleStream();
-
+        CWEList cwes = new CWEList();
         try {
             AnalyzerReport report = new AnalyzerReport();
 
@@ -80,6 +82,9 @@ public class ScarfXML implements OutputStructure {
                 trace.setBuildId(source.getBuildId());
                 trace.setAssessmentReportFile(source.getxPath());
                 instance.setBugTrace(trace);
+
+                for (CWE cwe : issue.getRule().retrieveCWEInfo(cwes))
+                    instance.getCweld().add(String.valueOf(cwe.getId()));
 
                 if (StringUtils.isNotBlank(issue.getClassName())) {
                     instance.setClassName(issue.getClassName());
