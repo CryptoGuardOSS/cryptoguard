@@ -74,5 +74,15 @@ public class MessageRepresentation {
     public String getMessage() {
         return this.env.getMessagingType().getTypeOfMessagingOutput().getOutput(this.env, this.getAnalysisIssues());
     }
+
+    /**
+     * The static method to get the structure of the output.
+     * Also re-opens the console output.
+     *
+     * @return String - the string output is determined by the type of messaging system used
+     */
+    public static String getMessage(EnvironmentInformation env, ArrayList<AnalysisIssue> issues) {
+        return env.getMessagingType().getTypeOfMessagingOutput().getOutput(env, issues);
+    }
     //endregion
 }
