@@ -4,10 +4,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileDescriptor;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
+import java.io.*;
+
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertNull;
 
 /**
  * <p>MessageRepresentationTest class.</p>
@@ -134,7 +135,6 @@ public class RuleEngineTest {
     //region Tests
     @Test
     public void mainTestJar() {
-        /*
         File temp = new File(this.jarOne);
 
         assertTrue(temp.isFile());
@@ -155,7 +155,6 @@ public class RuleEngineTest {
             e.printStackTrace();
             assertNull(e);
         }
-    */
     }
 
     @Test
