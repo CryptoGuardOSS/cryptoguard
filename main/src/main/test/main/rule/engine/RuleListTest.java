@@ -1,5 +1,6 @@
 package main.rule.engine;
 
+import main.CWE_Reader.CWE;
 import main.CWE_Reader.CWEList;
 import org.junit.After;
 import org.junit.Before;
@@ -35,7 +36,8 @@ public class RuleListTest {
     public void testCWEListing() {
         for (RuleList rule : RuleList.values())
             if (rule.getRuleId() != -1)
-                assertTrue(rule.retrieveCWEInfo(cwes).getId() != -1);
+                for (CWE cwe : rule.retrieveCWEInfo(cwes))
+                    assertTrue(cwe.getId() != -1);
     }
     //endregion
 }
