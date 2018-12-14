@@ -29,8 +29,8 @@ public class ListingTest {
     @Before
     public void setUp() {
         this.ListingSet = new ArrayList<>();
-        this.ListingSet.add(Listing.LegacyOutput);
-        this.ListingSet.add(Listing.ScarfXMLOutput);
+        this.ListingSet.add(Listing.Legacy);
+        this.ListingSet.add(Listing.ScarfXML);
 
         this.ListingStringValues = new ArrayList<>();
         this.ListingStringValues.add("{ \"type\": \"Legacy\", \"flag\": \"L\"}");
@@ -58,8 +58,8 @@ public class ListingTest {
 
     @Test
     public void getTypeOfMessagingTest() {
-        assertTrue(Listing.getTypeOfMessagingOutput(this.ListingFlags.get(0)) instanceof Legacy);
-        assertTrue(Listing.getTypeOfMessagingOutput(this.ListingFlags.get(1)) instanceof ScarfXML);
+        assertTrue(Listing.Legacy.getTypeOfMessagingOutput() instanceof Legacy);
+        assertTrue(Listing.ScarfXML.getTypeOfMessagingOutput() instanceof ScarfXML);
     }
     //endregion
 }

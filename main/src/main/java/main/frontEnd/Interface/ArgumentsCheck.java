@@ -36,7 +36,7 @@ public class ArgumentsCheck {
             }
             String dependencies = args[1];
 
-            InputStructure inputCheck = Listing.getTypeOfMessagingInput(args.length == 2 ? null : args[3]);
+            InputStructure inputCheck = Listing.retrieveListingType(args.length == 2 ? null : args[3]).getTypeOfMessagingInput();
 
             return inputCheck.inputValidation(args, dependencies, flow);
 

@@ -4,8 +4,6 @@ import com.example.response.*;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.AnalysisLocation;
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
-import main.frontEnd.MessagingSystem.routing.Listing;
-import main.rule.engine.EngineType;
 import main.rule.engine.RuleList;
 import org.apache.commons.lang3.StringUtils;
 
@@ -26,7 +24,6 @@ import java.util.HashMap;
  * @since V01.00.03
  */
 public class ScarfXML implements OutputStructure {
-    public final Listing typeOfStructure = Listing.LegacyOutput;
 
     /**
      * {@inheritDoc}
@@ -34,7 +31,11 @@ public class ScarfXML implements OutputStructure {
      * <p>
      * The overridden method for the Scarf XML output.
      */
-    public String getOutput(EnvironmentInformation source, EngineType type, ArrayList<AnalysisIssue> brokenRules, PrintStream internalWarnings) {
+    public String getOutput(EnvironmentInformation source, ArrayList<AnalysisIssue> brokenRules) {
+
+        //reopening the console stream
+        source.openConsoleStream();
+
         try {
             AnalyzerReport report = new AnalyzerReport();
 

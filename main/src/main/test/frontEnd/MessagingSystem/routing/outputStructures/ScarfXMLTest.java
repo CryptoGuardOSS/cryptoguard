@@ -7,6 +7,7 @@ import com.example.response.LocationType;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.AnalysisLocation;
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
+import main.frontEnd.MessagingSystem.routing.Listing;
 import main.frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import main.frontEnd.MessagingSystem.routing.outputStructures.ScarfXML;
 import main.rule.engine.Criteria;
@@ -66,9 +67,18 @@ public class ScarfXMLTest {
 
         this.type = EngineType.JAR;
 
-        this.env = new EnvironmentInformation(this.source, this.type, null, "STUBBED", "STUBBED", "STUBBED", "STUBBED", "STUBBED", null, true, "STUBBED");
+        this.env = new EnvironmentInformation(this.source, this.type, null, Listing.ScarfXML.getFlag());
+        //region Setting Scarf XML Required Fields
+        this.env.setAssessmentFramework("STUBBED");
+        this.env.setAssessmentFrameworkVersion("STUBBED");
+        this.env.setBuildRootDir("STUBBED");
+        this.env.setPackageRootDir("STUBBED");
+        this.env.setParserName("STUBBED");
+        this.env.setParserVersion("STUBBED");
         this.env.setPackageName(this.jar);
         this.env.setPackageVersion("0.0");
+        //endregion
+        this.env.setPrettyPrint(true);
 
 
         StringBuilder sampleOne = new StringBuilder();
@@ -206,7 +216,8 @@ public class ScarfXMLTest {
 
     @Test
     public void simpleFiveRuleTest() {
-        String xmlStream = this.messagingSystem.getOutput(this.env, this.type, this.brokenRules, null);
+        String xmlStream = this.messagingSystem.getOutput(this.env, this.brokenRules);
+        this.env.openConsoleStream();
 
         assertTrue(StringUtils.isNoneBlank(xmlStream));
         assertFalse(xmlStream.contains("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"));

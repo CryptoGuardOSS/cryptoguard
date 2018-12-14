@@ -1,6 +1,7 @@
 package main.frontEnd.MessagingSystem.routing.inputStructures;
 
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
+import main.frontEnd.MessagingSystem.routing.Listing;
 import main.rule.engine.EngineType;
 
 /**
@@ -19,7 +20,7 @@ public class Legacy implements InputStructure {
      * The overridden method for the Legacy output.
      */
     public EnvironmentInformation inputValidation(String[] args, String dependencies, EngineType type) {
-        return new EnvironmentInformation(args[0], type, dependencies, null, null, null, null, null, null, false, null);
+        return new EnvironmentInformation(args[0], type, dependencies, Listing.Legacy.getFlag());
     }
 
     /**

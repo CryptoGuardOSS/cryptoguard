@@ -3,6 +3,7 @@ package frontEnd.MessagingSystem.routing.outputStructures;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.AnalysisLocation;
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
+import main.frontEnd.MessagingSystem.routing.Listing;
 import main.frontEnd.MessagingSystem.routing.outputStructures.Legacy;
 import main.frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import main.rule.engine.EngineType;
@@ -37,7 +38,7 @@ public class LegacyTest {
         this.source = "testable-jar/build/libs/testable-jar.jar";
         this.type = EngineType.JAR;
 
-        this.env = new EnvironmentInformation(this.source, this.type, null, "", "", "", "", "", null, false, "");
+        this.env = new EnvironmentInformation(this.source, this.type, null, Listing.Legacy.getFlag());
 
         StringBuilder sampleOne = new StringBuilder();
 
@@ -140,7 +141,7 @@ public class LegacyTest {
 
     @Test
     public void getOutputTest() {
-        String output = this.messagingSystem.getOutput(env, this.type, this.brokenRules, null);
+        String output = this.messagingSystem.getOutput(env, this.brokenRules);
         assertEquals(this.result, output);
     }
 }

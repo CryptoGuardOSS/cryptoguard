@@ -2,9 +2,7 @@ package main.frontEnd.MessagingSystem.routing.outputStructures;
 
 import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
-import main.rule.engine.EngineType;
 
-import java.io.PrintStream;
 import java.util.ArrayList;
 
 /**
@@ -18,11 +16,9 @@ public interface OutputStructure {
     /**
      * <p>getOutput.</p>
      *
-     * @param source           a {@link EnvironmentInformation} object.
-     * @param type             a {@link main.rule.engine.EngineType} object.
-     * @param brokenRules      a {@link java.util.ArrayList} object.
-     * @param internalWarnings a {@link java.io.PrintStream} object.
+     * @param source      a {@link EnvironmentInformation} object.
+     * @param brokenRules a {@link java.util.ArrayList} object.
      * @return a {@link java.lang.String} object.
      */
-    String getOutput(EnvironmentInformation source, EngineType type, ArrayList<AnalysisIssue> brokenRules, PrintStream internalWarnings);
+    String getOutput(EnvironmentInformation source, ArrayList<AnalysisIssue> brokenRules);
 }

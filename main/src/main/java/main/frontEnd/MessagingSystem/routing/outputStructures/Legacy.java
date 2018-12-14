@@ -3,12 +3,9 @@ package main.frontEnd.MessagingSystem.routing.outputStructures;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.AnalysisLocation;
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
-import main.frontEnd.MessagingSystem.routing.Listing;
-import main.rule.engine.EngineType;
 import main.rule.engine.RuleList;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,8 +20,6 @@ import java.util.stream.Collectors;
  * @since V01.00.01
  */
 public class Legacy implements OutputStructure {
-    public final Listing typeOfStructure = Listing.LegacyOutput;
-
 
     /**
      * {@inheritDoc}
@@ -32,15 +27,17 @@ public class Legacy implements OutputStructure {
      * <p>
      * The overridden method for the Legacy output. Currently mimics the output as best seen.
      */
-    public String getOutput(EnvironmentInformation source, EngineType type, ArrayList<AnalysisIssue> brokenRules, PrintStream internalWarnings) {
+    public String getOutput(EnvironmentInformation source, ArrayList<AnalysisIssue> brokenRules) {
         StringBuilder output = new StringBuilder();
 
+        //reopening the console stream
+        source.openConsoleStream();
 
         //Only printing console output if it is set and there is output captured
-        if (internalWarnings != null && internalWarnings.toString().split("\n").length > 1) {
-            output.append("Internal Warnings: " + internalWarnings.toString() + "\n");
+        if (source.getInternalErrors() != null && source.getInternalErrors().toString().split("\n").length > 1) {
+            output.append("Internal Warnings: " + source.getInternalErrors().toString() + "\n");
         }
-        output.append("Analyzing " + type + ": " + source.getSource() + "\n");
+        output.append("Analyzing " + source.getSourceType() + ": " + source.getSource() + "\n");
 
         Map<Integer, List<AnalysisIssue>> groupedRules = brokenRules.stream().collect(Collectors.groupingBy(AnalysisIssue::getRuleId));
 

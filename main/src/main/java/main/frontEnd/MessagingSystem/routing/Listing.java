@@ -11,8 +11,8 @@ import main.frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
  */
 public enum Listing {
     //region Different Values
-    LegacyOutput("Legacy", "L"),
-    ScarfXMLOutput("ScarfXML", "SX");
+    Legacy("Legacy", "L"),
+    ScarfXML("ScarfXML", "SX");
     //endregion
     //region Attributes
     private String type;
@@ -44,31 +44,48 @@ public enum Listing {
     }
     //endregion
 
+    //region Getter
+
+    /**
+     * The dynamic loader for the Listing Type based on the flag
+     *
+     * @param flag {@link java.lang.String} - The input type looking for the flag type
+     * @return {@link Listing} - The messaging Type retrieved by flag, if not found the default will be used
+     */
+    public static Listing retrieveListingType(String flag) {
+        for (Listing type : Listing.values())
+            if (type.flag.equals(flag))
+                return type;
+
+        return Listing.Legacy;
+    }
+
+    /**
+     * Getter for flag
+     *
+     * <p>getFlag()</p>
+     *
+     * @return a {@link String} object.
+     */
+    public String getFlag() {
+        return flag;
+    }
+    //endregion
+
+    //region Helpers Based on the enum type
+
     /**
      * A method to dynamically retrieve the type of messaging structure asked for by the flag type.
      * NOTE: if there is any kind of issue instantiating the class name, it will default to the Legacy Output
      *
-     * @param flag - the type of Messaging Structure asked for
      * @return outputStructure - the type of messaging structure to be used to return information
      */
-    public static OutputStructure getTypeOfMessagingOutput(String flag) {
+    public OutputStructure getTypeOfMessagingOutput() {
 
-        if (flag == null)
-            return new main.frontEnd.MessagingSystem.routing.outputStructures.Legacy();
 
         try {
-            String className;
-            switch (flag) {
-                case "SX":
-                    className = ScarfXMLOutput.type;
-                    break;
-                default:
-                    className = LegacyOutput.type;
-                    break;
-            }
-
             //Return a dynamically loaded instantiation of the class
-            return (OutputStructure) Class.forName("main.frontEnd.MessagingSystem.routing.outputStructures." + className).newInstance();
+            return (OutputStructure) Class.forName("main.frontEnd.MessagingSystem.routing.outputStructures." + this.type).newInstance();
         }
         //In Case of any error, default to the Legacy Output
         catch (Exception e) {
@@ -80,30 +97,14 @@ public enum Listing {
      * A method to dynamically retrieve the type of messaging structure asked for by the flag type.
      * NOTE: if there is any kind of issue instantiating the class name, it will default to the Legacy Input
      *
-     * @param flag - the type of Messaging Structure asked for
      * @return outputStructure - the type of messaging structure to be used to return information
      */
-    public static InputStructure getTypeOfMessagingInput(String flag) {
-
-        if (flag == null)
-            return new main.frontEnd.MessagingSystem.routing.inputStructures.Legacy();
+    public InputStructure getTypeOfMessagingInput() {
 
         try {
-            String className;
-            switch (flag) {
-                case "SX":
-                    className = ScarfXMLOutput.type;
-                    break;
-                default:
-                    className = LegacyOutput.type;
-                    break;
-            }
-
             //Return a dynamically loaded instantiation of the class
-            return (InputStructure) Class.forName("main.frontEnd.MessagingSystem.routing.inputStructures." + className).newInstance();
-        }
-        //In Case of any error, default to the Legacy Output
-        catch (Exception e) {
+            return (InputStructure) Class.forName("main.frontEnd.MessagingSystem.routing.inputStructures." + this.type).newInstance();
+        } catch (Exception e) {
             return new main.frontEnd.MessagingSystem.routing.inputStructures.Legacy();
         }
     }
@@ -124,10 +125,11 @@ public enum Listing {
             help.append("===========================================================\n");
             help.append("===============").append(type.type).append("===============\n");
             help.append("Flag : ").append(type.flag).append("\n");
-            help.append(Listing.getTypeOfMessagingInput(type.flag).helpInfo()).append("\n");
+            help.append(type.getTypeOfMessagingInput().helpInfo()).append("\n");
             help.append("===========================================================\n\n");
         }
 
         return help.toString();
     }
+    //endregion
 }

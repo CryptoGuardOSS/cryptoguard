@@ -3,7 +3,7 @@ package frontEnd.MessagingSystem;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.MessageRepresentation;
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
-import main.frontEnd.MessagingSystem.routing.outputStructures.Legacy;
+import main.frontEnd.MessagingSystem.routing.Listing;
 import main.rule.engine.EngineType;
 import org.junit.After;
 import org.junit.Before;
@@ -13,7 +13,8 @@ import java.io.FileDescriptor;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * <p>MessageRepresentationTest class.</p>
@@ -35,7 +36,7 @@ public class MessageRepresentationTest {
     //region Test Environment Creation
     @Before
     public void setUp() throws Exception {
-        this.env = new EnvironmentInformation(jarOneName, jarType, null, "", "", "", "", "", null, false, "");
+        this.env = new EnvironmentInformation(jarOneName, jarType, null, Listing.Legacy.getFlag());
         this.ruleOneIssue = new AnalysisIssue(1, "<tester.Crypto: void <init>()>", "AES/ECB/PKCS5PADDING");
         this.ruleTwoIssue = new AnalysisIssue(1, "<tester.PasswordUtils: void <init>(java.lang.String)>", "PBEWithMD5AndDES");
     }
@@ -52,12 +53,11 @@ public class MessageRepresentationTest {
     //region Tests
     @Test
     public void legacyTest0() {
-        this.outputEngine = new MessageRepresentation(this.env, this.jarType, "L");
+        this.outputEngine = new MessageRepresentation(this.env);
 
         assertNotNull(this.outputEngine);
         assertEquals(this.jarOneName, this.outputEngine.getEnvironment().getSource());
-        assertEquals(this.jarType, this.outputEngine.getType());
-        assertTrue(this.outputEngine.getMessageEngine() instanceof Legacy);
+        assertEquals(this.jarType, this.outputEngine.getEnvironment().getSourceType());
         assertEquals(0, this.outputEngine.getAnalysisIssues().size());
     }
 
@@ -117,7 +117,7 @@ public class MessageRepresentationTest {
 
     @Test
     public void getLegacyMessage() {
-        this.outputEngine = new MessageRepresentation(this.env, this.jarType, "L");
+        this.outputEngine = new MessageRepresentation(this.env);
         String message = (String) this.outputEngine.getMessage();
 
         System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
