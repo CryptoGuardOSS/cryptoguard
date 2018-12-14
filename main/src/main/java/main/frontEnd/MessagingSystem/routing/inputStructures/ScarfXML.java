@@ -15,7 +15,7 @@ import java.util.Arrays;
  */
 public class ScarfXML implements InputStructure {
 
-    private ScarfJsonInput inputReader;
+    private ScarfJsonInput inputReader = new ScarfJsonInput();
 
     /**
      * {@inheritDoc}
@@ -27,7 +27,7 @@ public class ScarfXML implements InputStructure {
 
         EnvironmentInformation info = new EnvironmentInformation(args[0], type, dependencies, Listing.ScarfXML.getFlag());
 
-        inputReader = new ScarfJsonInput(Arrays.copyOfRange(args, 0, args.length - 1));
+        inputReader.parseArguments(Arrays.copyOfRange(args, 0, args.length - 1));
         info.setAssessmentFramework(inputReader.getAssessmentFramework());
         info.setAssessmentFrameworkVersion(inputReader.getAssessmentFrameworkVersion());
         info.setBuildRootDir(inputReader.getBuildRootDir());
@@ -67,12 +67,19 @@ public class ScarfXML implements InputStructure {
 
 
         /**
-         * The constructor with raw string arguments
-         * Sets the parameters if any strings are set
+         * An Empty Constructor
+         */
+        public ScarfJsonInput() {
+
+        }
+
+        /**
+         * The method to parse the raw arguments from the console.
          *
          * @param args {@link String[]} - The raw command arguments passed in from the command line.
          */
-        public ScarfJsonInput(String[] args) {
+        public void parseArguments(String[] args) {
+
             if (args.length >= 1)
                 this.assessmentFramework = args[0];
             if (args.length >= 2)
@@ -90,19 +97,18 @@ public class ScarfXML implements InputStructure {
         public String helpInfo() {
             StringBuilder help = new StringBuilder();
 
-            help.append("Usage: (AssessmentFramework) (AssessmentFrameworkVersion) (BuildRootDir) (PackageRootDir) (ParserName) (ParserVersion)\n");
-            help.append("\tAssessmentFramework: Default => STUBBED").append("\n");
-            help.append("\tAssessmentFrameworkVersion: Default => STUBBED").append("\n");
-            help.append("\tBuildRootDir: Default => STUBBED").append("\n");
-            help.append("\tPackageRootDir: Default => STUBBED").append("\n");
-            help.append("\tParserName: Default => STUBBED").append("\n");
-            help.append("\tParserVersion: Default => STUBBED").append("\n");
+            help.append("Usage: (AssessmentFramework) (AssessmentFrameworkVersion) (BuildRootDir) (PackageRootDir) (ParserName) (ParserVersion)\n")
+                    .append("\tAssessmentFramework: Default => STUBBED").append("\n")
+                    .append("\tAssessmentFrameworkVersion: Default => STUBBED").append("\n")
+                    .append("\tBuildRootDir: Default => STUBBED").append("\n")
+                    .append("\tPackageRootDir: Default => STUBBED").append("\n")
+                    .append("\tParserName: Default => STUBBED").append("\n")
+                    .append("\tParserVersion: Default => STUBBED");
 
             return help.toString();
         }
 
         //region Getters
-
         /**
          * Getter for assessmentFramework
          *

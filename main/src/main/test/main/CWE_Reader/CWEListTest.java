@@ -1,7 +1,5 @@
-package CWE_Reader;
+package main.CWE_Reader;
 
-import main.CWE_Reader.CWE;
-import main.CWE_Reader.CWEList;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

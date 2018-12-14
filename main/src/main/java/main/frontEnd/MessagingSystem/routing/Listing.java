@@ -17,10 +17,11 @@ public enum Listing {
     //region Attributes
     private String type;
     private String flag;
+    private final String inputPath = "main.frontEnd.MessagingSystem.routing.inputStructures";
+    private final String outputPath = "main.frontEnd.MessagingSystem.routing.outputStructures";
     //endregion
 
     //region Constructor
-
     /**
      * The inherint constructor of all the enum value types listed here
      *
@@ -70,6 +71,17 @@ public enum Listing {
     public String getFlag() {
         return flag;
     }
+
+    /**
+     * Getter for type
+     *
+     * <p>getType()</p>
+     *
+     * @return {@link String} - The type.
+     */
+    public String getType() {
+        return type;
+    }
     //endregion
 
     //region Helpers Based on the enum type
@@ -85,7 +97,7 @@ public enum Listing {
 
         try {
             //Return a dynamically loaded instantiation of the class
-            return (OutputStructure) Class.forName("main.frontEnd.MessagingSystem.routing.outputStructures." + this.type).newInstance();
+            return (OutputStructure) Class.forName(this.outputPath + "." + this.type).newInstance();
         }
         //In Case of any error, default to the Legacy Output
         catch (Exception e) {
@@ -103,7 +115,7 @@ public enum Listing {
 
         try {
             //Return a dynamically loaded instantiation of the class
-            return (InputStructure) Class.forName("main.frontEnd.MessagingSystem.routing.inputStructures." + this.type).newInstance();
+            return (InputStructure) Class.forName(inputPath + "." + this.type).newInstance();
         } catch (Exception e) {
             return new main.frontEnd.MessagingSystem.routing.inputStructures.Legacy();
         }
@@ -118,12 +130,12 @@ public enum Listing {
         StringBuilder help = new StringBuilder();
         help.append("===========================================================\n");
         help.append("key: {}=required ()=optional \n");
-        help.append("General Useage : java -jar {thisJar} {.apk/.jar file or sourcecode dir} {dir of dependencies, \"\" if there are none} (outputType) ({required depending on the output Type}) \n");
+        help.append("General Useage : java -jar {thisJar} {.apk/.jar file or sourcecode dir} {dir of dependencies, \"\" if there are none} (flag) ({required depending on the output Type}) \n");
         help.append("===========================================================\n\n");
 
         for (Listing type : Listing.values()) {
             help.append("===========================================================\n");
-            help.append("===============").append(type.type).append("===============\n");
+            help.append("Type : ").append(type.type).append("\n");
             help.append("Flag : ").append(type.flag).append("\n");
             help.append(type.getTypeOfMessagingInput().helpInfo()).append("\n");
             help.append("===========================================================\n\n");
