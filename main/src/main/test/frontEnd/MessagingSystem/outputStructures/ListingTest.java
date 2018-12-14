@@ -1,8 +1,8 @@
 package frontEnd.MessagingSystem.outputStructures;
 
-import main.frontEnd.MessagingSystem.outputStructures.LegacyOutput;
-import main.frontEnd.MessagingSystem.outputStructures.Listing;
-import main.frontEnd.MessagingSystem.outputStructures.ScarfXMLOutput;
+import main.frontEnd.MessagingSystem.routing.Listing;
+import main.frontEnd.MessagingSystem.routing.outputStructures.Legacy;
+import main.frontEnd.MessagingSystem.routing.outputStructures.ScarfXML;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,8 +33,8 @@ public class ListingTest {
         this.ListingSet.add(Listing.ScarfXMLOutput);
 
         this.ListingStringValues = new ArrayList<>();
-        this.ListingStringValues.add("{ \"type\": \"LegacyOutput\", \"flag\": \"L\"}");
-        this.ListingStringValues.add("{ \"type\": \"ScarfXMLOutput\", \"flag\": \"SX\"}");
+        this.ListingStringValues.add("{ \"type\": \"Legacy\", \"flag\": \"L\"}");
+        this.ListingStringValues.add("{ \"type\": \"ScarfXML\", \"flag\": \"SX\"}");
 
         this.ListingFlags = new ArrayList<>();
         this.ListingFlags.add("L");
@@ -58,8 +58,8 @@ public class ListingTest {
 
     @Test
     public void getTypeOfMessagingTest() {
-        assertTrue(Listing.getTypeOfMessaging(this.ListingFlags.get(0)) instanceof LegacyOutput);
-        assertTrue(Listing.getTypeOfMessaging(this.ListingFlags.get(1)) instanceof ScarfXMLOutput);
+        assertTrue(Listing.getTypeOfMessagingOutput(this.ListingFlags.get(0)) instanceof Legacy);
+        assertTrue(Listing.getTypeOfMessagingOutput(this.ListingFlags.get(1)) instanceof ScarfXML);
     }
     //endregion
 }
