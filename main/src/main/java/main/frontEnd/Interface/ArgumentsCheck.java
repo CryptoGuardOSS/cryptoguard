@@ -7,6 +7,9 @@ import main.rule.engine.EngineType;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static main.util.Utils.retrieveFullyQualifiedName;
+import static main.util.Utils.trimFilePath;
+
 /**
  * @author RigorityJTeam
  * Created on 12/13/18.
@@ -96,7 +99,7 @@ public class ArgumentsCheck {
                             failFast();
                             return null;
                         } else
-                            sourceFiles.add(args[argumentSplit]);
+                            sourceFiles.add(retrieveFullyQualifiedName(args[argumentSplit]));
 
                         argumentSplit++;
                     }
@@ -112,7 +115,7 @@ public class ArgumentsCheck {
                             failFast();
                             return null;
                         } else
-                            sourceFiles.add(args[argumentSplit]);
+                            sourceFiles.add(trimFilePath(args[argumentSplit]));
 
                         argumentSplit++;
                     }

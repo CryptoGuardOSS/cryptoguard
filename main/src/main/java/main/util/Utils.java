@@ -12,11 +12,9 @@ import soot.Unit;
 import soot.ValueBox;
 import soot.util.Chain;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
@@ -385,7 +383,7 @@ public class Utils {
     }
 
     /**
-     * <p>getClassNamesFromSnippet.</p>//todo - use this
+     * <p>getClassNamesFromSnippet.</p>
      *
      * @param sourcePaths a {@link java.util.List} object.
      * @return a {@link java.util.List} object.
@@ -412,5 +410,42 @@ public class Utils {
         }
 
         return classNames;
+    }
+
+    /**
+     * The method that retrieves the package information from a existing java file.
+     * If the file doesn't exist or the java file isn't contained in a file, it'll return null
+     *
+     * @param sourceJavaFile {@link String} - The path to the source java file.
+     * @return {@link String} - The package string, null if there is any issue or no package.
+     */
+    public static String retrieveFullyQualifiedName(String sourceJavaFile) {
+        String sourcePackage = null;
+        try (BufferedReader br = new BufferedReader(new FileReader(sourceJavaFile))) {
+
+            String firstLine = br.readLine();
+
+            if (firstLine.startsWith("package ") && firstLine.endsWith(";")) {
+                sourcePackage = firstLine.substring(8, firstLine.length() - 1);
+                sourcePackage += "." + trimFilePath(sourceJavaFile);
+            }
+
+        } catch (IOException e) {
+            System.out.println("Issue Reading File: " + sourceJavaFile);
+        }
+
+        return sourcePackage;
+    }
+
+    /**
+     * This method trims the file path and package from the absolute path.
+     * <p>EX: src/main/java/com/test/me/main.java {@literal -}{@literal >} main.java</p>
+     *
+     * @param fullFilePath {@link String} - The full file path
+     * @return {@link String} - The file name with the extension attached
+     */
+    public static String trimFilePath(String fullFilePath) {
+        String[] folderSplit = fullFilePath.split(Pattern.quote(System.getProperty("file.separator")));
+        return folderSplit[folderSplit.length - 1];
     }
 }
