@@ -35,8 +35,12 @@ public class EntryPoint {
             case JAR:
                 issues = JarEntry.NonStreamScan(generalInfo);
                 break;
-            case SOURCE:
+            case DIR:
                 issues = SourceEntry.NonStreamScan(generalInfo);
+                break;
+            case JAVAFILES://TODO - Work On This
+                break;
+            case CLASSFILES://TODO - Work On This
                 break;
         }
 

@@ -2,6 +2,7 @@ package main.frontEnd.MessagingSystem.routing;
 
 import main.frontEnd.MessagingSystem.routing.inputStructures.InputStructure;
 import main.frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
+import main.rule.engine.EngineType;
 
 /**
  * The enum containing all of the different messaging types available for the user.
@@ -130,7 +131,8 @@ public enum Listing {
         StringBuilder help = new StringBuilder();
         help.append("===========================================================\n");
         help.append("key: {}=required ()=optional \n");
-        help.append("General Useage : java -jar {thisJar} {.apk/.jar file or sourcecode dir} {dir of dependencies, \"\" if there are none} (flag) ({required depending on the output Type}) \n");
+        help.append("General Useage : java -jar {thisJar} {Engine Flag, as shown below} {.apk/.jar file, .class/.java file(s), or sourcecode dir} ({-d} {dir of dependencies for .class/.jar file(s), \"\" if there are none}) (Output Type flag) ({required depending on the output Type}) \n");
+        help.append(EngineType.getHelp());
         help.append("===========================================================\n\n");
 
         for (Listing type : Listing.values()) {

@@ -7,6 +7,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -26,7 +27,7 @@ public class LegacyTest {
     public void setUp() throws Exception {
         inputTest = new Legacy();
         args = new String[]{"TestSource", type.getName(), dependencies, Listing.Legacy.getFlag()};
-        testInfo = new EnvironmentInformation(args[0], type, args[2], args[3]);
+        testInfo = new EnvironmentInformation(new String[]{args[0]}, type, args[2], args[3]);
     }
 
     @After
@@ -40,8 +41,10 @@ public class LegacyTest {
     //region Tests
     @Test
     public void testSampleCreation() {
-        EnvironmentInformation newInfo = inputTest.inputValidation(args, dependencies, type);
+        EnvironmentInformation newInfo = new EnvironmentInformation(new String[]{args[0]}, type, args[2], args[3]);
 
+
+        assertTrue(inputTest.inputValidation(newInfo, args));
         assertNotNull(newInfo);
         assertEquals(testInfo.getMessagingType(), newInfo.getMessagingType());
         assertEquals(testInfo.getSource(), newInfo.getSource());

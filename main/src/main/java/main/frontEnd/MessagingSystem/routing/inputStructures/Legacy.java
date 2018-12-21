@@ -1,8 +1,6 @@
 package main.frontEnd.MessagingSystem.routing.inputStructures;
 
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
-import main.frontEnd.MessagingSystem.routing.Listing;
-import main.rule.engine.EngineType;
 
 /**
  * @author RigorityJTeam
@@ -17,8 +15,8 @@ public class Legacy implements InputStructure {
      * {@inheritDoc}
      * The overridden method for the Legacy output.
      */
-    public EnvironmentInformation inputValidation(String[] args, String dependencies, EngineType type) {
-        return new EnvironmentInformation(args[0], type, dependencies, Listing.Legacy.getFlag());
+    public Boolean inputValidation(EnvironmentInformation info, String[] args) {
+        return true;
     }
 
     /**

@@ -2,6 +2,7 @@ package main.frontEnd.MessagingSystem.routing;
 
 import main.frontEnd.MessagingSystem.routing.outputStructures.Legacy;
 import main.frontEnd.MessagingSystem.routing.outputStructures.ScarfXML;
+import main.rule.engine.EngineType;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,7 +50,8 @@ public class ListingTest {
 
         helpBuilder.append("===========================================================\n")
                 .append("key: {}=required ()=optional \n")
-                .append("General Useage : java -jar {thisJar} {.apk/.jar file or sourcecode dir} {dir of dependencies, \"\" if there are none} (flag) ({required depending on the output Type}) \n")
+                .append("General Useage : java -jar {thisJar} {Engine Flag, as shown below} {.apk/.jar file, .class/.java file(s), or sourcecode dir} ({-d} {dir of dependencies for .class/.jar file(s), \"\" if there are none}) (Output Type flag) ({required depending on the output Type}) \n")
+                .append(EngineType.getHelp())
                 .append("===========================================================\n\n");
 
         this.baseHelp = helpBuilder.toString();

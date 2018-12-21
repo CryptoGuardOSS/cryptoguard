@@ -36,7 +36,7 @@ public class LegacyTest {
         this.source = "testable-jar/build/libs/testable-jar.jar";
         this.type = EngineType.JAR;
 
-        this.env = new EnvironmentInformation(this.source, this.type, null, Listing.Legacy.getFlag());
+        this.env = new EnvironmentInformation(new String[]{this.source}, this.type, null, Listing.Legacy.getFlag());
 
         StringBuilder sampleOne = new StringBuilder();
 

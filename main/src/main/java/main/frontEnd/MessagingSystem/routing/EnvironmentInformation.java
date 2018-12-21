@@ -36,7 +36,7 @@ public class EnvironmentInformation {
     private String packageVersion;
     //endregion
     //region Required Elements Set From the Start
-    private final String Source;
+    private final String[] Source;
     private Boolean prettyPrint = false;
     private PrintStream internalErrors;
     private String sourceDependencies;
@@ -63,12 +63,12 @@ public class EnvironmentInformation {
     /**
      * The main constructor for setting all of the environmental variables used  for the outputs.
      *
-     * @param source        {@link java.lang.String} - The source name to be analyzed
+     * @param source        {@link java.lang.String[]} - The source name to be analyzed
      * @param sourceType    {@link EngineType} - The type of source (APK/JAR/SourceCode)
      * @param dependencies  {@link java.lang.String} - The location of the directory of the sources dependencies
      * @param messagingType {@link java.lang.String} - The flag passed in to determine the type of messaging system from {@link Listing}
      */
-    public EnvironmentInformation(@Nonnull String source, @Nonnull EngineType sourceType, String dependencies, @Nonnull String messagingType) {
+    public EnvironmentInformation(@Nonnull String[] source, @Nonnull EngineType sourceType, String dependencies, String messagingType) {
 
         //region Setting Internal Version Settings
         String tempToolFrameworkVersion;
@@ -159,6 +159,17 @@ public class EnvironmentInformation {
     //region Getters and Setters
 
     /**
+     * The getter for Source
+     *
+     * <p>getSource()</p>
+     *
+     * @return {@link String[]} - Returns the Source field
+     */
+    public String[] getSource() {
+        return Source;
+    }
+
+    /**
      * Setter for prettyPrint
      *
      * <p>setPrettyPrint(java.lang.Boolean prettyPrint)</p>
@@ -232,14 +243,6 @@ public class EnvironmentInformation {
         return platformName;
     }
 
-    /**
-     * <p>getSource.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    public String getSource() {
-        return Source;
-    }
 
     /**
      * <p>getAssessmentFramework.</p>

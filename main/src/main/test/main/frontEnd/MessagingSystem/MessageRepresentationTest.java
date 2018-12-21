@@ -34,7 +34,7 @@ public class MessageRepresentationTest {
     //region Test Environment Creation
     @Before
     public void setUp() throws Exception {
-        this.env = new EnvironmentInformation(jarOneName, jarType, null, Listing.Legacy.getFlag());
+        this.env = new EnvironmentInformation(new String[]{jarOneName}, jarType, null, Listing.Legacy.getFlag());
         this.ruleOneIssue = new AnalysisIssue(1, "<tester.Crypto: void <init>()>", "AES/ECB/PKCS5PADDING");
         this.ruleTwoIssue = new AnalysisIssue(1, "<tester.PasswordUtils: void <init>(java.lang.String)>", "PBEWithMD5AndDES");
     }
@@ -54,12 +54,11 @@ public class MessageRepresentationTest {
         this.outputEngine = new MessageRepresentation(this.env);
 
         assertNotNull(this.outputEngine);
-        assertEquals(this.jarOneName, this.outputEngine.getEnvironment().getSource());
+        assertEquals(this.jarOneName, this.outputEngine.getEnvironment().getSource()[0]);
         assertEquals(this.jarType, this.outputEngine.getEnvironment().getSourceType());
         assertEquals(0, this.outputEngine.getAnalysisIssues().size());
     }
 
-    //TODO - Update these tests
 	/*
 	@Test
 	public void addLegacyRuleAnalysis() {

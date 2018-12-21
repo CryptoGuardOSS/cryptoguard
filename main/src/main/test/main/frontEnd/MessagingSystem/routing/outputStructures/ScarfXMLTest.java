@@ -65,7 +65,7 @@ public class ScarfXMLTest {
 
         this.type = EngineType.JAR;
 
-        this.env = new EnvironmentInformation(this.source, this.type, null, Listing.ScarfXML.getFlag());
+        this.env = new EnvironmentInformation(new String[]{this.source}, this.type, null, Listing.ScarfXML.getFlag());
         //region Setting Scarf XML Required Fields
         this.env.setAssessmentFramework("STUBBED");
         this.env.setAssessmentFrameworkVersion("STUBBED");

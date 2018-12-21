@@ -20,12 +20,11 @@ import java.util.Map;
  */
 public class SourceEntry {
 
-    //TODO - Implement this
     public static ArrayList<AnalysisIssue> NonStreamScan(EnvironmentInformation generalInfo) {
         ArrayList<AnalysisIssue> issues = null;
 
         try {
-            BuildFileParser buildFileParser = BuildFileParserFactory.getBuildfileParser(generalInfo.getSource());
+            BuildFileParser buildFileParser = BuildFileParserFactory.getBuildfileParser(generalInfo.getSource()[0]);
 
             Map<String, List<String>> moduleVsDependency = buildFileParser.getDependencyList();
             List<String> analyzedModules = new ArrayList<>();
@@ -43,12 +42,12 @@ public class SourceEntry {
 
                         String dependencyModule = null;
 
-                        if (dependency.equals(generalInfo.getSource() + "/src/main/java")) {
-                            dependencyModule = generalInfo.getSource().substring(generalInfo.getSource().lastIndexOf("/") + 1);
+                        if (dependency.equals(generalInfo.getSource()[0] + "/src/main/java")) {
+                            dependencyModule = generalInfo.getSource()[0].substring(generalInfo.getSource()[0].lastIndexOf("/") + 1);
                             otherdependencies.add(dependency.substring(0, dependency.length() - 13) + generalInfo.getSourceDependencies());
 
                         } else {
-                            dependencyModule = dependency.substring(generalInfo.getSource().length() + 1, dependency.length() - 14);
+                            dependencyModule = dependency.substring(generalInfo.getSource()[0].length() + 1, dependency.length() - 14);
                             otherdependencies.add(dependency.substring(0, dependency.length() - 13) + generalInfo.getSourceDependencies());
 
                         }
@@ -60,7 +59,7 @@ public class SourceEntry {
                     System.out.println(output.substring(0, output.length() - 2));
 
                     for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
-                        ruleChecker.checkRule(EngineType.SOURCE, dependencies, otherdependencies);
+                        ruleChecker.checkRule(EngineType.DIR, dependencies, otherdependencies);
                     }
 
                     NamedMethodMap.clearCallerCalleeGraph();

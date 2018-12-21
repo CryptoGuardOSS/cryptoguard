@@ -111,7 +111,7 @@ public class RuleEngine {
                     System.out.println(output.substring(0, output.length() - 2));
 
                     for (RuleChecker ruleChecker : ruleCheckerList) {
-                        ruleChecker.checkRule(EngineType.SOURCE, dependencies, otherdependencies);
+                        ruleChecker.checkRule(EngineType.DIR, dependencies, otherdependencies);
                     }
 
                     NamedMethodMap.clearCallerCalleeGraph();

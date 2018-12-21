@@ -1,8 +1,6 @@
 package main.frontEnd.MessagingSystem.routing.inputStructures;
 
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
-import main.frontEnd.MessagingSystem.routing.Listing;
-import main.rule.engine.EngineType;
 
 import java.util.Arrays;
 
@@ -21,11 +19,10 @@ public class ScarfXML implements InputStructure {
      * {@inheritDoc}
      * The overridden method for the ScarfXML output.
      */
-    public EnvironmentInformation inputValidation(String[] args, String dependencies, EngineType type) {
+    public Boolean inputValidation(EnvironmentInformation info, String[] args) {
 
-        EnvironmentInformation info = new EnvironmentInformation(args[0], type, dependencies, Listing.ScarfXML.getFlag());
-
-        inputReader.parseArguments(Arrays.copyOfRange(args, 0, args.length - 1));
+        String[] subArgs = args.length > 0 ? Arrays.copyOfRange(args, 0, args.length) : new String[]{};
+        inputReader.parseArguments(subArgs);
         info.setAssessmentFramework(inputReader.getAssessmentFramework());
         info.setAssessmentFrameworkVersion(inputReader.getAssessmentFrameworkVersion());
         info.setBuildRootDir(inputReader.getBuildRootDir());
@@ -33,7 +30,7 @@ public class ScarfXML implements InputStructure {
         info.setParserName(inputReader.getParserName());
         info.setParserVersion(inputReader.getParserVersion());
 
-        return info;
+        return true;
     }
 
     /**

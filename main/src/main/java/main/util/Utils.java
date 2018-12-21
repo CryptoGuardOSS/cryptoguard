@@ -30,6 +30,8 @@ import java.util.zip.ZipInputStream;
 public class Utils {
 
     /**
+     *
+     * //todo - usethis
      * <p>getClassNamesFromJarArchive.</p>
      *
      * @param jarPath a {@link java.lang.String} object.
@@ -383,7 +385,7 @@ public class Utils {
     }
 
     /**
-     * <p>getClassNamesFromSnippet.</p>
+     * <p>getClassNamesFromSnippet.</p>//todo - use this
      *
      * @param sourcePaths a {@link java.util.List} object.
      * @return a {@link java.util.List} object.

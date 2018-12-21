@@ -68,7 +68,7 @@ public abstract class BaseRuleChecker implements RuleChecker {
                         criteria.getMethodName(),
                         criteria.getParam(),
                         projectPaths.get(0), this);
-            } else if (type == EngineType.SOURCE) {
+            } else if (type == EngineType.DIR) {
                 PartialCodeAnalyzer.analyzeSlices(criteria.getClassName(),
                         criteria.getMethodName(),
                         criteria.getParam(),

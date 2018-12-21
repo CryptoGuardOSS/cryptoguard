@@ -35,7 +35,18 @@ public class Legacy implements OutputStructure {
         if (source.getInternalErrors() != null && source.getInternalErrors().toString().split("\n").length > 1) {
             output.append("Internal Warnings: " + source.getInternalErrors().toString() + "\n");
         }
-        output.append("Analyzing " + source.getSourceType() + ": " + source.getSource() + "\n");
+
+        output.append("Analyzing " + source.getSourceType() + ": ");
+
+        for (int sourceKtr = 0; sourceKtr < source.getSource().length; sourceKtr++) {
+            output.append(source.getSource()[sourceKtr]);
+
+            if (sourceKtr != source.getSource().length - 1)
+                output.append(",");
+        }
+        output.append("\n");
+
+
 
         Map<Integer, List<AnalysisIssue>> groupedRules = brokenRules.stream().collect(Collectors.groupingBy(AnalysisIssue::getRuleId));
 

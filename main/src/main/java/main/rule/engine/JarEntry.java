@@ -16,7 +16,6 @@ import java.util.Arrays;
  */
 public class JarEntry {
 
-    //TODO - Implement this
     public static ArrayList<AnalysisIssue> NonStreamScan(EnvironmentInformation generalInfo) {
         ArrayList<AnalysisIssue> issues = null;
         try {
