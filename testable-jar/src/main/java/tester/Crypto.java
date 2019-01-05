@@ -76,6 +76,13 @@ public class Crypto {
             }
         };
 
+        HostnameVerifier hostnameVerifier1 = new HostnameVerifier() {
+            @Override
+            public boolean verify(String s, SSLSession sslSession) {
+                return true;
+            }
+        };
+
         System.out.println(hostnameVerifier);
 
         TrustManager ignoreValidationTM = new X509TrustManager() {

@@ -1,9 +1,11 @@
 package main.slicer.backward.property;
 
+import main.analyzer.backward.AssignInvokeUnitContainer;
 import main.analyzer.backward.PropertyFakeUnitContainer;
 import main.analyzer.backward.UnitContainer;
 import main.slicer.ValueArraySparseSet;
 import main.util.FieldInitializationInstructionMap;
+import main.util.Utils;
 import soot.ArrayType;
 import soot.Unit;
 import soot.Value;
@@ -11,6 +13,8 @@ import soot.ValueBox;
 import soot.baf.internal.BafLocal;
 import soot.jimple.AssignStmt;
 import soot.jimple.Jimple;
+import soot.jimple.internal.JAssignStmt;
+import soot.jimple.internal.JInvokeStmt;
 import soot.toolkits.graph.DirectedGraph;
 import soot.toolkits.scalar.BackwardFlowAnalysis;
 import soot.toolkits.scalar.FlowSet;
@@ -72,32 +76,41 @@ public class PropertyInstructionSlicer extends BackwardFlowAnalysis {
         }
 
         if (!inSet.isEmpty()) {
+
+            outSet.union(inSet);
+
+            if (currInstruction.toString().startsWith("if ")) {
+                return;
+            }
+
             for (Object anInSet : inSet.toList()) {
 
                 UnitContainer insetInstruction = (UnitContainer) anInSet;
                 List<ValueBox> useBoxes = insetInstruction.getUnit().getUseBoxes();
 
-                outSet.union(inSet);
-
                 for (ValueBox usebox : useBoxes) {
 
-                    if (isSpecialInvokeOn(currInstruction, usebox)) {
+                    if (insetInstruction instanceof AssignInvokeUnitContainer) {
+
+                        int arg = Utils.isArgOfAssignInvoke(usebox, insetInstruction.getUnit());
+
+
+                        if (arg > -1) {
+                            String args = ((AssignInvokeUnitContainer) insetInstruction).getArgs().toString();
+
+                            if (!args.contains("" + arg)) {
+                                continue;
+                            }
+                        }
+                    }
+
+                    if (Utils.isArgOfByteArrayCreation(usebox, insetInstruction.getUnit())) {
+                        continue;
+                    }
+
+                    if (isInvokeOn(currInstruction, usebox)) {
                         addCurrInstInOutSet(outSet, currInstruction);
                         return;
-                    }
-
-                    List<PropertyAnalysisResult> specialInitInsts;
-
-                    if (usebox.getValue().toString().startsWith("r0.")) {
-                        specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString().substring(3));
-                    } else if (usebox.getValue().toString().startsWith("this.")) {
-                        specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString().substring(5));
-                    } else {
-                        specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString());
-                    }
-
-                    if (specialInitInsts != null) {
-                        propertyUseMap.put(usebox.getValue().toString(), specialInitInsts);
                     }
 
                     for (ValueBox defbox : currInstruction.getDefBoxes()) {
@@ -118,13 +131,40 @@ public class PropertyInstructionSlicer extends BackwardFlowAnalysis {
     }
 
     private void addCurrInstInOutSet(FlowSet outSet, Unit currInstruction) {
-        UnitContainer currUnitContainer = new UnitContainer();
+
+        List<ValueBox> useBoxes = currInstruction.getUseBoxes();
+
+        for (ValueBox usebox : useBoxes) {
+            if (propertyUseMap.get(usebox.getValue().toString()) == null) {
+
+                List<PropertyAnalysisResult> specialInitInsts;
+                if (usebox.getValue().toString().startsWith("r0.")) {
+                    specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString().substring(3));
+                } else if (usebox.getValue().toString().startsWith("this.")) {
+                    specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString().substring(5));
+                } else {
+                    specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString());
+                }
+
+                if (specialInitInsts != null) {
+                    propertyUseMap.put(usebox.getValue().toString(), specialInitInsts);
+                }
+            }
+        }
+
+        UnitContainer currUnitContainer;
+
+        if (currInstruction instanceof JAssignStmt && currInstruction.toString().contains("invoke ")) {
+            currUnitContainer = Utils.createAssignInvokeUnitContainer(currInstruction);
+        } else {
+            currUnitContainer = new UnitContainer();
+        }
+
         currUnitContainer.setUnit(currInstruction);
         currUnitContainer.setMethod(initMethod);
 
         outSet.add(currUnitContainer);
     }
-
 
     private void addFakeInstInOutSet(FlowSet outSet, Unit fake, String original) {
 
@@ -142,8 +182,8 @@ public class PropertyInstructionSlicer extends BackwardFlowAnalysis {
         outSet.add(currUnitContainer);
     }
 
-    private boolean isSpecialInvokeOn(Unit currInstruction, ValueBox usebox) {
-        return currInstruction.toString().contains("specialinvoke")
+    private boolean isInvokeOn(Unit currInstruction, ValueBox usebox) {
+        return currInstruction instanceof JInvokeStmt
                 && currInstruction.toString().contains(usebox.getValue().toString() + ".<");
     }
 

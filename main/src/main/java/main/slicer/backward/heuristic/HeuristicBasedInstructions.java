@@ -1,4 +1,4 @@
-package main.slicer.backward.other;
+package main.slicer.backward.heuristic;
 
 import main.analyzer.backward.UnitContainer;
 import main.slicer.backward.property.PropertyAnalysisResult;
@@ -14,16 +14,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class OtherInfluencingInstructions {
+public class HeuristicBasedInstructions {
 
-    private OtherAnalysisResult analysisResult;
+    private HeuristicBasedAnalysisResult analysisResult;
 
-    public OtherInfluencingInstructions(SootMethod method, String slicingCriteria) {
+    public HeuristicBasedInstructions(SootMethod method, String slicingCriteria) {
 
         Body b = method.retrieveActiveBody();
         DirectedGraph methodToSlice = new ExceptionalUnitGraph(b);
 
-        OtherInstructionSlicer analysis = new OtherInstructionSlicer(methodToSlice, slicingCriteria, method.toString());
+        HeuristicBasedInstructionSlicer analysis = new HeuristicBasedInstructionSlicer(methodToSlice, slicingCriteria, method.toString());
 
         Iterator unitIt = methodToSlice.iterator();
         if (unitIt.hasNext()) {
@@ -33,11 +33,11 @@ public class OtherInfluencingInstructions {
             List<UnitContainer> slicingResult = Collections.unmodifiableList(set.toList());
             Map<String, List<PropertyAnalysisResult>> propertyUseMap = analysis.getPropertyUseMap();
 
-            analysisResult = new OtherAnalysisResult(slicingCriteria, method, slicingResult, propertyUseMap);
+            analysisResult = new HeuristicBasedAnalysisResult(slicingCriteria, method, slicingResult, propertyUseMap);
         }
     }
 
-    public OtherAnalysisResult getAnalysisResult() {
+    public HeuristicBasedAnalysisResult getAnalysisResult() {
         return analysisResult;
     }
 }
