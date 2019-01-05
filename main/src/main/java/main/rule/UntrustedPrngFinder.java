@@ -19,6 +19,7 @@ public class UntrustedPrngFinder implements RuleChecker {
 
     static {
         UNTRUSTED_PRNGS.add("java.util.Random: void <init>");
+        UNTRUSTED_PRNGS.add("java.lang.Math: double random");
     }
 
     @Override

@@ -21,6 +21,7 @@ public class BrokenCryptoFinder extends PatternMatcherRuleChecker {
         BROKEN_CRYPTO.add("(.)*RC4(.)*");
         BROKEN_CRYPTO.add("(.)*RC5(.)*");
         BROKEN_CRYPTO.add("(.)*Blowfish(.)*");
+        BROKEN_CRYPTO.add("(.)*IDEA(.)*");
         BROKEN_CRYPTO.add("PBEWithMD5AndDES");
         BROKEN_CRYPTO.add("PBEWithMD5AndTripleDES");
         BROKEN_CRYPTO.add("PBEWithSHA1AndDESede");
