@@ -58,7 +58,7 @@ public class HostNameVerifierFinder implements RuleChecker {
 
                 if (!usedSecondParam) {
                     System.out.println("=======================================");
-                    String output = "*** Violated Rule 6: Uses untrusted HostNameVerifier";
+                    String output = "***Violated Rule 6: Uses untrusted HostNameVerifier";
                     if (!constants.isEmpty()) {
                         output += "\n***Cause: Fixed " + constants.toString() + " used in " + className;
                     }

@@ -224,27 +224,18 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
 
         if (!predictableSources.isEmpty()) {
             System.out.println("=======================================");
-            String output = getPrintableMsg(predictableSourcMap, rule, ruleDesc);
+            String output = getPrintableMsg(predictableSources, rule, ruleDesc);
             System.out.println(output);
+            System.out.println(predictableSourceInsts);
             System.out.println("=======================================");
         }
     }
 
-    private String getPrintableMsg(Map<UnitContainer, List<String>> predictableSourcMap, String rule, String ruleDesc) {
-        String output = "***Violated Rule " +
+    private String getPrintableMsg(Collection<String> constants, String rule, String ruleDesc) {
+        return "***Violated Rule " +
                 rule + ": " +
-                ruleDesc;
-
-        for (UnitContainer unit : predictableSourcMap.keySet()) {
-
-            output += "\n***Found: " + predictableSourcMap.get(unit);
-            if (unit.getUnit().getJavaSourceStartLineNumber() >= 0) {
-                output += " in Line " + unit.getUnit().getJavaSourceStartLineNumber();
-            }
-
-            output += " in Method: " + unit.getMethod();
-        }
-
-        return output;
+                ruleDesc +
+                " ***Constants: " +
+                constants;
     }
 }

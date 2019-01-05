@@ -37,8 +37,7 @@ public class SSLSocketFactoryFinder implements RuleChecker {
     public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath) throws IOException {
 
         for (String slicing_criterion : SLICING_CRITERIA) {
-
-//            System.out.println(slicing_criterion);
+            
             SlicingCriteria criteria = new SlicingCriteria(slicing_criterion);
             Map<String, List<Unit>> analysisLists;
             if (type == EngineType.JAR) {
