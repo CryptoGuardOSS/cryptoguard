@@ -16,14 +16,19 @@ import java.util.List;
  */
 public enum EngineType {
     //region Values
-    JAR("JAR File", "jar"),
-    APK("APK File", "apk"),
-    SOURCE("Source Code", "source");
+    JAR("JAR File", "jar", ".jar", "To signal a Jar File to be scanned."),
+    APK("APK File", "apk", ".apk", "To signal a APK File to be scanned."),
+    DIR("Directory of Source Code", "dir", "dir", "To signal the source directory of a Maven/Gradle Project."),
+    JAVAFILES("Java File(s)", "java", ".java", "To signal a Java File(s) to be scanned."),
+    CLASSFILES("Class File(s)", "class", ".class", "To signal a Class File(s) to be scanned.");
     //endregion
 
     //region Attributes
     private String name;
     private String flag;
+    private String inputExtension;
+
+    private String helpInfo;
     //endregion
 
     //region Constructor
@@ -34,9 +39,11 @@ public enum EngineType {
      * @param name - the human readable name of the engine type
      * @param flag - the flag used to identify the engine type
      */
-    EngineType(String name, String flag) {
+    EngineType(String name, String flag, String extension, String helpInfo) {
         this.name = name;
         this.flag = flag;
+        this.inputExtension = extension;
+        this.helpInfo = helpInfo;
     }
     //endregion
 
@@ -61,6 +68,26 @@ public enum EngineType {
     }
 
     /**
+     * The getter for the extension
+     *
+     * @return {@link java.lang.String} - The extension for the engine Type
+     */
+    public String getInputExtension() {
+        return this.inputExtension;
+    }
+
+    /**
+     * The getter for helpInfo
+     *
+     * <p>getHelpInfo()</p>
+     *
+     * @return {@link String} - Returns the HelpInfo field
+     */
+    public String getHelpInfo() {
+        return helpInfo;
+    }
+
+    /**
      * The method to retrieve the engine type from the flag
      *
      * @param flag - the flag used to look for the specified engine type
@@ -68,10 +95,9 @@ public enum EngineType {
      */
     public static EngineType getFromFlag(String flag) {
         for (EngineType type : EngineType.values())
-            if (type.flag.equals(flag)) {
+            if (type.inputExtension.equals(flag)) {
                 return type;
             }
-
         return null;
     }
 
@@ -85,6 +111,20 @@ public enum EngineType {
         for (EngineType type : EngineType.values())
             flags.add(type.flag);
         return flags;
+    }
+
+    /**
+     * The method to automatically retrieve all of the help info for all of the different use cases.
+     *
+     * @return {@link String} - The full help info for console use
+     */
+    public static String getHelp() {
+        StringBuilder out = new StringBuilder();
+
+        for (EngineType type : EngineType.values())
+            out.append(type.getFlag()).append(" : ").append(type.getHelpInfo()).append("\n");
+
+        return out.toString();
     }
     //endregion
 }

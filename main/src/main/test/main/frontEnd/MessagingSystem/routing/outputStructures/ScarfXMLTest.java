@@ -1,4 +1,4 @@
-package frontEnd.MessagingSystem.outputStructures;
+package main.frontEnd.MessagingSystem.routing.outputStructures;
 
 import com.example.response.AnalyzerReport;
 import com.example.response.BugCategoryType;
@@ -6,9 +6,8 @@ import com.example.response.BugInstanceType;
 import com.example.response.LocationType;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.AnalysisLocation;
-import main.frontEnd.MessagingSystem.EnvironmentInformation;
-import main.frontEnd.MessagingSystem.OutputStructure;
-import main.frontEnd.MessagingSystem.outputStructures.ScarfXMLOutput;
+import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
+import main.frontEnd.MessagingSystem.routing.Listing;
 import main.rule.engine.Criteria;
 import main.rule.engine.EngineType;
 import main.rule.engine.RuleList;
@@ -40,7 +39,7 @@ import static org.junit.Assert.assertNull;
  * @author RigorityJTeam
  * @since V01.00.03
  */
-public class ScarfXMLOutputTest {
+public class ScarfXMLTest {
 
     //region Test Attributes
     private String propertyErrorMessage;
@@ -64,12 +63,21 @@ public class ScarfXMLOutputTest {
         marshallErrorMessage = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ERROR>\nThere has been an issue marshalling the output.\n</ERROR>";
 
 
-        this.env = new EnvironmentInformation(this.source, "STUBBED", "STUBBED", "STUBBED", "STUBBED", "STUBBED", null, true, "STUBBED");
+        this.type = EngineType.JAR;
+
+        this.env = new EnvironmentInformation(new String[]{this.source}, this.type, null, Listing.ScarfXML.getFlag());
+        //region Setting Scarf XML Required Fields
+        this.env.setAssessmentFramework("STUBBED");
+        this.env.setAssessmentFrameworkVersion("STUBBED");
+        this.env.setBuildRootDir("STUBBED");
+        this.env.setPackageRootDir("STUBBED");
+        this.env.setParserName("STUBBED");
+        this.env.setParserVersion("STUBBED");
         this.env.setPackageName(this.jar);
         this.env.setPackageVersion("0.0");
+        //endregion
+        this.env.setPrettyPrint(true);
 
-
-        this.type = EngineType.JAR;
 
         StringBuilder sampleOne = new StringBuilder();
 
@@ -128,7 +136,7 @@ public class ScarfXMLOutputTest {
 
         this.result = sampleOne.toString();
 
-        this.messagingSystem = new ScarfXMLOutput();
+        this.messagingSystem = new ScarfXML();
 
         this.brokenRules = new ArrayList<>();
 
@@ -206,7 +214,8 @@ public class ScarfXMLOutputTest {
 
     @Test
     public void simpleFiveRuleTest() {
-        String xmlStream = this.messagingSystem.getOutput(this.env, this.type, this.brokenRules, null);
+        String xmlStream = this.messagingSystem.getOutput(this.env, this.brokenRules);
+        this.env.openConsoleStream();
 
         assertTrue(StringUtils.isNoneBlank(xmlStream));
         assertFalse(xmlStream.contains("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"));

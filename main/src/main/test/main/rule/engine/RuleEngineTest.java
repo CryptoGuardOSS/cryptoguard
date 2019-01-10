@@ -1,14 +1,14 @@
-package rule.engine;
+package main.rule.engine;
 
-import main.rule.engine.EngineType;
-import main.rule.engine.RuleEngine;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.*;
 
-import static org.junit.Assert.*;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertNull;
 
 /**
  * <p>MessageRepresentationTest class.</p>
@@ -23,7 +23,7 @@ public class RuleEngineTest {
     private final String srcOneGrv = basePath.replace("/main", "");
     private String jarOneResults;
     private final EngineType jarType = EngineType.JAR;
-    private final EngineType srcType = EngineType.SOURCE;
+    private final EngineType srcType = EngineType.DIR;
     private String[] args;
     private RuleEngine engine;
     private ByteArrayOutputStream customStream;
@@ -135,27 +135,30 @@ public class RuleEngineTest {
     //region Tests
     @Test
     public void mainTestJar() {
-        File temp = new File(this.jarOne);
+        //TODO - fix this very much temp step
+        //Locked since Java7 Info only available via linux
+        if (!System.getProperty("os.name").contains("Windows")) {
+            File temp = new File(this.jarOne);
 
-        assertTrue(temp.isFile());
+            assertTrue(temp.isFile());
 
-        args = new String[]{jarType.getFlag(), this.jarOne, ""};
+            args = new String[]{jarType.getFlag(), this.jarOne, ""};
 
-        redirectOutput();
+            redirectOutput();
 
-        try {
-            this.engine.main(args);
+            try {
+                this.engine.main(args);
 
-            resetOutput();
+                resetOutput();
 
-            assertTrue(this.customStream.toString().split("\n").length > 1);
+                assertTrue(this.customStream.toString().split("\n").length > 1);
 
-            assertEquals(jarOneResults, this.customStream.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-            assertNull(e);
+                assertEquals(jarOneResults, this.customStream.toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
         }
-
     }
 
     @Test

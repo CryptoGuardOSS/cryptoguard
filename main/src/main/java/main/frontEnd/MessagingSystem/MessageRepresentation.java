@@ -1,10 +1,7 @@
 package main.frontEnd.MessagingSystem;
 
-import main.frontEnd.MessagingSystem.outputStructures.Listing;
-import main.rule.engine.EngineType;
+import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -20,10 +17,7 @@ public class MessageRepresentation {
 
     //region Attributes
     private EnvironmentInformation env;
-    private EngineType type;
     private Queue analysisIssues;
-    private PrintStream internalMessages;
-    private OutputStructure messageEngine;
     //endregion
 
     //region Constructor
@@ -33,17 +27,10 @@ public class MessageRepresentation {
      * <p>Used to funnel all of the output.</p>
      * Also creates a buffer to rewrite the system out internally.
      *
-     * @param type                     the type of engine to be used for the processing
-     * @param typeOfMessagingStructure the flag used to determine the type of messaging structure to be used
-     * @param source                   the name of the source being examined
-     * @param typeOfMessagingStructure the flag used to determine the type of messaging structure to be used
+     * @param source the name of the source being examined
      */
-    public MessageRepresentation(EnvironmentInformation source, EngineType type, String typeOfMessagingStructure) {
+    public MessageRepresentation(EnvironmentInformation source) {
         this.env = source;
-        this.type = type;
-        this.messageEngine = Listing.getTypeOfMessaging(typeOfMessagingStructure);
-        this.internalMessages = new PrintStream(new ByteArrayOutputStream());
-        System.setOut(this.internalMessages);
         this.analysisIssues = new LinkedList<>();
     }
     //endregion
@@ -60,30 +47,12 @@ public class MessageRepresentation {
     }
 
     /**
-     * The getter for the type
-     *
-     * @return EngineType - the type of engine running
-     */
-    public EngineType getType() {
-        return type;
-    }
-
-    /**
      * The getter for the Analysis Issues
      *
      * @return AnalysisRules - the list of broken rules
      */
     public ArrayList<AnalysisIssue> getAnalysisIssues() {
         return new ArrayList<>(analysisIssues);
-    }
-
-    /**
-     * <p>Getter for the field <code>messageEngine</code>.</p>
-     *
-     * @return a {@link OutputStructure} object.
-     */
-    public OutputStructure getMessageEngine() {
-        return messageEngine;
     }
 
 
@@ -98,11 +67,24 @@ public class MessageRepresentation {
 
     /**
      * The method to get the structure of the output.
+     * Also re-opens the console output.
      *
      * @return String - the string output is determined by the type of messaging system used
      */
     public String getMessage() {
-        return messageEngine.getOutput(this.env, this.type, this.getAnalysisIssues(), this.internalMessages);
+        return this.env.getMessagingType().getTypeOfMessagingOutput().getOutput(this.env, this.getAnalysisIssues());
+    }
+
+    /**
+     * The static method to get the structure of the output.
+     * Also re-opens the console output.
+     *
+     * @param env {@link EnvironmentInformation} - The container of all of the overall information
+     * @param issues {@link AnalysisIssue} - The list of collected issues
+     * @return String - the string output is determined by the type of messaging system used
+     */
+    public static String getMessage(EnvironmentInformation env, ArrayList<AnalysisIssue> issues) {
+        return env.getMessagingType().getTypeOfMessagingOutput().getOutput(env, issues);
     }
     //endregion
 }

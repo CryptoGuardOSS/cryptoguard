@@ -1,11 +1,11 @@
-package main.frontEnd.MessagingSystem.outputStructures;
+package main.frontEnd.MessagingSystem.routing.outputStructures;
 
 import com.example.response.*;
+import main.CWE_Reader.CWE;
+import main.CWE_Reader.CWEList;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.AnalysisLocation;
-import main.frontEnd.MessagingSystem.EnvironmentInformation;
-import main.frontEnd.MessagingSystem.OutputStructure;
-import main.rule.engine.EngineType;
+import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import main.rule.engine.RuleList;
 import org.apache.commons.lang3.StringUtils;
 
@@ -25,16 +25,17 @@ import java.util.HashMap;
  * @author franceme
  * @since V01.00.03
  */
-public class ScarfXMLOutput implements OutputStructure {
-    public final Listing typeOfStructure = Listing.LegacyOutput;
+public class ScarfXML implements OutputStructure {
 
     /**
      * {@inheritDoc}
-     * <p>
-     * <p>
      * The overridden method for the Scarf XML output.
      */
-    public String getOutput(EnvironmentInformation source, EngineType type, ArrayList<AnalysisIssue> brokenRules, PrintStream internalWarnings) {
+    public String getOutput(EnvironmentInformation source, ArrayList<AnalysisIssue> brokenRules) {
+
+        //reopening the console stream
+        source.openConsoleStream();
+        CWEList cwes = new CWEList();
         try {
             AnalyzerReport report = new AnalyzerReport();
 
@@ -79,6 +80,9 @@ public class ScarfXMLOutput implements OutputStructure {
                 trace.setBuildId(source.getBuildId());
                 trace.setAssessmentReportFile(source.getxPath());
                 instance.setBugTrace(trace);
+
+                for (CWE cwe : issue.getRule().retrieveCWEInfo(cwes))
+                    instance.getCweld().add(String.valueOf(cwe.getId()));
 
                 if (StringUtils.isNotBlank(issue.getClassName())) {
                     instance.setClassName(issue.getClassName());

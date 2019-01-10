@@ -1,14 +1,12 @@
-package main.frontEnd.MessagingSystem;
+package main.frontEnd.MessagingSystem.routing;
 
-import org.apache.commons.lang3.StringUtils;
+import main.rule.engine.EngineType;
 
 import javax.annotation.Nonnull;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -34,48 +32,45 @@ public class EnvironmentInformation {
     private final String BuildFramework;
     private final String BuildFrameworkVersion;
     private final String platformName = System.getProperty("os.name") + "-" + System.getProperty("os.version");
-    private final String Source;
-    private final Boolean prettyPrint;
     private String packageName;
     private String packageVersion;
     //endregion
-    //region From Outside
-    private final String AssessmentFramework;
-    private final String AssessmentFrameworkVersion;
-    private final String AssessmentStartTime;
-
-    private final String ParserName;
-    private final String ParserVersion;
-
-    private final String UUID;
-
-    //TODO - set constructors
-    private final String packageRootDir;
-    private final String buildRootDir;
-    private final Integer buildId;
-    private final String xPath;
+    //region Required Elements Set From the Start
+    private final String[] Source;
+    private Boolean prettyPrint = false;
+    private PrintStream internalErrors;
+    private String sourceDependencies;
+    private EngineType sourceType;
+    private Listing messagingType;
+    private String UUID;
     //endregion
-
+    //region From Outside and defaulted unless set
+    private String AssessmentFramework;
+    private String AssessmentFrameworkVersion;
+    private String AssessmentStartTime;
+    private String ParserName;
+    private String ParserVersion;
+    private String packageRootDir;
+    private String buildRootDir;
+    private Integer buildId;
+    private String xPath;
+    //endregion
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     //endregion
 
+    //region Constructor
 
     /**
      * The main constructor for setting all of the environmental variables used  for the outputs.
      *
-     * @param source                     - String the source file name
-     * @param assessmentFramework        - String, can't be null, the name of the tool calling this library
-     * @param assessmentFrameworkVersion - String, can't be null, the version of the tool calling this library
-     * @param assessmentFrameworkVersion - String, can't be null, the version of the tool calling this library
-     * @param assessmentStartTime        - String, can't be null, the timestamp the tool calling started it's processing
-     * @param parserName                 - String, can't be null, the name of the parser being used
-     * @param parserVersion              - String, can't be null, the version of the parser being used
-     * @param givenUUID                  - String, the unique ID for this particular validation, if null a sudo number will be generated
-     * @param printFormatted             a boolean.
-     * @param fileXPath                  a {@link java.lang.String} object.
+     * @param source        {@link java.lang.String[]} - The source name to be analyzed
+     * @param sourceType    {@link EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param dependencies  {@link java.lang.String} - The location of the directory of the sources dependencies
+     * @param messagingType {@link java.lang.String} - The flag passed in to determine the type of messaging system from {@link Listing}
      */
-    public EnvironmentInformation(@Nonnull String source, @Nonnull String assessmentFramework, @Nonnull String assessmentFrameworkVersion, @Nonnull String assessmentStartTime, @Nonnull String parserName, @Nonnull String parserVersion, String givenUUID, boolean printFormatted, String fileXPath) {
-        //region Setting Internal Settings
+    public EnvironmentInformation(@Nonnull String[] source, @Nonnull EngineType sourceType, String dependencies, String messagingType) {
+
+        //region Setting Internal Version Settings
         String tempToolFrameworkVersion;
         String tempToolFramework;
         String tempBuildFramework;
@@ -104,32 +99,19 @@ public class EnvironmentInformation {
         startTimeStamp = getCurrentDate();
         BuildFramework = tempBuildFramework;
         BuildFrameworkVersion = tempBuildFrameworkVersion;
-        prettyPrint = printFormatted;
         //endregion
 
-        //region Setting External Based Properties
-        Source = source;
-        AssessmentFramework = assessmentFramework;
-        AssessmentFrameworkVersion = assessmentFrameworkVersion;
-        AssessmentStartTime = assessmentStartTime;
-        ParserName = parserName;
-        ParserVersion = parserVersion;
-        if (givenUUID == null || givenUUID.isEmpty()) {
-            Random randomInst = new Random(getStringOfNumFromDate());
-            this.UUID = Long.toHexString(randomInst.nextLong() ^ getStringOfNumFromDate());
-        } else {
-            UUID = givenUUID;
-        }
-        packageRootDir = "";
-        buildId = -1;
-        if (StringUtils.isNotBlank(fileXPath)) {
-            xPath = fileXPath;
-        } else {
-            xPath = "Not Found";
-        }
-        buildRootDir = "";
+        //region Setting Required Attributes
+        internalErrors = new PrintStream(new ByteArrayOutputStream());
+        System.setOut(internalErrors);
+        this.Source = source;
+        this.sourceType = sourceType;
+        this.sourceDependencies = dependencies;
+        this.messagingType = Listing.retrieveListingType(messagingType);
         //endregion
+
     }
+    //endregion
 
     /**
      * A short method to generate a  XMLGregorian type from the current date
@@ -156,7 +138,6 @@ public class EnvironmentInformation {
     private Long getStringOfNumFromDate() {
         StringBuilder date = new StringBuilder();
         Date currentDate = new Date();
-
         date.append(currentDate.getYear());
         date.append(currentDate.getMonth());
         date.append(currentDate.getDay());
@@ -168,7 +149,36 @@ public class EnvironmentInformation {
         return Long.valueOf(date.toString());
     }
 
+    /**
+     * A simple method to "re-open" the console output after it was redirected for capture
+     */
+    public void openConsoleStream() {
+        System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
+    }
+
     //region Getters and Setters
+
+    /**
+     * The getter for Source
+     *
+     * <p>getSource()</p>
+     *
+     * @return {@link String[]} - Returns the Source field
+     */
+    public String[] getSource() {
+        return Source;
+    }
+
+    /**
+     * Setter for prettyPrint
+     *
+     * <p>setPrettyPrint(java.lang.Boolean prettyPrint)</p>
+     *
+     * @param prettyPrint {@link Boolean} - The value to set as prettyPrint
+     */
+    public void setPrettyPrint(Boolean prettyPrint) {
+        this.prettyPrint = prettyPrint;
+    }
 
     /**
      * <p>Getter for the field <code>packageRootDir</code>.</p>
@@ -233,14 +243,6 @@ public class EnvironmentInformation {
         return platformName;
     }
 
-    /**
-     * <p>getSource.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    public String getSource() {
-        return Source;
-    }
 
     /**
      * <p>getAssessmentFramework.</p>
@@ -293,7 +295,14 @@ public class EnvironmentInformation {
      * @return a {@link java.lang.String} object.
      */
     public String getUUID() {
-        return UUID;
+
+        if (this.UUID == null) {
+            Random randomInst = new Random(getStringOfNumFromDate());
+            this.UUID = Long.toHexString(randomInst.nextLong() ^ getStringOfNumFromDate());
+        }
+
+        return this.UUID;
+
     }
 
     /**
@@ -375,6 +384,183 @@ public class EnvironmentInformation {
      */
     public String getBuildRootDir() {
         return buildRootDir;
+    }
+
+    /**
+     * Getter for properties
+     *
+     * <p>getProperties()</p>
+     *
+     * @return a {@link java.util.Properties} object.
+     */
+    public java.util.Properties getProperties() {
+        return Properties;
+    }
+
+    /**
+     * Getter for propertiesFile
+     *
+     * <p>getPropertiesFile()</p>
+     *
+     * @return a {@link String} object.
+     */
+    public String getPropertiesFile() {
+        return PropertiesFile;
+    }
+
+    /**
+     * Getter for prettyPrint
+     *
+     * <p>getPrettyPrint()</p>
+     *
+     * @return a {@link Boolean} object.
+     */
+    public Boolean getPrettyPrint() {
+        return prettyPrint;
+    }
+
+    /**
+     * Getter for internalErrors
+     *
+     * <p>getInternalErrors()</p>
+     *
+     * @return a {@link PrintStream} object.
+     */
+    public PrintStream getInternalErrors() {
+        return internalErrors;
+    }
+
+    /**
+     * Getter for sourceDependencies
+     *
+     * <p>getSourceDependencies()</p>
+     *
+     * @return a {@link String} object.
+     */
+    public String getSourceDependencies() {
+        return sourceDependencies;
+    }
+
+    /**
+     * Getter for sourceType
+     *
+     * <p>getSourceType()</p>
+     *
+     * @return a {@link EngineType} object.
+     */
+    public EngineType getSourceType() {
+        return sourceType;
+    }
+
+    /**
+     * Getter for messagingType
+     *
+     * <p>getMessagingType()</p>
+     *
+     * @return a {@link Listing} object.
+     */
+    public Listing getMessagingType() {
+        return messagingType;
+    }
+
+
+    /**
+     * Setter for assessmentFramework
+     *
+     * <p>setAssessmentFramework(java.lang.String assessmentFramework)</p>
+     *
+     * @param assessmentFramework {@link String} - The value to set as assessmentFramework
+     */
+    public void setAssessmentFramework(String assessmentFramework) {
+        AssessmentFramework = assessmentFramework;
+    }
+
+    /**
+     * Setter for assessmentFrameworkVersion
+     *
+     * <p>setAssessmentFrameworkVersion(java.lang.String assessmentFrameworkVersion)</p>
+     *
+     * @param assessmentFrameworkVersion {@link String} - The value to set as assessmentFrameworkVersion
+     */
+    public void setAssessmentFrameworkVersion(String assessmentFrameworkVersion) {
+        AssessmentFrameworkVersion = assessmentFrameworkVersion;
+    }
+
+    /**
+     * Setter for assessmentStartTime
+     *
+     * <p>setAssessmentStartTime(java.lang.String assessmentStartTime)</p>
+     *
+     * @param assessmentStartTime {@link String} - The value to set as assessmentStartTime
+     */
+    public void setAssessmentStartTime(String assessmentStartTime) {
+        AssessmentStartTime = assessmentStartTime;
+    }
+
+    /**
+     * Setter for parserName
+     *
+     * <p>setParserName(java.lang.String parserName)</p>
+     *
+     * @param parserName {@link String} - The value to set as parserName
+     */
+    public void setParserName(String parserName) {
+        ParserName = parserName;
+    }
+
+    /**
+     * Setter for parserVersion
+     *
+     * <p>setParserVersion(java.lang.String parserVersion)</p>
+     *
+     * @param parserVersion {@link String} - The value to set as parserVersion
+     */
+    public void setParserVersion(String parserVersion) {
+        ParserVersion = parserVersion;
+    }
+
+    /**
+     * Setter for packageRootDir
+     *
+     * <p>setPackageRootDir(java.lang.String packageRootDir)</p>
+     *
+     * @param packageRootDir {@link String} - The value to set as packageRootDir
+     */
+    public void setPackageRootDir(String packageRootDir) {
+        this.packageRootDir = packageRootDir;
+    }
+
+    /**
+     * Setter for buildRootDir
+     *
+     * <p>setBuildRootDir(java.lang.String buildRootDir)</p>
+     *
+     * @param buildRootDir {@link String} - The value to set as buildRootDir
+     */
+    public void setBuildRootDir(String buildRootDir) {
+        this.buildRootDir = buildRootDir;
+    }
+
+    /**
+     * Setter for buildId
+     *
+     * <p>setBuildId(java.lang.Integer buildId)</p>
+     *
+     * @param buildId {@link Integer} - The value to set as buildId
+     */
+    public void setBuildId(Integer buildId) {
+        this.buildId = buildId;
+    }
+
+    /**
+     * Setter for xPath
+     *
+     * <p>setxPath(java.lang.String xPath)</p>
+     *
+     * @param xPath {@link String} - The value to set as xPath
+     */
+    public void setxPath(String xPath) {
+        this.xPath = xPath;
     }
     //endregion
 }
