@@ -31,7 +31,7 @@ public class JarAnalyzer {
 
         for (String dependency : Utils.getJarsInDirectory(projectDependencyPath)) {
             for (String dependencyClazz : Utils.getClassNamesFromJarArchive(dependency)) {
-                if (dependencyClazz.contains(basePackageName)) {
+                if (dependencyClazz != null && dependencyClazz.contains(basePackageName)) {
                     classNames.add(dependencyClazz);
                 }
             }

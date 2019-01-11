@@ -58,6 +58,23 @@ public class OtherInstructionSlicer extends BackwardFlowAnalysis {
                         return;
                     }
 
+                    if (propertyUseMap.get(usebox.getValue().toString()) == null) {
+
+                        List<PropertyAnalysisResult> specialInitInsts;
+
+                        if (usebox.getValue().toString().startsWith("r0.")) {
+                            specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString().substring(3));
+                        } else if (usebox.getValue().toString().startsWith("this.")) {
+                            specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString().substring(5));
+                        } else {
+                            specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString());
+                        }
+
+                        if (specialInitInsts != null) {
+                            propertyUseMap.put(usebox.getValue().toString(), specialInitInsts);
+                        }
+                    }
+
                     for (ValueBox defbox : currInstruction.getDefBoxes()) {
                         if (defbox.getValue().equivTo(usebox.getValue())) {
                             addCurrInstInOutSet(outSet, currInstruction);
@@ -75,26 +92,6 @@ public class OtherInstructionSlicer extends BackwardFlowAnalysis {
     }
 
     private void addCurrInstInOutSet(FlowSet outSet, Unit currInstruction) {
-
-        List<ValueBox> useBoxes = currInstruction.getUseBoxes();
-
-        for (ValueBox usebox : useBoxes) {
-            if (propertyUseMap.get(usebox.getValue().toString()) == null) {
-
-                List<PropertyAnalysisResult> specialInitInsts;
-                if (usebox.getValue().toString().startsWith("r0.")) {
-                    specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString().substring(3));
-                } else if (usebox.getValue().toString().startsWith("this.")) {
-                    specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString().substring(5));
-                } else {
-                    specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString());
-                }
-
-                if (specialInitInsts != null) {
-                    propertyUseMap.put(usebox.getValue().toString(), specialInitInsts);
-                }
-            }
-        }
 
         UnitContainer currUnitContainer = new UnitContainer();
         currUnitContainer.setUnit(currInstruction);
