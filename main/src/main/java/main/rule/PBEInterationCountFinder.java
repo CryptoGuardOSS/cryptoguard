@@ -117,33 +117,35 @@ public class PBEInterationCountFinder extends BaseRuleChecker {
 
             if (Utils.isArgumentOfInvoke(analysis, index, new ArrayList<UnitContainer>(), usedFields, invokeResult)) {
 
-                if (e.getUnit().toString().contains("specialinvoke") &&
-                        (invokeResult.getDefinedFields().isEmpty() || invokeResult.getUnit() != null)) {
+                if ((invokeResult.getDefinedFields().isEmpty() || !invokeResult.getArgs().isEmpty())
+                        && invokeResult.getUnit().toString().contains("specialinvoke")) {
+
                     for (UnitContainer unitContainer : outSet.keySet()) {
                         putIntoMap(predictableSourcMap, unitContainer, outSet.get(unitContainer));
                     }
                 } else {
 
-                    if (e.getUnit() instanceof JInvokeStmt && e.getUnit().toString().contains("interfaceinvoke")) {
+                    for (UnitContainer unitContainer : outSet.keySet()) {
+                        if (unitContainer.getUnit() instanceof JInvokeStmt && unitContainer.getUnit().toString().contains("interfaceinvoke")) {
 
-                        boolean found = false;
+                            boolean found = false;
 
-                        for (String constant : usedConstants) {
-                            if (((JInvokeStmt) e.getUnit()).getInvokeExpr().getArg(0).toString().contains(constant)) {
-                                putIntoMap(predictableSourcMap, e, outSet.get(e));
-                                found = true;
-                                break;
+                            for (String constant : usedConstants) {
+                                if (((JInvokeStmt) unitContainer.getUnit()).getInvokeExpr().getArg(0).toString().contains(constant)) {
+                                    putIntoMap(predictableSourcMap, unitContainer, outSet.get(unitContainer));
+                                    found = true;
+                                    break;
+                                }
                             }
-                        }
 
-                        if (!found) {
-                            putIntoMap(othersSourceMap, e, outSet.get(e));
-                        }
+                            if (!found) {
+                                putIntoMap(othersSourceMap, unitContainer, outSet.get(unitContainer));
+                            }
 
-                    } else {
-                        for (UnitContainer unitContainer : outSet.keySet()) {
+                        } else {
                             putIntoMap(othersSourceMap, unitContainer, outSet.get(unitContainer));
                         }
+
                     }
                 }
 
@@ -158,7 +160,6 @@ public class PBEInterationCountFinder extends BaseRuleChecker {
                 }
 
             } else {
-
                 for (UnitContainer unitContainer : outSet.keySet()) {
                     putIntoMap(predictableSourcMap, unitContainer, outSet.get(unitContainer));
                 }

@@ -409,7 +409,8 @@ public class Utils {
 
                     analysisResult.getAnalysisResult().addAll(container.getAnalysisResult());
                     analysisResult.setDefinedFields(container.getDefinedFields());
-                    analysisResult.setUnit(container.getUnit());
+                    analysisResult.setArgs(container.getArgs());
+                    analysisResult.setUnit(baseUnit.getUnit());
                     return true;
 
                 }
@@ -449,9 +450,11 @@ public class Utils {
                                     if (container.getArgs().contains(x)) {
                                         analysisResult.getAnalysisResult().addAll(container.getAnalysisResult());
                                         analysisResult.setDefinedFields(container.getDefinedFields());
-                                        analysisResult.setUnit(container.getUnit());
+                                        analysisResult.setArgs(container.getArgs());
+
                                     }
 
+                                    analysisResult.setUnit(curUnit.getUnit());
                                     return true;
                                 }
                             }
@@ -501,8 +504,9 @@ public class Utils {
                                         if (container.getArgs().contains(x)) {
                                             analysisResult.getAnalysisResult().addAll(container.getAnalysisResult());
                                             analysisResult.setDefinedFields(container.getDefinedFields());
-                                            analysisResult.setUnit(container.getUnit());
+                                            analysisResult.setArgs(container.getArgs());
                                         }
+                                        analysisResult.setUnit(curUnit.getUnit());
                                         return true;
                                     }
                                 }
@@ -555,9 +559,10 @@ public class Utils {
                                         if (container.getArgs().contains(x)) {
                                             analysisResult.getAnalysisResult().addAll(container.getAnalysisResult());
                                             analysisResult.setDefinedFields(container.getDefinedFields());
-                                            analysisResult.setUnit(container.getUnit());
-
+                                            analysisResult.setArgs(container.getArgs());
                                         }
+
+                                        analysisResult.setUnit(curUnit.getUnit());
                                         return true;
                                     }
                                 }
