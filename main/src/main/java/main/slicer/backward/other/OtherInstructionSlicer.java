@@ -53,29 +53,24 @@ public class OtherInstructionSlicer extends BackwardFlowAnalysis {
 
                 for (ValueBox usebox : useBoxes) {
 
+                    if ((usebox.getValue().toString().equals("r0") && insetInstruction.getUnit().toString().contains("r0.")) ||
+                            (usebox.getValue().toString().equals("this") && insetInstruction.getUnit().toString().contains("this."))) {
+                        continue;
+                    }
+
                     if (isInvokeOn(currInstruction, usebox)) {
                         addCurrInstInOutSet(outSet, currInstruction);
                         return;
                     }
 
-                    if (propertyUseMap.get(usebox.getValue().toString()) == null) {
-
-                        List<PropertyAnalysisResult> specialInitInsts;
-
-                        if (usebox.getValue().toString().startsWith("r0.")) {
-                            specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString().substring(3));
-                        } else if (usebox.getValue().toString().startsWith("this.")) {
-                            specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString().substring(5));
-                        } else {
-                            specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString());
-                        }
-
-                        if (specialInitInsts != null) {
-                            propertyUseMap.put(usebox.getValue().toString(), specialInitInsts);
-                        }
-                    }
 
                     for (ValueBox defbox : currInstruction.getDefBoxes()) {
+
+                        if ((defbox.getValue().toString().equals("r0") && currInstruction.toString().startsWith("r0.")) ||
+                                (defbox.getValue().toString().equals("this") && currInstruction.toString().startsWith("this."))) {
+                            continue;
+                        }
+
                         if (defbox.getValue().equivTo(usebox.getValue())) {
                             addCurrInstInOutSet(outSet, currInstruction);
                             return;
@@ -92,6 +87,24 @@ public class OtherInstructionSlicer extends BackwardFlowAnalysis {
     }
 
     private void addCurrInstInOutSet(FlowSet outSet, Unit currInstruction) {
+
+        for (ValueBox usebox : currInstruction.getUseBoxes()) {
+            if (propertyUseMap.get(usebox.getValue().toString()) == null) {
+
+                List<PropertyAnalysisResult> specialInitInsts;
+                if (usebox.getValue().toString().startsWith("r0.")) {
+                    specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString().substring(3));
+                } else if (usebox.getValue().toString().startsWith("this.")) {
+                    specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString().substring(5));
+                } else {
+                    specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString());
+                }
+
+                if (specialInitInsts != null) {
+                    propertyUseMap.put(usebox.getValue().toString(), specialInitInsts);
+                }
+            }
+        }
 
         UnitContainer currUnitContainer = new UnitContainer();
         currUnitContainer.setUnit(currInstruction);

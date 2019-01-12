@@ -3,6 +3,7 @@ package tester;
 import javax.crypto.spec.SecretKeySpec;
 
 public class NewTestCase2 {
+
     public static final String DEFAULT_ENCRYPT_KEY = "defaultkey";
     private static char[] ENCRYPT_KEY;
     private static char[] encryptKey;
