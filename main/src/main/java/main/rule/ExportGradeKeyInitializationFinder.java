@@ -124,8 +124,35 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
             InvokeUnitContainer invokeResult = new InvokeUnitContainer();
 
             if (Utils.isArgumentOfInvoke(analysis, index, new ArrayList<UnitContainer>(), usedFields, invokeResult)) {
-                for (UnitContainer unitContainer : outSet.keySet()) {
-                    putIntoMap(othersSourceMap, unitContainer, outSet.get(unitContainer));
+
+                if (e.getUnit().toString().contains("specialinvoke") &&
+                        (invokeResult.getDefinedFields().isEmpty() || invokeResult.getUnit() != null)) {
+                    for (UnitContainer unitContainer : outSet.keySet()) {
+                        putIntoMap(predictableSourcMap, unitContainer, outSet.get(unitContainer));
+                    }
+                } else {
+
+                    if (e.getUnit() instanceof JInvokeStmt && e.getUnit().toString().contains("interfaceinvoke")) {
+
+                        boolean found = false;
+
+                        for (String constant : usedConstants) {
+                            if (((JInvokeStmt) e.getUnit()).getInvokeExpr().getArg(0).toString().contains(constant)) {
+                                putIntoMap(predictableSourcMap, e, outSet.get(e));
+                                found = true;
+                                break;
+                            }
+                        }
+
+                        if (!found) {
+                            putIntoMap(othersSourceMap, e, outSet.get(e));
+                        }
+
+                    } else {
+                        for (UnitContainer unitContainer : outSet.keySet()) {
+                            putIntoMap(othersSourceMap, unitContainer, outSet.get(unitContainer));
+                        }
+                    }
                 }
 
                 Map<UnitContainer, String> newOutset = new HashMap<>();
@@ -141,25 +168,7 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
             } else {
 
                 for (UnitContainer unitContainer : outSet.keySet()) {
-                    if (unitContainer.getUnit() instanceof JInvokeStmt && unitContainer.getUnit().toString().contains("interfaceinvoke")) {
-
-                        boolean found = false;
-
-                        for (String constant : usedConstants) {
-                            if (((JInvokeStmt) unitContainer.getUnit()).getInvokeExpr().getArg(0).toString().contains(constant)) {
-                                putIntoMap(predictableSourcMap, unitContainer, outSet.get(unitContainer));
-                                found = true;
-                                break;
-                            }
-                        }
-
-                        if (!found) {
-                            putIntoMap(othersSourceMap, unitContainer, outSet.get(unitContainer));
-                        }
-
-                    } else {
-                        putIntoMap(predictableSourcMap, unitContainer, outSet.get(unitContainer));
-                    }
+                    putIntoMap(predictableSourcMap, unitContainer, outSet.get(unitContainer));
 
                 }
             }
@@ -170,7 +179,7 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
 
         for (ValueBox usebox : e.getUnit().getUseBoxes()) {
 
-            if (usebox.getValue() instanceof Constant) {
+            if (usebox.getValue() instanceof Constant && !Utils.isArgOfByteArrayCreation(usebox, e.getUnit())) {
                 if (e.getUnit() instanceof AssignStmt && usebox.getValue().getType() instanceof IntegerType) {
 
                     int value = Integer.valueOf(usebox.getValue().toString());
@@ -178,17 +187,17 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
                     if (usebox instanceof RValueBox && value != 0 && value % 2 == 0 && value < minSize) {
 
                         if (e.getUnit() instanceof JAssignStmt && ((AssignStmt) e.getUnit()).containsInvokeExpr()) {
-                                InvokeExpr invokeExpr = ((AssignStmt) e.getUnit()).getInvokeExpr();
-                                List<Value> args = invokeExpr.getArgs();
-                                for (Value arg : args) {
-                                    if (arg.equivTo(usebox.getValue())) {
-                                        putIntoMap(othersSourceMap, e, usebox.getValue().toString());
-                                        break;
-                                    }
+                            InvokeExpr invokeExpr = ((AssignStmt) e.getUnit()).getInvokeExpr();
+                            List<Value> args = invokeExpr.getArgs();
+                            for (Value arg : args) {
+                                if (arg.equivTo(usebox.getValue())) {
+                                    putIntoMap(othersSourceMap, e, usebox.getValue().toString());
+                                    break;
                                 }
-                            } else {
-                                outSet.put(e, usebox.getValue().toString());
                             }
+                        } else {
+                            outSet.put(e, usebox.getValue().toString());
+                        }
 
                     } else {
                         putIntoMap(othersSourceMap, e, usebox.getValue().toString());

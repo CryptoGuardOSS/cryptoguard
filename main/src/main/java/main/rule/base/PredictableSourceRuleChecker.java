@@ -103,14 +103,42 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
             InvokeUnitContainer invokeResult = new InvokeUnitContainer();
 
             if (Utils.isArgumentOfInvoke(analysis, index, new ArrayList<UnitContainer>(), usedFields, invokeResult)) {
-                for (UnitContainer unitContainer : outSet.keySet()) {
-                    putIntoMap(othersSourceMap, unitContainer, outSet.get(unitContainer));
-                }
 
                 Map<UnitContainer, String> newOutset = new HashMap<>();
 
-                if (e instanceof InvokeUnitContainer) {
-                    List<UnitContainer> resFromInside = ((InvokeUnitContainer) e).getAnalysisResult();
+                if (e.getUnit().toString().contains("specialinvoke") &&
+                        (invokeResult.getDefinedFields().isEmpty() || invokeResult.getUnit() != null)) {
+                    for (UnitContainer unitContainer : outSet.keySet()) {
+                        putIntoMap(predictableSourcMap, unitContainer, outSet.get(unitContainer));
+                    }
+                } else {
+
+                    if (e.getUnit() instanceof JInvokeStmt && e.getUnit().toString().contains("interfaceinvoke")) {
+
+                        boolean found = false;
+
+                        for (String constant : usedConstants) {
+                            if (((JInvokeStmt) e.getUnit()).getInvokeExpr().getArg(0).toString().contains(constant)) {
+                                putIntoMap(predictableSourcMap, e, outSet.get(e));
+                                found = true;
+                                break;
+                            }
+                        }
+
+                        if (!found) {
+                            putIntoMap(othersSourceMap, e, outSet.get(e));
+                        }
+
+                    } else {
+                        for (UnitContainer unitContainer : outSet.keySet()) {
+                            putIntoMap(othersSourceMap, unitContainer, outSet.get(unitContainer));
+                        }
+                    }
+                }
+
+                List<UnitContainer> resFromInside = invokeResult.getAnalysisResult();
+
+                if (!resFromInside.isEmpty()) {
                     checkPredictableSource(resFromInside, newOutset);
 
                 } else {
@@ -133,26 +161,7 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
             } else {
 
                 for (UnitContainer unitContainer : outSet.keySet()) {
-                    if (unitContainer.getUnit() instanceof JInvokeStmt && unitContainer.getUnit().toString().contains("interfaceinvoke")) {
-
-                        boolean found = false;
-
-                        for (String constant : usedConstants) {
-                            if (((JInvokeStmt) unitContainer.getUnit()).getInvokeExpr().getArg(0).toString().contains(constant)) {
-                                putIntoMap(predictableSourcMap, unitContainer, outSet.get(unitContainer));
-                                found = true;
-                                break;
-                            }
-                        }
-
-                        if (!found) {
-                            putIntoMap(othersSourceMap, unitContainer, outSet.get(unitContainer));
-                        }
-
-                    } else {
-                        putIntoMap(predictableSourcMap, unitContainer, outSet.get(unitContainer));
-                    }
-
+                    putIntoMap(predictableSourcMap, unitContainer, outSet.get(unitContainer));
                 }
             }
         }
@@ -189,7 +198,7 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
                     continue;
                 }
 
-                if (e.getUnit() instanceof JAssignStmt && usebox.getValue().getType() instanceof IntegerType) {
+                if (usebox.getValue().getType() instanceof IntegerType) {
 
                     List<ValueBox> defBoxes = e.getUnit().getDefBoxes();
 

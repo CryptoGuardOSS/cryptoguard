@@ -55,12 +55,19 @@ public class HeuristicBasedInstructionSlicer extends BackwardFlowAnalysis {
                 return;
             }
 
+
+
             for (Object anInSet : inSet.toList()) {
 
                 UnitContainer insetInstruction = (UnitContainer) anInSet;
                 List<ValueBox> useBoxes = insetInstruction.getUnit().getUseBoxes();
 
                 for (ValueBox usebox : useBoxes) {
+
+                    if ((usebox.getValue().toString().equals("r0") && insetInstruction.getUnit().toString().contains("r0.")) ||
+                            (usebox.getValue().toString().equals("this") && insetInstruction.getUnit().toString().contains("this."))) {
+                        continue;
+                    }
 
                     if (isArgOfAssignInvoke(usebox, insetInstruction.getUnit())) {
                         continue;
@@ -72,6 +79,12 @@ public class HeuristicBasedInstructionSlicer extends BackwardFlowAnalysis {
                     }
 
                     for (ValueBox defbox : currInstruction.getDefBoxes()) {
+
+                        if ((defbox.getValue().toString().equals("r0") && currInstruction.toString().startsWith("r0.")) ||
+                                (defbox.getValue().toString().equals("this") && currInstruction.toString().startsWith("this."))) {
+                            continue;
+                        }
+
                         if (defbox.getValue().equivTo(usebox.getValue())) {
 
                             addCurrInstInOutSet(outSet, currInstruction);

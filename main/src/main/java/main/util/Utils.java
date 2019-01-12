@@ -330,8 +330,6 @@ public class Utils {
 
         AssignInvokeUnitContainer unitContainer = new AssignInvokeUnitContainer();
 
-
-
         SootMethod method = ((JAssignStmt) currInstruction).getInvokeExpr().getMethod();
         if (method != null && method.isConcrete()) {
 
@@ -396,6 +394,28 @@ public class Utils {
     public static boolean isArgumentOfInvoke(Analysis analysis, int index,
                                              List<UnitContainer> outSet,
                                              Set<String> usedFields, InvokeUnitContainer analysisResult) {
+        UnitContainer baseUnit = analysis.getAnalysisResult().get(index);
+
+        if (baseUnit.getUnit() instanceof JInvokeStmt) {
+
+            InvokeExpr invokeExpr = ((JInvokeStmt) baseUnit.getUnit()).getInvokeExpr();
+
+            List<Value> args = invokeExpr.getArgs();
+
+            for (int x = 0; x < args.size(); x++) {
+                if (args.get(x) instanceof Constant) {
+
+                    InvokeUnitContainer container = getDefinedFieldsFromInvoke(invokeExpr.getMethod(), usedFields);
+
+                    analysisResult.getAnalysisResult().addAll(container.getAnalysisResult());
+                    analysisResult.setDefinedFields(container.getDefinedFields());
+                    analysisResult.setUnit(container.getUnit());
+                    return true;
+
+                }
+            }
+        }
+
 
         outSet.add(analysis.getAnalysisResult().get(index));
 
@@ -426,14 +446,13 @@ public class Utils {
 
                                     InvokeUnitContainer container = getDefinedFieldsFromInvoke(invokeExpr.getMethod(), usedFields);
 
-                                    if (container.getDefinedFields().isEmpty()) {
-                                        return false;
-                                    } else if (container.getArgs().contains(x)) {
-
+                                    if (container.getArgs().contains(x)) {
                                         analysisResult.getAnalysisResult().addAll(container.getAnalysisResult());
+                                        analysisResult.setDefinedFields(container.getDefinedFields());
                                         analysisResult.setUnit(container.getUnit());
-                                        return true;
                                     }
+
+                                    return true;
                                 }
                             }
                         }
@@ -479,13 +498,12 @@ public class Utils {
 
                                         InvokeUnitContainer container = getDefinedFieldsFromInvoke(invokeExpr.getMethod(), usedFields);
 
-                                        if (container.getDefinedFields().isEmpty()) {
-                                            return false;
-                                        } else if (container.getArgs().contains(x)) {
+                                        if (container.getArgs().contains(x)) {
                                             analysisResult.getAnalysisResult().addAll(container.getAnalysisResult());
+                                            analysisResult.setDefinedFields(container.getDefinedFields());
                                             analysisResult.setUnit(container.getUnit());
-                                            return true;
                                         }
+                                        return true;
                                     }
                                 }
                             } else if (curUnit.getUnit().toString().contains(defBox + ".<")) {
@@ -497,6 +515,12 @@ public class Utils {
 
                     } else {
                         for (ValueBox defBox : insetIns.getUnit().getDefBoxes()) {
+
+                            if ((defBox.getValue().toString().equals("r0") && insetIns.getUnit().toString().startsWith("r0.")) ||
+                                    (defBox.getValue().toString().equals("this") && insetIns.getUnit().toString().startsWith("this."))) {
+                                continue;
+                            }
+
                             for (ValueBox useBox : curUnit.getUnit().getUseBoxes()) {
 
                                 if (defBox.getValue().equivTo(useBox.getValue())
@@ -528,14 +552,13 @@ public class Utils {
                                             isArrayUseBox(curUnit, insetIns, defBox, args.get(x))) {
 
                                         InvokeUnitContainer container = getDefinedFieldsFromInvoke(invokeExpr.getMethod(), usedFields);
-
-                                        if (container.getDefinedFields().isEmpty()) {
-                                            return false;
-                                        } else if (container.getArgs().contains(x)) {
+                                        if (container.getArgs().contains(x)) {
                                             analysisResult.getAnalysisResult().addAll(container.getAnalysisResult());
+                                            analysisResult.setDefinedFields(container.getDefinedFields());
                                             analysisResult.setUnit(container.getUnit());
-                                            return true;
+
                                         }
+                                        return true;
                                     }
                                 }
                             }
@@ -543,6 +566,12 @@ public class Utils {
 
                     } else {
                         for (ValueBox defBox : insetIns.getUnit().getDefBoxes()) {
+
+                            if ((defBox.getValue().toString().equals("r0") && insetIns.getUnit().toString().startsWith("r0.")) ||
+                                    (defBox.getValue().toString().equals("this") && insetIns.getUnit().toString().startsWith("this."))) {
+                                continue;
+                            }
+
                             for (ValueBox useBox : curUnit.getUnit().getUseBoxes()) {
 
                                 if (defBox.getValue().equivTo(useBox.getValue())
