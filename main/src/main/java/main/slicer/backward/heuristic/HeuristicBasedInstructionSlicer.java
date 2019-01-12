@@ -3,7 +3,6 @@ package main.slicer.backward.heuristic;
 import main.analyzer.backward.UnitContainer;
 import main.slicer.ValueArraySparseSet;
 import main.slicer.backward.property.PropertyAnalysisResult;
-import main.util.FieldInitializationInstructionMap;
 import soot.ArrayType;
 import soot.Unit;
 import soot.Value;
@@ -56,7 +55,6 @@ public class HeuristicBasedInstructionSlicer extends BackwardFlowAnalysis {
             }
 
 
-
             for (Object anInSet : inSet.toList()) {
 
                 UnitContainer insetInstruction = (UnitContainer) anInSet;
@@ -73,7 +71,7 @@ public class HeuristicBasedInstructionSlicer extends BackwardFlowAnalysis {
                         continue;
                     }
 
-                    if (isInvokeOn(currInstruction, usebox)) {
+                    if (isSpecialInvokeOn(currInstruction, usebox)) {
                         addCurrInstInOutSet(outSet, currInstruction);
                         return;
                     }
@@ -137,7 +135,6 @@ public class HeuristicBasedInstructionSlicer extends BackwardFlowAnalysis {
                     return true;
                 }
             }
-
         }
 
         if (unit.toString().contains(" newarray ")) {
@@ -160,8 +157,8 @@ public class HeuristicBasedInstructionSlicer extends BackwardFlowAnalysis {
         outSet.add(currUnitContainer);
     }
 
-    private boolean isInvokeOn(Unit currInstruction, ValueBox usebox) {
-        return currInstruction instanceof JInvokeStmt
+    private boolean isSpecialInvokeOn(Unit currInstruction, ValueBox usebox) {
+        return currInstruction instanceof JInvokeStmt && currInstruction.toString().contains("specialinvoke")
                 && currInstruction.toString().contains(usebox.getValue().toString() + ".<");
     }
 
