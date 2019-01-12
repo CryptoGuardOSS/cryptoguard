@@ -29,10 +29,12 @@ public class JarAnalyzer {
 
         List<String> classNames = Utils.getClassNamesFromJarArchive(projectJarPath);
 
-        for (String dependency : Utils.getJarsInDirectory(projectDependencyPath)) {
-            for (String dependencyClazz : Utils.getClassNamesFromJarArchive(dependency)) {
-                if (dependencyClazz != null && dependencyClazz.contains(basePackageName)) {
-                    classNames.add(dependencyClazz);
+        if (basePackageName != null) {
+            for (String dependency : Utils.getJarsInDirectory(projectDependencyPath)) {
+                for (String dependencyClazz : Utils.getClassNamesFromJarArchive(dependency)) {
+                    if (dependencyClazz != null && dependencyClazz.contains(basePackageName)) {
+                        classNames.add(dependencyClazz);
+                    }
                 }
             }
         }

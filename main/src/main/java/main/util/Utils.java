@@ -88,9 +88,9 @@ public class Utils {
             return basePackages.get(0);
         } else if (basePackages.size() > 1) {
 
-//            if (isMain) {
-//                System.out.println("***Multiple Base packages of " + jarPath + " : " + basePackages.toString());
-//            }
+            if (isMain) {
+                System.out.println("***Multiple Base packages of " + jarPath + " : " + basePackages.toString());
+            }
 
             for (String basePackage : basePackages) {
                 if (basePackage.split("\\.").length > 2 && jarPath.contains(basePackage.split("\\.")[2])) {
