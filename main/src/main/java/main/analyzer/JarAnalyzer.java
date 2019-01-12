@@ -25,18 +25,13 @@ public class JarAnalyzer {
             System.exit(1);
         }
 
+
         String basePackageName = Utils.getBasePackageNameFromJar(projectJarPath, true);
 
         List<String> classNames = Utils.getClassNamesFromJarArchive(projectJarPath);
 
-        if (basePackageName != null) {
-            for (String dependency : Utils.getJarsInDirectory(projectDependencyPath)) {
-                for (String dependencyClazz : Utils.getClassNamesFromJarArchive(dependency)) {
-                    if (dependencyClazz != null && dependencyClazz.contains(basePackageName)) {
-                        classNames.add(dependencyClazz);
-                    }
-                }
-            }
+        for (String dependency : Utils.getJarsInDirectory(projectDependencyPath)) {
+            classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
         }
 
         String sootClassPath = Utils.buildSootClassPath(projectJarPath,
