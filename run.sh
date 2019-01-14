@@ -5,7 +5,12 @@
 #/usr/local/jdk1.7.0_80/bin/java -jar main/build/libs/main.jar "source" "/home/krishnokoli/projects/gradle-nosub" ""
 #/usr/local/jdk1.7.0_80/bin/java -jar main/build/libs/main.jar "source" "/home/krishnokoli/projects/simple-gradle-1-sub" ""
 
-java -jar main/build/libs/main.jar "jar" "testable-jar/build/libs/testable-jar.jar" "testable-jar/build/dependencies"
+#java -jar main/build/libs/main.jar "jar" "/media/krishnokoli/DATA/analysis-projects/apache/hive/ql/original-hive-exec-3.0.0-SNAPSHOT.jar" "/media/krishnokoli/DATA/analysis-projects/apache/hive/ql/dependent-jars"
+
+#java -jar main/build/libs/main.jar "jar" "/media/krishnokoli/DATA/analysis-projects/apache/wss4j/ws-security-stax/wss4j-ws-security-stax-2.2.1-SNAPSHOT.jar" "/media/krishnokoli/DATA/analysis-projects/apache/wss4j/ws-security-stax/dependent-jars"
+#java -jar main/build/libs/main.jar "jar" "/home/krishnokoli/projects/test-jar/spark-core_2.11-2.4.0-SNAPSHOT.jar" ""
+java -jar main/build/libs/main.jar "jar" "/media/krishnokoli/DATA/analysis-projects/apache/meecrowave/meecrowave-core/meecrowave-core-1.2.0-SNAPSHOT-runner.jar" ""
+#java -jar main/build/libs/main.jar "jar" "testable-jar/build/libs/testable-jar.jar" "testable-jar/build/dependencies"
 #java -jar main/build/libs/main.jar "jar" "/home/krishnokoli/projects/gradle-sample/sample-main/build/libs/sample-main.jar" "/home/krishnokoli/projects/gradle-sample/sample-main/build/dependencies"
 #java -jar main/build/libs/main.jar "jar" "/home/krishnokoli/projects/sample-mvn/sample-cmdlineapp/target/command-line-app.jar" ""
 

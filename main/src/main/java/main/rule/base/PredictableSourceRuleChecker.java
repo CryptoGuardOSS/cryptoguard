@@ -103,14 +103,43 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
             InvokeUnitContainer invokeResult = new InvokeUnitContainer();
 
             if (Utils.isArgumentOfInvoke(analysis, index, new ArrayList<UnitContainer>(), usedFields, invokeResult)) {
-                for (UnitContainer unitContainer : outSet.keySet()) {
-                    putIntoMap(othersSourceMap, unitContainer, outSet.get(unitContainer));
-                }
 
                 Map<UnitContainer, String> newOutset = new HashMap<>();
 
-                if (e instanceof InvokeUnitContainer) {
-                    List<UnitContainer> resFromInside = ((InvokeUnitContainer) e).getAnalysisResult();
+                if ((invokeResult.getDefinedFields().isEmpty() || !invokeResult.getArgs().isEmpty())
+                        && invokeResult.getUnit().toString().contains("specialinvoke")) {
+
+                    for (UnitContainer unitContainer : outSet.keySet()) {
+                        putIntoMap(predictableSourcMap, unitContainer, outSet.get(unitContainer));
+                    }
+                } else {
+
+                    for (UnitContainer unitContainer : outSet.keySet()) {
+                        if (unitContainer.getUnit() instanceof JInvokeStmt && unitContainer.getUnit().toString().contains("interfaceinvoke")) {
+
+                            boolean found = false;
+
+                            for (String constant : usedConstants) {
+                                if (((JInvokeStmt) unitContainer.getUnit()).getInvokeExpr().getArg(0).toString().contains(constant)) {
+                                    putIntoMap(predictableSourcMap, unitContainer, outSet.get(unitContainer));
+                                    found = true;
+                                    break;
+                                }
+                            }
+
+                            if (!found) {
+                                putIntoMap(othersSourceMap, unitContainer, outSet.get(unitContainer));
+                            }
+
+                        } else {
+                            putIntoMap(othersSourceMap, unitContainer, outSet.get(unitContainer));
+                        }
+                    }
+                }
+
+                List<UnitContainer> resFromInside = invokeResult.getAnalysisResult();
+
+                if (!resFromInside.isEmpty()) {
                     checkPredictableSource(resFromInside, newOutset);
 
                 } else {
@@ -133,26 +162,7 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
             } else {
 
                 for (UnitContainer unitContainer : outSet.keySet()) {
-                    if (unitContainer.getUnit() instanceof JInvokeStmt && unitContainer.getUnit().toString().contains("interfaceinvoke")) {
-
-                        boolean found = false;
-
-                        for (String constant : usedConstants) {
-                            if (((JInvokeStmt) unitContainer.getUnit()).getInvokeExpr().getArg(0).toString().contains(constant)) {
-                                putIntoMap(predictableSourcMap, unitContainer, outSet.get(unitContainer));
-                                found = true;
-                                break;
-                            }
-                        }
-
-                        if (!found) {
-                            putIntoMap(othersSourceMap, unitContainer, outSet.get(unitContainer));
-                        }
-
-                    } else {
-                        putIntoMap(predictableSourcMap, unitContainer, outSet.get(unitContainer));
-                    }
-
+                    putIntoMap(predictableSourcMap, unitContainer, outSet.get(unitContainer));
                 }
             }
         }
@@ -189,7 +199,7 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
                     continue;
                 }
 
-                if (e.getUnit() instanceof JAssignStmt && usebox.getValue().getType() instanceof IntegerType) {
+                if (usebox.getValue().getType() instanceof IntegerType) {
 
                     List<ValueBox> defBoxes = e.getUnit().getDefBoxes();
 

@@ -53,12 +53,24 @@ public class OtherInstructionSlicer extends BackwardFlowAnalysis {
 
                 for (ValueBox usebox : useBoxes) {
 
+                    if ((usebox.getValue().toString().equals("r0") && insetInstruction.getUnit().toString().contains("r0.")) ||
+                            (usebox.getValue().toString().equals("this") && insetInstruction.getUnit().toString().contains("this."))) {
+                        continue;
+                    }
+
                     if (isInvokeOn(currInstruction, usebox)) {
                         addCurrInstInOutSet(outSet, currInstruction);
                         return;
                     }
 
+
                     for (ValueBox defbox : currInstruction.getDefBoxes()) {
+
+                        if ((defbox.getValue().toString().equals("r0") && currInstruction.toString().startsWith("r0.")) ||
+                                (defbox.getValue().toString().equals("this") && currInstruction.toString().startsWith("this."))) {
+                            continue;
+                        }
+
                         if (defbox.getValue().equivTo(usebox.getValue())) {
                             addCurrInstInOutSet(outSet, currInstruction);
                             return;
@@ -76,9 +88,7 @@ public class OtherInstructionSlicer extends BackwardFlowAnalysis {
 
     private void addCurrInstInOutSet(FlowSet outSet, Unit currInstruction) {
 
-        List<ValueBox> useBoxes = currInstruction.getUseBoxes();
-
-        for (ValueBox usebox : useBoxes) {
+        for (ValueBox usebox : currInstruction.getUseBoxes()) {
             if (propertyUseMap.get(usebox.getValue().toString()) == null) {
 
                 List<PropertyAnalysisResult> specialInitInsts;

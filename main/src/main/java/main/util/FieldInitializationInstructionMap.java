@@ -84,14 +84,20 @@ public class FieldInitializationInstructionMap {
         }
 
         if (!initializationInstructions.containsKey(fieldName)) {
+
+            List<PropertyAnalysisResult> analysisResultList = new ArrayList<>();
+
+            initializationInstructions.put(fieldName, analysisResultList);
+
             List<MethodWrapper> initMethodList = fieldVsMethodWrapper.get(fieldName);
 
             if (initMethodList == null || initMethodList.isEmpty()) {
-                return null;
+                return initializationInstructions.get(fieldName);
+
             } else {
 
-                List<PropertyAnalysisResult> analysisResultList = new ArrayList<>();
                 for (MethodWrapper method : initMethodList) {
+
                     PropertyInfluencingInstructions simpleSlicerInstructions =
                             new PropertyInfluencingInstructions(method, fieldName);
 
@@ -101,11 +107,8 @@ public class FieldInitializationInstructionMap {
                         analysisResultList.add(analysis);
                     }
                 }
-
-                if (!analysisResultList.isEmpty()) {
-                    initializationInstructions.put(fieldName, analysisResultList);
-                }
             }
+
         }
 
         return initializationInstructions.get(fieldName);

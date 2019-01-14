@@ -3,7 +3,6 @@ package main.slicer.backward.heuristic;
 import main.analyzer.backward.UnitContainer;
 import main.slicer.ValueArraySparseSet;
 import main.slicer.backward.property.PropertyAnalysisResult;
-import main.util.FieldInitializationInstructionMap;
 import soot.ArrayType;
 import soot.Unit;
 import soot.Value;
@@ -55,6 +54,7 @@ public class HeuristicBasedInstructionSlicer extends BackwardFlowAnalysis {
                 return;
             }
 
+
             for (Object anInSet : inSet.toList()) {
 
                 UnitContainer insetInstruction = (UnitContainer) anInSet;
@@ -62,16 +62,27 @@ public class HeuristicBasedInstructionSlicer extends BackwardFlowAnalysis {
 
                 for (ValueBox usebox : useBoxes) {
 
+                    if ((usebox.getValue().toString().equals("r0") && insetInstruction.getUnit().toString().contains("r0.")) ||
+                            (usebox.getValue().toString().equals("this") && insetInstruction.getUnit().toString().contains("this."))) {
+                        continue;
+                    }
+
                     if (isArgOfAssignInvoke(usebox, insetInstruction.getUnit())) {
                         continue;
                     }
 
-                    if (isInvokeOn(currInstruction, usebox)) {
+                    if (isSpecialInvokeOn(currInstruction, usebox)) {
                         addCurrInstInOutSet(outSet, currInstruction);
                         return;
                     }
 
                     for (ValueBox defbox : currInstruction.getDefBoxes()) {
+
+                        if ((defbox.getValue().toString().equals("r0") && currInstruction.toString().startsWith("r0.")) ||
+                                (defbox.getValue().toString().equals("this") && currInstruction.toString().startsWith("this."))) {
+                            continue;
+                        }
+
                         if (defbox.getValue().equivTo(usebox.getValue())) {
 
                             addCurrInstInOutSet(outSet, currInstruction);
@@ -124,7 +135,6 @@ public class HeuristicBasedInstructionSlicer extends BackwardFlowAnalysis {
                     return true;
                 }
             }
-
         }
 
         if (unit.toString().contains(" newarray ")) {
@@ -140,26 +150,6 @@ public class HeuristicBasedInstructionSlicer extends BackwardFlowAnalysis {
 
     private void addCurrInstInOutSet(FlowSet outSet, Unit currInstruction) {
 
-        List<ValueBox> useBoxes = currInstruction.getUseBoxes();
-
-        for (ValueBox usebox : useBoxes) {
-            if (propertyUseMap.get(usebox.getValue().toString()) == null) {
-
-                List<PropertyAnalysisResult> specialInitInsts;
-                if (usebox.getValue().toString().startsWith("r0.")) {
-                    specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString().substring(3));
-                } else if (usebox.getValue().toString().startsWith("this.")) {
-                    specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString().substring(5));
-                } else {
-                    specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString());
-                }
-
-                if (specialInitInsts != null) {
-                    propertyUseMap.put(usebox.getValue().toString(), specialInitInsts);
-                }
-            }
-        }
-
         UnitContainer currUnitContainer = new UnitContainer();
         currUnitContainer.setUnit(currInstruction);
         currUnitContainer.setMethod(method);
@@ -167,8 +157,8 @@ public class HeuristicBasedInstructionSlicer extends BackwardFlowAnalysis {
         outSet.add(currUnitContainer);
     }
 
-    private boolean isInvokeOn(Unit currInstruction, ValueBox usebox) {
-        return currInstruction instanceof JInvokeStmt
+    private boolean isSpecialInvokeOn(Unit currInstruction, ValueBox usebox) {
+        return currInstruction instanceof JInvokeStmt && currInstruction.toString().contains("specialinvoke")
                 && currInstruction.toString().contains(usebox.getValue().toString() + ".<");
     }
 

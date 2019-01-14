@@ -31,13 +31,4 @@ public class AssignInvokeUnitContainer extends UnitContainer {
         this.analysisResult = analysisResult;
     }
 
-    @Override
-    public String toString() {
-        return "AssignInvokeUnitContainer{" +
-                "args=" + args +
-                ", properties=" + properties +
-                ", analysis=" + analysisResult +
-                ", unit=" + super.toString() +
-                '}';
-    }
 }
