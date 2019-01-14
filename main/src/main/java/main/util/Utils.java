@@ -42,10 +42,20 @@ public class Utils {
         return classNames;
     }
 
-    public static String getBasePackageNameFromApk(String apkPath) throws IOException {
+    public static String getBasePackageNameFromApk(String apkPath) {
+
+        String basePackage = null;
+
         ProcessManifest processManifest = new ProcessManifest();
-        processManifest.loadManifestFile(apkPath);
-        return processManifest.getPackageName();
+
+        try {
+            processManifest.loadManifestFile(apkPath);
+            basePackage = processManifest.getPackageName();
+        } catch (Exception e) {
+            System.out.println("Couldn't load manifest file.");
+        }
+
+        return basePackage;
     }
 
     public static String getBasePackageNameFromJar(String jarPath, boolean isMain) throws IOException {
