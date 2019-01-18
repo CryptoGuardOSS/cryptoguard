@@ -71,6 +71,10 @@ public class HeuristicBasedInstructionSlicer extends BackwardFlowAnalysis {
                         continue;
                     }
 
+                    if (insetInstruction.getUnit().toString().contains("[" + usebox.getValue() + "]")) {
+                        continue;
+                    }
+
                     if (isSpecialInvokeOn(currInstruction, usebox)) {
                         addCurrInstInOutSet(outSet, currInstruction);
                         return;

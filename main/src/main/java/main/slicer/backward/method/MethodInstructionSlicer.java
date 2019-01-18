@@ -123,6 +123,10 @@ public class MethodInstructionSlicer extends BackwardFlowAnalysis {
                         continue;
                     }
 
+                    if (insetInstruction.getUnit().toString().contains("[" + usebox.getValue() + "]")) {
+                        continue;
+                    }
+
                     if (isInvokeOn(currInstruction, usebox)) {
                         addCurrInstInOutSet(outSet, currInstruction);
                         return;
@@ -163,7 +167,7 @@ public class MethodInstructionSlicer extends BackwardFlowAnalysis {
                     specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString().substring(3));
                 } else if (usebox.getValue().toString().startsWith("this.")) {
                     specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString().substring(5));
-                } else if (usebox.getValue().toString().startsWith("<")){
+                } else if (usebox.getValue().toString().startsWith("<")) {
                     specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString());
                 }
 

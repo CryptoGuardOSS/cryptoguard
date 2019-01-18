@@ -181,7 +181,9 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
 
         for (ValueBox usebox : e.getUnit().getUseBoxes()) {
 
-            if (usebox.getValue() instanceof Constant && !Utils.isArgOfByteArrayCreation(usebox, e.getUnit())) {
+            if (usebox.getValue() instanceof Constant &&
+                    !Utils.isArgOfByteArrayCreation(usebox, e.getUnit()) &&
+                    !e.getUnit().toString().contains("[" + usebox.getValue() + "]")) {
                 if (e.getUnit() instanceof AssignStmt && usebox.getValue().getType() instanceof IntegerType) {
 
                     int value = Integer.valueOf(usebox.getValue().toString());

@@ -172,7 +172,9 @@ public class PBEInterationCountFinder extends BaseRuleChecker {
 
         for (ValueBox usebox : e.getUnit().getUseBoxes()) {
 
-            if (usebox.getValue() instanceof Constant && !Utils.isArgOfByteArrayCreation(usebox, e.getUnit())) {
+            if (usebox.getValue() instanceof Constant &&
+                    !Utils.isArgOfByteArrayCreation(usebox, e.getUnit()) &&
+                    !e.getUnit().toString().contains("[" + usebox.getValue() + "]")) {
 
                 if (usebox.getValue().getType() instanceof IntType && Integer.valueOf(usebox.getValue().toString()) < 1000) {
                     if (e.getUnit() instanceof JAssignStmt && ((AssignStmt) e.getUnit()).containsInvokeExpr()) {
@@ -192,6 +194,8 @@ public class PBEInterationCountFinder extends BaseRuleChecker {
                     putIntoMap(othersSourceMap, e, usebox.getValue().toString());
                 }
 
+            } else {
+                putIntoMap(othersSourceMap, e, usebox.getValue().toString());
             }
         }
     }

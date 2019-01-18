@@ -113,6 +113,10 @@ public class PropertyInstructionSlicer extends BackwardFlowAnalysis {
                         continue;
                     }
 
+                    if (insetInstruction.getUnit().toString().contains("[" + usebox.getValue() + "]")) {
+                        continue;
+                    }
+
                     if (isInvokeOn(currInstruction, usebox)) {
                         addCurrInstInOutSet(outSet, currInstruction);
                         return;

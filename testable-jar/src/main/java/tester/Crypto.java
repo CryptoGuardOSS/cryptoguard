@@ -151,7 +151,10 @@ public class Crypto {
     public byte[] randomNumberGeneration(long seed) {
 
         byte[] randomBytes = new byte[64];
-        new Random(seed).nextBytes(randomBytes);
+        SecureRandom secureRandom = new SecureRandom();
+        secureRandom.setSeed(seed);
+        secureRandom.nextBytes(randomBytes);
+
         return randomBytes;
     }
 
@@ -168,6 +171,8 @@ public class Crypto {
         System.out.println(md.toString() + md2);
 
 //        decrypt(key, initVector, "abcd");
+
+        randomNumberGeneration(1000L);
 //
         while (args.length > 0) {
             if (args[0].equals("g")) {
