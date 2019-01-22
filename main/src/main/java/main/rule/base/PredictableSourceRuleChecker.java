@@ -5,10 +5,7 @@ import main.analyzer.backward.AssignInvokeUnitContainer;
 import main.analyzer.backward.InvokeUnitContainer;
 import main.analyzer.backward.UnitContainer;
 import main.util.Utils;
-import soot.ByteType;
-import soot.IntegerType;
-import soot.Value;
-import soot.ValueBox;
+import soot.*;
 import soot.jimple.AssignStmt;
 import soot.jimple.Constant;
 import soot.jimple.InvokeExpr;
@@ -212,10 +209,22 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
                                 break;
                             }
                         }
-                    } else {
-                        outSet.put(e, usebox.getValue().toString());
-                    }
+                    } else if (usebox.getValue().getType() instanceof IntegerType) {
+                        if (e.getUnit().toString().contains(" = " + usebox.getValue())) {
+                            outSet.put(e, usebox.getValue().toString());
+                        } else {
+                            putIntoMap(othersSourceMap, e, usebox.getValue().toString());
+                        }
 
+                    } else {
+                        if (usebox.getValue().getType() instanceof BooleanType ||
+                                usebox.getValue().getType() instanceof FloatType ||
+                                usebox.getValue().getType() instanceof DoubleType) {
+                            putIntoMap(othersSourceMap, e, usebox.getValue().toString());
+                        } else {
+                            outSet.put(e, usebox.getValue().toString());
+                        }
+                    }
                 } else if (e.getUnit().toString().contains(" newarray ")) {
                     putIntoMap(othersSourceMap, e, usebox.getValue().toString());
                 } else {

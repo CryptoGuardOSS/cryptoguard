@@ -200,7 +200,11 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
                                 }
                             }
                         } else {
-                            outSet.put(e, usebox.getValue().toString());
+                            if (e.getUnit().toString().contains(" = " + usebox.getValue())) {
+                                outSet.put(e, usebox.getValue().toString());
+                            } else {
+                                putIntoMap(othersSourceMap, e, usebox.getValue().toString());
+                            }
                         }
 
                     } else {
