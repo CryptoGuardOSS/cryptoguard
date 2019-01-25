@@ -1,20 +1,20 @@
-# RigorityJ: Source Code
+# Octopus: Source Code
 
 An program analysis tool to find cryptographic misuse in Java and Android.
 
-### Prerequisites to use RigorityJ on Source code:
+### Prerequisites to use Octopus on Source code:
 
 1. Download and Install JDK 7.
 2. Set `JAVA7_HOME` environment variable.
 3. Download and Install Gradle.
 
-### Prerequisites to use RigorityJ on Jar:
+### Prerequisites to use Octopus on Jar:
 
 1. Download and Install JDK (version >= 7).
 2. Set `JAVA_HOME` environment variable.
 3. Download and Install Gradle.
 
-### Prerequisites to use RigorityJ on Apk:
+### Prerequisites to use Octopus on Apk:
 
 1. Download and Install JDK (version >= 7).
 2. Set `JAVA_HOME` environment variable.
@@ -22,37 +22,37 @@ An program analysis tool to find cryptographic misuse in Java and Android.
 4. Set `ANDROID_SDK_HOME`
 5. Download and Install Gradle.
 
-### Build RigorityJ
-1. Run `cd /path/to/rigorityj`
+### Build Octopus
+1. Run `cd /path/to/octopus`
 2. Run `gradle clean build`
 
-### Run RigorityJ to analyze source code:
+### Run Octopus to analyze source code:
 
-You need to run RigorityJ on JDK 7 to analyze source codes. If the project does not have any external dependencies then run,
+You need to run Octopus on JDK 7 to analyze source codes. If the project does not have any external dependencies then run,
      
-`cd /path/to/rigorityj &&  /usr/local/jdk1.7.0_80/bin/java -jar main/build/libs/main.jar "source" "/path/to/project/root" ""`
+`cd /path/to/octopus &&  /usr/local/jdk1.7.0_80/bin/java -jar main/build/libs/main.jar "source" "/path/to/project/root" ""`
 
 If the project have external dependencies then first gather the dependencies under a folder that is relative to the project root (e.g., “build/dependencies”), then run
 
-`cd /path/to/rigorityj && /usr/local/jdk1.7.0_80/bin/java -jar main/build/libs/main.jar "source" "/path/to/project/root" "build/dependencies"`
+`cd /path/to/octopus && /usr/local/jdk1.7.0_80/bin/java -jar main/build/libs/main.jar "source" "/path/to/project/root" "build/dependencies"`
 
 Note that if you have multiple subprojects with external dependencies, then you have to gather all the corresponding subproject dependencies under a path that is relative to each of the subprojects.
 
-### Run RigorityJ to analyze Jar:
+### Run Octopus to analyze Jar:
 
-`cd /path/to/rigorityj && java -jar main/build/libs/main.jar "jar" "/path/to/jar/my-jar.jar" ""`
+`cd /path/to/octopus && java -jar main/build/libs/main.jar "jar" "/path/to/jar/my-jar.jar" ""`
 
-### Run RigorityJ to analyze Apk:
+### Run Octopus to analyze Apk:
 
-`cd /path/to/rigorityj && java -jar main/build/libs/main.jar "apk" "/path/to/apk/my-apk.apk" `
+`cd /path/to/octopus && java -jar main/build/libs/main.jar "apk" "/path/to/apk/my-apk.apk" `
 
 If you have any questions or suggestions, please email to rigorityj@gmail.com.
 
 ## Disclaimer
 
-##### RigorityJ is a research prototype under GNU General Public License 3.0
+##### Octopus is a research prototype under GNU General Public License 3.0
 
- Copyright © 2018 RigorityJ
+ Copyright © 2018 Octopus
 
  This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
  
