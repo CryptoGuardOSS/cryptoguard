@@ -99,6 +99,8 @@ public class ArgumentsCheck {
                             failFast();
                             return null;
                         } else
+                            //TODO - Check This Alternative
+                            //sourceFiles.addAll(retrieveFullyQualifiedName(Arrays.asList(args[argumentSplit])));
                             sourceFiles.add(retrieveFullyQualifiedName(args[argumentSplit]));
 
                         argumentSplit++;
@@ -125,7 +127,7 @@ public class ArgumentsCheck {
             }
 
             String messagingType = args.length >= argumentSplit + 1 ? null : args[argumentSplit];
-            info = new EnvironmentInformation(sourceFiles.toArray(new String[0]), flow, dependency, messagingType);
+            info = new EnvironmentInformation(sourceFiles.toArray(new String[0]), flow, messagingType, dependency);
             String[] newArgs = Arrays.copyOfRange(args, argumentSplit, args.length);
 
             if (!info.getMessagingType().getTypeOfMessagingInput().inputValidation(info, newArgs)) {

@@ -8,10 +8,7 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Properties;
-import java.util.Random;
+import java.util.*;
 
 /**
  * The class containing the analysis rule information.
@@ -39,7 +36,7 @@ public class EnvironmentInformation {
     private final String[] Source;
     private Boolean prettyPrint = false;
     private PrintStream internalErrors;
-    private String sourceDependencies;
+    private List<String> dependencies;
     private EngineType sourceType;
     private Listing messagingType;
     private String UUID;
@@ -68,7 +65,7 @@ public class EnvironmentInformation {
      * @param dependencies  {@link java.lang.String} - The location of the directory of the sources dependencies
      * @param messagingType {@link java.lang.String} - The flag passed in to determine the type of messaging system from {@link Listing}
      */
-    public EnvironmentInformation(@Nonnull String[] source, @Nonnull EngineType sourceType, String dependencies, String messagingType) {
+    public EnvironmentInformation(@Nonnull String[] source, @Nonnull EngineType sourceType, String messagingType, String... dependencies) {
 
         //region Setting Internal Version Settings
         String tempToolFrameworkVersion;
@@ -106,7 +103,7 @@ public class EnvironmentInformation {
         System.setOut(internalErrors);
         this.Source = source;
         this.sourceType = sourceType;
-        this.sourceDependencies = dependencies;
+        this.dependencies = Arrays.asList(dependencies);
         this.messagingType = Listing.retrieveListingType(messagingType);
         //endregion
 
@@ -433,12 +430,12 @@ public class EnvironmentInformation {
     /**
      * Getter for sourceDependencies
      *
-     * <p>getSourceDependencies()</p>
+     * <p>getDependencies()</p>
      *
-     * @return a {@link String} object.
+     * @return a {@link java.util.List<java.lang.String>} object.
      */
-    public String getSourceDependencies() {
-        return sourceDependencies;
+    public List<String> getDependencies() {
+        return dependencies;
     }
 
     /**

@@ -44,11 +44,11 @@ public class SourceEntry {
 
                         if (dependency.equals(generalInfo.getSource()[0] + "/src/main/java")) {
                             dependencyModule = generalInfo.getSource()[0].substring(generalInfo.getSource()[0].lastIndexOf("/") + 1);
-                            otherdependencies.add(dependency.substring(0, dependency.length() - 13) + generalInfo.getSourceDependencies());
+                            otherdependencies.add(dependency.substring(0, dependency.length() - 13) + generalInfo.getDependencies());
 
                         } else {
                             dependencyModule = dependency.substring(generalInfo.getSource()[0].length() + 1, dependency.length() - 14);
-                            otherdependencies.add(dependency.substring(0, dependency.length() - 13) + generalInfo.getSourceDependencies());
+                            otherdependencies.add(dependency.substring(0, dependency.length() - 13) + generalInfo.getDependencies());
 
                         }
 

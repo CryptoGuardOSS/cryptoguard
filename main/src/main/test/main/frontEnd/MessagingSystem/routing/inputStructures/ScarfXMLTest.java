@@ -63,7 +63,7 @@ public class ScarfXMLTest {
         assertNotNull(newInfo);
         assertEquals(testInfo.getMessagingType(), newInfo.getMessagingType());
         assertEquals(testInfo.getSource(), newInfo.getSource());
-        assertEquals(testInfo.getSourceDependencies(), newInfo.getSourceDependencies());
+        assertEquals(testInfo.getDependencies(), newInfo.getDependencies());
         assertEquals(testInfo.getSourceType(), newInfo.getSourceType());
     }
 

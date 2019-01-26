@@ -20,7 +20,7 @@ public class JarEntry {
         ArrayList<AnalysisIssue> issues = null;
         try {
             for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
-                ruleChecker.checkRule(EngineType.JAR, Arrays.asList(generalInfo.getSource()), Arrays.asList(generalInfo.getSourceDependencies()));
+                ruleChecker.checkRule(EngineType.JAR, Arrays.asList(generalInfo.getSource()), generalInfo.getDependencies());
             }
         } catch (IOException e) {
 
