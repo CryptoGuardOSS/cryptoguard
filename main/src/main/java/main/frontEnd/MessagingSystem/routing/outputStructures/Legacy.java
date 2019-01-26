@@ -6,11 +6,7 @@ import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import main.rule.engine.RuleList;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import java.util.*;
 
 /**
  * The class containing the implementation of the legacy output.
@@ -47,8 +43,25 @@ public class Legacy implements OutputStructure {
         output.append("\n");
 
 
+        //region Version Specific Change
+        //Java 1.8.181 Implementation
+        //Map<Integer, List<AnalysisIssue>> groupedRules = brokenRules.stream().collect(Collectors.groupingBy(AnalysisIssue::getRuleId));
+        //Java 1.8.181 Implementation
 
-        Map<Integer, List<AnalysisIssue>> groupedRules = brokenRules.stream().collect(Collectors.groupingBy(AnalysisIssue::getRuleId));
+        //Java 1.7.80 Implementation
+        Map<Integer, List<AnalysisIssue>> groupedRules = new HashMap<>();
+        for (AnalysisIssue issue : brokenRules) {
+            List<AnalysisIssue> tempList;
+            if (groupedRules.containsKey(issue.getRuleId())) {
+                tempList = new ArrayList<>(groupedRules.get(issue.getRuleId()));
+                tempList.add(issue);
+            } else {
+                tempList = Collections.singletonList(issue);
+            }
+            groupedRules.put(issue.getRuleId(), tempList);
+        }
+        //Java 1.7.80 Implementation
+        //endregion
 
         //region Broken Rule Cycle
         for (Integer ruleNumber : groupedRules.keySet()) {
@@ -70,8 +83,22 @@ public class Legacy implements OutputStructure {
                         outputMessage.append("[\"" + issue.getIssueInformation() + "\"] ");
 
                         if (issue.getLocations().size() > 0) {
-                            Predicate<AnalysisLocation> matchByCurrentMethod = loc -> loc.getMethodNumber() == issue.getMethods().size() - 1;
-                            List<AnalysisLocation> issueLocations = issue.getLocations().stream().filter(matchByCurrentMethod).collect(Collectors.toList());
+
+                            //region Version Specific Change
+
+                            //Java 1.8.181 Implementation
+                            //Predicate<AnalysisLocation> matchByCurrentMethod = loc -> loc.getMethodNumber() == issue.getMethods().size() - 1;
+                            //List<AnalysisLocation> issueLocations = issue.getLocations().stream().filter(matchByCurrentMethod).collect(Collectors.toList());
+                            //Java 1.8.181 Implementation
+
+                            //Java 1.7.80 Implementation
+                            List<AnalysisLocation> issueLocations = new ArrayList<>();
+                            for (AnalysisLocation loc : issue.getLocations())
+                                if (loc.getMethodNumber() == issue.getMethods().size() - 1)
+                                    issueLocations.add(loc);
+                            //Java 1.7.80 Implementation
+
+                            //endregion
 
                             if (!issueLocations.isEmpty()) {
                                 outputMessage.append("in Line " + issueLocations.toString().replace("[", "").replace("]", "") + " ");

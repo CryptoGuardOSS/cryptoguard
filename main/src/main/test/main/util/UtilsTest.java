@@ -15,14 +15,43 @@ public class UtilsTest {
     private String fullJavaClassFile;
     private String fullJavaFile;
     private String fileSep = System.getProperty("file.separator");
-    private String javaFile = String.join(fileSep, "rsc", "test", "main.java");
+
+    //region Version Specific Change
+    //Java 1.8.181 Implementation
+    //private String javaFile = String.join(fileSep, "rsc", "test", "main.java");
+    //Java 1.8.181 Implementation
+
+    //Java 1.7.80 Implementation
+    private String javaFile = Utils.stringJoiner(fileSep, "rsc", "test", "main.java");
+    //Java 1.7.80 Implementation
+    //endregion
+
     //endregion
 
     //region Test Environment
     @Before
     public void setUp() throws Exception {
-        fullJavaFile = String.join(fileSep, "src", "main", "java", "com", "full", "fun", "test", "main.java");
-        fullJavaClassFile = String.join(fileSep, "target", "main", "java", "com", "full", "fun", "test", "main.class");
+
+        //region Version Specific Change
+        //Java 1.8.181 Implementation
+        //fullJavaFile = String.join(fileSep, "src", "main", "java", "com", "full", "fun", "test", "main.java");
+        //Java 1.8.181 Implementation
+
+        //Java 1.7.80 Implementation
+        fullJavaFile = Utils.stringJoiner(fileSep, "src", "main", "java", "com", "full", "fun", "test", "main.java");
+        //Java 1.7.80 Implementation
+        //endregion
+
+        //region Version Specific Change
+        //Java 1.8.181 Implementation
+        //fullJavaClassFile = String.join(fileSep, "target", "main", "java", "com", "full", "fun", "test", "main.class");
+        //Java 1.8.181 Implementation
+
+        //Java 1.7.80 Implementation
+        fullJavaClassFile = Utils.stringJoiner(fileSep, "target", "main", "java", "com", "full", "fun", "test", "main.class");
+        //Java 1.7.80 Implementation
+        //endregion
+
     }
 
     @After
@@ -33,61 +62,6 @@ public class UtilsTest {
     //endregion
 
     //region Tests
-    //region Stubbed
-    /*
-    @Test
-    public void getClassNamesFromJarArchiveTest() {
-    }
-
-    @Test
-    public void getBasePackageNameFromApkTest() {
-    }
-
-    @Test
-    public void getBasePackageNameFromJarTest() {
-    }
-
-    @Test
-    public void getClassNamesFromApkArchiveTest() {
-    }
-
-    @Test
-    public void buildSootClassPathTest() {
-    }
-
-    @Test
-    public void buildSootClassPath1Test() {
-    }
-
-    @Test
-    public void getJarsInDirectoryTest() {
-    }
-
-    @Test
-    public void getClassHierarchyAnalysisTest() {
-    }
-
-    @Test
-    public void getXmlFilesTest() {
-    }
-
-    @Test
-    public void findInfluencingParamtersTest() {
-    }
-
-    @Test
-    public void isSpecialInvokeOnTest() {
-    }
-
-    @Test
-    public void listfTest() {
-    }
-
-    @Test
-    public void getClassNamesFromSnippetTest() {
-    }
-    */
-    //endregion
 
     @Test
     public void trimFilePathTestOne() {

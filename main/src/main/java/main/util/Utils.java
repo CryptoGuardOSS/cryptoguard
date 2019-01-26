@@ -448,4 +448,16 @@ public class Utils {
         String[] folderSplit = fullFilePath.split(Pattern.quote(System.getProperty("file.separator")));
         return folderSplit[folderSplit.length - 1];
     }
+
+    //TODO - Upgrade to 1.8 to dump this method
+    public static String stringJoiner(String delimiter, String... inputs) {
+        StringBuilder tempString = new StringBuilder();
+        for (String in : inputs) {
+            tempString.append(in);
+            if (!in.equals(inputs[inputs.length - 1]))
+                tempString.append(delimiter);
+        }
+
+        return tempString.toString();
+    }
 }
