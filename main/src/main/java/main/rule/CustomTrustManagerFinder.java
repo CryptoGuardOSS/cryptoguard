@@ -1,24 +1,21 @@
 package main.rule;
 
 import main.analyzer.backward.UnitContainer;
+import main.analyzer.soot.EnvironmentHandler;
 import main.rule.engine.EngineType;
 import main.rule.engine.RuleChecker;
 import main.slicer.backward.other.OtherAnalysisResult;
 import main.slicer.backward.other.OtherInfluencingInstructions;
 import main.util.FieldInitializationInstructionMap;
 import main.util.NamedMethodMap;
-import main.util.Utils;
 import soot.*;
 import soot.jimple.internal.JAssignStmt;
 import soot.jimple.internal.JInvokeStmt;
-import soot.options.Options;
 import soot.toolkits.graph.DirectedGraph;
 import soot.toolkits.graph.ExceptionalUnitGraph;
 
 import java.io.IOException;
 import java.util.*;
-
-import static main.util.Utils.getClassNamesFromApkArchive;
 
 /**
  * <p>CustomTrustManagerFinder class.</p>
@@ -45,18 +42,11 @@ public class CustomTrustManagerFinder implements RuleChecker {
     @Override
     public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath) throws IOException {
 
-        Map<String, List<OtherAnalysisResult>> analysisLists;
-        if (type == EngineType.JAR) {
-            analysisLists = analyzeJar(projectJarPath.get(0), projectDependencyPath.get(0));
-        } else if (type == EngineType.APK) {
-            analysisLists = analyzeApk(projectJarPath.get(0));
-        } else { //if (type == EngineType.DIR) {
-            analysisLists = analyzeSnippet(projectJarPath, projectDependencyPath);
-        } /* else if (type == EngineType.JAVAFILES) {
-            analysisLists = getAnalysisForTrustManager(EnvironmentHandler.setupJavaFileEnv(projectJarPath, projectDependencyPath));
-        } else { //if (type == EngineType.JAVACLASSFILES)
-            analysisLists = getAnalysisForTrustManager(EnvironmentHandler.setupJavaClassFileEnv(projectJarPath, projectDependencyPath));
-        } *///TODO - Route These
+        Map<String, List<OtherAnalysisResult>> analysisLists =
+                getAnalysisForTrustManager(
+                        EnvironmentHandler.environmentRouting(projectJarPath, projectDependencyPath, type)
+                );
+
 
         for (String className : analysisLists.keySet()) {
 
@@ -137,7 +127,7 @@ public class CustomTrustManagerFinder implements RuleChecker {
         Body b = method.retrieveActiveBody();
         return b.getTraps().size() > 0;
     }
-
+/*
     private Map<String, List<OtherAnalysisResult>> analyzeSnippet(List<String> snippetPath, List<String> projectDependencyPath) {
 
         String javaHome = System.getenv("JAVA7_HOME");
@@ -229,6 +219,7 @@ public class CustomTrustManagerFinder implements RuleChecker {
         List<String> classNames = getClassNamesFromApkArchive(projectJarPath);
         return getAnalysisForTrustManager(classNames);
     }
+    */
 
     private static Map<String, List<OtherAnalysisResult>> getAnalysisForTrustManager(List<String> classNames) {
 

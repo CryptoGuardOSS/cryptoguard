@@ -8,9 +8,9 @@ import java.util.ArrayList;
 /**
  * @author RigorityJTeam
  * Created on 2019-01-20.
- * @since {Version}
+ * @since 02.02.00
  *
- * <p>{Description}</p>
+ * <p>The interface for how the the different use cases are called.</p>
  */
 public interface EntryHandler {
 

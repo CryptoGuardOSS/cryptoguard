@@ -507,12 +507,16 @@ public class Utils {
         return folderSplit[folderSplit.length - 1];
     }
 
-    //TODO - Upgrade to 1.8 to dump this method
     public static String join(String delimiter, String... elements) {
+        return join(delimiter, Arrays.asList(elements));
+    }
+
+    //TODO - Upgrade to 1.8 to dump this method
+    public static String join(String delimiter, List<String> elements) {
         StringBuilder tempString = new StringBuilder();
         for (String in : elements) {
             tempString.append(in);
-            if (!in.equals(elements[elements.length - 1]))
+            if (!in.equals(elements.get(elements.size() - 1)))
                 tempString.append(delimiter);
         }
 

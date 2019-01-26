@@ -1,5 +1,6 @@
 package main.analyzer.soot;
 
+import main.rule.engine.EngineType;
 import main.util.Utils;
 import soot.Scene;
 import soot.options.Options;
@@ -32,6 +33,20 @@ public class EnvironmentHandler {
     private static final String JAVA7_HOME = System.getenv("JAVA7_HOME");
     private static final String JAVA_HOME = System.getenv("JAVA_HOME");
     private static final String ANDROID_HOME = System.getenv("ANDROID_SDK_HOME");
+
+    public static List<String> environmentRouting(List<String> projectJarPath, List<String> projectDependencyPath, EngineType routingType) {
+        if (routingType == EngineType.JAR) {
+            return setupBaseJarEnv(projectJarPath.get(0), projectDependencyPath.get(0));
+        } else if (routingType == EngineType.APK) {
+            return setupBaseAPKEnv(projectJarPath.get(0));
+        } else { // if (routingType == EngineType.DIR) {
+            return setupBaseSourceEnv(projectJarPath, projectDependencyPath);
+        } /*else if (routingType == EngineType.JAVAFILES) {
+            return setupJavaFileEnv(projectJarPath, projectDependencyPath));
+        } else { //if (routingType == EngineType.JAVACLASSFILES)
+            return setupJavaClassFileEnv(projectJarPath, projectDependencyPath));
+        } *///TODO - Route These
+    }
 
     public static List<String> setupBaseJarEnv(String projectJarPath, String projectDependencyPath) {
 
@@ -125,6 +140,7 @@ public class EnvironmentHandler {
         return classNames;
     }
 
+    //region New Features
     /** Stubbed Current Work
      //TODO - Dependencies?
      //Follows Source Dir
@@ -200,5 +216,6 @@ public class EnvironmentHandler {
      return out;
      }
      **/
+    //endregion
 
 }

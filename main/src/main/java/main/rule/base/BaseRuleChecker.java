@@ -1,8 +1,6 @@
 package main.rule.base;
 
-import main.analyzer.ApkAnalyzer;
-import main.analyzer.JarAnalyzer;
-import main.analyzer.PartialCodeAnalyzer;
+import main.analyzer.BaseAnalyzerRouting;
 import main.analyzer.backward.Analysis;
 import main.analyzer.backward.UnitContainer;
 import main.rule.engine.Criteria;
@@ -56,24 +54,11 @@ public abstract class BaseRuleChecker implements RuleChecker {
         Map<String, String> xmlFileStr = Utils.getXmlFiles(projectPaths.get(0), Arrays.asList(excludes));
 
         for (Criteria criteria : getCriteriaList()) {
-            if (type == EngineType.JAR) {
-                JarAnalyzer.analyzeSlices(criteria.getClassName(),
-                        criteria.getMethodName(),
-                        criteria.getParam(),
-                        projectPaths.get(0),
-                        projectDependencyPath.get(0), this);
-            } else if (type == EngineType.APK) {
-
-                ApkAnalyzer.analyzeSlices(criteria.getClassName(),
-                        criteria.getMethodName(),
-                        criteria.getParam(),
-                        projectPaths.get(0), this);
-            } else if (type == EngineType.DIR) {
-                PartialCodeAnalyzer.analyzeSlices(criteria.getClassName(),
-                        criteria.getMethodName(),
-                        criteria.getParam(),
-                        projectPaths, projectDependencyPath, this);
-            }
+            BaseAnalyzerRouting.environmentRouting(type, criteria.getClassName(),
+                    criteria.getMethodName(),
+                    criteria.getParam(),
+                    projectPaths,
+                    projectDependencyPath, this);
         }
 
         printAnalysisOutput(xmlFileStr);

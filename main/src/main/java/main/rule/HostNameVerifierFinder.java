@@ -1,20 +1,20 @@
 package main.rule;
 
 import main.analyzer.backward.UnitContainer;
+import main.analyzer.soot.EnvironmentHandler;
 import main.rule.engine.EngineType;
 import main.rule.engine.RuleChecker;
 import main.slicer.backward.other.OtherInfluencingInstructions;
 import main.util.FieldInitializationInstructionMap;
 import main.util.NamedMethodMap;
-import main.util.Utils;
 import soot.*;
 import soot.jimple.Constant;
-import soot.options.Options;
 
 import java.io.IOException;
-import java.util.*;
-
-import static main.util.Utils.getClassNamesFromApkArchive;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>HostNameVerifierFinder class.</p>
@@ -34,18 +34,10 @@ public class HostNameVerifierFinder implements RuleChecker {
     @Override
     public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath) throws IOException {
 
-        Map<String, List<UnitContainer>> analysisLists;
-        if (type == EngineType.JAR) {
-            analysisLists = analyzeJar(projectJarPath.get(0), projectDependencyPath.get(0));
-        } else if (type == EngineType.APK) {
-            analysisLists = analyzeApk(projectJarPath.get(0));
-        } else { // if (type == EngineType.DIR) {
-            analysisLists = analyzeSnippet(projectJarPath, projectDependencyPath);
-        } /* else if (type == EngineType.JAVAFILES) {
-            analysisLists = getHostNameVerifiers(EnvironmentHandler.setupJavaFileEnv(projectJarPath, projectDependencyPath));
-        } else { //if (type == EngineType.JAVACLASSFILES)
-            analysisLists = getHostNameVerifiers(EnvironmentHandler.setupJavaClassFileEnv(projectJarPath, projectDependencyPath));
-        } *///TODO - Route These
+        Map<String, List<UnitContainer>> analysisLists = getHostNameVerifiers(
+                EnvironmentHandler.environmentRouting(projectJarPath, projectDependencyPath, type)
+        );
+
 
         for (String className : analysisLists.keySet()) {
             List<UnitContainer> analysis = analysisLists.get(className);
@@ -83,6 +75,7 @@ public class HostNameVerifierFinder implements RuleChecker {
 
     }
 
+    /*
     private Map<String, List<UnitContainer>> analyzeJar(String projectJarPath, String projectDependencyPath) throws IOException {
         String javaHome = System.getenv("JAVA_HOME");
 
@@ -174,6 +167,7 @@ public class HostNameVerifierFinder implements RuleChecker {
 
         return getHostNameVerifiers(classNames);
     }
+    */
 
     private static Map<String, List<UnitContainer>> getHostNameVerifiers(List<String> classNames) {
 

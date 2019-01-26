@@ -1,22 +1,22 @@
 package main.rule;
 
+import main.analyzer.soot.EnvironmentHandler;
 import main.rule.engine.EngineType;
 import main.rule.engine.RuleChecker;
 import main.slicer.forward.ForwardInfluenceInstructions;
 import main.slicer.forward.SlicingCriteria;
 import main.slicer.forward.SlicingResult;
-import main.util.Utils;
 import soot.*;
 import soot.jimple.IfStmt;
 import soot.jimple.internal.JAssignStmt;
-import soot.options.Options;
 import soot.toolkits.graph.ExceptionalUnitGraph;
 import soot.toolkits.graph.UnitGraph;
 
 import java.io.IOException;
-import java.util.*;
-
-import static main.util.Utils.getClassNamesFromApkArchive;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>SSLSocketFactoryFinder class.</p>
@@ -49,18 +49,9 @@ public class SSLSocketFactoryFinder implements RuleChecker {
 
 //            System.out.println(slicing_criterion);
             SlicingCriteria criteria = new SlicingCriteria(slicing_criterion);
-            Map<String, List<Unit>> analysisLists;
-            if (type == EngineType.JAR) {
-                analysisLists = analyzeJar(projectJarPath.get(0), projectDependencyPath.get(0), criteria);
-            } else if (type == EngineType.APK) {
-                analysisLists = analyzeApk(projectJarPath.get(0), criteria);
-            } else { // if (type == EngineType.DIR) {
-                analysisLists = analyzeSnippet(projectJarPath, projectDependencyPath, criteria);
-            } /*else if (type == EngineType.JAVAFILES) {
-                analysisLists = getForwardSlice(EnvironmentHandler.setupJavaFileEnv(projectJarPath, projectDependencyPath), criteria);
-            } else { //if (type == EngineType.JAVACLASSFILES)
-                analysisLists = getForwardSlice(EnvironmentHandler.setupJavaClassFileEnv(projectJarPath, projectDependencyPath), criteria);
-            } *///TODO - Route These
+            Map<String, List<Unit>> analysisLists = getForwardSlice(
+                    EnvironmentHandler.environmentRouting(projectJarPath, projectDependencyPath, type)
+                    , criteria);
 
             for (String method : analysisLists.keySet()) {
 
@@ -112,6 +103,7 @@ public class SSLSocketFactoryFinder implements RuleChecker {
 
     }
 
+    /*
     private Map<String, List<Unit>> analyzeJar(String projectJarPath, String projectDependencyPath, SlicingCriteria slicingCriteria) throws IOException {
         String javaHome = System.getenv("JAVA_HOME");
 
@@ -203,6 +195,7 @@ public class SSLSocketFactoryFinder implements RuleChecker {
 
         return getForwardSlice(classNames, slicingCriteria);
     }
+    */
 
     private static Map<String, List<Unit>> getForwardSlice(List<String> classNames, SlicingCriteria slicingCriteria) {
 
