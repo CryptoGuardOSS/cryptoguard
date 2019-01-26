@@ -21,6 +21,7 @@ public class RuleEngineTest {
     private final String basePath = System.getProperty("user.dir");
     private final String jarOne = basePath + "/rsc/test/" + "testable-jar.jar";
     private final String srcOneGrv = basePath.replace("/main", "");
+    private final String srcOneGrvDep = "build/dependencies";
     private String jarOneResults;
     private final EngineType jarType = EngineType.JAR;
     private final EngineType srcType = EngineType.DIR;
@@ -42,8 +43,8 @@ public class RuleEngineTest {
         sampleOne.append("Warning: retrofit2.Retrofit$Builder is a phantom class!\n");
         sampleOne.append("Warning: okhttp3.OkHttpClient$Builder is a phantom class!\n");
         sampleOne.append("Warning: okhttp3.Request is a phantom class!\n");
-        sampleOne.append("Warning: okhttp3.HttpUrl$Builder is a phantom class!\n");
         sampleOne.append("Warning: retrofit2.converter.gson.GsonConverterFactory is a phantom class!\n");
+        sampleOne.append("Warning: okhttp3.HttpUrl$Builder is a phantom class!\n");
         sampleOne.append("Warning: okhttp3.HttpUrl is a phantom class!\n");
         sampleOne.append("Warning: retrofit2.Converter$Factory is a phantom class!\n");
         sampleOne.append("=======================================\n");
@@ -63,35 +64,35 @@ public class RuleEngineTest {
         sampleOne.append("***Violated Rule 13: Untrused PRNG (java.util.Random) Found in <tester.Crypto: byte[] randomNumberGeneration(long)>\n");
         sampleOne.append("=============================================\n");
         sampleOne.append("=======================================\n");
-        sampleOne.append("***Violated Rule 4: Uses untrusted TrustManager ***Should at least get One accepted Issuer from Other Sources in getAcceptedIssuers method of tester.Crypto$2\n");
-        sampleOne.append("=======================================\n");
-        sampleOne.append("=======================================\n");
         sampleOne.append("***Violated Rule 4: Uses untrusted TrustManager ***Should not use unpinned self-signed certification in tester.Crypto$2\n");
+        sampleOne.append("=======================================\n");
+        sampleOne.append("=======================================\n");
+        sampleOne.append("***Violated Rule 4: Uses untrusted TrustManager ***Should at least get One accepted Issuer from Other Sources in getAcceptedIssuers method of tester.Crypto$2\n");
         sampleOne.append("=======================================\n");
         sampleOne.append("=======================================\n");
         sampleOne.append("***Violated Rule 2: Found broken hash functions\n");
         sampleOne.append("***Found: [\"MD5\"] in Method: <tester.PBEUsage: javax.crypto.spec.PBEKeySpec getPBEParameterSpec(java.lang.String)>\n");
-        sampleOne.append("***Found: [\"SHA\"] in Method: <tester.Crypto: void main(java.lang.String[])>\n");
         sampleOne.append("***Found: [\"SHA1\"] in Method: <tester.Crypto: void main(java.lang.String[])>\n");
+        sampleOne.append("***Found: [\"SHA\"] in Method: <tester.Crypto: void main(java.lang.String[])>\n");
         sampleOne.append("=======================================\n");
         sampleOne.append("=======================================\n");
         sampleOne.append("***Violated Rule 3: Used constant keys in code\n");
-        sampleOne.append("***Found: [\"aaaaaaa\"] in Method: <tester.LiveVarsClass: void <clinit>()>\n");
-        sampleOne.append("***Found: [\"tzL1AKl5uc4NKYaoQ4P3WLGIBFPXWPWdu1fRm9004jtQiV\"] in Line 79 in Method: <tester.PasswordUtils: void <init>(java.lang.String)>\n");
-        sampleOne.append("***Found: [\"aaaaaaa\"] in Line 4 in Method: <tester.LiveVarsClass: void <clinit>()>\n");
         sampleOne.append("***Found: [\"helloworld\"] in Method: <tester.VeryBusyClass: void main(java.lang.String[])>\n");
+        sampleOne.append("***Found: [\"aaaaaaa\"] in Method: <tester.LiveVarsClass: void <clinit>()>\n");
         sampleOne.append("***Found: [\"Bar12345Bar12345\"] in Line 152 in Method: <tester.Crypto: void main(java.lang.String[])>\n");
+        sampleOne.append("***Found: [\"aaaaaaa\"] in Line 4 in Method: <tester.LiveVarsClass: void <clinit>()>\n");
+        sampleOne.append("***Found: [\"tzL1AKl5uc4NKYaoQ4P3WLGIBFPXWPWdu1fRm9004jtQiV\"] in Line 79 in Method: <tester.PasswordUtils: void <init>(java.lang.String)>\n");
         sampleOne.append("=======================================\n");
         sampleOne.append("=======================================\n");
         sampleOne.append("***Violated Rule 10: Found constant IV in code\n");
         sampleOne.append("***Found: [\"aaaaaaa\"] in Method: <tester.LiveVarsClass: void <clinit>()>\n");
-        sampleOne.append("***Found: [\"aaaaaaa\"] in Line 4 in Method: <tester.LiveVarsClass: void <clinit>()>\n");
         sampleOne.append("***Found: [\"RandomInitVector\"] in Line 153 in Method: <tester.Crypto: void main(java.lang.String[])>\n");
+        sampleOne.append("***Found: [\"aaaaaaa\"] in Line 4 in Method: <tester.LiveVarsClass: void <clinit>()>\n");
         sampleOne.append("=======================================\n");
         sampleOne.append("=======================================\n");
         sampleOne.append("***Violated Rule 9: Found constant salts in code\n");
-        sampleOne.append("***Found: [\"f77aLYLo\"] in Line 80 in Method: <tester.PasswordUtils: void <init>(java.lang.String)>\n");
         sampleOne.append("***Found: [\"helloworld\"] in Method: <tester.VeryBusyClass: void main(java.lang.String[])>\n");
+        sampleOne.append("***Found: [\"f77aLYLo\"] in Line 80 in Method: <tester.PasswordUtils: void <init>(java.lang.String)>\n");
         sampleOne.append("=======================================\n");
         sampleOne.append("=======================================\n");
         sampleOne.append("***Violated Rule 8: Used < 1000 iteration for PBE\n");
@@ -162,33 +163,31 @@ public class RuleEngineTest {
     }
 
     @Test
-    public void testSelfProject() {
-		/*
-		System.out.println(srcOneGrv);
+    public void testSelfGradle() {
+        //Locked since Java7 Info only available via linux
+        if (!System.getProperty("os.name").contains("Windows")) {
 
-		args = new String[]{srcType.getFlag(), srcOneGrv, ""};
+            args = new String[]{srcType.getFlag(), srcOneGrv, srcOneGrvDep};
 
-		System.out.println(System.getenv("JAVA7_HOME"));
+            System.out.println(System.getenv("JAVA7_HOME"));
 
-		//redirectOutput();
+            redirectOutput();
 
-		try
-		{
-			this.engine.main(args);
+            try {
+                this.engine.main(args);
 
-			resetOutput();
+                resetOutput();
 
-			System.out.println(this.customStream);
+                System.out.println(this.customStream);
 
-			assertTrue(this.customStream.toString().split("\n").length > 1);
+                //assertTrue(this.customStream.toString().split("\n").length > 1);
 
-			assertEquals(jarOneResults, this.customStream.toString());
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-			assertNull(e);
-		}
-		*/
+                //assertEquals(jarOneResults, this.customStream.toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
     }
     //endregion
 }
