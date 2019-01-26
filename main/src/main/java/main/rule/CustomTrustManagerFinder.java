@@ -1,7 +1,7 @@
 package main.rule;
 
+import main.analyzer.UniqueRuleAnalyzer;
 import main.analyzer.backward.UnitContainer;
-import main.analyzer.soot.EnvironmentHandler;
 import main.rule.engine.EngineType;
 import main.rule.engine.RuleChecker;
 import main.slicer.backward.other.OtherAnalysisResult;
@@ -44,7 +44,7 @@ public class CustomTrustManagerFinder implements RuleChecker {
 
         Map<String, List<OtherAnalysisResult>> analysisLists =
                 getAnalysisForTrustManager(
-                        EnvironmentHandler.environmentRouting(projectJarPath, projectDependencyPath, type)
+                        UniqueRuleAnalyzer.environmentRouting(projectJarPath, projectDependencyPath, type)
                 );
 
 

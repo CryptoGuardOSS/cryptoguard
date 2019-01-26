@@ -1,4 +1,4 @@
-package main.analyzer.soot;
+package main.analyzer;
 
 import main.rule.engine.EngineType;
 import main.util.Utils;
@@ -28,11 +28,7 @@ import java.util.List;
  *
  * </p>
  */
-public class EnvironmentHandler {
-
-    private static final String JAVA7_HOME = System.getenv("JAVA7_HOME");
-    private static final String JAVA_HOME = System.getenv("JAVA_HOME");
-    private static final String ANDROID_HOME = System.getenv("ANDROID_SDK_HOME");
+public class UniqueRuleAnalyzer {
 
     public static List<String> environmentRouting(List<String> projectJarPath, List<String> projectDependencyPath, EngineType routingType) {
         if (routingType == EngineType.JAR) {
@@ -50,23 +46,16 @@ public class EnvironmentHandler {
 
     public static List<String> setupBaseJarEnv(String projectJarPath, String projectDependencyPath) {
 
-        if (JAVA_HOME.isEmpty()) {
-
-            System.err.println("Please set JAVA_HOME");
-            System.exit(1);
-        }
+        String java_home = Utils.getJAVA_HOME();
 
         String sootClassPath = Utils.buildSootClassPath(projectJarPath,
-                JAVA_HOME + "/jre/lib/rt.jar",
-                JAVA_HOME + "/jre/lib/jce.jar",
+                java_home + "/jre/lib/rt.jar",
+                java_home + "/jre/lib/jce.jar",
                 projectDependencyPath);
-
-        Options.v().set_keep_line_number(true);
-        Options.v().set_allow_phantom_refs(true);
 
         Scene.v().setSootClassPath(sootClassPath);
 
-        Scene.v().loadBasicClasses();
+        Utils.loadSootClasses(null);
 
         try {
             return Utils.getClassNamesFromJarArchive(projectJarPath);
@@ -77,28 +66,15 @@ public class EnvironmentHandler {
     }
 
     public static List<String> setupBaseAPKEnv(String projectJarPath) {
-        if (JAVA_HOME == null) {
 
-            System.err.println("Please set JAVA_HOME");
-            System.exit(1);
-        }
-
-        if (ANDROID_HOME == null) {
-
-            System.err.println("Please set ANDROID_SDK_HOME");
-            System.exit(1);
-        }
-
-        Options.v().set_keep_line_number(true);
         Options.v().set_src_prec(Options.src_prec_apk);
-        Options.v().set_android_jars(ANDROID_HOME + "/platforms");
-        Options.v().set_soot_classpath(JAVA_HOME + "/jre/lib/rt.jar:" + JAVA_HOME + "/jre/lib/jce.jar");
+        Options.v().set_android_jars(Utils.getANDROID() + "/platforms");
+        Options.v().set_soot_classpath(Utils.getBaseSOOT());
 
         Options.v().set_process_dir(Collections.singletonList(projectJarPath));
         Options.v().set_whole_program(true);
-        Options.v().set_allow_phantom_refs(true);
 
-        Scene.v().loadBasicClasses();
+        Utils.loadSootClasses(null);
 
         try {
             return Utils.getClassNamesFromApkArchive(projectJarPath);
@@ -108,34 +84,18 @@ public class EnvironmentHandler {
     }
 
     public static List<String> setupBaseSourceEnv(List<String> snippetPath, List<String> projectDependencyPath) {
-        if (JAVA7_HOME.isEmpty()) {
-            System.err.println("Please set JAVA7_HOME");
-            System.exit(1);
-        }
 
         List<String> classNames = Utils.getClassNamesFromSnippet(snippetPath);
 
-        StringBuilder srcPaths = new StringBuilder();
+        String srcPaths = Utils.join(":", snippetPath);
 
-        for (String srcDir : snippetPath) {
-            srcPaths.append(srcDir)
-                    .append(":");
-        }
-
-        Options.v().set_soot_classpath(JAVA7_HOME + "/jre/lib/rt.jar:"
-                + JAVA7_HOME + "/jre/lib/jce.jar:" + srcPaths.toString() + Utils.buildSootClassPath(projectDependencyPath));
+        Options.v().set_soot_classpath(Utils.getBaseSOOT7() +
+                ":" + srcPaths + Utils.buildSootClassPath(projectDependencyPath));
 
         Options.v().set_output_format(Options.output_format_jimple);
         Options.v().set_src_prec(Options.src_prec_java);
 
-        for (String className : classNames) {
-            Options.v().classes().add(className);
-        }
-
-        Options.v().set_keep_line_number(true);
-        Options.v().set_allow_phantom_refs(true);
-
-        Scene.v().loadBasicClasses();
+        Utils.loadSootClasses(classNames);
 
         return classNames;
     }

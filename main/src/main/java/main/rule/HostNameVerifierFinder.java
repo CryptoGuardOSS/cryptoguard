@@ -1,7 +1,7 @@
 package main.rule;
 
+import main.analyzer.UniqueRuleAnalyzer;
 import main.analyzer.backward.UnitContainer;
-import main.analyzer.soot.EnvironmentHandler;
 import main.rule.engine.EngineType;
 import main.rule.engine.RuleChecker;
 import main.slicer.backward.other.OtherInfluencingInstructions;
@@ -35,7 +35,7 @@ public class HostNameVerifierFinder implements RuleChecker {
     public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath) throws IOException {
 
         Map<String, List<UnitContainer>> analysisLists = getHostNameVerifiers(
-                EnvironmentHandler.environmentRouting(projectJarPath, projectDependencyPath, type)
+                UniqueRuleAnalyzer.environmentRouting(projectJarPath, projectDependencyPath, type)
         );
 
 

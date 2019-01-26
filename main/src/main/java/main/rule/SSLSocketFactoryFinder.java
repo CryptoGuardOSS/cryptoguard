@@ -1,6 +1,6 @@
 package main.rule;
 
-import main.analyzer.soot.EnvironmentHandler;
+import main.analyzer.UniqueRuleAnalyzer;
 import main.rule.engine.EngineType;
 import main.rule.engine.RuleChecker;
 import main.slicer.forward.ForwardInfluenceInstructions;
@@ -50,7 +50,7 @@ public class SSLSocketFactoryFinder implements RuleChecker {
 //            System.out.println(slicing_criterion);
             SlicingCriteria criteria = new SlicingCriteria(slicing_criterion);
             Map<String, List<Unit>> analysisLists = getForwardSlice(
-                    EnvironmentHandler.environmentRouting(projectJarPath, projectDependencyPath, type)
+                    UniqueRuleAnalyzer.environmentRouting(projectJarPath, projectDependencyPath, type)
                     , criteria);
 
             for (String method : analysisLists.keySet()) {

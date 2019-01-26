@@ -1,6 +1,6 @@
 package main.rule;
 
-import main.analyzer.soot.EnvironmentHandler;
+import main.analyzer.UniqueRuleAnalyzer;
 import main.rule.engine.EngineType;
 import main.rule.engine.RuleChecker;
 import soot.*;
@@ -31,7 +31,7 @@ public class UntrustedPrngFinder implements RuleChecker {
     public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath) throws IOException {
 
         Map<String, List<Unit>> analysisLists = getUntrustedPrngInstructions(
-                EnvironmentHandler.environmentRouting(projectJarPath, projectDependencyPath, type));
+                UniqueRuleAnalyzer.environmentRouting(projectJarPath, projectDependencyPath, type));
 
         if (!analysisLists.isEmpty()) {
             for (String method : analysisLists.keySet()) {

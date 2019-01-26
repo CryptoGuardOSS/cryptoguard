@@ -3,7 +3,6 @@ package main.analyzer;
 import main.rule.base.BaseRuleChecker;
 import main.rule.engine.EngineType;
 import main.util.Utils;
-import org.apache.commons.lang3.StringUtils;
 import soot.Scene;
 import soot.options.Options;
 
@@ -20,12 +19,6 @@ import java.util.List;
  * <p>The class to handle the routing for the different use cases.</p>
  */
 public class BaseAnalyzerRouting {
-
-    private static final String JAVA7_HOME = System.getenv("JAVA7_HOME");
-    private static final String JAVA_HOME = System.getenv("JAVA_HOME");
-    private static final String ANDROID_HOME = System.getenv("ANDROID_SDK_HOME");
-    private static final String BASE_SOOT = JAVA_HOME + Utils.join(JAVA_HOME, "/jre/lib/rt.jar:", "/jre/lib/jce.jar");
-
 
     public static void environmentRouting(EngineType routingType,
                                           String criteriaClass, String criteriaMethod,
@@ -48,30 +41,6 @@ public class BaseAnalyzerRouting {
         }
     }
 
-
-    //region System Environment Handlers
-    private static void checkJAVA() {
-        if (StringUtils.isEmpty(JAVA_HOME)) {
-            System.out.println("Please Set JAVA_HOME");
-            System.exit(1);
-        }
-    }
-
-    private static void checkJAVA7() {
-        if (StringUtils.isEmpty(JAVA7_HOME)) {
-            System.out.println("Please Set JAVA7_HOME");
-            System.exit(1);
-        }
-    }
-
-    private static void checkANDROID() {
-        if (StringUtils.isEmpty(ANDROID_HOME)) {
-            System.out.println("Please Set ANDROID_HOME");
-            System.exit(1);
-        }
-    }
-    //endregion
-
     //region Case Handlers
 
     //region JAR
@@ -80,7 +49,9 @@ public class BaseAnalyzerRouting {
                                     int criteriaParam,
                                     String projectJarPath,
                                     String projectDependencyPath, BaseRuleChecker checker) throws IOException {
-        checkJAVA();
+
+        String java_home = Utils.getJAVA_HOME();
+
         String basePackageName = Utils.getBasePackageNameFromJar(projectJarPath, true);
 
         List<String> classNames = Utils.getClassNamesFromJarArchive(projectJarPath);
@@ -94,8 +65,8 @@ public class BaseAnalyzerRouting {
         }
 
         String sootClassPath = Utils.buildSootClassPath(projectJarPath,
-                JAVA_HOME + "/jre/lib/rt.jar",
-                JAVA_HOME + "/jre/lib/jce.jar",
+                java_home + "/jre/lib/rt.jar",
+                java_home + "/jre/lib/jce.jar",
                 projectDependencyPath);
 
         Options.v().set_keep_line_number(true);
@@ -114,15 +85,13 @@ public class BaseAnalyzerRouting {
                                     int criteriaParam,
                                     String projectJarPath,
                                     BaseRuleChecker checker) throws IOException {
-        checkJAVA();
-        checkANDROID();
 
         List<String> classNames = Utils.getClassNamesFromApkArchive(projectJarPath);
 
         Options.v().set_keep_line_number(true);
         Options.v().set_src_prec(Options.src_prec_apk);
-        Options.v().set_android_jars(ANDROID_HOME + "/platforms");
-        Options.v().set_soot_classpath(BASE_SOOT);
+        Options.v().set_android_jars(Utils.getANDROID() + "/platforms");
+        Options.v().set_soot_classpath(Utils.getBaseSOOT());
 
         Options.v().set_process_dir(Collections.singletonList(projectJarPath));
         Options.v().set_whole_program(true);
@@ -139,7 +108,8 @@ public class BaseAnalyzerRouting {
                                     List<String> snippetPath,
                                     List<String> projectDependency,
                                     BaseRuleChecker checker) throws IOException {
-        checkJAVA7();
+
+        Utils.getJAVA7_HOME();
 
         Options.v().set_allow_phantom_refs(true);
         Options.v().set_keep_line_number(true);
@@ -148,9 +118,9 @@ public class BaseAnalyzerRouting {
 
         String srcPaths = Utils.join(":", snippetPath);
 
-        String sooPathTemp = BASE_SOOT + ":" + srcPaths + ":" + Utils.buildSootClassPath(projectDependency);
+        String tempSoot = Utils.getBaseSOOT() + ":" + srcPaths + ":" + Utils.buildSootClassPath(projectDependency);
 
-        Scene.v().setSootClassPath(BASE_SOOT + ":" + srcPaths + ":" + Utils.buildSootClassPath(projectDependency));
+        Scene.v().setSootClassPath(tempSoot);
 
         List<String> classNames = Utils.getClassNamesFromSnippet(snippetPath);
 

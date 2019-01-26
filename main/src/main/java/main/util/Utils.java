@@ -2,6 +2,7 @@ package main.util;
 
 import main.analyzer.backward.UnitContainer;
 import main.util.manifest.ProcessManifest;
+import org.apache.commons.lang3.StringUtils;
 import org.jf.dexlib2.DexFileFactory;
 import org.jf.dexlib2.Opcodes;
 import org.jf.dexlib2.iface.ClassDef;
@@ -10,6 +11,7 @@ import soot.Scene;
 import soot.SootClass;
 import soot.Unit;
 import soot.ValueBox;
+import soot.options.Options;
 import soot.util.Chain;
 
 import java.io.*;
@@ -521,5 +523,57 @@ public class Utils {
         }
 
         return tempString.toString();
+    }
+
+    public static String getJAVA_HOME() {
+        String JAVA_HOME = System.getenv("JAVA_HOME");
+        if (StringUtils.isEmpty(JAVA_HOME)) {
+            System.out.println("Please Set JAVA_HOME");
+            System.exit(1);
+        }
+        return JAVA_HOME;
+    }
+
+    public static String getJAVA7_HOME() {
+        String JAVA7_HOME = System.getenv("JAVA7_HOME");
+        if (StringUtils.isEmpty(JAVA7_HOME)) {
+            System.out.println("Please Set JAVA7_HOME");
+            System.exit(1);
+        }
+        return JAVA7_HOME;
+    }
+
+    public static String getANDROID() {
+        String ANDROID_HOME = System.getenv("ANDROID_HOME");
+        if (StringUtils.isEmpty(ANDROID_HOME)) {
+            System.out.println("Please Set ANDROID_HOME");
+            System.exit(1);
+        }
+        return ANDROID_HOME;
+    }
+
+    public static String getBaseSOOT() {
+        String rt = Utils.join(Utils.fileSep, "jre", "lib", "rt.jar:");
+        String jce = Utils.join(Utils.fileSep, "jre", "lib", "jce.jar");
+
+        return Utils.getJAVA_HOME() + Utils.fileSep + Utils.join(Utils.getJAVA_HOME() + Utils.fileSep, rt, jce);
+    }
+
+    public static String getBaseSOOT7() {
+        String rt = Utils.join(Utils.fileSep, "jre", "lib", "rt.jar:");
+        String jce = Utils.join(Utils.fileSep, "jre", "lib", "jce.jar");
+
+        return Utils.getJAVA7_HOME() + Utils.fileSep + Utils.join(Utils.getJAVA7_HOME() + Utils.fileSep, rt, jce);
+    }
+
+    public static void loadSootClasses(List<String> classes) {
+        Options.v().set_keep_line_number(true);
+        Options.v().set_allow_phantom_refs(true);
+
+        if (classes != null)
+            for (String clazz : classes)
+                Options.v().classes().add(clazz);
+
+        Scene.v().loadBasicClasses();
     }
 }
