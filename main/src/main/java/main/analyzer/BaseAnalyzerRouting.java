@@ -8,6 +8,7 @@ import soot.options.Options;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,13 +30,13 @@ public class BaseAnalyzerRouting {
                 setupBaseJar(criteriaClass, criteriaMethod, criteriaParam, snippetPath.get(0), projectDependency.get(0), checker);
             } else if (routingType == EngineType.APK) {
                 setupBaseAPK(criteriaClass, criteriaMethod, criteriaParam, snippetPath.get(0), checker);
-            } else { // if (routingType == EngineType.DIR) {
+            } else if (routingType == EngineType.DIR) {
                 setupBaseDir(criteriaClass, criteriaMethod, criteriaParam, snippetPath, projectDependency, checker);
-            } /*else if (routingType == EngineType.JAVAFILES) {
-            setupJavaFileEnv(projectJarPath, projectDependencyPath));
-        } else { //if (routingType == EngineType.JAVACLASSFILES)
-            setupJavaClassFileEnv(projectJarPath, projectDependencyPath));
-        } *///TODO - Route These
+            } else if (routingType == EngineType.JAVAFILES) {
+                setupBaseJava(criteriaClass, criteriaMethod, criteriaParam, snippetPath, projectDependency, checker);
+            } else { //if (routingType == EngineType.JAVACLASSFILES)
+                setupBaseJavaClass(criteriaClass, criteriaMethod, criteriaParam, snippetPath, projectDependency, checker);
+            }
         } catch (IOException e) {
 
         }
@@ -69,8 +70,6 @@ public class BaseAnalyzerRouting {
                 java_home + "/jre/lib/jce.jar",
                 projectDependencyPath);
 
-        Options.v().set_keep_line_number(true);
-        Options.v().set_allow_phantom_refs(true);
 
         Scene.v().setSootClassPath(sootClassPath);
 
@@ -88,14 +87,12 @@ public class BaseAnalyzerRouting {
 
         List<String> classNames = Utils.getClassNamesFromApkArchive(projectJarPath);
 
-        Options.v().set_keep_line_number(true);
         Options.v().set_src_prec(Options.src_prec_apk);
         Options.v().set_android_jars(Utils.getANDROID() + "/platforms");
         Options.v().set_soot_classpath(Utils.getBaseSOOT());
 
         Options.v().set_process_dir(Collections.singletonList(projectJarPath));
         Options.v().set_whole_program(true);
-        Options.v().set_allow_phantom_refs(true);
 
         loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
     }
@@ -111,8 +108,6 @@ public class BaseAnalyzerRouting {
 
         Utils.getJAVA7_HOME();
 
-        Options.v().set_allow_phantom_refs(true);
-        Options.v().set_keep_line_number(true);
         Options.v().set_output_format(Options.output_format_jimple);
         Options.v().set_src_prec(Options.src_prec_java);
 
@@ -129,34 +124,14 @@ public class BaseAnalyzerRouting {
     //endregion
 
     //region JavaFiles
-    /*
-    public static void analyzeSlices(Criteria criteria,
+    public static void setupBaseJava(String criteriaClass,
+                                     String criteriaMethod,
+                                     int criteriaParam,
                                      List<String> snippetPath,
                                      List<String> projectDependency,
                                      BaseRuleChecker checker) throws IOException {
 
-        String java7Home = System.getenv("JAVA7_HOME");
-
-        if (StringUtils.isBlank(java7Home)) {
-            System.err.println("Please set JAVA7_HOME");
-            System.exit(1);
-        }
-
-        Options.v().set_allow_phantom_refs(true);
-        Options.v().set_keep_line_number(true);
-        Options.v().set_output_format(Options.output_format_jimple);
-        Options.v().set_src_prec(Options.src_prec_java);
-
-        String split = System.getProperty("file.separator");
-        StringBuilder rt = new StringBuilder(java7Home);
-        for (String in : new String[]{"jre", "lib", "rt.jar"})
-            rt.append(split).append(in);
-        //String jce = String.join(split, javaHome, "jre", "lib", "jce.jar");
-        StringBuilder jce = new StringBuilder(java7Home);
-        for (String in : new String[]{"jre", "lib", "jce.jar"})
-            rt.append(split).append(in);
-
-        Scene.v().setSootClassPath(rt.toString() + ":" + jce.toString() + ":" + Utils.buildSootClassPath(projectDependency));
+        Scene.v().setSootClassPath(Utils.getBaseSOOT7() + ":" + Utils.buildSootClassPath(projectDependency));
 
 
         List<String> classNames = new ArrayList<>();
@@ -164,107 +139,40 @@ public class BaseAnalyzerRouting {
         for (String snippit : snippetPath)
             classNames.addAll(Utils.retrieveFullyQualifiedName(Arrays.asList(snippit)));
 
-        for (String clazz : BaseAnalyzer.CRITERIA_CLASSES) {
-            Scene.v().loadClassAndSupport(clazz);
-        }
 
-        for (String clazz : classNames) {
-            Scene.v().loadClassAndSupport(clazz);
-        }
-
-        Scene.v().loadNecessaryClasses();
-
-        String endPoint = "<" + criteria.getClassName() + ": " + criteria.getMethodName() + ">";
-        ArrayList<Integer> slicingParameters = new ArrayList<>();
-        slicingParameters.add(criteria.getParam());
-
-
-        BaseAnalyzer.analyzeSliceInternal(criteria.getClassName(), classNames, endPoint, slicingParameters, checker);
-
+        loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
     }
-     */
     //endregion
 
     //region JavaClassFiles
 
-    /**
-     * //TODO - Have to fix dependencies
-     * public static void analyzeSlices(Criteria criteria,
-     * List<String> sourceJavaClasses,
-     * List<String> projectDependencyPath,
-     * BaseRuleChecker checker) throws IOException {
-     * <p>
-     * //region Checking For Java_HOME System Env
-     * String javaHome = System.getenv("JAVA_HOME");
-     * <p>
-     * if (javaHome.isEmpty()) {
-     * System.err.println("Please set JAVA_HOME");
-     * System.exit(1);
-     * }
-     * //endregion
-     * <p>
-     * <p>
-     * //TODO - Use Utils.getClassNameFromJavaClassFile?
-     * <p>
-     * //for (String dependency : Utils.getJarsInDirectory(projectDependencyPath)) {
-     * //for (String dependencyClazz : Utils.getClassNamesFromJarArchive(dependency)) {
-     * //if (dependencyClazz.contains(basePackageName)) {
-     * //sourceJavaClasses.add(dependencyClazz);
-     * //}
-     * //}
-     * //}
-     * <p>
-     * //region Stock Soot Stuff
-     * Options.v().set_keep_line_number(true);
-     * Options.v().set_allow_phantom_refs(true);
-     * <p>
-     * String split = System.getProperty("file.separator");
-     * //String rt = String.join(split, javaHome, "jre", "lib", "rt.jar");
-     * StringBuilder rt = new StringBuilder(javaHome);
-     * for (String in : new String[]{"jre", "lib", "rt.jar"})
-     * rt.append(split).append(in);
-     * //String jce = String.join(split, javaHome, "jre", "lib", "jce.jar");
-     * StringBuilder jce = new StringBuilder(javaHome);
-     * for (String in : new String[]{"jre", "lib", "jce.jar"})
-     * rt.append(split).append(in);
-     * <p>
-     * String sootPath = Utils.buildSootClassPath(rt.toString(), jce.toString());
-     * <p>
-     * StringBuilder projectDependency = new StringBuilder();
-     * for (String in : projectDependencyPath)
-     * projectDependency.append(":").append(in);
-     * <p>
-     * Scene.v().setSootClassPath(rt + ":" + jce + ":" + projectDependency);//String.join(":", rt, jce, String.join(":",projectDependencyPath)));
-     * //endregion
-     * <p>
-     * String endPoint = "<" + criteria.getClassName() + ": " + criteria.getMethodName() + ">";
-     * ArrayList<Integer> slicingParameters = new ArrayList<>();
-     * slicingParameters.add(criteria.getParam());
-     * <p>
-     * //Loading all of the classes
-     * //BaseAnalyzer.CRITERIA_CLASSES.forEach(Scene.v()::loadClassAndSupport);
-     * for (String className : BaseAnalyzer.CRITERIA_CLASSES) {
-     * Scene.v().loadClassAndSupport(className);
-     * }
-     * <p>
-     * //sourceJavaClasses.forEach(Scene.v()::loadClassAndSupport);
-     * for (String className : sourceJavaClasses) {
-     * Scene.v().loadClassAndSupport(className);
-     * }
-     * <p>
-     * Scene.v().loadNecessaryClasses();
-     * //endregion
-     * <p>
-     * BaseAnalyzer.analyzeSliceInternal(criteria.getClassName(), sourceJavaClasses, endPoint, slicingParameters, checker);
-     * <p>
-     * }
-     */
+
+    //TODO - Have to fix dependencies
+    public static void setupBaseJavaClass(String criteriaClass,
+                                          String criteriaMethod,
+                                          int criteriaParam,
+                                          List<String> sourceJavaClasses,
+                                          List<String> projectDependencyPath,
+                                          BaseRuleChecker checker) throws IOException {
+
+
+        Scene.v().setSootClassPath(Utils.getBaseSOOT() + ":" + Utils.join(":", projectDependencyPath));//String.join(":", rt, jce, String.join(":",projectDependencyPath)));
+
+
+        loadBaseSootInfo(sourceJavaClasses, criteriaClass, criteriaMethod, criteriaParam, checker);
+
+    }
+
     //endregion
 
     //endregion
     public static void loadBaseSootInfo(List<String> classNames, String criteriaClass,
                                         String criteriaMethod,
                                         int criteriaParam, BaseRuleChecker checker) {
+
+
+        Options.v().set_keep_line_number(true);
+        Options.v().set_allow_phantom_refs(true);
 
         for (String clazz : BaseAnalyzer.CRITERIA_CLASSES) {
             Scene.v().loadClassAndSupport(clazz);
