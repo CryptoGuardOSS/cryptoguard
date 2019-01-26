@@ -50,9 +50,13 @@ public class CustomTrustManagerFinder implements RuleChecker {
             analysisLists = analyzeJar(projectJarPath.get(0), projectDependencyPath.get(0));
         } else if (type == EngineType.APK) {
             analysisLists = analyzeApk(projectJarPath.get(0));
-        } else {
+        } else { //if (type == EngineType.DIR) {
             analysisLists = analyzeSnippet(projectJarPath, projectDependencyPath);
-        }
+        } /* else if (type == EngineType.JAVAFILES) {
+            analysisLists = getAnalysisForTrustManager(EnvironmentHandler.setupJavaFileEnv(projectJarPath, projectDependencyPath));
+        } else { //if (type == EngineType.JAVACLASSFILES)
+            analysisLists = getAnalysisForTrustManager(EnvironmentHandler.setupJavaClassFileEnv(projectJarPath, projectDependencyPath));
+        } *///TODO - Route These
 
         for (String className : analysisLists.keySet()) {
 

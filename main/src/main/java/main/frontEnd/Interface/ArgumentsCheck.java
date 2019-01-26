@@ -20,6 +20,7 @@ import static main.util.Utils.trimFilePath;
 public class ArgumentsCheck {
 
     //TODO - Need To Unit Test These Paths
+
     /**
      * The fail fast parameter Check method
      * <p>This method will attempt to create the Environment Information and provide help if the usage doesn't match</p>
@@ -100,8 +101,8 @@ public class ArgumentsCheck {
                             return null;
                         } else
                             //TODO - Check This Alternative
-                            //sourceFiles.addAll(retrieveFullyQualifiedName(Arrays.asList(args[argumentSplit])));
-                            sourceFiles.add(retrieveFullyQualifiedName(args[argumentSplit]));
+                            sourceFiles.addAll(retrieveFullyQualifiedName(Arrays.asList(args[argumentSplit])));
+                        //sourceFiles.add(retrieveFullyQualifiedName(args[argumentSplit]));
 
                         argumentSplit++;
                     }

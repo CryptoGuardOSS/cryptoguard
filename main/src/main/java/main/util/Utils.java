@@ -26,9 +26,9 @@ import java.util.zip.ZipInputStream;
  * @since V01.00.00
  */
 public class Utils {
+    private static String fileSep = System.getProperty("file.separator");
 
     /**
-     *
      * //todo - usethis
      * <p>getClassNamesFromJarArchive.</p>
      *
@@ -416,25 +416,83 @@ public class Utils {
      * The method that retrieves the package information from a existing java file.
      * If the file doesn't exist or the java file isn't contained in a file, it'll return null
      *
-     * @param sourceJavaFile {@link String} - The path to the source java file.
-     * @return {@link String} - The package string, null if there is any issue or no package.
+     * @param sourceJavaFile {@link java.util.List<java.lang.String>} - The path to the source java file.
+     * @return {@link java.util.List<java.lang.String>} - The package string, null if there is any issue or no package.
      */
-    public static String retrieveFullyQualifiedName(String sourceJavaFile) {
-        String sourcePackage = null;
-        try (BufferedReader br = new BufferedReader(new FileReader(sourceJavaFile))) {
+    public static List<String> retrieveFullyQualifiedName(List<String> sourceJavaFile) {
+        List<String> packagedJavaNames = new ArrayList<>();
+        for (String in : sourceJavaFile) {
+            String sourcePackage = trimFilePath(in).replace(".java", "");
+            try (BufferedReader br = new BufferedReader(new FileReader(in))) {
 
-            String firstLine = br.readLine();
+                //region TODO - Enhance this to look for package declaration
+                /**
+                 * This could be since the a license could be spread anywhere throughout the file
+                 * ie.
+                 * License - TLDR
+                 * package org.main.hello;
+                 */
+                //endregion
+                String firstLine = br.readLine();
 
-            if (firstLine.startsWith("package ") && firstLine.endsWith(";")) {
-                sourcePackage = firstLine.substring(8, firstLine.length() - 1);
-                sourcePackage += "." + trimFilePath(sourceJavaFile);
+                if (firstLine.startsWith("package ") && firstLine.endsWith(";")) {
+                    sourcePackage = firstLine.substring("package ".length(), firstLine.length() - 1) + "." + sourcePackage;
+                } else //File has no package declaration, retrieving the last folder path
+                {
+                    String[] paths = Utils.retrieveFullFilePath(in).split(fileSep);
+
+                    sourcePackage = paths[paths.length - 2] + "." + sourcePackage;
+                }
+
+            } catch (IOException e) {
+                System.out.println("Issue Reading File: " + sourceJavaFile);
+            }
+            packagedJavaNames.add(sourcePackage);
+        }
+        return packagedJavaNames;
+    }
+
+    //TODO - add Error handling here
+    public static List<String> retrieveTrimmedSourcePaths(List<String> files) {
+        List<String> filePaths = new ArrayList<>();
+        for (String relativeFile : files) {
+            String relativeFilePath = "";
+
+            File file = new File(relativeFile);
+
+            try {
+                relativeFilePath = file.getCanonicalPath().replace(file.getName(), "");
+            } catch (IOException e) {
+
             }
 
-        } catch (IOException e) {
-            System.out.println("Issue Reading File: " + sourceJavaFile);
+            if (!filePaths.contains(relativeFilePath))
+                filePaths.add(relativeFilePath);
         }
+        return filePaths;
+    }
 
-        return sourcePackage;
+    //TODO - add Error Handling here
+    public static String retrieveBaseSourcePath(List<String> sourcePaths, String dependencyPath) {
+        String tempDependencyPath = sourcePaths.get(0);
+        for (String in : sourcePaths)
+            if (!in.equals(tempDependencyPath)) {
+                tempDependencyPath = System.getProperty("user.dir");
+                break;
+            }
+        return tempDependencyPath + System.getProperty("file.separator") + dependencyPath;
+    }
+
+    public static String retrieveFullFilePath(String filename) {
+        File file = new File(filename);
+        if (file.exists())
+            try {
+                return file.getCanonicalPath();
+            } catch (IOException e) {
+                return filename;
+            }
+        else
+            return filename;
     }
 
     /**
@@ -450,11 +508,11 @@ public class Utils {
     }
 
     //TODO - Upgrade to 1.8 to dump this method
-    public static String stringJoiner(String delimiter, String... inputs) {
+    public static String join(String delimiter, String... elements) {
         StringBuilder tempString = new StringBuilder();
-        for (String in : inputs) {
+        for (String in : elements) {
             tempString.append(in);
-            if (!in.equals(inputs[inputs.length - 1]))
+            if (!in.equals(elements[elements.length - 1]))
                 tempString.append(delimiter);
         }
 

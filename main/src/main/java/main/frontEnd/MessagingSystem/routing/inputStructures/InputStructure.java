@@ -14,8 +14,8 @@ public interface InputStructure {
     /**
      * The interface for each type of routing to handle the raw command line arguments.
      *
-     * @param info         {@link EnvironmentInformation} - the continuation of the environmental info to be added onto.
-     * @param args  {@link String[]} - The subset of arguments passed from the command line
+     * @param info {@link EnvironmentInformation} - the continuation of the environmental info to be added onto.
+     * @param args {@link String[]} - The subset of arguments passed from the command line
      * @return {@link Boolean} - an indication if the validation passed.
      */
     Boolean inputValidation(EnvironmentInformation info, String[] args);

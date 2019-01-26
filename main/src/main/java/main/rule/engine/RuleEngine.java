@@ -1,6 +1,5 @@
 package main.rule.engine;
 
-import main.rule.*;
 import main.util.*;
 
 import java.util.ArrayList;
@@ -16,25 +15,7 @@ import java.util.Map;
  * @since V01.00.00
  */
 public class RuleEngine {
-    private static List<RuleChecker> ruleCheckerList = new ArrayList<>();
-
-    static {
-
-        ruleCheckerList.add(new InsecureAssymCryptoFinder());
-        ruleCheckerList.add(new BrokenCryptoFinder());
-        ruleCheckerList.add(new UntrustedPrngFinder());
-        ruleCheckerList.add(new SSLSocketFactoryFinder());
-        ruleCheckerList.add(new CustomTrustManagerFinder());
-        ruleCheckerList.add(new HostNameVerifierFinder());
-        ruleCheckerList.add(new BrokenHashFinder());
-        ruleCheckerList.add(new ConstantKeyFinder());
-        ruleCheckerList.add(new PredictableIVFinder());
-        ruleCheckerList.add(new PBESaltFinder());
-        ruleCheckerList.add(new PBEInterationCountFinder());
-        ruleCheckerList.add(new PredictableSeedFinder());
-        ruleCheckerList.add(new PredictableKeyStorePasswordFinder());
-        ruleCheckerList.add(new HttpUrlFinder());
-    }
+    private static List<RuleChecker> ruleCheckerList = CommonRules.ruleCheckerList;
 
     /**
      * The point of entry for this library. Essentially the frontend, this will

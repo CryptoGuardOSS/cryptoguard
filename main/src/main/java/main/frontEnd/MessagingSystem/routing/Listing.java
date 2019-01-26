@@ -23,6 +23,7 @@ public enum Listing {
     //endregion
 
     //region Constructor
+
     /**
      * The inherint constructor of all the enum value types listed here
      *

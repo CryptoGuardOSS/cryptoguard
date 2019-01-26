@@ -102,6 +102,7 @@ public class ScarfXML implements InputStructure {
         }
 
         //region Getters
+
         /**
          * Getter for assessmentFramework
          *

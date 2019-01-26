@@ -54,9 +54,13 @@ public class SSLSocketFactoryFinder implements RuleChecker {
                 analysisLists = analyzeJar(projectJarPath.get(0), projectDependencyPath.get(0), criteria);
             } else if (type == EngineType.APK) {
                 analysisLists = analyzeApk(projectJarPath.get(0), criteria);
-            } else {
+            } else { // if (type == EngineType.DIR) {
                 analysisLists = analyzeSnippet(projectJarPath, projectDependencyPath, criteria);
-            }
+            } /*else if (type == EngineType.JAVAFILES) {
+                analysisLists = getForwardSlice(EnvironmentHandler.setupJavaFileEnv(projectJarPath, projectDependencyPath), criteria);
+            } else { //if (type == EngineType.JAVACLASSFILES)
+                analysisLists = getForwardSlice(EnvironmentHandler.setupJavaClassFileEnv(projectJarPath, projectDependencyPath), criteria);
+            } *///TODO - Route These
 
             for (String method : analysisLists.keySet()) {
 

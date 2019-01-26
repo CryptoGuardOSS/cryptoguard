@@ -79,7 +79,7 @@ public class MessageRepresentation {
      * The static method to get the structure of the output.
      * Also re-opens the console output.
      *
-     * @param env {@link EnvironmentInformation} - The container of all of the overall information
+     * @param env    {@link EnvironmentInformation} - The container of all of the overall information
      * @param issues {@link AnalysisIssue} - The list of collected issues
      * @return String - the string output is determined by the type of messaging system used
      */

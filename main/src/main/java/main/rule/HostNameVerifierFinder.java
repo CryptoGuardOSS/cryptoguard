@@ -39,9 +39,13 @@ public class HostNameVerifierFinder implements RuleChecker {
             analysisLists = analyzeJar(projectJarPath.get(0), projectDependencyPath.get(0));
         } else if (type == EngineType.APK) {
             analysisLists = analyzeApk(projectJarPath.get(0));
-        } else {
+        } else { // if (type == EngineType.DIR) {
             analysisLists = analyzeSnippet(projectJarPath, projectDependencyPath);
-        }
+        } /* else if (type == EngineType.JAVAFILES) {
+            analysisLists = getHostNameVerifiers(EnvironmentHandler.setupJavaFileEnv(projectJarPath, projectDependencyPath));
+        } else { //if (type == EngineType.JAVACLASSFILES)
+            analysisLists = getHostNameVerifiers(EnvironmentHandler.setupJavaClassFileEnv(projectJarPath, projectDependencyPath));
+        } *///TODO - Route These
 
         for (String className : analysisLists.keySet()) {
             List<UnitContainer> analysis = analysisLists.get(className);
