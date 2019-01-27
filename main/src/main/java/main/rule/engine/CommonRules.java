@@ -1,9 +1,6 @@
 package main.rule.engine;
 
-import main.rule.CustomTrustManagerFinder;
-import main.rule.HostNameVerifierFinder;
-import main.rule.SSLSocketFactoryFinder;
-import main.rule.UntrustedPrngFinder;
+import main.rule.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,15 +18,14 @@ public class CommonRules {
     static {
 
         //region BaseAnalyzer Routes
-        //ruleCheckerList.add(new InsecureAssymCryptoFinder());
-        //ruleCheckerList.add(new BrokenCryptoFinder());
+        ruleCheckerList.add(new InsecureAssymCryptoFinder());
+        ruleCheckerList.add(new BrokenCryptoFinder());
         //endregion
         ruleCheckerList.add(new UntrustedPrngFinder());
         ruleCheckerList.add(new SSLSocketFactoryFinder());
         ruleCheckerList.add(new CustomTrustManagerFinder());
         ruleCheckerList.add(new HostNameVerifierFinder());
         //region BaseAnalyzer Routes
-        /*
         ruleCheckerList.add(new BrokenHashFinder());
         ruleCheckerList.add(new ConstantKeyFinder());
         ruleCheckerList.add(new PredictableIVFinder());
@@ -38,7 +34,6 @@ public class CommonRules {
         ruleCheckerList.add(new PredictableSeedFinder());
         ruleCheckerList.add(new PredictableKeyStorePasswordFinder());
         ruleCheckerList.add(new HttpUrlFinder());
-        */
         //endregion
     }
 }

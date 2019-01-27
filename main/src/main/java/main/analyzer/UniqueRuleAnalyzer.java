@@ -23,6 +23,7 @@ import java.util.List;
  * <li>{@link main.rule.SSLSocketFactoryFinder SSLSocketFactoryFinder}</li>
  * <li>{@link main.rule.CustomTrustManagerFinder CustomTrustManagerFinder}</li>
  * <li>{@link main.rule.HostNameVerifierFinder HostNameVerifierFinder}</li>
+ * <li>{@link main.rule.DefaultExportGradeKeyFinder DefaultExportGradeKeyFinder}</li>
  * </ol>
  *
  * </p>
