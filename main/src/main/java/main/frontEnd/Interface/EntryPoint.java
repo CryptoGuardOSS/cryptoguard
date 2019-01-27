@@ -3,9 +3,7 @@ package main.frontEnd.Interface;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.MessageRepresentation;
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
-import main.rule.engine.ApkEntry;
-import main.rule.engine.JarEntry;
-import main.rule.engine.SourceEntry;
+import main.rule.engine.*;
 
 import java.util.ArrayList;
 
@@ -28,6 +26,7 @@ public class EntryPoint {
 
 
         ArrayList<AnalysisIssue> issues = null;
+        EntryHandler handler = null;
         switch (generalInfo.getSourceType()) {
             case APK:
                 issues = ApkEntry.NonStreamScan(generalInfo);
@@ -38,11 +37,15 @@ public class EntryPoint {
             case DIR:
                 issues = SourceEntry.NonStreamScan(generalInfo);
                 break;
-            case JAVAFILES://TODO - Work On This
+            case JAVAFILES:
+                handler = new JavaFileEntry();
                 break;
-            case CLASSFILES://TODO - Work On This
+            case CLASSFILES:
+                handler = new JavaClassFileEntry();
                 break;
         }
+        if (handler != null)
+            issues = handler.NonStreamScan(generalInfo);
 
         System.out.println(MessageRepresentation.getMessage(generalInfo, issues));
     }

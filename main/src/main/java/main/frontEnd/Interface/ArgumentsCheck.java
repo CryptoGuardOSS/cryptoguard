@@ -19,7 +19,7 @@ import static main.util.Utils.trimFilePath;
  */
 public class ArgumentsCheck {
 
-    //TODO - Need To Unit Test These Paths
+    //TODO - Need To Unit Test
 
     /**
      * The fail fast parameter Check method
@@ -100,9 +100,7 @@ public class ArgumentsCheck {
                             failFast();
                             return null;
                         } else
-                            //TODO - Check This Alternative
                             sourceFiles.addAll(retrieveFullyQualifiedName(Arrays.asList(args[argumentSplit])));
-                        //sourceFiles.add(retrieveFullyQualifiedName(args[argumentSplit]));
 
                         argumentSplit++;
                     }

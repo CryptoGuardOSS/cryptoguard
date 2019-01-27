@@ -201,8 +201,6 @@ public class RuleEngineTest {
     //region Tests
     @Test
     public void mainTestJar() {
-        //TODO - fix this very much temp step
-        //Locked since Java7 Info only available via linux
         if (!System.getProperty("os.name").contains("Windows")) {
             File temp = new File(this.jarOne);
 
@@ -229,7 +227,6 @@ public class RuleEngineTest {
 
     @Test
     public void testSelfGradle() {
-        //Locked since Java7 Info only available via linux
         if (!System.getProperty("os.name").contains("Windows")) {
 
             args = new String[]{srcTypeString, srcOneGrv, srcOneGrvDep};

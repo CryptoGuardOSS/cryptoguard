@@ -103,7 +103,8 @@ public class EnvironmentInformation {
         System.setOut(internalErrors);
         this.Source = source;
         this.sourceType = sourceType;
-        this.dependencies = Arrays.asList(dependencies);
+        if (dependencies != null)
+            this.dependencies = Arrays.asList(dependencies);
         this.messagingType = Listing.retrieveListingType(messagingType);
         //endregion
 
@@ -435,7 +436,12 @@ public class EnvironmentInformation {
      * @return a {@link java.util.List<java.lang.String>} object.
      */
     public List<String> getDependencies() {
+
+        if (dependencies == null)
+            dependencies = new ArrayList<>();
+
         return dependencies;
+
     }
 
     /**

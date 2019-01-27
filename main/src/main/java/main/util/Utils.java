@@ -28,10 +28,20 @@ import java.util.zip.ZipInputStream;
  * @since V01.00.00
  */
 public class Utils {
+    /**
+     * //TODO Possible work usages
+     * {@link main.util.Utils#getClassNamesFromJarArchive}
+     * {@link main.util.Utils#retrieveFullyQualifiedName}
+     * - Enhance this to look for package declarations not at the top of the file
+     * License - TLDR
+     * package org.main.hello;
+     * {@link main.util.Utils#getClassNamesFromJarArchive}
+     * {@link main.util.Utils#getClassNamesFromJarArchive}
+     */
+
     private static String fileSep = System.getProperty("file.separator");
 
     /**
-     * //todo - usethis
      * <p>getClassNamesFromJarArchive.</p>
      *
      * @param jarPath a {@link java.lang.String} object.
@@ -414,27 +424,21 @@ public class Utils {
         return classNames;
     }
 
-    /**
-     * The method that retrieves the package information from a existing java file.
-     * If the file doesn't exist or the java file isn't contained in a file, it'll return null
-     *
-     * @param sourceJavaFile {@link java.util.List<java.lang.String>} - The path to the source java file.
-     * @return {@link java.util.List<java.lang.String>} - The package string, null if there is any issue or no package.
-     */
     public static List<String> retrieveFullyQualifiedName(List<String> sourceJavaFile) {
-        List<String> packagedJavaNames = new ArrayList<>();
-        for (String in : sourceJavaFile) {
-            String sourcePackage = trimFilePath(in).replace(".java", "");
-            try (BufferedReader br = new BufferedReader(new FileReader(in))) {
+        List<String> fullPath = new ArrayList<>();
+        for (String in : sourceJavaFile)
+            fullPath.add(Utils.retrieveFullyQualifiedName(in));
 
-                //region TODO - Enhance this to look for package declaration
-                /**
-                 * This could be since the a license could be spread anywhere throughout the file
-                 * ie.
-                 * License - TLDR
-                 * package org.main.hello;
-                 */
-                //endregion
+        return fullPath;
+    }
+
+
+    public static String retrieveFullyQualifiedName(String in) {
+
+        String sourcePackage = trimFilePath(in);
+        if (in.endsWith(".java")) {
+            sourcePackage = sourcePackage.replace(".java", "");
+            try (BufferedReader br = new BufferedReader(new FileReader(in))) {
                 String firstLine = br.readLine();
 
                 if (firstLine.startsWith("package ") && firstLine.endsWith(";")) {
@@ -447,14 +451,18 @@ public class Utils {
                 }
 
             } catch (IOException e) {
-                System.out.println("Issue Reading File: " + sourceJavaFile);
+                System.out.println("Issue Reading File: " + in);
             }
-            packagedJavaNames.add(sourcePackage);
+        } else if (in.endsWith(".class")) {
+            sourcePackage = sourcePackage.replace(".class", "");
+
+            String[] paths = Utils.retrieveFullFilePath(in).split(fileSep);
+
+            //sourcePackage = paths[paths.length - 2] + "." + sourcePackage;
         }
-        return packagedJavaNames;
+        return sourcePackage;
     }
 
-    //TODO - add Error handling here
     public static List<String> retrieveTrimmedSourcePaths(List<String> files) {
         List<String> filePaths = new ArrayList<>();
         for (String relativeFile : files) {
@@ -474,7 +482,6 @@ public class Utils {
         return filePaths;
     }
 
-    //TODO - add Error Handling here
     public static String retrieveBaseSourcePath(List<String> sourcePaths, String dependencyPath) {
         String tempDependencyPath = sourcePaths.get(0);
         for (String in : sourcePaths)
@@ -509,11 +516,14 @@ public class Utils {
         return folderSplit[folderSplit.length - 1];
     }
 
+    public static String osPathJoin(String... elements) {
+        return Utils.join(Utils.fileSep, elements);
+    }
+
     public static String join(String delimiter, String... elements) {
         return join(delimiter, Arrays.asList(elements));
     }
 
-    //TODO - Upgrade to 1.8 to dump this method
     public static String join(String delimiter, List<String> elements) {
         StringBuilder tempString = new StringBuilder();
         for (String in : elements) {

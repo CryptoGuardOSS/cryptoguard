@@ -19,8 +19,6 @@ import java.util.Arrays;
 public class JavaFileEntry implements EntryHandler {
 
     /**
-     * TODO - Add dependency support?
-     * TODO - Retrieve dependencies from the imports
      * {@inheritDoc}
      */
     public ArrayList<AnalysisIssue> NonStreamScan(EnvironmentInformation generalInfo) {

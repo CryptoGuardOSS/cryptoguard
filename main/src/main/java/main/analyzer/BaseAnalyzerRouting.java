@@ -77,7 +77,6 @@ public class BaseAnalyzerRouting {
 
     }
     //endregion
-
     //region APK
     public static void setupBaseAPK(String criteriaClass,
                                     String criteriaMethod,
@@ -97,7 +96,6 @@ public class BaseAnalyzerRouting {
         loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
     }
     //endregion
-
     //region BaseDir
     public static void setupBaseDir(String criteriaClass,
                                     String criteriaMethod,
@@ -122,8 +120,8 @@ public class BaseAnalyzerRouting {
         loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
     }
     //endregion
-
     //region JavaFiles
+    //Like Dir
     public static void setupBaseJava(String criteriaClass,
                                      String criteriaMethod,
                                      int criteriaParam,
@@ -143,11 +141,8 @@ public class BaseAnalyzerRouting {
         loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
     }
     //endregion
-
     //region JavaClassFiles
-
-
-    //TODO - Have to fix dependencies
+    //Like Jar
     public static void setupBaseJavaClass(String criteriaClass,
                                           String criteriaMethod,
                                           int criteriaParam,
@@ -155,11 +150,13 @@ public class BaseAnalyzerRouting {
                                           List<String> projectDependencyPath,
                                           BaseRuleChecker checker) throws IOException {
 
+        Scene.v().setSootClassPath(Utils.getBaseSOOT() + ":" + Utils.join(":", projectDependencyPath));
 
-        Scene.v().setSootClassPath(Utils.getBaseSOOT() + ":" + Utils.join(":", projectDependencyPath));//String.join(":", rt, jce, String.join(":",projectDependencyPath)));
+        List<String> classNames = new ArrayList<>();
+        for (String in : sourceJavaClasses)
+            classNames.add(Utils.retrieveFullyQualifiedName(in));
 
-
-        loadBaseSootInfo(sourceJavaClasses, criteriaClass, criteriaMethod, criteriaParam, checker);
+        loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
 
     }
 

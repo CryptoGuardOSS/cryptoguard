@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-//TODO - fully implement
-
 /**
  * @author RigorityJTeam
  * Created on 2019-01-25.
@@ -101,19 +99,23 @@ public class UniqueRuleAnalyzer {
         return classNames;
     }
 
-    //region //TODO - Java File, Like Dir, dependencies?
-
+    //region Java Files
+    //Like Dir
     public static List<String> setupJavaFileEnv(List<String> snippetPath, List<String> projectDependencyPath) {
 
         List<String> classNames = Utils.retrieveFullyQualifiedName(snippetPath);
-        List<String> classPaths = Utils.retrieveTrimmedSourcePaths(snippetPath);
 
-        String srcPaths = Utils.join(":", snippetPath);
+        StringBuilder sootPath = new StringBuilder();
+        sootPath.append(Utils.getBaseSOOT7())
+                .append(":")
+                .append(Utils.join(":", snippetPath));
 
-        String sootPath = Utils.getBaseSOOT7() + ":" + srcPaths
-                + Utils.buildSootClassPath(Utils.retrieveBaseSourcePath(classPaths, projectDependencyPath.get(0)));
+        if (projectDependencyPath.size() >= 1) {
+            List<String> classPaths = Utils.retrieveTrimmedSourcePaths(snippetPath);
+            sootPath.append(Utils.buildSootClassPath(Utils.retrieveBaseSourcePath(classPaths, projectDependencyPath.get(0))));
+        }
 
-        Options.v().set_soot_classpath(sootPath);
+        Options.v().set_soot_classpath(sootPath.toString());
 
         Options.v().set_output_format(Options.output_format_jimple);
         Options.v().set_src_prec(Options.src_prec_java);
@@ -124,22 +126,15 @@ public class UniqueRuleAnalyzer {
     }
     //endregion
 
-    //region JavaClassFiles, like jar
-    //TODO - Create ClassNames from javaClassFiles, dependencies?
-
+    //region JavaClassFiles
+    //Like Jar
     public static List<String> setupJavaClassFileEnv(List<String> javaClassFiles, List<String> projectDependencyPath) {
-          /*
-         StringBuilder sootClassPathBuilder = new StringBuilder();
-         for (String in : javaClassFiles)
-         sootClassPathBuilder.append(Utils.retrieveFullFilePath(in)).append(":");
-     */
-
 
         Scene.v().setSootClassPath(Utils.getBaseSOOT());
 
         List<String> classNames = new ArrayList<>();
         for (String in : javaClassFiles)
-            classNames.add(Utils.trimFilePath(in));
+            classNames.add(Utils.retrieveFullyQualifiedName(in));
 
         Utils.loadSootClasses(null);
 
