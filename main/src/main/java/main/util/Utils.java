@@ -458,7 +458,7 @@ public class Utils {
 
             String[] paths = Utils.retrieveFullFilePath(in).split(fileSep);
 
-            //sourcePackage = paths[paths.length - 2] + "." + sourcePackage;
+            sourcePackage = paths[paths.length - 2] + "." + sourcePackage;
         }
         return sourcePackage;
     }

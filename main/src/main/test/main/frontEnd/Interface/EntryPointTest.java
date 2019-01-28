@@ -229,11 +229,10 @@ public class EntryPointTest {
 
                 assertTrue(out.toString().split("\n").length > 1);
 
-                Boolean results_header = main_TestableJar_results.equals(out.toString());
-                Boolean results_no_header = main_TestableJar_results_noheader.equals(out.toString());
+                Boolean results_header = main_TestableJar_results.toString().equals(out.toString());
+                Boolean results_no_header = main_TestableJar_results_noheader.toString().equals(out.toString());
 
-                //assertTrue(results_header || results_no_header);
-                assertEquals(main_TestableJar_results_noheader.toString(), out.toString());
+                assertTrue(results_header || results_no_header);
             } catch (Exception e) {
                 e.printStackTrace();
                 assertNull(e);
