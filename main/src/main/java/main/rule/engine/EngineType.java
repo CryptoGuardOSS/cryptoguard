@@ -1,7 +1,12 @@
 package main.rule.engine;
 
+import main.frontEnd.Interface.ExceptionHandler;
+
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The different types of "sources" accepted to examine.
@@ -16,11 +21,11 @@ import java.util.List;
  */
 public enum EngineType {
     //region Values
-    JAR("JAR File", "jar", ".jar", "To signal a Jar File to be scanned."),
-    APK("APK File", "apk", ".apk", "To signal a APK File to be scanned."),
-    DIR("Directory of Source Code", "source", "dir", "To signal the source directory of a Maven/Gradle Project."),
-    JAVAFILES("Java File(s)", "java", ".java", "To signal a Java File(s) to be scanned."),
-    CLASSFILES("Class File(s)", "class", ".class", "To signal a Class File(s) to be scanned.");
+    JAR("JAR File", "jar", ".jar", "To signal a Jar File to be scanned.", "-s {(absolute path)/file.jar} -d {relative path to dependencies}"),
+    APK("APK File", "apk", ".apk", "To signal a APK File to be scanned.", "-s {(absolute path)/sourcefile.apk}"),
+    DIR("Directory of Source Code", "source", "dir", "To signal the source directory of a Maven/Gradle Project.", "-s {absolute path to dir}"),
+    JAVAFILES("Java File(s)", "java", ".java", "To signal a Java File(s) to be scanned.", "-s {(absolute path)/file.java (s)}"),
+    CLASSFILES("Class File(s)", "class", ".class", "To signal a Class File(s) to be scanned.", "-s {(absolute path)/file.class (s)} -d {relative path to dependencies}");
     //endregion
 
     //region Attributes
@@ -29,6 +34,7 @@ public enum EngineType {
     private String inputExtension;
 
     private String helpInfo;
+    private String validInfo;
     //endregion
 
     //region Constructor
@@ -39,11 +45,12 @@ public enum EngineType {
      * @param name - the human readable name of the engine type
      * @param flag - the flag used to identify the engine type
      */
-    EngineType(String name, String flag, String extension, String helpInfo) {
+    EngineType(String name, String flag, String extension, String helpInfo, String validInfo) {
         this.name = name;
         this.flag = flag;
         this.inputExtension = extension;
         this.helpInfo = helpInfo;
+        this.validInfo = validInfo;
     }
     //endregion
 
@@ -95,7 +102,7 @@ public enum EngineType {
      */
     public static EngineType getFromFlag(String flag) {
         for (EngineType type : EngineType.values())
-            if (type.inputExtension.equals(flag)) {
+            if (type.flag.equalsIgnoreCase(flag)) {
                 return type;
             }
         return null;
@@ -125,6 +132,108 @@ public enum EngineType {
             out.append(type.getFlag()).append(" : ").append(type.getHelpInfo()).append("\n");
 
         return out.toString();
+    }
+
+    public static String getValidHelp() {
+        StringBuilder help = new StringBuilder();
+
+        help.append("===========================================================\n")
+                .append("key: {}=required ()=optional \n");
+        for (EngineType type : EngineType.values()) {
+            help.append("\t===========================================================\n");
+
+            help.append("\tType : ").append(type.name).append("\n");
+            help
+                    .append("\tjava7 -jar rigorityj.jar ")
+                    .append(type.flag)
+                    .append(" ")
+                    .append(type.validInfo)
+                    .append("(Output Type flag) ({required depending on the output Type})")
+                    .append("\n");
+
+            help.append("\t===========================================================\n");
+        }
+        help.append("===========================================================\n");
+        return help.toString();
+    }
+
+    public List<String> retrieveDirs(List<String> arguments) throws ExceptionHandler {
+        List<String> dirs = new ArrayList<>();
+        for (String dir : arguments) {
+            File dirChecking = new File(dir);
+            if (!dirChecking.exists() || !dirChecking.isDirectory())
+                throw new ExceptionHandler(dirChecking.getName() + " is not a valid directory.");
+
+            try {
+                dirs.add(dirChecking.getCanonicalPath());
+            } catch (Exception e) {
+                throw new ExceptionHandler("Error retrieving the path of the directory.");
+            }
+        }
+        return dirs;
+    }
+
+    public List<String> retrieveFilesByType(List<String> arguments) throws ExceptionHandler {
+        if (this == EngineType.DIR)
+            if (arguments.size() != 1)
+                throw new ExceptionHandler("Please enter one argument for this use case.");
+            else
+                return retrieveDirs(arguments);
+
+        List<String> filePaths = new ArrayList<>();
+        for (String in : arguments) {
+            if (!in.endsWith(inputExtension))
+                throw new ExceptionHandler("File " + in + "doesn't have the right file type ");
+
+            File tempFile = new File(in);
+            if (!tempFile.exists() || !tempFile.isFile())
+                throw new ExceptionHandler(tempFile.getName() + " is not a valid file.");
+
+            try {
+                filePaths.add(tempFile.getCanonicalPath());
+            } catch (Exception e) {
+                throw new ExceptionHandler("Error retrieving the path of the file " + tempFile.getName() + ".");
+            }
+        }
+        return filePaths;
+    }
+
+    public Map<String, List<String>> retrieveInputsFromInput(List<String> args, Integer messageType) throws ExceptionHandler {
+        Map<String, List<String>> source_dependencies = new HashMap<>();
+
+        if (!args.get(0).equals("-s"))
+            throw new ExceptionHandler("You need to pass the -s for the source files/dir.");
+
+        Integer dependencyLoc = args.indexOf("-d");
+        Integer msgLoc = messageType;
+
+        Integer sourceEnding = dependencyLoc != -1 ? dependencyLoc : (msgLoc != -1 ? msgLoc - 1 : args.size());
+
+        if (sourceEnding == 0)
+            throw new ExceptionHandler("You need to pass a source files/dir.");
+
+        source_dependencies.put("source",
+                retrieveFilesByType(args.subList(1, sourceEnding)));
+
+        if (dependencyLoc != -1) {
+            Integer dependencyEnding = msgLoc != -1 ? msgLoc : args.size();
+
+            if (this != EngineType.JAR && this != EngineType.CLASSFILES && this != EngineType.DIR)
+                throw new ExceptionHandler("You can only pass dependencies with the Jar or Java Class Path.");
+
+            //region TODO - check these relative pathes
+            /*
+            source_dependencies.put("dependencies",
+                    retrieveDirs(args.subList(sourceEnding + 1,dependencyEnding)));
+            */
+            //endregion
+
+            source_dependencies.put("dependencies",
+                    args.subList(sourceEnding + 1, dependencyEnding));
+
+        }
+
+        return source_dependencies;
     }
     //endregion
 }

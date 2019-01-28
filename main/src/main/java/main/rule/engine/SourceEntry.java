@@ -24,7 +24,7 @@ public class SourceEntry {
         ArrayList<AnalysisIssue> issues = null;
 
         try {
-            BuildFileParser buildFileParser = BuildFileParserFactory.getBuildfileParser(generalInfo.getSource()[0]);
+            BuildFileParser buildFileParser = BuildFileParserFactory.getBuildfileParser(generalInfo.getSource().get(0));
 
             Map<String, List<String>> moduleVsDependency = buildFileParser.getDependencyList();
             List<String> analyzedModules = new ArrayList<>();
@@ -42,12 +42,12 @@ public class SourceEntry {
 
                         String dependencyModule = null;
 
-                        if (dependency.equals(generalInfo.getSource()[0] + "/src/main/java")) {
-                            dependencyModule = generalInfo.getSource()[0].substring(generalInfo.getSource()[0].lastIndexOf("/") + 1);
+                        if (dependency.equals(generalInfo.getSource().get(0) + "/src/main/java")) {
+                            dependencyModule = generalInfo.getSource().get(0).substring(generalInfo.getSource().get(0).lastIndexOf("/") + 1);
                             otherdependencies.add(dependency.substring(0, dependency.length() - 13) + generalInfo.getDependencies());
 
                         } else {
-                            dependencyModule = dependency.substring(generalInfo.getSource()[0].length() + 1, dependency.length() - 14);
+                            dependencyModule = dependency.substring(generalInfo.getSource().get(0).length() + 1, dependency.length() - 14);
                             otherdependencies.add(dependency.substring(0, dependency.length() - 13) + generalInfo.getDependencies());
 
                         }

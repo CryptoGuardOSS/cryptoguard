@@ -4,12 +4,8 @@ import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import main.frontEnd.MessagingSystem.routing.Listing;
 import main.rule.engine.EngineType;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import static main.util.Utils.retrieveFullyQualifiedName;
-import static main.util.Utils.trimFilePath;
-
+import java.util.List;
+import java.util.Map;
 /**
  * @author RigorityJTeam
  * Created on 12/13/18.
@@ -19,28 +15,58 @@ import static main.util.Utils.trimFilePath;
  */
 public class ArgumentsCheck {
 
-    //TODO - Need To Unit Test
-
     /**
      * The fail fast parameter Check method
      * <p>This method will attempt to create the Environment Information and provide help if the usage doesn't match</p>
      *
-     * @param args {@link java.lang.String[]} - the raw arguments passed into the console
+     * @param args {@link java.lang.String} - the raw arguments passed into the console
      * @return {@link EnvironmentInformation} - when not null, the general Information is created for usage within any output structure.
      */
-    public static EnvironmentInformation paramaterCheck(String[] args) {
+    public static EnvironmentInformation paramaterCheck(List<String> args) throws ExceptionHandler {
 
         EngineType flow;
         EnvironmentInformation info = null;
 
+
         //Needs a minimum of at least two arguments, flag type and source directory
-        if (args.length >= 2 && (flow = EngineType.getFromFlag(args[0])) != null) {
+        if (args.size() >= 3 && (flow = EngineType.getFromFlag(args.get(0))) != null) {
+
+            Integer messageLoc = args.indexOf("-m");
+
+            Map<String, List<String>> source_dependencies =
+                    flow.retrieveInputsFromInput(
+                            args.subList(1, args.size()), messageLoc
+                    );
+
+            Listing messageType = Listing.retrieveListingType(
+                    messageLoc != -1 && args.size() == messageLoc + 2
+                            ? args.get(messageLoc + 1) : null);
+
+            info = new EnvironmentInformation(
+                    source_dependencies.get("source"),
+                    flow,
+                    messageType,
+                    source_dependencies.get("dependencies")
+            );
+
+            List<String> messagingArgs = args.subList(
+                    messageLoc != -1 ? messageLoc : args.size() - 1, args.size() - 1
+            );
+
+            if (!info.getMessagingType().getTypeOfMessagingInput().inputValidation(info, messagingArgs.toArray(new String[0]))) {
+                failFast();
+                return null;
+            }
+
+            //region OldMethod
+        /*
 
             ArrayList<String> sourceFiles = new ArrayList<>();
             String dependency = null;
             Integer argumentSplit = -1;
             String filePath;
 
+            //region Old Split
             switch (flow) {
                 //region APK
                 case APK:
@@ -124,6 +150,7 @@ public class ArgumentsCheck {
                     break;
                 //endregion
             }
+            //endregion
 
             String messagingType = args.length >= argumentSplit + 1 ? null : args[argumentSplit];
             info = new EnvironmentInformation(sourceFiles.toArray(new String[0]), flow, messagingType, dependency);
@@ -133,7 +160,8 @@ public class ArgumentsCheck {
                 failFast();
                 return null;
             }
-
+            */
+            //endregion
             return info;
 
         } else {

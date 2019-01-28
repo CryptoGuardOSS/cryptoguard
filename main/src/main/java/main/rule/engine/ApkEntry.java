@@ -5,7 +5,6 @@ import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * @author RigorityJTeam
@@ -22,7 +21,7 @@ public class ApkEntry {
         try {
 
             for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
-                ruleChecker.checkRule(EngineType.APK, Arrays.asList(generalInfo.getSource()), null);
+                ruleChecker.checkRule(EngineType.APK, generalInfo.getSource(), null);
             }
         } catch (IOException e) {
 

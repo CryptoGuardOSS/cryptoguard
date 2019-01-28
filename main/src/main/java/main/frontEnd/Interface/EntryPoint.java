@@ -6,6 +6,7 @@ import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import main.rule.engine.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * @author RigorityJTeam
@@ -20,33 +21,37 @@ public class EntryPoint {
     public static void main(String[] args) {
 
         //Fail Fast on the input validation
-        EnvironmentInformation generalInfo = ArgumentsCheck.paramaterCheck(args);
-        if (generalInfo == null)
-            System.exit(0);
+        try {
+            EnvironmentInformation generalInfo = ArgumentsCheck.paramaterCheck(Arrays.asList(args));
+            if (generalInfo == null)
+                System.exit(0);
 
 
-        ArrayList<AnalysisIssue> issues = null;
-        EntryHandler handler = null;
-        switch (generalInfo.getSourceType()) {
-            case APK:
-                issues = ApkEntry.NonStreamScan(generalInfo);
-                break;
-            case JAR:
-                issues = JarEntry.NonStreamScan(generalInfo);
-                break;
-            case DIR:
-                issues = SourceEntry.NonStreamScan(generalInfo);
-                break;
-            case JAVAFILES:
-                handler = new JavaFileEntry();
-                break;
-            case CLASSFILES:
-                handler = new JavaClassFileEntry();
-                break;
+            ArrayList<AnalysisIssue> issues = null;
+            EntryHandler handler = null;
+            switch (generalInfo.getSourceType()) {
+                case APK:
+                    issues = ApkEntry.NonStreamScan(generalInfo);
+                    break;
+                case JAR:
+                    issues = JarEntry.NonStreamScan(generalInfo);
+                    break;
+                case DIR:
+                    issues = SourceEntry.NonStreamScan(generalInfo);
+                    break;
+                case JAVAFILES:
+                    handler = new JavaFileEntry();
+                    break;
+                case CLASSFILES:
+                    handler = new JavaClassFileEntry();
+                    break;
+            }
+            if (handler != null)
+                issues = handler.NonStreamScan(generalInfo);
+
+            System.out.println(MessageRepresentation.getMessage(generalInfo, issues));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        if (handler != null)
-            issues = handler.NonStreamScan(generalInfo);
-
-        System.out.println(MessageRepresentation.getMessage(generalInfo, issues));
     }
 }

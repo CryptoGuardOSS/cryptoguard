@@ -10,6 +10,7 @@ import org.junit.Test;
 import java.io.FileDescriptor;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -34,7 +35,7 @@ public class MessageRepresentationTest {
     //region Test Environment Creation
     @Before
     public void setUp() throws Exception {
-        this.env = new EnvironmentInformation(new String[]{jarOneName}, jarType, null, Listing.Legacy.getFlag());
+        this.env = new EnvironmentInformation(Arrays.asList(jarOneName), jarType, Listing.Legacy, null);
         this.ruleOneIssue = new AnalysisIssue(1, "<tester.Crypto: void <init>()>", "AES/ECB/PKCS5PADDING");
         this.ruleTwoIssue = new AnalysisIssue(1, "<tester.PasswordUtils: void <init>(java.lang.String)>", "PBEWithMD5AndDES");
     }
@@ -54,7 +55,7 @@ public class MessageRepresentationTest {
         this.outputEngine = new MessageRepresentation(this.env);
 
         assertNotNull(this.outputEngine);
-        assertEquals(this.jarOneName, this.outputEngine.getEnvironment().getSource()[0]);
+        assertEquals(this.jarOneName, this.outputEngine.getEnvironment().getSource().get(0));
         assertEquals(this.jarType, this.outputEngine.getEnvironment().getSourceType());
         assertEquals(0, this.outputEngine.getAnalysisIssues().size());
     }

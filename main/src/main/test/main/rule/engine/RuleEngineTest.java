@@ -23,6 +23,7 @@ public class RuleEngineTest {
     private final String srcOneGrv = basePath.replace("/main", "/testable-jar");
     private final String srcOneGrvDep = "build/dependencies";
     private String jarOneResults;
+    private String jarOneResults_NoPhantoms;
     private final EngineType jarType = EngineType.JAR;
     private final EngineType srcType = EngineType.DIR;
     private String[] args;
@@ -114,6 +115,12 @@ public class RuleEngineTest {
         sampleOne.append("=======================================\n");
         //endregion
         this.jarOneResults = sampleOne.toString();
+
+        StringBuilder noPhantoms = new StringBuilder();
+        for (String line : jarOneResults.split("\n"))
+            if (!line.endsWith(" is a phantom class!"))
+                noPhantoms.append(line).append("\n");
+        jarOneResults_NoPhantoms = noPhantoms.toString();
 
         StringBuilder expected = new StringBuilder();
         //region Building Testable-Jar Output String
@@ -217,7 +224,10 @@ public class RuleEngineTest {
 
                 assertTrue(this.customStream.toString().split("\n").length > 1);
 
-                assertEquals(jarOneResults, this.customStream.toString());
+                Boolean equals_phantoms = jarOneResults.equals(customStream.toString());
+                Boolean equals_nophantoms = jarOneResults_NoPhantoms.equals(customStream.toString());
+
+                assertTrue(equals_phantoms || equals_nophantoms);
             } catch (Exception e) {
                 e.printStackTrace();
                 assertNull(e);

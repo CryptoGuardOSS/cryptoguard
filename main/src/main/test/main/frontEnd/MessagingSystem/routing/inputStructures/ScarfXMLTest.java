@@ -7,6 +7,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -27,7 +29,7 @@ public class ScarfXMLTest {
     public void setUp() throws Exception {
         inputTest = new ScarfXML();
         args = new String[]{"TestSource", type.getName(), dependencies, Listing.ScarfXML.getFlag()};
-        testInfo = new EnvironmentInformation(new String[]{args[0]}, type, args[2], args[3]);
+        testInfo = new EnvironmentInformation(Arrays.asList(args[0]), type, Listing.ScarfXML, Arrays.asList(args[2]));
 
         StringBuilder helpBuilder = new StringBuilder();
 
@@ -56,7 +58,7 @@ public class ScarfXMLTest {
     @Test
     public void testSampleCreation() {
         //EnvironmentInformation newInfo = inputTest.inputValidation(args, dependencies, type);
-        EnvironmentInformation newInfo = new EnvironmentInformation(new String[]{args[0]}, type, args[2], args[3]);
+        EnvironmentInformation newInfo = new EnvironmentInformation(Arrays.asList(args[0]), type, Listing.ScarfXML, Arrays.asList(args[2]));
 
         assertTrue(inputTest.inputValidation(newInfo, new String[]{}));
 

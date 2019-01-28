@@ -34,10 +34,10 @@ public class Legacy implements OutputStructure {
 
         output.append("Analyzing " + source.getSourceType() + ": ");
 
-        for (int sourceKtr = 0; sourceKtr < source.getSource().length; sourceKtr++) {
-            output.append(source.getSource()[sourceKtr]);
+        for (int sourceKtr = 0; sourceKtr < source.getSource().size(); sourceKtr++) {
+            output.append(source.getSource().get(sourceKtr));
 
-            if (sourceKtr != source.getSource().length - 1)
+            if (sourceKtr != source.getSource().size() - 1)
                 output.append(",");
         }
         output.append("\n");
@@ -50,16 +50,17 @@ public class Legacy implements OutputStructure {
 
         //Java 1.7.80 Implementation
         Map<Integer, List<AnalysisIssue>> groupedRules = new HashMap<>();
-        for (AnalysisIssue issue : brokenRules) {
-            List<AnalysisIssue> tempList;
-            if (groupedRules.containsKey(issue.getRuleId())) {
-                tempList = new ArrayList<>(groupedRules.get(issue.getRuleId()));
-                tempList.add(issue);
-            } else {
-                tempList = Collections.singletonList(issue);
+        if (brokenRules != null)
+            for (AnalysisIssue issue : brokenRules) {
+                List<AnalysisIssue> tempList;
+                if (groupedRules.containsKey(issue.getRuleId())) {
+                    tempList = new ArrayList<>(groupedRules.get(issue.getRuleId()));
+                    tempList.add(issue);
+                } else {
+                    tempList = Collections.singletonList(issue);
+                }
+                groupedRules.put(issue.getRuleId(), tempList);
             }
-            groupedRules.put(issue.getRuleId(), tempList);
-        }
         //Java 1.7.80 Implementation
         //endregion
 

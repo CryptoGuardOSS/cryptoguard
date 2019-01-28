@@ -56,9 +56,10 @@ public enum Listing {
      * @return {@link Listing} - The messaging Type retrieved by flag, if not found the default will be used
      */
     public static Listing retrieveListingType(String flag) {
-        for (Listing type : Listing.values())
-            if (type.flag.equals(flag))
-                return type;
+        if (flag != null)
+            for (Listing type : Listing.values())
+                if (type.flag.equals(flag))
+                    return type;
 
         return Listing.Legacy;
     }

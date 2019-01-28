@@ -7,7 +7,6 @@ import main.util.NamedMethodMap;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * @author RigorityJTeam
@@ -30,7 +29,7 @@ public class JavaFileEntry implements EntryHandler {
 
 
             for (RuleChecker ruleChecker : CommonRules.ruleCheckerList)
-                ruleChecker.checkRule(generalInfo.getSourceType(), Arrays.asList(generalInfo.getSource()), generalInfo.getDependencies());
+                ruleChecker.checkRule(generalInfo.getSourceType(), generalInfo.getSource(), generalInfo.getDependencies());
 
             NamedMethodMap.clearCallerCalleeGraph();
             FieldInitializationInstructionMap.reset();

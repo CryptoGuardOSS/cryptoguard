@@ -27,7 +27,11 @@ public class BaseAnalyzerRouting {
                                           List<String> projectDependency, BaseRuleChecker checker) {
         try {
             if (routingType == EngineType.JAR) {
-                setupBaseJar(criteriaClass, criteriaMethod, criteriaParam, snippetPath.get(0), projectDependency.get(0), checker);
+                setupBaseJar(criteriaClass, criteriaMethod, criteriaParam, snippetPath.get(0),
+                        projectDependency.size() >= 1
+                                ? projectDependency.get(0)
+                                : null,
+                        checker);
             } else if (routingType == EngineType.APK) {
                 setupBaseAPK(criteriaClass, criteriaMethod, criteriaParam, snippetPath.get(0), checker);
             } else if (routingType == EngineType.DIR) {
@@ -57,21 +61,24 @@ public class BaseAnalyzerRouting {
 
         List<String> classNames = Utils.getClassNamesFromJarArchive(projectJarPath);
 
-        for (String dependency : Utils.getJarsInDirectory(projectDependencyPath)) {
-            for (String dependencyClazz : Utils.getClassNamesFromJarArchive(dependency)) {
-                if (dependencyClazz.contains(basePackageName)) {
-                    classNames.add(dependencyClazz);
+        if (projectDependencyPath != null)
+            for (String dependency : Utils.getJarsInDirectory(projectDependencyPath)) {
+                for (String dependencyClazz : Utils.getClassNamesFromJarArchive(dependency)) {
+                    if (dependencyClazz.contains(basePackageName)) {
+                        classNames.add(dependencyClazz);
+                    }
                 }
             }
-        }
 
-        String sootClassPath = Utils.buildSootClassPath(projectJarPath,
-                java_home + "/jre/lib/rt.jar",
-                java_home + "/jre/lib/jce.jar",
-                projectDependencyPath);
+        List<String> sootPaths = new ArrayList<>();
+        sootPaths.add(projectJarPath);
+        sootPaths.add(Utils.osPathJoin(java_home, "jre", "lib", "rt.jar"));
+        sootPaths.add(Utils.osPathJoin(java_home, "jre", "lib", "jce.jar"));
 
+        if (projectDependencyPath != null)
+            sootPaths.add(projectJarPath);
 
-        Scene.v().setSootClassPath(sootClassPath);
+        Scene.v().setSootClassPath(Utils.buildSootClassPath(sootPaths));
 
         loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
 

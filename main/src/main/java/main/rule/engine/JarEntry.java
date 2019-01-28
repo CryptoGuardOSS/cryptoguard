@@ -5,7 +5,6 @@ import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * @author RigorityJTeam
@@ -20,7 +19,7 @@ public class JarEntry {
         ArrayList<AnalysisIssue> issues = null;
         try {
             for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
-                ruleChecker.checkRule(EngineType.JAR, Arrays.asList(generalInfo.getSource()), generalInfo.getDependencies());
+                ruleChecker.checkRule(EngineType.JAR, generalInfo.getSource(), generalInfo.getDependencies());
             }
         } catch (IOException e) {
 

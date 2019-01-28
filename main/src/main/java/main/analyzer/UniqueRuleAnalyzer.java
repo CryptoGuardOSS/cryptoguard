@@ -32,7 +32,10 @@ public class UniqueRuleAnalyzer {
 
     public static List<String> environmentRouting(List<String> projectJarPath, List<String> projectDependencyPath, EngineType routingType) {
         if (routingType == EngineType.JAR) {
-            return setupBaseJarEnv(projectJarPath.get(0), projectDependencyPath.get(0));
+            return setupBaseJarEnv(projectJarPath.get(0),
+                    projectDependencyPath.size() >= 1
+                            ? projectDependencyPath.get(0)
+                            : null); //TODO - Add dep null
         } else if (routingType == EngineType.APK) {
             return setupBaseAPKEnv(projectJarPath.get(0));
         } else if (routingType == EngineType.DIR) {
@@ -48,12 +51,15 @@ public class UniqueRuleAnalyzer {
 
         String java_home = Utils.getJAVA_HOME();
 
-        String sootClassPath = Utils.buildSootClassPath(projectJarPath,
-                java_home + "/jre/lib/rt.jar",
-                java_home + "/jre/lib/jce.jar",
-                projectDependencyPath);
+        List<String> sootPaths = new ArrayList<>();
+        sootPaths.add(projectJarPath);
+        sootPaths.add(Utils.osPathJoin(java_home, "jre", "lib", "rt.jar"));
+        sootPaths.add(Utils.osPathJoin(java_home, "jre", "lib", "jce.jar"));
 
-        Scene.v().setSootClassPath(sootClassPath);
+        if (projectDependencyPath != null)
+            sootPaths.add(projectJarPath);
+
+        Scene.v().setSootClassPath(Utils.buildSootClassPath(sootPaths));
 
         Utils.loadSootClasses(null);
 

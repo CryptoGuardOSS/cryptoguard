@@ -5,7 +5,6 @@ import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * @author RigorityJTeam
@@ -27,7 +26,7 @@ public class JavaClassFileEntry implements EntryHandler {
         try {
 
             for (RuleChecker ruleChecker : CommonRules.ruleCheckerList)
-                ruleChecker.checkRule(generalInfo.getSourceType(), Arrays.asList(generalInfo.getSource()), generalInfo.getDependencies());
+                ruleChecker.checkRule(generalInfo.getSourceType(), generalInfo.getSource(), generalInfo.getDependencies());
 
 
         } catch (IOException e) {

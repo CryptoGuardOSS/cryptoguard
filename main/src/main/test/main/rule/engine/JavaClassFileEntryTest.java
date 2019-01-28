@@ -13,6 +13,7 @@ import java.io.FileDescriptor;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertNull;
@@ -51,7 +52,7 @@ public class JavaClassFileEntryTest {
     @Before
     public void setUp() throws Exception {
         this.customStream = new ByteArrayOutputStream();
-        this.info = new EnvironmentInformation(new String[]{javaClassPath}, fileType, output.getFlag(), null);
+        this.info = new EnvironmentInformation(Arrays.asList(javaClassPath), fileType, output, null);
 
     }
 

@@ -33,7 +33,7 @@ public class EnvironmentInformation {
     private String packageVersion;
     //endregion
     //region Required Elements Set From the Start
-    private final String[] Source;
+    private final List<String> Source;
     private Boolean prettyPrint = false;
     private PrintStream internalErrors;
     private List<String> dependencies;
@@ -65,7 +65,7 @@ public class EnvironmentInformation {
      * @param dependencies  {@link java.lang.String} - The location of the directory of the sources dependencies
      * @param messagingType {@link java.lang.String} - The flag passed in to determine the type of messaging system from {@link Listing}
      */
-    public EnvironmentInformation(@Nonnull String[] source, @Nonnull EngineType sourceType, String messagingType, String... dependencies) {
+    public EnvironmentInformation(@Nonnull List<String> source, @Nonnull EngineType sourceType, Listing messagingType, List<String> dependencies) {
 
         //region Setting Internal Version Settings
         String tempToolFrameworkVersion;
@@ -104,8 +104,8 @@ public class EnvironmentInformation {
         this.Source = source;
         this.sourceType = sourceType;
         if (dependencies != null)
-            this.dependencies = Arrays.asList(dependencies);
-        this.messagingType = Listing.retrieveListingType(messagingType);
+            this.dependencies = dependencies;
+        this.messagingType = messagingType;
         //endregion
 
     }
@@ -161,9 +161,9 @@ public class EnvironmentInformation {
      *
      * <p>getSource()</p>
      *
-     * @return {@link String[]} - Returns the Source field
+     * @return {@link java.util.List<java.lang.String>} - Returns the Source field
      */
-    public String[] getSource() {
+    public List<String> getSource() {
         return Source;
     }
 

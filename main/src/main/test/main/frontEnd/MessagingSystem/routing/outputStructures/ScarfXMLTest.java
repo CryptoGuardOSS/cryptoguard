@@ -27,6 +27,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import static junit.framework.TestCase.*;
@@ -65,7 +66,7 @@ public class ScarfXMLTest {
 
         this.type = EngineType.JAR;
 
-        this.env = new EnvironmentInformation(new String[]{this.source}, this.type, null, Listing.ScarfXML.getFlag());
+        this.env = new EnvironmentInformation(Arrays.asList(source), this.type, Listing.ScarfXML, null);
         //region Setting Scarf XML Required Fields
         this.env.setAssessmentFramework("STUBBED");
         this.env.setAssessmentFrameworkVersion("STUBBED");
