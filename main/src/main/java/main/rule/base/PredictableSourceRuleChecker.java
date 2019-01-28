@@ -192,14 +192,14 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
             if (usebox.getValue() instanceof Constant) {
 
                 if (usebox.getValue().toString().equals("null") ||
-                        usebox.getValue().toString().equals("\"\"")) {
+                        usebox.getValue().toString().equals("\"null\"") ||
+                        usebox.getValue().toString().equals("\"\"") ||
+                        usebox.getValue().toString().contains(" = class ")) {
                     putIntoMap(othersSourceMap, e, usebox.getValue().toString());
                     continue;
                 }
 
-                if (e.getUnit().toString().contains("[" + usebox.getValue() + "]")) {
-                    putIntoMap(othersSourceMap, e, usebox.getValue().toString());
-                } else if (e.getUnit() instanceof JAssignStmt) {
+                if (e.getUnit() instanceof JAssignStmt) {
                     if (((AssignStmt) e.getUnit()).containsInvokeExpr()) {
                         InvokeExpr invokeExpr = ((AssignStmt) e.getUnit()).getInvokeExpr();
                         List<Value> args = invokeExpr.getArgs();
@@ -210,10 +210,15 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
                             }
                         }
                     } else if (usebox.getValue().getType() instanceof IntegerType) {
-                        if (e.getUnit().toString().contains(" = " + usebox.getValue())) {
-                            outSet.put(e, usebox.getValue().toString());
-                        } else {
-                            putIntoMap(othersSourceMap, e, usebox.getValue().toString());
+
+                        List<ValueBox> defBoxes = e.getUnit().getDefBoxes();
+
+                        if (defBoxes != null && !defBoxes.isEmpty()) {
+                            if (usebox instanceof RValueBox && defBoxes.get(0).getValue().getType() instanceof ByteType) {
+                                outSet.put(e, usebox.getValue().toString());
+                            } else {
+                                putIntoMap(othersSourceMap, e, usebox.getValue().toString());
+                            }
                         }
 
                     } else {
@@ -228,7 +233,9 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
                 } else if (e.getUnit().toString().contains(" newarray ")) {
                     putIntoMap(othersSourceMap, e, usebox.getValue().toString());
                 } else {
-                    outSet.put(e, usebox.getValue().toString());
+                    if (usebox.getValue().getType() instanceof LongType || usebox.getValue().toString().startsWith("\"")) {
+                        outSet.put(e, usebox.getValue().toString());
+                    }
                 }
             }
         }
