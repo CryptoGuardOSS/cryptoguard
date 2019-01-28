@@ -25,6 +25,7 @@ public class EntryPointTest {
     private final String srcOneGrvDep = Utils.osPathJoin("build", "dependencies");
 
     private StringBuilder main_TestableJar_results = new StringBuilder();
+    private StringBuilder main_TestableJar_results_noheader = new StringBuilder();
     private StringBuilder main_TestableJarSource_results = new StringBuilder();
     //endregion
 
@@ -115,7 +116,7 @@ public class EntryPointTest {
         //endregion
 
         //region Building main_TestableJarSource_results-Jar String
-        main_TestableJarSource_results.append("Analyzing Project: " + srcOneGrv + "\n");
+        //main_TestableJarSource_results.append("Analyzing Project: " + srcOneGrv + "\n");
         main_TestableJarSource_results.append("Analyzing Module: testable-jar\n");
         main_TestableJarSource_results.append("=======================================\n");
         main_TestableJarSource_results.append("***Violated Rule 5: Used export grade public Key \n");
@@ -173,6 +174,11 @@ public class EntryPointTest {
         main_TestableJarSource_results.append("=======================================\n");
         //endregion
 
+        for (String line : main_TestableJar_results.toString().split("\n"))
+            if (!line.startsWith("Analyzing "))
+                main_TestableJar_results_noheader.append(line).append("\n");
+        main_TestableJar_results.append("\n");
+
         engine = new EntryPoint();
         out = new ByteArrayOutputStream();
     }
@@ -223,7 +229,11 @@ public class EntryPointTest {
 
                 assertTrue(out.toString().split("\n").length > 1);
 
-                assertEquals(main_TestableJar_results, out.toString());
+                Boolean results_header = main_TestableJar_results.equals(out.toString());
+                Boolean results_no_header = main_TestableJar_results_noheader.equals(out.toString());
+
+                //assertTrue(results_header || results_no_header);
+                assertEquals(main_TestableJar_results_noheader.toString(), out.toString());
             } catch (Exception e) {
                 e.printStackTrace();
                 assertNull(e);
@@ -245,7 +255,7 @@ public class EntryPointTest {
 
                 assertTrue(out.toString().split("\n").length > 1);
 
-                assertEquals(main_TestableJarSource_results, out.toString());
+                assertEquals(main_TestableJarSource_results.toString(), out.toString());
             } catch (Exception e) {
                 e.printStackTrace();
                 assertNull(e);

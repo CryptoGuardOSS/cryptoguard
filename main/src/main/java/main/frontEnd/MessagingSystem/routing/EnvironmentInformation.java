@@ -99,8 +99,9 @@ public class EnvironmentInformation {
         //endregion
 
         //region Setting Required Attributes
-        internalErrors = new PrintStream(new ByteArrayOutputStream());
-        System.setOut(internalErrors);
+        //internalErrors = new PrintStream(new ByteArrayOutputStream());
+        //System.setOut(internalErrors);
+
         this.Source = source;
         this.sourceType = sourceType;
         if (dependencies != null)
@@ -240,7 +241,6 @@ public class EnvironmentInformation {
     public String getPlatformName() {
         return platformName;
     }
-
 
     /**
      * <p>getAssessmentFramework.</p>
@@ -425,6 +425,7 @@ public class EnvironmentInformation {
      * @return a {@link PrintStream} object.
      */
     public PrintStream getInternalErrors() {
+        //openConsoleStream();
         return internalErrors;
     }
 
