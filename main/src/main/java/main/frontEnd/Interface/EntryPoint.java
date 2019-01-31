@@ -1,6 +1,7 @@
 package main.frontEnd.Interface;
 
 import main.frontEnd.MessagingSystem.AnalysisIssue;
+import main.frontEnd.MessagingSystem.MessageRepresentation;
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import main.rule.engine.*;
 
@@ -48,7 +49,7 @@ public class EntryPoint {
             if (handler != null)
                 issues = handler.NonStreamScan(generalInfo);
 
-            //System.out.println(MessageRepresentation.getMessage(generalInfo, issues));
+            System.out.println(MessageRepresentation.getMessage(generalInfo, issues));
             //System.out.println(generalInfo.getInternalErrors());
         } catch (Exception e) {
             e.printStackTrace();

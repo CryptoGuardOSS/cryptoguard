@@ -59,7 +59,7 @@ public class SourceEntry {
                     System.out.println(output.substring(0, output.length() - 2));
 
                     for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
-                        ruleChecker.checkRule(EngineType.DIR, dependencies, otherdependencies);
+                        ruleChecker.checkRule(EngineType.DIR, dependencies, otherdependencies, generalInfo.getPrintOut());
                     }
 
                     NamedMethodMap.clearCallerCalleeGraph();

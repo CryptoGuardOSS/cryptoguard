@@ -1,6 +1,7 @@
 package main.rule;
 
 import main.analyzer.UniqueRuleAnalyzer;
+import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.rule.engine.EngineType;
 import main.rule.engine.RuleChecker;
 import main.slicer.forward.ForwardInfluenceInstructions;
@@ -43,7 +44,9 @@ public class SSLSocketFactoryFinder implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath) throws IOException {
+    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printOut) throws IOException {
+
+        ArrayList<AnalysisIssue> issues = printOut ? null : new ArrayList<AnalysisIssue>();
 
         for (String slicing_criterion : SLICING_CRITERIA) {
 
@@ -90,112 +93,26 @@ public class SSLSocketFactoryFinder implements RuleChecker {
                     }
 
                     if (getSocketAppeared && isVulnerable) {
-                        System.out.println("=======================================");
-                        String output = "***Violated Rule 12: Does not manually verify the hostname";
-                        output += "\n***Cause: should have manually verify hostname in " + method;
-                        System.out.println(output);
-                        System.out.println("=======================================");
+                        if (printOut) {
+                            System.out.println("=======================================");
+                            String output = "***Violated Rule 12: Does not manually verify the hostname";
+                            output += "\n***Cause: should have manually verify hostname in " + method;
+                            System.out.println(output);
+                            System.out.println("=======================================");
+                        } else {
+                            issues.add(new AnalysisIssue(
+                                    12,
+                                    method,
+                                    "Cause: should have manually verify hostname in " + method
+                            ));
+                        }
                     }
 
                 }
             }
         }
-
+        return issues;
     }
-
-    /*
-    private Map<String, List<Unit>> analyzeJar(String projectJarPath, String projectDependencyPath, SlicingCriteria slicingCriteria) throws IOException {
-        String javaHome = System.getenv("JAVA_HOME");
-
-        if (javaHome.isEmpty()) {
-
-            System.err.println("Please set JAVA_HOME");
-            System.exit(1);
-        }
-
-        String sootClassPath = Utils.buildSootClassPath(projectJarPath,
-                javaHome + "/jre/lib/rt.jar",
-                javaHome + "/jre/lib/jce.jar",
-                projectDependencyPath);
-        Options.v().set_keep_line_number(true);
-        Options.v().set_allow_phantom_refs(true);
-
-        Scene.v().setSootClassPath(sootClassPath);
-
-        Scene.v().loadBasicClasses();
-
-        List<String> classNames = Utils.getClassNamesFromJarArchive(projectJarPath);
-        return getForwardSlice(classNames, slicingCriteria);
-    }
-
-    private Map<String, List<Unit>> analyzeApk(String projectJarPath, SlicingCriteria slicingCriteria) throws IOException {
-        String javaHome = System.getenv("JAVA_HOME");
-        String androidHome = System.getenv("ANDROID_SDK_HOME");
-
-        if (javaHome == null) {
-
-            System.err.println("Please set JAVA_HOME");
-            System.exit(1);
-        }
-
-        if (androidHome == null) {
-
-            System.err.println("Please set ANDROID_SDK_HOME");
-            System.exit(1);
-        }
-
-        Options.v().set_keep_line_number(true);
-        Options.v().set_src_prec(Options.src_prec_apk);
-        Options.v().set_android_jars(androidHome + "/platforms");
-        Options.v().set_soot_classpath(javaHome + "/jre/lib/rt.jar:" + javaHome + "/jre/lib/jce.jar");
-
-        Options.v().set_process_dir(Collections.singletonList(projectJarPath));
-        Options.v().set_whole_program(true);
-        Options.v().set_allow_phantom_refs(true);
-
-        Scene.v().loadBasicClasses();
-
-        List<String> classNames = getClassNamesFromApkArchive(projectJarPath);
-        return getForwardSlice(classNames, slicingCriteria);
-    }
-
-    private Map<String, List<Unit>> analyzeSnippet(List<String> snippetPath, List<String> projectDependencyPath, SlicingCriteria slicingCriteria) throws IOException {
-
-        String javaHome = System.getenv("JAVA7_HOME");
-
-        if (javaHome.isEmpty()) {
-
-            System.err.println("Please set JAVA7_HOME");
-            System.exit(1);
-        }
-
-        List<String> classNames = Utils.getClassNamesFromSnippet(snippetPath);
-
-        StringBuilder srcPaths = new StringBuilder();
-
-        for (String srcDir : snippetPath) {
-            srcPaths.append(srcDir)
-                    .append(":");
-        }
-
-        Options.v().set_soot_classpath(javaHome + "/jre/lib/rt.jar:"
-                + javaHome + "/jre/lib/jce.jar:" + srcPaths.toString() + Utils.buildSootClassPath(projectDependencyPath));
-
-        Options.v().set_output_format(Options.output_format_jimple);
-        Options.v().set_src_prec(Options.src_prec_java);
-
-        for (String className : classNames) {
-            Options.v().classes().add(className);
-        }
-
-        Options.v().set_keep_line_number(true);
-        Options.v().set_allow_phantom_refs(true);
-
-        Scene.v().loadBasicClasses();
-
-        return getForwardSlice(classNames, slicingCriteria);
-    }
-    */
 
     private static Map<String, List<Unit>> getForwardSlice(List<String> classNames, SlicingCriteria slicingCriteria) {
 

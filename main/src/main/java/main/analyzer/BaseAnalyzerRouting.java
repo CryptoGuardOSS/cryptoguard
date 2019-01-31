@@ -83,6 +83,7 @@ public class BaseAnalyzerRouting {
         loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
 
     }
+
     //endregion
     //region APK
     public static void setupBaseAPK(String criteriaClass,
@@ -102,6 +103,7 @@ public class BaseAnalyzerRouting {
 
         loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
     }
+
     //endregion
     //region BaseDir
     public static void setupBaseDir(String criteriaClass,
@@ -126,6 +128,7 @@ public class BaseAnalyzerRouting {
 
         loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
     }
+
     //endregion
     //region JavaFiles
     //Like Dir
@@ -147,6 +150,7 @@ public class BaseAnalyzerRouting {
 
         loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
     }
+
     //endregion
     //region JavaClassFiles
     //Like Jar

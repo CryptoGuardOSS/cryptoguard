@@ -16,6 +16,7 @@ import soot.util.Chain;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -29,7 +30,6 @@ import java.util.zip.ZipInputStream;
  */
 public class Utils {
     /**
-     * //TODO Possible work usages
      * {@link main.util.Utils#getClassNamesFromJarArchive}
      * {@link main.util.Utils#retrieveFullyQualifiedName}
      * - Enhance this to look for package declarations not at the top of the file
@@ -40,6 +40,10 @@ public class Utils {
      */
 
     private static String fileSep = System.getProperty("file.separator");
+    private static Pattern sootClassPattern = Pattern.compile("[<](.+)[:]");
+    private static Pattern sootFoundPattern = Pattern.compile("\\[(.+)\\]");
+    private static Pattern sootCausePattern = Pattern.compile("Cause: (.+) [<]");
+    private static Pattern sootLineNumPattern = Pattern.compile("\\(\\)\\>\\[(\\d+)\\]");
 
     /**
      * <p>getClassNamesFromJarArchive.</p>
@@ -432,7 +436,6 @@ public class Utils {
         return fullPath;
     }
 
-
     public static String retrieveFullyQualifiedName(String in) {
 
         String sourcePackage = trimFilePath(in);
@@ -587,5 +590,31 @@ public class Utils {
         Scene.v().loadBasicClasses();
     }
 
+    public static String retrieveClassNameFromSootString(String sootString) {
+        Matcher matches = sootClassPattern.matcher(sootString);
+        if (!matches.matches())
+            return "UNKNOWN";
+        return matches.group(matches.end());
+    }
 
+    public static String retrieveFoundPatternFromSootString(String sootString) {
+        Matcher matches = sootFoundPattern.matcher(sootString);
+        if (!matches.matches())
+            return "NONE";
+        return matches.group(matches.start()).replaceAll("\"", "");
+    }
+
+    public static String retrieveCauseFromSootString(String sootString) {
+        Matcher matches = sootCausePattern.matcher(sootString);
+        if (!matches.matches())
+            return "NONE";
+        return matches.group(matches.start()).replaceAll("in method:", "").replaceAll("in Method", "");
+    }
+
+    public static Integer retrieveLineNumFromSootString(String sootString) {
+        Matcher matches = sootLineNumPattern.matcher(sootString);
+        if (!matches.matches())
+            return -1;
+        return Integer.parseInt(matches.group(matches.end()));
+    }
 }

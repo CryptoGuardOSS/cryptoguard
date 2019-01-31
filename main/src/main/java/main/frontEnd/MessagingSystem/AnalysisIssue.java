@@ -1,7 +1,9 @@
 package main.frontEnd.MessagingSystem;
 
+import main.analyzer.backward.UnitContainer;
 import main.rule.engine.Criteria;
 import main.rule.engine.RuleList;
+import main.util.Utils;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -98,6 +100,40 @@ public class AnalysisIssue {
         this.issueCause = cause;
         this.rule = RuleList.getRuleByRuleNumber(ruleNumber);
     }
+
+    public AnalysisIssue(UnitContainer unit, Integer ruleNumber, String sootString) {
+        Integer lineNum;
+
+        if ((lineNum = unit.getUnit().getJavaSourceStartLineNumber()) >= 0) {
+            AnalysisLocation tempLoc = new AnalysisLocation(lineNum);
+            if (unit.getUnit().getJavaSourceStartColumnNumber() >= 0) {
+                tempLoc.setColStart(unit.getUnit().getJavaSourceStartColumnNumber());
+                tempLoc.setColEnd(unit.getUnit().getJavaSourceStartColumnNumber());
+            }
+
+            this.addMethod(unit.getMethod(), tempLoc);
+        }
+
+        this.className = Utils.retrieveClassNameFromSootString(sootString);
+        this.rule = RuleList.getRuleByRuleNumber(ruleNumber);
+
+        if (sootString.startsWith("Found"))
+            this.issueInformation = Utils.retrieveFoundPatternFromSootString(sootString);
+        else //Cause
+        {
+            this.issueCause = Utils.retrieveCauseFromSootString(sootString);
+            if (lineNum <= 0) {
+                this.addMethod(unit.getMethod(),
+                        new AnalysisLocation(
+                                Utils.retrieveLineNumFromSootString(sootString)));
+            }
+        }
+
+        if (this.getMethods().empty())
+            this.addMethod(unit.getMethod());
+
+    }
+
     //endregion
 
     //region Getters/Setters

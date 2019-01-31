@@ -1,6 +1,7 @@
 package main.rule;
 
 import main.analyzer.UniqueRuleAnalyzer;
+import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.rule.engine.EngineType;
 import main.rule.engine.RuleChecker;
 import main.slicer.forward.ForwardInfluenceInstructions;
@@ -44,7 +45,9 @@ public class DefaultExportGradeKeyFinder implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath) throws IOException {
+    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printOut) throws IOException {
+
+        ArrayList<AnalysisIssue> issues = printOut ? null : new ArrayList<AnalysisIssue>();
 
         for (String slicing_criterion : SLICING_CRITERIA) {
 
@@ -76,17 +79,26 @@ public class DefaultExportGradeKeyFinder implements RuleChecker {
                     }
 
                     if (isDefault && !defaultSecure) {
-                        System.out.println("=======================================");
-                        String output = "***Violated Rule 5: Used export grade public Key ";
-                        output += "\n***Cause: Used default key size in method: " + method;
-                        System.out.println(output);
-                        System.out.println("=======================================");
+                        if (printOut) {
+                            System.out.println("=======================================");
+                            String output = "***Violated Rule 5: Used export grade public Key ";
+                            output += "\n***Cause: Used default key size in method: " + method;
+                            System.out.println(output);
+                            System.out.println("=======================================");
+                        } else {
+                            issues.add(new AnalysisIssue(
+                                    5,
+                                    method,
+                                    "Cause: Used default key size in method: " + method
+
+                            ));
+                        }
                     }
 
                 }
             }
         }
-
+        return issues;
     }
 
     /**

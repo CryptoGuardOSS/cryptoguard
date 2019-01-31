@@ -3,6 +3,7 @@ package main.rule.base;
 import main.analyzer.BaseAnalyzerRouting;
 import main.analyzer.backward.Analysis;
 import main.analyzer.backward.UnitContainer;
+import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.rule.engine.Criteria;
 import main.rule.engine.EngineType;
 import main.rule.engine.RuleChecker;
@@ -47,7 +48,7 @@ public abstract class BaseRuleChecker implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public void checkRule(EngineType type, List<String> projectPaths, List<String> projectDependencyPath) throws IOException {
+    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectPaths, List<String> projectDependencyPath, Boolean printout) throws IOException {
 
         String[] excludes = {"web.xml", "pom.xml"};
 
@@ -61,7 +62,11 @@ public abstract class BaseRuleChecker implements RuleChecker {
                     projectDependencyPath, this);
         }
 
-        printAnalysisOutput(xmlFileStr);
+        if (printout) {
+            printAnalysisOutput(xmlFileStr);
+            return null;
+        } else
+            return createAnalysisOutput(xmlFileStr);
     }
 
     /**
@@ -84,6 +89,8 @@ public abstract class BaseRuleChecker implements RuleChecker {
      * @param xmlFileStr a {@link java.util.Map} object.
      */
     public abstract void printAnalysisOutput(Map<String, String> xmlFileStr);
+
+    public abstract ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr);
 
     /**
      * <p>putIntoMap.</p>

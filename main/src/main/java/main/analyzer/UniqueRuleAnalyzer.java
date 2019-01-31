@@ -35,7 +35,7 @@ public class UniqueRuleAnalyzer {
             return setupBaseJarEnv(projectJarPath.get(0),
                     projectDependencyPath.size() >= 1
                             ? projectDependencyPath.get(0)
-                            : null); //TODO - Add dep null
+                            : null);
         } else if (routingType == EngineType.APK) {
             return setupBaseAPKEnv(projectJarPath.get(0));
         } else if (routingType == EngineType.DIR) {

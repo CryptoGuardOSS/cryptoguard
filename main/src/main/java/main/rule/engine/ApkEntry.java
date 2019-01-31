@@ -21,7 +21,7 @@ public class ApkEntry {
         try {
 
             for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
-                ruleChecker.checkRule(EngineType.APK, generalInfo.getSource(), null);
+                ruleChecker.checkRule(EngineType.APK, generalInfo.getSource(), null, generalInfo.getPrintOut());
             }
         } catch (IOException e) {
 

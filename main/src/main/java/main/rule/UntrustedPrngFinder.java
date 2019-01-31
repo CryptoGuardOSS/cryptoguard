@@ -1,6 +1,7 @@
 package main.rule;
 
 import main.analyzer.UniqueRuleAnalyzer;
+import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.rule.engine.EngineType;
 import main.rule.engine.RuleChecker;
 import soot.*;
@@ -28,24 +29,34 @@ public class UntrustedPrngFinder implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath) throws IOException {
+    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printOut) throws IOException {
 
         Map<String, List<Unit>> analysisLists = getUntrustedPrngInstructions(
                 UniqueRuleAnalyzer.environmentRouting(projectJarPath, projectDependencyPath, type));
+
+        ArrayList<AnalysisIssue> issues = printOut ? null : new ArrayList<AnalysisIssue>();
 
         if (!analysisLists.isEmpty()) {
             for (String method : analysisLists.keySet()) {
                 List<Unit> analysis = analysisLists.get(method);
 
                 if (!analysis.isEmpty()) {
-                    System.out.println("=============================================");
-                    String output = "***Violated Rule 13: Untrused PRNG (java.util.Random) Found in " + method;
-                    System.out.println(output);
-                    System.out.println("=============================================");
+                    if (printOut) {
+                        System.out.println("=============================================");
+                        String output = "***Violated Rule 13: Untrused PRNG (java.util.Random) Found in " + method;
+                        System.out.println(output);
+                        System.out.println("=============================================");
+                    } else {
+                        issues.add(new AnalysisIssue(
+                                13,
+                                method,
+                                "Found in " + method
+                        ));
+                    }
                 }
             }
         }
-
+        return issues;
     }
 
     private static Map<String, List<Unit>> getUntrustedPrngInstructions(List<String> classNames) {

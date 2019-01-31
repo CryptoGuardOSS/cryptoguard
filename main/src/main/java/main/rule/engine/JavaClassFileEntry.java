@@ -26,7 +26,8 @@ public class JavaClassFileEntry implements EntryHandler {
         try {
 
             for (RuleChecker ruleChecker : CommonRules.ruleCheckerList)
-                ruleChecker.checkRule(generalInfo.getSourceType(), generalInfo.getSource(), generalInfo.getDependencies());
+                ruleChecker.checkRule(generalInfo.getSourceType(), generalInfo.getSource(), generalInfo.getDependencies(),
+                        generalInfo.getPrintOut());
 
 
         } catch (IOException e) {

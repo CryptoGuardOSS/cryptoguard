@@ -51,6 +51,7 @@ public class EnvironmentInformation {
     private String buildRootDir;
     private Integer buildId;
     private String xPath;
+    private Boolean printOut = false;
     //endregion
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     //endregion
@@ -177,6 +178,17 @@ public class EnvironmentInformation {
      */
     public void setPrettyPrint(Boolean prettyPrint) {
         this.prettyPrint = prettyPrint;
+    }
+
+    /**
+     * Getter for printOut
+     *
+     * <p>getPrintOut()</p>
+     *
+     * @return {@link Boolean} - The printOut.
+     */
+    public Boolean getPrintOut() {
+        return printOut;
     }
 
     /**

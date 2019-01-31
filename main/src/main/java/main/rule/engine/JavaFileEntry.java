@@ -29,7 +29,8 @@ public class JavaFileEntry implements EntryHandler {
 
 
             for (RuleChecker ruleChecker : CommonRules.ruleCheckerList)
-                ruleChecker.checkRule(generalInfo.getSourceType(), generalInfo.getSource(), generalInfo.getDependencies());
+                ruleChecker.checkRule(generalInfo.getSourceType(), generalInfo.getSource(), generalInfo.getDependencies(),
+                        generalInfo.getPrintOut());
 
             NamedMethodMap.clearCallerCalleeGraph();
             FieldInitializationInstructionMap.reset();

@@ -1,6 +1,9 @@
 package main.rule.engine;
 
+import main.frontEnd.MessagingSystem.AnalysisIssue;
+
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,5 +23,5 @@ public interface RuleChecker {
      * @param projectDependencyPath the path to the dependencies of the project
      * @throws java.io.IOException In case there is an issue interpreting the project
      */
-    public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath) throws IOException;
+    ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printout) throws IOException;
 }
