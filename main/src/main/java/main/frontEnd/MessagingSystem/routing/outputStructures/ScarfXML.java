@@ -62,6 +62,7 @@ public class ScarfXML implements OutputStructure {
 
             //region Creating Bug Instances
             for (int ktr = 0; ktr < brokenRules.size(); ktr++) {
+
                 BugInstanceType instance = new BugInstanceType();
                 AnalysisIssue issue = brokenRules.get(ktr);
 
@@ -76,10 +77,12 @@ public class ScarfXML implements OutputStructure {
                 instance.setBugGroup(issue.getRule().getDesc());
                 instance.setBugMessage(issue.getRule().getDesc());
 
-                BugTraceType trace = new BugTraceType();
-                trace.setBuildId(source.getBuildId());
-                trace.setAssessmentReportFile(source.getxPath());
-                instance.setBugTrace(trace);
+                if (source.getBuildId() != null || source.getxPath() != null) {
+                    BugTraceType trace = new BugTraceType();
+                    trace.setBuildId(source.getBuildId());
+                    trace.setAssessmentReportFile(source.getxPath());
+                    instance.setBugTrace(trace);
+                }
 
                 for (CWE cwe : issue.getRule().retrieveCWEInfo(cwes))
                     instance.getCweld().add(String.valueOf(cwe.getId()));
@@ -146,7 +149,7 @@ public class ScarfXML implements OutputStructure {
             Marshaller marshaller = context.createMarshaller();
 
             //Settings Properties of the Marshaller
-            if (source.prettyPrint()) {
+            if (source.prettyPrint() || true) { //TODO - Temp Enabled this
                 marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             }
 

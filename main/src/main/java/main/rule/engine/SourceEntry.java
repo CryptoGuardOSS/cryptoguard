@@ -18,10 +18,13 @@ import java.util.Map;
  *
  * <p>The method in the Engine handling Source Scanning</p>
  */
-public class SourceEntry {
+public class SourceEntry implements EntryHandler {
 
-    public static ArrayList<AnalysisIssue> NonStreamScan(EnvironmentInformation generalInfo) {
-        ArrayList<AnalysisIssue> issues = null;
+    /**
+     * {@inheritDoc}
+     */
+    public ArrayList<AnalysisIssue> NonStreamScan(EnvironmentInformation generalInfo) {
+        ArrayList<AnalysisIssue> issues = generalInfo.getPrintOut() ? null : new ArrayList<AnalysisIssue>();
 
         try {
             BuildFileParser buildFileParser = BuildFileParserFactory.getBuildfileParser(generalInfo.getSource().get(0));
@@ -59,7 +62,10 @@ public class SourceEntry {
                     System.out.println(output.substring(0, output.length() - 2));
 
                     for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
-                        ruleChecker.checkRule(EngineType.DIR, dependencies, otherdependencies, generalInfo.getPrintOut());
+                        ArrayList<AnalysisIssue> tempIssues = ruleChecker.checkRule(EngineType.DIR, dependencies, otherdependencies, generalInfo.getPrintOut());
+
+                        if (!generalInfo.getPrintOut())
+                            issues.addAll(tempIssues);
                     }
 
                     NamedMethodMap.clearCallerCalleeGraph();

@@ -13,14 +13,22 @@ import java.util.ArrayList;
  *
  * <p>The method in the Engine handling Jar Scanning</p>
  */
-public class JarEntry {
+public class JarEntry implements EntryHandler {
 
-    public static ArrayList<AnalysisIssue> NonStreamScan(EnvironmentInformation generalInfo) {
-        ArrayList<AnalysisIssue> issues = null;
+    /**
+     * {@inheritDoc}
+     */
+    public ArrayList<AnalysisIssue> NonStreamScan(EnvironmentInformation generalInfo) {
+
+        ArrayList<AnalysisIssue> issues = generalInfo.getPrintOut() ? null : new ArrayList<AnalysisIssue>();
         try {
             for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
-                ruleChecker.checkRule(EngineType.JAR, generalInfo.getSource(), generalInfo.getDependencies(),
+                ArrayList<AnalysisIssue> tempIssues = ruleChecker.checkRule(EngineType.JAR, generalInfo.getSource(), generalInfo.getDependencies(),
                         generalInfo.getPrintOut());
+
+
+                if (!generalInfo.getPrintOut())
+                    issues.addAll(tempIssues);
             }
         } catch (IOException e) {
 

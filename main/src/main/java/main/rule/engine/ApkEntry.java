@@ -13,15 +13,21 @@ import java.util.ArrayList;
  *
  * <p>The method in the Engine handling Apk Scanning</p>
  */
-public class ApkEntry {
+public class ApkEntry implements EntryHandler {
 
-    public static ArrayList<AnalysisIssue> NonStreamScan(EnvironmentInformation generalInfo) {
-        ArrayList<AnalysisIssue> issues = null;
+    /**
+     * {@inheritDoc}
+     */
+    public ArrayList<AnalysisIssue> NonStreamScan(EnvironmentInformation generalInfo) {
+        ArrayList<AnalysisIssue> issues = generalInfo.getPrintOut() ? null : new ArrayList<AnalysisIssue>();
 
         try {
 
             for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
-                ruleChecker.checkRule(EngineType.APK, generalInfo.getSource(), null, generalInfo.getPrintOut());
+                ArrayList<AnalysisIssue> tempIssues = ruleChecker.checkRule(EngineType.APK, generalInfo.getSource(), null, generalInfo.getPrintOut());
+
+                if (!generalInfo.getPrintOut())
+                    issues.addAll(tempIssues);
             }
         } catch (IOException e) {
 

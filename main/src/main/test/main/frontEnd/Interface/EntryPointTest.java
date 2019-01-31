@@ -1,5 +1,6 @@
 package main.frontEnd.Interface;
 
+import main.frontEnd.MessagingSystem.routing.Listing;
 import main.rule.engine.EngineType;
 import main.util.Utils;
 import org.junit.After;
@@ -219,6 +220,31 @@ public class EntryPointTest {
     public void main_TestableJar() {
         if (isLinux) {
             String args = EngineType.JAR.getFlag() + " -s " + jarOne;
+
+            redirectOutput();
+
+            try {
+                engine.main(args.split(" "));
+
+                resetOutput();
+
+                assertTrue(out.toString().split("\n").length > 1);
+
+                Boolean results_header = main_TestableJar_results.toString().equals(out.toString());
+                Boolean results_no_header = main_TestableJar_results_noheader.toString().equals(out.toString());
+
+                assertTrue(results_header || results_no_header);
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    @Test
+    public void main_TestableJar_Scarf() {
+        if (isLinux) {
+            String args = EngineType.JAR.getFlag() + " -s " + jarOne + " -m " + Listing.ScarfXML.getFlag();
 
             redirectOutput();
 

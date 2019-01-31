@@ -21,16 +21,21 @@ public class JavaFileEntry implements EntryHandler {
      * {@inheritDoc}
      */
     public ArrayList<AnalysisIssue> NonStreamScan(EnvironmentInformation generalInfo) {
-        ArrayList<AnalysisIssue> issues = null;
+
+        ArrayList<AnalysisIssue> issues = generalInfo.getPrintOut() ? null : new ArrayList<AnalysisIssue>();
 
 
         //region Core Handling
         try {
 
 
-            for (RuleChecker ruleChecker : CommonRules.ruleCheckerList)
-                ruleChecker.checkRule(generalInfo.getSourceType(), generalInfo.getSource(), generalInfo.getDependencies(),
+            for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
+                ArrayList<AnalysisIssue> tempIssues = ruleChecker.checkRule(generalInfo.getSourceType(), generalInfo.getSource(), generalInfo.getDependencies(),
                         generalInfo.getPrintOut());
+
+                if (!generalInfo.getPrintOut())
+                    issues.addAll(tempIssues);
+            }
 
             NamedMethodMap.clearCallerCalleeGraph();
             FieldInitializationInstructionMap.reset();

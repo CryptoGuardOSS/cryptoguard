@@ -578,5 +578,10 @@ public class EnvironmentInformation {
     public void setxPath(String xPath) {
         this.xPath = xPath;
     }
+
+
+    public void setPrintOut(Boolean printOut) {
+        this.printOut = printOut;
+    }
     //endregion
 }

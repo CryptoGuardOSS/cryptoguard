@@ -12,12 +12,13 @@ import main.rule.engine.EngineType;
  */
 public enum Listing {
     //region Different Values
-    Legacy("Legacy", "L"),
-    ScarfXML("ScarfXML", "SX");
+    Legacy("Legacy", "L", ".txt"),
+    ScarfXML("ScarfXML", "SX", ".xml");
     //endregion
     //region Attributes
     private String type;
     private String flag;
+    private String outputFileExt;
     private final String inputPath = "main.frontEnd.MessagingSystem.routing.inputStructures";
     private final String outputPath = "main.frontEnd.MessagingSystem.routing.outputStructures";
     //endregion
@@ -30,9 +31,10 @@ public enum Listing {
      * @param Type - the string value of the type of
      * @param Flag - the flag used to identify the specific messaging type
      */
-    Listing(String Type, String Flag) {
+    Listing(String Type, String Flag, String outputFileExt) {
         this.type = Type;
         this.flag = Flag;
+        this.outputFileExt = outputFileExt;
     }
     //endregion
 
@@ -146,6 +148,10 @@ public enum Listing {
         }
 
         return help.toString();
+    }
+
+    public String getOutputFileExt() {
+        return outputFileExt;
     }
     //endregion
 }
