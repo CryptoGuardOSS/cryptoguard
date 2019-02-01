@@ -46,63 +46,26 @@ public class AnalysisIssue {
         this.rule = RuleList.getRuleByRuleNumber(ruleNumber);
     }
 
-    /**
-     * <p>Constructor for AnalysisIssue.</p>
-     *
-     * @param className   a {@link java.lang.String} object.
-     * @param ruleNumber  a {@link java.lang.Integer} object.
-     * @param information a {@link java.lang.String} object.
-     */
-    public AnalysisIssue(String className, Integer ruleNumber, String information) {
-        this.fullPathName = className;
+    public AnalysisIssue(String sootString, Integer ruleNumber, String Info) {
+        String className = Utils.retrieveClassNameFromSootString(sootString);
+        String methodName = Utils.retrieveMethodFromSootString(sootString);
+        Integer lineNum = Utils.retrieveLineNumFromSootString(sootString);
+
+        if (lineNum >= 0)
+            this.addMethod(methodName, new AnalysisLocation(lineNum));
+        else
+            this.addMethod(methodName);
+
         this.className = className;
-        this.issueInformation = information;
         this.rule = RuleList.getRuleByRuleNumber(ruleNumber);
-    }
 
-    /**
-     * <p>Constructor for AnalysisIssue.</p>
-     *
-     * @param ruleNumber  a {@link java.lang.Integer} object.
-     * @param methodName  a {@link java.lang.String} object.
-     * @param information a {@link java.lang.String} object.
-     */
-    public AnalysisIssue(Integer ruleNumber, String methodName, String information) {
-        this.fullPathName = "Unknown";
-        this.getMethods().push(methodName);
-        this.issueInformation = information;
-        this.rule = RuleList.getRuleByRuleNumber(ruleNumber);
-    }
-
-    /**
-     * <p>Constructor for AnalysisIssue.</p>
-     *
-     * @param ruleNumber  a {@link java.lang.Integer} object.
-     * @param methodName  a {@link java.lang.String} object.
-     * @param information a {@link java.lang.String} object.
-     * @param location    a {@link AnalysisLocation} object.
-     */
-    public AnalysisIssue(Integer ruleNumber, String methodName, String information, AnalysisLocation location) {
-        this.fullPathName = "Unknown";
-        this.addMethod(methodName, location);
-        this.issueInformation = information;
-        this.rule = RuleList.getRuleByRuleNumber(ruleNumber);
-    }
-
-    /**
-     * <p>Constructor for AnalysisIssue.</p>
-     *
-     * @param ruleNumber a {@link java.lang.Integer} object.
-     * @param cause      a {@link java.lang.String} object.
-     */
-    public AnalysisIssue(Integer ruleNumber, String cause) {
-        this.fullPathName = "Unknown";
-        this.issueCause = cause;
-        this.rule = RuleList.getRuleByRuleNumber(ruleNumber);
+        this.issueInformation = Info;
     }
 
     public AnalysisIssue(UnitContainer unit, Integer ruleNumber, String sootString) {
         Integer lineNum;
+
+        String methodName = Utils.retrieveMethodFromSootString(unit.getMethod());
 
         if ((lineNum = unit.getUnit().getJavaSourceStartLineNumber()) >= 0) {
             AnalysisLocation tempLoc = new AnalysisLocation(lineNum);
@@ -111,10 +74,10 @@ public class AnalysisIssue {
                 tempLoc.setColEnd(unit.getUnit().getJavaSourceStartColumnNumber());
             }
 
-            this.addMethod(unit.getMethod(), tempLoc);
+            this.addMethod(methodName, tempLoc);
         }
 
-        this.className = Utils.retrieveClassNameFromSootString(sootString);
+        this.className = Utils.retrieveClassNameFromSootString(unit.getMethod());
         this.rule = RuleList.getRuleByRuleNumber(ruleNumber);
 
         if (sootString.startsWith("Found"))
@@ -123,14 +86,16 @@ public class AnalysisIssue {
         {
             this.issueCause = Utils.retrieveCauseFromSootString(sootString);
             if (lineNum <= 0) {
-                this.addMethod(unit.getMethod(),
+                this.addMethod(methodName,
                         new AnalysisLocation(
                                 Utils.retrieveLineNumFromSootString(sootString)));
             }
         }
 
         if (this.getMethods().empty())
-            this.addMethod(unit.getMethod());
+            this.addMethod(methodName);
+
+
 
     }
 

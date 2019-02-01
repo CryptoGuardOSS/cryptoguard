@@ -7,6 +7,7 @@ import main.rule.engine.RuleChecker;
 import main.slicer.forward.ForwardInfluenceInstructions;
 import main.slicer.forward.SlicingCriteria;
 import main.slicer.forward.SlicingResult;
+import main.util.Utils;
 import soot.*;
 import soot.toolkits.graph.ExceptionalUnitGraph;
 import soot.toolkits.graph.UnitGraph;
@@ -87,9 +88,9 @@ public class DefaultExportGradeKeyFinder implements RuleChecker {
                             System.out.println("=======================================");
                         } else {
                             issues.add(new AnalysisIssue(
-                                    5,
                                     method,
-                                    "Cause: Used default key size in method: " + method
+                                    5,
+                                    "Cause: Used default key size in method: " + Utils.retrieveMethodFromSootString(method)
 
                             ));
                         }

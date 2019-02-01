@@ -41,10 +41,14 @@ public class Utils {
 
     private static String fileSep = System.getProperty("file.separator");
     private static Pattern sootClassPattern = Pattern.compile("[<](.+)[:]");
+    private static Pattern sootClassPatternTwo = Pattern.compile("([a-zA-Z0-9]+[.][a-zA-Z0-9]+)\\$[0-9]+");
     private static Pattern sootFoundPattern = Pattern.compile("\\[(.+)\\]");
     private static Pattern sootCausePattern = Pattern.compile("Cause: (.+) [<]");
     private static Pattern sootLineNumPattern = Pattern.compile("\\(\\)\\>\\[(\\d+)\\]");
+    private static Pattern sootMthdPattern = Pattern.compile("<((?:[a-zA-Z0-9]+))>");
+    private static Pattern sootMthdPatternTwo = Pattern.compile("((?:[a-zA-Z0-9_]+))\\(");
 
+    //region PreMadeStuff
     /**
      * <p>getClassNamesFromJarArchive.</p>
      *
@@ -590,31 +594,54 @@ public class Utils {
         Scene.v().loadBasicClasses();
     }
 
+    //endregion
+
     public static String retrieveClassNameFromSootString(String sootString) {
+        Matcher secondMatches = sootClassPatternTwo.matcher(sootString);
+        if (secondMatches.find())
+            return secondMatches.group(1);
+
         Matcher matches = sootClassPattern.matcher(sootString);
-        if (!matches.matches())
-            return "UNKNOWN";
-        return matches.group(matches.end());
+        if (matches.find())
+            return matches.group(1);
+
+        return "UNKNOWN";
     }
 
     public static String retrieveFoundPatternFromSootString(String sootString) {
         Matcher matches = sootFoundPattern.matcher(sootString);
-        if (!matches.matches())
-            return "NONE";
-        return matches.group(matches.start()).replaceAll("\"", "");
+
+        if (matches.find())
+            return matches.group(1).replaceAll("\"", "");
+        return "UNKNOWN";
     }
 
     public static String retrieveCauseFromSootString(String sootString) {
         Matcher matches = sootCausePattern.matcher(sootString);
-        if (!matches.matches())
-            return "NONE";
-        return matches.group(matches.start()).replaceAll("in method:", "").replaceAll("in Method", "");
+
+        if (matches.find())
+            return matches.group(1).replaceAll("in method:", "").replaceAll("in Method", "");
+        return "UNKNOWN";
     }
 
     public static Integer retrieveLineNumFromSootString(String sootString) {
         Matcher matches = sootLineNumPattern.matcher(sootString);
-        if (!matches.matches())
-            return -1;
-        return Integer.parseInt(matches.group(matches.end()));
+
+        if (matches.find())
+            return Integer.parseInt(matches.group(1));
+        return -1;
+    }
+
+    public static String retrieveMethodFromSootString(String sootString) {
+        Matcher matches = sootMthdPattern.matcher(sootString);
+
+        if (matches.find())
+            return matches.group(1);
+
+        Matcher secondMatches = sootMthdPatternTwo.matcher(sootString);
+        if (secondMatches.find())
+            return secondMatches.group(1);
+
+        return "UNKNOWN";
     }
 }

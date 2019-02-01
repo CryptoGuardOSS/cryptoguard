@@ -9,6 +9,7 @@ import main.slicer.backward.other.OtherAnalysisResult;
 import main.slicer.backward.other.OtherInfluencingInstructions;
 import main.util.FieldInitializationInstructionMap;
 import main.util.NamedMethodMap;
+import main.util.Utils;
 import soot.*;
 import soot.jimple.internal.JAssignStmt;
 import soot.jimple.internal.JInvokeStmt;
@@ -71,7 +72,8 @@ public class CustomTrustManagerFinder implements RuleChecker {
                         issues.add(
                                 new AnalysisIssue(className,
                                         4,
-                                        "Should throw java.security.cert.CertificateException in check(Client|Server)Trusted method of " + className));
+                                        "Should throw java.security.cert.CertificateException in check(Client|Server)Trusted method of " +
+                                                Utils.retrieveClassNameFromSootString(className)));
                     }
 
                 }
@@ -90,10 +92,9 @@ public class CustomTrustManagerFinder implements RuleChecker {
                                 System.out.println(output);
                                 System.out.println("=======================================");
                             } else {
-                                issues.add(
-                                        new AnalysisIssue(className,
-                                                4,
-                                                "Should not use unpinned self-signed certification in " + className));
+                                issues.add(new AnalysisIssue(
+                                        unit, 4, className
+                                ));
                             }
                         }
                     }
@@ -118,9 +119,10 @@ public class CustomTrustManagerFinder implements RuleChecker {
                             System.out.println("=======================================");
                         } else {
                             issues.add(
-                                    new AnalysisIssue(className,
+                                    new AnalysisIssue(className + " <getAcceptedIssuers>",
                                             4,
-                                            "Should at least get One accepted Issuer from Other Sources in getAcceptedIssuers method of " + className));
+                                            "Should at least get One accepted Issuer from Other Sources in getAcceptedIssuers method of " +
+                                                    Utils.retrieveClassNameFromSootString(className)));
                         }
                     }
                 }

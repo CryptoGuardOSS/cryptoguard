@@ -7,6 +7,7 @@ import main.rule.engine.RuleChecker;
 import main.slicer.forward.ForwardInfluenceInstructions;
 import main.slicer.forward.SlicingCriteria;
 import main.slicer.forward.SlicingResult;
+import main.util.Utils;
 import soot.*;
 import soot.jimple.IfStmt;
 import soot.jimple.internal.JAssignStmt;
@@ -101,9 +102,10 @@ public class SSLSocketFactoryFinder implements RuleChecker {
                             System.out.println("=======================================");
                         } else {
                             issues.add(new AnalysisIssue(
-                                    12,
                                     method,
-                                    "Cause: should have manually verify hostname in " + method
+                                    12,
+                                    "Didn't manually verify hostname in " +
+                                            Utils.retrieveMethodFromSootString(method)
                             ));
                         }
                     }

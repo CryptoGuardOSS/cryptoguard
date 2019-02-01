@@ -8,6 +8,7 @@ import main.rule.engine.RuleChecker;
 import main.slicer.backward.other.OtherInfluencingInstructions;
 import main.util.FieldInitializationInstructionMap;
 import main.util.NamedMethodMap;
+import main.util.Utils;
 import soot.*;
 import soot.jimple.Constant;
 
@@ -76,7 +77,7 @@ public class HostNameVerifierFinder implements RuleChecker {
                         issues.add(new AnalysisIssue(
                                 className,
                                 6,
-                                "Cause: Fixed " + constants.toString() + " used in " + className
+                                "Fixed " + constants.toString() + " used in " + Utils.retrieveCauseFromSootString(className)
                         ));
                     }
                 }

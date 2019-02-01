@@ -1,7 +1,6 @@
 package main.frontEnd.MessagingSystem.routing.outputStructures;
 
 import main.frontEnd.MessagingSystem.AnalysisIssue;
-import main.frontEnd.MessagingSystem.AnalysisLocation;
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import main.frontEnd.MessagingSystem.routing.Listing;
 import main.rule.engine.EngineType;
@@ -100,31 +99,32 @@ public class LegacyTest {
 
         this.brokenRules = new ArrayList<>();
 
+        //TODO - re add the rules in
         //region Adding Rules
         //region Rule 5
-        brokenRules.add(new AnalysisIssue(5, "Used default key size in method: <tester.Crypto: java.security.KeyPair generateKeyPairDefaultKeySize()>[122]"));
+     /*   brokenRules.add(new AnalysisIssue(5, "Used default key size in method: <tester.Crypto: java.security.KeyPair generateKeyPairDefaultKeySize()>[122]"));
         brokenRules.add(new AnalysisIssue(5, "<tester.Crypto: java.security.KeyPair generateKeyPair()>", "1024"));
-        //endregion
+       */ //endregion
         //region Rule 1
-        brokenRules.add(new AnalysisIssue(1, "<tester.Crypto: void <init>()>", "AES/ECB/PKCS5PADDING"));
+     /*   brokenRules.add(new AnalysisIssue(1, "<tester.Crypto: void <init>()>", "AES/ECB/PKCS5PADDING"));
         brokenRules.add(new AnalysisIssue(1, "<tester.PasswordUtils: void <init>(java.lang.String)>", "PBEWithMD5AndDES"));
-        //endregion
+      */  //endregion
         //region Rule 4
-        brokenRules.add(new AnalysisIssue("tester.Crypto$2", 4, "Should at least get One accepted Issuer from Other Sources in getAcceptedIssuers method of "));
+ /*       brokenRules.add(new AnalysisIssue("tester.Crypto$2", 4, "Should at least get One accepted Issuer from Other Sources in getAcceptedIssuers method of "));
         brokenRules.add(new AnalysisIssue("tester.Crypto$2", 4, "Should not use unpinned self-signed certification in "));
-        //endregion
+   */     //endregion
         //region Rule 2
-        brokenRules.add(new AnalysisIssue(2, "<tester.PBEUsage: javax.crypto.spec.PBEKeySpec getPBEParameterSpec(java.lang.String)>", "MD5"));
+      /*  brokenRules.add(new AnalysisIssue(2, "<tester.PBEUsage: javax.crypto.spec.PBEKeySpec getPBEParameterSpec(java.lang.String)>", "MD5"));
         brokenRules.add(new AnalysisIssue(2, "<tester.Crypto: void main(java.lang.String[])>", "SHA"));
         brokenRules.add(new AnalysisIssue(2, "<tester.Crypto: void main(java.lang.String[])>", "SHA1"));
-        //endregion
+     */   //endregion
         //region Rule 3
-        brokenRules.add(new AnalysisIssue(3, "<tester.LiveVarsClass: void <clinit>()>", "aaaaaaa"));
+      /*  brokenRules.add(new AnalysisIssue(3, "<tester.LiveVarsClass: void <clinit>()>", "aaaaaaa"));
         brokenRules.add(new AnalysisIssue(3, "<tester.PasswordUtils: void <init>(java.lang.String)>", "tzL1AKl5uc4NKYaoQ4P3WLGIBFPXWPWdu1fRm9004jtQiV", new AnalysisLocation(79, 79)));
         brokenRules.add(new AnalysisIssue(3, "<tester.LiveVarsClass: void <clinit>()>", "aaaaaaa", new AnalysisLocation(4, 4)));
         brokenRules.add(new AnalysisIssue(3, "<tester.VeryBusyClass: void main(java.lang.String[])>", "helloworld"));
         brokenRules.add(new AnalysisIssue(3, "<tester.Crypto: void main(java.lang.String[])>", "Bar12345Bar12345", new AnalysisLocation(152, 152)));
-        //endregion
+      */  //endregion
         //endregion
     }
 
