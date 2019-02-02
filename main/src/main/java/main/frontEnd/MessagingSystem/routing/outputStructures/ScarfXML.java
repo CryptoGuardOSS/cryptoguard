@@ -161,7 +161,7 @@ public class ScarfXML implements OutputStructure {
             ByteArrayOutputStream xmlStream = new ByteArrayOutputStream();
             marshaller.marshal(report, new PrintStream(xmlStream));
 
-            return xmlStream.toString();
+            return StringUtils.stripToNull(xmlStream.toString());
         } catch (PropertyException e) {
             return creatingErrorMessage("There has been an issue setting properties.");
         } catch (JAXBException e) {

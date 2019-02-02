@@ -60,13 +60,13 @@ public class ArgumentsCheckTest {
 
     }
 
-    @Test
+    @Test //TODO - Need to fix the sourcePaths
     public void paramaterCheck_jar() {
         info = new EnvironmentInformation(
                 Arrays.asList(jarOne),
                 EngineType.JAR,
                 Listing.Legacy,
-                null
+                null, null, null
         );
 
         String args = "jar -s " + jarOne;
@@ -88,13 +88,13 @@ public class ArgumentsCheckTest {
         }
     }
 
-    @Test
+    @Test //TODO - Need to fix the sourcePaths
     public void paramaterCheck_Scarfjar() {
         info = new EnvironmentInformation(
                 Arrays.asList(jarOne),
                 EngineType.JAR,
                 Listing.ScarfXML,
-                null
+                null, null, null
         );
 
         String args = "jar -s " + jarOne + " -m " + Listing.ScarfXML.getFlag();
@@ -116,13 +116,13 @@ public class ArgumentsCheckTest {
         }
     }
 
-    @Test
+    @Test //TODO - Need to fix the sourcePaths
     public void parameterCheck_gdl() {
         info = new EnvironmentInformation(
                 Arrays.asList(srcOneGrv),
                 EngineType.DIR,
                 Listing.Legacy,
-                Arrays.asList(srcOneGrvDep)
+                Arrays.asList(srcOneGrvDep), null, null
         );
 
         String args = "source -s " + srcOneGrv + " -d " + srcOneGrvDep;
@@ -150,7 +150,7 @@ public class ArgumentsCheckTest {
                 Arrays.asList(srcOneGrv),
                 EngineType.DIR,
                 Listing.ScarfXML,
-                Arrays.asList(srcOneGrvDep)
+                Arrays.asList(srcOneGrvDep), null, null
         );
 
         String args = "source -s " + srcOneGrv + " -d " + srcOneGrvDep + "-m" + Listing.ScarfXML.getFlag();

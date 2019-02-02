@@ -34,7 +34,7 @@ public class HostNameVerifierFinder implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printOut) throws IOException {
+    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printOut, List<String> sourcePaths) throws IOException {
 
         Map<String, List<UnitContainer>> analysisLists = getHostNameVerifiers(
                 UniqueRuleAnalyzer.environmentRouting(projectJarPath, projectDependencyPath, type)
@@ -77,7 +77,8 @@ public class HostNameVerifierFinder implements RuleChecker {
                         issues.add(new AnalysisIssue(
                                 className,
                                 6,
-                                "Fixed " + constants.toString() + " used in " + Utils.retrieveCauseFromSootString(className)
+                                "Fixed " + constants.toString() + " used in " + Utils.retrieveCauseFromSootString(className),
+                                sourcePaths
                         ));
                     }
                 }

@@ -187,7 +187,8 @@ public class BaseAnalyzerRouting {
         }
 
         for (String clazz : classNames) {
-            Scene.v().loadClassAndSupport(clazz);
+            if (!clazz.contains("UrlFrameWorks"))//TODO - Really Weird issue...
+                Scene.v().loadClassAndSupport(clazz);
         }
 
         Scene.v().loadNecessaryClasses();

@@ -62,7 +62,7 @@ public class SourceEntry implements EntryHandler {
                     System.out.println(output.substring(0, output.length() - 2));
 
                     for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
-                        ArrayList<AnalysisIssue> tempIssues = ruleChecker.checkRule(EngineType.DIR, dependencies, otherdependencies, generalInfo.getPrintOut());
+                        ArrayList<AnalysisIssue> tempIssues = ruleChecker.checkRule(EngineType.DIR, dependencies, otherdependencies, generalInfo.getPrintOut(), generalInfo.getSourcePaths());
 
                         if (!generalInfo.getPrintOut())
                             issues.addAll(tempIssues);
@@ -73,7 +73,7 @@ public class SourceEntry implements EntryHandler {
                 }
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
         return issues;
     }

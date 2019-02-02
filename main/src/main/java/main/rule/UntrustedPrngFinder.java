@@ -30,7 +30,7 @@ public class UntrustedPrngFinder implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printOut) throws IOException {
+    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printOut, List<String> sourcePaths) throws IOException {
 
         Map<String, List<Unit>> analysisLists = getUntrustedPrngInstructions(
                 UniqueRuleAnalyzer.environmentRouting(projectJarPath, projectDependencyPath, type));
@@ -52,7 +52,7 @@ public class UntrustedPrngFinder implements RuleChecker {
                                 method,
                                 13,
                                 "Untrused PRNG (java.util.Random) Found in " +
-                                        Utils.retrieveMethodFromSootString(method)
+                                        Utils.retrieveMethodFromSootString(method), sourcePaths
 
                         ));
                     }

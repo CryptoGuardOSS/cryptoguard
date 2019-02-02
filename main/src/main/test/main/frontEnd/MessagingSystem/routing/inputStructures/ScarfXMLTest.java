@@ -29,7 +29,7 @@ public class ScarfXMLTest {
     public void setUp() throws Exception {
         inputTest = new ScarfXML();
         args = new String[]{"TestSource", type.getName(), dependencies, Listing.ScarfXML.getFlag()};
-        testInfo = new EnvironmentInformation(Arrays.asList(args[0]), type, Listing.ScarfXML, Arrays.asList(args[2]));
+        testInfo = new EnvironmentInformation(Arrays.asList(args[0]), type, Listing.ScarfXML, Arrays.asList(args[2]), null, null);
 
         StringBuilder helpBuilder = new StringBuilder();
 
@@ -58,7 +58,7 @@ public class ScarfXMLTest {
     @Test
     public void testSampleCreation() {
         //EnvironmentInformation newInfo = inputTest.inputValidation(args, dependencies, type);
-        EnvironmentInformation newInfo = new EnvironmentInformation(Arrays.asList(args[0]), type, Listing.ScarfXML, Arrays.asList(args[2]));
+        EnvironmentInformation newInfo = new EnvironmentInformation(Arrays.asList(args[0]), type, Listing.ScarfXML, Arrays.asList(args[2]), null, null);
 
         assertTrue(inputTest.inputValidation(newInfo, new String[]{}));
 

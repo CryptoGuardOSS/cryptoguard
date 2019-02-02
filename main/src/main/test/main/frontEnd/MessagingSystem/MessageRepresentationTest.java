@@ -35,7 +35,7 @@ public class MessageRepresentationTest {
     //region Test Environment Creation
     @Before
     public void setUp() throws Exception {
-        this.env = new EnvironmentInformation(Arrays.asList(jarOneName), jarType, Listing.Legacy, null);
+        this.env = new EnvironmentInformation(Arrays.asList(jarOneName), jarType, Listing.Legacy, null, null, null);
         //TODO - re add these rules
         //this.ruleOneIssue = new AnalysisIssue(1, "<tester.Crypto: void <init>()>", "AES/ECB/PKCS5PADDING");
         //this.ruleTwoIssue = new AnalysisIssue(1, "<tester.PasswordUtils: void <init>(java.lang.String)>", "PBEWithMD5AndDES");

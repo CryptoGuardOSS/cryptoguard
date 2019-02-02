@@ -287,5 +287,27 @@ public class EntryPointTest {
             }
         }
     }
+
+    @Test
+    public void main_TestableJarSourceScarf() {
+        if (isLinux) {
+            String args = EngineType.DIR.getFlag() + " -s " + srcOneGrv + " -d " + srcOneGrvDep + " -m " + Listing.ScarfXML.getFlag();
+
+            redirectOutput();
+
+            try {
+                engine.main(args.split(" "));
+
+                resetOutput();
+
+                assertTrue(out.toString().split("\n").length > 1);
+
+                assertEquals(main_TestableJarSource_results.toString(), out.toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
     //endregion
 }

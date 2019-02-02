@@ -46,7 +46,7 @@ public class DefaultExportGradeKeyFinder implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printOut) throws IOException {
+    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printOut, List<String> sourcePaths) throws IOException {
 
         ArrayList<AnalysisIssue> issues = printOut ? null : new ArrayList<AnalysisIssue>();
 
@@ -90,7 +90,7 @@ public class DefaultExportGradeKeyFinder implements RuleChecker {
                             issues.add(new AnalysisIssue(
                                     method,
                                     5,
-                                    "Cause: Used default key size in method: " + Utils.retrieveMethodFromSootString(method)
+                                    "Cause: Used default key size in method: " + Utils.retrieveMethodFromSootString(method), sourcePaths
 
                             ));
                         }

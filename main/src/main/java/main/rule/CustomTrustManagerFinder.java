@@ -42,7 +42,7 @@ public class CustomTrustManagerFinder implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printOut) throws IOException {
+    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printOut, List<String> sourcePaths) throws IOException {
 
         Map<String, List<OtherAnalysisResult>> analysisLists =
                 getAnalysisForTrustManager(
@@ -73,7 +73,7 @@ public class CustomTrustManagerFinder implements RuleChecker {
                                 new AnalysisIssue(className,
                                         4,
                                         "Should throw java.security.cert.CertificateException in check(Client|Server)Trusted method of " +
-                                                Utils.retrieveClassNameFromSootString(className)));
+                                                Utils.retrieveClassNameFromSootString(className), sourcePaths));
                     }
 
                 }
@@ -93,7 +93,7 @@ public class CustomTrustManagerFinder implements RuleChecker {
                                 System.out.println("=======================================");
                             } else {
                                 issues.add(new AnalysisIssue(
-                                        unit, 4, className
+                                        unit, 4, className, sourcePaths
                                 ));
                             }
                         }
@@ -122,7 +122,7 @@ public class CustomTrustManagerFinder implements RuleChecker {
                                     new AnalysisIssue(className + " <getAcceptedIssuers>",
                                             4,
                                             "Should at least get One accepted Issuer from Other Sources in getAcceptedIssuers method of " +
-                                                    Utils.retrieveClassNameFromSootString(className)));
+                                                    Utils.retrieveClassNameFromSootString(className), sourcePaths));
                         }
                     }
                 }

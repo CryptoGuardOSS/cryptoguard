@@ -107,7 +107,7 @@ public class AssymCryptoFinder extends BaseRuleChecker {
     }
 
     @Override
-    public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr) {
+    public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths) {
         return new ArrayList<>();
     }
 }

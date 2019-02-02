@@ -52,7 +52,7 @@ public class JavaFileEntryTest {
     @Before
     public void setUp() throws Exception {
         this.customStream = new ByteArrayOutputStream();
-        this.info = new EnvironmentInformation(Arrays.asList(javaFilePath), fileType, output, null);
+        this.info = new EnvironmentInformation(Arrays.asList(javaFilePath), fileType, output, null, null, null);
     }
 
     @After

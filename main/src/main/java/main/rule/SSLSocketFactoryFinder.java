@@ -45,7 +45,7 @@ public class SSLSocketFactoryFinder implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printOut) throws IOException {
+    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printOut, List<String> sourcePaths) throws IOException {
 
         ArrayList<AnalysisIssue> issues = printOut ? null : new ArrayList<AnalysisIssue>();
 
@@ -105,7 +105,7 @@ public class SSLSocketFactoryFinder implements RuleChecker {
                                     method,
                                     12,
                                     "Didn't manually verify hostname in " +
-                                            Utils.retrieveMethodFromSootString(method)
+                                            Utils.retrieveMethodFromSootString(method), sourcePaths
                             ));
                         }
                     }

@@ -36,7 +36,7 @@ public class RuleEngine {
             System.out.println("Analyzing JAR: " + projectJarPath);
 
             for (RuleChecker ruleChecker : ruleCheckerList) {
-                ruleChecker.checkRule(EngineType.JAR, Arrays.asList(projectJarPath), Arrays.asList(projectDependencyPath), true);
+                ruleChecker.checkRule(EngineType.JAR, Arrays.asList(projectJarPath), Arrays.asList(projectDependencyPath), true, null);
             }
 
         } else if (args[0].equals("apk")) {
@@ -47,7 +47,7 @@ public class RuleEngine {
             String basePackage = Utils.getBasePackageNameFromApk(projectJarPath);
 
             for (RuleChecker ruleChecker : ruleCheckerList) {
-                ruleChecker.checkRule(EngineType.APK, Arrays.asList(projectJarPath), null, true);
+                ruleChecker.checkRule(EngineType.APK, Arrays.asList(projectJarPath), null, true, null);
             }
         } else if (args[0].equals("source")) {
 
@@ -92,7 +92,7 @@ public class RuleEngine {
                     System.out.println(output.substring(0, output.length() - 2));
 
                     for (RuleChecker ruleChecker : ruleCheckerList) {
-                        ruleChecker.checkRule(EngineType.DIR, dependencies, otherdependencies, true);
+                        ruleChecker.checkRule(EngineType.DIR, dependencies, otherdependencies, true, null);
                     }
 
                     NamedMethodMap.clearCallerCalleeGraph();

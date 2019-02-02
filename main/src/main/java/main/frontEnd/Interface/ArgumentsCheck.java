@@ -26,7 +26,7 @@ public class ArgumentsCheck {
     public static EnvironmentInformation paramaterCheck(List<String> args) throws ExceptionHandler {
 
         EngineType flow;
-        EnvironmentInformation info = null;
+        EnvironmentInformation info;
 
 
         //Needs a minimum of at least two arguments, flag type and source directory
@@ -47,11 +47,16 @@ public class ArgumentsCheck {
                     source_dependencies.get("source"),
                     flow,
                     messageType,
-                    source_dependencies.get("dependencies")
+                    source_dependencies.get("dependencies"),
+                    source_dependencies.get("sourcePaths"),
+                    source_dependencies.get("sourcePkg").get(0)
             );
 
+            //TODO - temp step
+            info.setPackageVersion("0");
+
             List<String> messagingArgs = args.subList(
-                    messageLoc != -1 ? messageLoc : args.size() - 1, args.size() - 1
+                    messageLoc != -1 ? messageLoc + 1 : args.size() - 1, args.size() - 1
             );
 
             if (!info.getMessagingType().getTypeOfMessagingInput().inputValidation(info, messagingArgs.toArray(new String[0]))) {
@@ -59,110 +64,7 @@ public class ArgumentsCheck {
                 return null;
             }
 
-            //region OldMethod
-        /*
 
-            ArrayList<String> sourceFiles = new ArrayList<>();
-            String dependency = null;
-            Integer argumentSplit = -1;
-            String filePath;
-
-            //region Old Split
-            switch (flow) {
-                //region APK
-                case APK:
-                    filePath = args[1];
-
-                    if (!filePath.endsWith(".apk") || args[2].equals("-d")) {
-                        failFast();
-                        return null;
-                    }
-
-                    argumentSplit = 2;
-                    sourceFiles.add(filePath);
-
-
-                    break;
-                //endregion
-                //region Jar
-                case JAR:
-                    filePath = args[1];
-
-                    if (!filePath.endsWith(".jar")) {
-                        failFast();
-                        return null;
-                    }
-
-                    if (args[2].equals("-d")) {
-                        dependency = args[3];
-                        argumentSplit = 4;
-                    } else
-                        argumentSplit = 2;
-
-                    sourceFiles.add(filePath);
-
-                    break;
-                //endregion
-                //region Dir
-                case DIR:
-
-                    filePath = args[1];
-
-                    if (args[2].equals("-d")) {
-                        failFast();
-                        return null;
-                    }
-
-                    argumentSplit = 2;
-                    sourceFiles.add(filePath);
-
-                    break;
-                //endregion
-                //region JavaFiles
-                case JAVAFILES:
-
-                    argumentSplit = 1;
-                    while (argumentSplit < args.length && !args[argumentSplit].equals("-d") && Listing.retrieveListingType(args[argumentSplit]) == null) {
-                        if (!args[argumentSplit].endsWith(".java")) {
-                            failFast();
-                            return null;
-                        } else
-                            sourceFiles.addAll(retrieveFullyQualifiedName(Arrays.asList(args[argumentSplit])));
-
-                        argumentSplit++;
-                    }
-
-                    break;
-                //endregion
-                //region ClassFiles
-                case CLASSFILES:
-
-                    argumentSplit = 1;
-                    while (argumentSplit < args.length && !args[argumentSplit].equals("-d") && Listing.retrieveListingType(args[argumentSplit]) == null) {
-                        if (!args[argumentSplit].endsWith(".class")) {
-                            failFast();
-                            return null;
-                        } else
-                            sourceFiles.add(trimFilePath(args[argumentSplit]));
-
-                        argumentSplit++;
-                    }
-
-                    break;
-                //endregion
-            }
-            //endregion
-
-            String messagingType = args.length >= argumentSplit + 1 ? null : args[argumentSplit];
-            info = new EnvironmentInformation(sourceFiles.toArray(new String[0]), flow, messagingType, dependency);
-            String[] newArgs = Arrays.copyOfRange(args, argumentSplit, args.length);
-
-            if (!info.getMessagingType().getTypeOfMessagingInput().inputValidation(info, newArgs)) {
-                failFast();
-                return null;
-            }
-            */
-            //endregion
             return info;
 
         } else {

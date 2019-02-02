@@ -76,15 +76,15 @@ public class ScarfXML implements InputStructure {
             if (args.length >= 1)
                 this.assessmentFramework = args[0];
             if (args.length >= 2)
-                this.assessmentFramework = args[1];
+                this.assessmentFrameworkVersion = args[1];
             if (args.length >= 3)
-                this.assessmentFramework = args[2];
+                this.buildRootDir = args[2];
             if (args.length >= 4)
-                this.assessmentFramework = args[3];
+                this.packageRootDir = args[3];
             if (args.length >= 5)
-                this.assessmentFramework = args[4];
+                this.parserName = args[4];
             if (args.length >= 6)
-                this.assessmentFramework = args[5];
+                this.parserVersion = args[5];
         }
 
         public String helpInfo() {

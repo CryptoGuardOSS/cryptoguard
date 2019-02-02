@@ -1,11 +1,11 @@
 package main.frontEnd.MessagingSystem;
 
 import main.analyzer.backward.UnitContainer;
-import main.rule.engine.Criteria;
 import main.rule.engine.RuleList;
 import main.util.Utils;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 /**
@@ -31,22 +31,7 @@ public class AnalysisIssue {
 
     //region Constructors
 
-    /**
-     * <p>Constructor for AnalysisIssue.</p>
-     *
-     * @param bugLocationInformation a {@link main.rule.engine.Criteria} object.
-     * @param information            a {@link java.lang.String} object.
-     * @param ruleNumber             a {@link java.lang.Integer} object.
-     */
-    public AnalysisIssue(Criteria bugLocationInformation, String information, Integer ruleNumber) {
-        this.fullPathName = bugLocationInformation.getClassName();
-        this.className = bugLocationInformation.getClassName();
-        this.addMethod(bugLocationInformation.getMethodName());
-        this.issueInformation = information;
-        this.rule = RuleList.getRuleByRuleNumber(ruleNumber);
-    }
-
-    public AnalysisIssue(String sootString, Integer ruleNumber, String Info) {
+    public AnalysisIssue(String sootString, Integer ruleNumber, String Info, List<String> sourcePaths) {
         String className = Utils.retrieveClassNameFromSootString(sootString);
         String methodName = Utils.retrieveMethodFromSootString(sootString);
         Integer lineNum = Utils.retrieveLineNumFromSootString(sootString);
@@ -60,9 +45,20 @@ public class AnalysisIssue {
         this.rule = RuleList.getRuleByRuleNumber(ruleNumber);
 
         this.issueInformation = Info;
+
+        if (sourcePaths.size() == 1)
+            this.fullPathName = Utils.osPathJoin(sourcePaths.get(0), "src", "main", "java", className.replace(".", System.getProperty("file.separator")));
+        else {
+            for (String in : sourcePaths)
+                if (in.contains(className))
+                    this.fullPathName = in;
+
+            this.fullPathName = "UNKNOWN";
+        }
+
     }
 
-    public AnalysisIssue(UnitContainer unit, Integer ruleNumber, String sootString) {
+    public AnalysisIssue(UnitContainer unit, Integer ruleNumber, String sootString, List<String> sourcePaths) {
         Integer lineNum;
 
         String methodName = Utils.retrieveMethodFromSootString(unit.getMethod());
@@ -96,7 +92,15 @@ public class AnalysisIssue {
             this.addMethod(methodName);
 
 
+        if (sourcePaths.size() == 1)
+            this.fullPathName = Utils.osPathJoin(sourcePaths.get(0), "src", "main", "java", className.replace(".", System.getProperty("file.separator")));
+        else {
+            for (String in : sourcePaths)
+                if (in.contains(className))
+                    this.fullPathName = in;
 
+            this.fullPathName = "UNKNOWN";
+        }
     }
 
     //endregion

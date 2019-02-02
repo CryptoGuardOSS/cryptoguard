@@ -38,11 +38,11 @@ public class InsecureAssymCryptoFinder implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printOut) throws IOException {
+    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printOut, List<String> sourcePaths) throws IOException {
 
         ArrayList<AnalysisIssue> issues = printOut ? null : new ArrayList<AnalysisIssue>();
-        ArrayList<AnalysisIssue> resultOne = checkAssym(type, projectJarPath, projectDependencyPath, AssymType.RSA, printOut);
-        ArrayList<AnalysisIssue> resultTwo = checkAssym(type, projectJarPath, projectDependencyPath, AssymType.EC, printOut);
+        ArrayList<AnalysisIssue> resultOne = checkAssym(type, projectJarPath, projectDependencyPath, AssymType.RSA, printOut, sourcePaths);
+        ArrayList<AnalysisIssue> resultTwo = checkAssym(type, projectJarPath, projectDependencyPath, AssymType.EC, printOut, sourcePaths);
 
         if (!printOut) {
             issues.addAll(resultOne);
@@ -56,7 +56,7 @@ public class InsecureAssymCryptoFinder implements RuleChecker {
     private ArrayList<AnalysisIssue> checkAssym(EngineType type,
                                                 List<String> projectJarPath,
                                                 List<String> projectDependencyPath,
-                                                AssymType assymType, Boolean printOut) throws IOException {
+                                                AssymType assymType, Boolean printOut, List<String> sourcePaths) throws IOException {
 
         ArrayList<AnalysisIssue> issues = printOut ? null : new ArrayList<AnalysisIssue>();
 
@@ -68,19 +68,19 @@ public class InsecureAssymCryptoFinder implements RuleChecker {
         ExportGradeKeyInitializationFinder insecureInitializationFinder = new ExportGradeKeyInitializationFinder();
 
         assymCryptoFinder.setCrypto(cryptoType);
-        ArrayList<AnalysisIssue> resultOne = assymCryptoFinder.checkRule(type, projectJarPath, projectDependencyPath, printOut);
+        ArrayList<AnalysisIssue> resultOne = assymCryptoFinder.checkRule(type, projectJarPath, projectDependencyPath, printOut, sourcePaths);
 
         ArrayList<String> foundSites = assymCryptoFinder.getOccurrenceSites();
 
         initializationFinder.setMethodsToLook(foundSites);
         initializationFinder.setDefaultSecure(IS_DEFAULT_SECURE_MAP.get(assymType));
-        ArrayList<AnalysisIssue> resultTwo = initializationFinder.checkRule(type, projectJarPath, projectDependencyPath, printOut);
+        ArrayList<AnalysisIssue> resultTwo = initializationFinder.checkRule(type, projectJarPath, projectDependencyPath, printOut, sourcePaths);
 
         ArrayList<String> initializationCallsites = initializationFinder.getInitializationCallsites();
 
         insecureInitializationFinder.setInitializationCallsites(initializationCallsites);
         insecureInitializationFinder.setMinSize(SIZE_MAP.get(assymType));
-        ArrayList<AnalysisIssue> resultThree = insecureInitializationFinder.checkRule(type, projectJarPath, projectDependencyPath, printOut);
+        ArrayList<AnalysisIssue> resultThree = insecureInitializationFinder.checkRule(type, projectJarPath, projectDependencyPath, printOut, sourcePaths);
 
         if (!printOut) {
             issues.addAll(resultOne);

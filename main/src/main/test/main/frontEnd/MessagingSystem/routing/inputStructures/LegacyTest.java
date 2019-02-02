@@ -29,7 +29,7 @@ public class LegacyTest {
     public void setUp() throws Exception {
         inputTest = new Legacy();
         args = new String[]{"TestSource", type.getName(), dependencies, Listing.Legacy.getFlag()};
-        testInfo = new EnvironmentInformation(Arrays.asList(args[0]), type, Listing.Legacy, Arrays.asList(args[2]));
+        testInfo = new EnvironmentInformation(Arrays.asList(args[0]), type, Listing.Legacy, Arrays.asList(args[2]), null, null);
     }
 
     @After
@@ -43,7 +43,7 @@ public class LegacyTest {
     //region Tests
     @Test
     public void testSampleCreation() {
-        EnvironmentInformation newInfo = new EnvironmentInformation(Arrays.asList(args[0]), type, Listing.Legacy, Arrays.asList(args[2]));
+        EnvironmentInformation newInfo = new EnvironmentInformation(Arrays.asList(args[0]), type, Listing.Legacy, Arrays.asList(args[2]), null, null);
 
 
         assertTrue(inputTest.inputValidation(newInfo, args));

@@ -56,7 +56,7 @@ public class EntryPoint {
             issues = handler.NonStreamScan(generalInfo);
 
             fileName = Utils.osPathJoin(System.getProperty("user.dir"),
-                    generalInfo.getPackageName() + "_" + fileName + generalInfo.getMessagingType().getOutputFileExt());
+                    generalInfo.getPackageName() /*+ "_" + fileName*/ + generalInfo.getMessagingType().getOutputFileExt());
 
             outputMessage = MessageRepresentation.getMessage(generalInfo, issues);
             //System.out.println(generalInfo.getInternalErrors());

@@ -65,7 +65,7 @@ public class ScarfXMLTest {
 
         this.type = EngineType.JAR;
 
-        this.env = new EnvironmentInformation(Arrays.asList(source), this.type, Listing.ScarfXML, null);
+        this.env = new EnvironmentInformation(Arrays.asList(source), this.type, Listing.ScarfXML, null, null, null);
         //region Setting Scarf XML Required Fields
         this.env.setAssessmentFramework("STUBBED");
         this.env.setAssessmentFrameworkVersion("STUBBED");
@@ -179,9 +179,9 @@ public class ScarfXMLTest {
         simpleCriteriaThree.setClassName("ClassThree");
         simpleCriteriaThree.setMethodName("MethodThree");
 
-        brokenRules.add(new AnalysisIssue(simpleCriteriaOne, "Borked Message Here", 6));
+/*        brokenRules.add(new AnalysisIssue(simpleCriteriaOne, "Borked Message Here", 6));
         brokenRules.add(new AnalysisIssue(simpleCriteriaTwo, "New Borked Message Here", 6));
-        brokenRules.add(new AnalysisIssue(simpleCriteriaThree, "The Borked Message Here", 6));
+        brokenRules.add(new AnalysisIssue(simpleCriteriaThree, "The Borked Message Here", 6));*/
         //endregion
         //endregion
     }

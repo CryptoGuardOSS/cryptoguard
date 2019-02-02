@@ -1,6 +1,7 @@
 package main.frontEnd.MessagingSystem.routing;
 
 import main.rule.engine.EngineType;
+import main.util.Utils;
 
 import javax.annotation.Nonnull;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -28,12 +29,13 @@ public class EnvironmentInformation {
     private final XMLGregorianCalendar startTimeStamp;
     private final String BuildFramework;
     private final String BuildFrameworkVersion;
-    private final String platformName = System.getProperty("os.name") + "-" + System.getProperty("os.version");
+    private final String platformName = Utils.getPlatform();
     private String packageName;
     private String packageVersion;
     //endregion
     //region Required Elements Set From the Start
     private final List<String> Source;
+    private final List<String> sourcePaths; //Could this be intertwined with source?
     private Boolean prettyPrint = false;
     private PrintStream internalErrors;
     private List<String> dependencies;
@@ -66,7 +68,7 @@ public class EnvironmentInformation {
      * @param dependencies  {@link java.lang.String} - The location of the directory of the sources dependencies
      * @param messagingType {@link java.lang.String} - The flag passed in to determine the type of messaging system from {@link Listing}
      */
-    public EnvironmentInformation(@Nonnull List<String> source, @Nonnull EngineType sourceType, Listing messagingType, List<String> dependencies) {
+    public EnvironmentInformation(@Nonnull List<String> source, @Nonnull EngineType sourceType, Listing messagingType, List<String> dependencies, List<String> sourcePaths, String sourcePkg) {
 
         //region Setting Internal Version Settings
         String tempToolFrameworkVersion;
@@ -108,6 +110,10 @@ public class EnvironmentInformation {
         if (dependencies != null)
             this.dependencies = dependencies;
         this.messagingType = messagingType;
+        this.sourcePaths = sourcePaths;
+        String[] pkgs = sourcePkg.split(System.getProperty("file.separator"));
+        this.packageName = pkgs[pkgs.length - 1].split("\\.")[0];
+        this.packageRootDir = sourcePkg;
         //endregion
 
     }
@@ -306,10 +312,9 @@ public class EnvironmentInformation {
      */
     public String getUUID() {
 
-        if (this.UUID == null) {
-            Random randomInst = new Random(getStringOfNumFromDate());
-            this.UUID = Long.toHexString(randomInst.nextLong() ^ getStringOfNumFromDate());
-        }
+        if (this.UUID == null)
+            this.UUID = java.util.UUID.randomUUID().toString();
+
 
         return this.UUID;
 
@@ -582,6 +587,10 @@ public class EnvironmentInformation {
 
     public void setPrintOut(Boolean printOut) {
         this.printOut = printOut;
+    }
+
+    public List<String> getSourcePaths() {
+        return sourcePaths;
     }
     //endregion
 }

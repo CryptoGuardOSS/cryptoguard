@@ -48,7 +48,6 @@ public class Utils {
     private static Pattern sootMthdPattern = Pattern.compile("<((?:[a-zA-Z0-9]+))>");
     private static Pattern sootMthdPatternTwo = Pattern.compile("((?:[a-zA-Z0-9_]+))\\(");
 
-    //region PreMadeStuff
     /**
      * <p>getClassNamesFromJarArchive.</p>
      *
@@ -496,7 +495,7 @@ public class Utils {
                 tempDependencyPath = System.getProperty("user.dir");
                 break;
             }
-        return tempDependencyPath + System.getProperty("file.separator") + dependencyPath;
+        return Utils.osPathJoin(tempDependencyPath, dependencyPath);
     }
 
     public static String retrieveFullFilePath(String filename) {
@@ -594,8 +593,6 @@ public class Utils {
         Scene.v().loadBasicClasses();
     }
 
-    //endregion
-
     public static String retrieveClassNameFromSootString(String sootString) {
         Matcher secondMatches = sootClassPatternTwo.matcher(sootString);
         if (secondMatches.find())
@@ -643,5 +640,28 @@ public class Utils {
             return secondMatches.group(1);
 
         return "UNKNOWN";
+    }
+
+    public static String getPlatform() {
+        if (!System.getProperty("os.name").contains("Linux")) {
+            return System.getProperty("os.name") + "_" + System.getProperty("os.version");
+        } else {
+            try {
+                String baseName = System.getProperty("os.name") + "_" + System.getProperty("os.version");
+                Scanner file = new Scanner(new File("/etc/os-release"));
+                String line;
+                while (file.hasNextLine()) {
+                    line = file.nextLine();
+                    if (line.startsWith("PRETTY_NAME=")) {
+                        baseName = line.replace("PRETTY_NAME=", "").replaceAll("\"", "").replaceAll(" ", "_");
+                        break;
+                    }
+                }
+                file.close();
+                return baseName;
+            } catch (FileNotFoundException e) {
+                return System.getProperty("os.name") + "_" + System.getProperty("os.version");
+            }
+        }
     }
 }

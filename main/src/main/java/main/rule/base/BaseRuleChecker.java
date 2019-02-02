@@ -48,7 +48,7 @@ public abstract class BaseRuleChecker implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectPaths, List<String> projectDependencyPath, Boolean printout) throws IOException {
+    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectPaths, List<String> projectDependencyPath, Boolean printout, List<String> sourcePaths) throws IOException {
 
         String[] excludes = {"web.xml", "pom.xml"};
 
@@ -66,7 +66,7 @@ public abstract class BaseRuleChecker implements RuleChecker {
             printAnalysisOutput(xmlFileStr);
             return null;
         } else
-            return createAnalysisOutput(xmlFileStr);
+            return createAnalysisOutput(xmlFileStr, sourcePaths);
     }
 
     /**
@@ -90,7 +90,7 @@ public abstract class BaseRuleChecker implements RuleChecker {
      */
     public abstract void printAnalysisOutput(Map<String, String> xmlFileStr);
 
-    public abstract ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr);
+    public abstract ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths);
 
     /**
      * <p>putIntoMap.</p>

@@ -3,10 +3,8 @@ package main.rule.engine;
 import main.frontEnd.Interface.ExceptionHandler;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * The different types of "sources" accepted to examine.
@@ -227,11 +225,50 @@ public enum EngineType {
                     retrieveDirs(args.subList(sourceEnding + 1,dependencyEnding)));
             */
             //endregion
-
+            //TODO - Depdencency pulling/checking
             source_dependencies.put("dependencies",
-                    args.subList(sourceEnding + 1, dependencyEnding));
+                    args.subList(sourceEnding + 1, dependencyEnding - 1));
 
         }
+
+        String pkg = null;
+
+        List<String> basePath = new ArrayList<String>();
+        File sourceFile;
+        switch (this) {
+            case APK:
+            case JAR:
+                sourceFile = new File(source_dependencies.get("source").get(0));
+                basePath.add(sourceFile.getName());
+                pkg = sourceFile.getName();
+                break;
+            case DIR:
+                sourceFile = new File(source_dependencies.get("source").get(0));
+                try {
+                    basePath.add(sourceFile.getCanonicalPath());
+                } catch (IOException e) {
+                }
+                pkg = sourceFile.getName();
+                break;
+            case JAVAFILES:
+            case CLASSFILES:
+                for (String file : source_dependencies.get("source")) {
+                    try {
+                        sourceFile = new File(file);
+                        basePath.add(sourceFile.getCanonicalPath());
+
+                        if (pkg == null) {
+                            pkg = sourceFile.getCanonicalPath().replace(sourceFile.getName(), "");
+                        }
+
+                    } catch (IOException e) {
+                    }
+                }
+                break;
+        }
+
+        source_dependencies.put("sourcePaths", basePath);
+        source_dependencies.put("sourcePkg", Arrays.asList(pkg));
 
         return source_dependencies;
     }
