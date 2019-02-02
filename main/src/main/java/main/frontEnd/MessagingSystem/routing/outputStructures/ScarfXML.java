@@ -137,11 +137,8 @@ public class ScarfXML implements OutputStructure {
 
                 //TODO - Issue with bug message being UNKNOWN
                 StringBuilder outputMessage = new StringBuilder();
-                String cause = StringUtils.trimToNull(issue.getIssueCause());
-                String info = StringUtils.trimToNull(issue.getIssueInformation());
+                String info = StringUtils.trimToNull(issue.getInfo());
 
-                if (cause != null)
-                    outputMessage.append(cause).append(". ");
 
                 if (info != null)
                     outputMessage.append(info).append(". ");

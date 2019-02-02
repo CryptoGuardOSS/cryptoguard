@@ -20,13 +20,12 @@ import java.util.Stack;
 public class AnalysisIssue {
 
     //region Attributes
-    private String fullPathName = "";
-    private String className = "";
+    private String fullPathName;
+    private String className;
     private RuleList rule;
     private Stack methods;
     private ArrayList<AnalysisLocation> locations;
-    private String issueInformation = "";
-    private String issueCause = "";
+    private String info;
     //endregion
 
     //region Constructors
@@ -51,9 +50,9 @@ public class AnalysisIssue {
         this.rule = RuleList.getRuleByRuleNumber(ruleNumber);
 
         if (constant != null)
-            Info += " Value found = \"" + constant + "\".";
+            Info += " Found value \"" + constant + "\"";
 
-        this.issueInformation = Info;
+        this.info = Info;
 
         if (sourcePaths.size() == 1) {
             String fullSource = sourcePaths.get(0);
@@ -61,8 +60,7 @@ public class AnalysisIssue {
                 this.fullPathName = Utils.osPathJoin(fullSource.replace(":dir", ""), "src", "main", "java", className.replace(".", System.getProperty("file.separator")) + ".java");
             else
                 this.fullPathName = Utils.osPathJoin(fullSource, "src", "main", "java", className.replace(".", System.getProperty("file.separator")));
-        }
-        else {
+        } else {
             for (String in : sourcePaths)
                 if (in.contains(className))
                     this.fullPathName = in;
@@ -95,30 +93,22 @@ public class AnalysisIssue {
         this.className = Utils.retrieveClassNameFromSootString(unit.getMethod());
         this.rule = RuleList.getRuleByRuleNumber(ruleNumber);
 
-        if (sootString.startsWith("Found")) {
-            this.issueInformation = Utils.retrieveFoundPatternFromSootString(sootString);
 
-            if (this.issueInformation.equals("UNKNOWN") && constant != null)
-                this.issueInformation = "Found constant = \"" + constant + "\".";
-            else if (this.issueInformation.equals("UNKNOWN") && constant == null)
-                this.issueInformation = sootString;
-            else if (constant != null)
-                this.issueInformation += " Value found = \"" + constant + "\".";
+        this.info = Utils.retrieveFoundPatternFromSootString(sootString);
 
+        if (this.info.equals("UNKNOWN") && constant != null)
+            this.info = "Found: Constant \"" + constant + "\"";
+        else if (this.info.equals("UNKNOWN") && constant == null)
+            this.info = sootString;
+        else if (constant != null)
+            this.info += " Found value \"" + constant + "\"";
+
+        if (lineNum <= 0) {
+            this.addMethod(methodName,
+                    new AnalysisLocation(
+                            Utils.retrieveLineNumFromSootString(sootString)));
         }
-        else //Cause
-        {
-            this.issueCause = Utils.retrieveCauseFromSootString(sootString);
-            if (lineNum <= 0) {
-                this.addMethod(methodName,
-                        new AnalysisLocation(
-                                Utils.retrieveLineNumFromSootString(sootString)));
-            }
 
-
-            if (constant != null)
-                this.issueCause += " Value found = \"" + constant + "\".";
-        }
 
         if (this.getMethods().empty())
             this.addMethod(methodName);
@@ -130,8 +120,7 @@ public class AnalysisIssue {
                 this.fullPathName = Utils.osPathJoin(fullSource.replace(":dir", ""), "src", "main", "java", className.replace(".", System.getProperty("file.separator")) + ".java");
             else
                 this.fullPathName = Utils.osPathJoin(fullSource, "src", "main", "java", className.replace(".", System.getProperty("file.separator")));
-        }
-        else {
+        } else {
             for (String in : sourcePaths)
                 if (in.contains(className))
                     this.fullPathName = in;
@@ -250,21 +239,12 @@ public class AnalysisIssue {
     }
 
     /**
-     * <p>Getter for the field <code>issueInformation</code>.</p>
+     * <p>Getter for the field <code>info</code>.</p>
      *
      * @return a {@link java.lang.String} object.
      */
-    public String getIssueInformation() {
-        return issueInformation;
-    }
-
-    /**
-     * <p>Getter for the field <code>issueCause</code>.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    public String getIssueCause() {
-        return issueCause;
+    public String getInfo() {
+        return info;
     }
     //endregion
 }

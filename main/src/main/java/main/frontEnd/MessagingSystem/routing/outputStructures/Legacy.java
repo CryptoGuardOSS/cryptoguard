@@ -3,6 +3,7 @@ package main.frontEnd.MessagingSystem.routing.outputStructures;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.AnalysisLocation;
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
+import main.rule.engine.EngineType;
 import main.rule.engine.RuleList;
 import org.apache.commons.lang3.StringUtils;
 
@@ -57,54 +58,55 @@ public class Legacy implements OutputStructure {
 
         //region Broken Rule Cycle
         for (Integer ruleNumber : groupedRules.keySet()) {
+
             output.append("=======================================\n");
             output.append("***Violated Rule " + RuleList.getRuleByRuleNumber(ruleNumber).getRuleId() + ": " + RuleList.getRuleByRuleNumber(ruleNumber).getDesc() + "\n");
 
             for (AnalysisIssue issue : groupedRules.get(ruleNumber)) {
                 StringBuilder outputMessage = new StringBuilder();
 
-                //region for no general cause
-                if (StringUtils.isBlank(issue.getIssueCause())) {
-
-                    if (StringUtils.isNotBlank(issue.getClassName())) {
-                        outputMessage.append("***");
-                        if (!issue.getIssueInformation().equals("UNKNOWN")) {
-                            outputMessage.append(issue.getIssueInformation());
-                            outputMessage.append(" ");
-                        } else {
-                            outputMessage.append(issue.getRule().getDesc());
-                            outputMessage.append(" in ");
-                        }
-                        outputMessage.append(issue.getClassName());
-                    } else if (issue.getMethods().size() > 0) {
-                        outputMessage.append("***Found: ");
-                        outputMessage.append("[\"" + issue.getIssueInformation() + "\"] ");
-
-                        if (issue.getLocations().size() > 0) {
-
-                            List<AnalysisLocation> issueLocations = new ArrayList<>();
-                            for (AnalysisLocation loc : issue.getLocations())
-                                if (loc.getMethodNumber() == issue.getMethods().size() - 1)
-                                    issueLocations.add(loc);
-
-                            if (!issueLocations.isEmpty()) {
-                                outputMessage.append("in Line " + issueLocations.toString().replace("[", "").replace("]", "") + " ");
-                            }
-                        }
-                        outputMessage.append("in Method: " + issue.getMethods().pop());
-
-                    } else {
-                        outputMessage.append("***Cause: ");
-                        outputMessage.append(issue.getIssueCause());
-                    }
+                if (StringUtils.isNotBlank(issue.getClassName())) {
+                    outputMessage.append("***");
+                    if (!issue.getInfo().equals("UNKNOWN"))
+                        outputMessage.append(issue.getInfo());
+                    else
+                        outputMessage.append(issue.getRule().getDesc());
+                } else {
+                    outputMessage.append("***Found: ");
+                    outputMessage.append("[\"" + issue.getInfo() + "\"] ");
                 }
-                //endregion
-                //region only general cause
-                else {
-                    output.append("***Cause: " + issue.getIssueCause());
+
+                //region Location Setting
+                String lines = null;
+                if (issue.getLocations().size() > 0) {
+
+                    List<AnalysisLocation> issueLocations = new ArrayList<>();
+                    for (AnalysisLocation loc : issue.getLocations())
+                        if (loc.getMethodNumber() == issue.getMethods().size() - 1)
+                            issueLocations.add(loc);
+
+                    if (!issueLocations.isEmpty() && !issueLocations.toString().contains("-1"))
+                        lines = ":" + issueLocations.toString().replace("[", "").replace("]", "");
+
                 }
+
+                outputMessage.append(" in ").append(issue.getClassName());
+
+                if (source.getSourceType().equals(EngineType.DIR) || source.getSourceType().equals(EngineType.JAVAFILES))
+                    outputMessage.append(".java");
+                else if (source.getSourceType().equals(EngineType.CLASSFILES))
+                    outputMessage.append(".class");
+
+                outputMessage.append("::").append(issue.getMethods().pop());
+
+                if (lines != null)
+                    outputMessage.append(lines);
+
+                outputMessage.append(".");
                 //endregion
-                output.append(outputMessage + "\n");
+
+                //endregion
+                output.append(outputMessage).append("\n");
             }
 
             output.append("=======================================\n");

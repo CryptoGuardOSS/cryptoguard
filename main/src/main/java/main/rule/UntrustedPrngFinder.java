@@ -4,7 +4,6 @@ import main.analyzer.UniqueRuleAnalyzer;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.rule.engine.EngineType;
 import main.rule.engine.RuleChecker;
-import main.util.Utils;
 import soot.*;
 import soot.toolkits.graph.DirectedGraph;
 import soot.toolkits.graph.ExceptionalUnitGraph;
@@ -48,11 +47,11 @@ public class UntrustedPrngFinder implements RuleChecker {
                         System.out.println(output);
                         System.out.println("=============================================");
                     } else {
+                        //TODO - Location not showing up
                         issues.add(new AnalysisIssue(
                                 method,
                                 13,
-                                "Untrused PRNG (java.util.Random) Found in " +
-                                        Utils.retrieveMethodFromSootString(method), sourcePaths
+                                "Found: Untrused PRNG (java.util.Random)", sourcePaths
 
                         ));
                     }

@@ -43,7 +43,6 @@ public class Utils {
     private static Pattern sootClassPattern = Pattern.compile("[<](.+)[:]");
     private static Pattern sootClassPatternTwo = Pattern.compile("([a-zA-Z0-9]+[.][a-zA-Z0-9]+)\\$[0-9]+");
     private static Pattern sootFoundPattern = Pattern.compile("\\[(.+)\\]");
-    private static Pattern sootCausePattern = Pattern.compile("Cause: (.+) [<]");
     private static Pattern sootLineNumPattern = Pattern.compile("\\(\\)\\>\\[(\\d+)\\]");
     private static Pattern sootMthdPattern = Pattern.compile("<((?:[a-zA-Z0-9]+))>");
     private static Pattern sootMthdPatternTwo = Pattern.compile("((?:[a-zA-Z0-9_]+))\\(");
@@ -611,14 +610,6 @@ public class Utils {
 
         if (matches.find())
             return matches.group(1).replaceAll("\"", "");
-        return "UNKNOWN";
-    }
-
-    public static String retrieveCauseFromSootString(String sootString) {
-        Matcher matches = sootCausePattern.matcher(sootString);
-
-        if (matches.find())
-            return matches.group(1).replaceAll("in method:", "").replaceAll("in Method", "");
         return "UNKNOWN";
     }
 

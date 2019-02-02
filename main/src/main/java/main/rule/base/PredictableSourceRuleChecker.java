@@ -3,7 +3,6 @@ package main.rule.base;
 import main.analyzer.backward.Analysis;
 import main.analyzer.backward.UnitContainer;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
-import main.util.Utils;
 import soot.ByteType;
 import soot.IntegerType;
 import soot.Value;
@@ -166,6 +165,13 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
             System.out.println(output);
             System.out.println("=======================================");
         }
+
+        if (!othersSourceMap.isEmpty()) {
+            System.out.println("=======================================");
+            String output = getPrintableMsg(othersSourceMap, rule + "a", ruleDesc);
+            System.out.println(output);
+            System.out.println("=======================================");
+        }
     }
 
     private String getPrintableMsg(Map<UnitContainer, List<String>> predictableSourcMap, String rule, String ruleDesc) {
@@ -193,7 +199,14 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
         for (UnitContainer unit : predictableSourcMap.keySet()) {
             String sootString = predictableSourcMap.get(unit).size() <= 0
                     ? ""
-                    : "Found: " + predictableSourcMap.get(unit).get(0) + "in method " + Utils.retrieveMethodFromSootString(unit.getMethod()) + ".";
+                    : "Found: \"" + predictableSourcMap.get(unit).get(0).replaceAll("\"", "") + "\"";
+            outList.add(new AnalysisIssue(unit, Integer.parseInt(rule), sootString, sourcePaths));
+        }
+
+        for (UnitContainer unit : othersSourceMap.keySet()) {
+            String sootString = othersSourceMap.get(unit).size() <= 0
+                    ? ""
+                    : "Found: \"" + othersSourceMap.get(unit).get(0).replaceAll("\"", "") + "\"";
             outList.add(new AnalysisIssue(unit, Integer.parseInt(rule), sootString, sourcePaths));
         }
 
