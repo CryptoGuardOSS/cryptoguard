@@ -3,6 +3,7 @@ package main.rule.base;
 import main.analyzer.backward.Analysis;
 import main.analyzer.backward.UnitContainer;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
+import main.util.Utils;
 import soot.ByteType;
 import soot.IntegerType;
 import soot.Value;
@@ -192,7 +193,7 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
         for (UnitContainer unit : predictableSourcMap.keySet()) {
             String sootString = predictableSourcMap.get(unit).size() <= 0
                     ? ""
-                    : "Found: " + predictableSourcMap.get(unit).get(0);
+                    : "Found: " + predictableSourcMap.get(unit).get(0) + "in method " + Utils.retrieveMethodFromSootString(unit.getMethod()) + ".";
             outList.add(new AnalysisIssue(unit, Integer.parseInt(rule), sootString, sourcePaths));
         }
 

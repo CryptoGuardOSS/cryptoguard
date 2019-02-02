@@ -35,6 +35,12 @@ public class AnalysisIssue {
         String className = Utils.retrieveClassNameFromSootString(sootString);
         String methodName = Utils.retrieveMethodFromSootString(sootString);
         Integer lineNum = Utils.retrieveLineNumFromSootString(sootString);
+        String constant = null;
+
+
+        if (sootString.contains("constant keys") || ruleNumber == 3)
+            constant = Utils.retrieveFoundMatchFromSootString(sootString);
+
 
         if (lineNum >= 0)
             this.addMethod(methodName, new AnalysisLocation(lineNum));
@@ -43,6 +49,9 @@ public class AnalysisIssue {
 
         this.className = className;
         this.rule = RuleList.getRuleByRuleNumber(ruleNumber);
+
+        if (constant != null)
+            Info += " Value found = \"" + constant + "\".";
 
         this.issueInformation = Info;
 
@@ -60,11 +69,16 @@ public class AnalysisIssue {
 
             this.fullPathName = "UNKNOWN";
         }
-
     }
 
     public AnalysisIssue(UnitContainer unit, Integer ruleNumber, String sootString, List<String> sourcePaths) {
         Integer lineNum;
+        String constant = null;
+
+
+        if (sootString.contains("constant keys") || ruleNumber == 3)
+            constant = Utils.retrieveFoundMatchFromSootString(sootString);
+
 
         String methodName = Utils.retrieveMethodFromSootString(unit.getMethod());
 
@@ -81,8 +95,17 @@ public class AnalysisIssue {
         this.className = Utils.retrieveClassNameFromSootString(unit.getMethod());
         this.rule = RuleList.getRuleByRuleNumber(ruleNumber);
 
-        if (sootString.startsWith("Found"))
+        if (sootString.startsWith("Found")) {
             this.issueInformation = Utils.retrieveFoundPatternFromSootString(sootString);
+
+            if (this.issueInformation.equals("UNKNOWN") && constant != null)
+                this.issueInformation = "Found constant = \"" + constant + "\".";
+            else if (this.issueInformation.equals("UNKNOWN") && constant == null)
+                this.issueInformation = sootString;
+            else if (constant != null)
+                this.issueInformation += " Value found = \"" + constant + "\".";
+
+        }
         else //Cause
         {
             this.issueCause = Utils.retrieveCauseFromSootString(sootString);
@@ -91,6 +114,10 @@ public class AnalysisIssue {
                         new AnalysisLocation(
                                 Utils.retrieveLineNumFromSootString(sootString)));
             }
+
+
+            if (constant != null)
+                this.issueCause += " Value found = \"" + constant + "\".";
         }
 
         if (this.getMethods().empty())

@@ -136,11 +136,19 @@ public class ScarfXML implements OutputStructure {
                 //endregion
 
                 //TODO - Issue with bug message being UNKNOWN
-                String outputMessage = StringUtils.trimToNull(issue.getIssueCause() + " " + issue.getIssueInformation());
-                if (outputMessage.equals("UNKNOWN"))
-                    outputMessage = issue.getRule().getDesc();
+                StringBuilder outputMessage = new StringBuilder();
+                String cause = StringUtils.trimToNull(issue.getIssueCause());
+                String info = StringUtils.trimToNull(issue.getIssueInformation());
 
-                instance.setBugMessage(outputMessage);
+                if (cause != null)
+                    outputMessage.append(cause).append(". ");
+
+                if (info != null)
+                    outputMessage.append(info).append(". ");
+
+                outputMessage.append(issue.getRule().getDesc()).append(".");
+
+                instance.setBugMessage(outputMessage.toString());
 
                 report.getBugInstance().add(instance);
             }

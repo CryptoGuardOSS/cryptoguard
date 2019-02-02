@@ -47,6 +47,7 @@ public class Utils {
     private static Pattern sootLineNumPattern = Pattern.compile("\\(\\)\\>\\[(\\d+)\\]");
     private static Pattern sootMthdPattern = Pattern.compile("<((?:[a-zA-Z0-9]+))>");
     private static Pattern sootMthdPatternTwo = Pattern.compile("((?:[a-zA-Z0-9_]+))\\(");
+    private static Pattern sootFoundMatchPattern = Pattern.compile("\"{1}(.+)\"{1}");
 
     /**
      * <p>getClassNamesFromJarArchive.</p>
@@ -663,5 +664,14 @@ public class Utils {
                 return System.getProperty("os.name") + "_" + System.getProperty("os.version");
             }
         }
+    }
+
+    public static String retrieveFoundMatchFromSootString(String sootString) {
+        Matcher matches = sootFoundMatchPattern.matcher(sootString);
+
+        if (matches.find())
+            return StringUtils.trimToNull(matches.group(1));
+
+        return "UNKNOWN";
     }
 }

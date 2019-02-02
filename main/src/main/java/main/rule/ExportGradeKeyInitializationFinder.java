@@ -6,6 +6,7 @@ import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.rule.base.BaseRuleChecker;
 import main.rule.base.MajorHeuristics;
 import main.rule.engine.Criteria;
+import main.util.Utils;
 import soot.IntegerType;
 import soot.ValueBox;
 import soot.jimple.AssignStmt;
@@ -164,7 +165,7 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
         for (UnitContainer unit : predictableSourcMap.keySet()) {
             String sootString = predictableSourcMap.get(unit).size() <= 0
                     ? ""
-                    : "Found: " + predictableSourcMap.get(unit).get(0);
+                    : "Found: " + predictableSourcMap.get(unit).get(0) + "in method " + Utils.retrieveMethodFromSootString(unit.getMethod()) + ".";
             outList.add(new AnalysisIssue(unit, Integer.parseInt(rule), sootString, sourcePaths));
         }
 
