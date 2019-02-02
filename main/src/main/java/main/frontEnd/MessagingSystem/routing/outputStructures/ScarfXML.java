@@ -77,6 +77,7 @@ public class ScarfXML implements OutputStructure {
                 instance.setBugGroup(issue.getRule().getDesc());
                 instance.setBugMessage(issue.getRule().getDesc());
 
+
                 if (source.getBuildId() != null || source.getxPath() != null) {
                     BugTraceType trace = new BugTraceType();
                     trace.setBuildId(source.getBuildId());
@@ -134,8 +135,12 @@ public class ScarfXML implements OutputStructure {
                 instance.setBugLocations(bugLocations);
                 //endregion
 
-                String outputMessage = issue.getIssueCause() + " " + issue.getIssueInformation();
-                instance.setBugMessage(StringUtils.trimToNull(outputMessage));
+                //TODO - Issue with bug message being UNKNOWN
+                String outputMessage = StringUtils.trimToNull(issue.getIssueCause() + " " + issue.getIssueInformation());
+                if (outputMessage.equals("UNKNOWN"))
+                    outputMessage = issue.getRule().getDesc();
+
+                instance.setBugMessage(outputMessage);
 
                 report.getBugInstance().add(instance);
             }

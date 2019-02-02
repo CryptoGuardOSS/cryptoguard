@@ -245,7 +245,7 @@ public enum EngineType {
             case DIR:
                 sourceFile = new File(source_dependencies.get("source").get(0));
                 try {
-                    basePath.add(sourceFile.getCanonicalPath());
+                    basePath.add(sourceFile.getCanonicalPath() + ":dir");
                 } catch (IOException e) {
                 }
                 pkg = sourceFile.getName();
@@ -258,7 +258,7 @@ public enum EngineType {
                         basePath.add(sourceFile.getCanonicalPath());
 
                         if (pkg == null) {
-                            pkg = sourceFile.getCanonicalPath().replace(sourceFile.getName(), "");
+                            pkg = sourceFile.getCanonicalPath();//.replace(sourceFile.getName(), "")
                         }
 
                     } catch (IOException e) {

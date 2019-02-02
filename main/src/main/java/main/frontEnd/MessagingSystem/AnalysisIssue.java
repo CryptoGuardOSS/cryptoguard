@@ -46,8 +46,13 @@ public class AnalysisIssue {
 
         this.issueInformation = Info;
 
-        if (sourcePaths.size() == 1)
-            this.fullPathName = Utils.osPathJoin(sourcePaths.get(0), "src", "main", "java", className.replace(".", System.getProperty("file.separator")));
+        if (sourcePaths.size() == 1) {
+            String fullSource = sourcePaths.get(0);
+            if (fullSource.endsWith(":dir"))
+                this.fullPathName = Utils.osPathJoin(fullSource.replace(":dir", ""), "src", "main", "java", className.replace(".", System.getProperty("file.separator")) + ".java");
+            else
+                this.fullPathName = Utils.osPathJoin(fullSource, "src", "main", "java", className.replace(".", System.getProperty("file.separator")));
+        }
         else {
             for (String in : sourcePaths)
                 if (in.contains(className))
@@ -92,8 +97,13 @@ public class AnalysisIssue {
             this.addMethod(methodName);
 
 
-        if (sourcePaths.size() == 1)
-            this.fullPathName = Utils.osPathJoin(sourcePaths.get(0), "src", "main", "java", className.replace(".", System.getProperty("file.separator")));
+        if (sourcePaths.size() == 1) {
+            String fullSource = sourcePaths.get(0);
+            if (fullSource.endsWith(":dir"))
+                this.fullPathName = Utils.osPathJoin(fullSource.replace(":dir", ""), "src", "main", "java", className.replace(".", System.getProperty("file.separator")) + ".java");
+            else
+                this.fullPathName = Utils.osPathJoin(fullSource, "src", "main", "java", className.replace(".", System.getProperty("file.separator")));
+        }
         else {
             for (String in : sourcePaths)
                 if (in.contains(className))
