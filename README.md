@@ -1,20 +1,20 @@
-# Octopus: Source Code
+# CryptoGuard: Source Code
 
 An program analysis tool to find cryptographic misuse in Java and Android.
 
-### Prerequisites to use Octopus on Source code:
+### Prerequisites to use CryptoGuard on Source code:
 
 1. Download and Install JDK 7.
 2. Set `JAVA7_HOME` environment variable.
 3. Download and Install Gradle.
 
-### Prerequisites to use Octopus on Jar:
+### Prerequisites to use CryptoGuard on Jar:
 
 1. Download and Install JDK (version >= 7).
 2. Set `JAVA_HOME` environment variable.
 3. Download and Install Gradle.
 
-### Prerequisites to use Octopus on Apk:
+### Prerequisites to use CryptoGuard on Apk:
 
 1. Download and Install JDK (version >= 7).
 2. Set `JAVA_HOME` environment variable.
@@ -22,13 +22,13 @@ An program analysis tool to find cryptographic misuse in Java and Android.
 4. Set `ANDROID_SDK_HOME`
 5. Download and Install Gradle.
 
-### Build Octopus
+### Build CryptoGuard
 1. Run `cd /path/to/octopus`
 2. Run `gradle clean build`
 
-### Run Octopus to analyze source code:
+### Run CryptoGuard to analyze source code:
 
-You need to run Octopus on JDK 7 to analyze source codes. If the project does not have any external dependencies then run,
+You need to run CryptoGuard on JDK 7 to analyze source codes. If the project does not have any external dependencies then run,
      
 `cd /path/to/octopus &&  /usr/local/jdk1.7.0_80/bin/java -jar main/build/libs/main.jar "source" "/path/to/project/root" ""`
 
@@ -38,11 +38,11 @@ If the project have external dependencies then first gather the dependencies und
 
 Note that if you have multiple subprojects with external dependencies, then you have to gather all the corresponding subproject dependencies under a path that is relative to each of the subprojects.
 
-### Run Octopus to analyze Jar:
+### Run CryptoGuard to analyze Jar:
 
 `cd /path/to/octopus && java -jar main/build/libs/main.jar "jar" "/path/to/jar/my-jar.jar" ""`
 
-### Run Octopus to analyze Apk:
+### Run CryptoGuard to analyze Apk:
 
 `cd /path/to/octopus && java -jar main/build/libs/main.jar "apk" "/path/to/apk/my-apk.apk" `
 
@@ -50,9 +50,9 @@ If you have any questions or suggestions, please email to rigorityj@gmail.com.
 
 ## Disclaimer
 
-##### Octopus is a research prototype under GNU General Public License 3.0
+##### CryptoGuard is a research prototype under GNU General Public License 3.0
 
- Copyright © 2018 Octopus
+ Copyright © 2018 CryptoGuard
 
  This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
  
