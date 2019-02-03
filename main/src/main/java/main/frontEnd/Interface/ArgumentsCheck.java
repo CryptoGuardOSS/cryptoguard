@@ -32,7 +32,10 @@ public class ArgumentsCheck {
         //Needs a minimum of at least two arguments, flag type and source directory
         if (args.size() >= 3 && (flow = EngineType.getFromFlag(args.get(0))) != null) {
 
-            Integer messageLoc = args.indexOf("-m");
+            Integer messageTypeLoc = args.indexOf("-m");
+            Integer fileOutLoc = args.indexOf("-o");
+
+            Integer messageLoc = messageTypeLoc < fileOutLoc ? messageTypeLoc : fileOutLoc;
 
             Map<String, List<String>> source_dependencies =
                     flow.retrieveInputsFromInput(
@@ -54,6 +57,7 @@ public class ArgumentsCheck {
 
             //TODO - temp step
             info.setPackageVersion("0");
+
 
             List<String> messagingArgs = args.subList(
                     messageLoc != -1 ? messageLoc + 1 : args.size() - 1, args.size() - 1

@@ -42,6 +42,9 @@ public class EnvironmentInformation {
     private EngineType sourceType;
     private Listing messagingType;
     private String UUID;
+    private Long startAnalyisisTime;
+    private Long analysisMilliSeconds;
+    private String fileOut;
     //endregion
     //region From Outside and defaulted unless set
     private String AssessmentFramework;
@@ -591,6 +594,26 @@ public class EnvironmentInformation {
 
     public List<String> getSourcePaths() {
         return sourcePaths;
+    }
+
+    public void startAnalysis() {
+        this.startAnalyisisTime = System.currentTimeMillis();
+    }
+
+    public void stopAnalysis() {
+        this.analysisMilliSeconds = System.currentTimeMillis() - this.startAnalyisisTime;
+    }
+
+    public Long getAnalyisisTime() {
+        return this.analysisMilliSeconds;
+    }
+
+    public String getFileOut() {
+        return fileOut;
+    }
+
+    public void setFileOut(String fileOut) {
+        this.fileOut = fileOut;
     }
     //endregion
 }

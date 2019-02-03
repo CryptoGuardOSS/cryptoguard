@@ -117,7 +117,10 @@ public class ScarfXML implements OutputStructure {
 
                         newLocation.setId(locationKtr);
                         newLocation.setPrimary(locationKtr == 0);
-                        newLocation.setStartLine(createdLoc.getLineStart());
+
+                        if (createdLoc.getLineStart() != -1)
+                            newLocation.setStartLine(createdLoc.getLineStart());
+
                         newLocation.setSourceFile(issue.getFullPathName());
 
                         if (createdLoc.getLineEnd() > 0 && !createdLoc.getLineEnd().equals(createdLoc.getLineStart())) {
@@ -171,7 +174,14 @@ public class ScarfXML implements OutputStructure {
             ByteArrayOutputStream xmlStream = new ByteArrayOutputStream();
             marshaller.marshal(report, new PrintStream(xmlStream));
 
-            return StringUtils.stripToNull(xmlStream.toString());
+            StringBuilder commentedFooter = new StringBuilder("\n<!--\n");
+            //region Timing Portion
+            commentedFooter.append("\tAnalysis Timing (ms): ").append(source.getAnalyisisTime()).append(".").append("\n");
+            //endregion
+
+            commentedFooter.append("-->");
+
+            return StringUtils.stripToNull(xmlStream.toString()) + commentedFooter.toString();
         } catch (PropertyException e) {
             return creatingErrorMessage("There has been an issue setting properties.");
         } catch (JAXBException e) {

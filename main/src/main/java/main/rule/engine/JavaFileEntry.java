@@ -28,7 +28,7 @@ public class JavaFileEntry implements EntryHandler {
         //region Core Handling
         try {
 
-
+            generalInfo.startAnalysis();
             for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
                 ArrayList<AnalysisIssue> tempIssues = ruleChecker.checkRule(generalInfo.getSourceType(), generalInfo.getSource(), generalInfo.getDependencies(),
                         generalInfo.getPrintOut(), generalInfo.getSourcePaths());
@@ -36,6 +36,7 @@ public class JavaFileEntry implements EntryHandler {
                 if (!generalInfo.getPrintOut())
                     issues.addAll(tempIssues);
             }
+            generalInfo.stopAnalysis();
 
             NamedMethodMap.clearCallerCalleeGraph();
             FieldInitializationInstructionMap.reset();

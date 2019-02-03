@@ -113,6 +113,12 @@ public class Legacy implements OutputStructure {
         }
         //endregion
 
+        //region Timing Section
+        output.append("=======================================\n");
+        output.append("Analysis Timing (ms): ").append(source.getAnalyisisTime()).append(".\n");
+        output.append("=======================================\n");
+        //endregion
+
         return output.toString();
     }
 }

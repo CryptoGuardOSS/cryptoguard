@@ -53,12 +53,14 @@ public class SourceEntry implements EntryHandler {
                         analyzedModules.add(dependencyModule);
                     }
 
+                    generalInfo.startAnalysis();
                     for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
                         ArrayList<AnalysisIssue> tempIssues = ruleChecker.checkRule(EngineType.DIR, dependencies, otherdependencies, generalInfo.getPrintOut(), generalInfo.getSourcePaths());
 
                         if (!generalInfo.getPrintOut())
                             issues.addAll(tempIssues);
                     }
+                    generalInfo.stopAnalysis();
 
                     NamedMethodMap.clearCallerCalleeGraph();
                     FieldInitializationInstructionMap.reset();

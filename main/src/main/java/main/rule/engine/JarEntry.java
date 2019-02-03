@@ -22,6 +22,7 @@ public class JarEntry implements EntryHandler {
 
         ArrayList<AnalysisIssue> issues = generalInfo.getPrintOut() ? null : new ArrayList<AnalysisIssue>();
         try {
+            generalInfo.startAnalysis();
             for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
                 ArrayList<AnalysisIssue> tempIssues = ruleChecker.checkRule(EngineType.JAR, generalInfo.getSource(), generalInfo.getDependencies(),
                         generalInfo.getPrintOut(), generalInfo.getSourcePaths());
@@ -30,6 +31,7 @@ public class JarEntry implements EntryHandler {
                 if (!generalInfo.getPrintOut())
                     issues.addAll(tempIssues);
             }
+            generalInfo.stopAnalysis();
         } catch (IOException e) {
 
         }

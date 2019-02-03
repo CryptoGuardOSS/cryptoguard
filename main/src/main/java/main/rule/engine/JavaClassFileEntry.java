@@ -24,7 +24,7 @@ public class JavaClassFileEntry implements EntryHandler {
 
         //region Core Handling
         try {
-
+            generalInfo.startAnalysis();
             for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
                 ArrayList<AnalysisIssue> tempIssues = ruleChecker.checkRule(generalInfo.getSourceType(), generalInfo.getSource(), generalInfo.getDependencies(),
                         generalInfo.getPrintOut(), generalInfo.getSourcePaths());
@@ -33,6 +33,7 @@ public class JavaClassFileEntry implements EntryHandler {
                 if (!generalInfo.getPrintOut())
                     issues.addAll(tempIssues);
             }
+            generalInfo.stopAnalysis();
 
 
         } catch (IOException e) {

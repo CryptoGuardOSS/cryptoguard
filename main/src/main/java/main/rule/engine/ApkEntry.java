@@ -23,12 +23,14 @@ public class ApkEntry implements EntryHandler {
 
         try {
 
+            generalInfo.stopAnalysis();
             for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
                 ArrayList<AnalysisIssue> tempIssues = ruleChecker.checkRule(EngineType.APK, generalInfo.getSource(), null, generalInfo.getPrintOut(), generalInfo.getSourcePaths());
 
                 if (!generalInfo.getPrintOut())
                     issues.addAll(tempIssues);
             }
+            generalInfo.stopAnalysis();
         } catch (IOException e) {
 
         }
