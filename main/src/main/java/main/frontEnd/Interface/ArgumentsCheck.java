@@ -1,11 +1,10 @@
 package main.frontEnd.Interface;
 
+import groovyjarjarcommonscli.*;
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
-import main.frontEnd.MessagingSystem.routing.Listing;
 import main.rule.engine.EngineType;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author RigorityJTeam
@@ -15,6 +14,42 @@ import java.util.Map;
  * <p>The main check for the Arguments</p>
  */
 public class ArgumentsCheck {
+
+    enum argumentsMatch {
+
+        FORMAT("in", "(Req'd) The format of input you want to scan."),
+        SOURCE("s", "(Req'd) The source(s) to be scanned, use the absolute path)."),
+        DEP("d", "The dependency to be scanned, (use the relative path)."),
+        OUT("o", "The file to be created with the output (default will be the project name)."),
+        TIMEMEASURE("t", "Output the time of the internal processes."),
+        FORMATOUT("m", "The output format you want to produce."),
+        PRETTY("n", "Output the analysis information in a 'pretty' format."),
+        HELP("h", "Print out the Help Information.");
+
+
+        private String id;
+        private String desc;
+
+        argumentsMatch(String id, String desc) {
+            this.id = id;
+            this.desc = desc;
+        }
+
+        public String getId() {
+            return this.id;
+        }
+
+        public String getDesc() {
+            return this.desc;
+        }
+
+        public static argumentsMatch lookup(String id) {
+            for (argumentsMatch in : argumentsMatch.values())
+                if (in.getId().equals(id))
+                    return in;
+            return null;
+        }
+    }
 
     /**
      * The fail fast parameter Check method
@@ -28,62 +63,126 @@ public class ArgumentsCheck {
         EngineType flow;
         EnvironmentInformation info;
 
+        //region CLI Section
+        //region CLI Arguments
+        Options cmdLineArgs = new Options();
 
-        //Needs a minimum of at least two arguments, flag type and source directory
-        if (args.size() >= 3 && (flow = EngineType.getFromFlag(args.get(0))) != null) {
+        //cmdLineArgs.addOption("f", false, "Output the time of the internal processes.");
+        Option format = OptionBuilder.withArgName("format").hasArg().withDescription(argumentsMatch.FORMAT.getDesc()).isRequired().create(argumentsMatch.FORMAT.getId());
+        format.setType(String.class);
+        format.setOptionalArg(false);
+        cmdLineArgs.addOption(format);
 
-            Integer messageTypeLoc = args.indexOf("-m");
-            Integer fileOutLoc = args.indexOf("-o");
+        Option sources = OptionBuilder.withArgName("file(s)/dir").hasArgs().withDescription(argumentsMatch.SOURCE.getDesc()).isRequired().create(argumentsMatch.SOURCE.getId());
+        sources.setType(String.class);
+        sources.setValueSeparator(' ');
+        sources.setOptionalArg(false);
+        cmdLineArgs.addOption(sources);
 
-            Integer messageLoc = messageTypeLoc < fileOutLoc ? messageTypeLoc : fileOutLoc;
+        Option dependency = OptionBuilder.withArgName("dir").hasArg().withDescription(argumentsMatch.DEP.getDesc()).create(argumentsMatch.DEP.getId());
+        dependency.setType(String.class);
+        dependency.setOptionalArg(false);
+        cmdLineArgs.addOption(dependency);
 
-            Map<String, List<String>> source_dependencies =
-                    flow.retrieveInputsFromInput(
-                            args.subList(1, args.size()), messageLoc
-                    );
+        Option output = OptionBuilder.withArgName("file").hasArg().withDescription(argumentsMatch.OUT.getDesc()).create(argumentsMatch.OUT.getId());
+        output.setType(String.class);
+        output.setOptionalArg(true);
+        cmdLineArgs.addOption(output);
 
-            Listing messageType = Listing.retrieveListingType(
-                    messageLoc != -1 && args.size() == messageLoc + 2
-                            ? args.get(messageLoc + 1) : null);
+        Option timing = new Option(argumentsMatch.TIMEMEASURE.getId(), false, argumentsMatch.TIMEMEASURE.getDesc());
+        timing.setOptionalArg(true);
+        cmdLineArgs.addOption(timing);
 
-            info = new EnvironmentInformation(
-                    source_dependencies.get("source"),
-                    flow,
-                    messageType,
-                    source_dependencies.get("dependencies"),
-                    source_dependencies.get("sourcePaths"),
-                    source_dependencies.get("sourcePkg").get(0)
-            );
+        Option formatOut = OptionBuilder.withArgName("formatType").hasArg().withDescription(argumentsMatch.FORMATOUT.getDesc()).create(argumentsMatch.FORMATOUT.getId());
+        formatOut.setOptionalArg(false);
+        cmdLineArgs.addOption(formatOut);
 
-            //TODO - temp step
-            info.setPackageVersion("0");
+        Option prettyPrint = new Option(argumentsMatch.PRETTY.getId(), true, argumentsMatch.PRETTY.getDesc());
+        prettyPrint.setOptionalArg(true);
+        cmdLineArgs.addOption(prettyPrint);
+
+        Option help = new Option(argumentsMatch.HELP.getId(), false, argumentsMatch.HELP.getDesc());
+        help.setOptionalArg(true);
+        cmdLineArgs.addOption(help);
+
+        //endregion
+
+        CommandLine cmd = null;
+
+        try {
+            cmd = new DefaultParser().parse(cmdLineArgs, args.toArray(new String[0]));
+        } catch (ParseException e) {//TODO
+            System.out.println("====================================================");
+            System.out.println(e.getMessage());
+            System.out.println("====================================================");
+            failFast(cmdLineArgs);
+        }
+
+        //endregion
 
 
-            List<String> messagingArgs = args.subList(
-                    messageLoc != -1 ? messageLoc + 1 : args.size() - 1, args.size() - 1
-            );
-
-            if (!info.getMessagingType().getTypeOfMessagingInput().inputValidation(info, messagingArgs.toArray(new String[0]))) {
-                failFast();
-                return null;
-            }
+        if (cmd.hasOption(argumentsMatch.HELP.getId()))
+            failFast(cmdLineArgs);
 
 
-            return info;
+        //region OldLogic
+        /**
+         Integer messageTypeLoc = args.indexOf("-m");
+         Integer fileOutLoc = args.indexOf("-o");
 
-        } else {
+         Integer messageLoc = messageTypeLoc < fileOutLoc ? messageTypeLoc : fileOutLoc;
+
+         Map<String, List<String>> source_dependencies =
+         flow.retrieveInputsFromInput(
+         args.subList(1, args.size()), messageLoc
+         );
+
+         Listing messageType = Listing.retrieveListingType(
+         messageLoc != -1 && args.size() == messageLoc + 2
+         ? args.get(messageLoc + 1) : null);
+
+         info = new EnvironmentInformation(
+         source_dependencies.get("source"),
+         flow,
+         messageType,
+         source_dependencies.get("dependencies"),
+         source_dependencies.get("sourcePaths"),
+         source_dependencies.get("sourcePkg").get(0)
+         );
+
+         //TODO - temp step
+         info.setPackageVersion("0");
+
+
+         List<String> messagingArgs = args.subList(
+         messageLoc != -1 ? messageLoc + 1 : args.size() - 1, args.size() - 1
+         );
+
+         if (!info.getMessagingType().getTypeOfMessagingInput().inputValidation(info, messagingArgs.toArray(new String[0]))) {
+         failFast();
+         return null;
+         }
+         **/
+        //endregion
+
+        return null;//info;
+
+        /*} else {
             failFast();
             return null;
-        }
+        }*/
 
     }
 
     /**
      * A universal method to return failure/help message
      */
-    private static void failFast() {
-        System.out.println(Listing.getInputHelp());
-        return;
+    private static void failFast(Options args) {
+
+        HelpFormatter helper = new HelpFormatter();
+        helper.setOptionComparator(null);
+        helper.printHelp("Rigorityj", args, false);
+        System.exit(0);
     }
 
 }

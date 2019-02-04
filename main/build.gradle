@@ -88,6 +88,7 @@ dependencies {
     compile group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '2.3.0'
     compile group: 'com.sun.xml.bind', name: 'jaxb-core', version: '2.3.0'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
+    implementation 'commons-cli:commons-cli:1.4'
 }
 
 //compileJava.dependsOn xsd2java
