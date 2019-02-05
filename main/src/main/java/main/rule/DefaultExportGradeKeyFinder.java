@@ -119,6 +119,11 @@ public class DefaultExportGradeKeyFinder implements RuleChecker {
         Scene.v().loadBasicClasses();
 
         List<String> classNames = Utils.getClassNamesFromJarArchive(projectJarPath);
+
+        for (String dependency : Utils.getJarsInDirectory(projectDependencyPath)) {
+            classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
+        }
+
         return getForwardSlice(classNames, slicingCriteria);
     }
 
