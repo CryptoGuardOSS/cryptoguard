@@ -40,6 +40,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ *
+ * @author RigorityJTeam
+ * @version $Id: $Id
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "MetricType", propOrder = {
@@ -78,7 +81,7 @@ public class MetricType {
      * Gets the value of the location property.
      *
      * @return possible object is
-     * {@link String }
+     * {@link java.lang.String}
      */
     public String getLocation() {
         return location;
@@ -88,7 +91,7 @@ public class MetricType {
      * Sets the value of the location property.
      *
      * @param value allowed object is
-     *              {@link String }
+     *              {@link java.lang.String}
      */
     public void setLocation(String value) {
         this.location = value;
@@ -98,7 +101,7 @@ public class MetricType {
      * Gets the value of the clazz property.
      *
      * @return possible object is
-     * {@link String }
+     * {@link java.lang.String}
      */
     public String getClazz() {
         return clazz;
@@ -108,7 +111,7 @@ public class MetricType {
      * Sets the value of the clazz property.
      *
      * @param value allowed object is
-     *              {@link String }
+     *              {@link java.lang.String}
      */
     public void setClazz(String value) {
         this.clazz = value;
@@ -118,7 +121,7 @@ public class MetricType {
      * Gets the value of the method property.
      *
      * @return possible object is
-     * {@link String }
+     * {@link java.lang.String}
      */
     public String getMethod() {
         return method;
@@ -128,7 +131,7 @@ public class MetricType {
      * Sets the value of the method property.
      *
      * @param value allowed object is
-     *              {@link String }
+     *              {@link java.lang.String}
      */
     public void setMethod(String value) {
         this.method = value;
@@ -138,7 +141,7 @@ public class MetricType {
      * Gets the value of the type property.
      *
      * @return possible object is
-     * {@link String }
+     * {@link java.lang.String}
      */
     public String getType() {
         return type;
@@ -148,7 +151,7 @@ public class MetricType {
      * Sets the value of the type property.
      *
      * @param value allowed object is
-     *              {@link String }
+     *              {@link java.lang.String}
      */
     public void setType(String value) {
         this.type = value;
@@ -158,7 +161,7 @@ public class MetricType {
      * Gets the value of the value property.
      *
      * @return possible object is
-     * {@link String }
+     * {@link java.lang.String}
      */
     public String getValue() {
         return value;
@@ -168,7 +171,7 @@ public class MetricType {
      * Sets the value of the value property.
      *
      * @param value allowed object is
-     *              {@link String }
+     *              {@link java.lang.String}
      */
     public void setValue(String value) {
         this.value = value;
@@ -176,6 +179,8 @@ public class MetricType {
 
     /**
      * Gets the value of the id property.
+     *
+     * @return a int.
      */
     public int getId() {
         return id;
@@ -183,6 +188,8 @@ public class MetricType {
 
     /**
      * Sets the value of the id property.
+     *
+     * @param value a int.
      */
     public void setId(int value) {
         this.id = value;

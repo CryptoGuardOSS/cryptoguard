@@ -6,13 +6,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * <p>CommonRules class.</p>
+ *
  * @author RigorityJTeam
  * Created on 2018-12-14.
+ * @version $Id: $Id
  * @since 01.01.06
  *
  * <p>A common stash of rules used by all three methods</p>
  */
 public class CommonRules {
+    /**
+     * Constant <code>ruleCheckerList</code>
+     */
     public static List<RuleChecker> ruleCheckerList = new ArrayList<>();
 
     static {

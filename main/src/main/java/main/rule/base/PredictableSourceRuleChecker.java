@@ -22,6 +22,7 @@ import java.util.Map;
  * Created by krishnokoli on 11/26/17.
  *
  * @author krishnokoli
+ * @version $Id: $Id
  * @since V01.00.00
  */
 public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
@@ -192,6 +193,9 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
         return output;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths) {
         ArrayList<AnalysisIssue> outList = new ArrayList<>();

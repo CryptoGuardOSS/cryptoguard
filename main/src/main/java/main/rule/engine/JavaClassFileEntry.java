@@ -7,8 +7,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
+ * <p>JavaClassFileEntry class.</p>
+ *
  * @author RigorityJTeam
  * Created on 2019-01-17.
+ * @version $Id: $Id
  * @since 01.01.11
  *
  * <p>The method in the Engine handling Java Class File(s) Scanning.</p>

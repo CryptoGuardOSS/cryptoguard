@@ -4,6 +4,7 @@ package main.frontEnd.MessagingSystem;
  * <p>AnalysisLocation class.</p>
  *
  * @author franceme
+ * @version $Id: $Id
  * @since V01.00.00
  */
 public class AnalysisLocation {
@@ -29,6 +30,11 @@ public class AnalysisLocation {
         this.lineEnd = end;
     }
 
+    /**
+     * <p>Constructor for AnalysisLocation.</p>
+     *
+     * @param lineNumber a {@link java.lang.Integer} object.
+     */
     public AnalysisLocation(Integer lineNumber) {
         this.lineStart = lineNumber;
         this.lineEnd = lineNumber;
@@ -111,7 +117,7 @@ public class AnalysisLocation {
      *
      * <p>getColStart()</p>
      *
-     * @return {@link Integer} - The colStart.
+     * @return {@link java.lang.Integer} - The colStart.
      */
     public Integer getColStart() {
         return colStart;
@@ -122,7 +128,7 @@ public class AnalysisLocation {
      *
      * <p>setColStart(java.lang.Integer colStart)</p>
      *
-     * @param colStart {@link Integer} - The value to set as colStart
+     * @param colStart {@link java.lang.Integer} - The value to set as colStart
      */
     public void setColStart(Integer colStart) {
         this.colStart = colStart;
@@ -133,7 +139,7 @@ public class AnalysisLocation {
      *
      * <p>getColEnd()</p>
      *
-     * @return {@link Integer} - The colEnd.
+     * @return {@link java.lang.Integer} - The colEnd.
      */
     public Integer getColEnd() {
         return colEnd;
@@ -144,7 +150,7 @@ public class AnalysisLocation {
      *
      * <p>setColEnd(java.lang.Integer colEnd)</p>
      *
-     * @param colEnd {@link Integer} - The value to set as colEnd
+     * @param colEnd {@link java.lang.Integer} - The value to set as colEnd
      */
     public void setColEnd(Integer colEnd) {
         this.colEnd = colEnd;

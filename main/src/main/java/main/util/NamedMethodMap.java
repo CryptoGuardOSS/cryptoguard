@@ -15,6 +15,7 @@ import java.util.Map;
  * <p>NamedMethodMap class.</p>
  *
  * @author RigorityJTeam
+ * @version $Id: $Id
  * @since V01.00.00
  */
 public class NamedMethodMap {

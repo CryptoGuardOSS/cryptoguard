@@ -23,6 +23,7 @@ import java.util.HashMap;
  * <p>STATUS: IC</p>
  *
  * @author franceme
+ * @version $Id: $Id
  * @since V01.00.03
  */
 public class ScarfXML implements OutputStructure {

@@ -4,6 +4,7 @@ package main.rule.engine;
  * The criteria helper class. This is used for creating static rules to be enforced in various ways.
  *
  * @author RigorityJTeam
+ * @version $Id: $Id
  * @since V01.00.00
  */
 public class Criteria {

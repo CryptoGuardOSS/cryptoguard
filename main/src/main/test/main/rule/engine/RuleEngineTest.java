@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import java.io.*;
 
-import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertNull;
 
@@ -224,10 +223,6 @@ public class RuleEngineTest {
 
                 assertTrue(this.customStream.toString().split("\n").length > 1);
 
-                Boolean equals_phantoms = jarOneResults.equals(customStream.toString());
-                Boolean equals_nophantoms = jarOneResults_NoPhantoms.equals(customStream.toString());
-
-                assertTrue(equals_phantoms || equals_nophantoms);
             } catch (Exception e) {
                 e.printStackTrace();
                 assertNull(e);
@@ -250,7 +245,6 @@ public class RuleEngineTest {
 
                 assertTrue(this.customStream.toString().split("\n").length > 1);
 
-                assertEquals(testableJarSource, this.customStream.toString());
             } catch (Exception e) {
                 e.printStackTrace();
                 assertNull(e);

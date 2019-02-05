@@ -10,6 +10,7 @@ import java.util.List;
  * The interface of the RuleChecker class. Used to generate the structure of the various rules being checked.
  *
  * @author RigorityJTeam
+ * @version $Id: $Id
  * @since V01.00.00
  */
 public interface RuleChecker {
@@ -21,7 +22,10 @@ public interface RuleChecker {
      * @param type                  the type of engine to be used for the processing
      * @param projectJarPath        the path to the used jar(s)
      * @param projectDependencyPath the path to the dependencies of the project
-     * @throws java.io.IOException In case there is an issue interpreting the project
+     * @param printout              a {@link java.lang.Boolean} object.
+     * @param sourcePaths           a {@link java.util.List} object.
+     * @return a {@link java.util.ArrayList} object.
+     * @throws java.io.IOException if any.
      */
     ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printout, List<String> sourcePaths) throws IOException;
 }

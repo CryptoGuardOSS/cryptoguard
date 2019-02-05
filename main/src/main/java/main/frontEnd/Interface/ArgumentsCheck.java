@@ -16,8 +16,11 @@ import java.util.List;
 import java.util.Properties;
 
 /**
+ * <p>ArgumentsCheck class.</p>
+ *
  * @author RigorityJTeam
  * Created on 12/13/18.
+ * @version $Id: $Id
  * @since 01.01.02
  *
  * <p>The main check for the Arguments</p>
@@ -31,7 +34,8 @@ public class ArgumentsCheck {
      * <p>This method will attempt to create the Environment Information and provide help if the usage doesn't match</p>
      *
      * @param args {@link java.lang.String} - the raw arguments passed into the console
-     * @return {@link EnvironmentInformation} - when not null, the general Information is created for usage within any output structure.
+     * @return {@link main.frontEnd.MessagingSystem.routing.EnvironmentInformation} - when not null, the general Information is created for usage within any output structure.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
     public static EnvironmentInformation paramaterCheck(List<String> args) throws ExceptionHandler {
 

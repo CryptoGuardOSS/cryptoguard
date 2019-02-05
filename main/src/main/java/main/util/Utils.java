@@ -30,6 +30,7 @@ import java.util.zip.ZipInputStream;
  * <p>Utils class.</p>
  *
  * @author RigorityJTeam
+ * @version $Id: $Id
  * @since V01.00.00
  */
 public class Utils {
@@ -436,6 +437,12 @@ public class Utils {
         return classNames;
     }
 
+    /**
+     * <p>retrieveFullyQualifiedName.</p>
+     *
+     * @param sourceJavaFile a {@link java.util.List} object.
+     * @return a {@link java.util.List} object.
+     */
     public static List<String> retrieveFullyQualifiedName(List<String> sourceJavaFile) {
         List<String> fullPath = new ArrayList<>();
         for (String in : sourceJavaFile)
@@ -444,6 +451,12 @@ public class Utils {
         return fullPath;
     }
 
+    /**
+     * <p>retrieveFullyQualifiedName.</p>
+     *
+     * @param in a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String retrieveFullyQualifiedName(String in) {
 
         String sourcePackage = trimFilePath(in);
@@ -474,6 +487,12 @@ public class Utils {
         return sourcePackage;
     }
 
+    /**
+     * <p>retrieveTrimmedSourcePaths.</p>
+     *
+     * @param files a {@link java.util.List} object.
+     * @return a {@link java.util.List} object.
+     */
     public static List<String> retrieveTrimmedSourcePaths(List<String> files) {
         List<String> filePaths = new ArrayList<>();
         for (String relativeFile : files) {
@@ -493,6 +512,13 @@ public class Utils {
         return filePaths;
     }
 
+    /**
+     * <p>retrieveBaseSourcePath.</p>
+     *
+     * @param sourcePaths    a {@link java.util.List} object.
+     * @param dependencyPath a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String retrieveBaseSourcePath(List<String> sourcePaths, String dependencyPath) {
         String tempDependencyPath = sourcePaths.get(0);
         for (String in : sourcePaths)
@@ -503,6 +529,12 @@ public class Utils {
         return Utils.osPathJoin(tempDependencyPath, dependencyPath);
     }
 
+    /**
+     * <p>retrieveFullFilePath.</p>
+     *
+     * @param filename a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String retrieveFullFilePath(String filename) {
         File file = new File(filename);
         if (file.exists())
@@ -519,22 +551,42 @@ public class Utils {
      * This method trims the file path and package from the absolute path.
      * <p>EX: src/main/java/com/test/me/main.java {@literal -}{@literal >} main.java</p>
      *
-     * @param fullFilePath {@link String} - The full file path
-     * @return {@link String} - The file name with the extension attached
+     * @param fullFilePath {@link java.lang.String} - The full file path
+     * @return {@link java.lang.String} - The file name with the extension attached
      */
     public static String trimFilePath(String fullFilePath) {
         String[] folderSplit = fullFilePath.split(Pattern.quote(System.getProperty("file.separator")));
         return folderSplit[folderSplit.length - 1];
     }
 
+    /**
+     * <p>osPathJoin.</p>
+     *
+     * @param elements a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String osPathJoin(String... elements) {
         return Utils.join(Utils.fileSep, elements);
     }
 
+    /**
+     * <p>join.</p>
+     *
+     * @param delimiter a {@link java.lang.String} object.
+     * @param elements  a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String join(String delimiter, String... elements) {
         return join(delimiter, Arrays.asList(elements));
     }
 
+    /**
+     * <p>join.</p>
+     *
+     * @param delimiter a {@link java.lang.String} object.
+     * @param elements  a {@link java.util.List} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String join(String delimiter, List<String> elements) {
         StringBuilder tempString = new StringBuilder();
         for (String in : elements) {
@@ -546,6 +598,11 @@ public class Utils {
         return tempString.toString();
     }
 
+    /**
+     * <p>getJAVA_HOME.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public static String getJAVA_HOME() {
         String JAVA_HOME = System.getenv("JAVA_HOME");
         if (StringUtils.isEmpty(JAVA_HOME)) {
@@ -555,6 +612,11 @@ public class Utils {
         return JAVA_HOME;
     }
 
+    /**
+     * <p>getJAVA7_HOME.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public static String getJAVA7_HOME() {
         String JAVA7_HOME = System.getenv("JAVA7_HOME");
         if (StringUtils.isEmpty(JAVA7_HOME)) {
@@ -564,6 +626,11 @@ public class Utils {
         return JAVA7_HOME;
     }
 
+    /**
+     * <p>getANDROID.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public static String getANDROID() {
         String ANDROID_HOME = System.getenv("ANDROID_HOME");
         if (StringUtils.isEmpty(ANDROID_HOME)) {
@@ -573,6 +640,11 @@ public class Utils {
         return ANDROID_HOME;
     }
 
+    /**
+     * <p>getBaseSOOT.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public static String getBaseSOOT() {
         String rt = Utils.join(Utils.fileSep, "jre", "lib", "rt.jar:");
         String jce = Utils.join(Utils.fileSep, "jre", "lib", "jce.jar");
@@ -580,6 +652,11 @@ public class Utils {
         return Utils.getJAVA_HOME() + Utils.fileSep + Utils.join(Utils.getJAVA_HOME() + Utils.fileSep, rt, jce);
     }
 
+    /**
+     * <p>getBaseSOOT7.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public static String getBaseSOOT7() {
         String rt = Utils.join(Utils.fileSep, "jre", "lib", "rt.jar:");
         String jce = Utils.join(Utils.fileSep, "jre", "lib", "jce.jar");
@@ -587,6 +664,11 @@ public class Utils {
         return Utils.getJAVA7_HOME() + Utils.fileSep + Utils.join(Utils.getJAVA7_HOME() + Utils.fileSep, rt, jce);
     }
 
+    /**
+     * <p>loadSootClasses.</p>
+     *
+     * @param classes a {@link java.util.List} object.
+     */
     public static void loadSootClasses(List<String> classes) {
         Options.v().set_keep_line_number(true);
         Options.v().set_allow_phantom_refs(true);
@@ -598,6 +680,12 @@ public class Utils {
         Scene.v().loadBasicClasses();
     }
 
+    /**
+     * <p>retrieveClassNameFromSootString.</p>
+     *
+     * @param sootString a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String retrieveClassNameFromSootString(String sootString) {
         Matcher secondMatches = sootClassPatternTwo.matcher(sootString);
         if (secondMatches.find())
@@ -610,6 +698,12 @@ public class Utils {
         return "UNKNOWN";
     }
 
+    /**
+     * <p>retrieveFoundPatternFromSootString.</p>
+     *
+     * @param sootString a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String retrieveFoundPatternFromSootString(String sootString) {
         Matcher matches = sootFoundPattern.matcher(sootString);
 
@@ -618,6 +712,12 @@ public class Utils {
         return "UNKNOWN";
     }
 
+    /**
+     * <p>retrieveLineNumFromSootString.</p>
+     *
+     * @param sootString a {@link java.lang.String} object.
+     * @return a {@link java.lang.Integer} object.
+     */
     public static Integer retrieveLineNumFromSootString(String sootString) {
         Matcher matches = sootLineNumPattern.matcher(sootString);
 
@@ -626,6 +726,12 @@ public class Utils {
         return -1;
     }
 
+    /**
+     * <p>retrieveMethodFromSootString.</p>
+     *
+     * @param sootString a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String retrieveMethodFromSootString(String sootString) {
         Matcher matches = sootMthdPattern.matcher(sootString);
 
@@ -639,6 +745,11 @@ public class Utils {
         return "UNKNOWN";
     }
 
+    /**
+     * <p>getPlatform.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public static String getPlatform() {
         if (!System.getProperty("os.name").contains("Linux")) {
             return System.getProperty("os.name") + "_" + System.getProperty("os.version");
@@ -662,6 +773,12 @@ public class Utils {
         }
     }
 
+    /**
+     * <p>retrieveFoundMatchFromSootString.</p>
+     *
+     * @param sootString a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String retrieveFoundMatchFromSootString(String sootString) {
         Matcher matches = sootFoundMatchPattern.matcher(sootString);
 
@@ -671,6 +788,13 @@ public class Utils {
         return "UNKNOWN";
     }
 
+    /**
+     * <p>retrieveDirs.</p>
+     *
+     * @param arguments a {@link java.util.List} object.
+     * @return a {@link java.util.List} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
+     */
     public static List<String> retrieveDirs(List<String> arguments) throws ExceptionHandler {
         List<String> dirs = new ArrayList<>();
         for (String dir : arguments) {
@@ -687,6 +811,14 @@ public class Utils {
         return dirs;
     }
 
+    /**
+     * <p>verifyFileOut.</p>
+     *
+     * @param file a {@link java.lang.String} object.
+     * @param type a {@link main.frontEnd.MessagingSystem.routing.Listing} object.
+     * @return a {@link java.lang.String} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
+     */
     public static String verifyFileOut(String file, Listing type) throws ExceptionHandler {
         if (!file.endsWith(type.getOutputFileExt()))
             throw new ExceptionHandler("File " + file + " doesn't have the right file type ");
@@ -704,6 +836,14 @@ public class Utils {
         }
     }
 
+    /**
+     * <p>retrieveFilePath.</p>
+     *
+     * @param file a {@link java.lang.String} object.
+     * @param type a {@link main.rule.engine.EngineType} object.
+     * @return a {@link java.lang.String} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
+     */
     public static String retrieveFilePath(String file, EngineType type) throws ExceptionHandler {
         if (!file.endsWith(type.getInputExtension()))
             throw new ExceptionHandler("File " + file + " doesn't have the right file type ");
@@ -719,6 +859,14 @@ public class Utils {
         }
     }
 
+    /**
+     * <p>retrieveFilesByType.</p>
+     *
+     * @param arguments a {@link java.util.List} object.
+     * @param type      a {@link main.rule.engine.EngineType} object.
+     * @return a {@link java.util.List} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
+     */
     public static List<String> retrieveFilesByType(List<String> arguments, EngineType type) throws ExceptionHandler {
         if (type == EngineType.DIR)
             if (arguments.size() != 1)
@@ -734,6 +882,11 @@ public class Utils {
         return filePaths;
     }
 
+    /**
+     * <p>getCurrentTimeStamp.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public static String getCurrentTimeStamp() {
         return dateFormat.format(new Date());
 

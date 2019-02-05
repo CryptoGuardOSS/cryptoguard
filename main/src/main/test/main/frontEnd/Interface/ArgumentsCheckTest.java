@@ -43,7 +43,7 @@ public class ArgumentsCheckTest {
     @Test
     public void testEnvironmentVariables() {
         String[] fileLists = new String[]{jarOne};
-        String[] dirLists = new String[]{srcOneGrv, Utils.osPathJoin(srcOneGrv, srcOneGrvDep)};
+        String[] dirLists = new String[]{srcOneGrv, srcOneGrvDep};
 
         for (String file : fileLists) {
             File tempFile = new File(file);

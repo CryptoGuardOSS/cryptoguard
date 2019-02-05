@@ -15,6 +15,7 @@ import java.util.Map;
  * <p>Abstract PatternMatcherRuleChecker class.</p>
  *
  * @author RigorityJTeam
+ * @version $Id: $Id
  * @since V01.00.00
  */
 public abstract class PatternMatcherRuleChecker extends BaseRuleChecker {
@@ -57,6 +58,9 @@ public abstract class PatternMatcherRuleChecker extends BaseRuleChecker {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths) {
         ArrayList<AnalysisIssue> outList = new ArrayList<>();

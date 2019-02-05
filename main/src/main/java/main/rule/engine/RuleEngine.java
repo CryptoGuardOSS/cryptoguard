@@ -12,6 +12,7 @@ import java.util.Map;
  * passes them to the entry point of the program for processing.
  *
  * @author RigorityJTeam
+ * @version $Id: $Id
  * @since V01.00.00
  */
 public class RuleEngine {
@@ -22,7 +23,7 @@ public class RuleEngine {
      * handle all of the arguments and routing for the operation required.
      *
      * @param args the arguments passed in from being called from the command line
-     * @throws java.lang.Exception throws exceptions in case of extreme error of being called.
+     * @throws java.lang.Exception if any.
      */
     public static void main(String[] args) throws Exception {
         if (args.length < 2) {

@@ -12,8 +12,10 @@ import java.util.List;
  * </ul>
  *
  * @author RigorityJTeam
+ * @version $Id: $Id
  * @since V01.00.00
  */
+//region Attributes
 public enum EngineType {
     //region Values
     JAR("JAR File", "jar", ".jar", "To signal a Jar File to be scanned.", "-s {(absolute path)/file.jar} -d {relative path to dependencies}"),
@@ -83,7 +85,7 @@ public enum EngineType {
      *
      * <p>getHelpInfo()</p>
      *
-     * @return {@link String} - Returns the HelpInfo field
+     * @return {@link java.lang.String} - Returns the HelpInfo field
      */
     public String getHelpInfo() {
         return helpInfo;
@@ -118,7 +120,7 @@ public enum EngineType {
     /**
      * The method to automatically retrieve all of the help info for all of the different use cases.
      *
-     * @return {@link String} - The full help info for console use
+     * @return {@link java.lang.String} - The full help info for console use
      */
     public static String getHelp() {
         StringBuilder out = new StringBuilder();
@@ -129,6 +131,11 @@ public enum EngineType {
         return out.toString();
     }
 
+    /**
+     * <p>getValidHelp.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public static String getValidHelp() {
         StringBuilder help = new StringBuilder();
 

@@ -12,8 +12,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
+ * <p>EntryPoint class.</p>
+ *
  * @author RigorityJTeam
  * Created on 12/5/18.
+ * @version $Id: $Id
  * @since 01.00.06
  *
  * <p>The main entry point of the program when this program
@@ -21,6 +24,11 @@ import java.util.Arrays;
  */
 public class EntryPoint {
 
+    /**
+     * <p>main.</p>
+     *
+     * @param args an array of {@link java.lang.String} objects.
+     */
     public static void main(String[] args) {
 
         String outputMessage;

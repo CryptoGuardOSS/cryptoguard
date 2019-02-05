@@ -8,6 +8,7 @@ import main.rule.engine.EngineType;
  * The enum containing all of the different messaging types available for the user.
  *
  * @author franceme
+ * @version $Id: $Id
  * @since V01.00.00
  */
 public enum Listing {
@@ -55,7 +56,7 @@ public enum Listing {
      * The dynamic loader for the Listing Type based on the flag
      *
      * @param flag {@link java.lang.String} - The input type looking for the flag type
-     * @return {@link Listing} - The messaging Type retrieved by flag, if not found the default will be used
+     * @return {@link main.frontEnd.MessagingSystem.routing.Listing} - The messaging Type retrieved by flag, if not found the default will be used
      */
     public static Listing retrieveListingType(String flag) {
         if (flag != null)
@@ -71,7 +72,7 @@ public enum Listing {
      *
      * <p>getFlag()</p>
      *
-     * @return a {@link String} object.
+     * @return a {@link java.lang.String} object.
      */
     public String getFlag() {
         return flag;
@@ -82,7 +83,7 @@ public enum Listing {
      *
      * <p>getType()</p>
      *
-     * @return {@link String} - The type.
+     * @return {@link java.lang.String} - The type.
      */
     public String getType() {
         return type;
@@ -150,6 +151,11 @@ public enum Listing {
         return help.toString();
     }
 
+    /**
+     * <p>Getter for the field <code>outputFileExt</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getOutputFileExt() {
         return outputFileExt;
     }

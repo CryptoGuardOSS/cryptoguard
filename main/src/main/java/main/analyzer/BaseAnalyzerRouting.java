@@ -13,14 +13,28 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * <p>BaseAnalyzerRouting class.</p>
+ *
  * @author RigorityJTeam
  * Created on 2019-01-26.
+ * @version $Id: $Id
  * @since 02.02.00
  *
  * <p>The class to handle the routing for the different use cases.</p>
  */
 public class BaseAnalyzerRouting {
 
+    /**
+     * <p>environmentRouting.</p>
+     *
+     * @param routingType       a {@link main.rule.engine.EngineType} object.
+     * @param criteriaClass     a {@link java.lang.String} object.
+     * @param criteriaMethod    a {@link java.lang.String} object.
+     * @param criteriaParam     a int.
+     * @param snippetPath       a {@link java.util.List} object.
+     * @param projectDependency a {@link java.util.List} object.
+     * @param checker           a {@link main.rule.base.BaseRuleChecker} object.
+     */
     public static void environmentRouting(EngineType routingType,
                                           String criteriaClass, String criteriaMethod,
                                           int criteriaParam, List<String> snippetPath,
@@ -49,6 +63,18 @@ public class BaseAnalyzerRouting {
     //region Case Handlers
 
     //region JAR
+
+    /**
+     * <p>setupBaseJar.</p>
+     *
+     * @param criteriaClass         a {@link java.lang.String} object.
+     * @param criteriaMethod        a {@link java.lang.String} object.
+     * @param criteriaParam         a int.
+     * @param projectJarPath        a {@link java.lang.String} object.
+     * @param projectDependencyPath a {@link java.lang.String} object.
+     * @param checker               a {@link main.rule.base.BaseRuleChecker} object.
+     * @throws java.io.IOException if any.
+     */
     public static void setupBaseJar(String criteriaClass,
                                     String criteriaMethod,
                                     int criteriaParam,
@@ -86,6 +112,17 @@ public class BaseAnalyzerRouting {
 
     //endregion
     //region APK
+
+    /**
+     * <p>setupBaseAPK.</p>
+     *
+     * @param criteriaClass  a {@link java.lang.String} object.
+     * @param criteriaMethod a {@link java.lang.String} object.
+     * @param criteriaParam  a int.
+     * @param projectJarPath a {@link java.lang.String} object.
+     * @param checker        a {@link main.rule.base.BaseRuleChecker} object.
+     * @throws java.io.IOException if any.
+     */
     public static void setupBaseAPK(String criteriaClass,
                                     String criteriaMethod,
                                     int criteriaParam,
@@ -106,6 +143,18 @@ public class BaseAnalyzerRouting {
 
     //endregion
     //region BaseDir
+
+    /**
+     * <p>setupBaseDir.</p>
+     *
+     * @param criteriaClass     a {@link java.lang.String} object.
+     * @param criteriaMethod    a {@link java.lang.String} object.
+     * @param criteriaParam     a int.
+     * @param snippetPath       a {@link java.util.List} object.
+     * @param projectDependency a {@link java.util.List} object.
+     * @param checker           a {@link main.rule.base.BaseRuleChecker} object.
+     * @throws java.io.IOException if any.
+     */
     public static void setupBaseDir(String criteriaClass,
                                     String criteriaMethod,
                                     int criteriaParam,
@@ -132,6 +181,18 @@ public class BaseAnalyzerRouting {
     //endregion
     //region JavaFiles
     //Like Dir
+
+    /**
+     * <p>setupBaseJava.</p>
+     *
+     * @param criteriaClass     a {@link java.lang.String} object.
+     * @param criteriaMethod    a {@link java.lang.String} object.
+     * @param criteriaParam     a int.
+     * @param snippetPath       a {@link java.util.List} object.
+     * @param projectDependency a {@link java.util.List} object.
+     * @param checker           a {@link main.rule.base.BaseRuleChecker} object.
+     * @throws java.io.IOException if any.
+     */
     public static void setupBaseJava(String criteriaClass,
                                      String criteriaMethod,
                                      int criteriaParam,
@@ -154,6 +215,18 @@ public class BaseAnalyzerRouting {
     //endregion
     //region JavaClassFiles
     //Like Jar
+
+    /**
+     * <p>setupBaseJavaClass.</p>
+     *
+     * @param criteriaClass         a {@link java.lang.String} object.
+     * @param criteriaMethod        a {@link java.lang.String} object.
+     * @param criteriaParam         a int.
+     * @param sourceJavaClasses     a {@link java.util.List} object.
+     * @param projectDependencyPath a {@link java.util.List} object.
+     * @param checker               a {@link main.rule.base.BaseRuleChecker} object.
+     * @throws java.io.IOException if any.
+     */
     public static void setupBaseJavaClass(String criteriaClass,
                                           String criteriaMethod,
                                           int criteriaParam,
@@ -174,6 +247,16 @@ public class BaseAnalyzerRouting {
     //endregion
 
     //endregion
+
+    /**
+     * <p>loadBaseSootInfo.</p>
+     *
+     * @param classNames     a {@link java.util.List} object.
+     * @param criteriaClass  a {@link java.lang.String} object.
+     * @param criteriaMethod a {@link java.lang.String} object.
+     * @param criteriaParam  a int.
+     * @param checker        a {@link main.rule.base.BaseRuleChecker} object.
+     */
     public static void loadBaseSootInfo(List<String> classNames, String criteriaClass,
                                         String criteriaMethod,
                                         int criteriaParam, BaseRuleChecker checker) {

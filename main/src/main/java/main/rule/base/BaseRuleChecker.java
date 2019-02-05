@@ -16,6 +16,7 @@ import java.util.*;
  * This file checks on several of the main factors within the outputed Jimple format.
  *
  * @author RigorityJTeam
+ * @version $Id: $Id
  * @since V01.00.00
  */
 public abstract class BaseRuleChecker implements RuleChecker {
@@ -90,6 +91,13 @@ public abstract class BaseRuleChecker implements RuleChecker {
      */
     public abstract void printAnalysisOutput(Map<String, String> xmlFileStr);
 
+    /**
+     * <p>createAnalysisOutput.</p>
+     *
+     * @param xmlFileStr  a {@link java.util.Map} object.
+     * @param sourcePaths a {@link java.util.List} object.
+     * @return a {@link java.util.ArrayList} object.
+     */
     public abstract ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths);
 
     /**

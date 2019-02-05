@@ -7,8 +7,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
+ * <p>JarEntry class.</p>
+ *
  * @author RigorityJTeam
  * Created on 2018-12-14.
+ * @version $Id: $Id
  * @since 01.01.06
  *
  * <p>The method in the Engine handling Jar Scanning</p>

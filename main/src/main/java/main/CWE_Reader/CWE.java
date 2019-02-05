@@ -1,8 +1,11 @@
 package main.CWE_Reader;
 
 /**
+ * <p>CWE class.</p>
+ *
  * @author RigorityJTeam
  * Created on 2018-12-05.
+ * @version $Id: $Id
  * @since 01.00.07
  *
  * <p>The Class containing the CWE Info</p>
@@ -22,11 +25,11 @@ public class CWE {
      * The cwe general info body
      * This class only carries a brief subset of the full information of a CWE
      *
-     * @param id                  {@link Integer} - The id of the CWE
-     * @param name                {@link String} - The name of the CWE
-     * @param weaknessAbstraction {@link String} - The weakness type of the CWE
-     * @param description         {@link String} - The short description of the CWE
-     * @param extendedDescription {@link String} - The extended description of the CWE
+     * @param id                  {@link java.lang.Integer} - The id of the CWE
+     * @param name                {@link java.lang.String} - The name of the CWE
+     * @param weaknessAbstraction {@link java.lang.String} - The weakness type of the CWE
+     * @param description         {@link java.lang.String} - The short description of the CWE
+     * @param extendedDescription {@link java.lang.String} - The extended description of the CWE
      */
     public CWE(Integer id, String name, String weaknessAbstraction, String description, String extendedDescription) {
         this.id = id;
@@ -43,7 +46,7 @@ public class CWE {
      *
      * <p>getId()</p>
      *
-     * @return a {@link Integer} object.
+     * @return a {@link java.lang.Integer} object.
      */
     public Integer getId() {
         return id;
@@ -54,7 +57,7 @@ public class CWE {
      *
      * <p>getName()</p>
      *
-     * @return a {@link String} object.
+     * @return a {@link java.lang.String} object.
      */
     public String getName() {
         return name;
@@ -65,7 +68,7 @@ public class CWE {
      *
      * <p>getWeaknessAbstraction()</p>
      *
-     * @return a {@link String} object.
+     * @return a {@link java.lang.String} object.
      */
     public String getWeaknessAbstraction() {
         return weaknessAbstraction;
@@ -76,7 +79,7 @@ public class CWE {
      *
      * <p>getDescription()</p>
      *
-     * @return a {@link String} object.
+     * @return a {@link java.lang.String} object.
      */
     public String getDescription() {
         return description;
@@ -87,7 +90,7 @@ public class CWE {
      *
      * <p>getExtendedDescription()</p>
      *
-     * @return a {@link String} object.
+     * @return a {@link java.lang.String} object.
      */
     public String getExtendedDescription() {
         return extendedDescription;

@@ -11,8 +11,11 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * <p>UniqueRuleAnalyzer class.</p>
+ *
  * @author RigorityJTeam
  * Created on 2019-01-25.
+ * @version $Id: $Id
  * @since 02.00.04
  *
  * <p>The funneling class to handle the various different implementations of setting up the SOOT environment</p>
@@ -30,6 +33,14 @@ import java.util.List;
  */
 public class UniqueRuleAnalyzer {
 
+    /**
+     * <p>environmentRouting.</p>
+     *
+     * @param projectJarPath        a {@link java.util.List} object.
+     * @param projectDependencyPath a {@link java.util.List} object.
+     * @param routingType           a {@link main.rule.engine.EngineType} object.
+     * @return a {@link java.util.List} object.
+     */
     public static List<String> environmentRouting(List<String> projectJarPath, List<String> projectDependencyPath, EngineType routingType) {
         if (routingType == EngineType.JAR) {
             return setupBaseJarEnv(projectJarPath.get(0),
@@ -47,6 +58,13 @@ public class UniqueRuleAnalyzer {
         }
     }
 
+    /**
+     * <p>setupBaseJarEnv.</p>
+     *
+     * @param projectJarPath        a {@link java.lang.String} object.
+     * @param projectDependencyPath a {@link java.lang.String} object.
+     * @return a {@link java.util.List} object.
+     */
     public static List<String> setupBaseJarEnv(String projectJarPath, String projectDependencyPath) {
 
         String java_home = Utils.getJAVA_HOME();
@@ -71,6 +89,12 @@ public class UniqueRuleAnalyzer {
 
     }
 
+    /**
+     * <p>setupBaseAPKEnv.</p>
+     *
+     * @param projectJarPath a {@link java.lang.String} object.
+     * @return a {@link java.util.List} object.
+     */
     public static List<String> setupBaseAPKEnv(String projectJarPath) {
 
         Options.v().set_src_prec(Options.src_prec_apk);
@@ -89,6 +113,13 @@ public class UniqueRuleAnalyzer {
         }
     }
 
+    /**
+     * <p>setupBaseSourceEnv.</p>
+     *
+     * @param snippetPath           a {@link java.util.List} object.
+     * @param projectDependencyPath a {@link java.util.List} object.
+     * @return a {@link java.util.List} object.
+     */
     public static List<String> setupBaseSourceEnv(List<String> snippetPath, List<String> projectDependencyPath) {
 
         List<String> classNames = Utils.getClassNamesFromSnippet(snippetPath);
@@ -108,6 +139,14 @@ public class UniqueRuleAnalyzer {
 
     //region Java Files
     //Like Dir
+
+    /**
+     * <p>setupJavaFileEnv.</p>
+     *
+     * @param snippetPath           a {@link java.util.List} object.
+     * @param projectDependencyPath a {@link java.util.List} object.
+     * @return a {@link java.util.List} object.
+     */
     public static List<String> setupJavaFileEnv(List<String> snippetPath, List<String> projectDependencyPath) {
 
         List<String> classNames = Utils.retrieveFullyQualifiedName(snippetPath);
@@ -135,6 +174,14 @@ public class UniqueRuleAnalyzer {
 
     //region JavaClassFiles
     //Like Jar
+
+    /**
+     * <p>setupJavaClassFileEnv.</p>
+     *
+     * @param javaClassFiles        a {@link java.util.List} object.
+     * @param projectDependencyPath a {@link java.util.List} object.
+     * @return a {@link java.util.List} object.
+     */
     public static List<String> setupJavaClassFileEnv(List<String> javaClassFiles, List<String> projectDependencyPath) {
 
         Scene.v().setSootClassPath(Utils.getBaseSOOT());

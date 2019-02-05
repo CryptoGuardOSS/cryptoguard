@@ -14,6 +14,7 @@ import java.util.*;
  * <p>STATUS: IC</p>
  *
  * @author franceme
+ * @version $Id: $Id
  * @since V01.00.01
  */
 public class Legacy implements OutputStructure {

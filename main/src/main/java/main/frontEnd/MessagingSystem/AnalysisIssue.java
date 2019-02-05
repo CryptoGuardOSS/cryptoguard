@@ -15,6 +15,7 @@ import java.util.Stack;
  * <p>STATUS: IC</p>
  *
  * @author franceme
+ * @version $Id: $Id
  * @since V01.00.01
  */
 public class AnalysisIssue {
@@ -30,6 +31,14 @@ public class AnalysisIssue {
 
     //region Constructors
 
+    /**
+     * <p>Constructor for AnalysisIssue.</p>
+     *
+     * @param sootString  a {@link java.lang.String} object.
+     * @param ruleNumber  a {@link java.lang.Integer} object.
+     * @param Info        a {@link java.lang.String} object.
+     * @param sourcePaths a {@link java.util.List} object.
+     */
     public AnalysisIssue(String sootString, Integer ruleNumber, String Info, List<String> sourcePaths) {
         String className = Utils.retrieveClassNameFromSootString(sootString);
         String methodName = Utils.retrieveMethodFromSootString(sootString);
@@ -69,6 +78,14 @@ public class AnalysisIssue {
         }
     }
 
+    /**
+     * <p>Constructor for AnalysisIssue.</p>
+     *
+     * @param unit        a {@link main.analyzer.backward.UnitContainer} object.
+     * @param ruleNumber  a {@link java.lang.Integer} object.
+     * @param sootString  a {@link java.lang.String} object.
+     * @param sourcePaths a {@link java.util.List} object.
+     */
     public AnalysisIssue(UnitContainer unit, Integer ruleNumber, String sootString, List<String> sourcePaths) {
         Integer lineNum;
         String constant = null;
@@ -210,7 +227,7 @@ public class AnalysisIssue {
     /**
      * <p>addLocation.</p>
      *
-     * @param newLocation a {@link AnalysisLocation} object.
+     * @param newLocation a {@link main.frontEnd.MessagingSystem.AnalysisLocation} object.
      */
     public void addLocation(AnalysisLocation newLocation) {
         this.getLocations().add(newLocation);
@@ -229,7 +246,7 @@ public class AnalysisIssue {
      * <p>addMethod.</p>
      *
      * @param methodName a {@link java.lang.String} object.
-     * @param location   a {@link AnalysisLocation} object.
+     * @param location   a {@link main.frontEnd.MessagingSystem.AnalysisLocation} object.
      */
     public void addMethod(String methodName, AnalysisLocation location) {
         location.setMethodNumber(this.getMethods().size());
