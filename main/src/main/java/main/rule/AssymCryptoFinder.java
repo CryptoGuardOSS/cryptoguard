@@ -2,6 +2,7 @@ package main.rule;
 
 import main.analyzer.backward.Analysis;
 import main.analyzer.backward.UnitContainer;
+import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.rule.base.BaseRuleChecker;
 import main.rule.engine.Criteria;
 import soot.ValueBox;
@@ -15,6 +16,7 @@ import java.util.Map;
  * <p>AssymCryptoFinder class.</p>
  *
  * @author RigorityJTeam
+ * @version $Id: $Id
  * @since V01.00.00
  */
 public class AssymCryptoFinder extends BaseRuleChecker {
@@ -103,5 +105,13 @@ public class AssymCryptoFinder extends BaseRuleChecker {
      */
     @Override
     public void printAnalysisOutput(Map<String, String> xmlFileStr) {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths) {
+        return new ArrayList<>();
     }
 }

@@ -37,6 +37,9 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ *
+ * @author RigorityJTeam
+ * @version $Id: $Id
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "BugSummaryType", propOrder = {
@@ -65,7 +68,9 @@ public class BugSummaryType {
      *
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link BugCategoryType }
+     * {@link com.example.response.BugCategoryType}
+     *
+     * @return a {@link java.util.List} object.
      */
     public List<BugCategoryType> getBugCategory() {
         if (bugCategory == null) {

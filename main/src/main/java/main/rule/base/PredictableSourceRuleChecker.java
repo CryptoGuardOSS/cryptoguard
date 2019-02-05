@@ -2,6 +2,7 @@ package main.rule.base;
 
 import main.analyzer.backward.Analysis;
 import main.analyzer.backward.UnitContainer;
+import main.frontEnd.MessagingSystem.AnalysisIssue;
 import soot.ByteType;
 import soot.IntegerType;
 import soot.Value;
@@ -21,6 +22,7 @@ import java.util.Map;
  * Created by krishnokoli on 11/26/17.
  *
  * @author krishnokoli
+ * @version $Id: $Id
  * @since V01.00.00
  */
 public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
@@ -40,6 +42,8 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
 
     private Map<UnitContainer, List<String>> predictableSourcMap = new HashMap<>();
     private Map<UnitContainer, List<String>> othersSourceMap = new HashMap<>();
+    private final String rule = getRuleId();
+    private final String ruleDesc = RULE_VS_DESCRIPTION.get(rule);
 
     /**
      * {@inheritDoc}
@@ -141,9 +145,6 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
      */
     public void printAnalysisOutput(Map<String, String> configFiles) {
 
-        String rule = getRuleId();
-        String ruleDesc = RULE_VS_DESCRIPTION.get(rule);
-
         List<String> predictableSources = new ArrayList<>();
         List<UnitContainer> predictableSourceInst = new ArrayList<>();
         List<UnitContainer> othersSourceInst = new ArrayList<>();
@@ -165,6 +166,13 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
             System.out.println(output);
             System.out.println("=======================================");
         }
+
+        if (!othersSourceMap.isEmpty()) {
+            System.out.println("=======================================");
+            String output = getPrintableMsg(othersSourceMap, rule + "a", ruleDesc);
+            System.out.println(output);
+            System.out.println("=======================================");
+        }
     }
 
     private String getPrintableMsg(Map<UnitContainer, List<String>> predictableSourcMap, String rule, String ruleDesc) {
@@ -183,6 +191,30 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
         }
 
         return output;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths) {
+        ArrayList<AnalysisIssue> outList = new ArrayList<>();
+
+        for (UnitContainer unit : predictableSourcMap.keySet()) {
+            String sootString = predictableSourcMap.get(unit).size() <= 0
+                    ? ""
+                    : "Found: \"" + predictableSourcMap.get(unit).get(0).replaceAll("\"", "") + "\"";
+            outList.add(new AnalysisIssue(unit, Integer.parseInt(rule), sootString, sourcePaths));
+        }
+
+        for (UnitContainer unit : othersSourceMap.keySet()) {
+            String sootString = othersSourceMap.get(unit).size() <= 0
+                    ? ""
+                    : "Found: \"" + othersSourceMap.get(unit).get(0).replaceAll("\"", "") + "\"";
+            outList.add(new AnalysisIssue(unit, Integer.parseInt(rule), sootString, sourcePaths));
+        }
+
+        return outList;
     }
 
     /**

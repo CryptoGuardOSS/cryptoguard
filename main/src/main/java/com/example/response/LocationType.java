@@ -36,6 +36,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ *
+ * @author RigorityJTeam
+ * @version $Id: $Id
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "LocationType", propOrder = {
@@ -73,7 +76,7 @@ public class LocationType {
      * Gets the value of the sourceFile property.
      *
      * @return possible object is
-     * {@link String }
+     * {@link java.lang.String}
      */
     public String getSourceFile() {
         return sourceFile;
@@ -83,7 +86,7 @@ public class LocationType {
      * Sets the value of the sourceFile property.
      *
      * @param value allowed object is
-     *              {@link String }
+     *              {@link java.lang.String}
      */
     public void setSourceFile(String value) {
         this.sourceFile = value;
@@ -93,7 +96,7 @@ public class LocationType {
      * Gets the value of the startLine property.
      *
      * @return possible object is
-     * {@link Integer }
+     * {@link java.lang.Integer}
      */
     public Integer getStartLine() {
         return startLine;
@@ -103,7 +106,7 @@ public class LocationType {
      * Sets the value of the startLine property.
      *
      * @param value allowed object is
-     *              {@link Integer }
+     *              {@link java.lang.Integer}
      */
     public void setStartLine(Integer value) {
         this.startLine = value;
@@ -113,7 +116,7 @@ public class LocationType {
      * Gets the value of the endLine property.
      *
      * @return possible object is
-     * {@link Integer }
+     * {@link java.lang.Integer}
      */
     public Integer getEndLine() {
         return endLine;
@@ -123,7 +126,7 @@ public class LocationType {
      * Sets the value of the endLine property.
      *
      * @param value allowed object is
-     *              {@link Integer }
+     *              {@link java.lang.Integer}
      */
     public void setEndLine(Integer value) {
         this.endLine = value;
@@ -133,7 +136,7 @@ public class LocationType {
      * Gets the value of the startColumn property.
      *
      * @return possible object is
-     * {@link Integer }
+     * {@link java.lang.Integer}
      */
     public Integer getStartColumn() {
         return startColumn;
@@ -143,7 +146,7 @@ public class LocationType {
      * Sets the value of the startColumn property.
      *
      * @param value allowed object is
-     *              {@link Integer }
+     *              {@link java.lang.Integer}
      */
     public void setStartColumn(Integer value) {
         this.startColumn = value;
@@ -153,7 +156,7 @@ public class LocationType {
      * Gets the value of the endColumn property.
      *
      * @return possible object is
-     * {@link Integer }
+     * {@link java.lang.Integer}
      */
     public Integer getEndColumn() {
         return endColumn;
@@ -163,7 +166,7 @@ public class LocationType {
      * Sets the value of the endColumn property.
      *
      * @param value allowed object is
-     *              {@link Integer }
+     *              {@link java.lang.Integer}
      */
     public void setEndColumn(Integer value) {
         this.endColumn = value;
@@ -173,7 +176,7 @@ public class LocationType {
      * Gets the value of the explanation property.
      *
      * @return possible object is
-     * {@link String }
+     * {@link java.lang.String}
      */
     public String getExplanation() {
         return explanation;
@@ -183,7 +186,7 @@ public class LocationType {
      * Sets the value of the explanation property.
      *
      * @param value allowed object is
-     *              {@link String }
+     *              {@link java.lang.String}
      */
     public void setExplanation(String value) {
         this.explanation = value;
@@ -191,6 +194,8 @@ public class LocationType {
 
     /**
      * Gets the value of the id property.
+     *
+     * @return a int.
      */
     public int getId() {
         return id;
@@ -198,6 +203,8 @@ public class LocationType {
 
     /**
      * Sets the value of the id property.
+     *
+     * @param value a int.
      */
     public void setId(int value) {
         this.id = value;
@@ -205,6 +212,8 @@ public class LocationType {
 
     /**
      * Gets the value of the primary property.
+     *
+     * @return a boolean.
      */
     public boolean isPrimary() {
         return primary;
@@ -212,6 +221,8 @@ public class LocationType {
 
     /**
      * Sets the value of the primary property.
+     *
+     * @param value a boolean.
      */
     public void setPrimary(boolean value) {
         this.primary = value;

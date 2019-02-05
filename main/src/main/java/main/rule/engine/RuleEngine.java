@@ -1,6 +1,5 @@
 package main.rule.engine;
 
-import main.rule.*;
 import main.util.*;
 
 import java.util.ArrayList;
@@ -13,35 +12,18 @@ import java.util.Map;
  * passes them to the entry point of the program for processing.
  *
  * @author RigorityJTeam
+ * @version $Id: $Id
  * @since V01.00.00
  */
 public class RuleEngine {
-    private static List<RuleChecker> ruleCheckerList = new ArrayList<>();
-
-    static {
-
-        ruleCheckerList.add(new InsecureAssymCryptoFinder());
-        ruleCheckerList.add(new BrokenCryptoFinder());
-        ruleCheckerList.add(new UntrustedPrngFinder());
-        ruleCheckerList.add(new SSLSocketFactoryFinder());
-        ruleCheckerList.add(new CustomTrustManagerFinder());
-        ruleCheckerList.add(new HostNameVerifierFinder());
-        ruleCheckerList.add(new BrokenHashFinder());
-        ruleCheckerList.add(new ConstantKeyFinder());
-        ruleCheckerList.add(new PredictableIVFinder());
-        ruleCheckerList.add(new PBESaltFinder());
-        ruleCheckerList.add(new PBEInterationCountFinder());
-        ruleCheckerList.add(new PredictableSeedFinder());
-        ruleCheckerList.add(new PredictableKeyStorePasswordFinder());
-        ruleCheckerList.add(new HttpUrlFinder());
-    }
+    private static List<RuleChecker> ruleCheckerList = CommonRules.ruleCheckerList;
 
     /**
      * The point of entry for this library. Essentially the frontend, this will
      * handle all of the arguments and routing for the operation required.
      *
      * @param args the arguments passed in from being called from the command line
-     * @throws java.lang.Exception throws exceptions in case of extreme error of being called.
+     * @throws java.lang.Exception if any.
      */
     public static void main(String[] args) throws Exception {
         if (args.length < 2) {
@@ -55,7 +37,7 @@ public class RuleEngine {
             System.out.println("Analyzing JAR: " + projectJarPath);
 
             for (RuleChecker ruleChecker : ruleCheckerList) {
-                ruleChecker.checkRule(EngineType.JAR, Arrays.asList(projectJarPath), Arrays.asList(projectDependencyPath));
+                ruleChecker.checkRule(EngineType.JAR, Arrays.asList(projectJarPath), Arrays.asList(projectDependencyPath), true, null);
             }
 
         } else if (args[0].equals("apk")) {
@@ -66,7 +48,7 @@ public class RuleEngine {
             String basePackage = Utils.getBasePackageNameFromApk(projectJarPath);
 
             for (RuleChecker ruleChecker : ruleCheckerList) {
-                ruleChecker.checkRule(EngineType.APK, Arrays.asList(projectJarPath), null);
+                ruleChecker.checkRule(EngineType.APK, Arrays.asList(projectJarPath), null, true, null);
             }
         } else if (args[0].equals("source")) {
 
@@ -111,7 +93,7 @@ public class RuleEngine {
                     System.out.println(output.substring(0, output.length() - 2));
 
                     for (RuleChecker ruleChecker : ruleCheckerList) {
-                        ruleChecker.checkRule(EngineType.DIR, dependencies, otherdependencies);
+                        ruleChecker.checkRule(EngineType.DIR, dependencies, otherdependencies, true, null);
                     }
 
                     NamedMethodMap.clearCallerCalleeGraph();

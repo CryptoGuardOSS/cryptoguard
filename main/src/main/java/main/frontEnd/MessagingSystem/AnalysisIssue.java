@@ -1,9 +1,11 @@
 package main.frontEnd.MessagingSystem;
 
-import main.rule.engine.Criteria;
+import main.analyzer.backward.UnitContainer;
 import main.rule.engine.RuleList;
+import main.util.Utils;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 /**
@@ -13,18 +15,18 @@ import java.util.Stack;
  * <p>STATUS: IC</p>
  *
  * @author franceme
+ * @version $Id: $Id
  * @since V01.00.01
  */
 public class AnalysisIssue {
 
     //region Attributes
-    private String fullPathName = "";
-    private String className = "";
+    private String fullPathName;
+    private String className;
     private RuleList rule;
     private Stack methods;
     private ArrayList<AnalysisLocation> locations;
-    private String issueInformation = "";
-    private String issueCause = "";
+    private String info;
     //endregion
 
     //region Constructors
@@ -32,72 +34,118 @@ public class AnalysisIssue {
     /**
      * <p>Constructor for AnalysisIssue.</p>
      *
-     * @param bugLocationInformation a {@link main.rule.engine.Criteria} object.
-     * @param information            a {@link java.lang.String} object.
-     * @param ruleNumber             a {@link java.lang.Integer} object.
-     */
-    public AnalysisIssue(Criteria bugLocationInformation, String information, Integer ruleNumber) {
-        this.fullPathName = bugLocationInformation.getClassName();
-        this.className = bugLocationInformation.getClassName();
-        this.addMethod(bugLocationInformation.getMethodName());
-        this.issueInformation = information;
-        this.rule = RuleList.getRuleByRuleNumber(ruleNumber);
-    }
-
-    /**
-     * <p>Constructor for AnalysisIssue.</p>
-     *
-     * @param className   a {@link java.lang.String} object.
+     * @param sootString  a {@link java.lang.String} object.
      * @param ruleNumber  a {@link java.lang.Integer} object.
-     * @param information a {@link java.lang.String} object.
+     * @param Info        a {@link java.lang.String} object.
+     * @param sourcePaths a {@link java.util.List} object.
      */
-    public AnalysisIssue(String className, Integer ruleNumber, String information) {
-        this.fullPathName = className;
+    public AnalysisIssue(String sootString, Integer ruleNumber, String Info, List<String> sourcePaths) {
+        String className = Utils.retrieveClassNameFromSootString(sootString);
+        String methodName = Utils.retrieveMethodFromSootString(sootString);
+        Integer lineNum = Utils.retrieveLineNumFromSootString(sootString);
+        String constant = null;
+
+
+        if (sootString.contains("constant keys") || ruleNumber == 3)
+            constant = Utils.retrieveFoundMatchFromSootString(sootString);
+
+
+        if (lineNum >= 0)
+            this.addMethod(methodName, new AnalysisLocation(lineNum));
+        else
+            this.addMethod(methodName);
+
         this.className = className;
-        this.issueInformation = information;
         this.rule = RuleList.getRuleByRuleNumber(ruleNumber);
+
+        if (constant != null)
+            Info += " Found value \"" + constant + "\"";
+
+        this.info = Info;
+
+        if (sourcePaths.size() == 1) {
+            String fullSource = sourcePaths.get(0);
+            if (fullSource.endsWith(":dir"))
+                this.fullPathName = Utils.osPathJoin(fullSource.replace(":dir", ""), "src", "main", "java", className.replace(".", System.getProperty("file.separator")) + ".java");
+            else
+                this.fullPathName = Utils.osPathJoin(fullSource, "src", "main", "java", className.replace(".", System.getProperty("file.separator")));
+        } else {
+            for (String in : sourcePaths)
+                if (in.contains(className))
+                    this.fullPathName = in;
+
+            this.fullPathName = "UNKNOWN";
+        }
     }
 
     /**
      * <p>Constructor for AnalysisIssue.</p>
      *
+     * @param unit        a {@link main.analyzer.backward.UnitContainer} object.
      * @param ruleNumber  a {@link java.lang.Integer} object.
-     * @param methodName  a {@link java.lang.String} object.
-     * @param information a {@link java.lang.String} object.
+     * @param sootString  a {@link java.lang.String} object.
+     * @param sourcePaths a {@link java.util.List} object.
      */
-    public AnalysisIssue(Integer ruleNumber, String methodName, String information) {
-        this.fullPathName = "Unknown";
-        this.getMethods().push(methodName);
-        this.issueInformation = information;
+    public AnalysisIssue(UnitContainer unit, Integer ruleNumber, String sootString, List<String> sourcePaths) {
+        Integer lineNum;
+        String constant = null;
+
+
+        if (sootString.contains("constant keys") || ruleNumber == 3)
+            constant = Utils.retrieveFoundMatchFromSootString(sootString);
+
+
+        String methodName = Utils.retrieveMethodFromSootString(unit.getMethod());
+
+        if ((lineNum = unit.getUnit().getJavaSourceStartLineNumber()) >= 0) {
+            AnalysisLocation tempLoc = new AnalysisLocation(lineNum);
+            if (unit.getUnit().getJavaSourceStartColumnNumber() >= 0) {
+                tempLoc.setColStart(unit.getUnit().getJavaSourceStartColumnNumber());
+                tempLoc.setColEnd(unit.getUnit().getJavaSourceStartColumnNumber());
+            }
+
+            this.addMethod(methodName, tempLoc);
+        }
+
+        this.className = Utils.retrieveClassNameFromSootString(unit.getMethod());
         this.rule = RuleList.getRuleByRuleNumber(ruleNumber);
+
+
+        this.info = Utils.retrieveFoundPatternFromSootString(sootString);
+
+        if (this.info.equals("UNKNOWN") && constant != null)
+            this.info = "Found: Constant \"" + constant + "\"";
+        else if (this.info.equals("UNKNOWN") && constant == null)
+            this.info = sootString;
+        else if (constant != null)
+            this.info += " Found value \"" + constant + "\"";
+
+        if (lineNum <= 0) {
+            this.addMethod(methodName,
+                    new AnalysisLocation(
+                            Utils.retrieveLineNumFromSootString(sootString)));
+        }
+
+
+        if (this.getMethods().empty())
+            this.addMethod(methodName);
+
+
+        if (sourcePaths.size() == 1) {
+            String fullSource = sourcePaths.get(0);
+            if (fullSource.endsWith(":dir"))
+                this.fullPathName = Utils.osPathJoin(fullSource.replace(":dir", ""), "src", "main", "java", className.replace(".", System.getProperty("file.separator")) + ".java");
+            else
+                this.fullPathName = Utils.osPathJoin(fullSource, "src", "main", "java", className.replace(".", System.getProperty("file.separator")));
+        } else {
+            for (String in : sourcePaths)
+                if (in.contains(className))
+                    this.fullPathName = in;
+
+            this.fullPathName = "UNKNOWN";
+        }
     }
 
-    /**
-     * <p>Constructor for AnalysisIssue.</p>
-     *
-     * @param ruleNumber  a {@link java.lang.Integer} object.
-     * @param methodName  a {@link java.lang.String} object.
-     * @param information a {@link java.lang.String} object.
-     * @param location    a {@link AnalysisLocation} object.
-     */
-    public AnalysisIssue(Integer ruleNumber, String methodName, String information, AnalysisLocation location) {
-        this.fullPathName = "Unknown";
-        this.addMethod(methodName, location);
-        this.issueInformation = information;
-        this.rule = RuleList.getRuleByRuleNumber(ruleNumber);
-    }
-
-    /**
-     * <p>Constructor for AnalysisIssue.</p>
-     *
-     * @param ruleNumber a {@link java.lang.Integer} object.
-     * @param cause      a {@link java.lang.String} object.
-     */
-    public AnalysisIssue(Integer ruleNumber, String cause) {
-        this.fullPathName = "Unknown";
-        this.issueCause = cause;
-        this.rule = RuleList.getRuleByRuleNumber(ruleNumber);
-    }
     //endregion
 
     //region Getters/Setters
@@ -179,7 +227,7 @@ public class AnalysisIssue {
     /**
      * <p>addLocation.</p>
      *
-     * @param newLocation a {@link AnalysisLocation} object.
+     * @param newLocation a {@link main.frontEnd.MessagingSystem.AnalysisLocation} object.
      */
     public void addLocation(AnalysisLocation newLocation) {
         this.getLocations().add(newLocation);
@@ -198,7 +246,7 @@ public class AnalysisIssue {
      * <p>addMethod.</p>
      *
      * @param methodName a {@link java.lang.String} object.
-     * @param location   a {@link AnalysisLocation} object.
+     * @param location   a {@link main.frontEnd.MessagingSystem.AnalysisLocation} object.
      */
     public void addMethod(String methodName, AnalysisLocation location) {
         location.setMethodNumber(this.getMethods().size());
@@ -208,21 +256,12 @@ public class AnalysisIssue {
     }
 
     /**
-     * <p>Getter for the field <code>issueInformation</code>.</p>
+     * <p>Getter for the field <code>info</code>.</p>
      *
      * @return a {@link java.lang.String} object.
      */
-    public String getIssueInformation() {
-        return issueInformation;
-    }
-
-    /**
-     * <p>Getter for the field <code>issueCause</code>.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    public String getIssueCause() {
-        return issueCause;
+    public String getInfo() {
+        return info;
     }
     //endregion
 }

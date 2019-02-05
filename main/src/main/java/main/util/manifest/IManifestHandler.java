@@ -6,6 +6,7 @@ import java.io.InputStream;
  * Common interface for handlers working on Android manifest files
  *
  * @author Steven Arzt
+ * @version $Id: $Id
  */
 public interface IManifestHandler {
 

@@ -11,6 +11,7 @@ import java.util.Queue;
  * <p>STATUS: IC</p>
  *
  * @author franceme
+ * @version $Id: $Id
  * @since V01.00.01
  */
 public class MessageRepresentation {
@@ -59,7 +60,7 @@ public class MessageRepresentation {
     /**
      * <p>addAnalysis.</p>
      *
-     * @param issue a {@link AnalysisIssue} object.
+     * @param issue a {@link main.frontEnd.MessagingSystem.AnalysisIssue} object.
      */
     public void addAnalysis(AnalysisIssue issue) {
         this.analysisIssues.add(issue);
@@ -79,8 +80,8 @@ public class MessageRepresentation {
      * The static method to get the structure of the output.
      * Also re-opens the console output.
      *
-     * @param env {@link EnvironmentInformation} - The container of all of the overall information
-     * @param issues {@link AnalysisIssue} - The list of collected issues
+     * @param env    {@link main.frontEnd.MessagingSystem.routing.EnvironmentInformation} - The container of all of the overall information
+     * @param issues {@link main.frontEnd.MessagingSystem.AnalysisIssue} - The list of collected issues
      * @return String - the string output is determined by the type of messaging system used
      */
     public static String getMessage(EnvironmentInformation env, ArrayList<AnalysisIssue> issues) {

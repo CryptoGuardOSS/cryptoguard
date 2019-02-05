@@ -30,6 +30,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ *
+ * @author RigorityJTeam
+ * @version $Id: $Id
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "InstanceLocationType", propOrder = {
@@ -49,7 +52,7 @@ public class InstanceLocationType {
      * Gets the value of the xpath property.
      *
      * @return possible object is
-     * {@link String }
+     * {@link java.lang.String}
      */
     public String getXpath() {
         return xpath;
@@ -59,7 +62,7 @@ public class InstanceLocationType {
      * Sets the value of the xpath property.
      *
      * @param value allowed object is
-     *              {@link String }
+     *              {@link java.lang.String}
      */
     public void setXpath(String value) {
         this.xpath = value;
@@ -69,7 +72,7 @@ public class InstanceLocationType {
      * Gets the value of the lineNum property.
      *
      * @return possible object is
-     * {@link LineNumType }
+     * {@link com.example.response.LineNumType}
      */
     public LineNumType getLineNum() {
         return lineNum;
@@ -79,7 +82,7 @@ public class InstanceLocationType {
      * Sets the value of the lineNum property.
      *
      * @param value allowed object is
-     *              {@link LineNumType }
+     *              {@link com.example.response.LineNumType}
      */
     public void setLineNum(LineNumType value) {
         this.lineNum = value;

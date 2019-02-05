@@ -28,6 +28,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/simpleContent>
  * &lt;/complexType>
  * </pre>
+ *
+ * @author RigorityJTeam
+ * @version $Id: $Id
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "MethodType", propOrder = {
@@ -48,7 +51,7 @@ public class MethodType {
      * Gets the value of the value property.
      *
      * @return possible object is
-     * {@link String }
+     * {@link java.lang.String}
      */
     public String getValue() {
         return value;
@@ -58,7 +61,7 @@ public class MethodType {
      * Sets the value of the value property.
      *
      * @param value allowed object is
-     *              {@link String }
+     *              {@link java.lang.String}
      */
     public void setValue(String value) {
         this.value = value;
@@ -66,6 +69,8 @@ public class MethodType {
 
     /**
      * Gets the value of the id property.
+     *
+     * @return a int.
      */
     public int getId() {
         return id;
@@ -73,6 +78,8 @@ public class MethodType {
 
     /**
      * Sets the value of the id property.
+     *
+     * @param value a int.
      */
     public void setId(int value) {
         this.id = value;
@@ -80,6 +87,8 @@ public class MethodType {
 
     /**
      * Gets the value of the primary property.
+     *
+     * @return a boolean.
      */
     public boolean isPrimary() {
         return primary;
@@ -87,6 +96,8 @@ public class MethodType {
 
     /**
      * Sets the value of the primary property.
+     *
+     * @param value a boolean.
      */
     public void setPrimary(boolean value) {
         this.primary = value;

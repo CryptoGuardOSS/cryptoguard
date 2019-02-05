@@ -48,6 +48,9 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ *
+ * @author RigorityJTeam
+ * @version $Id: $Id
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "BugInstanceType", propOrder = {
@@ -106,7 +109,7 @@ public class BugInstanceType {
      * Gets the value of the className property.
      *
      * @return possible object is
-     * {@link String }
+     * {@link java.lang.String}
      */
     public String getClassName() {
         return className;
@@ -116,7 +119,7 @@ public class BugInstanceType {
      * Sets the value of the className property.
      *
      * @param value allowed object is
-     *              {@link String }
+     *              {@link java.lang.String}
      */
     public void setClassName(String value) {
         this.className = value;
@@ -126,7 +129,7 @@ public class BugInstanceType {
      * Gets the value of the methods property.
      *
      * @return possible object is
-     * {@link MethodsType }
+     * {@link com.example.response.MethodsType}
      */
     public MethodsType getMethods() {
         return methods;
@@ -136,7 +139,7 @@ public class BugInstanceType {
      * Sets the value of the methods property.
      *
      * @param value allowed object is
-     *              {@link MethodsType }
+     *              {@link com.example.response.MethodsType}
      */
     public void setMethods(MethodsType value) {
         this.methods = value;
@@ -146,7 +149,7 @@ public class BugInstanceType {
      * Gets the value of the bugLocations property.
      *
      * @return possible object is
-     * {@link BugLocationsType }
+     * {@link com.example.response.BugLocationsType}
      */
     public BugLocationsType getBugLocations() {
         return bugLocations;
@@ -156,7 +159,7 @@ public class BugInstanceType {
      * Sets the value of the bugLocations property.
      *
      * @param value allowed object is
-     *              {@link BugLocationsType }
+     *              {@link com.example.response.BugLocationsType}
      */
     public void setBugLocations(BugLocationsType value) {
         this.bugLocations = value;
@@ -166,7 +169,7 @@ public class BugInstanceType {
      * Gets the value of the bugGroup property.
      *
      * @return possible object is
-     * {@link String }
+     * {@link java.lang.String}
      */
     public String getBugGroup() {
         return bugGroup;
@@ -176,7 +179,7 @@ public class BugInstanceType {
      * Sets the value of the bugGroup property.
      *
      * @param value allowed object is
-     *              {@link String }
+     *              {@link java.lang.String}
      */
     public void setBugGroup(String value) {
         this.bugGroup = value;
@@ -186,7 +189,7 @@ public class BugInstanceType {
      * Gets the value of the bugRank property.
      *
      * @return possible object is
-     * {@link Integer }
+     * {@link java.lang.Integer}
      */
     public Integer getBugRank() {
         return bugRank;
@@ -196,7 +199,7 @@ public class BugInstanceType {
      * Sets the value of the bugRank property.
      *
      * @param value allowed object is
-     *              {@link Integer }
+     *              {@link java.lang.Integer}
      */
     public void setBugRank(Integer value) {
         this.bugRank = value;
@@ -206,7 +209,7 @@ public class BugInstanceType {
      * Gets the value of the bugSeverity property.
      *
      * @return possible object is
-     * {@link Integer }
+     * {@link java.lang.Integer}
      */
     public Integer getBugSeverity() {
         return bugSeverity;
@@ -216,7 +219,7 @@ public class BugInstanceType {
      * Sets the value of the bugSeverity property.
      *
      * @param value allowed object is
-     *              {@link Integer }
+     *              {@link java.lang.Integer}
      */
     public void setBugSeverity(Integer value) {
         this.bugSeverity = value;
@@ -240,7 +243,9 @@ public class BugInstanceType {
      *
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link String }
+     * {@link java.lang.String}
+     *
+     * @return a {@link java.util.List} object.
      */
     public List<String> getCweld() {
         if (cweld == null) {
@@ -253,7 +258,7 @@ public class BugInstanceType {
      * Gets the value of the bugMessage property.
      *
      * @return possible object is
-     * {@link String }
+     * {@link java.lang.String}
      */
     public String getBugMessage() {
         return bugMessage;
@@ -263,7 +268,7 @@ public class BugInstanceType {
      * Sets the value of the bugMessage property.
      *
      * @param value allowed object is
-     *              {@link String }
+     *              {@link java.lang.String}
      */
     public void setBugMessage(String value) {
         this.bugMessage = value;
@@ -273,7 +278,7 @@ public class BugInstanceType {
      * Gets the value of the resolutionSuggestion property.
      *
      * @return possible object is
-     * {@link String }
+     * {@link java.lang.String}
      */
     public String getResolutionSuggestion() {
         return resolutionSuggestion;
@@ -283,7 +288,7 @@ public class BugInstanceType {
      * Sets the value of the resolutionSuggestion property.
      *
      * @param value allowed object is
-     *              {@link String }
+     *              {@link java.lang.String}
      */
     public void setResolutionSuggestion(String value) {
         this.resolutionSuggestion = value;
@@ -293,7 +298,7 @@ public class BugInstanceType {
      * Gets the value of the bugTrace property.
      *
      * @return possible object is
-     * {@link BugTraceType }
+     * {@link com.example.response.BugTraceType}
      */
     public BugTraceType getBugTrace() {
         return bugTrace;
@@ -303,7 +308,7 @@ public class BugInstanceType {
      * Sets the value of the bugTrace property.
      *
      * @param value allowed object is
-     *              {@link BugTraceType }
+     *              {@link com.example.response.BugTraceType}
      */
     public void setBugTrace(BugTraceType value) {
         this.bugTrace = value;
@@ -313,7 +318,7 @@ public class BugInstanceType {
      * Gets the value of the bugCode property.
      *
      * @return possible object is
-     * {@link String }
+     * {@link java.lang.String}
      */
     public String getBugCode() {
         return bugCode;
@@ -323,7 +328,7 @@ public class BugInstanceType {
      * Sets the value of the bugCode property.
      *
      * @param value allowed object is
-     *              {@link String }
+     *              {@link java.lang.String}
      */
     public void setBugCode(String value) {
         this.bugCode = value;
@@ -331,6 +336,8 @@ public class BugInstanceType {
 
     /**
      * Gets the value of the id property.
+     *
+     * @return a int.
      */
     public int getId() {
         return id;
@@ -338,6 +345,8 @@ public class BugInstanceType {
 
     /**
      * Sets the value of the id property.
+     *
+     * @param value a int.
      */
     public void setId(int value) {
         this.id = value;

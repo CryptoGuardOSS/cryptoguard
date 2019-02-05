@@ -1,6 +1,7 @@
 package main.frontEnd.MessagingSystem.routing;
 
 import main.rule.engine.EngineType;
+import main.util.Utils;
 
 import javax.annotation.Nonnull;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -8,16 +9,14 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Properties;
-import java.util.Random;
+import java.util.*;
 
 /**
  * The class containing the analysis rule information.
  * <p>STATUS: IC</p>
  *
  * @author franceme
+ * @version $Id: $Id
  * @since V01.00.04
  */
 public class EnvironmentInformation {
@@ -31,29 +30,35 @@ public class EnvironmentInformation {
     private final XMLGregorianCalendar startTimeStamp;
     private final String BuildFramework;
     private final String BuildFrameworkVersion;
-    private final String platformName = System.getProperty("os.name") + "-" + System.getProperty("os.version");
-    private String packageName;
-    private String packageVersion;
+    private final String platformName = Utils.getPlatform();
+    private String packageName = "UNKNOWN";
+    private String packageVersion = "UNKNOWN";
+    private boolean showTimes = false;
     //endregion
     //region Required Elements Set From the Start
-    private final String[] Source;
+    private final List<String> Source;
+    private final List<String> sourcePaths; //Could this be intertwined with source?
     private Boolean prettyPrint = false;
     private PrintStream internalErrors;
-    private String sourceDependencies;
+    private List<String> dependencies;
     private EngineType sourceType;
     private Listing messagingType;
     private String UUID;
+    private Long startAnalyisisTime;
+    private Long analysisMilliSeconds;
+    private String fileOut;
     //endregion
     //region From Outside and defaulted unless set
-    private String AssessmentFramework;
-    private String AssessmentFrameworkVersion;
-    private String AssessmentStartTime;
-    private String ParserName;
-    private String ParserVersion;
-    private String packageRootDir;
-    private String buildRootDir;
+    private String AssessmentFramework = "UNKNOWN";
+    private String AssessmentFrameworkVersion = "UNKNOWN";
+    private String AssessmentStartTime = "UNKNOWN";
+    private String ParserName = "UNKNOWN";
+    private String ParserVersion = "UNKNOWN";
+    private String packageRootDir = "UNKNOWN";
+    private String buildRootDir = "UNKNOWN";
     private Integer buildId;
     private String xPath;
+    private Boolean printOut = false;
     //endregion
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     //endregion
@@ -64,11 +69,14 @@ public class EnvironmentInformation {
      * The main constructor for setting all of the environmental variables used  for the outputs.
      *
      * @param source        {@link java.lang.String[]} - The source name to be analyzed
-     * @param sourceType    {@link EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
      * @param dependencies  {@link java.lang.String} - The location of the directory of the sources dependencies
-     * @param messagingType {@link java.lang.String} - The flag passed in to determine the type of messaging system from {@link Listing}
+     * @param messagingType {@link java.lang.String} - The flag passed in to determine the type of messaging system from {@link main.frontEnd.MessagingSystem.routing.Listing}
+     * @param sourcePaths   a {@link java.util.List} object.
+     * @param sourcePkg     a {@link java.lang.String} object.
      */
-    public EnvironmentInformation(@Nonnull String[] source, @Nonnull EngineType sourceType, String dependencies, String messagingType) {
+    public EnvironmentInformation(@Nonnull List<String> source, @Nonnull EngineType sourceType, Listing messagingType, List<String> dependencies, List<String> sourcePaths, String sourcePkg) {
 
         //region Setting Internal Version Settings
         String tempToolFrameworkVersion;
@@ -102,12 +110,18 @@ public class EnvironmentInformation {
         //endregion
 
         //region Setting Required Attributes
-        internalErrors = new PrintStream(new ByteArrayOutputStream());
-        System.setOut(internalErrors);
+        //internalErrors = new PrintStream(new ByteArrayOutputStream());
+        //System.setOut(internalErrors);
+
         this.Source = source;
         this.sourceType = sourceType;
-        this.sourceDependencies = dependencies;
-        this.messagingType = Listing.retrieveListingType(messagingType);
+        if (dependencies != null)
+            this.dependencies = dependencies;
+        this.messagingType = messagingType;
+        this.sourcePaths = sourcePaths;
+        String[] pkgs = sourcePkg.split(System.getProperty("file.separator"));
+        this.packageName = pkgs[pkgs.length - 1].split("\\.")[0];
+        this.packageRootDir = sourcePkg;
         //endregion
 
     }
@@ -131,25 +145,6 @@ public class EnvironmentInformation {
     }
 
     /**
-     * Returning a Long Number based on the time stamp
-     *
-     * @return - String with the current time stamp set
-     */
-    private Long getStringOfNumFromDate() {
-        StringBuilder date = new StringBuilder();
-        Date currentDate = new Date();
-        date.append(currentDate.getYear());
-        date.append(currentDate.getMonth());
-        date.append(currentDate.getDay());
-
-        date.append(currentDate.getHours());
-        date.append(currentDate.getMinutes());
-        date.append(currentDate.getSeconds());
-
-        return Long.valueOf(date.toString());
-    }
-
-    /**
      * A simple method to "re-open" the console output after it was redirected for capture
      */
     public void openConsoleStream() {
@@ -163,9 +158,9 @@ public class EnvironmentInformation {
      *
      * <p>getSource()</p>
      *
-     * @return {@link String[]} - Returns the Source field
+     * @return {@link java.util.List<java.lang.String>} - Returns the Source field
      */
-    public String[] getSource() {
+    public List<String> getSource() {
         return Source;
     }
 
@@ -174,10 +169,21 @@ public class EnvironmentInformation {
      *
      * <p>setPrettyPrint(java.lang.Boolean prettyPrint)</p>
      *
-     * @param prettyPrint {@link Boolean} - The value to set as prettyPrint
+     * @param prettyPrint {@link java.lang.Boolean} - The value to set as prettyPrint
      */
     public void setPrettyPrint(Boolean prettyPrint) {
         this.prettyPrint = prettyPrint;
+    }
+
+    /**
+     * Getter for printOut
+     *
+     * <p>getPrintOut()</p>
+     *
+     * @return {@link java.lang.Boolean} - The printOut.
+     */
+    public Boolean getPrintOut() {
+        return printOut;
     }
 
     /**
@@ -243,7 +249,6 @@ public class EnvironmentInformation {
         return platformName;
     }
 
-
     /**
      * <p>getAssessmentFramework.</p>
      *
@@ -296,10 +301,9 @@ public class EnvironmentInformation {
      */
     public String getUUID() {
 
-        if (this.UUID == null) {
-            Random randomInst = new Random(getStringOfNumFromDate());
-            this.UUID = Long.toHexString(randomInst.nextLong() ^ getStringOfNumFromDate());
-        }
+        if (this.UUID == null)
+            this.UUID = java.util.UUID.randomUUID().toString();
+
 
         return this.UUID;
 
@@ -402,7 +406,7 @@ public class EnvironmentInformation {
      *
      * <p>getPropertiesFile()</p>
      *
-     * @return a {@link String} object.
+     * @return a {@link java.lang.String} object.
      */
     public String getPropertiesFile() {
         return PropertiesFile;
@@ -413,7 +417,7 @@ public class EnvironmentInformation {
      *
      * <p>getPrettyPrint()</p>
      *
-     * @return a {@link Boolean} object.
+     * @return a {@link java.lang.Boolean} object.
      */
     public Boolean getPrettyPrint() {
         return prettyPrint;
@@ -424,21 +428,27 @@ public class EnvironmentInformation {
      *
      * <p>getInternalErrors()</p>
      *
-     * @return a {@link PrintStream} object.
+     * @return a {@link java.io.PrintStream} object.
      */
     public PrintStream getInternalErrors() {
+        //openConsoleStream();
         return internalErrors;
     }
 
     /**
      * Getter for sourceDependencies
      *
-     * <p>getSourceDependencies()</p>
+     * <p>getDependencies()</p>
      *
-     * @return a {@link String} object.
+     * @return a {@link java.util.List<java.lang.String>} object.
      */
-    public String getSourceDependencies() {
-        return sourceDependencies;
+    public List<String> getDependencies() {
+
+        if (dependencies == null)
+            dependencies = new ArrayList<>();
+
+        return dependencies;
+
     }
 
     /**
@@ -446,7 +456,7 @@ public class EnvironmentInformation {
      *
      * <p>getSourceType()</p>
      *
-     * @return a {@link EngineType} object.
+     * @return a {@link main.rule.engine.EngineType} object.
      */
     public EngineType getSourceType() {
         return sourceType;
@@ -457,7 +467,7 @@ public class EnvironmentInformation {
      *
      * <p>getMessagingType()</p>
      *
-     * @return a {@link Listing} object.
+     * @return a {@link main.frontEnd.MessagingSystem.routing.Listing} object.
      */
     public Listing getMessagingType() {
         return messagingType;
@@ -469,7 +479,7 @@ public class EnvironmentInformation {
      *
      * <p>setAssessmentFramework(java.lang.String assessmentFramework)</p>
      *
-     * @param assessmentFramework {@link String} - The value to set as assessmentFramework
+     * @param assessmentFramework {@link java.lang.String} - The value to set as assessmentFramework
      */
     public void setAssessmentFramework(String assessmentFramework) {
         AssessmentFramework = assessmentFramework;
@@ -480,7 +490,7 @@ public class EnvironmentInformation {
      *
      * <p>setAssessmentFrameworkVersion(java.lang.String assessmentFrameworkVersion)</p>
      *
-     * @param assessmentFrameworkVersion {@link String} - The value to set as assessmentFrameworkVersion
+     * @param assessmentFrameworkVersion {@link java.lang.String} - The value to set as assessmentFrameworkVersion
      */
     public void setAssessmentFrameworkVersion(String assessmentFrameworkVersion) {
         AssessmentFrameworkVersion = assessmentFrameworkVersion;
@@ -491,7 +501,7 @@ public class EnvironmentInformation {
      *
      * <p>setAssessmentStartTime(java.lang.String assessmentStartTime)</p>
      *
-     * @param assessmentStartTime {@link String} - The value to set as assessmentStartTime
+     * @param assessmentStartTime {@link java.lang.String} - The value to set as assessmentStartTime
      */
     public void setAssessmentStartTime(String assessmentStartTime) {
         AssessmentStartTime = assessmentStartTime;
@@ -502,7 +512,7 @@ public class EnvironmentInformation {
      *
      * <p>setParserName(java.lang.String parserName)</p>
      *
-     * @param parserName {@link String} - The value to set as parserName
+     * @param parserName {@link java.lang.String} - The value to set as parserName
      */
     public void setParserName(String parserName) {
         ParserName = parserName;
@@ -513,7 +523,7 @@ public class EnvironmentInformation {
      *
      * <p>setParserVersion(java.lang.String parserVersion)</p>
      *
-     * @param parserVersion {@link String} - The value to set as parserVersion
+     * @param parserVersion {@link java.lang.String} - The value to set as parserVersion
      */
     public void setParserVersion(String parserVersion) {
         ParserVersion = parserVersion;
@@ -524,7 +534,7 @@ public class EnvironmentInformation {
      *
      * <p>setPackageRootDir(java.lang.String packageRootDir)</p>
      *
-     * @param packageRootDir {@link String} - The value to set as packageRootDir
+     * @param packageRootDir {@link java.lang.String} - The value to set as packageRootDir
      */
     public void setPackageRootDir(String packageRootDir) {
         this.packageRootDir = packageRootDir;
@@ -535,7 +545,7 @@ public class EnvironmentInformation {
      *
      * <p>setBuildRootDir(java.lang.String buildRootDir)</p>
      *
-     * @param buildRootDir {@link String} - The value to set as buildRootDir
+     * @param buildRootDir {@link java.lang.String} - The value to set as buildRootDir
      */
     public void setBuildRootDir(String buildRootDir) {
         this.buildRootDir = buildRootDir;
@@ -546,7 +556,7 @@ public class EnvironmentInformation {
      *
      * <p>setBuildId(java.lang.Integer buildId)</p>
      *
-     * @param buildId {@link Integer} - The value to set as buildId
+     * @param buildId {@link java.lang.Integer} - The value to set as buildId
      */
     public void setBuildId(Integer buildId) {
         this.buildId = buildId;
@@ -557,10 +567,88 @@ public class EnvironmentInformation {
      *
      * <p>setxPath(java.lang.String xPath)</p>
      *
-     * @param xPath {@link String} - The value to set as xPath
+     * @param xPath {@link java.lang.String} - The value to set as xPath
      */
     public void setxPath(String xPath) {
         this.xPath = xPath;
+    }
+
+
+    /**
+     * <p>Setter for the field <code>printOut</code>.</p>
+     *
+     * @param printOut a {@link java.lang.Boolean} object.
+     */
+    public void setPrintOut(Boolean printOut) {
+        this.printOut = printOut;
+    }
+
+    /**
+     * <p>Getter for the field <code>sourcePaths</code>.</p>
+     *
+     * @return a {@link java.util.List} object.
+     */
+    public List<String> getSourcePaths() {
+        return sourcePaths;
+    }
+
+    /**
+     * <p>startAnalysis.</p>
+     */
+    public void startAnalysis() {
+        this.startAnalyisisTime = System.currentTimeMillis();
+    }
+
+    /**
+     * <p>stopAnalysis.</p>
+     */
+    public void stopAnalysis() {
+        this.analysisMilliSeconds = System.currentTimeMillis() - this.startAnalyisisTime;
+    }
+
+    /**
+     * <p>getAnalyisisTime.</p>
+     *
+     * @return a {@link java.lang.Long} object.
+     */
+    public Long getAnalyisisTime() {
+        return this.analysisMilliSeconds;
+    }
+
+    /**
+     * <p>Getter for the field <code>fileOut</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getFileOut() {
+        return fileOut;
+    }
+
+    /**
+     * <p>Setter for the field <code>fileOut</code>.</p>
+     *
+     * @param fileOut a {@link java.lang.String} object.
+     */
+    public void setFileOut(String fileOut) {
+        this.fileOut = fileOut;
+    }
+
+    /**
+     * <p>isShowTimes.</p>
+     *
+     * @return a boolean.
+     */
+    public boolean isShowTimes() {
+        return showTimes;
+    }
+
+    /**
+     * <p>Setter for the field <code>showTimes</code>.</p>
+     *
+     * @param showTimes a boolean.
+     */
+    public void setShowTimes(boolean showTimes) {
+        this.showTimes = showTimes;
     }
     //endregion
 }

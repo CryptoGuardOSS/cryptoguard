@@ -32,6 +32,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ *
+ * @author RigorityJTeam
+ * @version $Id: $Id
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "BugCategoryType", propOrder = {
@@ -57,7 +60,7 @@ public class BugCategoryType {
      * Gets the value of the group property.
      *
      * @return possible object is
-     * {@link String }
+     * {@link java.lang.String}
      */
     public String getGroup() {
         return group;
@@ -67,7 +70,7 @@ public class BugCategoryType {
      * Sets the value of the group property.
      *
      * @param value allowed object is
-     *              {@link String }
+     *              {@link java.lang.String}
      */
     public void setGroup(String value) {
         this.group = value;
@@ -77,7 +80,7 @@ public class BugCategoryType {
      * Gets the value of the code property.
      *
      * @return possible object is
-     * {@link String }
+     * {@link java.lang.String}
      */
     public String getCode() {
         return code;
@@ -87,7 +90,7 @@ public class BugCategoryType {
      * Sets the value of the code property.
      *
      * @param value allowed object is
-     *              {@link String }
+     *              {@link java.lang.String}
      */
     public void setCode(String value) {
         this.code = value;
@@ -95,6 +98,8 @@ public class BugCategoryType {
 
     /**
      * Gets the value of the count property.
+     *
+     * @return a int.
      */
     public int getCount() {
         return count;
@@ -102,6 +107,8 @@ public class BugCategoryType {
 
     /**
      * Sets the value of the count property.
+     *
+     * @param value a int.
      */
     public void setCount(int value) {
         this.count = value;
@@ -111,7 +118,7 @@ public class BugCategoryType {
      * Gets the value of the bytes property.
      *
      * @return possible object is
-     * {@link Integer }
+     * {@link java.lang.Integer}
      */
     public Integer getBytes() {
         return bytes;
@@ -121,7 +128,7 @@ public class BugCategoryType {
      * Sets the value of the bytes property.
      *
      * @param value allowed object is
-     *              {@link Integer }
+     *              {@link java.lang.Integer}
      */
     public void setBytes(Integer value) {
         this.bytes = value;

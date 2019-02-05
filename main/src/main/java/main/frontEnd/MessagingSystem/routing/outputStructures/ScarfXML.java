@@ -23,6 +23,7 @@ import java.util.HashMap;
  * <p>STATUS: IC</p>
  *
  * @author franceme
+ * @version $Id: $Id
  * @since V01.00.03
  */
 public class ScarfXML implements OutputStructure {
@@ -62,6 +63,7 @@ public class ScarfXML implements OutputStructure {
 
             //region Creating Bug Instances
             for (int ktr = 0; ktr < brokenRules.size(); ktr++) {
+
                 BugInstanceType instance = new BugInstanceType();
                 AnalysisIssue issue = brokenRules.get(ktr);
 
@@ -76,10 +78,13 @@ public class ScarfXML implements OutputStructure {
                 instance.setBugGroup(issue.getRule().getDesc());
                 instance.setBugMessage(issue.getRule().getDesc());
 
-                BugTraceType trace = new BugTraceType();
-                trace.setBuildId(source.getBuildId());
-                trace.setAssessmentReportFile(source.getxPath());
-                instance.setBugTrace(trace);
+
+                if (source.getBuildId() != null || source.getxPath() != null) {
+                    BugTraceType trace = new BugTraceType();
+                    trace.setBuildId(source.getBuildId());
+                    trace.setAssessmentReportFile(source.getxPath());
+                    instance.setBugTrace(trace);
+                }
 
                 for (CWE cwe : issue.getRule().retrieveCWEInfo(cwes))
                     instance.getCweld().add(String.valueOf(cwe.getId()));
@@ -113,7 +118,10 @@ public class ScarfXML implements OutputStructure {
 
                         newLocation.setId(locationKtr);
                         newLocation.setPrimary(locationKtr == 0);
-                        newLocation.setStartLine(createdLoc.getLineStart());
+
+                        if (createdLoc.getLineStart() != -1)
+                            newLocation.setStartLine(createdLoc.getLineStart());
+
                         newLocation.setSourceFile(issue.getFullPathName());
 
                         if (createdLoc.getLineEnd() > 0 && !createdLoc.getLineEnd().equals(createdLoc.getLineStart())) {
@@ -131,8 +139,16 @@ public class ScarfXML implements OutputStructure {
                 instance.setBugLocations(bugLocations);
                 //endregion
 
-                String outputMessage = issue.getIssueCause() + " " + issue.getIssueInformation();
-                instance.setBugMessage(StringUtils.trimToNull(outputMessage));
+                StringBuilder outputMessage = new StringBuilder();
+                String info = StringUtils.trimToNull(issue.getInfo());
+
+
+                if (info != null)
+                    outputMessage.append(info).append(". ");
+
+                outputMessage.append(issue.getRule().getDesc()).append(".");
+
+                instance.setBugMessage(outputMessage.toString());
 
                 report.getBugInstance().add(instance);
             }
@@ -146,9 +162,9 @@ public class ScarfXML implements OutputStructure {
             Marshaller marshaller = context.createMarshaller();
 
             //Settings Properties of the Marshaller
-            if (source.prettyPrint()) {
+            if (source.prettyPrint())
                 marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            }
+
 
             //Removing the <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
             //From the marshaller output
@@ -158,7 +174,19 @@ public class ScarfXML implements OutputStructure {
             ByteArrayOutputStream xmlStream = new ByteArrayOutputStream();
             marshaller.marshal(report, new PrintStream(xmlStream));
 
-            return xmlStream.toString();
+            String footer = "";
+
+            if (source.isShowTimes()) {
+                StringBuilder commentedFooter = new StringBuilder("\n<!--\n");
+                //region Timing Portion
+                commentedFooter.append("\tAnalysis Timing (ms): ").append(source.getAnalyisisTime()).append(".").append("\n");
+                //endregion
+
+                commentedFooter.append("-->");
+                footer = commentedFooter.toString();
+            }
+
+            return StringUtils.stripToNull(xmlStream.toString() + footer);
         } catch (PropertyException e) {
             return creatingErrorMessage("There has been an issue setting properties.");
         } catch (JAXBException e) {

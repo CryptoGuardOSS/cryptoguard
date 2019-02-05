@@ -5,23 +5,36 @@ import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
+ * <p>JarEntry class.</p>
+ *
  * @author RigorityJTeam
  * Created on 2018-12-14.
+ * @version $Id: $Id
  * @since 01.01.06
  *
  * <p>The method in the Engine handling Jar Scanning</p>
  */
-public class JarEntry {
+public class JarEntry implements EntryHandler {
 
-    public static ArrayList<AnalysisIssue> NonStreamScan(EnvironmentInformation generalInfo) {
-        ArrayList<AnalysisIssue> issues = null;
+    /**
+     * {@inheritDoc}
+     */
+    public ArrayList<AnalysisIssue> NonStreamScan(EnvironmentInformation generalInfo) {
+
+        ArrayList<AnalysisIssue> issues = generalInfo.getPrintOut() ? null : new ArrayList<AnalysisIssue>();
         try {
+            generalInfo.startAnalysis();
             for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
-                ruleChecker.checkRule(EngineType.JAR, Arrays.asList(generalInfo.getSource()), Arrays.asList(generalInfo.getSourceDependencies()));
+                ArrayList<AnalysisIssue> tempIssues = ruleChecker.checkRule(EngineType.JAR, generalInfo.getSource(), generalInfo.getDependencies(),
+                        generalInfo.getPrintOut(), generalInfo.getSourcePaths());
+
+
+                if (!generalInfo.getPrintOut())
+                    issues.addAll(tempIssues);
             }
+            generalInfo.stopAnalysis();
         } catch (IOException e) {
 
         }

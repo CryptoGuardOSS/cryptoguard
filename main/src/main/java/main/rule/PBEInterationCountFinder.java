@@ -2,6 +2,7 @@ package main.rule;
 
 import main.analyzer.backward.Analysis;
 import main.analyzer.backward.UnitContainer;
+import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.rule.base.BaseRuleChecker;
 import main.rule.base.MajorHeuristics;
 import main.rule.engine.Criteria;
@@ -18,12 +19,16 @@ import java.util.Map;
  * Created by krishnokoli on 10/22/17.
  *
  * @author krishnokoli
+ * @version $Id: $Id
  * @since V01.00.00
  */
 public class PBEInterationCountFinder extends BaseRuleChecker {
 
     private static final List<Criteria> CRITERIA_LIST = new ArrayList<>();
 
+
+    String rule = "8";
+    String ruleDesc = RULE_VS_DESCRIPTION.get(rule);
 
     private Map<UnitContainer, List<String>> predictableSourcMap = new HashMap<>();
     private Map<UnitContainer, List<String>> othersSourceMap = new HashMap<>();
@@ -102,9 +107,6 @@ public class PBEInterationCountFinder extends BaseRuleChecker {
      */
     public void printAnalysisOutput(Map<String, String> configFiles) {
 
-        String rule = "8";
-        String ruleDesc = RULE_VS_DESCRIPTION.get(rule);
-
         List<String> predictableSources = new ArrayList<>();
         List<UnitContainer> predictableSourceInst = new ArrayList<>();
         List<String> others = new ArrayList<>();
@@ -149,5 +151,22 @@ public class PBEInterationCountFinder extends BaseRuleChecker {
         }
 
         return output;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths) {
+        ArrayList<AnalysisIssue> outList = new ArrayList<>();
+
+        for (UnitContainer unit : predictableSourcMap.keySet()) {
+            String sootString = predictableSourcMap.get(unit).size() <= 0
+                    ? ""
+                    : "Found: \"" + predictableSourcMap.get(unit).get(0).replaceAll("\"", "") + "\"";
+            outList.add(new AnalysisIssue(unit, Integer.parseInt(rule), sootString, sourcePaths));
+        }
+
+        return outList;
     }
 }

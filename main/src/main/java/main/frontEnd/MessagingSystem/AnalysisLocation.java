@@ -4,6 +4,7 @@ package main.frontEnd.MessagingSystem;
  * <p>AnalysisLocation class.</p>
  *
  * @author franceme
+ * @version $Id: $Id
  * @since V01.00.00
  */
 public class AnalysisLocation {
@@ -11,6 +12,8 @@ public class AnalysisLocation {
     //region Attributes
     private Integer lineStart;
     private Integer lineEnd;
+    private Integer colStart;
+    private Integer colEnd;
     private Integer methodNumber = -1;
     //endregion
 
@@ -25,6 +28,16 @@ public class AnalysisLocation {
     public AnalysisLocation(Integer start, Integer end) {
         this.lineStart = start;
         this.lineEnd = end;
+    }
+
+    /**
+     * <p>Constructor for AnalysisLocation.</p>
+     *
+     * @param lineNumber a {@link java.lang.Integer} object.
+     */
+    public AnalysisLocation(Integer lineNumber) {
+        this.lineStart = lineNumber;
+        this.lineEnd = lineNumber;
     }
 
     /**
@@ -97,6 +110,50 @@ public class AnalysisLocation {
      */
     public void setMethodNumber(Integer methodNumber) {
         this.methodNumber = methodNumber;
+    }
+
+    /**
+     * Getter for colStart
+     *
+     * <p>getColStart()</p>
+     *
+     * @return {@link java.lang.Integer} - The colStart.
+     */
+    public Integer getColStart() {
+        return colStart;
+    }
+
+    /**
+     * Setter for colStart
+     *
+     * <p>setColStart(java.lang.Integer colStart)</p>
+     *
+     * @param colStart {@link java.lang.Integer} - The value to set as colStart
+     */
+    public void setColStart(Integer colStart) {
+        this.colStart = colStart;
+    }
+
+    /**
+     * Getter for colEnd
+     *
+     * <p>getColEnd()</p>
+     *
+     * @return {@link java.lang.Integer} - The colEnd.
+     */
+    public Integer getColEnd() {
+        return colEnd;
+    }
+
+    /**
+     * Setter for colEnd
+     *
+     * <p>setColEnd(java.lang.Integer colEnd)</p>
+     *
+     * @param colEnd {@link java.lang.Integer} - The value to set as colEnd
+     */
+    public void setColEnd(Integer colEnd) {
+        this.colEnd = colEnd;
     }
     //endregion
 

@@ -32,6 +32,9 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ *
+ * @author RigorityJTeam
+ * @version $Id: $Id
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "MethodsType", propOrder = {
@@ -60,7 +63,9 @@ public class MethodsType {
      *
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link MethodType }
+     * {@link com.example.response.MethodType}
+     *
+     * @return a {@link java.util.List} object.
      */
     public List<MethodType> getMethod() {
         if (method == null) {

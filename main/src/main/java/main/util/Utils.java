@@ -1,7 +1,11 @@
 package main.util;
 
 import main.analyzer.backward.UnitContainer;
+import main.frontEnd.Interface.ExceptionHandler;
+import main.frontEnd.MessagingSystem.routing.Listing;
+import main.rule.engine.EngineType;
 import main.util.manifest.ProcessManifest;
+import org.apache.commons.lang3.StringUtils;
 import org.jf.dexlib2.DexFileFactory;
 import org.jf.dexlib2.Opcodes;
 import org.jf.dexlib2.iface.ClassDef;
@@ -10,10 +14,13 @@ import soot.Scene;
 import soot.SootClass;
 import soot.Unit;
 import soot.ValueBox;
+import soot.options.Options;
 import soot.util.Chain;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -23,13 +30,31 @@ import java.util.zip.ZipInputStream;
  * <p>Utils class.</p>
  *
  * @author RigorityJTeam
+ * @version $Id: $Id
  * @since V01.00.00
  */
 public class Utils {
+    /**
+     * {@link main.util.Utils#getClassNamesFromJarArchive}
+     * {@link main.util.Utils#retrieveFullyQualifiedName}
+     * - Enhance this to look for package declarations not at the top of the file
+     * License - TLDR
+     * package org.main.hello;
+     * {@link main.util.Utils#getClassNamesFromJarArchive}
+     * {@link main.util.Utils#getClassNamesFromJarArchive}
+     */
+
+    private static String fileSep = System.getProperty("file.separator");
+    private static Pattern sootClassPattern = Pattern.compile("[<](.+)[:]");
+    private static Pattern sootClassPatternTwo = Pattern.compile("([a-zA-Z0-9]+[.][a-zA-Z0-9]+)\\$[0-9]+");
+    private static Pattern sootFoundPattern = Pattern.compile("\\[(.+)\\]");
+    private static Pattern sootLineNumPattern = Pattern.compile("\\(\\)\\>\\[(\\d+)\\]");
+    private static Pattern sootMthdPattern = Pattern.compile("<((?:[a-zA-Z0-9]+))>");
+    private static Pattern sootMthdPatternTwo = Pattern.compile("((?:[a-zA-Z0-9_]+))\\(");
+    private static Pattern sootFoundMatchPattern = Pattern.compile("\"{1}(.+)\"{1}");
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");
 
     /**
-     *
-     * //todo - usethis
      * <p>getClassNamesFromJarArchive.</p>
      *
      * @param jarPath a {@link java.lang.String} object.
@@ -413,51 +438,457 @@ public class Utils {
     }
 
     /**
-     * The method that retrieves the package information from a existing java file.
-     * If the file doesn't exist or the java file isn't contained in a file, it'll return null
+     * <p>retrieveFullyQualifiedName.</p>
      *
-     * @param sourceJavaFile {@link String} - The path to the source java file.
-     * @return {@link String} - The package string, null if there is any issue or no package.
+     * @param sourceJavaFile a {@link java.util.List} object.
+     * @return a {@link java.util.List} object.
      */
-    public static String retrieveFullyQualifiedName(String sourceJavaFile) {
-        String sourcePackage = null;
-        try (BufferedReader br = new BufferedReader(new FileReader(sourceJavaFile))) {
+    public static List<String> retrieveFullyQualifiedName(List<String> sourceJavaFile) {
+        List<String> fullPath = new ArrayList<>();
+        for (String in : sourceJavaFile)
+            fullPath.add(Utils.retrieveFullyQualifiedName(in));
 
-            String firstLine = br.readLine();
+        return fullPath;
+    }
 
-            if (firstLine.startsWith("package ") && firstLine.endsWith(";")) {
-                sourcePackage = firstLine.substring(8, firstLine.length() - 1);
-                sourcePackage += "." + trimFilePath(sourceJavaFile);
+    /**
+     * <p>retrieveFullyQualifiedName.</p>
+     *
+     * @param in a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String retrieveFullyQualifiedName(String in) {
+
+        String sourcePackage = trimFilePath(in);
+        if (in.endsWith(".java")) {
+            sourcePackage = sourcePackage.replace(".java", "");
+            try (BufferedReader br = new BufferedReader(new FileReader(in))) {
+                String firstLine = br.readLine();
+
+                if (firstLine.startsWith("package ") && firstLine.endsWith(";")) {
+                    sourcePackage = firstLine.substring("package ".length(), firstLine.length() - 1) + "." + sourcePackage;
+                } else //File has no package declaration, retrieving the last folder path
+                {
+                    String[] paths = Utils.retrieveFullFilePath(in).split(fileSep);
+
+                    sourcePackage = paths[paths.length - 2] + "." + sourcePackage;
+                }
+
+            } catch (IOException e) {
+                System.out.println("Issue Reading File: " + in);
+            }
+        } else if (in.endsWith(".class")) {
+            sourcePackage = sourcePackage.replace(".class", "");
+
+            String[] paths = Utils.retrieveFullFilePath(in).split(fileSep);
+
+            sourcePackage = paths[paths.length - 2] + "." + sourcePackage;
+        }
+        return sourcePackage;
+    }
+
+    /**
+     * <p>retrieveTrimmedSourcePaths.</p>
+     *
+     * @param files a {@link java.util.List} object.
+     * @return a {@link java.util.List} object.
+     */
+    public static List<String> retrieveTrimmedSourcePaths(List<String> files) {
+        List<String> filePaths = new ArrayList<>();
+        for (String relativeFile : files) {
+            String relativeFilePath = "";
+
+            File file = new File(relativeFile);
+
+            try {
+                relativeFilePath = file.getCanonicalPath().replace(file.getName(), "");
+            } catch (IOException e) {
+
             }
 
-        } catch (IOException e) {
-            System.out.println("Issue Reading File: " + sourceJavaFile);
+            if (!filePaths.contains(relativeFilePath))
+                filePaths.add(relativeFilePath);
         }
+        return filePaths;
+    }
 
-        return sourcePackage;
+    /**
+     * <p>retrieveBaseSourcePath.</p>
+     *
+     * @param sourcePaths    a {@link java.util.List} object.
+     * @param dependencyPath a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String retrieveBaseSourcePath(List<String> sourcePaths, String dependencyPath) {
+        String tempDependencyPath = sourcePaths.get(0);
+        for (String in : sourcePaths)
+            if (!in.equals(tempDependencyPath)) {
+                tempDependencyPath = System.getProperty("user.dir");
+                break;
+            }
+        return Utils.osPathJoin(tempDependencyPath, dependencyPath);
+    }
+
+    /**
+     * <p>retrieveFullFilePath.</p>
+     *
+     * @param filename a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String retrieveFullFilePath(String filename) {
+        File file = new File(filename);
+        if (file.exists())
+            try {
+                return file.getCanonicalPath();
+            } catch (IOException e) {
+                return filename;
+            }
+        else
+            return filename;
     }
 
     /**
      * This method trims the file path and package from the absolute path.
      * <p>EX: src/main/java/com/test/me/main.java {@literal -}{@literal >} main.java</p>
      *
-     * @param fullFilePath {@link String} - The full file path
-     * @return {@link String} - The file name with the extension attached
+     * @param fullFilePath {@link java.lang.String} - The full file path
+     * @return {@link java.lang.String} - The file name with the extension attached
      */
     public static String trimFilePath(String fullFilePath) {
         String[] folderSplit = fullFilePath.split(Pattern.quote(System.getProperty("file.separator")));
         return folderSplit[folderSplit.length - 1];
     }
 
-    //TODO - Upgrade to 1.8 to dump this method
-    public static String stringJoiner(String delimiter, String... inputs) {
+    /**
+     * <p>osPathJoin.</p>
+     *
+     * @param elements a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String osPathJoin(String... elements) {
+        return Utils.join(Utils.fileSep, elements);
+    }
+
+    /**
+     * <p>join.</p>
+     *
+     * @param delimiter a {@link java.lang.String} object.
+     * @param elements  a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String join(String delimiter, String... elements) {
+        return join(delimiter, Arrays.asList(elements));
+    }
+
+    /**
+     * <p>join.</p>
+     *
+     * @param delimiter a {@link java.lang.String} object.
+     * @param elements  a {@link java.util.List} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String join(String delimiter, List<String> elements) {
         StringBuilder tempString = new StringBuilder();
-        for (String in : inputs) {
+        for (String in : elements) {
             tempString.append(in);
-            if (!in.equals(inputs[inputs.length - 1]))
+            if (!in.equals(elements.get(elements.size() - 1)))
                 tempString.append(delimiter);
         }
 
         return tempString.toString();
+    }
+
+    /**
+     * <p>getJAVA_HOME.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public static String getJAVA_HOME() {
+        String JAVA_HOME = System.getenv("JAVA_HOME");
+        if (StringUtils.isEmpty(JAVA_HOME)) {
+            System.out.println("Please Set JAVA_HOME");
+            System.exit(1);
+        }
+        return JAVA_HOME;
+    }
+
+    /**
+     * <p>getJAVA7_HOME.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public static String getJAVA7_HOME() {
+        String JAVA7_HOME = System.getenv("JAVA7_HOME");
+        if (StringUtils.isEmpty(JAVA7_HOME)) {
+            System.out.println("Please Set JAVA7_HOME");
+            System.exit(1);
+        }
+        return JAVA7_HOME;
+    }
+
+    /**
+     * <p>getANDROID.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public static String getANDROID() {
+        String ANDROID_HOME = System.getenv("ANDROID_HOME");
+        if (StringUtils.isEmpty(ANDROID_HOME)) {
+            System.out.println("Please Set ANDROID_HOME");
+            System.exit(1);
+        }
+        return ANDROID_HOME;
+    }
+
+    /**
+     * <p>getBaseSOOT.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public static String getBaseSOOT() {
+        String rt = Utils.join(Utils.fileSep, "jre", "lib", "rt.jar:");
+        String jce = Utils.join(Utils.fileSep, "jre", "lib", "jce.jar");
+
+        return Utils.getJAVA_HOME() + Utils.fileSep + Utils.join(Utils.getJAVA_HOME() + Utils.fileSep, rt, jce);
+    }
+
+    /**
+     * <p>getBaseSOOT7.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public static String getBaseSOOT7() {
+        String rt = Utils.join(Utils.fileSep, "jre", "lib", "rt.jar:");
+        String jce = Utils.join(Utils.fileSep, "jre", "lib", "jce.jar");
+
+        return Utils.getJAVA7_HOME() + Utils.fileSep + Utils.join(Utils.getJAVA7_HOME() + Utils.fileSep, rt, jce);
+    }
+
+    /**
+     * <p>loadSootClasses.</p>
+     *
+     * @param classes a {@link java.util.List} object.
+     */
+    public static void loadSootClasses(List<String> classes) {
+        Options.v().set_keep_line_number(true);
+        Options.v().set_allow_phantom_refs(true);
+
+        if (classes != null)
+            for (String clazz : classes)
+                Options.v().classes().add(clazz);
+
+        Scene.v().loadBasicClasses();
+    }
+
+    /**
+     * <p>retrieveClassNameFromSootString.</p>
+     *
+     * @param sootString a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String retrieveClassNameFromSootString(String sootString) {
+        Matcher secondMatches = sootClassPatternTwo.matcher(sootString);
+        if (secondMatches.find())
+            return secondMatches.group(1);
+
+        Matcher matches = sootClassPattern.matcher(sootString);
+        if (matches.find())
+            return matches.group(1);
+
+        return "UNKNOWN";
+    }
+
+    /**
+     * <p>retrieveFoundPatternFromSootString.</p>
+     *
+     * @param sootString a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String retrieveFoundPatternFromSootString(String sootString) {
+        Matcher matches = sootFoundPattern.matcher(sootString);
+
+        if (matches.find())
+            return matches.group(1).replaceAll("\"", "");
+        return "UNKNOWN";
+    }
+
+    /**
+     * <p>retrieveLineNumFromSootString.</p>
+     *
+     * @param sootString a {@link java.lang.String} object.
+     * @return a {@link java.lang.Integer} object.
+     */
+    public static Integer retrieveLineNumFromSootString(String sootString) {
+        Matcher matches = sootLineNumPattern.matcher(sootString);
+
+        if (matches.find())
+            return Integer.parseInt(matches.group(1));
+        return -1;
+    }
+
+    /**
+     * <p>retrieveMethodFromSootString.</p>
+     *
+     * @param sootString a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String retrieveMethodFromSootString(String sootString) {
+        Matcher matches = sootMthdPattern.matcher(sootString);
+
+        if (matches.find())
+            return matches.group(1);
+
+        Matcher secondMatches = sootMthdPatternTwo.matcher(sootString);
+        if (secondMatches.find())
+            return secondMatches.group(1);
+
+        return "UNKNOWN";
+    }
+
+    /**
+     * <p>getPlatform.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public static String getPlatform() {
+        if (!System.getProperty("os.name").contains("Linux")) {
+            return System.getProperty("os.name") + "_" + System.getProperty("os.version");
+        } else {
+            try {
+                String baseName = System.getProperty("os.name") + "_" + System.getProperty("os.version");
+                Scanner file = new Scanner(new File("/etc/os-release"));
+                String line;
+                while (file.hasNextLine()) {
+                    line = file.nextLine();
+                    if (line.startsWith("PRETTY_NAME=")) {
+                        baseName = line.replace("PRETTY_NAME=", "").replaceAll("\"", "").replaceAll(" ", "_");
+                        break;
+                    }
+                }
+                file.close();
+                return baseName;
+            } catch (FileNotFoundException e) {
+                return System.getProperty("os.name") + "_" + System.getProperty("os.version");
+            }
+        }
+    }
+
+    /**
+     * <p>retrieveFoundMatchFromSootString.</p>
+     *
+     * @param sootString a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String retrieveFoundMatchFromSootString(String sootString) {
+        Matcher matches = sootFoundMatchPattern.matcher(sootString);
+
+        if (matches.find())
+            return StringUtils.trimToNull(matches.group(1));
+
+        return "UNKNOWN";
+    }
+
+    /**
+     * <p>retrieveDirs.</p>
+     *
+     * @param arguments a {@link java.util.List} object.
+     * @return a {@link java.util.List} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
+     */
+    public static List<String> retrieveDirs(List<String> arguments) throws ExceptionHandler {
+        List<String> dirs = new ArrayList<>();
+        for (String dir : arguments) {
+            File dirChecking = new File(dir);
+            if (!dirChecking.exists() || !dirChecking.isDirectory())
+                throw new ExceptionHandler(dirChecking.getName() + " is not a valid directory.");
+
+            try {
+                dirs.add(dirChecking.getCanonicalPath());
+            } catch (Exception e) {
+                throw new ExceptionHandler("Error retrieving the path of the directory.");
+            }
+        }
+        return dirs;
+    }
+
+    /**
+     * <p>verifyFileOut.</p>
+     *
+     * @param file a {@link java.lang.String} object.
+     * @param type a {@link main.frontEnd.MessagingSystem.routing.Listing} object.
+     * @return a {@link java.lang.String} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
+     */
+    public static String verifyFileOut(String file, Listing type) throws ExceptionHandler {
+        if (!file.endsWith(type.getOutputFileExt()))
+            throw new ExceptionHandler("File " + file + " doesn't have the right file type ");
+
+        File tempFile = new File(file);
+
+        //TODO - Add flag to verify overwrite a file?
+        /*if (tempFile.exists() || tempFile.isFile())
+            throw new ExceptionHandler(tempFile.getName() + " is already a valid file.");
+*/
+        try {
+            return tempFile.getCanonicalPath();
+        } catch (Exception e) {
+            throw new ExceptionHandler("Error retrieving the path of the file " + tempFile.getName() + ".");
+        }
+    }
+
+    /**
+     * <p>retrieveFilePath.</p>
+     *
+     * @param file a {@link java.lang.String} object.
+     * @param type a {@link main.rule.engine.EngineType} object.
+     * @return a {@link java.lang.String} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
+     */
+    public static String retrieveFilePath(String file, EngineType type) throws ExceptionHandler {
+        if (!file.endsWith(type.getInputExtension()))
+            throw new ExceptionHandler("File " + file + " doesn't have the right file type ");
+
+        File tempFile = new File(file);
+        if (!tempFile.exists() || !tempFile.isFile())
+            throw new ExceptionHandler(tempFile.getName() + " is not a valid file.");
+
+        try {
+            return tempFile.getCanonicalPath();
+        } catch (Exception e) {
+            throw new ExceptionHandler("Error retrieving the path of the file " + tempFile.getName() + ".");
+        }
+    }
+
+    /**
+     * <p>retrieveFilesByType.</p>
+     *
+     * @param arguments a {@link java.util.List} object.
+     * @param type      a {@link main.rule.engine.EngineType} object.
+     * @return a {@link java.util.List} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
+     */
+    public static List<String> retrieveFilesByType(List<String> arguments, EngineType type) throws ExceptionHandler {
+        if (type == EngineType.DIR)
+            if (arguments.size() != 1)
+                throw new ExceptionHandler("Please enter one argument for this use case.");
+            else
+                return retrieveDirs(arguments);
+
+        List<String> filePaths = new ArrayList<>();
+
+        for (String in : arguments)
+            filePaths.add(retrieveFilePath(in, type));
+
+        return filePaths;
+    }
+
+    /**
+     * <p>getCurrentTimeStamp.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public static String getCurrentTimeStamp() {
+        return dateFormat.format(new Date());
+
     }
 }

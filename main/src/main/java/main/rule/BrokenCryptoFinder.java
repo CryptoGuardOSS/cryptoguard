@@ -10,6 +10,7 @@ import java.util.List;
  * <p>BrokenCryptoFinder class.</p>
  *
  * @author RigorityJTeam
+ * @version $Id: $Id
  * @since V01.00.00
  */
 public class BrokenCryptoFinder extends PatternMatcherRuleChecker {

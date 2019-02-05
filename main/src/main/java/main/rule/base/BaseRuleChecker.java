@@ -1,10 +1,9 @@
 package main.rule.base;
 
-import main.analyzer.ApkAnalyzer;
-import main.analyzer.JarAnalyzer;
-import main.analyzer.PartialCodeAnalyzer;
+import main.analyzer.BaseAnalyzerRouting;
 import main.analyzer.backward.Analysis;
 import main.analyzer.backward.UnitContainer;
+import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.rule.engine.Criteria;
 import main.rule.engine.EngineType;
 import main.rule.engine.RuleChecker;
@@ -17,6 +16,7 @@ import java.util.*;
  * This file checks on several of the main factors within the outputed Jimple format.
  *
  * @author RigorityJTeam
+ * @version $Id: $Id
  * @since V01.00.00
  */
 public abstract class BaseRuleChecker implements RuleChecker {
@@ -49,34 +49,25 @@ public abstract class BaseRuleChecker implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public void checkRule(EngineType type, List<String> projectPaths, List<String> projectDependencyPath) throws IOException {
+    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectPaths, List<String> projectDependencyPath, Boolean printout, List<String> sourcePaths) throws IOException {
 
         String[] excludes = {"web.xml", "pom.xml"};
 
         Map<String, String> xmlFileStr = Utils.getXmlFiles(projectPaths.get(0), Arrays.asList(excludes));
 
         for (Criteria criteria : getCriteriaList()) {
-            if (type == EngineType.JAR) {
-                JarAnalyzer.analyzeSlices(criteria.getClassName(),
-                        criteria.getMethodName(),
-                        criteria.getParam(),
-                        projectPaths.get(0),
-                        projectDependencyPath.get(0), this);
-            } else if (type == EngineType.APK) {
-
-                ApkAnalyzer.analyzeSlices(criteria.getClassName(),
-                        criteria.getMethodName(),
-                        criteria.getParam(),
-                        projectPaths.get(0), this);
-            } else if (type == EngineType.DIR) {
-                PartialCodeAnalyzer.analyzeSlices(criteria.getClassName(),
-                        criteria.getMethodName(),
-                        criteria.getParam(),
-                        projectPaths, projectDependencyPath, this);
-            }
+            BaseAnalyzerRouting.environmentRouting(type, criteria.getClassName(),
+                    criteria.getMethodName(),
+                    criteria.getParam(),
+                    projectPaths,
+                    projectDependencyPath, this);
         }
 
-        printAnalysisOutput(xmlFileStr);
+        if (printout) {
+            printAnalysisOutput(xmlFileStr);
+            return null;
+        } else
+            return createAnalysisOutput(xmlFileStr, sourcePaths);
     }
 
     /**
@@ -99,6 +90,15 @@ public abstract class BaseRuleChecker implements RuleChecker {
      * @param xmlFileStr a {@link java.util.Map} object.
      */
     public abstract void printAnalysisOutput(Map<String, String> xmlFileStr);
+
+    /**
+     * <p>createAnalysisOutput.</p>
+     *
+     * @param xmlFileStr  a {@link java.util.Map} object.
+     * @param sourcePaths a {@link java.util.List} object.
+     * @return a {@link java.util.ArrayList} object.
+     */
+    public abstract ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths);
 
     /**
      * <p>putIntoMap.</p>

@@ -36,6 +36,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ *
+ * @author RigorityJTeam
+ * @version $Id: $Id
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "MetricSummaryType", propOrder = {
@@ -73,7 +76,7 @@ public class MetricSummaryType {
      * Gets the value of the type property.
      *
      * @return possible object is
-     * {@link String }
+     * {@link java.lang.String}
      */
     public String getType() {
         return type;
@@ -83,7 +86,7 @@ public class MetricSummaryType {
      * Sets the value of the type property.
      *
      * @param value allowed object is
-     *              {@link String }
+     *              {@link java.lang.String}
      */
     public void setType(String value) {
         this.type = value;
@@ -91,6 +94,8 @@ public class MetricSummaryType {
 
     /**
      * Gets the value of the count property.
+     *
+     * @return a int.
      */
     public int getCount() {
         return count;
@@ -98,6 +103,8 @@ public class MetricSummaryType {
 
     /**
      * Sets the value of the count property.
+     *
+     * @param value a int.
      */
     public void setCount(int value) {
         this.count = value;
@@ -105,6 +112,8 @@ public class MetricSummaryType {
 
     /**
      * Gets the value of the sum property.
+     *
+     * @return a int.
      */
     public int getSum() {
         return sum;
@@ -112,6 +121,8 @@ public class MetricSummaryType {
 
     /**
      * Sets the value of the sum property.
+     *
+     * @param value a int.
      */
     public void setSum(int value) {
         this.sum = value;
@@ -119,6 +130,8 @@ public class MetricSummaryType {
 
     /**
      * Gets the value of the sumOfSquares property.
+     *
+     * @return a int.
      */
     public int getSumOfSquares() {
         return sumOfSquares;
@@ -126,6 +139,8 @@ public class MetricSummaryType {
 
     /**
      * Sets the value of the sumOfSquares property.
+     *
+     * @param value a int.
      */
     public void setSumOfSquares(int value) {
         this.sumOfSquares = value;
@@ -133,6 +148,8 @@ public class MetricSummaryType {
 
     /**
      * Gets the value of the minimum property.
+     *
+     * @return a int.
      */
     public int getMinimum() {
         return minimum;
@@ -140,6 +157,8 @@ public class MetricSummaryType {
 
     /**
      * Sets the value of the minimum property.
+     *
+     * @param value a int.
      */
     public void setMinimum(int value) {
         this.minimum = value;
@@ -147,6 +166,8 @@ public class MetricSummaryType {
 
     /**
      * Gets the value of the maximum property.
+     *
+     * @return a int.
      */
     public int getMaximum() {
         return maximum;
@@ -154,6 +175,8 @@ public class MetricSummaryType {
 
     /**
      * Sets the value of the maximum property.
+     *
+     * @param value a int.
      */
     public void setMaximum(int value) {
         this.maximum = value;
@@ -161,6 +184,8 @@ public class MetricSummaryType {
 
     /**
      * Gets the value of the average property.
+     *
+     * @return a double.
      */
     public double getAverage() {
         return average;
@@ -168,6 +193,8 @@ public class MetricSummaryType {
 
     /**
      * Sets the value of the average property.
+     *
+     * @param value a double.
      */
     public void setAverage(double value) {
         this.average = value;
@@ -175,6 +202,8 @@ public class MetricSummaryType {
 
     /**
      * Gets the value of the standardDeviation property.
+     *
+     * @return a double.
      */
     public double getStandardDeviation() {
         return standardDeviation;
@@ -182,6 +211,8 @@ public class MetricSummaryType {
 
     /**
      * Sets the value of the standardDeviation property.
+     *
+     * @param value a double.
      */
     public void setStandardDeviation(double value) {
         this.standardDeviation = value;

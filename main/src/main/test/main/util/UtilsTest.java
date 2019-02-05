@@ -4,6 +4,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 import static main.util.Utils.retrieveFullyQualifiedName;
 import static main.util.Utils.trimFilePath;
 import static org.junit.Assert.assertEquals;
@@ -22,7 +24,7 @@ public class UtilsTest {
     //Java 1.8.181 Implementation
 
     //Java 1.7.80 Implementation
-    private String javaFile = Utils.stringJoiner(fileSep, "rsc", "test", "main.java");
+    private String javaFile = Utils.join(fileSep, "rsc", "test", "main.java");
     //Java 1.7.80 Implementation
     //endregion
 
@@ -38,7 +40,7 @@ public class UtilsTest {
         //Java 1.8.181 Implementation
 
         //Java 1.7.80 Implementation
-        fullJavaFile = Utils.stringJoiner(fileSep, "src", "main", "java", "com", "full", "fun", "test", "main.java");
+        fullJavaFile = Utils.join(fileSep, "src", "main", "java", "com", "full", "fun", "test", "main.java");
         //Java 1.7.80 Implementation
         //endregion
 
@@ -48,7 +50,7 @@ public class UtilsTest {
         //Java 1.8.181 Implementation
 
         //Java 1.7.80 Implementation
-        fullJavaClassFile = Utils.stringJoiner(fileSep, "target", "main", "java", "com", "full", "fun", "test", "main.class");
+        fullJavaClassFile = Utils.join(fileSep, "target", "main", "java", "com", "full", "fun", "test", "main.class");
         //Java 1.7.80 Implementation
         //endregion
 
@@ -83,10 +85,10 @@ public class UtilsTest {
 
     @Test
     public void retrieveFullyQualifiedNameTest() {
-        String packageName = retrieveFullyQualifiedName(javaFile);
+        String packageName = retrieveFullyQualifiedName(Arrays.asList(javaFile)).get(0);
 
         assertNotNull(packageName);
-        assertEquals("src.main.java.com.full.fun.test.main.java", packageName);
+        assertEquals("src.main.java.com.full.fun.test.main", packageName);
     }
     //endregion
 }

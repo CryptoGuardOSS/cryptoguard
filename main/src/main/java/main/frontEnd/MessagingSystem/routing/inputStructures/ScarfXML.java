@@ -5,8 +5,11 @@ import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import java.util.Arrays;
 
 /**
+ * <p>ScarfXML class.</p>
+ *
  * @author RigorityJTeam
  * Created on 2018-12-14.
+ * @version $Id: $Id
  * @since 01.01.07
  *
  * <p>The Scarf Input check implementation.</p>
@@ -18,6 +21,10 @@ public class ScarfXML implements InputStructure {
     /**
      * {@inheritDoc}
      * The overridden method for the ScarfXML output.
+     *
+     * @param info a {@link main.frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
+     * @param args an array of {@link java.lang.String} objects.
+     * @return a {@link java.lang.Boolean} object.
      */
     public Boolean inputValidation(EnvironmentInformation info, String[] args) {
 
@@ -36,6 +43,8 @@ public class ScarfXML implements InputStructure {
     /**
      * {@inheritDoc}
      * The overridden method for the Legacy output.
+     *
+     * @return a {@link java.lang.String} object.
      */
     public String helpInfo() {
         return inputReader.helpInfo();
@@ -76,15 +85,15 @@ public class ScarfXML implements InputStructure {
             if (args.length >= 1)
                 this.assessmentFramework = args[0];
             if (args.length >= 2)
-                this.assessmentFramework = args[1];
+                this.assessmentFrameworkVersion = args[1];
             if (args.length >= 3)
-                this.assessmentFramework = args[2];
+                this.buildRootDir = args[2];
             if (args.length >= 4)
-                this.assessmentFramework = args[3];
+                this.packageRootDir = args[3];
             if (args.length >= 5)
-                this.assessmentFramework = args[4];
+                this.parserName = args[4];
             if (args.length >= 6)
-                this.assessmentFramework = args[5];
+                this.parserVersion = args[5];
         }
 
         public String helpInfo() {
@@ -102,6 +111,7 @@ public class ScarfXML implements InputStructure {
         }
 
         //region Getters
+
         /**
          * Getter for assessmentFramework
          *

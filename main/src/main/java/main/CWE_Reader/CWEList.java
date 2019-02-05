@@ -8,8 +8,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * <p>CWEList class.</p>
+ *
  * @author RigorityJTeam
  * Created on 2018-12-05.
+ * @version $Id: $Id
  * @since 01.00.07
  *
  * <p>The Lazy CWE Loader that retrieves CWES for Java</p>
@@ -36,7 +39,7 @@ public class CWEList {
      *
      * <p>getCweList()</p>
      *
-     * @return a {@link Map} object.
+     * @return a {@link java.util.Map} object.
      */
     public Map<Integer, CWE> getCweList() {
 
@@ -75,7 +78,7 @@ public class CWEList {
      * <p>CWE_Lookup({@link java.lang.Integer})</p>
      *
      * @param cweId {@link java.lang.Integer}
-     * @return a {@link CWE} object.
+     * @return a {@link main.CWE_Reader.CWE} object.
      */
     public CWE CWE_Lookup(Integer cweId) {
         if (this.getCweList().containsKey(cweId))

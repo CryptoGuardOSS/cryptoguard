@@ -50,6 +50,9 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ *
+ * @author RigorityJTeam
+ * @version $Id: $Id
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
@@ -147,7 +150,9 @@ public class AnalyzerReport {
      *
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link BugInstanceType }
+     * {@link com.example.response.BugInstanceType}
+     *
+     * @return a {@link java.util.List} object.
      */
     public List<BugInstanceType> getBugInstance() {
         if (bugInstance == null) {
@@ -160,7 +165,7 @@ public class AnalyzerReport {
      * Gets the value of the bugSummary property.
      *
      * @return possible object is
-     * {@link BugSummaryType }
+     * {@link com.example.response.BugSummaryType}
      */
     public BugSummaryType getBugSummary() {
         return bugSummary;
@@ -170,7 +175,7 @@ public class AnalyzerReport {
      * Sets the value of the bugSummary property.
      *
      * @param value allowed object is
-     *              {@link BugSummaryType }
+     *              {@link com.example.response.BugSummaryType}
      */
     public void setBugSummary(BugSummaryType value) {
         this.bugSummary = value;
@@ -194,7 +199,9 @@ public class AnalyzerReport {
      *
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link MetricType }
+     * {@link com.example.response.MetricType}
+     *
+     * @return a {@link java.util.List} object.
      */
     public List<MetricType> getMetric() {
         if (metric == null) {
@@ -207,7 +214,7 @@ public class AnalyzerReport {
      * Gets the value of the metricSummaries property.
      *
      * @return possible object is
-     * {@link MetricSummariesType }
+     * {@link com.example.response.MetricSummariesType}
      */
     public MetricSummariesType getMetricSummaries() {
         return metricSummaries;
@@ -217,7 +224,7 @@ public class AnalyzerReport {
      * Sets the value of the metricSummaries property.
      *
      * @param value allowed object is
-     *              {@link MetricSummariesType }
+     *              {@link com.example.response.MetricSummariesType}
      */
     public void setMetricSummaries(MetricSummariesType value) {
         this.metricSummaries = value;
@@ -227,7 +234,7 @@ public class AnalyzerReport {
      * Gets the value of the assessFw property.
      *
      * @return possible object is
-     * {@link String }
+     * {@link java.lang.String}
      */
     public String getAssessFw() {
         return assessFw;
@@ -237,7 +244,7 @@ public class AnalyzerReport {
      * Sets the value of the assessFw property.
      *
      * @param value allowed object is
-     *              {@link String }
+     *              {@link java.lang.String}
      */
     public void setAssessFw(String value) {
         this.assessFw = value;
@@ -247,7 +254,7 @@ public class AnalyzerReport {
      * Gets the value of the assessFwVersion property.
      *
      * @return possible object is
-     * {@link String }
+     * {@link java.lang.String}
      */
     public String getAssessFwVersion() {
         return assessFwVersion;
@@ -257,7 +264,7 @@ public class AnalyzerReport {
      * Sets the value of the assessFwVersion property.
      *
      * @param value allowed object is
-     *              {@link String }
+     *              {@link java.lang.String}
      */
     public void setAssessFwVersion(String value) {
         this.assessFwVersion = value;
@@ -267,7 +274,7 @@ public class AnalyzerReport {
      * Gets the value of the assessmentStartTs property.
      *
      * @return possible object is
-     * {@link XMLGregorianCalendar }
+     * {@link javax.xml.datatype.XMLGregorianCalendar}
      */
     public XMLGregorianCalendar getAssessmentStartTs() {
         return assessmentStartTs;
@@ -277,7 +284,7 @@ public class AnalyzerReport {
      * Sets the value of the assessmentStartTs property.
      *
      * @param value allowed object is
-     *              {@link XMLGregorianCalendar }
+     *              {@link javax.xml.datatype.XMLGregorianCalendar}
      */
     public void setAssessmentStartTs(XMLGregorianCalendar value) {
         this.assessmentStartTs = value;
@@ -287,7 +294,7 @@ public class AnalyzerReport {
      * Gets the value of the buildFw property.
      *
      * @return possible object is
-     * {@link String }
+     * {@link java.lang.String}
      */
     public String getBuildFw() {
         return buildFw;
@@ -297,7 +304,7 @@ public class AnalyzerReport {
      * Sets the value of the buildFw property.
      *
      * @param value allowed object is
-     *              {@link String }
+     *              {@link java.lang.String}
      */
     public void setBuildFw(String value) {
         this.buildFw = value;
@@ -307,7 +314,7 @@ public class AnalyzerReport {
      * Gets the value of the buildFwVersion property.
      *
      * @return possible object is
-     * {@link String }
+     * {@link java.lang.String}
      */
     public String getBuildFwVersion() {
         return buildFwVersion;
@@ -317,7 +324,7 @@ public class AnalyzerReport {
      * Sets the value of the buildFwVersion property.
      *
      * @param value allowed object is
-     *              {@link String }
+     *              {@link java.lang.String}
      */
     public void setBuildFwVersion(String value) {
         this.buildFwVersion = value;
@@ -327,7 +334,7 @@ public class AnalyzerReport {
      * Gets the value of the packageName property.
      *
      * @return possible object is
-     * {@link String }
+     * {@link java.lang.String}
      */
     public String getPackageName() {
         return packageName;
@@ -337,7 +344,7 @@ public class AnalyzerReport {
      * Sets the value of the packageName property.
      *
      * @param value allowed object is
-     *              {@link String }
+     *              {@link java.lang.String}
      */
     public void setPackageName(String value) {
         this.packageName = value;
@@ -347,7 +354,7 @@ public class AnalyzerReport {
      * Gets the value of the packageVersion property.
      *
      * @return possible object is
-     * {@link String }
+     * {@link java.lang.String}
      */
     public String getPackageVersion() {
         return packageVersion;
@@ -357,7 +364,7 @@ public class AnalyzerReport {
      * Sets the value of the packageVersion property.
      *
      * @param value allowed object is
-     *              {@link String }
+     *              {@link java.lang.String}
      */
     public void setPackageVersion(String value) {
         this.packageVersion = value;
@@ -367,7 +374,7 @@ public class AnalyzerReport {
      * Gets the value of the buildRootDir property.
      *
      * @return possible object is
-     * {@link String }
+     * {@link java.lang.String}
      */
     public String getBuildRootDir() {
         return buildRootDir;
@@ -377,7 +384,7 @@ public class AnalyzerReport {
      * Sets the value of the buildRootDir property.
      *
      * @param value allowed object is
-     *              {@link String }
+     *              {@link java.lang.String}
      */
     public void setBuildRootDir(String value) {
         this.buildRootDir = value;
@@ -387,7 +394,7 @@ public class AnalyzerReport {
      * Gets the value of the packageRootDir property.
      *
      * @return possible object is
-     * {@link String }
+     * {@link java.lang.String}
      */
     public String getPackageRootDir() {
         return packageRootDir;
@@ -397,7 +404,7 @@ public class AnalyzerReport {
      * Sets the value of the packageRootDir property.
      *
      * @param value allowed object is
-     *              {@link String }
+     *              {@link java.lang.String}
      */
     public void setPackageRootDir(String value) {
         this.packageRootDir = value;
@@ -407,7 +414,7 @@ public class AnalyzerReport {
      * Gets the value of the parserFw property.
      *
      * @return possible object is
-     * {@link String }
+     * {@link java.lang.String}
      */
     public String getParserFw() {
         return parserFw;
@@ -417,7 +424,7 @@ public class AnalyzerReport {
      * Sets the value of the parserFw property.
      *
      * @param value allowed object is
-     *              {@link String }
+     *              {@link java.lang.String}
      */
     public void setParserFw(String value) {
         this.parserFw = value;
@@ -427,7 +434,7 @@ public class AnalyzerReport {
      * Gets the value of the parserFwVersion property.
      *
      * @return possible object is
-     * {@link String }
+     * {@link java.lang.String}
      */
     public String getParserFwVersion() {
         return parserFwVersion;
@@ -437,7 +444,7 @@ public class AnalyzerReport {
      * Sets the value of the parserFwVersion property.
      *
      * @param value allowed object is
-     *              {@link String }
+     *              {@link java.lang.String}
      */
     public void setParserFwVersion(String value) {
         this.parserFwVersion = value;
@@ -447,7 +454,7 @@ public class AnalyzerReport {
      * Gets the value of the platformName property.
      *
      * @return possible object is
-     * {@link String }
+     * {@link java.lang.String}
      */
     public String getPlatformName() {
         return platformName;
@@ -457,7 +464,7 @@ public class AnalyzerReport {
      * Sets the value of the platformName property.
      *
      * @param value allowed object is
-     *              {@link String }
+     *              {@link java.lang.String}
      */
     public void setPlatformName(String value) {
         this.platformName = value;
@@ -467,7 +474,7 @@ public class AnalyzerReport {
      * Gets the value of the toolName property.
      *
      * @return possible object is
-     * {@link String }
+     * {@link java.lang.String}
      */
     public String getToolName() {
         return toolName;
@@ -477,7 +484,7 @@ public class AnalyzerReport {
      * Sets the value of the toolName property.
      *
      * @param value allowed object is
-     *              {@link String }
+     *              {@link java.lang.String}
      */
     public void setToolName(String value) {
         this.toolName = value;
@@ -487,7 +494,7 @@ public class AnalyzerReport {
      * Gets the value of the toolVersion property.
      *
      * @return possible object is
-     * {@link String }
+     * {@link java.lang.String}
      */
     public String getToolVersion() {
         return toolVersion;
@@ -497,7 +504,7 @@ public class AnalyzerReport {
      * Sets the value of the toolVersion property.
      *
      * @param value allowed object is
-     *              {@link String }
+     *              {@link java.lang.String}
      */
     public void setToolVersion(String value) {
         this.toolVersion = value;
@@ -507,7 +514,7 @@ public class AnalyzerReport {
      * Gets the value of the uuid property.
      *
      * @return possible object is
-     * {@link String }
+     * {@link java.lang.String}
      */
     public String getUuid() {
         return uuid;
@@ -517,7 +524,7 @@ public class AnalyzerReport {
      * Sets the value of the uuid property.
      *
      * @param value allowed object is
-     *              {@link String }
+     *              {@link java.lang.String}
      */
     public void setUuid(String value) {
         this.uuid = value;

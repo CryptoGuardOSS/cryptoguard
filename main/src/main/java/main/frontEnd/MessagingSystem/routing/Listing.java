@@ -8,30 +8,34 @@ import main.rule.engine.EngineType;
  * The enum containing all of the different messaging types available for the user.
  *
  * @author franceme
+ * @version $Id: $Id
  * @since V01.00.00
  */
 public enum Listing {
     //region Different Values
-    Legacy("Legacy", "L"),
-    ScarfXML("ScarfXML", "SX");
+    Legacy("Legacy", "L", ".txt"),
+    ScarfXML("ScarfXML", "SX", ".xml");
     //endregion
     //region Attributes
     private String type;
     private String flag;
+    private String outputFileExt;
     private final String inputPath = "main.frontEnd.MessagingSystem.routing.inputStructures";
     private final String outputPath = "main.frontEnd.MessagingSystem.routing.outputStructures";
     //endregion
 
     //region Constructor
+
     /**
      * The inherint constructor of all the enum value types listed here
      *
      * @param Type - the string value of the type of
      * @param Flag - the flag used to identify the specific messaging type
      */
-    Listing(String Type, String Flag) {
+    Listing(String Type, String Flag, String outputFileExt) {
         this.type = Type;
         this.flag = Flag;
+        this.outputFileExt = outputFileExt;
     }
     //endregion
 
@@ -52,12 +56,13 @@ public enum Listing {
      * The dynamic loader for the Listing Type based on the flag
      *
      * @param flag {@link java.lang.String} - The input type looking for the flag type
-     * @return {@link Listing} - The messaging Type retrieved by flag, if not found the default will be used
+     * @return {@link main.frontEnd.MessagingSystem.routing.Listing} - The messaging Type retrieved by flag, if not found the default will be used
      */
     public static Listing retrieveListingType(String flag) {
-        for (Listing type : Listing.values())
-            if (type.flag.equals(flag))
-                return type;
+        if (flag != null)
+            for (Listing type : Listing.values())
+                if (type.flag.equals(flag))
+                    return type;
 
         return Listing.Legacy;
     }
@@ -67,7 +72,7 @@ public enum Listing {
      *
      * <p>getFlag()</p>
      *
-     * @return a {@link String} object.
+     * @return a {@link java.lang.String} object.
      */
     public String getFlag() {
         return flag;
@@ -78,7 +83,7 @@ public enum Listing {
      *
      * <p>getType()</p>
      *
-     * @return {@link String} - The type.
+     * @return {@link java.lang.String} - The type.
      */
     public String getType() {
         return type;
@@ -144,6 +149,15 @@ public enum Listing {
         }
 
         return help.toString();
+    }
+
+    /**
+     * <p>Getter for the field <code>outputFileExt</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getOutputFileExt() {
+        return outputFileExt;
     }
     //endregion
 }

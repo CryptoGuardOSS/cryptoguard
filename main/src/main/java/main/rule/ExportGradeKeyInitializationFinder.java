@@ -2,6 +2,7 @@ package main.rule;
 
 import main.analyzer.backward.Analysis;
 import main.analyzer.backward.UnitContainer;
+import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.rule.base.BaseRuleChecker;
 import main.rule.base.MajorHeuristics;
 import main.rule.engine.Criteria;
@@ -20,6 +21,7 @@ import java.util.Map;
  * Created by krishnokoli on 11/15/17.
  *
  * @author krishnokoli
+ * @version $Id: $Id
  * @since V01.00.00
  */
 public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
@@ -58,6 +60,8 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
     private Map<UnitContainer, List<String>> othersSourceMap = new HashMap<>();
 
     private int minSize;
+    private final String rule = "5";
+    private final String ruleDesc = RULE_VS_DESCRIPTION.get(rule);
 
     private ArrayList<String> initializationCallsites;
 
@@ -136,8 +140,6 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
      */
     @Override
     public void printAnalysisOutput(Map<String, String> xmlFileStr) {
-        String rule = "5";
-        String ruleDesc = RULE_VS_DESCRIPTION.get(rule);
 
         List<String> predictableSources = new ArrayList<>();
         List<UnitContainer> predictableSourceInsts = new ArrayList<>();
@@ -155,6 +157,24 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
             System.out.println("=======================================");
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths) {
+        ArrayList<AnalysisIssue> outList = new ArrayList<>();
+
+        for (UnitContainer unit : predictableSourcMap.keySet()) {
+            String sootString = predictableSourcMap.get(unit).size() <= 0
+                    ? ""
+                    : "Found: \"" + predictableSourcMap.get(unit).get(0).replaceAll("\"", "") + "\"";
+            outList.add(new AnalysisIssue(unit, Integer.parseInt(rule), sootString, sourcePaths));
+        }
+
+        return outList;
+    }
+
 
     private String getPrintableMsg(Map<UnitContainer, List<String>> predictableSourcMap, String rule, String ruleDesc) {
         String output = "***Violated Rule " +

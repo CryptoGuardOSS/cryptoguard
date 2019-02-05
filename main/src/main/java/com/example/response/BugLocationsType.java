@@ -32,6 +32,9 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ *
+ * @author RigorityJTeam
+ * @version $Id: $Id
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "BugLocationsType", propOrder = {
@@ -60,7 +63,9 @@ public class BugLocationsType {
      *
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link LocationType }
+     * {@link com.example.response.LocationType}
+     *
+     * @return a {@link java.util.List} object.
      */
     public List<LocationType> getLocation() {
         if (location == null) {

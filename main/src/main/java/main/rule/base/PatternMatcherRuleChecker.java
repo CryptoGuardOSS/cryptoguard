@@ -2,6 +2,7 @@ package main.rule.base;
 
 import main.analyzer.backward.Analysis;
 import main.analyzer.backward.UnitContainer;
+import main.frontEnd.MessagingSystem.AnalysisIssue;
 import soot.ValueBox;
 import soot.jimple.Constant;
 
@@ -14,6 +15,7 @@ import java.util.Map;
  * <p>Abstract PatternMatcherRuleChecker class.</p>
  *
  * @author RigorityJTeam
+ * @version $Id: $Id
  * @since V01.00.00
  */
 public abstract class PatternMatcherRuleChecker extends BaseRuleChecker {
@@ -22,6 +24,9 @@ public abstract class PatternMatcherRuleChecker extends BaseRuleChecker {
 
     private Map<UnitContainer, List<String>> predictableSourcMap = new HashMap<>();
     private Map<UnitContainer, List<String>> othersSourceMap = new HashMap<>();
+    private final String rule = getRuleId();
+    private final String ruleDesc = RULE_VS_DESCRIPTION.get(rule);
+
 
     /**
      * {@inheritDoc}
@@ -56,10 +61,24 @@ public abstract class PatternMatcherRuleChecker extends BaseRuleChecker {
     /**
      * {@inheritDoc}
      */
-    public void printAnalysisOutput(Map<String, String> configFiles) {
+    @Override
+    public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths) {
+        ArrayList<AnalysisIssue> outList = new ArrayList<>();
 
-        String rule = getRuleId();
-        String ruleDesc = RULE_VS_DESCRIPTION.get(rule);
+        for (UnitContainer unit : predictableSourcMap.keySet()) {
+            String sootString = predictableSourcMap.get(unit).size() <= 0
+                    ? ""
+                    : "Found: \"" + predictableSourcMap.get(unit).get(0).replaceAll("\"", "") + "\"";
+            outList.add(new AnalysisIssue(unit, Integer.parseInt(rule), sootString, sourcePaths));
+        }
+
+        return outList;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void printAnalysisOutput(Map<String, String> configFiles) {
 
         List<String> predictableSources = new ArrayList<>();
         List<UnitContainer> predictableSourceInst = new ArrayList<>();
@@ -76,14 +95,14 @@ public abstract class PatternMatcherRuleChecker extends BaseRuleChecker {
 
         if (!predictableSources.isEmpty()) {
             System.out.println("=======================================");
-            String output = getPrintableMsg(predictableSourcMap, rule, ruleDesc);
+            String output = getPrintableMsg(predictableSourcMap);
             System.out.println(output);
 
             System.out.println("=======================================");
         }
     }
 
-    private String getPrintableMsg(Map<UnitContainer, List<String>> predictableSourcMap, String rule, String ruleDesc) {
+    private String getPrintableMsg(Map<UnitContainer, List<String>> predictableSourcMap) {
         String output = "***Violated Rule " +
                 rule + ": " +
                 ruleDesc;
