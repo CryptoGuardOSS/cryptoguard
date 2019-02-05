@@ -1,6 +1,8 @@
 package main.frontEnd.Interface;
 
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
+import main.frontEnd.MessagingSystem.routing.Listing;
+import main.rule.engine.EngineType;
 import main.util.Utils;
 import org.junit.After;
 import org.junit.Before;
@@ -9,7 +11,9 @@ import org.junit.Test;
 import java.io.File;
 import java.util.Arrays;
 
+import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.*;
 
 public class ArgumentsCheckTest {
 
@@ -19,7 +23,9 @@ public class ArgumentsCheckTest {
     private final String basePath = System.getProperty("user.dir");
     private final String jarOne = Utils.osPathJoin(basePath, "rsc", "test", "testable-jar.jar");
     private final String srcOneGrv = basePath.replace("main", "testable-jar");
-    private final String srcOneGrvDep = "build/dependencies";
+    private final String srcOneGrvDep = Utils.osPathJoin(srcOneGrv, "build", "dependencies");
+    private final String fileOut = Utils.osPathJoin(srcOneGrv, "tmp", "txt.xml");
+    private final String fileOutTxt = Utils.osPathJoin(srcOneGrv, "tmp", "txt.txt");
     //endregion
 
     //region Test Environment Setup
@@ -56,130 +62,130 @@ public class ArgumentsCheckTest {
 
     }
 
-    @Test //TODO - Need to fix the sourcePaths
+    @Test
+    public void paramaterCheck_jar_SkipValidation() {
+        StringBuilder args = new StringBuilder();
+
+        args.append("-in").append(" ").append(EngineType.JAR.getFlag()).append(" ");
+        args.append("-s ").append(jarOne).append(" ");
+        args.append("-d ").append(srcOneGrvDep).append(" ");
+        args.append("-o ").append(fileOutTxt).append(" ");
+        args.append("-t").append(" ");
+        args.append("-n").append(" ");
+        args.append("-x");
+
+        EnvironmentInformation info = null;
+
+        try {
+            info = ArgumentsCheck.paramaterCheck(Arrays.asList(args.toString().split(" ")));
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertNull(e);
+        }
+
+        assertNotNull(info);
+        assertEquals(EngineType.JAR, info.getSourceType());
+        assertEquals(1, info.getSource().size());
+        assertEquals(jarOne, info.getSource().get(0));
+        assertEquals(1, info.getDependencies().size());
+        assertEquals(srcOneGrvDep, info.getDependencies().get(0));
+        assertTrue(info.isShowTimes());
+        assertTrue(info.getPrettyPrint());
+        assertEquals(fileOutTxt, info.getFileOut());
+        assertEquals(Listing.Legacy, info.getMessagingType());
+    }
+
+    @Test
     public void paramaterCheck_jar() {
 
         StringBuilder args = new StringBuilder();
 
-        args.append("-in SOURCE").append(" ");
-        //args.append("-s ").append(jarOne).append(" ");
+        args.append("-in").append(" ").append(EngineType.JAR.getFlag()).append(" ");
+        args.append("-s ").append(jarOne).append(" ");
         args.append("-d ").append(srcOneGrvDep).append(" ");
+        args.append("-o ").append(fileOut).append(" ");
+        args.append("-m ").append(Listing.ScarfXML.getFlag()).append(" ");
         args.append("-t").append(" ");
-        args.append("-n").append(" ");
-        args.append("-h");
+        args.append("-n");
+
+        EnvironmentInformation info = null;
 
         try {
-            EnvironmentInformation info = ArgumentsCheck.paramaterCheck(Arrays.asList(args.toString().split(" ")));
+            info = ArgumentsCheck.paramaterCheck(Arrays.asList(args.toString().split(" ")));
         } catch (Exception e) {
+            e.printStackTrace();
+            assertNull(e);
         }
-       /* info = new EnvironmentInformation(
-                Arrays.asList(jarOne),
-                EngineType.JAR,
-                Listing.Legacy,
-                null, null, null
-        );
 
-        String args = "jar -s " + jarOne;
-
-        try {
-            EnvironmentInformation checkedInfo =
-                    ArgumentsCheck.paramaterCheck(
-                            Arrays.asList(args.split(" ")));
-
-            assertNotNull(checkedInfo);
-
-            for (Field feld : EnvironmentInformation.class.getFields())
-                assertEquals(info.getClass().getField(feld.getName()),
-                        checkedInfo.getClass().getField(feld.getName()));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            assertNull(e);
-        }*/
-    }
-
-    @Test //TODO - Need to fix the sourcePaths
-    public void paramaterCheck_Scarfjar() {
-        /*info = new EnvironmentInformation(
-                Arrays.asList(jarOne),
-                EngineType.JAR,
-                Listing.ScarfXML,
-                null, null, null
-        );
-
-        String args = "jar -s " + jarOne + " -m " + Listing.ScarfXML.getFlag();
-
-        try {
-            EnvironmentInformation checkedInfo =
-                    ArgumentsCheck.paramaterCheck(
-                            Arrays.asList(args.split(" ")));
-
-            assertNotNull(checkedInfo);
-
-            for (Field feld : EnvironmentInformation.class.getFields())
-                assertEquals(info.getClass().getField(feld.getName()),
-                        checkedInfo.getClass().getField(feld.getName()));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            assertNull(e);
-        }*/
-    }
-
-    @Test //TODO - Need to fix the sourcePaths
-    public void parameterCheck_gdl() {
-        /*info = new EnvironmentInformation(
-                Arrays.asList(srcOneGrv),
-                EngineType.DIR,
-                Listing.Legacy,
-                Arrays.asList(srcOneGrvDep), null, null
-        );
-
-        String args = "source -s " + srcOneGrv + " -d " + srcOneGrvDep;
-
-        try {
-            EnvironmentInformation checkedInfo =
-                    ArgumentsCheck.paramaterCheck(
-                            Arrays.asList(args.split(" ")));
-
-            assertNotNull(checkedInfo);
-
-            for (Field feld : EnvironmentInformation.class.getFields())
-                assertEquals(info.getClass().getField(feld.getName()),
-                        checkedInfo.getClass().getField(feld.getName()));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            assertNull(e);
-        }*/
+        assertNotNull(info);
+        assertEquals(EngineType.JAR, info.getSourceType());
+        assertEquals(1, info.getSource().size());
+        assertEquals(jarOne, info.getSource().get(0));
+        assertEquals(1, info.getDependencies().size());
+        assertEquals(srcOneGrvDep, info.getDependencies().get(0));
+        assertTrue(info.isShowTimes());
+        assertTrue(info.getPrettyPrint());
+        assertEquals(fileOut, info.getFileOut());
+        assertEquals(Listing.ScarfXML, info.getMessagingType());
     }
 
     @Test
-    public void parameterCheck_ScarfGDL() {
-        /*info = new EnvironmentInformation(
-                Arrays.asList(srcOneGrv),
-                EngineType.DIR,
-                Listing.ScarfXML,
-                Arrays.asList(srcOneGrvDep), null, null
-        );
+    public void paramaterCheck_Barejar() {
 
-        String args = "source -s " + srcOneGrv + " -d " + srcOneGrvDep + "-m" + Listing.ScarfXML.getFlag();
+        StringBuilder args = new StringBuilder();
+
+        args.append("-in").append(" ").append(EngineType.JAR.getFlag()).append(" ");
+        args.append("-s ").append(jarOne);
+
+        EnvironmentInformation info = null;
 
         try {
-            EnvironmentInformation checkedInfo =
-                    ArgumentsCheck.paramaterCheck(
-                            Arrays.asList(args.split(" ")));
-
-            assertNotNull(checkedInfo);
-
-            for (Field feld : EnvironmentInformation.class.getFields())
-                assertEquals(info.getClass().getField(feld.getName()),
-                        checkedInfo.getClass().getField(feld.getName()));
-
+            info = ArgumentsCheck.paramaterCheck(Arrays.asList(args.toString().split(" ")));
         } catch (Exception e) {
             e.printStackTrace();
             assertNull(e);
-        }*/
+        }
+
+        assertNotNull(info);
+        assertEquals(EngineType.JAR, info.getSourceType());
+        assertEquals(1, info.getSource().size());
+        assertEquals(jarOne, info.getSource().get(0));
+        assertFalse(info.isShowTimes());
+        assertFalse(info.getPrettyPrint());
+        assertEquals(Listing.Legacy, info.getMessagingType());
+    }
+
+    @Test
+    public void parameterCheck_gdl() {
+        StringBuilder args = new StringBuilder();
+
+        args.append("-in").append(" ").append(EngineType.DIR.getFlag()).append(" ");
+        args.append("-s ").append(srcOneGrv).append(" ");
+        args.append("-d ").append(srcOneGrvDep).append(" ");
+        args.append("-o ").append(fileOut).append(" ");
+        args.append("-m ").append(Listing.ScarfXML.getFlag()).append(" ");
+        args.append("-t").append(" ");
+        args.append("-n");
+
+        EnvironmentInformation info = null;
+
+        try {
+            info = ArgumentsCheck.paramaterCheck(Arrays.asList(args.toString().split(" ")));
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertNull(e);
+        }
+
+        assertNotNull(info);
+        assertEquals(EngineType.DIR, info.getSourceType());
+        assertEquals(1, info.getSource().size());
+        assertEquals(srcOneGrv, info.getSource().get(0));
+        assertEquals(1, info.getDependencies().size());
+        assertEquals(srcOneGrvDep, info.getDependencies().get(0));
+        assertTrue(info.isShowTimes());
+        assertTrue(info.getPrettyPrint());
+        assertEquals(fileOut, info.getFileOut());
+        assertEquals(Listing.ScarfXML, info.getMessagingType());
     }
     //endregion
 }

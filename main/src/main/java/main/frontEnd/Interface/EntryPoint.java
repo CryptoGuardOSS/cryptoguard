@@ -6,11 +6,10 @@ import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import main.rule.engine.*;
 import main.util.Utils;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 
 /**
  * @author RigorityJTeam
@@ -25,7 +24,7 @@ public class EntryPoint {
     public static void main(String[] args) {
 
         String outputMessage;
-        String fileName = getCurrentTimeStamp();
+        String filePath;
 
         //Fail Fast on the input validation
         try {
@@ -33,7 +32,6 @@ public class EntryPoint {
             if (generalInfo == null)
                 System.exit(0);
 
-            generalInfo.setPrintOut(false);
             ArrayList<AnalysisIssue> issues = null;
             EntryHandler handler = null;
             switch (generalInfo.getSourceType()) {
@@ -55,44 +53,22 @@ public class EntryPoint {
             }
             issues = handler.NonStreamScan(generalInfo);
 
-            fileName = Utils.osPathJoin(System.getProperty("user.dir"),
-                    generalInfo.getPackageName() /*+ "_" + fileName*/ + generalInfo.getMessagingType().getOutputFileExt());
-
             outputMessage = MessageRepresentation.getMessage(generalInfo, issues);
-            //System.out.println(generalInfo.getInternalErrors());
+            filePath = generalInfo.getFileOut();
 
         } catch (Exception e) {
             e.printStackTrace();
-            fileName = Utils.osPathJoin(System.getProperty("user.dir"),
-                    "ERROR_" + fileName + ".txt");
+            filePath = Utils.osPathJoin(System.getProperty("user.dir"), "ERROR.txt");
             outputMessage = e.getLocalizedMessage();
         }
 
         try {
-            BufferedWriter out = new BufferedWriter(new FileWriter(fileName));
-            out.write(outputMessage);
-            out.flush();
-            out.close();
-
+            Files.write(Paths.get(filePath), outputMessage.getBytes());
         } catch (Exception e) {
-            System.out.println("File " + fileName + " cannot be written to.");
+            System.out.println("File " + filePath + " cannot be written to.");
         }
 
     }
 
-    private static String getCurrentTimeStamp() {
 
-        StringBuilder date = new StringBuilder();
-        Date currentDate = new Date();
-        date.append(currentDate.getYear());
-        date.append(currentDate.getMonth());
-        date.append(currentDate.getDay());
-        date.append("-");
-        date.append(currentDate.getHours());
-        date.append(currentDate.getMinutes());
-        date.append(currentDate.getSeconds());
-
-        return date.toString();
-
-    }
 }

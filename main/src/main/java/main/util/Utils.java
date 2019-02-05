@@ -1,6 +1,9 @@
 package main.util;
 
 import main.analyzer.backward.UnitContainer;
+import main.frontEnd.Interface.ExceptionHandler;
+import main.frontEnd.MessagingSystem.routing.Listing;
+import main.rule.engine.EngineType;
 import main.util.manifest.ProcessManifest;
 import org.apache.commons.lang3.StringUtils;
 import org.jf.dexlib2.DexFileFactory;
@@ -15,6 +18,7 @@ import soot.options.Options;
 import soot.util.Chain;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -47,6 +51,7 @@ public class Utils {
     private static Pattern sootMthdPattern = Pattern.compile("<((?:[a-zA-Z0-9]+))>");
     private static Pattern sootMthdPatternTwo = Pattern.compile("((?:[a-zA-Z0-9_]+))\\(");
     private static Pattern sootFoundMatchPattern = Pattern.compile("\"{1}(.+)\"{1}");
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");
 
     /**
      * <p>getClassNamesFromJarArchive.</p>
@@ -664,5 +669,73 @@ public class Utils {
             return StringUtils.trimToNull(matches.group(1));
 
         return "UNKNOWN";
+    }
+
+    public static List<String> retrieveDirs(List<String> arguments) throws ExceptionHandler {
+        List<String> dirs = new ArrayList<>();
+        for (String dir : arguments) {
+            File dirChecking = new File(dir);
+            if (!dirChecking.exists() || !dirChecking.isDirectory())
+                throw new ExceptionHandler(dirChecking.getName() + " is not a valid directory.");
+
+            try {
+                dirs.add(dirChecking.getCanonicalPath());
+            } catch (Exception e) {
+                throw new ExceptionHandler("Error retrieving the path of the directory.");
+            }
+        }
+        return dirs;
+    }
+
+    public static String verifyFileOut(String file, Listing type) throws ExceptionHandler {
+        if (!file.endsWith(type.getOutputFileExt()))
+            throw new ExceptionHandler("File " + file + " doesn't have the right file type ");
+
+        File tempFile = new File(file);
+
+        //TODO - Add flag to verify overwrite a file?
+        /*if (tempFile.exists() || tempFile.isFile())
+            throw new ExceptionHandler(tempFile.getName() + " is already a valid file.");
+*/
+        try {
+            return tempFile.getCanonicalPath();
+        } catch (Exception e) {
+            throw new ExceptionHandler("Error retrieving the path of the file " + tempFile.getName() + ".");
+        }
+    }
+
+    public static String retrieveFilePath(String file, EngineType type) throws ExceptionHandler {
+        if (!file.endsWith(type.getInputExtension()))
+            throw new ExceptionHandler("File " + file + " doesn't have the right file type ");
+
+        File tempFile = new File(file);
+        if (!tempFile.exists() || !tempFile.isFile())
+            throw new ExceptionHandler(tempFile.getName() + " is not a valid file.");
+
+        try {
+            return tempFile.getCanonicalPath();
+        } catch (Exception e) {
+            throw new ExceptionHandler("Error retrieving the path of the file " + tempFile.getName() + ".");
+        }
+    }
+
+    public static List<String> retrieveFilesByType(List<String> arguments, EngineType type) throws ExceptionHandler {
+        if (type == EngineType.DIR)
+            if (arguments.size() != 1)
+                throw new ExceptionHandler("Please enter one argument for this use case.");
+            else
+                return retrieveDirs(arguments);
+
+        List<String> filePaths = new ArrayList<>();
+
+        for (String in : arguments)
+            filePaths.add(retrieveFilePath(in, type));
+
+        return filePaths;
+    }
+
+    public static String getCurrentTimeStamp() {
+        return dateFormat.format(new Date());
+
     }
 }

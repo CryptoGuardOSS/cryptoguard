@@ -1,10 +1,7 @@
 package main.rule.engine;
 
-import main.frontEnd.Interface.ExceptionHandler;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The different types of "sources" accepted to examine.
@@ -155,122 +152,6 @@ public enum EngineType {
         return help.toString();
     }
 
-    public List<String> retrieveDirs(List<String> arguments) throws ExceptionHandler {
-        List<String> dirs = new ArrayList<>();
-        for (String dir : arguments) {
-            File dirChecking = new File(dir);
-            if (!dirChecking.exists() || !dirChecking.isDirectory())
-                throw new ExceptionHandler(dirChecking.getName() + " is not a valid directory.");
 
-            try {
-                dirs.add(dirChecking.getCanonicalPath());
-            } catch (Exception e) {
-                throw new ExceptionHandler("Error retrieving the path of the directory.");
-            }
-        }
-        return dirs;
-    }
-
-    public List<String> retrieveFilesByType(List<String> arguments) throws ExceptionHandler {
-        if (this == EngineType.DIR)
-            if (arguments.size() != 1)
-                throw new ExceptionHandler("Please enter one argument for this use case.");
-            else
-                return retrieveDirs(arguments);
-
-        List<String> filePaths = new ArrayList<>();
-        for (String in : arguments) {
-            if (!in.endsWith(inputExtension))
-                throw new ExceptionHandler("File " + in + "doesn't have the right file type ");
-
-            File tempFile = new File(in);
-            if (!tempFile.exists() || !tempFile.isFile())
-                throw new ExceptionHandler(tempFile.getName() + " is not a valid file.");
-
-            try {
-                filePaths.add(tempFile.getCanonicalPath());
-            } catch (Exception e) {
-                throw new ExceptionHandler("Error retrieving the path of the file " + tempFile.getName() + ".");
-            }
-        }
-        return filePaths;
-    }
-
-    public Map<String, List<String>> retrieveInputsFromInput(List<String> args, Integer messageType) throws ExceptionHandler {
-        Map<String, List<String>> source_dependencies = new HashMap<>();
-
-        if (!args.get(0).equals("-s"))
-            throw new ExceptionHandler("You need to pass the -s for the source files/dir.");
-
-        Integer dependencyLoc = args.indexOf("-d");
-        Integer msgLoc = messageType;
-
-        Integer sourceEnding = dependencyLoc != -1 ? dependencyLoc : (msgLoc != -1 ? msgLoc - 1 : args.size());
-
-        if (sourceEnding == 0)
-            throw new ExceptionHandler("You need to pass a source files/dir.");
-
-        source_dependencies.put("source",
-                retrieveFilesByType(args.subList(1, sourceEnding)));
-
-        if (dependencyLoc != -1) {
-            Integer dependencyEnding = msgLoc != -1 ? msgLoc : args.size();
-
-            if (this != EngineType.JAR && this != EngineType.CLASSFILES && this != EngineType.DIR)
-                throw new ExceptionHandler("You can only pass dependencies with the Jar or Java Class Path.");
-
-            //region TODO - check these relative pathes
-            /*
-            source_dependencies.put("dependencies",
-                    retrieveDirs(args.subList(sourceEnding + 1,dependencyEnding)));
-            */
-            //endregion
-            //TODO - Depdencency pulling/checking
-            source_dependencies.put("dependencies",
-                    args.subList(sourceEnding + 1, dependencyEnding - 1));
-
-        }
-
-        String pkg = null;
-
-        List<String> basePath = new ArrayList<String>();
-        File sourceFile;
-        switch (this) {
-            case APK:
-            case JAR:
-                sourceFile = new File(source_dependencies.get("source").get(0));
-                basePath.add(sourceFile.getName());
-                pkg = sourceFile.getName();
-                break;
-            case DIR:
-                sourceFile = new File(source_dependencies.get("source").get(0));
-                try {
-                    basePath.add(sourceFile.getCanonicalPath() + ":dir");
-                } catch (IOException e) {
-                }
-                pkg = sourceFile.getName();
-                break;
-            case JAVAFILES:
-            case CLASSFILES:
-                for (String file : source_dependencies.get("source")) {
-                    try {
-                        sourceFile = new File(file);
-                        basePath.add(sourceFile.getCanonicalPath());
-
-                        if (pkg == null) {
-                            pkg = sourceFile.getCanonicalPath();//.replace(sourceFile.getName(), "")
-                        }
-
-                    } catch (IOException e) {
-                    }
-                }
-                break;
-        }
-
-        source_dependencies.put("sourcePaths", basePath);
-        source_dependencies.put("sourcePkg", Arrays.asList(pkg));
-
-        return source_dependencies;
-    }
     //endregion
 }

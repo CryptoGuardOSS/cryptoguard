@@ -30,8 +30,9 @@ public class EnvironmentInformation {
     private final String BuildFramework;
     private final String BuildFrameworkVersion;
     private final String platformName = Utils.getPlatform();
-    private String packageName;
-    private String packageVersion;
+    private String packageName = "UNKNOWN";
+    private String packageVersion = "UNKNOWN";
+    private boolean showTimes = false;
     //endregion
     //region Required Elements Set From the Start
     private final List<String> Source;
@@ -47,13 +48,13 @@ public class EnvironmentInformation {
     private String fileOut;
     //endregion
     //region From Outside and defaulted unless set
-    private String AssessmentFramework;
-    private String AssessmentFrameworkVersion;
-    private String AssessmentStartTime;
-    private String ParserName;
-    private String ParserVersion;
-    private String packageRootDir;
-    private String buildRootDir;
+    private String AssessmentFramework = "UNKNOWN";
+    private String AssessmentFrameworkVersion = "UNKNOWN";
+    private String AssessmentStartTime = "UNKNOWN";
+    private String ParserName = "UNKNOWN";
+    private String ParserVersion = "UNKNOWN";
+    private String packageRootDir = "UNKNOWN";
+    private String buildRootDir = "UNKNOWN";
     private Integer buildId;
     private String xPath;
     private Boolean printOut = false;
@@ -137,25 +138,6 @@ public class EnvironmentInformation {
         } catch (DatatypeConfigurationException e) {
             return null;
         }
-    }
-
-    /**
-     * Returning a Long Number based on the time stamp
-     *
-     * @return - String with the current time stamp set
-     */
-    private Long getStringOfNumFromDate() {
-        StringBuilder date = new StringBuilder();
-        Date currentDate = new Date();
-        date.append(currentDate.getYear());
-        date.append(currentDate.getMonth());
-        date.append(currentDate.getDay());
-
-        date.append(currentDate.getHours());
-        date.append(currentDate.getMinutes());
-        date.append(currentDate.getSeconds());
-
-        return Long.valueOf(date.toString());
     }
 
     /**
@@ -614,6 +596,14 @@ public class EnvironmentInformation {
 
     public void setFileOut(String fileOut) {
         this.fileOut = fileOut;
+    }
+
+    public boolean isShowTimes() {
+        return showTimes;
+    }
+
+    public void setShowTimes(boolean showTimes) {
+        this.showTimes = showTimes;
     }
     //endregion
 }
