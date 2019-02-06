@@ -21,6 +21,7 @@ public class BrokenHashFinder extends PatternMatcherRuleChecker {
     static {
         BROKEN_HASH.add("\"MD2\"");
         BROKEN_HASH.add("(.)*MD5\"");
+        BROKEN_HASH.add("(.)*MD4\"");
         BROKEN_HASH.add("(.)*SHA-1\"");
         BROKEN_HASH.add("\"SHA1\"");
         BROKEN_HASH.add("\"SHA\"");

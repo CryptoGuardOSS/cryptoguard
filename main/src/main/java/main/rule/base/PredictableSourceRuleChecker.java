@@ -1,22 +1,21 @@
 package main.rule.base;
 
 import main.analyzer.backward.Analysis;
+import main.analyzer.backward.AssignInvokeUnitContainer;
+import main.analyzer.backward.InvokeUnitContainer;
 import main.analyzer.backward.UnitContainer;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
-import soot.ByteType;
-import soot.IntegerType;
-import soot.Value;
-import soot.ValueBox;
+import main.util.Utils;
+import soot.*;
 import soot.jimple.AssignStmt;
 import soot.jimple.Constant;
 import soot.jimple.InvokeExpr;
 import soot.jimple.internal.JAssignStmt;
+import soot.jimple.internal.JInvokeStmt;
 import soot.jimple.internal.RValueBox;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * Created by krishnokoli on 11/26/17.
@@ -55,86 +54,201 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
             return;
         }
 
+        Set<String> usedFields = new HashSet<>();
+        Set<String> usedConstants = new HashSet<>();
+
+        for (int index = 0; index < analysis.getAnalysisResult().size(); index++) {
+            UnitContainer e = analysis.getAnalysisResult().get(index);
+
+            if (e instanceof AssignInvokeUnitContainer) {
+                Set<String> fields = ((AssignInvokeUnitContainer) e).getProperties();
+                usedFields.addAll(fields);
+
+                if (e.getUnit().toString().contains("interfaceinvoke ")) {
+                    for (ValueBox usebox : e.getUnit().getUseBoxes()) {
+                        if (usebox.getValue() instanceof Constant) {
+                            usedConstants.add(usebox.getValue().toString());
+                        }
+                    }
+                }
+            }
+        }
+
         for (int index = 0; index < analysis.getAnalysisResult().size(); index++) {
 
             UnitContainer e = analysis.getAnalysisResult().get(index);
 
-            boolean found = false;
+            Map<UnitContainer, String> outSet = new HashMap<>();
 
-            for (String predictableSource : PREDICTABLE_SOURCES) {
-                if (e.getUnit().toString().contains(predictableSource)) {
 
-                    List<UnitContainer> outSet = new ArrayList<>();
-                    outSet.add(e);
+            if (e instanceof AssignInvokeUnitContainer) {
+                List<UnitContainer> resFromInside = ((AssignInvokeUnitContainer) e).getAnalysisResult();
+                checkPredictableSource(resFromInside, e, outSet);
 
-                    if (MajorHeuristics.isArgumentOfInvoke(analysis, index, outSet)) {
-                        putIntoMap(othersSourceMap, e, e.getUnit().toString());
-                    } else if (MajorHeuristics.isArgumentOfByteArrayCreation(analysis, index, outSet)) {
-                        putIntoMap(othersSourceMap, e, e.getUnit().toString());
-                    } else {
-                        putIntoMap(predictableSourcMap, e, e.getUnit().toString());
+            } else {
+                for (String predictableSource : PREDICTABLE_SOURCES) {
+                    if (e.getUnit().toString().contains(predictableSource)) {
+                        outSet.put(e, e.toString());
+                        break;
                     }
-
-                    found = true;
-                    break;
                 }
             }
 
-            if (found) {
+            if (e instanceof AssignInvokeUnitContainer) {
+                List<UnitContainer> result = ((AssignInvokeUnitContainer) e).getAnalysisResult();
+
+                if (result != null) {
+                    for (UnitContainer unit : result) {
+                        checkHeuristics(unit, outSet);
+                    }
+                }
+
+            } else {
+                checkHeuristics(e, outSet);
+            }
+
+            if (outSet.isEmpty()) {
                 continue;
             }
 
-            for (ValueBox usebox : e.getUnit().getUseBoxes()) {
-                if (usebox.getValue() instanceof Constant) {
+            InvokeUnitContainer invokeResult = new InvokeUnitContainer();
 
-                    List<UnitContainer> outSet = new ArrayList<>();
+            if (Utils.isArgumentOfInvoke(analysis, index, new ArrayList<UnitContainer>(), usedFields, invokeResult)) {
 
-                    if (e.getUnit() instanceof JAssignStmt && usebox.getValue().getType() instanceof IntegerType) {
+                Map<UnitContainer, String> newOutset = new HashMap<>();
+
+                if ((invokeResult.getDefinedFields().isEmpty() || !invokeResult.getArgs().isEmpty())
+                        && invokeResult.getUnit().toString().contains("specialinvoke")) {
+
+                    for (UnitContainer unitContainer : outSet.keySet()) {
+                        putIntoMap(predictableSourcMap, unitContainer, outSet.get(unitContainer));
+                    }
+                } else {
+
+                    for (UnitContainer unitContainer : outSet.keySet()) {
+                        if (unitContainer.getUnit() instanceof JInvokeStmt && unitContainer.getUnit().toString().contains("interfaceinvoke")) {
+
+                            boolean found = false;
+
+                            for (String constant : usedConstants) {
+                                if (((JInvokeStmt) unitContainer.getUnit()).getInvokeExpr().getArg(0).toString().contains(constant)) {
+                                    putIntoMap(predictableSourcMap, unitContainer, outSet.get(unitContainer));
+                                    found = true;
+                                    break;
+                                }
+                            }
+
+                            if (!found) {
+                                putIntoMap(othersSourceMap, unitContainer, outSet.get(unitContainer));
+                            }
+
+                        } else {
+                            putIntoMap(othersSourceMap, unitContainer, outSet.get(unitContainer));
+                        }
+                    }
+                }
+
+                List<UnitContainer> resFromInside = invokeResult.getAnalysisResult();
+
+                if (!resFromInside.isEmpty()) {
+                    checkPredictableSource(resFromInside, newOutset);
+
+                } else {
+                    for (String predictableSource : PREDICTABLE_SOURCES) {
+                        if (e.getUnit().toString().contains(predictableSource)) {
+                            newOutset.put(e, e.toString());
+                            break;
+                        }
+                    }
+                }
+
+                for (UnitContainer unit : invokeResult.getAnalysisResult()) {
+                    checkHeuristics(unit, newOutset);
+                }
+
+                for (UnitContainer unitContainer : newOutset.keySet()) {
+                    putIntoMap(predictableSourcMap, unitContainer, newOutset.get(unitContainer));
+                }
+
+            } else {
+
+                for (UnitContainer unitContainer : outSet.keySet()) {
+                    putIntoMap(predictableSourcMap, unitContainer, outSet.get(unitContainer));
+                }
+            }
+        }
+    }
+
+    private void checkPredictableSource(List<UnitContainer> result, UnitContainer e, Map<UnitContainer, String> outSet) {
+        for (UnitContainer key : result) {
+            for (String predictableSource : PREDICTABLE_SOURCES) {
+                if (key.getUnit().toString().contains(predictableSource)) {
+                    outSet.put(e, e.toString());
+                }
+            }
+        }
+    }
+
+    private void checkPredictableSource(List<UnitContainer> result, Map<UnitContainer, String> outSet) {
+        for (UnitContainer key : result) {
+            for (String predictableSource : PREDICTABLE_SOURCES) {
+                if (key.getUnit().toString().contains(predictableSource)) {
+                    outSet.put(key, key.toString());
+                }
+            }
+        }
+    }
+
+    private void checkHeuristics(UnitContainer e, Map<UnitContainer, String> outSet) {
+
+        for (ValueBox usebox : e.getUnit().getUseBoxes()) {
+            if (usebox.getValue() instanceof Constant) {
+
+                if (usebox.getValue().toString().equals("null") ||
+                        usebox.getValue().toString().equals("\"null\"") ||
+                        usebox.getValue().toString().equals("\"\"") ||
+                        usebox.getValue().toString().contains(" = class ")) {
+                    putIntoMap(othersSourceMap, e, usebox.getValue().toString());
+                    continue;
+                }
+
+                if (e.getUnit() instanceof JAssignStmt) {
+                    if (((AssignStmt) e.getUnit()).containsInvokeExpr()) {
+                        InvokeExpr invokeExpr = ((AssignStmt) e.getUnit()).getInvokeExpr();
+                        List<Value> args = invokeExpr.getArgs();
+                        for (Value arg : args) {
+                            if (arg.equivTo(usebox.getValue())) {
+                                putIntoMap(othersSourceMap, e, usebox.getValue().toString());
+                                break;
+                            }
+                        }
+                    } else if (usebox.getValue().getType() instanceof IntegerType) {
 
                         List<ValueBox> defBoxes = e.getUnit().getDefBoxes();
 
                         if (defBoxes != null && !defBoxes.isEmpty()) {
                             if (usebox instanceof RValueBox && defBoxes.get(0).getValue().getType() instanceof ByteType) {
-                                outSet.add(e);
+                                outSet.put(e, usebox.getValue().toString());
                             } else {
                                 putIntoMap(othersSourceMap, e, usebox.getValue().toString());
                             }
                         }
-                    } else if (e.getUnit() instanceof AssignStmt) {
-                        if (((AssignStmt) e.getUnit()).containsInvokeExpr() && !e.getUnit().toString().contains(" void <init>")) {
-                            InvokeExpr invokeExpr = ((AssignStmt) e.getUnit()).getInvokeExpr();
-                            List<Value> args = invokeExpr.getArgs();
-                            for (Value arg : args) {
-                                if (arg.equivTo(usebox.getValue())) {
-                                    putIntoMap(othersSourceMap, e, usebox.getValue().toString());
-                                    break;
-                                }
-                            }
-                        } else {
-                            outSet.add(e);
-                        }
 
                     } else {
-                        putIntoMap(othersSourceMap, e, usebox.getValue().toString());
-                    }
-
-                    if (outSet.isEmpty()) {
-                        continue;
-                    }
-
-                    if (MajorHeuristics.isArgumentOfInvoke(analysis, index, outSet)) {
-                        putIntoMap(othersSourceMap, e, usebox.getValue().toString());
-                    } else if (MajorHeuristics.isArgumentOfByteArrayCreation(analysis, index, outSet)) {
-                        putIntoMap(othersSourceMap, e, usebox.getValue().toString());
-                    } else {
-                        if (!usebox.getValue().toString().equals("null") &&
-                                !usebox.getValue().toString().equals("\"\"")) {
-                            putIntoMap(predictableSourcMap, e, usebox.getValue().toString());
-                        } else {
+                        if (usebox.getValue().getType() instanceof BooleanType ||
+                                usebox.getValue().getType() instanceof FloatType ||
+                                usebox.getValue().getType() instanceof DoubleType) {
                             putIntoMap(othersSourceMap, e, usebox.getValue().toString());
+                        } else {
+                            outSet.put(e, usebox.getValue().toString());
                         }
                     }
-
+                } else if (e.getUnit().toString().contains(" newarray ")) {
+                    putIntoMap(othersSourceMap, e, usebox.getValue().toString());
+                } else {
+                    if (usebox.getValue().getType() instanceof LongType || usebox.getValue().toString().startsWith("\"")) {
+                        outSet.put(e, usebox.getValue().toString());
+                    }
                 }
             }
         }
@@ -162,35 +276,73 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
 
         if (!predictableSources.isEmpty()) {
             System.out.println("=======================================");
-            String output = getPrintableMsg(predictableSourcMap, rule, ruleDesc);
+            String output = getPrintableMsg(predictableSources, rule, ruleDesc);
             System.out.println(output);
+            System.out.println(predictableSourceInst);
             System.out.println("=======================================");
         }
 
-        if (!othersSourceMap.isEmpty()) {
+        if (!others.isEmpty()) {
             System.out.println("=======================================");
-            String output = getPrintableMsg(othersSourceMap, rule + "a", ruleDesc);
+            String output = getOthersToPrint(configFiles, others, rule, ruleDesc);
             System.out.println(output);
+            System.out.println(othersSourceInst);
             System.out.println("=======================================");
         }
     }
 
-    private String getPrintableMsg(Map<UnitContainer, List<String>> predictableSourcMap, String rule, String ruleDesc) {
-        String output = "***Violated Rule " +
+    private String getPrintableMsg(Collection<String> constants, String rule, String ruleDesc) {
+        return "***Violated Rule " +
                 rule + ": " +
-                ruleDesc;
+                ruleDesc +
+                " ***Constants: " +
+                constants;
+    }
 
-        for (UnitContainer unit : predictableSourcMap.keySet()) {
+    private String getOthersToPrint(Map<String, String> xmlFileStr, Collection<String> others, String rule, String ruleDesc) {
 
-            output += "\n***Found: " + predictableSourcMap.get(unit);
-            if (unit.getUnit().getJavaSourceStartLineNumber() >= 0) {
-                output += " in Line " + unit.getUnit().getJavaSourceStartLineNumber();
+        StringBuilder output = new StringBuilder(getPrintableMsg(others, rule + "a", ruleDesc));
+
+        for (String config : others) {
+            for (String configFile : xmlFileStr.keySet()) {
+
+                String val = config.replace("\"", "");
+                Pattern p = Pattern.compile("[^a-zA-Z.]");
+                boolean hasSpecialChar = p.matcher(val).find();
+
+                if (!hasSpecialChar) {
+                    val = ">" + val + "<";
+
+                    String[] lines = xmlFileStr.get(configFile).split("\n");
+
+                    for (int index = 0; index < lines.length; index++) {
+                        if (lines[index].contains(val)) {
+
+                            if (index + 1 < lines.length) {
+                                output.append(" ***Config: ")
+                                        .append(config)
+                                        .append(" in line: ")
+                                        .append(lines[index].trim())
+                                        .append(" with value: ")
+                                        .append(lines[index + 1].trim())
+                                        .append(" in file: ")
+                                        .append(configFile);
+                            } else {
+                                output.append(" ***Config: ")
+                                        .append(config)
+                                        .append(" in line: ")
+                                        .append(lines[index].trim())
+                                        .append(" in file: ")
+                                        .append(configFile);
+                            }
+                        }
+                    }
+
+                }
             }
-
-            output += " in Method: " + unit.getMethod();
         }
 
-        return output;
+        return output.toString();
     }
 
     /**

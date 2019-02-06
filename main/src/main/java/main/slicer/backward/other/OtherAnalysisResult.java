@@ -1,9 +1,11 @@
 package main.slicer.backward.other;
 
 import main.analyzer.backward.UnitContainer;
+import main.slicer.backward.property.PropertyAnalysisResult;
 import soot.SootMethod;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>OtherAnalysisResult class.</p>
@@ -17,18 +19,24 @@ public class OtherAnalysisResult {
     private String instruction;
     private SootMethod method;
     private List<UnitContainer> analysis;
+    private Map<String, List<PropertyAnalysisResult>> propertyUseMap;
 
     /**
      * <p>Constructor for OtherAnalysisResult.</p>
      *
-     * @param instruction a {@link java.lang.String} object.
-     * @param method      a {@link soot.SootMethod} object.
-     * @param analysis    a {@link java.util.List} object.
+     * @param instruction       a {@link java.lang.String} object.
+     * @param method            a {@link soot.SootMethod} object.
+     * @param analysis          a {@link java.util.List} object.
+     * @param propertyUseMap    a {@link java.util.Map<java.lang.String,java.util.List<main.slicer.backward.property.PropertyAnalysisResult>>} object.
      */
-    public OtherAnalysisResult(String instruction, SootMethod method, List<UnitContainer> analysis) {
+    public OtherAnalysisResult(String instruction,
+                               SootMethod method,
+                               List<UnitContainer> analysis,
+                               Map<String, List<PropertyAnalysisResult>> propertyUseMap) {
         this.instruction = instruction;
         this.method = method;
         this.analysis = analysis;
+        this.propertyUseMap = propertyUseMap;
     }
 
     /**
@@ -56,5 +64,9 @@ public class OtherAnalysisResult {
      */
     public List<UnitContainer> getAnalysis() {
         return analysis;
+    }
+
+    public Map<String, List<PropertyAnalysisResult>> getPropertyUseMap() {
+        return propertyUseMap;
     }
 }

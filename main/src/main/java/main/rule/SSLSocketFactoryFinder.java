@@ -51,8 +51,7 @@ public class SSLSocketFactoryFinder implements RuleChecker {
         ArrayList<AnalysisIssue> issues = printOut ? null : new ArrayList<AnalysisIssue>();
 
         for (String slicing_criterion : SLICING_CRITERIA) {
-
-//            System.out.println(slicing_criterion);
+            
             SlicingCriteria criteria = new SlicingCriteria(slicing_criterion);
             Map<String, List<Unit>> analysisLists = getForwardSlice(
                     UniqueRuleAnalyzer.environmentRouting(projectJarPath, projectDependencyPath, type)

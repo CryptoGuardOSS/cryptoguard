@@ -46,6 +46,7 @@ public class RuleEngine {
             System.out.println("Analyzing APK: " + projectJarPath);
 
             String basePackage = Utils.getBasePackageNameFromApk(projectJarPath);
+            System.out.println("*** Base package: " + basePackage);
 
             for (RuleChecker ruleChecker : ruleCheckerList) {
                 ruleChecker.checkRule(EngineType.APK, Arrays.asList(projectJarPath), null, true, null);

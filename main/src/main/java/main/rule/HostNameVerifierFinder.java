@@ -99,14 +99,15 @@ public class HostNameVerifierFinder implements RuleChecker {
 
             if (sClass.getInterfaces().toString().contains(HOST_NAME_VERIFIER)) {
 
-                SootMethod method = sClass.getMethod(METHOD_TO_SLICE);
+                List<SootMethod> methodList = sClass.getMethods();
 
-                if (method.isConcrete()) {
-
-                    OtherInfluencingInstructions returnInfluencingInstructions = new OtherInfluencingInstructions(method,
-                            SLICING_INSTRUCTION);
-                    List<UnitContainer> analysis = returnInfluencingInstructions.getAnalysisResult().getAnalysis();
-                    analysisList.put(className, analysis);
+                for (SootMethod method : methodList) {
+                    if (method.toString().contains(METHOD_TO_SLICE) && method.isConcrete()) {
+                        OtherInfluencingInstructions returnInfluencingInstructions = new OtherInfluencingInstructions(method,
+                                SLICING_INSTRUCTION);
+                        List<UnitContainer> analysis = returnInfluencingInstructions.getAnalysisResult().getAnalysis();
+                        analysisList.put(className, analysis);
+                    }
                 }
             }
         }
