@@ -173,24 +173,24 @@ public class ArgumentsCheck {
     private static Options setOptions() {
         Options cmdLineArgs = new Options();
 
-        //cmdLineArgs.addOption("f", false, "Output the time of the internal processes.");
-        Option format = OptionBuilder.withArgName("format").hasArg().withDescription(argsIdentifier.FORMAT.getDesc()).isRequired().create(argsIdentifier.FORMAT.getId());
+
+        Option format = Option.builder(argsIdentifier.FORMAT.getId()).required().hasArg().argName("format").desc(argsIdentifier.FORMAT.getDesc()).build();
         format.setType(String.class);
         format.setOptionalArg(false);
         cmdLineArgs.addOption(format);
 
-        Option sources = OptionBuilder.withArgName("file(s)/dir").hasArgs().withDescription(argsIdentifier.SOURCE.getDesc()).isRequired().create(argsIdentifier.SOURCE.getId());
+        Option sources = Option.builder(argsIdentifier.SOURCE.getId()).required().hasArgs().argName("file(s)/dir").desc(argsIdentifier.SOURCE.getDesc()).build();
         sources.setType(String.class);
         sources.setValueSeparator(' ');
         sources.setOptionalArg(false);
         cmdLineArgs.addOption(sources);
 
-        Option dependency = OptionBuilder.withArgName("dir").hasArg().withDescription(argsIdentifier.DEPENDENCY.getDesc()).create(argsIdentifier.DEPENDENCY.getId());
+        Option dependency = Option.builder(argsIdentifier.DEPENDENCY.getId()).hasArg().argName("dir").desc(argsIdentifier.DEPENDENCY.getDesc()).build();
         dependency.setType(String.class);
         dependency.setOptionalArg(false);
         cmdLineArgs.addOption(dependency);
 
-        Option output = OptionBuilder.withArgName("file").hasArg().withDescription(argsIdentifier.OUT.getDesc()).create(argsIdentifier.OUT.getId());
+        Option output = Option.builder(argsIdentifier.OUT.getId()).hasArg().argName("file").desc(argsIdentifier.OUT.getDesc()).build();
         output.setType(String.class);
         output.setOptionalArg(true);
         cmdLineArgs.addOption(output);
@@ -199,7 +199,7 @@ public class ArgumentsCheck {
         timing.setOptionalArg(true);
         cmdLineArgs.addOption(timing);
 
-        Option formatOut = OptionBuilder.withArgName("formatType").hasArg().withDescription(argsIdentifier.FORMATOUT.getDesc()).create(argsIdentifier.FORMATOUT.getId());
+        Option formatOut = Option.builder(argsIdentifier.FORMATOUT.getId()).hasArg().argName("formatType").desc(argsIdentifier.FORMATOUT.getDesc()).build();
         formatOut.setOptionalArg(false);
         cmdLineArgs.addOption(formatOut);
 

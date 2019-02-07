@@ -29,11 +29,6 @@ public class Legacy implements OutputStructure {
         //reopening the console stream
         source.openConsoleStream();
 
-        //Only printing console output if it is set and there is output captured
-        if (source.getInternalErrors() != null && source.getInternalErrors().toString().split("\n").length > 1) {
-            output.append("Internal Warnings: " + source.getInternalErrors().toString() + "\n");
-        }
-
         output.append("Analyzing " + source.getSourceType() + ": ");
 
         for (int sourceKtr = 0; sourceKtr < source.getSource().size(); sourceKtr++) {
@@ -43,6 +38,13 @@ public class Legacy implements OutputStructure {
                 output.append(",");
         }
         output.append("\n");
+
+        //Only printing console output if it is set and there is output captured
+        if (source.getInternalErrors() != null && source.getInternalErrors().split("\n").length >= 1) {
+            output.append("=======================================\n");
+            output.append("Internal Warnings: \n" + source.getInternalErrors() + "\n");
+            output.append("=======================================\n");
+        }
 
         Map<Integer, List<AnalysisIssue>> groupedRules = new HashMap<>();
         if (brokenRules != null)

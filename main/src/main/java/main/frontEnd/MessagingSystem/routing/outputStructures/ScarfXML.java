@@ -176,15 +176,20 @@ public class ScarfXML implements OutputStructure {
 
             String footer = "";
 
-            if (source.isShowTimes()) {
                 StringBuilder commentedFooter = new StringBuilder("\n<!--\n");
+
+            if (source.getInternalErrors() != null && source.getInternalErrors().split("\n").length >= 1)
+                commentedFooter.append(source.getInternalErrors()).append("\n");
                 //region Timing Portion
+            if (source.isShowTimes())
                 commentedFooter.append("\tAnalysis Timing (ms): ").append(source.getAnalyisisTime()).append(".").append("\n");
                 //endregion
 
                 commentedFooter.append("-->");
+
+            if (!commentedFooter.toString().equals("\n<!--\n-->"))
                 footer = commentedFooter.toString();
-            }
+
 
             return StringUtils.stripToNull(xmlStream.toString() + footer);
         } catch (PropertyException e) {

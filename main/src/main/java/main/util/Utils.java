@@ -1,30 +1,25 @@
 package main.util;
 
 import main.analyzer.backward.*;
-import main.slicer.backward.heuristic.HeuristicBasedAnalysisResult;
-import main.slicer.backward.heuristic.HeuristicBasedInstructions;
-import main.analyzer.backward.UnitContainer;
 import main.frontEnd.Interface.ExceptionHandler;
+import main.frontEnd.MessagingSystem.AnalysisIssue;
+import main.frontEnd.MessagingSystem.AnalysisLocation;
 import main.frontEnd.MessagingSystem.routing.Listing;
 import main.rule.engine.EngineType;
+import main.slicer.backward.heuristic.HeuristicBasedAnalysisResult;
+import main.slicer.backward.heuristic.HeuristicBasedInstructions;
 import main.util.manifest.ProcessManifest;
 import org.apache.commons.lang3.StringUtils;
 import org.jf.dexlib2.DexFileFactory;
 import org.jf.dexlib2.Opcodes;
 import org.jf.dexlib2.iface.ClassDef;
 import org.jf.dexlib2.iface.DexFile;
-import soot.Scene;
-import soot.SootClass;
-import soot.Unit;
-import soot.ValueBox;
-import soot.options.Options;
 import soot.*;
 import soot.jimple.Constant;
 import soot.jimple.InvokeExpr;
-import soot.jimple.InvokeStmt;
-import soot.jimple.StringConstant;
 import soot.jimple.internal.JAssignStmt;
 import soot.jimple.internal.JInvokeStmt;
+import soot.options.Options;
 import soot.util.Chain;
 
 import java.io.*;
@@ -1222,5 +1217,109 @@ public class Utils {
         }
 
         return unitContainer;
+    }
+
+    /**
+     * <p>createAnalysisOutput.</p>
+     *
+     * @param xmlFileStr  a {@link java.util.Map} object.
+     * @param sourcePaths a {@link java.util.List} object.
+     * @return a {@link java.util.ArrayList} object.
+     */
+    public static ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, Map<UnitContainer, List<String>> predictableSourcMap, Map<UnitContainer, List<String>> othersSourceMap, String rule) {
+        ArrayList<AnalysisIssue> outList = new ArrayList<>();
+
+        Integer ruleNumber = Integer.parseInt(rule);
+
+        //region Stubbed Stuff
+        //region Old Method
+        /*for (UnitContainer unit : predictableSourcMap.keySet()) {
+            String sootString = predictableSourcMap.get(unit).size() <= 0
+                    ? ""
+                    : "Found: \"" + predictableSourcMap.get(unit).get(0).replaceAll("\"", "") + "\"";
+            outList.add(new AnalysisIssue(unit, Integer.parseInt(rule), sootString, sourcePaths));
+        }*/
+        //endregion
+        //region Newer Methods
+        /*for (UnitContainer unit : predictableSourcMap.keySet()) {
+            if (predictableSourcMap.get(unit).size() <= 0)
+                outList.add(new AnalysisIssue(unit, ruleNumber, "", sourcePaths));
+            else
+                for (String sootString : predictableSourcMap.get(unit))
+                    outList.add(new AnalysisIssue(unit, ruleNumber, "Found: \"" + sootString + "\"", sourcePaths));
+
+        }
+
+        if (ruleNumber == 7)
+            for (UnitContainer unit : othersSourceMap.keySet())
+                for (String sootString : othersSourceMap.get(unit))
+                    outList.add(new AnalysisIssue(unit, ruleNumber, "Found: \"" + sootString + "\"", sourcePaths));*/
+        //endregion
+        //endregion
+
+        for (UnitContainer unit : predictableSourcMap.keySet())
+            if (predictableSourcMap.get(unit).size() <= 0)
+                outList.add(new AnalysisIssue(unit, ruleNumber, "", sourcePaths));
+            else
+                for (String sootString : predictableSourcMap.get(unit))
+                    outList.add(new AnalysisIssue(unit, ruleNumber, "Found: \"" + sootString.replaceAll("\"", "") + "\"", sourcePaths));
+
+        for (UnitContainer unit : othersSourceMap.keySet())
+            if (ruleNumber != 7) {
+                String sootString = othersSourceMap.get(unit).size() <= 0
+                        ? ""
+                        : "Found: Constant \"" + othersSourceMap.get(unit).get(0).replaceAll("\"", "") + "\"";
+                outList.add(new AnalysisIssue(unit, Integer.parseInt(rule), sootString, sourcePaths));
+            } else
+                for (String sootString : othersSourceMap.get(unit))
+                    outList.add(new AnalysisIssue(unit, ruleNumber, "Found: Constant  \"" + sootString.replaceAll("\"", "") + "\"", sourcePaths));
+
+
+        List<String> others = new ArrayList<>();
+
+        for (List<String> values : othersSourceMap.values()) {
+            others.addAll(values);
+        }
+
+        for (String config : others) {
+            for (String configFile : xmlFileStr.keySet()) {
+
+                String val = config.replace("\"", "");
+                Pattern p = Pattern.compile("[^a-zA-Z.]");
+                boolean hasSpecialChar = p.matcher(val).find();
+
+                if (!hasSpecialChar) {
+                    val = ">" + val + "<";
+                    String[] lines = xmlFileStr.get(configFile).split("\n");
+
+                    for (int index = 0; index < lines.length; index++) {
+
+                        if (lines[index].contains(val)) {
+
+                            AnalysisIssue issue = new AnalysisIssue(ruleNumber);
+
+                            issue.setClassName(Utils.retrieveClassNameFromSootString(configFile));
+
+                            String methodName = Utils.retrieveMethodFromSootString(configFile);
+
+                            if (!methodName.equals("UNKNOWN"))
+                                issue.addMethod(methodName, new AnalysisLocation(Integer.valueOf(lines[index].trim())));
+                            else
+                                issue.addLocation(new AnalysisLocation(Integer.valueOf(lines[index].trim())));
+
+                            if (index + 1 < lines.length) {
+                                issue.setInfo("Issue with config and value " + lines[index + 1].trim());
+                            } else {
+                                issue.setInfo("Issue with config.");
+                            }
+
+                            outList.add(issue);
+                        }
+                    }
+                }
+            }
+        }
+
+        return outList;
     }
 }

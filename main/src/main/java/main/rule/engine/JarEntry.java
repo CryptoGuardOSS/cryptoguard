@@ -27,6 +27,7 @@ public class JarEntry implements EntryHandler {
         try {
             generalInfo.startAnalysis();
             for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
+
                 ArrayList<AnalysisIssue> tempIssues = ruleChecker.checkRule(EngineType.JAR, generalInfo.getSource(), generalInfo.getDependencies(),
                         generalInfo.getPrintOut(), generalInfo.getSourcePaths());
 

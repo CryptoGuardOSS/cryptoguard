@@ -89,11 +89,7 @@ public class BaseAnalyzerRouting {
 
         if (projectDependencyPath != null)
             for (String dependency : Utils.getJarsInDirectory(projectDependencyPath)) {
-                for (String dependencyClazz : Utils.getClassNamesFromJarArchive(dependency)) {
-                    if (dependencyClazz.contains(basePackageName)) {
-                        classNames.add(dependencyClazz);
-                    }
-                }
+                classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
             }
 
         List<String> sootPaths = new ArrayList<>();
@@ -102,7 +98,7 @@ public class BaseAnalyzerRouting {
         sootPaths.add(Utils.osPathJoin(java_home, "jre", "lib", "jce.jar"));
 
         if (projectDependencyPath != null)
-            sootPaths.add(projectJarPath);
+            sootPaths.add(projectDependencyPath);
 
         Scene.v().setSootClassPath(Utils.buildSootClassPath(sootPaths));
 
@@ -270,7 +266,6 @@ public class BaseAnalyzerRouting {
         }
 
         for (String clazz : classNames) {
-            if (!clazz.contains("UrlFrameWorks"))//TODO - Really Weird issue...
                 Scene.v().loadClassAndSupport(clazz);
         }
 

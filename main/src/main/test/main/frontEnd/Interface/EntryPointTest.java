@@ -32,8 +32,8 @@ public class EntryPointTest {
     private final Boolean isLinux = !System.getProperty("os.name").contains("Windows");
 
     private final String basePath = System.getProperty("user.dir");
-    private final String jarOne = Utils.osPathJoin(basePath, "rsc", "test", "testable-jar.jar");
     private final String srcOneGrv = basePath.replace("main", "testable-jar");
+    private final String jarOne = Utils.osPathJoin(srcOneGrv, "build", "libs", "testable-jar.jar");
     private final String srcOneGrvDep = Utils.osPathJoin(srcOneGrv, "build", "dependencies");
     private final String tempFileOutTxt = Utils.osPathJoin(System.getProperty("user.dir"), "testable-jar.txt");
     private final String tempFileOutXML = Utils.osPathJoin(System.getProperty("user.dir"), "testable-jar.xml");
@@ -233,7 +233,7 @@ public class EntryPointTest {
     @Test
     public void main_TestableJar() {
         if (isLinux) {
-            String args = "-in " + EngineType.JAR.getFlag() + " -s " + jarOne + " -o " + tempFileOutTxt;
+            String args = "-in " + EngineType.JAR.getFlag() + " -s " + jarOne + " -d " + srcOneGrvDep + " -o " + tempFileOutTxt;
 
             redirectOutput();
 
@@ -259,7 +259,7 @@ public class EntryPointTest {
     @Test
     public void main_TestableJar_Scarf() {
         if (isLinux) {
-            String args = "-in " + EngineType.JAR.getFlag() + " -s " + jarOne + " -m " + Listing.ScarfXML.getFlag() + " -o " + tempFileOutXML;
+            String args = "-in " + EngineType.JAR.getFlag() + " -s " + jarOne + " -d " + srcOneGrvDep + " -m " + Listing.ScarfXML.getFlag() + " -o " + tempFileOutXML;
 
             redirectOutput();
 
@@ -272,7 +272,7 @@ public class EntryPointTest {
                     assertTrue(StringUtils.isAllBlank(in) || in.startsWith("Warning"));
 
                 List<String> results = Files.readAllLines(Paths.get(tempFileOutXML), Charset.forName("UTF-8"));
-                assertTrue(results.size() == 1);
+                assertTrue(results.size() >= 1);
 
                 Schema schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(new File(pathToSchema));
 
@@ -291,7 +291,7 @@ public class EntryPointTest {
     @Test
     public void main_TestableJar_ScarfTimeStamp() {
         if (isLinux) {
-            String args = "-in " + EngineType.JAR.getFlag() + " -s " + jarOne + " -m " + Listing.ScarfXML.getFlag() + " -o " + tempFileOutXML + " " + argsIdentifier.TIMESTAMP.getArg() + " " + argsIdentifier.PRETTY.getArg();
+            String args = "-in " + EngineType.JAR.getFlag() + " -s " + jarOne + " -d " + srcOneGrvDep + " -m " + Listing.ScarfXML.getFlag() + " -o " + tempFileOutXML + " " + argsIdentifier.TIMESTAMP.getArg() + " " + argsIdentifier.PRETTY.getArg();
 
             redirectOutput();
 
@@ -350,7 +350,7 @@ public class EntryPointTest {
                     assertTrue(StringUtils.isAllBlank(in) || in.startsWith("Warning"));
 
                 List<String> results = Files.readAllLines(Paths.get(tempFileOutXML), Charset.forName("UTF-8"));
-                assertTrue(results.size() == 1);
+                assertTrue(results.size() >= 1);
 
                 Schema schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(new File(pathToSchema));
 

@@ -3,6 +3,7 @@ package main.rule.base;
 import main.analyzer.backward.Analysis;
 import main.analyzer.backward.UnitContainer;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
+import main.util.Utils;
 import soot.ValueBox;
 import soot.jimple.Constant;
 
@@ -61,23 +62,15 @@ public abstract class PatternMatcherRuleChecker extends BaseRuleChecker {
      */
     @Override
     public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths) {
-        ArrayList<AnalysisIssue> outList = new ArrayList<>();
 
-        for (UnitContainer unit : predictableSourcMap.keySet()) {
-            String sootString = predictableSourcMap.get(unit).size() <= 0
-                    ? ""
-                    : "Found: \"" + predictableSourcMap.get(unit).get(0).replaceAll("\"", "") + "\"";
-            outList.add(new AnalysisIssue(unit, Integer.parseInt(rule), sootString, sourcePaths));
-        }
+        return Utils.createAnalysisOutput(xmlFileStr, sourcePaths, predictableSourcMap, othersSourceMap, rule);
 
-        return outList;
     }
 
     /**
      * {@inheritDoc}
      */
     public void printAnalysisOutput(Map<String, String> configFiles) {
-
         List<String> predictableSources = new ArrayList<>();
         List<UnitContainer> predictableSourceInst = new ArrayList<>();
         List<String> others = new ArrayList<>();

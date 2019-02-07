@@ -2,6 +2,7 @@ package main.frontEnd.MessagingSystem.routing;
 
 import main.rule.engine.EngineType;
 import main.util.Utils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nonnull;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -39,7 +40,7 @@ public class EnvironmentInformation {
     private final List<String> Source;
     private final List<String> sourcePaths; //Could this be intertwined with source?
     private Boolean prettyPrint = false;
-    private PrintStream internalErrors;
+    private ByteArrayOutputStream internalErrors = new ByteArrayOutputStream();
     private List<String> dependencies;
     private EngineType sourceType;
     private Listing messagingType;
@@ -110,8 +111,7 @@ public class EnvironmentInformation {
         //endregion
 
         //region Setting Required Attributes
-        //internalErrors = new PrintStream(new ByteArrayOutputStream());
-        //System.setOut(internalErrors);
+        System.setOut(new PrintStream(this.internalErrors));
 
         this.Source = source;
         this.sourceType = sourceType;
@@ -152,6 +152,17 @@ public class EnvironmentInformation {
     }
 
     //region Getters and Setters
+
+    /**
+     * Getter for internalErrors
+     *
+     * <p>getInternalErrors()</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getInternalErrors() {
+        return StringUtils.trimToEmpty(internalErrors.toString());
+    }
 
     /**
      * The getter for Source
@@ -421,18 +432,6 @@ public class EnvironmentInformation {
      */
     public Boolean getPrettyPrint() {
         return prettyPrint;
-    }
-
-    /**
-     * Getter for internalErrors
-     *
-     * <p>getInternalErrors()</p>
-     *
-     * @return a {@link java.io.PrintStream} object.
-     */
-    public PrintStream getInternalErrors() {
-        //openConsoleStream();
-        return internalErrors;
     }
 
     /**

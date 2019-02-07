@@ -350,23 +350,10 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
      */
     @Override
     public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths) {
-        ArrayList<AnalysisIssue> outList = new ArrayList<>();
 
-        for (UnitContainer unit : predictableSourcMap.keySet()) {
-            String sootString = predictableSourcMap.get(unit).size() <= 0
-                    ? ""
-                    : "Found: \"" + predictableSourcMap.get(unit).get(0).replaceAll("\"", "") + "\"";
-            outList.add(new AnalysisIssue(unit, Integer.parseInt(rule), sootString, sourcePaths));
-        }
+        return Utils.createAnalysisOutput(xmlFileStr, sourcePaths, predictableSourcMap, othersSourceMap, rule);
 
-        for (UnitContainer unit : othersSourceMap.keySet()) {
-            String sootString = othersSourceMap.get(unit).size() <= 0
-                    ? ""
-                    : "Found: \"" + othersSourceMap.get(unit).get(0).replaceAll("\"", "") + "\"";
-            outList.add(new AnalysisIssue(unit, Integer.parseInt(rule), sootString, sourcePaths));
-        }
 
-        return outList;
     }
 
     /**
