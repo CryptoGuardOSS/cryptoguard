@@ -71,9 +71,7 @@ public class HttpUrlFinder extends PatternMatcherRuleChecker {
         return HTTP_URL_PATTERN;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public String getRuleId() {
         return "7";

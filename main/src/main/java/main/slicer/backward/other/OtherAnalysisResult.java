@@ -66,6 +66,11 @@ public class OtherAnalysisResult {
         return analysis;
     }
 
+    /**
+     * <p>Getter for the field <code>propertyUseMap</code>.</p>
+     *
+     * @return a {@link java.util.Map} object.
+     */
     public Map<String, List<PropertyAnalysisResult>> getPropertyUseMap() {
         return propertyUseMap;
     }

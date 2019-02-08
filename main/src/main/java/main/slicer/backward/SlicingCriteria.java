@@ -86,9 +86,7 @@ public class SlicingCriteria {
         return result;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         return "SlicingCriteria{" +

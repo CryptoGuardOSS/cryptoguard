@@ -1,5 +1,11 @@
 package main.frontEnd.MessagingSystem.routing.inputStructures;
 
+/**
+ * <p>ScarfXMLId class.</p>
+ *
+ * @author drmonster
+ * @version $Id: $Id
+ */
 public enum ScarfXMLId {
 
     AssessmentFramework("Saf", "The assessment framework."),

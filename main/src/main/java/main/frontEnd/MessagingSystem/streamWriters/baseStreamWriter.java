@@ -9,11 +9,14 @@ import java.io.FileOutputStream;
 import java.nio.charset.Charset;
 
 /**
+ * <p>Abstract baseStreamWriter class.</p>
+ *
  * @author RigorityJTeam
  * Created on 2/7/19.
  * @since 03.02.00
  *
- * <p>{Description Here}</p>
+ * <p>The "interface" for the stream writing.</p>
+ * @version $Id: $Id
  */
 public abstract class baseStreamWriter {
 
@@ -21,6 +24,11 @@ public abstract class baseStreamWriter {
     private EngineType type;
     private final Charset chars = Charset.forName("UTF-8");
 
+    /**
+     * <p>Constructor for baseStreamWriter.</p>
+     *
+     * @param info a {@link main.frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
+     */
     public baseStreamWriter(EnvironmentInformation info) {
 
         this.type = info.getSourceType();
@@ -35,6 +43,12 @@ public abstract class baseStreamWriter {
         this.writeHeader(info);
     }
 
+    /**
+     * <p>writeln.</p>
+     *
+     * @param output a {@link java.lang.String} object.
+     * @param pretty a {@link java.lang.Boolean} object.
+     */
     public void writeln(String output, Boolean pretty) {
         try {
             if (pretty)
@@ -48,6 +62,9 @@ public abstract class baseStreamWriter {
         }
     }
 
+    /**
+     * <p>newln.</p>
+     */
     public void newln() {
         try {
             this.streamOut.write("\n".getBytes(chars));
@@ -59,6 +76,11 @@ public abstract class baseStreamWriter {
         }
     }
 
+    /**
+     * <p>write.</p>
+     *
+     * @param output a {@link java.lang.String} object.
+     */
     public void write(String output) {
         try {
             this.streamOut.write(output.getBytes(chars));
@@ -70,6 +92,11 @@ public abstract class baseStreamWriter {
         }
     }
 
+    /**
+     * <p>close.</p>
+     *
+     * @param info a {@link main.frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
+     */
     public void close(EnvironmentInformation info) {
         info.openConsoleStream();
         this.writeFooter(info);
@@ -83,12 +110,32 @@ public abstract class baseStreamWriter {
         }
     }
 
+    /**
+     * <p>writeHeader.</p>
+     *
+     * @param info a {@link main.frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
+     */
     public abstract void writeHeader(EnvironmentInformation info);
 
+    /**
+     * <p>streamIntoBody.</p>
+     *
+     * @param issue a {@link main.frontEnd.MessagingSystem.AnalysisIssue} object.
+     */
     public abstract void streamIntoBody(AnalysisIssue issue);
 
+    /**
+     * <p>writeFooter.</p>
+     *
+     * @param info a {@link main.frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
+     */
     public abstract void writeFooter(EnvironmentInformation info);
 
+    /**
+     * <p>Getter for the field <code>type</code>.</p>
+     *
+     * @return a {@link main.rule.engine.EngineType} object.
+     */
     public EngineType getType() {
         return type;
     }

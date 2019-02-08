@@ -73,6 +73,12 @@ public class EnvironmentInformation {
      * @param source        {@link java.lang.String[]} - The source name to be analyzed
      * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
      * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourcePaths   a {@link java.util.List} object.
+     * @param sourcePkg     a {@link java.lang.String} object.
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
      * @param dependencies  {@link java.lang.String} - The location of the directory of the sources dependencies
      * @param messagingType {@link java.lang.String} - The flag passed in to determine the type of messaging system from {@link main.frontEnd.MessagingSystem.routing.Listing}
      * @param sourcePaths   a {@link java.util.List} object.
@@ -154,10 +160,20 @@ public class EnvironmentInformation {
 
     //region Getters and Setters
 
+    /**
+     * <p>Setter for the field <code>streaming</code>.</p>
+     *
+     * @param flag a {@link java.lang.Boolean} object.
+     */
     public void setStreaming(Boolean flag) {
         this.streaming = flag;
     }
 
+    /**
+     * <p>Getter for the field <code>streaming</code>.</p>
+     *
+     * @return a {@link java.lang.Boolean} object.
+     */
     public Boolean getStreaming() {
         return streaming;
     }

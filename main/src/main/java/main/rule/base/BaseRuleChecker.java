@@ -98,6 +98,7 @@ public abstract class BaseRuleChecker implements RuleChecker {
      * @param xmlFileStr  a {@link java.util.Map} object.
      * @param sourcePaths a {@link java.util.List} object.
      * @return a {@link java.util.ArrayList} object.
+     * @param writer a {@link main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter} object.
      */
     public abstract ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, baseStreamWriter writer);
 

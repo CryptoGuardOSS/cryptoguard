@@ -247,9 +247,7 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
         this.initializationCallsites = initializationCallsites;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void printAnalysisOutput(Map<String, String> xmlFileStr) {
 
@@ -271,9 +269,7 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, baseStreamWriter writer) {
         ArrayList<AnalysisIssue> outList = new ArrayList<>();

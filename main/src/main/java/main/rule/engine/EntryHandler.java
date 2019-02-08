@@ -27,5 +27,11 @@ public interface EntryHandler {
     public ArrayList<AnalysisIssue> NonStreamScan(EnvironmentInformation generalInfo);
 
 
+    /**
+     * <p>StreamScan.</p>
+     *
+     * @param generalInfo  a {@link main.frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
+     * @param streamWriter a {@link main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter} object.
+     */
     public void StreamScan(EnvironmentInformation generalInfo, baseStreamWriter streamWriter);
 }

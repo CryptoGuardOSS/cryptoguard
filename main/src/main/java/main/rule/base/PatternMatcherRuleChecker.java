@@ -67,9 +67,7 @@ public abstract class PatternMatcherRuleChecker extends BaseRuleChecker {
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     public void printAnalysisOutput(Map<String, String> configFiles) {
         List<String> predictableSources = new ArrayList<>();
         List<UnitContainer> predictableSourceInst = new ArrayList<>();

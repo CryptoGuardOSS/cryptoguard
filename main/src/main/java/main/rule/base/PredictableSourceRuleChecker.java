@@ -346,9 +346,7 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
         return output.toString();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, baseStreamWriter writer) {
 

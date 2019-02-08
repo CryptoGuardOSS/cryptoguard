@@ -218,9 +218,7 @@ public class PBEInterationCountFinder extends BaseRuleChecker {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     public void printAnalysisOutput(Map<String, String> configFiles) {
 
         List<String> predictableSources = new ArrayList<>();
@@ -306,9 +304,7 @@ public class PBEInterationCountFinder extends BaseRuleChecker {
         return output.toString();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, baseStreamWriter writer) {
 

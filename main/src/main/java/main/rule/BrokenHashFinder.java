@@ -61,9 +61,7 @@ public class BrokenHashFinder extends PatternMatcherRuleChecker {
         return BROKEN_HASH;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public String getRuleId() {
         return "2";

@@ -67,6 +67,11 @@ public enum Listing {
         return Listing.Legacy;
     }
 
+    /**
+     * <p>retrieveListingValues.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public static String retrieveListingValues() {
         StringBuilder out = new StringBuilder("[");
 

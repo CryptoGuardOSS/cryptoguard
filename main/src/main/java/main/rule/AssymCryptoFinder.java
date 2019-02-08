@@ -101,16 +101,12 @@ public class AssymCryptoFinder extends BaseRuleChecker {
         this.crypto = crypto;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void printAnalysisOutput(Map<String, String> xmlFileStr) {
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, baseStreamWriter writer) {
         return new ArrayList<>();

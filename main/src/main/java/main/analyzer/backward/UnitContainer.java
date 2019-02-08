@@ -71,9 +71,7 @@ public class UnitContainer {
         return unit.toString().hashCode();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         return "UnitContainer{" +

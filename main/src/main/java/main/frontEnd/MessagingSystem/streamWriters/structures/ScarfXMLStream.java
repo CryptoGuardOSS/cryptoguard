@@ -20,11 +20,14 @@ import java.io.PrintStream;
 import java.util.HashMap;
 
 /**
+ * <p>ScarfXMLStream class.</p>
+ *
  * @author RigorityJTeam
  * Created on 2/7/19.
- * @since {VersionHere}
+ * @since 03.02.00
  *
- * <p>{Description Here}</p>
+ * <p>The ScarfXML stream writer.</p>
+ * @version $Id: $Id
  */
 public class ScarfXMLStream extends baseStreamWriter {
 
@@ -36,6 +39,11 @@ public class ScarfXMLStream extends baseStreamWriter {
     private CWEList cwes = new CWEList();
     private final Boolean prettyPrint;
 
+    /**
+     * <p>Getter for the field <code>prettyPrint</code>.</p>
+     *
+     * @return a {@link java.lang.Boolean} object.
+     */
     public Boolean getPrettyPrint() {
         return prettyPrint == null ? false : prettyPrint;
     }
@@ -68,6 +76,11 @@ public class ScarfXMLStream extends baseStreamWriter {
         return bugDict;
     }
 
+    /**
+     * <p>Constructor for ScarfXMLStream.</p>
+     *
+     * @param info a {@link main.frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
+     */
     public ScarfXMLStream(EnvironmentInformation info) {
         super(info);
         this.buildId = info.getBuildId();
@@ -79,6 +92,9 @@ public class ScarfXMLStream extends baseStreamWriter {
         return this.issueID++;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void writeHeader(EnvironmentInformation info) {
 
@@ -132,6 +148,9 @@ public class ScarfXMLStream extends baseStreamWriter {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void streamIntoBody(AnalysisIssue issue) {
 
@@ -262,6 +281,7 @@ public class ScarfXMLStream extends baseStreamWriter {
         //endregion
     }
 
+    /** {@inheritDoc} */
     @Override
     public void writeFooter(EnvironmentInformation info) {
 

@@ -130,9 +130,7 @@ public class MethodCallSiteInfo {
         return result;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         return "MethodCallSiteInfo{" +

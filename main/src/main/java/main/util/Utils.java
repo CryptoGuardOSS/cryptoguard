@@ -86,7 +86,6 @@ public class Utils {
      *
      * @param apkPath a {@link java.lang.String} object.
      * @return a {@link java.lang.String} object.
-     * @throws java.io.IOException if any.
      */
     public static String getBasePackageNameFromApk(String apkPath) {
 
@@ -910,6 +909,12 @@ public class Utils {
 
     }
 
+    /**
+     * <p>createAssignInvokeUnitContainer.</p>
+     *
+     * @param currInstruction a {@link soot.Unit} object.
+     * @return a {@link main.analyzer.backward.UnitContainer} object.
+     */
     public static UnitContainer createAssignInvokeUnitContainer(Unit currInstruction) {
 
         AssignInvokeUnitContainer unitContainer = new AssignInvokeUnitContainer();
@@ -947,6 +952,13 @@ public class Utils {
         return unitContainer;
     }
 
+    /**
+     * <p>isArgOfAssignInvoke.</p>
+     *
+     * @param useBox a {@link soot.ValueBox} object.
+     * @param unit   a {@link soot.Unit} object.
+     * @return a int.
+     */
     public static int isArgOfAssignInvoke(ValueBox useBox, Unit unit) {
 
         if (unit instanceof JAssignStmt && unit.toString().contains("invoke ")) {
@@ -963,6 +975,13 @@ public class Utils {
         return -1;
     }
 
+    /**
+     * <p>isArgOfByteArrayCreation.</p>
+     *
+     * @param useBox a {@link soot.ValueBox} object.
+     * @param unit   a {@link soot.Unit} object.
+     * @return a boolean.
+     */
     public static boolean isArgOfByteArrayCreation(ValueBox useBox, Unit unit) {
         if (unit.toString().contains(" newarray ")) {
             for (ValueBox valueBox : unit.getUseBoxes()) {
@@ -975,6 +994,16 @@ public class Utils {
         return false;
     }
 
+    /**
+     * <p>isArgumentOfInvoke.</p>
+     *
+     * @param analysis a {@link main.analyzer.backward.Analysis} object.
+     * @param index a int.
+     * @param outSet a {@link java.util.List} object.
+     * @param usedFields a {@link java.util.Set} object.
+     * @param analysisResult a {@link main.analyzer.backward.InvokeUnitContainer} object.
+     * @return a boolean.
+     */
     public static boolean isArgumentOfInvoke(Analysis analysis, int index,
                                              List<UnitContainer> outSet,
                                              Set<String> usedFields, InvokeUnitContainer analysisResult) {
@@ -1226,6 +1255,10 @@ public class Utils {
      * @param xmlFileStr  a {@link java.util.Map} object.
      * @param sourcePaths a {@link java.util.List} object.
      * @return a {@link java.util.ArrayList} object.
+     * @param predictableSourcMap a {@link java.util.Map} object.
+     * @param othersSourceMap a {@link java.util.Map} object.
+     * @param rule a {@link java.lang.String} object.
+     * @param writer a {@link main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter} object.
      */
     public static ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, Map<UnitContainer, List<String>> predictableSourcMap, Map<UnitContainer, List<String>> othersSourceMap, String rule, baseStreamWriter writer) {
         ArrayList<AnalysisIssue> outList = new ArrayList<>();

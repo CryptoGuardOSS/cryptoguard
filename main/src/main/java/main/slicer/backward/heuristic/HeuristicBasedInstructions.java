@@ -14,10 +14,22 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * <p>HeuristicBasedInstructions class.</p>
+ *
+ * @author drmonster
+ * @version $Id: $Id
+ */
 public class HeuristicBasedInstructions {
 
     private HeuristicBasedAnalysisResult analysisResult;
 
+    /**
+     * <p>Constructor for HeuristicBasedInstructions.</p>
+     *
+     * @param method          a {@link soot.SootMethod} object.
+     * @param slicingCriteria a {@link java.lang.String} object.
+     */
     public HeuristicBasedInstructions(SootMethod method, String slicingCriteria) {
 
         Body b = method.retrieveActiveBody();
@@ -37,6 +49,11 @@ public class HeuristicBasedInstructions {
         }
     }
 
+    /**
+     * <p>Getter for the field <code>analysisResult</code>.</p>
+     *
+     * @return a {@link main.slicer.backward.heuristic.HeuristicBasedAnalysisResult} object.
+     */
     public HeuristicBasedAnalysisResult getAnalysisResult() {
         return analysisResult;
     }

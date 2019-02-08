@@ -11,20 +11,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * <p>LegacyStream class.</p>
+ *
  * @author RigorityJTeam
  * Created on 2/7/19.
- * @since {VersionHere}
+ * @since 03.02.00
  *
- * <p>{Description Here}</p>
+ * <p>The Legacy stream writer.</p>
+ * @version $Id: $Id
  */
-public class LegacyXMLStream extends baseStreamWriter {
+public class LegacyStream extends baseStreamWriter {
 
     private final Boolean pretty = true;
 
-    public LegacyXMLStream(EnvironmentInformation info) {
+    /**
+     * <p>Constructor for LegacyStream.</p>
+     *
+     * @param info a {@link main.frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
+     */
+    public LegacyStream(EnvironmentInformation info) {
         super(info);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void writeHeader(EnvironmentInformation info) {
 
@@ -40,6 +51,9 @@ public class LegacyXMLStream extends baseStreamWriter {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void streamIntoBody(AnalysisIssue issue) {
         writeln("=======================================", pretty);
@@ -94,6 +108,7 @@ public class LegacyXMLStream extends baseStreamWriter {
         writeln("=======================================", pretty);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void writeFooter(EnvironmentInformation info) {
 

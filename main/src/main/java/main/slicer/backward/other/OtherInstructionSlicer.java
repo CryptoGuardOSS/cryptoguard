@@ -143,17 +143,13 @@ public class OtherInstructionSlicer extends BackwardFlowAnalysis {
         return emptySet.clone();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     protected Object entryInitialFlow() {
         return emptySet.clone();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     protected void merge(Object in1, Object in2, Object out) {
         FlowSet inSet1 = (FlowSet) in1,
@@ -163,9 +159,7 @@ public class OtherInstructionSlicer extends BackwardFlowAnalysis {
         inSet1.union(inSet2, outSet);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     protected void copy(Object source, Object dest) {
         FlowSet srcSet = (FlowSet) source,
@@ -173,6 +167,11 @@ public class OtherInstructionSlicer extends BackwardFlowAnalysis {
         srcSet.copy(destSet);
     }
 
+    /**
+     * <p>Getter for the field <code>propertyUseMap</code>.</p>
+     *
+     * @return a {@link java.util.Map} object.
+     */
     public Map<String, List<PropertyAnalysisResult>> getPropertyUseMap() {
         return propertyUseMap;
     }
