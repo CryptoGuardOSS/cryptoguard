@@ -1,12 +1,12 @@
-dir=?#(insert full path to cloned directory here)
-java7=?#(insert full path to java7 here)
+dir=./
+java7=$JAVA7_HOME
 
-ver=03.01.01
+ver=03.02.02
 scan=$(java7) -jar $(dir)/main/build/libs/main-$(ver).jar
 
-jarLoc=$(dir)/testable-jar/build/libs/testable-jar.jar
-depLoc=$(dir)/testable-jar/build/dependencies
-dirLoc=$(dir)/testable-jar
+jarLoc=$(dir)testable-jar/build/libs/testable-jar.jar
+depLoc=$(dir)testable-jar/build/dependencies
+dirLoc=$(dir)testable-jar
 apkLoc=$(dir)
 
 default:: build
@@ -24,7 +24,7 @@ build:
 	-rm $(dirLoc)/settings.gradle
 	gradle -p $(dirLoc) clean build
 	echo "rootProject.name = 'testable-jar'" >> $(dirLoc)/settings.gradle
-	gradle -p $(dir)/main clean build
+	gradle -p $(dir)main clean build
 
 help:
 	$(scan) -h
