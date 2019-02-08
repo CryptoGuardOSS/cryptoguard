@@ -26,6 +26,9 @@ build:
 	echo "rootProject.name = 'testable-jar'" >> $(dirLoc)/settings.gradle
 	gradle -p $(dir)/main clean build
 
+help:
+	$(scan) -h
+
 clean:
 	gradle -p $(dir) clean
 	-rm results_newJar.txt

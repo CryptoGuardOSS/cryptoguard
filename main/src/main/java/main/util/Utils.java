@@ -5,6 +5,7 @@ import main.frontEnd.Interface.ExceptionHandler;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.AnalysisLocation;
 import main.frontEnd.MessagingSystem.routing.Listing;
+import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
 import main.rule.engine.EngineType;
 import main.slicer.backward.heuristic.HeuristicBasedAnalysisResult;
 import main.slicer.backward.heuristic.HeuristicBasedInstructions;
@@ -1226,7 +1227,7 @@ public class Utils {
      * @param sourcePaths a {@link java.util.List} object.
      * @return a {@link java.util.ArrayList} object.
      */
-    public static ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, Map<UnitContainer, List<String>> predictableSourcMap, Map<UnitContainer, List<String>> othersSourceMap, String rule) {
+    public static ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, Map<UnitContainer, List<String>> predictableSourcMap, Map<UnitContainer, List<String>> othersSourceMap, String rule, baseStreamWriter writer) {
         ArrayList<AnalysisIssue> outList = new ArrayList<>();
 
         Integer ruleNumber = Integer.parseInt(rule);
@@ -1259,20 +1260,33 @@ public class Utils {
 
         for (UnitContainer unit : predictableSourcMap.keySet())
             if (predictableSourcMap.get(unit).size() <= 0)
-                outList.add(new AnalysisIssue(unit, ruleNumber, "", sourcePaths));
+                if (writer == null)
+                    outList.add(new AnalysisIssue(unit, ruleNumber, "", sourcePaths));
+                else
+                    writer.streamIntoBody(new AnalysisIssue(unit, ruleNumber, "", sourcePaths));
             else
                 for (String sootString : predictableSourcMap.get(unit))
-                    outList.add(new AnalysisIssue(unit, ruleNumber, "Found: \"" + sootString.replaceAll("\"", "") + "\"", sourcePaths));
+                    if (writer == null)
+                        outList.add(new AnalysisIssue(unit, ruleNumber, "Found: \"" + sootString.replaceAll("\"", "") + "\"", sourcePaths));
+                    else
+                        writer.streamIntoBody(new AnalysisIssue(unit, ruleNumber, "Found: \"" + sootString.replaceAll("\"", "") + "\"", sourcePaths));
 
         for (UnitContainer unit : othersSourceMap.keySet())
             if (ruleNumber != 7) {
                 String sootString = othersSourceMap.get(unit).size() <= 0
                         ? ""
                         : "Found: Constant \"" + othersSourceMap.get(unit).get(0).replaceAll("\"", "") + "\"";
-                outList.add(new AnalysisIssue(unit, Integer.parseInt(rule), sootString, sourcePaths));
+
+                if (writer == null)
+                    outList.add(new AnalysisIssue(unit, Integer.parseInt(rule), sootString, sourcePaths));
+                else
+                    writer.streamIntoBody(new AnalysisIssue(unit, Integer.parseInt(rule), sootString, sourcePaths));
             } else
                 for (String sootString : othersSourceMap.get(unit))
-                    outList.add(new AnalysisIssue(unit, ruleNumber, "Found: Constant  \"" + sootString.replaceAll("\"", "") + "\"", sourcePaths));
+                    if (writer == null)
+                        outList.add(new AnalysisIssue(unit, ruleNumber, "Found: Constant  \"" + sootString.replaceAll("\"", "") + "\"", sourcePaths));
+                    else
+                        writer.streamIntoBody(new AnalysisIssue(unit, ruleNumber, "Found: Constant  \"" + sootString.replaceAll("\"", "") + "\"", sourcePaths));
 
 
         List<String> others = new ArrayList<>();
@@ -1313,7 +1327,10 @@ public class Utils {
                                 issue.setInfo("Issue with config.");
                             }
 
-                            outList.add(issue);
+                            if (writer != null)
+                                writer.streamIntoBody(issue);
+                            else
+                                outList.add(issue);
                         }
                     }
                 }

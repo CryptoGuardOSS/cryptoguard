@@ -1,8 +1,13 @@
 package main.frontEnd.MessagingSystem.routing.inputStructures;
 
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
+import main.frontEnd.argsIdentifier;
+import org.apache.commons.cli.*;
 
-import java.util.Arrays;
+import java.io.ByteArrayOutputStream;
+import java.io.FileDescriptor;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 
 /**
  * <p>ScarfXML class.</p>
@@ -16,7 +21,7 @@ import java.util.Arrays;
  */
 public class ScarfXML implements InputStructure {
 
-    private ScarfJsonInput inputReader = new ScarfJsonInput();
+    private Options cmdLineArgs = setOptions();
 
     /**
      * {@inheritDoc}
@@ -28,14 +33,45 @@ public class ScarfXML implements InputStructure {
      */
     public Boolean inputValidation(EnvironmentInformation info, String[] args) {
 
-        String[] subArgs = args.length > 0 ? Arrays.copyOfRange(args, 0, args.length) : new String[]{};
-        inputReader.parseArguments(subArgs);
-        info.setAssessmentFramework(inputReader.getAssessmentFramework());
-        info.setAssessmentFrameworkVersion(inputReader.getAssessmentFrameworkVersion());
-        info.setBuildRootDir(inputReader.getBuildRootDir());
-        info.setPackageRootDir(inputReader.getPackageRootDir());
-        info.setParserName(inputReader.getParserName());
-        info.setParserVersion(inputReader.getParserVersion());
+        CommandLine cmd = null;
+
+        try {
+            cmd = new DefaultParser().parse(cmdLineArgs, args);
+        } catch (ParseException e) {
+            System.out.println("====================================================");
+
+            if (e.getMessage().startsWith("Missing required option: "))
+                System.out.println("Please enter a valid " +
+                        argsIdentifier.lookup(e.getMessage().replace("Missing required option: ", "")));
+            else
+                System.out.println("Please enter valid information.");
+
+            System.out.println("====================================================");
+
+            System.out.println(this.helpInfo());
+            System.exit(0);
+        }
+
+        if (cmd.hasOption(ScarfXMLId.AssessmentFramework.getId()))
+            info.setAssessmentFramework(cmd.getOptionValue(ScarfXMLId.AssessmentFramework.getId(), "UNKNOWN"));
+
+        if (cmd.hasOption(ScarfXMLId.AssessmentFrameworkVersion.getId()))
+            info.setAssessmentFramework(cmd.getOptionValue(ScarfXMLId.AssessmentFrameworkVersion.getId(), "UNKNOWN"));
+
+        if (cmd.hasOption(ScarfXMLId.BuildRootDir.getId()))
+            info.setAssessmentFramework(cmd.getOptionValue(ScarfXMLId.BuildRootDir.getId(), "UNKNOWN"));
+
+        if (cmd.hasOption(ScarfXMLId.PackageRootDir.getId()))
+            info.setAssessmentFramework(cmd.getOptionValue(ScarfXMLId.PackageRootDir.getId(), "UNKNOWN"));
+
+        if (cmd.hasOption(ScarfXMLId.ParserName.getId()))
+            info.setAssessmentFramework(cmd.getOptionValue(ScarfXMLId.ParserName.getId(), "UNKNOWN"));
+
+        if (cmd.hasOption(ScarfXMLId.ParserVersion.getId()))
+            info.setAssessmentFramework(cmd.getOptionValue(ScarfXMLId.ParserVersion.getId(), "UNKNOWN"));
+
+        if (cmd.hasOption(ScarfXMLId.UUID.getId()))
+            info.setAssessmentFramework(cmd.getOptionValue(ScarfXMLId.UUID.getId(), java.util.UUID.randomUUID().toString()));
 
         return true;
     }
@@ -47,137 +83,59 @@ public class ScarfXML implements InputStructure {
      * @return a {@link java.lang.String} object.
      */
     public String helpInfo() {
-        return inputReader.helpInfo();
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(out));
+
+        HelpFormatter helper = new HelpFormatter();
+        helper.setOptionComparator(null);
+        helper.printHelp("ScarfXML", cmdLineArgs, false);
+
+        System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
+
+        return out.toString();
+
     }
 
+    private static Options setOptions() {
+        Options cmdLineArgs = new Options();
 
-    //region Sub Class Reader
+        Option AssessmentFramework = Option.builder(ScarfXMLId.AssessmentFramework.getId()).required().hasArg().argName("string").desc(ScarfXMLId.AssessmentFramework.getDesc()).build();
+        AssessmentFramework.setType(String.class);
+        AssessmentFramework.setOptionalArg(false);
+        cmdLineArgs.addOption(AssessmentFramework);
 
-    /**
-     * A sub class to read the information Scarf Input Reader
-     * This is externalized to be able to read from multiple forms of input
-     */
-    private class ScarfJsonInput {
-        //region Attributes
-        private String assessmentFramework = "UNAVAILABLE";
-        private String assessmentFrameworkVersion = "UNAVAILABLE";
-        private String buildRootDir = "UNAVAILABLE";
-        private String packageRootDir = "UNAVAILABLE";
-        private String parserName = "UNAVAILABLE";
-        private String parserVersion = "UNAVAILABLE";
-        //endregion
+        Option AssessmentFrameworkVersion = Option.builder(ScarfXMLId.AssessmentFrameworkVersion.getId()).required().hasArg().argName("string").desc(ScarfXMLId.AssessmentFrameworkVersion.getDesc()).build();
+        AssessmentFrameworkVersion.setType(String.class);
+        AssessmentFrameworkVersion.setOptionalArg(false);
+        cmdLineArgs.addOption(AssessmentFrameworkVersion);
 
+        Option BuildRootDir = Option.builder(ScarfXMLId.BuildRootDir.getId()).hasArg().argName("string").desc(ScarfXMLId.BuildRootDir.getDesc()).build();
+        BuildRootDir.setType(String.class);
+        BuildRootDir.setOptionalArg(false);
+        cmdLineArgs.addOption(BuildRootDir);
 
-        /**
-         * An Empty Constructor
-         */
-        public ScarfJsonInput() {
+        Option PackageRootDir = Option.builder(ScarfXMLId.PackageRootDir.getId()).hasArg().argName("string").desc(ScarfXMLId.PackageRootDir.getDesc()).build();
+        PackageRootDir.setType(String.class);
+        PackageRootDir.setOptionalArg(true);
+        cmdLineArgs.addOption(PackageRootDir);
 
-        }
+        Option ParserName = Option.builder(ScarfXMLId.ParserName.getId()).hasArg().argName("string").desc(ScarfXMLId.ParserName.getDesc()).build();
+        ParserName.setType(String.class);
+        ParserName.setOptionalArg(false);
+        cmdLineArgs.addOption(ParserName);
 
-        /**
-         * The method to parse the raw arguments from the console.
-         *
-         * @param args {@link String[]} - The raw command arguments passed in from the command line.
-         */
-        public void parseArguments(String[] args) {
+        Option ParserVersion = Option.builder(ScarfXMLId.ParserVersion.getId()).hasArg().argName("string").desc(ScarfXMLId.ParserVersion.getDesc()).build();
+        ParserVersion.setType(String.class);
+        ParserVersion.setOptionalArg(false);
+        cmdLineArgs.addOption(ParserVersion);
 
-            if (args.length >= 1)
-                this.assessmentFramework = args[0];
-            if (args.length >= 2)
-                this.assessmentFrameworkVersion = args[1];
-            if (args.length >= 3)
-                this.buildRootDir = args[2];
-            if (args.length >= 4)
-                this.packageRootDir = args[3];
-            if (args.length >= 5)
-                this.parserName = args[4];
-            if (args.length >= 6)
-                this.parserVersion = args[5];
-        }
+        Option UUID = Option.builder(ScarfXMLId.UUID.getId()).hasArg().argName("string").desc(ScarfXMLId.UUID.getDesc()).build();
+        UUID.setType(String.class);
+        UUID.setOptionalArg(false);
+        cmdLineArgs.addOption(UUID);
 
-        public String helpInfo() {
-            StringBuilder help = new StringBuilder();
-
-            help.append("Usage: (AssessmentFramework) (AssessmentFrameworkVersion) (BuildRootDir) (PackageRootDir) (ParserName) (ParserVersion)\n")
-                    .append("\tAssessmentFramework: Default => STUBBED").append("\n")
-                    .append("\tAssessmentFrameworkVersion: Default => STUBBED").append("\n")
-                    .append("\tBuildRootDir: Default => STUBBED").append("\n")
-                    .append("\tPackageRootDir: Default => STUBBED").append("\n")
-                    .append("\tParserName: Default => STUBBED").append("\n")
-                    .append("\tParserVersion: Default => STUBBED");
-
-            return help.toString();
-        }
-
-        //region Getters
-
-        /**
-         * Getter for assessmentFramework
-         *
-         * <p>getAssessmentFramework()</p>
-         *
-         * @return {@link String} - The assessmentFramework.
-         */
-        public String getAssessmentFramework() {
-            return assessmentFramework;
-        }
-
-        /**
-         * Getter for assessmentFrameworkVersion
-         *
-         * <p>getAssessmentFrameworkVersion()</p>
-         *
-         * @return {@link String} - The assessmentFrameworkVersion.
-         */
-        public String getAssessmentFrameworkVersion() {
-            return assessmentFrameworkVersion;
-        }
-
-        /**
-         * Getter for buildRootDir
-         *
-         * <p>getBuildRootDir()</p>
-         *
-         * @return {@link String} - The buildRootDir.
-         */
-        public String getBuildRootDir() {
-            return buildRootDir;
-        }
-
-        /**
-         * Getter for packageRootDir
-         *
-         * <p>getPackageRootDir()</p>
-         *
-         * @return {@link String} - The packageRootDir.
-         */
-        public String getPackageRootDir() {
-            return packageRootDir;
-        }
-
-        /**
-         * Getter for parserName
-         *
-         * <p>getParserName()</p>
-         *
-         * @return {@link String} - The parserName.
-         */
-        public String getParserName() {
-            return parserName;
-        }
-
-        /**
-         * Getter for parserVersion
-         *
-         * <p>getParserVersion()</p>
-         *
-         * @return {@link String} - The parserVersion.
-         */
-        public String getParserVersion() {
-            return parserVersion;
-        }
-        //endregion
+        return cmdLineArgs;
     }
-    //endregion
+
 }

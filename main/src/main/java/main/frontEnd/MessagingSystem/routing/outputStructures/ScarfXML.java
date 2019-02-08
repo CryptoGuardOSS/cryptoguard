@@ -174,21 +174,22 @@ public class ScarfXML implements OutputStructure {
             ByteArrayOutputStream xmlStream = new ByteArrayOutputStream();
             marshaller.marshal(report, new PrintStream(xmlStream));
 
+            //region Writing any extra footer comments
             String footer = "";
+            String prettyTab = source.getPrettyPrint() ? "\t" : "";
+            String prettyLine = source.getPrettyPrint() ? "\n" : " ";
 
-                StringBuilder commentedFooter = new StringBuilder("\n<!--\n");
+            StringBuilder commentedFooter = new StringBuilder();
 
             if (source.getInternalErrors() != null && source.getInternalErrors().split("\n").length >= 1)
-                commentedFooter.append(source.getInternalErrors()).append("\n");
-                //region Timing Portion
+                commentedFooter.append(prettyTab).append(source.getInternalErrors().replaceAll("\n", prettyLine)).append(prettyLine);
+
             if (source.isShowTimes())
-                commentedFooter.append("\tAnalysis Timing (ms): ").append(source.getAnalyisisTime()).append(".").append("\n");
-                //endregion
+                commentedFooter.append("Analysis Timing (ms): ").append(source.getAnalyisisTime()).append(".").append(prettyLine);
 
-                commentedFooter.append("-->");
-
-            if (!commentedFooter.toString().equals("\n<!--\n-->"))
-                footer = commentedFooter.toString();
+            if (StringUtils.isNotBlank(commentedFooter.toString()))
+                footer = prettyLine + "<!--" + prettyLine + commentedFooter.toString() + "-->";
+            //endregion
 
 
             return StringUtils.stripToNull(xmlStream.toString() + footer);

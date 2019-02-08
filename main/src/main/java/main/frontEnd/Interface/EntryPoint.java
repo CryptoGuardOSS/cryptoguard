@@ -3,8 +3,9 @@ package main.frontEnd.Interface;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.MessageRepresentation;
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
+import main.frontEnd.MessagingSystem.streamWriters.Listing;
+import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
 import main.rule.engine.*;
-import main.util.Utils;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -31,49 +32,61 @@ public class EntryPoint {
      */
     public static void main(String[] args) {
 
-        String outputMessage;
-        String filePath;
+        EnvironmentInformation generalInfo = null;
+
 
         //Fail Fast on the input validation
         try {
-            EnvironmentInformation generalInfo = ArgumentsCheck.paramaterCheck(Arrays.asList(args));
-            if (generalInfo == null)
-                System.exit(0);
+            generalInfo = ArgumentsCheck.paramaterCheck(Arrays.asList(args));
+        } catch (ExceptionHandler e) {
+            e.printStackTrace();
+            System.exit(0);
+        }
+
+
+        EntryHandler handler = null;
+        switch (generalInfo.getSourceType()) {
+            case APK:
+                handler = new ApkEntry();
+                break;
+            case JAR:
+                handler = new JarEntry();
+                break;
+            case DIR:
+                handler = new SourceEntry();
+                break;
+            case JAVAFILES:
+                handler = new JavaFileEntry();
+                break;
+            case CLASSFILES:
+                handler = new JavaClassFileEntry();
+                break;
+        }
+
+        if (!generalInfo.getStreaming()) {
+            String outputMessage;
+            String filePath;
 
             ArrayList<AnalysisIssue> issues = null;
-            EntryHandler handler = null;
-            switch (generalInfo.getSourceType()) {
-                case APK:
-                    handler = new ApkEntry();
-                    break;
-                case JAR:
-                    handler = new JarEntry();
-                    break;
-                case DIR:
-                    handler = new SourceEntry();
-                    break;
-                case JAVAFILES:
-                    handler = new JavaFileEntry();
-                    break;
-                case CLASSFILES:
-                    handler = new JavaClassFileEntry();
-                    break;
-            }
+
             issues = handler.NonStreamScan(generalInfo);
 
             outputMessage = MessageRepresentation.getMessage(generalInfo, issues);
             filePath = generalInfo.getFileOut();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            filePath = Utils.osPathJoin(System.getProperty("user.dir"), "ERROR.txt");
-            outputMessage = e.getLocalizedMessage();
-        }
 
-        try {
-            Files.write(Paths.get(filePath), outputMessage.getBytes());
-        } catch (Exception e) {
-            System.out.println("File " + filePath + " cannot be written to.");
+            try {
+                Files.write(Paths.get(filePath), outputMessage.getBytes());
+            } catch (Exception e) {
+                System.out.println("File " + filePath + " cannot be written to.");
+            }
+        } else {
+
+            baseStreamWriter writer = Listing.retrieveWriterByType(generalInfo);
+
+            handler.StreamScan(generalInfo, writer);
+
+            writer.close(generalInfo);
         }
 
     }

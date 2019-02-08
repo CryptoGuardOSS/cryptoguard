@@ -4,6 +4,7 @@ import main.analyzer.BaseAnalyzerRouting;
 import main.analyzer.backward.Analysis;
 import main.analyzer.backward.UnitContainer;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
+import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
 import main.rule.engine.Criteria;
 import main.rule.engine.EngineType;
 import main.rule.engine.RuleChecker;
@@ -49,7 +50,7 @@ public abstract class BaseRuleChecker implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectPaths, List<String> projectDependencyPath, Boolean printout, List<String> sourcePaths) throws IOException {
+    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectPaths, List<String> projectDependencyPath, Boolean printout, List<String> sourcePaths, baseStreamWriter streamWriter) throws IOException {
 
         String[] excludes = {"web.xml", "pom.xml"};
 
@@ -67,7 +68,7 @@ public abstract class BaseRuleChecker implements RuleChecker {
             printAnalysisOutput(xmlFileStr);
             return null;
         } else
-            return createAnalysisOutput(xmlFileStr, sourcePaths);
+            return createAnalysisOutput(xmlFileStr, sourcePaths, streamWriter);
     }
 
     /**
@@ -98,7 +99,7 @@ public abstract class BaseRuleChecker implements RuleChecker {
      * @param sourcePaths a {@link java.util.List} object.
      * @return a {@link java.util.ArrayList} object.
      */
-    public abstract ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths);
+    public abstract ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, baseStreamWriter writer);
 
     /**
      * <p>putIntoMap.</p>

@@ -48,6 +48,7 @@ public class EnvironmentInformation {
     private Long startAnalyisisTime;
     private Long analysisMilliSeconds;
     private String fileOut;
+    private Boolean streaming = false;
     //endregion
     //region From Outside and defaulted unless set
     private String AssessmentFramework = "UNKNOWN";
@@ -152,6 +153,14 @@ public class EnvironmentInformation {
     }
 
     //region Getters and Setters
+
+    public void setStreaming(Boolean flag) {
+        this.streaming = flag;
+    }
+
+    public Boolean getStreaming() {
+        return streaming;
+    }
 
     /**
      * Getter for internalErrors

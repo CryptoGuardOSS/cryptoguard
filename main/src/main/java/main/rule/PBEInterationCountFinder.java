@@ -5,6 +5,7 @@ import main.analyzer.backward.AssignInvokeUnitContainer;
 import main.analyzer.backward.InvokeUnitContainer;
 import main.analyzer.backward.UnitContainer;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
+import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
 import main.rule.base.BaseRuleChecker;
 import main.rule.engine.Criteria;
 import main.util.Utils;
@@ -309,9 +310,9 @@ public class PBEInterationCountFinder extends BaseRuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths) {
+    public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, baseStreamWriter writer) {
 
-        return Utils.createAnalysisOutput(xmlFileStr, sourcePaths, predictableSourcMap, othersSourceMap, rule);
+        return Utils.createAnalysisOutput(xmlFileStr, sourcePaths, predictableSourcMap, othersSourceMap, rule, writer);
 
     }
 }

@@ -2,6 +2,7 @@ package main.rule.engine;
 
 import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
+import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,34 +25,48 @@ public class JavaClassFileEntry implements EntryHandler {
     public ArrayList<AnalysisIssue> NonStreamScan(EnvironmentInformation generalInfo) {
         ArrayList<AnalysisIssue> issues = generalInfo.getPrintOut() ? null : new ArrayList<AnalysisIssue>();
 
-
+        generalInfo.startAnalysis();
         //region Core Handling
         try {
-            generalInfo.startAnalysis();
             for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
                 ArrayList<AnalysisIssue> tempIssues = ruleChecker.checkRule(generalInfo.getSourceType(), generalInfo.getSource(), generalInfo.getDependencies(),
-                        generalInfo.getPrintOut(), generalInfo.getSourcePaths());
+                        generalInfo.getPrintOut(), generalInfo.getSourcePaths(), null);
 
 
                 if (!generalInfo.getPrintOut())
                     issues.addAll(tempIssues);
             }
-            generalInfo.stopAnalysis();
 
 
         } catch (IOException e) {
+            e.printStackTrace();
+            //TODO - Handle This
 
         }
         //endregion
 
 
+        generalInfo.stopAnalysis();
         return issues;
     }
 
     /**
      * {@inheritDoc}
      */
-    /*public Stream<AnalysisIssue> StreamScan(EnvironmentInformation generalInfo) {
-        return new ArrayList<AnalysisIssue>().stream();
-    }*/
+    public void StreamScan(EnvironmentInformation generalInfo, baseStreamWriter streamWriter) {
+        generalInfo.startAnalysis();
+        //region Core
+        try {
+            for (RuleChecker ruleChecker : CommonRules.ruleCheckerList)
+                ruleChecker.checkRule(generalInfo.getSourceType(), generalInfo.getSource(), generalInfo.getDependencies(),
+                        generalInfo.getPrintOut(), generalInfo.getSourcePaths(), streamWriter);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            //TODO - Handle This
+        }
+        //endregion
+        generalInfo.stopAnalysis();
+    }
+
 }

@@ -5,11 +5,10 @@ import main.analyzer.backward.AssignInvokeUnitContainer;
 import main.analyzer.backward.InvokeUnitContainer;
 import main.analyzer.backward.UnitContainer;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
+import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
 import main.rule.base.BaseRuleChecker;
-
 import main.rule.engine.Criteria;
 import main.util.Utils;
-
 import soot.IntegerType;
 import soot.Value;
 import soot.ValueBox;
@@ -276,14 +275,18 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths) {
+    public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, baseStreamWriter writer) {
         ArrayList<AnalysisIssue> outList = new ArrayList<>();
 
         for (UnitContainer unit : predictableSourcMap.keySet()) {
             String sootString = predictableSourcMap.get(unit).size() <= 0
                     ? ""
                     : "Found: \"" + predictableSourcMap.get(unit).get(0).replaceAll("\"", "") + "\"";
-            outList.add(new AnalysisIssue(unit, Integer.parseInt(rule), sootString, sourcePaths));
+
+            if (writer == null)
+                outList.add(new AnalysisIssue(unit, Integer.parseInt(rule), sootString, sourcePaths));
+            else
+                writer.streamIntoBody(new AnalysisIssue(unit, Integer.parseInt(rule), sootString, sourcePaths));
         }
 
         return outList;

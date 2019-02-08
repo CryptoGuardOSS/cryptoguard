@@ -5,6 +5,7 @@ import main.analyzer.backward.AssignInvokeUnitContainer;
 import main.analyzer.backward.InvokeUnitContainer;
 import main.analyzer.backward.UnitContainer;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
+import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
 import main.util.Utils;
 import soot.*;
 import soot.jimple.AssignStmt;
@@ -349,9 +350,9 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths) {
+    public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, baseStreamWriter writer) {
 
-        return Utils.createAnalysisOutput(xmlFileStr, sourcePaths, predictableSourcMap, othersSourceMap, rule);
+        return Utils.createAnalysisOutput(xmlFileStr, sourcePaths, predictableSourcMap, othersSourceMap, rule, writer);
 
 
     }

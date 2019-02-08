@@ -2,6 +2,7 @@ package main.rule;
 
 import main.analyzer.UniqueRuleAnalyzer;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
+import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
 import main.rule.engine.EngineType;
 import main.rule.engine.RuleChecker;
 import soot.*;
@@ -31,7 +32,7 @@ public class UntrustedPrngFinder implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printOut, List<String> sourcePaths) throws IOException {
+    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printOut, List<String> sourcePaths, baseStreamWriter streamWriter) throws IOException {
 
         Map<String, List<Unit>> analysisLists = getUntrustedPrngInstructions(
                 UniqueRuleAnalyzer.environmentRouting(projectJarPath, projectDependencyPath, type));
@@ -50,12 +51,19 @@ public class UntrustedPrngFinder implements RuleChecker {
                         System.out.println("=============================================");
                     } else {
                         //TODO - Location not showing up
-                        issues.add(new AnalysisIssue(
+                        AnalysisIssue issue = new AnalysisIssue(
                                 method,
                                 13,
                                 "Found: Untrused PRNG (java.util.Random)", sourcePaths
 
-                        ));
+                        );
+
+                        ;
+                        if (streamWriter != null) {
+                            streamWriter.streamIntoBody(issue);
+                        } else {
+                            issues.add(issue);
+                        }
                     }
                 }
             }

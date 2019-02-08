@@ -3,6 +3,7 @@ package main.rule;
 import main.analyzer.UniqueRuleAnalyzer;
 import main.analyzer.backward.UnitContainer;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
+import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
 import main.rule.engine.EngineType;
 import main.rule.engine.RuleChecker;
 import main.slicer.backward.other.OtherAnalysisResult;
@@ -43,7 +44,7 @@ public class CustomTrustManagerFinder implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printOut, List<String> sourcePaths) throws IOException {
+    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printOut, List<String> sourcePaths, baseStreamWriter streamWriter) throws IOException {
 
         Map<String, List<OtherAnalysisResult>> analysisLists =
                 getAnalysisForTrustManager(
@@ -70,11 +71,18 @@ public class CustomTrustManagerFinder implements RuleChecker {
                         System.out.println(output);
                         System.out.println("=======================================");
                     } else {
-                        issues.add(
-                                new AnalysisIssue(className,
-                                        4,
-                                        "Should throw java.security.cert.CertificateException in check(Client|Server)Trusted method of " +
-                                                Utils.retrieveClassNameFromSootString(className), sourcePaths));
+
+                        AnalysisIssue issue = new AnalysisIssue(className,
+                                4,
+                                "Should throw java.security.cert.CertificateException in check(Client|Server)Trusted method of " +
+                                        Utils.retrieveClassNameFromSootString(className), sourcePaths);
+
+                        if (streamWriter != null) {
+                            streamWriter.streamIntoBody(issue);
+                        } else {
+                            issues.add(issue);
+                        }
+
                     }
 
                 }
@@ -93,9 +101,15 @@ public class CustomTrustManagerFinder implements RuleChecker {
                                 System.out.println(output);
                                 System.out.println("=======================================");
                             } else {
-                                issues.add(new AnalysisIssue(
+                                AnalysisIssue issue = new AnalysisIssue(
                                         unit, 4, className, sourcePaths
-                                ));
+                                );
+
+                                if (streamWriter != null) {
+                                    streamWriter.streamIntoBody(issue);
+                                } else {
+                                    issues.add(issue);
+                                }
                             }
                         }
                     }
@@ -119,11 +133,16 @@ public class CustomTrustManagerFinder implements RuleChecker {
                             System.out.println(output);
                             System.out.println("=======================================");
                         } else {
-                            issues.add(
-                                    new AnalysisIssue(className + " <getAcceptedIssuers>",
-                                            4,
-                                            "Should at least get One accepted Issuer from Other Sources in getAcceptedIssuers method of " +
-                                                    Utils.retrieveClassNameFromSootString(className), sourcePaths));
+                            AnalysisIssue issue = new AnalysisIssue(className + " <getAcceptedIssuers>",
+                                    4,
+                                    "Should at least get One accepted Issuer from Other Sources in getAcceptedIssuers method of " +
+                                            Utils.retrieveClassNameFromSootString(className), sourcePaths);
+
+                            if (streamWriter != null) {
+                                streamWriter.streamIntoBody(issue);
+                            } else {
+                                issues.add(issue);
+                            }
                         }
                     }
                 }

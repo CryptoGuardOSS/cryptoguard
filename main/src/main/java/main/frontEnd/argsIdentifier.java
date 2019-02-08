@@ -1,5 +1,7 @@
 package main.frontEnd;
 
+import main.frontEnd.MessagingSystem.routing.Listing;
+
 /**
  * <p>argsIdentifier class.</p>
  *
@@ -12,7 +14,7 @@ package main.frontEnd;
  */
 public enum argsIdentifier {
 
-    FORMAT("in", "(Req'd) The format of input you want to scan."),
+    FORMAT("in", "(Req'd) The format of input you want to scan, available styles " + Listing.retrieveListingValues() + "."),
     SOURCE("s", "(Req'd) The source(s) to be scanned, use the absolute path)."),
     DEPENDENCY("d", "The dependency to be scanned, (use the relative path)."),
     OUT("o", "The file to be created with the output (default will be the project name)."),
@@ -22,6 +24,7 @@ public enum argsIdentifier {
     SKIPINPUTVALIDATION("x", "Skip input validation."),
     VERSION("v", "Output the version number."),
     TIMESTAMP("ts", "Add a timestamp to the file output."),
+    STREAM("st", "Stream the analysis to the output file (still being tested)."),
     HELP("h", "Print out the Help Information.");
 
     private String id;

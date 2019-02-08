@@ -66,18 +66,6 @@ public class ListingTest {
         this.scarfInput = null;
         this.baseHelp = null;
     }
-
-    private String generateTypeHelp(Listing type) {
-        StringBuilder help = new StringBuilder();
-
-        help.append("===========================================================\n")
-                .append("Type : ").append(type.getType()).append("\n")
-                .append("Flag : ").append(type.getFlag()).append("\n")
-                .append(type.getTypeOfMessagingInput().helpInfo()).append("\n")
-                .append("===========================================================\n\n");
-
-        return help.toString();
-    }
     //endregion
 
     //region Tests
@@ -91,19 +79,6 @@ public class ListingTest {
     public void getTypeOfMessagingTest() {
         assertTrue(Listing.Legacy.getTypeOfMessagingOutput() instanceof Legacy);
         assertTrue(Listing.ScarfXML.getTypeOfMessagingOutput() instanceof ScarfXML);
-    }
-
-    @Test
-    public void getHelpInfoTest() {
-        StringBuilder helpfulString = new StringBuilder();
-
-        helpfulString.append(baseHelp);
-        for (Listing listingType : ListingSet)
-            helpfulString.append(generateTypeHelp(listingType));
-
-        assertEquals(helpfulString.toString(), Listing.getInputHelp());
-
-        System.out.println(helpfulString);
     }
     //endregion
 }

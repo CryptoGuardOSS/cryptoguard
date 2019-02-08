@@ -165,6 +165,7 @@ public class ArgumentsCheck {
 
         info.setPrettyPrint(cmd.hasOption(argsIdentifier.PRETTY.getId()));
         info.setShowTimes(cmd.hasOption(argsIdentifier.TIMEMEASURE.getId()));
+        info.setStreaming(cmd.hasOption(argsIdentifier.STREAM.getId()));
 
         return info;
 
@@ -223,6 +224,10 @@ public class ArgumentsCheck {
         skipInput.setOptionalArg(true);
         cmdLineArgs.addOption(timeStamp);
 
+        Option stream = new Option(argsIdentifier.STREAM.getId(), false, argsIdentifier.STREAM.getDesc());
+        stream.setOptionalArg(true);
+        cmdLineArgs.addOption(stream);
+
         return cmdLineArgs;
     }
 
@@ -244,6 +249,9 @@ public class ArgumentsCheck {
         }
 
         helper.printHelp(projectName, args, false);
+
+        System.out.println(Listing.getInputHelp());
+
         System.exit(0);
     }
 

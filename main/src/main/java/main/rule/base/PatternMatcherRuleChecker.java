@@ -3,13 +3,13 @@ package main.rule.base;
 import main.analyzer.backward.Analysis;
 import main.analyzer.backward.UnitContainer;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
+import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
 import main.util.Utils;
 import soot.ValueBox;
 import soot.jimple.Constant;
 
 import java.util.*;
 import java.util.regex.Pattern;
-
 /**
  * <p>Abstract PatternMatcherRuleChecker class.</p>
  *
@@ -61,9 +61,9 @@ public abstract class PatternMatcherRuleChecker extends BaseRuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths) {
+    public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, baseStreamWriter writer) {
 
-        return Utils.createAnalysisOutput(xmlFileStr, sourcePaths, predictableSourcMap, othersSourceMap, rule);
+        return Utils.createAnalysisOutput(xmlFileStr, sourcePaths, predictableSourcMap, othersSourceMap, rule, writer);
 
     }
 

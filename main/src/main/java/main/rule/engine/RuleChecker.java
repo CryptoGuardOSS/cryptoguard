@@ -1,6 +1,7 @@
 package main.rule.engine;
 
 import main.frontEnd.MessagingSystem.AnalysisIssue;
+import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,5 +28,5 @@ public interface RuleChecker {
      * @return a {@link java.util.ArrayList} object.
      * @throws java.io.IOException if any.
      */
-    ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printout, List<String> sourcePaths) throws IOException;
+    ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printout, List<String> sourcePaths, baseStreamWriter streamWriter) throws IOException;
 }

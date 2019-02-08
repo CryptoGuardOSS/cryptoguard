@@ -2,7 +2,7 @@ package main.frontEnd.MessagingSystem.routing;
 
 import main.frontEnd.MessagingSystem.routing.inputStructures.InputStructure;
 import main.frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
-import main.rule.engine.EngineType;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * The enum containing all of the different messaging types available for the user.
@@ -65,6 +65,15 @@ public enum Listing {
                     return type;
 
         return Listing.Legacy;
+    }
+
+    public static String retrieveListingValues() {
+        StringBuilder out = new StringBuilder("[");
+
+        for (Listing type : Listing.values())
+            out.append(type.getFlag()).append(" ");
+
+        return StringUtils.trimToNull(out.toString()) + "]";
     }
 
     /**
@@ -135,15 +144,13 @@ public enum Listing {
     public static String getInputHelp() {
         StringBuilder help = new StringBuilder();
         help.append("===========================================================\n");
-        help.append("key: {}=required ()=optional \n");
-        help.append("General Useage : java -jar {thisJar} {Engine Flag, as shown below} {.apk/.jar file, .class/.java file(s), or sourcecode dir} ({-d} {dir of dependencies for .class/.jar file(s), \"\" if there are none}) (Output Type flag) ({required depending on the output Type}) \n");
-        help.append(EngineType.getHelp());
+        help.append("Format Help\n");
         help.append("===========================================================\n\n");
 
         for (Listing type : Listing.values()) {
             help.append("===========================================================\n");
             help.append("Type : ").append(type.type).append("\n");
-            help.append("Flag : ").append(type.flag).append("\n");
+            help.append("Format : ").append(type.flag).append("\n");
             help.append(type.getTypeOfMessagingInput().helpInfo()).append("\n");
             help.append("===========================================================\n\n");
         }

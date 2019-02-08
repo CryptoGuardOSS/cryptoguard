@@ -3,6 +3,7 @@ package main.rule;
 import main.analyzer.UniqueRuleAnalyzer;
 import main.analyzer.backward.UnitContainer;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
+import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
 import main.rule.engine.EngineType;
 import main.rule.engine.RuleChecker;
 import main.slicer.backward.other.OtherInfluencingInstructions;
@@ -34,7 +35,7 @@ public class HostNameVerifierFinder implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printOut, List<String> sourcePaths) throws IOException {
+    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printOut, List<String> sourcePaths, baseStreamWriter streamWriter) throws IOException {
 
         Map<String, List<UnitContainer>> analysisLists = getHostNameVerifiers(
                 UniqueRuleAnalyzer.environmentRouting(projectJarPath, projectDependencyPath, type)
@@ -74,12 +75,17 @@ public class HostNameVerifierFinder implements RuleChecker {
                         System.out.println(output);
                         System.out.println("=======================================");
                     } else {
-                        issues.add(new AnalysisIssue(
+                        AnalysisIssue issue = new AnalysisIssue(
                                 className,
                                 6,
                                 "Cause: Fixed \"" + constants.toString().replaceAll("\"", "") + "\"",
                                 sourcePaths
-                        ));
+                        );
+                        if (streamWriter != null) {
+                            streamWriter.streamIntoBody(issue);
+                        } else {
+                            issues.add(issue);
+                        }
                     }
                 }
             }
