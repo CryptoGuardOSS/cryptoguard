@@ -204,7 +204,7 @@ public class ArgumentsCheck {
         formatOut.setOptionalArg(false);
         cmdLineArgs.addOption(formatOut);
 
-        Option prettyPrint = new Option(argsIdentifier.PRETTY.getId(), true, argsIdentifier.PRETTY.getDesc());
+        Option prettyPrint = new Option(argsIdentifier.PRETTY.getId(), false, argsIdentifier.PRETTY.getDesc());
         prettyPrint.setOptionalArg(true);
         cmdLineArgs.addOption(prettyPrint);
 
