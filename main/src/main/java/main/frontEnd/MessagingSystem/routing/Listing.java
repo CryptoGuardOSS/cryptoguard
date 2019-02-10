@@ -2,7 +2,6 @@ package main.frontEnd.MessagingSystem.routing;
 
 import main.frontEnd.MessagingSystem.routing.inputStructures.InputStructure;
 import main.frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * The enum containing all of the different messaging types available for the user.
@@ -65,20 +64,6 @@ public enum Listing {
                     return type;
 
         return Listing.Legacy;
-    }
-
-    /**
-     * <p>retrieveListingValues.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    public static String retrieveListingValues() {
-        StringBuilder out = new StringBuilder("[");
-
-        for (Listing type : Listing.values())
-            out.append(type.getFlag()).append(" ");
-
-        return StringUtils.trimToNull(out.toString()) + "]";
     }
 
     /**

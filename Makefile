@@ -1,7 +1,7 @@
 dir=./
 java7=${JAVA7_HOME}/bin/java
 
-ver=03.02.03
+ver=03.02.04
 scan=$(java7) -jar $(dir)main/build/libs/main-$(ver).jar
 marshal=$(dir)main/src/main/java/com/example/response/package-info.java
 
