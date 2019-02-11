@@ -34,7 +34,7 @@ public abstract class BaseRuleChecker implements RuleChecker {
         RULE_VS_DESCRIPTION.put("3", "Used constant keys in code");  // Rule 1, 2
         RULE_VS_DESCRIPTION.put("4", "Used untrusted TrustManager"); // Rule 5
         RULE_VS_DESCRIPTION.put("5", "Used export grade public Key"); // Rule 15
-        RULE_VS_DESCRIPTION.put("6", "Used untrusted HostNameVerifier"); // Rule 14
+        RULE_VS_DESCRIPTION.put("6", "Used untrusted HostNameVerifier"); // Rule 4
         RULE_VS_DESCRIPTION.put("7", "Used HTTP Protocol"); // Rule 7
         RULE_VS_DESCRIPTION.put("8", "Used < 1000 iteration for PBE"); // Rule 13
         RULE_VS_DESCRIPTION.put("9", "Found constant salts in code"); // Rule 10

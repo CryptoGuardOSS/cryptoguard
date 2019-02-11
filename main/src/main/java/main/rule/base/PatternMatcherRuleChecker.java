@@ -4,7 +4,6 @@ import main.analyzer.backward.Analysis;
 import main.analyzer.backward.UnitContainer;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
-import main.util.Utils;
 import soot.ValueBox;
 import soot.jimple.Constant;
 
@@ -57,13 +56,15 @@ public abstract class PatternMatcherRuleChecker extends BaseRuleChecker {
         }
     }
 
+    //TODO - Experiment Based Rules
     /**
      * {@inheritDoc}
      */
     @Override
     public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, baseStreamWriter writer) {
 
-        return Utils.createAnalysisOutput(xmlFileStr, sourcePaths, predictableSourcMap, othersSourceMap, rule, writer);
+        return new ArrayList<>();
+        //return Utils.createAnalysisOutput(xmlFileStr, sourcePaths, predictableSourcMap, othersSourceMap, rule, writer);
 
     }
 

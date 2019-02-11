@@ -53,7 +53,9 @@ public class SourceEntry implements EntryHandler {
                         else
                             dependencyModule = dependency.substring(generalInfo.getSource().get(0).length() + 1, dependency.length() - 14);
 
-                        otherdependencies.add(dependency.substring(0, dependency.length() - 13) + generalInfo.getDependencies());
+                        /* This is needed when the dependency path is relative*/
+                        //otherdependencies.add(dependency.substring(0, dependency.length() - 13) + generalInfo.getDependencies());
+                        otherdependencies.addAll(generalInfo.getDependencies());
 
                         analyzedModules.add(dependencyModule);
                     }
@@ -107,12 +109,15 @@ public class SourceEntry implements EntryHandler {
                         else
                             dependencyModule = dependency.substring(generalInfo.getSource().get(0).length() + 1, dependency.length() - 14);
 
-                        otherdependencies.add(dependency.substring(0, dependency.length() - 13) + generalInfo.getDependencies());
+                        /* This is needed when the dependency path is relative*/
+                        //otherdependencies.add(dependency.substring(0, dependency.length() - 13) + generalInfo.getDependencies());
+                        otherdependencies.addAll(generalInfo.getDependencies());
 
                         analyzedModules.add(dependencyModule);
                     }
 
                     for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
+                        System.out.println(ruleChecker.getClass().getSimpleName());
                         ruleChecker.checkRule(EngineType.DIR, dependencies, otherdependencies, generalInfo.getPrintOut(), generalInfo.getSourcePaths(), streamWriter);
 
                     }

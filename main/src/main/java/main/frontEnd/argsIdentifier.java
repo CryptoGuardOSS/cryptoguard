@@ -22,6 +22,7 @@ public enum argsIdentifier {
     FORMATOUT("m", "The output format you want to produce."),
     PRETTY("n", "Output the analysis information in a 'pretty' format."),
     SKIPINPUTVALIDATION("x", "Skip input validation."),
+    EXPERIMENTRESULTS("exp", "View the experiment based results."),
     VERSION("v", "Output the version number."),
     TIMESTAMP("ts", "Add a timestamp to the file output."),
     STREAM("st", "Stream the analysis to the output file (still being tested)."),

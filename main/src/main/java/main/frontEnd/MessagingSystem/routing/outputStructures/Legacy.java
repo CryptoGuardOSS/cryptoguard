@@ -59,8 +59,20 @@ public class Legacy implements OutputStructure {
                 groupedRules.put(issue.getRuleId(), tempList);
             }
 
+        //region Changing the order of the rules
+        Set<Integer> ruleOrdering = new HashSet<>();
+        if (true) {
+            Integer[] paperBasedOrdering = new Integer[]{3, 14, 6, 4, 12, 7, 11, 13, 9, 1, 10, 8, 5, 2};
+            for (Integer rule : paperBasedOrdering)
+                if (groupedRules.containsKey(rule))
+                    ruleOrdering.add(rule);
+        } else
+            ruleOrdering = groupedRules.keySet();
+
+        //endregion
+
         //region Broken Rule Cycle
-        for (Integer ruleNumber : groupedRules.keySet()) {
+        for (Integer ruleNumber : ruleOrdering) {
 
             output.append("=======================================\n");
             output.append("***Violated Rule " + RuleList.getRuleByRuleNumber(ruleNumber).getRuleId() + ": " + RuleList.getRuleByRuleNumber(ruleNumber).getDesc() + "\n");

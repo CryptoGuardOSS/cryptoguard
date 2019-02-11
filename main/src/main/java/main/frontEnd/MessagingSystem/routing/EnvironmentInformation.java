@@ -35,6 +35,7 @@ public class EnvironmentInformation {
     private String packageName = "UNKNOWN";
     private String packageVersion = "UNKNOWN";
     private boolean showTimes = false;
+    private boolean addExperimentalRules = false;
     //endregion
     //region Required Elements Set From the Start
     private final List<String> Source;
@@ -160,6 +161,23 @@ public class EnvironmentInformation {
 
     //region Getters and Setters
 
+    /**
+     * <p>Getter for the field <code>addExperimentalRules</code>.</p>
+     *
+     * @return a {@link java.lang.Boolean} object.
+     */
+    public boolean isAddExperimentalRules() {
+        return addExperimentalRules;
+    }
+
+    /**
+     * <p>Setter for the field <code>addExperimentalRules</code>.</p>
+     *
+     * @param addExperimentalRules a {@link java.lang.Boolean} object.
+     */
+    public void setAddExperimentalRules(boolean addExperimentalRules) {
+        this.addExperimentalRules = addExperimentalRules;
+    }
     /**
      * <p>Setter for the field <code>streaming</code>.</p>
      *

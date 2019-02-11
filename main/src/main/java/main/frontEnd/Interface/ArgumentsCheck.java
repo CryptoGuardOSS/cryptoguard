@@ -41,7 +41,11 @@ public class ArgumentsCheck {
 
         //region CLI Section
 
-        Options cmdLineArgs = setOptions();
+        Options cmdLineArgs = new Options();//getStableOptions();
+        //TODO - Enable this throughout
+        cmdLineArgs.addOptionGroup(getStableOptions())/*.addOptionGroup(getExperimentalOptions())*/;
+
+
         CommandLine cmd = null;
 
         try {
@@ -166,69 +170,80 @@ public class ArgumentsCheck {
         info.setPrettyPrint(cmd.hasOption(argsIdentifier.PRETTY.getId()));
         info.setShowTimes(cmd.hasOption(argsIdentifier.TIMEMEASURE.getId()));
         info.setStreaming(cmd.hasOption(argsIdentifier.STREAM.getId()));
+        info.setAddExperimentalRules(cmd.hasOption(argsIdentifier.EXPERIMENTRESULTS.getId()));
 
         return info;
 
     }
 
-    private static Options setOptions() {
-        Options cmdLineArgs = new Options();
+    private static OptionGroup getStableOptions() {
+        OptionGroup stable = new OptionGroup();
 
 
         Option format = Option.builder(argsIdentifier.FORMAT.getId()).required().hasArg().argName("format").desc(argsIdentifier.FORMAT.getDesc()).build();
         format.setType(String.class);
         format.setOptionalArg(false);
-        cmdLineArgs.addOption(format);
+        stable.addOption(format);
 
         Option sources = Option.builder(argsIdentifier.SOURCE.getId()).required().hasArgs().argName("file(s)/dir").desc(argsIdentifier.SOURCE.getDesc()).build();
         sources.setType(String.class);
         sources.setValueSeparator(' ');
         sources.setOptionalArg(false);
-        cmdLineArgs.addOption(sources);
+        stable.addOption(sources);
 
         Option dependency = Option.builder(argsIdentifier.DEPENDENCY.getId()).hasArg().argName("dir").desc(argsIdentifier.DEPENDENCY.getDesc()).build();
         dependency.setType(String.class);
         dependency.setOptionalArg(false);
-        cmdLineArgs.addOption(dependency);
+        stable.addOption(dependency);
 
         Option output = Option.builder(argsIdentifier.OUT.getId()).hasArg().argName("file").desc(argsIdentifier.OUT.getDesc()).build();
         output.setType(String.class);
         output.setOptionalArg(true);
-        cmdLineArgs.addOption(output);
+        stable.addOption(output);
 
         Option timing = new Option(argsIdentifier.TIMEMEASURE.getId(), false, argsIdentifier.TIMEMEASURE.getDesc());
         timing.setOptionalArg(true);
-        cmdLineArgs.addOption(timing);
+        stable.addOption(timing);
 
         Option formatOut = Option.builder(argsIdentifier.FORMATOUT.getId()).hasArg().argName("formatType").desc(argsIdentifier.FORMATOUT.getDesc()).build();
         formatOut.setOptionalArg(false);
-        cmdLineArgs.addOption(formatOut);
+        stable.addOption(formatOut);
 
         Option prettyPrint = new Option(argsIdentifier.PRETTY.getId(), false, argsIdentifier.PRETTY.getDesc());
         prettyPrint.setOptionalArg(true);
-        cmdLineArgs.addOption(prettyPrint);
+        stable.addOption(prettyPrint);
 
         Option help = new Option(argsIdentifier.HELP.getId(), false, argsIdentifier.HELP.getDesc());
         help.setOptionalArg(true);
-        cmdLineArgs.addOption(help);
+        stable.addOption(help);
 
         Option version = new Option(argsIdentifier.VERSION.getId(), false, argsIdentifier.VERSION.getDesc());
         version.setOptionalArg(true);
-        cmdLineArgs.addOption(version);
+        stable.addOption(version);
 
         Option skipInput = new Option(argsIdentifier.SKIPINPUTVALIDATION.getId(), false, argsIdentifier.SKIPINPUTVALIDATION.getDesc());
         skipInput.setOptionalArg(true);
-        cmdLineArgs.addOption(skipInput);
+        stable.addOption(skipInput);
 
         Option timeStamp = new Option(argsIdentifier.TIMESTAMP.getId(), false, argsIdentifier.TIMESTAMP.getDesc());
         skipInput.setOptionalArg(true);
-        cmdLineArgs.addOption(timeStamp);
+        stable.addOption(timeStamp);
 
         Option stream = new Option(argsIdentifier.STREAM.getId(), false, argsIdentifier.STREAM.getDesc());
         stream.setOptionalArg(true);
-        cmdLineArgs.addOption(stream);
+        stable.addOption(stream);
 
-        return cmdLineArgs;
+        return stable;
+    }
+
+    private static OptionGroup getExperimentalOptions() {
+        OptionGroup experimental = new OptionGroup();
+
+        Option exper = new Option(argsIdentifier.EXPERIMENTRESULTS.getId(), false, argsIdentifier.EXPERIMENTRESULTS.getDesc());
+        exper.setOptionalArg(true);
+        experimental.addOption(exper);
+
+        return experimental;
     }
 
     /**
@@ -248,7 +263,10 @@ public class ArgumentsCheck {
         } catch (IOException e) {
         }
 
-        helper.printHelp(projectName, args, false);
+        Options stableInput = new Options();
+        stableInput.addOptionGroup(getStableOptions());
+
+        helper.printHelp(projectName, stableInput, false);
 
         System.out.println(Listing.getInputHelp());
 

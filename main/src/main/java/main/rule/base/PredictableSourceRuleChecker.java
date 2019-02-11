@@ -345,12 +345,12 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
 
         return output.toString();
     }
-
+//TODO - Experiment Based Rules
     /** {@inheritDoc} */
     @Override
     public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, baseStreamWriter writer) {
-
-        return Utils.createAnalysisOutput(xmlFileStr, sourcePaths, predictableSourcMap, othersSourceMap, rule, writer);
+        return new ArrayList<>();
+        //return Utils.createAnalysisOutput(xmlFileStr, sourcePaths, predictableSourcMap, othersSourceMap, rule, writer);
 
 
     }
