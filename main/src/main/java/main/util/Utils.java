@@ -3,7 +3,6 @@ package main.util;
 import main.analyzer.backward.*;
 import main.frontEnd.Interface.ExceptionHandler;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
-import main.frontEnd.MessagingSystem.AnalysisLocation;
 import main.frontEnd.MessagingSystem.routing.Listing;
 import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
 import main.rule.engine.EngineType;
@@ -1256,11 +1255,10 @@ public class Utils {
      * @param sourcePaths a {@link java.util.List} object.
      * @return a {@link java.util.ArrayList} object.
      * @param predictableSourcMap a {@link java.util.Map} object.
-     * @param othersSourceMap a {@link java.util.Map} object.
      * @param rule a {@link java.lang.String} object.
      * @param writer a {@link main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter} object.
      */
-    public static ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, Map<UnitContainer, List<String>> predictableSourcMap, Map<UnitContainer, List<String>> othersSourceMap, String rule, baseStreamWriter writer) {
+    public static ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, Map<UnitContainer, List<String>> predictableSourcMap, String rule, baseStreamWriter writer) {
         ArrayList<AnalysisIssue> outList = new ArrayList<>();
 
         Integer ruleNumber = Integer.parseInt(rule);
@@ -1304,7 +1302,7 @@ public class Utils {
                     else
                         writer.streamIntoBody(new AnalysisIssue(unit, ruleNumber, "Found: \"" + sootString.replaceAll("\"", "") + "\"", sourcePaths));
 
-        for (UnitContainer unit : othersSourceMap.keySet())
+        /*for (UnitContainer unit : othersSourceMap.keySet())
             if (ruleNumber != 7) {
                 String sootString = othersSourceMap.get(unit).size() <= 0
                         ? ""
@@ -1368,7 +1366,7 @@ public class Utils {
                     }
                 }
             }
-        }
+        }*/
 
         return outList;
     }
