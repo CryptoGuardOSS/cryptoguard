@@ -2,10 +2,8 @@
 Project TODO
 =======================================
 
-
 BUGS
 ------------------
-
 
 TODO
 ------------------
@@ -13,13 +11,14 @@ TODO
 1. [ ] Verify
         1. [X] the scarf-output is valid
         #. [~] old paths still work
+        #. [ ] verify the experimental rules 'a' are not showing up
         #. [~] new paths work (jar/apk/dir)
         #. [~] java/class files work
 #. Ask
         1. [~] remove experimentation related code :sub:`put behind a flag`
         #. Documentation
-                * [ ] Inline
-                * [ ] TODO
+                * [~] Inline
+                * [~] TODO
                 * [ ] *
         #. Re-order output to be consistent w/ paper
                 * [ ] **only need to do this with non-stream**
