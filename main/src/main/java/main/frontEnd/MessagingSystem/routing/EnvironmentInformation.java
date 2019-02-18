@@ -692,5 +692,14 @@ public class EnvironmentInformation {
     public void setShowTimes(boolean showTimes) {
         this.showTimes = showTimes;
     }
+
+    /**
+     * <p>Setter for the field <code>UUID</code>.</p>
+     *
+     * @param UUID a String.
+     */
+    public void setUUID(String UUID) {
+        this.UUID = UUID;
+    }
     //endregion
 }

@@ -127,25 +127,19 @@ public enum Listing {
     }
 
     /**
-     * The method retrieving all of the input help for each of the messaging system types
+     * A method to dynamically retrieve the args of messaging structure asked for by the flag type for help
+     *  with error checking.
      *
-     * @return {@link java.lang.String} - The full multi-line string describing help for each type
+     * @return string - the help string provided by each messaging interface
      */
-    public static String getInputHelp() {
-        StringBuilder help = new StringBuilder();
-        help.append("===========================================================\n");
-        help.append("Format Help\n");
-        help.append("===========================================================\n\n");
+    public String getInputHelp() {
 
-        for (Listing type : Listing.values()) {
-            help.append("===========================================================\n");
-            help.append("Type : ").append(type.type).append("\n");
-            help.append("Format : ").append(type.flag).append("\n");
-            help.append(type.getTypeOfMessagingInput().helpInfo()).append("\n");
-            help.append("===========================================================\n\n");
+        try {
+            //Return a dynamically loaded instantiation of the class
+            return ((InputStructure) Class.forName(inputPath + "." + this.type).newInstance()).helpInfo();
+        } catch (Exception e) {
+            return new main.frontEnd.MessagingSystem.routing.inputStructures.Legacy().helpInfo();
         }
-
-        return help.toString();
     }
 
     /**

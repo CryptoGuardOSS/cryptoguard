@@ -45,7 +45,7 @@ public class ArgumentsCheck {
         CommandLine cmd = null;
 
         try {
-            cmd = new DefaultParser().parse(cmdLineArgs, args.toArray(new String[0]));
+            cmd = new DefaultParser().parse(cmdLineArgs, args.toArray(new String[0]), true);
         } catch (ParseException e) {
             System.out.println("====================================================");
 
@@ -57,14 +57,25 @@ public class ArgumentsCheck {
 
             System.out.println("====================================================");
 
-            failFast(cmdLineArgs);
+            failFast(cmdLineArgs, true);
         }
 
         //endregion
 
+        //region Cleaning retrieved values from args
+        ArrayList<String> upgradedArgs = new ArrayList<>(args);
+        for (argsIdentifier arg : argsIdentifier.values()) {
+            if (cmd.hasOption(arg.getId())) {
+                upgradedArgs.remove("-" + arg.getId());
+                upgradedArgs.remove(cmd.getOptionValue(arg.getId()));
+            }
+        }
+        args = upgradedArgs;
+        //endregion
+
         //region Printing Help or Version
         if (cmd.hasOption(argsIdentifier.HELP.getId()))
-            failFast(cmdLineArgs);
+            failFast(cmdLineArgs, false);
         else if (cmd.hasOption(argsIdentifier.VERSION.getId())) {
             try {
                 Properties Properties = new Properties();
@@ -163,6 +174,11 @@ public class ArgumentsCheck {
 
         //endregion
 
+        if (!messaging.getTypeOfMessagingInput().inputValidation(info, args.toArray(new String[0]))) {
+            System.out.println(messaging.getInputHelp());
+            System.exit(0);
+        }
+
         info.setPrettyPrint(cmd.hasOption(argsIdentifier.PRETTY.getId()));
         info.setShowTimes(cmd.hasOption(argsIdentifier.TIMEMEASURE.getId()));
         info.setStreaming(cmd.hasOption(argsIdentifier.STREAM.getId()));
@@ -233,8 +249,10 @@ public class ArgumentsCheck {
 
     /**
      * A universal method to return failure/help message
+     *
+     * @param args - a {@link org.apache.commons.cli.Options} object.
      */
-    private static void failFast(Options args) {
+    private static void failFast(Options args, Boolean broken) {
 
         HelpFormatter helper = new HelpFormatter();
         helper.setOptionComparator(null);
@@ -250,7 +268,10 @@ public class ArgumentsCheck {
 
         helper.printHelp(projectName, args, false);
 
-        System.out.println(Listing.getInputHelp());
+        if (!broken) {
+            for (Listing listingType : Listing.values())
+                System.out.println(listingType.getInputHelp());
+        }
 
         System.exit(0);
     }
