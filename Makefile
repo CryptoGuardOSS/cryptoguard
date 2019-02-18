@@ -4,6 +4,7 @@ java7=${JAVA7_HOME}/bin/java
 ver=03.02.08
 scan=$(java7) -jar $(dir)main/build/libs/main-$(ver).jar
 marshal=$(dir)main/src/main/java/com/example/response/package-info.java
+scarfXSD=$(dir)main/src/main/schema/xsd/Scarf/scarf_v1.2.xsd
 
 jarLoc=$(dir)testable-jar/build/libs/testable-jar.jar
 depLoc=$(dir)testable-jar/build/dependencies
@@ -15,14 +16,23 @@ default:: build
 scanJar:
 	$(scan) -in jar -s $(jarLoc) -d $(depLoc) -o ./results_newJar.txt
 
+scanJar_Scarf:
+	$(scan) -in jar -s $(jarLoc) -d $(depLoc) -o ./results_newJar_Scarf.xml -m SX -n
+	xmllint --schema $(scarfXSD) ./results_newJar_Scarf.xml>lint.out 2>lint.err
+
 scanDir:
 	$(scan) -in source -s $(dirLoc) -d $(depLoc) -o ./results_newDir.txt
 
-testScan:
-	$(scan) -in jar -s $(jarLoc) -d $(depLoc) -o ./results_newJar.xml -m SX -Saf java-assess -Safv 2.6.12c -Sbrd /home/bolo/build/pkg1 -Sprd octopus -Spn octopus -Spv 2019-02-14 -Sid 12345
+scanDir_Scarf:
+	$(scan) -in source -s $(dirLoc) -d $(depLoc) -o ./results_newDir_Scarf.xml -m SX -n
+	xmllint --schema $(scarfXSD) ./results_newDir_Scarf.xml>lint.out 2>lint.err
 
 scanAPK:
 	$(scan) -in apk -s $(apkLoc) -o ./results_newApk.txt
+
+scanAPK_Scarf:
+	$(scan) -in apk -s $(apkLoc) -o ./results_newApk_Scarf.xml -m SX -n
+	xmllint --schema $(scarfXSD) ./results_newApk_Scarf.xml>lint.out 2>lint.err
 
 #Sets the namespace for the xml, needed for unit/integration tests
 setNS:
@@ -60,6 +70,6 @@ build:
 
 clean:
 	gradle -p $(dir) clean
-	-rm results_newJar.txt
-	-rm results_newDir.txt
-	-rm results_newApk.txt
+	-rm results*
+	-rm ERROR*
+	-rm lint*
