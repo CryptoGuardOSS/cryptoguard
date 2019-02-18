@@ -36,9 +36,12 @@ public class EntryPointTest {
     private final String jarOne = Utils.osPathJoin(srcOneGrv, "build", "libs", "testable-jar.jar");
     private final String srcOneGrvDep = Utils.osPathJoin(srcOneGrv, "build", "dependencies");
     private final String tempFileOutTxt = Utils.osPathJoin(System.getProperty("user.dir"), "testable-jar.txt");
+    private final String tempFileOutApk = Utils.osPathJoin(System.getProperty("user.dir"), "app-debug.txt");
+    private final String tempFileOutApk_Scarf = Utils.osPathJoin(System.getProperty("user.dir"), "app-debug.xml");
     private final String tempFileOutXML = Utils.osPathJoin(System.getProperty("user.dir"), "testable-jar.xml");
     private final String tempStreamXML = Utils.osPathJoin(System.getProperty("user.dir"), "testable-jar_Stream.xml");
     private final String pathToSchema = Utils.osPathJoin(basePath, "src", "main", "schema", "xsd", "Scarf", "Scarf.xsd");
+    private final String pathToAPK = Utils.osPathJoin(basePath.replace("main", ""), "app-debug.apk");
 
     private Boolean validateXML = false;
     //endregion
@@ -133,6 +136,51 @@ public class EntryPointTest {
     public void main_TestableJar_Scarf() {
         if (isLinux) {
             String args = "-in " + EngineType.JAR.getFlag() + " -s " + jarOne + " -d " + srcOneGrvDep + " -m " + Listing.ScarfXML.getFlag() + " -o " + tempFileOutXML + " -t";
+
+            redirectOutput();
+
+            try {
+                engine.main(args.split(" "));
+
+                resetOutput();
+
+                for (String in : out.toString().split("\n"))
+                    assertTrue(StringUtils.isAllBlank(in) || in.startsWith("Warning"));
+
+                List<String> results = Files.readAllLines(Paths.get(tempFileOutXML), Charset.forName("UTF-8"));
+                assertTrue(results.size() >= 1);
+
+                if (validateXML) {
+                    Schema schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(new File(pathToSchema));
+
+                    Unmarshaller xmlToJava = JAXBContext.newInstance(AnalyzerReport.class).createUnmarshaller();
+                    xmlToJava.setSchema(schema);
+
+                    AnalyzerReport result = (AnalyzerReport) xmlToJava.unmarshal(new File(tempFileOutXML));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    @Test
+    public void main_TestableJar_Scarf_Args() {
+        if (isLinux) {
+            String args = "-in " + EngineType.JAR.getFlag() +
+                    " -s " + jarOne +
+                    " -d " + srcOneGrvDep +
+                    " -m " + Listing.ScarfXML.getFlag() +
+                    " -o " + tempFileOutXML +
+                    " -t" +
+                    " -Saf " + "java-assess" +
+                    " -Safv " + "1.0.1" +
+                    " -Sbrd " + "/home/test" +
+                    " -Sprd " + "octopus" +
+                    " -Spn " + "octopus" +
+                    " -Spv " + "2019-02-14" +
+                    " -Sid " + "12345";
 
             redirectOutput();
 
@@ -307,5 +355,58 @@ public class EntryPointTest {
             }
         }
     }
+
+    @Test
+    public void main_TestableApk() {
+        if (isLinux) {
+            String args = "-in " + EngineType.APK.getFlag() + " -s " + pathToAPK + " -o " + tempFileOutApk;
+
+            redirectOutput();
+
+            try {
+                engine.main(args.split(" "));
+
+                resetOutput();
+
+                for (String in : out.toString().split("\n"))
+                    assertTrue(StringUtils.isAllBlank(in) || in.startsWith("Warning"));
+
+                List<String> results = Files.readAllLines(Paths.get(tempFileOutApk), Charset.forName("UTF-8"));
+                assertTrue(results.size() >= 10);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    @Test
+    public void main_TestableApk_Scarf() {
+        if (isLinux) {
+            String args = "-in " + EngineType.APK.getFlag() + " -s " + pathToAPK + " -o " + tempFileOutApk_Scarf + " -m " + Listing.ScarfXML.getFlag() + " -n";
+
+            redirectOutput();
+
+            try {
+                engine.main(args.split(" "));
+
+                resetOutput();
+
+                for (String in : out.toString().split("\n"))
+                    assertTrue(StringUtils.isAllBlank(in) || in.startsWith("Warning"));
+
+                List<String> results = Files.readAllLines(Paths.get(tempFileOutApk_Scarf), Charset.forName("UTF-8"));
+                assertTrue(results.size() >= 10);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
     //endregion
 }

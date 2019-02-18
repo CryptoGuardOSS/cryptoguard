@@ -61,6 +61,32 @@ Help
 * If you have any questions or suggestions, please email to cryptoguardorg@gmail.com.
 * Please also run `make help` or `cd /path/to/grptoguard && java -jar main/build/libs/main-{Version Here}.jar -h` for argument help.
 
+FAQ
+^^^
+* There may be ***silent failures*** if any of the environment variables below are not set.
+
++------------------------+--------------------+----------------------------------------+------------------------------------+
+| Build Type             | Env. Variable Name | Path Resolution                        | Example                            |
++------------------------+--------------------+----------------------------------------+------------------------------------+
+| JAR/Dir/APK/Java Class | JAVA_HOME          | Should resolve to the bin of Java 7    | export PATH=...:~/java7/bin:...    |
++------------------------+--------------------+----------------------------------------+------------------------------------+
+| Source/Java Files      | JAVA7_HOME         | Should resolve to the bin of Java 7    | export PATH=...:~/java7/bin:...    |
++------------------------+--------------------+----------------------------------------+------------------------------------+
+| APK                    | ANDROID_HOME       | Should resolve to the SDK Android path | export PATH=...:~/Android/Sdk/:... |
++------------------------+--------------------+----------------------------------------+------------------------------------+
+
+* Also listed below is the current support (tldr) of the project across the various operating systems
+
++------------------------+--------------------+----------------------------------------+------------------------------------+
+| Build Type             | Env. Variable Name | Path Resolution                        | Example                            |
++------------------------+--------------------+----------------------------------------+------------------------------------+
+| JAR/Dir/APK/Java Class | JAVA_HOME          | Should resolve to the bin of Java 7    | export PATH=...:~/java7/bin:...    |
++------------------------+--------------------+----------------------------------------+------------------------------------+
+| Source/Java Files      | JAVA7_HOME         | Should resolve to the bin of Java 7    | export PATH=...:~/java7/bin:...    |
++------------------------+--------------------+----------------------------------------+------------------------------------+
+| APK                    | ANDROID_HOME       | Should resolve to the SDK Android path | export PATH=...:~/Android/Sdk/:... |
++------------------------+--------------------+----------------------------------------+------------------------------------+
+
 Disclaimer
 -----------
 

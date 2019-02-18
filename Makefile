@@ -1,14 +1,14 @@
 dir=./
 java7=${JAVA7_HOME}/bin/java
 
-ver=03.02.06
+ver=03.02.07
 scan=$(java7) -jar $(dir)main/build/libs/main-$(ver).jar
 marshal=$(dir)main/src/main/java/com/example/response/package-info.java
 
 jarLoc=$(dir)testable-jar/build/libs/testable-jar.jar
 depLoc=$(dir)testable-jar/build/dependencies
 dirLoc=$(dir)testable-jar
-apkLoc=$(dir)
+apkLoc=$(dir)app-debug.apk
 
 default:: build
 
@@ -18,8 +18,11 @@ scanJar:
 scanDir:
 	$(scan) -in source -s $(dirLoc) -d $(depLoc) -o ./results_newDir.txt
 
+testScan:
+	$(scan) -in jar -s $(jarLoc) -d $(depLoc) -o ./results_newJar.xml -m SX -Saf java-assess -Safv 2.6.12c -Sbrd /home/bolo/build/pkg1 -Sprd octopus -Spn octopus -Spv 2019-02-14 -Sid 12345
+
 scanAPK:
-	#$(scan) -in source -s $(apkLoc) -o ./results_newApk.txt
+	$(scan) -in apk -s $(apkLoc) -o ./results_newApk.txt
 
 #Sets the namespace for the xml, needed for unit/integration tests
 setNS:
