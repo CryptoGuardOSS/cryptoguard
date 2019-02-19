@@ -38,6 +38,7 @@ public class ScarfXMLStream extends baseStreamWriter {
     private String xPath;
     private CWEList cwes = new CWEList();
     private final Boolean prettyPrint;
+    private final String fileOut;
 
     /**
      * <p>Getter for the field <code>prettyPrint</code>.</p>
@@ -83,6 +84,7 @@ public class ScarfXMLStream extends baseStreamWriter {
      */
     public ScarfXMLStream(EnvironmentInformation info) {
         super(info);
+        this.fileOut = info.getFileOutName();
         this.buildId = info.getBuildId();
         this.xPath = info.getxPath();
         this.prettyPrint = info.getPrettyPrint();
@@ -102,11 +104,11 @@ public class ScarfXMLStream extends baseStreamWriter {
             AnalyzerReport report = new AnalyzerReport();
 
             //region Setting Attributes
-            report.setAssessFw(info.getAssessmentFramework());
-            report.setAssessFwVersion(info.getAssessmentFrameworkVersion());
+          /*  report.setAssessFw(info.getAssessmentFramework());
+            report.setAssessFwVersion(info.getAssessmentFrameworkVersion());*/
             report.setAssessmentStartTs(info.getStartTimeStamp());
-            report.setBuildFw(info.getBuildFramework());
-            report.setBuildFwVersion(info.getBuildFrameworkVersion());
+           /* report.setBuildFw(info.getBuildFramework());
+            report.setBuildFwVersion(info.getBuildFrameworkVersion());*/
             report.setPackageName(info.getPackageName());
             report.setPackageVersion(info.getPackageVersion());
             report.setPackageRootDir(info.getPackageRootDir());
@@ -177,7 +179,7 @@ public class ScarfXMLStream extends baseStreamWriter {
         }
 
         for (CWE cwe : issue.getRule().retrieveCWEInfo(cwes))
-            instance.getCweld().add(String.valueOf(cwe.getId()));
+            instance.getCweId().add(String.valueOf(cwe.getId()));
 
         if (StringUtils.isNotBlank(issue.getClassName())) {
             instance.setClassName(issue.getClassName());
@@ -239,6 +241,15 @@ public class ScarfXMLStream extends baseStreamWriter {
         outputMessage.append(issue.getRule().getDesc()).append(".");
 
         instance.setBugMessage(outputMessage.toString());
+        //endregion
+
+        //region Setting BugTrace
+        BugTraceType trace = new BugTraceType();
+
+        trace.setBuildId(this.buildId);
+        trace.setAssessmentReportFile(this.fileOut);
+
+        instance.setBugTrace(trace);
         //endregion
 
         //endregion

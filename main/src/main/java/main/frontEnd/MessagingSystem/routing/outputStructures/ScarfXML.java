@@ -42,11 +42,11 @@ public class ScarfXML implements OutputStructure {
 
             //region Setting the report for marshalling
             //region Setting Attributes
-            report.setAssessFw(source.getAssessmentFramework());
-            report.setAssessFwVersion(source.getAssessmentFrameworkVersion());
+            /*report.setAssessFw(source.getAssessmentFramework());
+            report.setAssessFwVersion(source.getAssessmentFrameworkVersion());*/
             report.setAssessmentStartTs(source.getStartTimeStamp());
-            report.setBuildFw(source.getBuildFramework());
-            report.setBuildFwVersion(source.getBuildFrameworkVersion());
+/*            report.setBuildFw(source.getBuildFramework());
+            report.setBuildFwVersion(source.getBuildFrameworkVersion());*/
             report.setPackageName(source.getPackageName());
             report.setPackageVersion(source.getPackageVersion());
             report.setPackageRootDir(source.getPackageRootDir());
@@ -87,7 +87,7 @@ public class ScarfXML implements OutputStructure {
                 }
 
                 for (CWE cwe : issue.getRule().retrieveCWEInfo(cwes))
-                    instance.getCweld().add(String.valueOf(cwe.getId()));
+                    instance.getCweId().add(String.valueOf(cwe.getId()));
 
                 if (StringUtils.isNotBlank(issue.getClassName())) {
                     instance.setClassName(issue.getClassName());
@@ -149,6 +149,15 @@ public class ScarfXML implements OutputStructure {
                 outputMessage.append(issue.getRule().getDesc()).append(".");
 
                 instance.setBugMessage(outputMessage.toString());
+
+                //region Setting BugTrace
+                BugTraceType trace = new BugTraceType();
+
+                trace.setBuildId(source.getBuildId());
+                trace.setAssessmentReportFile(source.getFileOutName());
+
+                instance.setBugTrace(trace);
+                //endregion
 
                 report.getBugInstance().add(instance);
             }

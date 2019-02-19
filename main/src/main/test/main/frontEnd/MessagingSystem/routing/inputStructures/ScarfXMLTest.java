@@ -2,7 +2,6 @@ package main.frontEnd.MessagingSystem.routing.inputStructures;
 
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import main.frontEnd.MessagingSystem.routing.Listing;
-import main.frontEnd.argsIdentifier;
 import main.rule.engine.EngineType;
 import org.junit.After;
 import org.junit.Before;
@@ -122,10 +121,6 @@ public class ScarfXMLTest {
         StringBuilder args = new StringBuilder();
 
         //region Setting the arguments string
-        args.append(makeArg(argsIdentifier.FORMAT.getId(), "jar"));
-        args.append(makeArg(argsIdentifier.SOURCE.getId(), "./testable-jar.jar"));
-        args.append(makeArg(argsIdentifier.DEPENDENCY.getId(), "./testable-jar/build/dependencies"));
-        args.append(makeArg(argsIdentifier.OUT.getId(), "./results.xml"));
         args.append(makeArg(ScarfXMLId.AssessmentFramework.getId(), assessmentFramework));
         args.append(makeArg(ScarfXMLId.AssessmentFrameworkVersion.getId(), assessmentFrameworkVersion));
         args.append(makeArg(ScarfXMLId.BuildRootDir.getId(), buildRootDir));

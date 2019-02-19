@@ -414,6 +414,9 @@ public class EnvironmentInformation {
      * @return a {@link java.lang.Integer} object.
      */
     public Integer getBuildId() {
+        if (this.buildId == null)
+            this.buildId = 0;
+
         return buildId;
     }
 
@@ -664,6 +667,12 @@ public class EnvironmentInformation {
      */
     public String getFileOut() {
         return fileOut;
+    }
+
+    public String getFileOutName() {
+        String[] split = this.fileOut.split(System.getProperty("file.separator"));
+
+        return split[split.length - 1];
     }
 
     /**
