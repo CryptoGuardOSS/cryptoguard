@@ -21,8 +21,6 @@ import java.io.PrintStream;
  */
 public class ScarfXML implements InputStructure {
 
-    private Options cmdLineArgs = setOptions();
-
     /**
      * {@inheritDoc}
      * The overridden method for the ScarfXML output.
@@ -34,7 +32,7 @@ public class ScarfXML implements InputStructure {
     public Boolean inputValidation(EnvironmentInformation info, String[] args) {
 
         CommandLine cmd = null;
-
+        Options cmdLineArgs = setOptions();
         try {
             cmd = new DefaultParser().parse(cmdLineArgs, args);
         } catch (ParseException e) {
@@ -52,26 +50,15 @@ public class ScarfXML implements InputStructure {
             System.exit(0);
         }
 
-        if (cmd.hasOption(ScarfXMLId.AssessmentFramework.getId()))
-            info.setAssessmentFramework(cmd.getOptionValue(ScarfXMLId.AssessmentFramework.getId(), "UNKNOWN"));
-
-        if (cmd.hasOption(ScarfXMLId.AssessmentFrameworkVersion.getId()))
-            info.setAssessmentFramework(cmd.getOptionValue(ScarfXMLId.AssessmentFrameworkVersion.getId(), "UNKNOWN"));
-
-        if (cmd.hasOption(ScarfXMLId.BuildRootDir.getId()))
-            info.setAssessmentFramework(cmd.getOptionValue(ScarfXMLId.BuildRootDir.getId(), "UNKNOWN"));
-
-        if (cmd.hasOption(ScarfXMLId.PackageRootDir.getId()))
-            info.setAssessmentFramework(cmd.getOptionValue(ScarfXMLId.PackageRootDir.getId(), "UNKNOWN"));
-
-        if (cmd.hasOption(ScarfXMLId.ParserName.getId()))
-            info.setAssessmentFramework(cmd.getOptionValue(ScarfXMLId.ParserName.getId(), "UNKNOWN"));
-
-        if (cmd.hasOption(ScarfXMLId.ParserVersion.getId()))
-            info.setAssessmentFramework(cmd.getOptionValue(ScarfXMLId.ParserVersion.getId(), "UNKNOWN"));
-
-        if (cmd.hasOption(ScarfXMLId.UUID.getId()))
-            info.setAssessmentFramework(cmd.getOptionValue(ScarfXMLId.UUID.getId(), java.util.UUID.randomUUID().toString()));
+        //region Retrieving and setting the values
+        info.setAssessmentFramework(cmd.getOptionValue(ScarfXMLId.AssessmentFramework.getId(), "UNKNOWN"));
+        info.setAssessmentFrameworkVersion(cmd.getOptionValue(ScarfXMLId.AssessmentFrameworkVersion.getId(), "UNKNOWN"));
+        info.setBuildRootDir(cmd.getOptionValue(ScarfXMLId.BuildRootDir.getId(), "UNKNOWN"));
+        info.setPackageRootDir(cmd.getOptionValue(ScarfXMLId.PackageRootDir.getId(), "UNKNOWN"));
+        info.setParserName(cmd.getOptionValue(ScarfXMLId.ParserName.getId(), "UNKNOWN"));
+        info.setParserVersion(cmd.getOptionValue(ScarfXMLId.ParserVersion.getId(), "UNKNOWN"));
+        info.setUUID(cmd.getOptionValue(ScarfXMLId.UUID.getId(), java.util.UUID.randomUUID().toString()));
+        //endregion
 
         return true;
     }
@@ -89,7 +76,7 @@ public class ScarfXML implements InputStructure {
 
         HelpFormatter helper = new HelpFormatter();
         helper.setOptionComparator(null);
-        helper.printHelp("ScarfXML", cmdLineArgs, false);
+        helper.printHelp("ScarfXML", setOptions(), false);
 
         System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
 
@@ -100,12 +87,12 @@ public class ScarfXML implements InputStructure {
     private static Options setOptions() {
         Options cmdLineArgs = new Options();
 
-        Option AssessmentFramework = Option.builder(ScarfXMLId.AssessmentFramework.getId()).required().hasArg().argName("string").desc(ScarfXMLId.AssessmentFramework.getDesc()).build();
+        Option AssessmentFramework = Option.builder(ScarfXMLId.AssessmentFramework.getId()).hasArg().argName("string").desc(ScarfXMLId.AssessmentFramework.getDesc()).build();
         AssessmentFramework.setType(String.class);
         AssessmentFramework.setOptionalArg(false);
         cmdLineArgs.addOption(AssessmentFramework);
 
-        Option AssessmentFrameworkVersion = Option.builder(ScarfXMLId.AssessmentFrameworkVersion.getId()).required().hasArg().argName("string").desc(ScarfXMLId.AssessmentFrameworkVersion.getDesc()).build();
+        Option AssessmentFrameworkVersion = Option.builder(ScarfXMLId.AssessmentFrameworkVersion.getId()).hasArg().argName("string").desc(ScarfXMLId.AssessmentFrameworkVersion.getDesc()).build();
         AssessmentFrameworkVersion.setType(String.class);
         AssessmentFrameworkVersion.setOptionalArg(false);
         cmdLineArgs.addOption(AssessmentFrameworkVersion);

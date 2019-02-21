@@ -414,6 +414,9 @@ public class EnvironmentInformation {
      * @return a {@link java.lang.Integer} object.
      */
     public Integer getBuildId() {
+        if (this.buildId == null)
+            this.buildId = 0;
+
         return buildId;
     }
 
@@ -666,6 +669,12 @@ public class EnvironmentInformation {
         return fileOut;
     }
 
+    public String getFileOutName() {
+        String[] split = this.fileOut.split(System.getProperty("file.separator"));
+
+        return split[split.length - 1];
+    }
+
     /**
      * <p>Setter for the field <code>fileOut</code>.</p>
      *
@@ -691,6 +700,15 @@ public class EnvironmentInformation {
      */
     public void setShowTimes(boolean showTimes) {
         this.showTimes = showTimes;
+    }
+
+    /**
+     * <p>Setter for the field <code>UUID</code>.</p>
+     *
+     * @param UUID a String.
+     */
+    public void setUUID(String UUID) {
+        this.UUID = UUID;
     }
     //endregion
 }

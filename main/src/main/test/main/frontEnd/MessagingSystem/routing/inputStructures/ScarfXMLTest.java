@@ -5,6 +5,13 @@ import main.frontEnd.MessagingSystem.routing.Listing;
 import main.rule.engine.EngineType;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
+
+import java.util.ArrayList;
+
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class ScarfXMLTest {
 
@@ -15,6 +22,13 @@ public class ScarfXMLTest {
     private final EngineType type = EngineType.APK;
     private final String dependencies = null;
     private String helpString;
+    private String assessmentFramework;
+    private String assessmentFrameworkVersion;
+    private String buildRootDir;
+    private String packageRootDir;
+    private String parserName;
+    private String parserVersion;
+    private String UUID;
     //endregion
 
     //region Test Environment Management
@@ -35,6 +49,14 @@ public class ScarfXMLTest {
 
         helpString = helpBuilder.toString();
 
+        assessmentFramework = "java-assess";
+        assessmentFrameworkVersion = "1.0.0c";
+        buildRootDir = "/home";
+        packageRootDir = "CryptoGuard";
+        parserName = "CryptoGuard";
+        parserVersion = "1970-01-01";
+        UUID = "8675309";
+
     }
 
     @After
@@ -43,7 +65,90 @@ public class ScarfXMLTest {
         args = null;
         inputTest = null;
         helpString = null;
+        assessmentFramework = null;
+        assessmentFrameworkVersion = null;
+        buildRootDir = null;
+        packageRootDir = null;
+        parserName = null;
+        parserVersion = null;
+        UUID = null;
     }
     //endregion
+
+    //region Helper Methods
+    private String makeArg(String id, String value) {
+        return "-" + id + " " + value + " ";
+    }
+    //endregion
+
+    @Test
+    public void testAllArguments_inputValidation() {
+        StringBuilder args = new StringBuilder();
+
+        //region Setting the arguments string
+        args.append(makeArg(ScarfXMLId.AssessmentFramework.getId(), assessmentFramework));
+        args.append(makeArg(ScarfXMLId.AssessmentFrameworkVersion.getId(), assessmentFrameworkVersion));
+        args.append(makeArg(ScarfXMLId.BuildRootDir.getId(), buildRootDir));
+        args.append(makeArg(ScarfXMLId.PackageRootDir.getId(), packageRootDir));
+        args.append(makeArg(ScarfXMLId.ParserName.getId(), parserName));
+        args.append(makeArg(ScarfXMLId.ParserVersion.getId(), parserVersion));
+        args.append(makeArg(ScarfXMLId.UUID.getId(), UUID));
+        //endregion
+
+        testInfo = new EnvironmentInformation(new ArrayList<String>(), EngineType.JAR, Listing.ScarfXML, null, new ArrayList<String>(), "");
+
+        try {
+            assertTrue(inputTest.inputValidation(testInfo, args.toString().split(" ")));
+
+            //region Checking arguments
+            assertEquals(assessmentFramework, testInfo.getAssessmentFramework());
+            assertEquals(assessmentFrameworkVersion, testInfo.getAssessmentFrameworkVersion());
+            assertEquals(buildRootDir, testInfo.getBuildRootDir());
+            assertEquals(packageRootDir, testInfo.getPackageRootDir());
+            assertEquals(parserName, testInfo.getParserName());
+            assertEquals(parserVersion, testInfo.getParserVersion());
+            assertEquals(UUID, testInfo.getUUID());
+            //endregion
+        } catch (Exception e) {
+            assertNull(e);
+            e.printStackTrace();
+        }
+
+    }
+
+    @Test
+    public void testAllArguments_inputValidation_realisticArgs() {
+        StringBuilder args = new StringBuilder();
+
+        //region Setting the arguments string
+        args.append(makeArg(ScarfXMLId.AssessmentFramework.getId(), assessmentFramework));
+        args.append(makeArg(ScarfXMLId.AssessmentFrameworkVersion.getId(), assessmentFrameworkVersion));
+        args.append(makeArg(ScarfXMLId.BuildRootDir.getId(), buildRootDir));
+        args.append(makeArg(ScarfXMLId.PackageRootDir.getId(), packageRootDir));
+        args.append(makeArg(ScarfXMLId.ParserName.getId(), parserName));
+        args.append(makeArg(ScarfXMLId.ParserVersion.getId(), parserVersion));
+        args.append(makeArg(ScarfXMLId.UUID.getId(), UUID));
+        //endregion
+
+        testInfo = new EnvironmentInformation(new ArrayList<String>(), EngineType.JAR, Listing.ScarfXML, null, new ArrayList<String>(), "");
+
+        try {
+            assertTrue(inputTest.inputValidation(testInfo, args.toString().split(" ")));
+
+            //region Checking arguments
+            assertEquals(assessmentFramework, testInfo.getAssessmentFramework());
+            assertEquals(assessmentFrameworkVersion, testInfo.getAssessmentFrameworkVersion());
+            assertEquals(buildRootDir, testInfo.getBuildRootDir());
+            assertEquals(packageRootDir, testInfo.getPackageRootDir());
+            assertEquals(parserName, testInfo.getParserName());
+            assertEquals(parserVersion, testInfo.getParserVersion());
+            assertEquals(UUID, testInfo.getUUID());
+            //endregion
+        } catch (Exception e) {
+            assertNull(e);
+            e.printStackTrace();
+        }
+
+    }
 
 }

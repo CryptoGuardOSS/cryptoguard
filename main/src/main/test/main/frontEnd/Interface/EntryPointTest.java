@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import soot.G;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
@@ -59,6 +60,9 @@ public class EntryPointTest {
     //region Test Environment Setup
     @Before
     public void setUp() throws Exception {
+        //Cleaning the current scene since setup carries throughout the VM
+        //tldr - one test setting up the scene will carry over to the next test, this'll stop that
+        G.reset();
 
         //region Determining to validate the XML against the schema or not
         try {
