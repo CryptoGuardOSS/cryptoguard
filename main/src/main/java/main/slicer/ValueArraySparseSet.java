@@ -147,9 +147,7 @@ public class ValueArraySparseSet extends ArraySparseSet {
         maxElements = newSize;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     public void remove(Object obj) {
         int i = 0;
         while (i < this.numElements) {

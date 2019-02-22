@@ -18,9 +18,9 @@ import java.util.List;
 
 /**
  * <p>Java class for anonymous complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -51,7 +51,8 @@ import java.util.List;
  * &lt;/complexType>
  * </pre>
  *
- * 
+ * @author drmonster
+ * @version $Id: $Id
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
@@ -133,25 +134,25 @@ public class AnalyzerReport {
 
     /**
      * Gets the value of the bugInstance property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the bugInstance property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getBugInstance().add(newItem);
      * </pre>
      *
-     * 
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link BugInstanceType }
+     * {@link com.example.response.BugInstanceType}
      *
-     * 
+     * @return a {@link java.util.List} object.
      */
     public List<BugInstanceType> getBugInstance() {
         if (bugInstance == null) {
@@ -163,10 +164,7 @@ public class AnalyzerReport {
     /**
      * Gets the value of the bugSummary property.
      *
-     * @return
-     *     possible object is
-     *     {@link BugSummaryType }
-     *     
+     * @return a {@link com.example.response.BugSummaryType} object.
      */
     public BugSummaryType getBugSummary() {
         return bugSummary;
@@ -177,8 +175,7 @@ public class AnalyzerReport {
      *
      * @param value
      *     allowed object is
-     *     {@link BugSummaryType }
-     *     
+     *     {@link com.example.response.BugSummaryType}
      */
     public void setBugSummary(BugSummaryType value) {
         this.bugSummary = value;
@@ -186,25 +183,25 @@ public class AnalyzerReport {
 
     /**
      * Gets the value of the metric property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the metric property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getMetric().add(newItem);
      * </pre>
      *
-     * 
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link MetricType }
+     * {@link com.example.response.MetricType}
      *
-     * 
+     * @return a {@link java.util.List} object.
      */
     public List<MetricType> getMetric() {
         if (metric == null) {
@@ -216,10 +213,7 @@ public class AnalyzerReport {
     /**
      * Gets the value of the metricSummaries property.
      *
-     * @return
-     *     possible object is
-     *     {@link MetricSummariesType }
-     *     
+     * @return a {@link com.example.response.MetricSummariesType} object.
      */
     public MetricSummariesType getMetricSummaries() {
         return metricSummaries;
@@ -230,8 +224,7 @@ public class AnalyzerReport {
      *
      * @param value
      *     allowed object is
-     *     {@link MetricSummariesType }
-     *     
+     *     {@link com.example.response.MetricSummariesType}
      */
     public void setMetricSummaries(MetricSummariesType value) {
         this.metricSummaries = value;
@@ -240,10 +233,7 @@ public class AnalyzerReport {
     /**
      * Gets the value of the assessFw property.
      *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return a {@link java.lang.String} object.
      */
     public String getAssessFw() {
         return assessFw;
@@ -254,8 +244,7 @@ public class AnalyzerReport {
      *
      * @param value
      *     allowed object is
-     *     {@link String }
-     *     
+     *     {@link java.lang.String}
      */
     public void setAssessFw(String value) {
         this.assessFw = value;
@@ -264,10 +253,7 @@ public class AnalyzerReport {
     /**
      * Gets the value of the assessFwVersion property.
      *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return a {@link java.lang.String} object.
      */
     public String getAssessFwVersion() {
         return assessFwVersion;
@@ -278,8 +264,7 @@ public class AnalyzerReport {
      *
      * @param value
      *     allowed object is
-     *     {@link String }
-     *     
+     *     {@link java.lang.String}
      */
     public void setAssessFwVersion(String value) {
         this.assessFwVersion = value;
@@ -288,10 +273,7 @@ public class AnalyzerReport {
     /**
      * Gets the value of the assessmentStartTs property.
      *
-     * @return
-     *     possible object is
-     *     {@link XMLGregorianCalendar }
-     *     
+     * @return a {@link javax.xml.datatype.XMLGregorianCalendar} object.
      */
     public XMLGregorianCalendar getAssessmentStartTs() {
         return assessmentStartTs;
@@ -302,8 +284,7 @@ public class AnalyzerReport {
      *
      * @param value
      *     allowed object is
-     *     {@link XMLGregorianCalendar }
-     *     
+     *     {@link javax.xml.datatype.XMLGregorianCalendar}
      */
     public void setAssessmentStartTs(XMLGregorianCalendar value) {
         this.assessmentStartTs = value;
@@ -312,10 +293,7 @@ public class AnalyzerReport {
     /**
      * Gets the value of the buildFw property.
      *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return a {@link java.lang.String} object.
      */
     public String getBuildFw() {
         return buildFw;
@@ -326,8 +304,7 @@ public class AnalyzerReport {
      *
      * @param value
      *     allowed object is
-     *     {@link String }
-     *     
+     *     {@link java.lang.String}
      */
     public void setBuildFw(String value) {
         this.buildFw = value;
@@ -336,10 +313,7 @@ public class AnalyzerReport {
     /**
      * Gets the value of the buildFwVersion property.
      *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return a {@link java.lang.String} object.
      */
     public String getBuildFwVersion() {
         return buildFwVersion;
@@ -350,8 +324,7 @@ public class AnalyzerReport {
      *
      * @param value
      *     allowed object is
-     *     {@link String }
-     *     
+     *     {@link java.lang.String}
      */
     public void setBuildFwVersion(String value) {
         this.buildFwVersion = value;
@@ -360,10 +333,7 @@ public class AnalyzerReport {
     /**
      * Gets the value of the packageName property.
      *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return a {@link java.lang.String} object.
      */
     public String getPackageName() {
         return packageName;
@@ -374,8 +344,7 @@ public class AnalyzerReport {
      *
      * @param value
      *     allowed object is
-     *     {@link String }
-     *     
+     *     {@link java.lang.String}
      */
     public void setPackageName(String value) {
         this.packageName = value;
@@ -384,10 +353,7 @@ public class AnalyzerReport {
     /**
      * Gets the value of the packageVersion property.
      *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return a {@link java.lang.String} object.
      */
     public String getPackageVersion() {
         return packageVersion;
@@ -398,8 +364,7 @@ public class AnalyzerReport {
      *
      * @param value
      *     allowed object is
-     *     {@link String }
-     *     
+     *     {@link java.lang.String}
      */
     public void setPackageVersion(String value) {
         this.packageVersion = value;
@@ -408,10 +373,7 @@ public class AnalyzerReport {
     /**
      * Gets the value of the buildRootDir property.
      *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return a {@link java.lang.String} object.
      */
     public String getBuildRootDir() {
         return buildRootDir;
@@ -422,8 +384,7 @@ public class AnalyzerReport {
      *
      * @param value
      *     allowed object is
-     *     {@link String }
-     *     
+     *     {@link java.lang.String}
      */
     public void setBuildRootDir(String value) {
         this.buildRootDir = value;
@@ -432,10 +393,7 @@ public class AnalyzerReport {
     /**
      * Gets the value of the packageRootDir property.
      *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return a {@link java.lang.String} object.
      */
     public String getPackageRootDir() {
         return packageRootDir;
@@ -446,8 +404,7 @@ public class AnalyzerReport {
      *
      * @param value
      *     allowed object is
-     *     {@link String }
-     *     
+     *     {@link java.lang.String}
      */
     public void setPackageRootDir(String value) {
         this.packageRootDir = value;
@@ -456,10 +413,7 @@ public class AnalyzerReport {
     /**
      * Gets the value of the parserFw property.
      *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return a {@link java.lang.String} object.
      */
     public String getParserFw() {
         return parserFw;
@@ -470,8 +424,7 @@ public class AnalyzerReport {
      *
      * @param value
      *     allowed object is
-     *     {@link String }
-     *     
+     *     {@link java.lang.String}
      */
     public void setParserFw(String value) {
         this.parserFw = value;
@@ -480,10 +433,7 @@ public class AnalyzerReport {
     /**
      * Gets the value of the parserFwVersion property.
      *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return a {@link java.lang.String} object.
      */
     public String getParserFwVersion() {
         return parserFwVersion;
@@ -494,8 +444,7 @@ public class AnalyzerReport {
      *
      * @param value
      *     allowed object is
-     *     {@link String }
-     *     
+     *     {@link java.lang.String}
      */
     public void setParserFwVersion(String value) {
         this.parserFwVersion = value;
@@ -504,10 +453,7 @@ public class AnalyzerReport {
     /**
      * Gets the value of the platformName property.
      *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return a {@link java.lang.String} object.
      */
     public String getPlatformName() {
         return platformName;
@@ -518,8 +464,7 @@ public class AnalyzerReport {
      *
      * @param value
      *     allowed object is
-     *     {@link String }
-     *     
+     *     {@link java.lang.String}
      */
     public void setPlatformName(String value) {
         this.platformName = value;
@@ -528,10 +473,7 @@ public class AnalyzerReport {
     /**
      * Gets the value of the toolName property.
      *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return a {@link java.lang.String} object.
      */
     public String getToolName() {
         return toolName;
@@ -542,8 +484,7 @@ public class AnalyzerReport {
      *
      * @param value
      *     allowed object is
-     *     {@link String }
-     *     
+     *     {@link java.lang.String}
      */
     public void setToolName(String value) {
         this.toolName = value;
@@ -552,10 +493,7 @@ public class AnalyzerReport {
     /**
      * Gets the value of the toolVersion property.
      *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return a {@link java.lang.String} object.
      */
     public String getToolVersion() {
         return toolVersion;
@@ -566,8 +504,7 @@ public class AnalyzerReport {
      *
      * @param value
      *     allowed object is
-     *     {@link String }
-     *     
+     *     {@link java.lang.String}
      */
     public void setToolVersion(String value) {
         this.toolVersion = value;
@@ -576,10 +513,7 @@ public class AnalyzerReport {
     /**
      * Gets the value of the uuid property.
      *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return a {@link java.lang.String} object.
      */
     public String getUuid() {
         return uuid;
@@ -590,8 +524,7 @@ public class AnalyzerReport {
      *
      * @param value
      *     allowed object is
-     *     {@link String }
-     *     
+     *     {@link java.lang.String}
      */
     public void setUuid(String value) {
         this.uuid = value;

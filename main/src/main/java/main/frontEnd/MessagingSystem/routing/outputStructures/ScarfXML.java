@@ -35,7 +35,6 @@ public class ScarfXML implements OutputStructure {
     public String getOutput(EnvironmentInformation source, ArrayList<AnalysisIssue> brokenRules) {
 
         //reopening the console stream
-        source.openConsoleStream();
         CWEList cwes = new CWEList();
         try {
             AnalyzerReport report = new AnalyzerReport();
@@ -190,8 +189,8 @@ public class ScarfXML implements OutputStructure {
 
             StringBuilder commentedFooter = new StringBuilder();
 
-            if (source.getInternalErrors() != null && source.getInternalErrors().split("\n").length >= 1)
-                commentedFooter.append(prettyTab).append(source.getInternalErrors().replaceAll("\n", prettyLine)).append(prettyLine);
+            if (source.getSootErrors() != null && source.getSootErrors().split("\n").length >= 1)
+                commentedFooter.append(prettyTab).append(source.getSootErrors().replaceAll("\n", prettyLine)).append(prettyLine);
 
             if (source.isShowTimes())
                 commentedFooter.append("Analysis Timing (ms): ").append(source.getAnalyisisTime()).append(".").append(prettyLine);

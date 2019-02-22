@@ -98,7 +98,6 @@ public abstract class baseStreamWriter {
      * @param info a {@link main.frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
      */
     public void close(EnvironmentInformation info) {
-        info.openConsoleStream();
         this.writeFooter(info);
         try {
             this.streamOut.close();

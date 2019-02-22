@@ -98,9 +98,7 @@ public class MethodWrapper {
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         return method.toString().hashCode();

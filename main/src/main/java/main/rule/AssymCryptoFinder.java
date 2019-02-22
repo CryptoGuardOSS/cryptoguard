@@ -84,9 +84,7 @@ public class AssymCryptoFinder extends BaseRuleChecker {
         return occurrences;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public List<Criteria> getCriteriaList() {
         return CRITERIA_LIST;

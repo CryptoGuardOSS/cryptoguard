@@ -56,9 +56,7 @@ public class JavaFileEntry implements EntryHandler {
         return issues;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     public void StreamScan(EnvironmentInformation generalInfo, baseStreamWriter streamWriter) {
         generalInfo.startAnalysis();
         //region Core

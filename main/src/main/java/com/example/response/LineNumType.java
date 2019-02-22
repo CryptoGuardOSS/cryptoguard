@@ -16,9 +16,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for LineNumType complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="LineNumType">
  *   &lt;complexContent>
@@ -32,7 +32,8 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;/complexType>
  * </pre>
  *
- * 
+ * @author drmonster
+ * @version $Id: $Id
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "LineNumType", propOrder = {
@@ -48,7 +49,8 @@ public class LineNumType {
 
     /**
      * Gets the value of the start property.
-     * 
+     *
+     * @return a int.
      */
     public int getStart() {
         return start;
@@ -56,7 +58,8 @@ public class LineNumType {
 
     /**
      * Sets the value of the start property.
-     * 
+     *
+     * @param value a int.
      */
     public void setStart(int value) {
         this.start = value;
@@ -64,7 +67,8 @@ public class LineNumType {
 
     /**
      * Gets the value of the end property.
-     * 
+     *
+     * @return a int.
      */
     public int getEnd() {
         return end;
@@ -72,7 +76,8 @@ public class LineNumType {
 
     /**
      * Sets the value of the end property.
-     * 
+     *
+     * @param value a int.
      */
     public void setEnd(int value) {
         this.end = value;

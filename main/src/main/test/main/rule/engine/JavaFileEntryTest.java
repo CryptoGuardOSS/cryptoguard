@@ -7,9 +7,6 @@ import org.junit.After;
 import org.junit.Before;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileDescriptor;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
 
 public class JavaFileEntryTest {
 
@@ -29,16 +26,6 @@ public class JavaFileEntryTest {
     private final Listing output = Listing.ScarfXML;
     //endregion
 
-    //endregion
-
-    //region Test Methods
-    private void redirectOutput() {
-        System.setOut(new PrintStream(this.customStream));
-    }
-
-    private void resetOutput() {
-        System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
-    }
     //endregion
 
     //region Test Environment Setup

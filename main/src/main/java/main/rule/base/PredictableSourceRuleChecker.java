@@ -255,9 +255,7 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     public void printAnalysisOutput(Map<String, String> configFiles) {
 
         List<String> predictableSources = new ArrayList<>();

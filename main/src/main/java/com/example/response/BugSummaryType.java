@@ -22,11 +22,11 @@ import java.util.List;
  *                 with BugSummary tag. There can be only one occurrence of
  *                 BugSummary.
  *
- * 
+ *
  * <p>Java class for BugSummaryType complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="BugSummaryType">
  *   &lt;complexContent>
@@ -39,7 +39,8 @@ import java.util.List;
  * &lt;/complexType>
  * </pre>
  *
- * 
+ * @author drmonster
+ * @version $Id: $Id
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "BugSummaryType", propOrder = {
@@ -52,25 +53,25 @@ public class BugSummaryType {
 
     /**
      * Gets the value of the bugCategory property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the bugCategory property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getBugCategory().add(newItem);
      * </pre>
      *
-     * 
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link BugCategoryType }
+     * {@link com.example.response.BugCategoryType}
      *
-     * 
+     * @return a {@link java.util.List} object.
      */
     public List<BugCategoryType> getBugCategory() {
         if (bugCategory == null) {

@@ -150,9 +150,7 @@ public class ScarfXMLStream extends baseStreamWriter {
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void streamIntoBody(AnalysisIssue issue) {
 
@@ -343,8 +341,8 @@ public class ScarfXMLStream extends baseStreamWriter {
 
         StringBuilder commentedFooter = new StringBuilder();
 
-        if (info.getInternalErrors() != null && info.getInternalErrors().split("\n").length >= 1)
-            commentedFooter.append(prettyTab).append(info.getInternalErrors().replaceAll("\n", prettyLine)).append(prettyLine);
+        if (info.getSootErrors() != null && info.getSootErrors().split("\n").length >= 1)
+            commentedFooter.append(prettyTab).append(info.getSootErrors().replaceAll("\n", prettyLine)).append(prettyLine);
 
         if (info.isShowTimes())
             commentedFooter.append("Analysis Timing (ms): ").append(info.getAnalyisisTime()).append(".").append(prettyLine);

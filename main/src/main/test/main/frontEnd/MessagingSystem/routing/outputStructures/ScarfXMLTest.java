@@ -97,7 +97,6 @@ public class ScarfXMLTest {
     //@Test
     public void simpleFiveRuleTest() {
         String xmlStream = this.messagingSystem.getOutput(this.env, this.brokenRules);
-        this.env.openConsoleStream();
 
         assertTrue(StringUtils.isNoneBlank(xmlStream));
         assertFalse(xmlStream.contains("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"));

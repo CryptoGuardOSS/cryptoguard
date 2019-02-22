@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * <p>Java class for InstanceLocationType complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="InstanceLocationType">
  *   &lt;complexContent>
@@ -31,7 +31,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * &lt;/complexType>
  * </pre>
  *
- * 
+ * @author drmonster
+ * @version $Id: $Id
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "InstanceLocationType", propOrder = {
@@ -50,10 +51,7 @@ public class InstanceLocationType {
     /**
      * Gets the value of the xpath property.
      *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return a {@link java.lang.String} object.
      */
     public String getXpath() {
         return xpath;
@@ -64,8 +62,7 @@ public class InstanceLocationType {
      *
      * @param value
      *     allowed object is
-     *     {@link String }
-     *     
+     *     {@link java.lang.String}
      */
     public void setXpath(String value) {
         this.xpath = value;
@@ -74,10 +71,7 @@ public class InstanceLocationType {
     /**
      * Gets the value of the lineNum property.
      *
-     * @return
-     *     possible object is
-     *     {@link LineNumType }
-     *     
+     * @return a {@link com.example.response.LineNumType} object.
      */
     public LineNumType getLineNum() {
         return lineNum;
@@ -88,8 +82,7 @@ public class InstanceLocationType {
      *
      * @param value
      *     allowed object is
-     *     {@link LineNumType }
-     *     
+     *     {@link com.example.response.LineNumType}
      */
     public void setLineNum(LineNumType value) {
         this.lineNum = value;

@@ -5,7 +5,6 @@ import main.frontEnd.MessagingSystem.routing.Listing;
 import main.frontEnd.argsIdentifier;
 import main.rule.engine.EngineType;
 import main.util.Utils;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +15,8 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -45,16 +45,6 @@ public class EntryPointTest {
     private final String pathToAPK = Utils.osPathJoin(basePath.replace("main", ""), "app-debug.apk");
 
     private Boolean validateXML = false;
-    //endregion
-
-    //region Test Methods
-    private void redirectOutput() {
-        System.setOut(new PrintStream(out));
-    }
-
-    private void resetOutput() {
-        System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
-    }
     //endregion
 
     //region Test Environment Setup
@@ -115,15 +105,8 @@ public class EntryPointTest {
         if (isLinux) {
             String args = "-in " + EngineType.JAR.getFlag() + " -s " + jarOne + " -d " + srcOneGrvDep + " -o " + tempFileOutTxt;
 
-            redirectOutput();
-
             try {
                 engine.main(args.split(" "));
-
-                resetOutput();
-
-                for (String in : out.toString().split("\n"))
-                    assertTrue(StringUtils.isAllBlank(in) || in.startsWith("Warning"));
 
                 List<String> results = Files.readAllLines(Paths.get(tempFileOutTxt), Charset.forName("UTF-8"));
                 assertTrue(results.size() >= 10);
@@ -141,15 +124,8 @@ public class EntryPointTest {
         if (isLinux) {
             String args = "-in " + EngineType.JAR.getFlag() + " -s " + jarOne + " -d " + srcOneGrvDep + " -m " + Listing.ScarfXML.getFlag() + " -o " + tempFileOutXML + " -t";
 
-            redirectOutput();
-
             try {
                 engine.main(args.split(" "));
-
-                resetOutput();
-
-                for (String in : out.toString().split("\n"))
-                    assertTrue(StringUtils.isAllBlank(in) || in.startsWith("Warning"));
 
                 List<String> results = Files.readAllLines(Paths.get(tempFileOutXML), Charset.forName("UTF-8"));
                 assertTrue(results.size() >= 1);
@@ -178,6 +154,7 @@ public class EntryPointTest {
                     " -m " + Listing.ScarfXML.getFlag() +
                     " -o " + tempFileOutXML +
                     " -t" +
+                    " -n" +
                     " -Saf " + "java-assess" +
                     " -Safv " + "1.0.1" +
                     " -Sbrd " + "/home/test" +
@@ -186,15 +163,8 @@ public class EntryPointTest {
                     " -Spv " + "2019-02-14" +
                     " -Sid " + "12345";
 
-            redirectOutput();
-
             try {
                 engine.main(args.split(" "));
-
-                resetOutput();
-
-                for (String in : out.toString().split("\n"))
-                    assertTrue(StringUtils.isAllBlank(in) || in.startsWith("Warning"));
 
                 List<String> results = Files.readAllLines(Paths.get(tempFileOutXML), Charset.forName("UTF-8"));
                 assertTrue(results.size() >= 1);
@@ -219,15 +189,8 @@ public class EntryPointTest {
         if (isLinux) {
             String args = "-in " + EngineType.JAR.getFlag() + " -s " + jarOne + " -d " + srcOneGrvDep + " -m " + Listing.ScarfXML.getFlag() + " -o " + tempStreamXML + " -st" + " -t";
 
-            redirectOutput();
-
             try {
                 engine.main(args.split(" "));
-
-                resetOutput();
-
-                for (String in : out.toString().split("\n"))
-                    assertTrue(StringUtils.isAllBlank(in) || in.startsWith("Warning"));
 
                 List<String> results = Files.readAllLines(Paths.get(tempStreamXML), Charset.forName("UTF-8"));
                 assertTrue(results.size() >= 1);
@@ -252,15 +215,8 @@ public class EntryPointTest {
         if (isLinux) {
             String args = "-in " + EngineType.JAR.getFlag() + " -s " + jarOne + " -d " + srcOneGrvDep + " -m " + Listing.ScarfXML.getFlag() + " -o " + tempFileOutXML + " " + argsIdentifier.TIMESTAMP.getArg() + " " + argsIdentifier.PRETTY.getArg();
 
-            redirectOutput();
-
             try {
                 engine.main(args.split(" "));
-
-                resetOutput();
-
-                for (String in : out.toString().split("\n"))
-                    assertTrue(StringUtils.isAllBlank(in) || in.startsWith("Warning"));
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -274,15 +230,8 @@ public class EntryPointTest {
         if (isLinux) {
             String args = "-in " + EngineType.DIR.getFlag() + " -s " + srcOneGrv + " -d " + srcOneGrvDep + " -o " + tempFileOutTxt;
 
-            redirectOutput();
-
             try {
                 engine.main(args.split(" "));
-
-                resetOutput();
-
-                for (String in : out.toString().split("\n"))
-                    assertTrue(StringUtils.isAllBlank(in) || in.startsWith("Warning"));
 
                 List<String> results = Files.readAllLines(Paths.get(tempFileOutTxt), Charset.forName("UTF-8"));
                 assertTrue(results.size() >= 10);
@@ -298,15 +247,8 @@ public class EntryPointTest {
         if (isLinux) {
             String args = "-in " + EngineType.DIR.getFlag() + " -s " + srcOneGrv + " -d " + srcOneGrvDep + " -m " + Listing.ScarfXML.getFlag() + " -o " + tempFileOutXML;
 
-            redirectOutput();
-
             try {
                 engine.main(args.split(" "));
-
-                resetOutput();
-
-                for (String in : out.toString().split("\n"))
-                    assertTrue(StringUtils.isAllBlank(in) || in.startsWith("Warning"));
 
                 List<String> results = Files.readAllLines(Paths.get(tempFileOutXML), Charset.forName("UTF-8"));
                 assertTrue(results.size() >= 1);
@@ -332,15 +274,8 @@ public class EntryPointTest {
         if (isLinux) {
             String args = "-in " + EngineType.DIR.getFlag() + " -s " + srcOneGrv + " -d " + srcOneGrvDep + " -n -m " + Listing.ScarfXML.getFlag() + " -o " + tempStreamXML + " -st";
 
-            redirectOutput();
-
             try {
                 engine.main(args.split(" "));
-
-                resetOutput();
-
-                for (String in : out.toString().split("\n"))
-                    assertTrue(StringUtils.isAllBlank(in) || in.startsWith("Warning"));
 
                 List<String> results = Files.readAllLines(Paths.get(tempStreamXML), Charset.forName("UTF-8"));
                 assertTrue(results.size() >= 1);
@@ -365,15 +300,8 @@ public class EntryPointTest {
         if (isLinux) {
             String args = "-in " + EngineType.APK.getFlag() + " -s " + pathToAPK + " -o " + tempFileOutApk;
 
-            redirectOutput();
-
             try {
                 engine.main(args.split(" "));
-
-                resetOutput();
-
-                for (String in : out.toString().split("\n"))
-                    assertTrue(StringUtils.isAllBlank(in) || in.startsWith("Warning"));
 
                 List<String> results = Files.readAllLines(Paths.get(tempFileOutApk), Charset.forName("UTF-8"));
                 assertTrue(results.size() >= 10);
@@ -391,15 +319,8 @@ public class EntryPointTest {
         if (isLinux) {
             String args = "-in " + EngineType.APK.getFlag() + " -s " + pathToAPK + " -o " + tempFileOutApk_Scarf + " -m " + Listing.ScarfXML.getFlag() + " -n";
 
-            redirectOutput();
-
             try {
                 engine.main(args.split(" "));
-
-                resetOutput();
-
-                for (String in : out.toString().split("\n"))
-                    assertTrue(StringUtils.isAllBlank(in) || in.startsWith("Warning"));
 
                 List<String> results = Files.readAllLines(Paths.get(tempFileOutApk_Scarf), Charset.forName("UTF-8"));
                 assertTrue(results.size() >= 10);

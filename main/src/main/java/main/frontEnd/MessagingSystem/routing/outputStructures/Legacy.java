@@ -27,7 +27,6 @@ public class Legacy implements OutputStructure {
         StringBuilder output = new StringBuilder();
 
         //reopening the console stream
-        source.openConsoleStream();
 
         output.append("Analyzing " + source.getSourceType() + ": ");
 
@@ -40,9 +39,9 @@ public class Legacy implements OutputStructure {
         output.append("\n");
 
         //Only printing console output if it is set and there is output captured
-        if (source.getInternalErrors() != null && source.getInternalErrors().split("\n").length >= 1) {
+        if (source.getSootErrors() != null && source.getSootErrors().split("\n").length >= 1) {
             output.append("=======================================\n");
-            output.append("Internal Warnings: \n" + source.getInternalErrors() + "\n");
+            output.append("Internal Warnings: \n" + source.getSootErrors() + "\n");
             output.append("=======================================\n");
         }
 

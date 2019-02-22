@@ -3,6 +3,7 @@ package main.frontEnd.MessagingSystem.routing;
 import main.rule.engine.EngineType;
 import main.util.Utils;
 import org.apache.commons.lang3.StringUtils;
+import soot.G;
 
 import javax.annotation.Nonnull;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -41,7 +42,8 @@ public class EnvironmentInformation {
     private final List<String> Source;
     private final List<String> sourcePaths; //Could this be intertwined with source?
     private Boolean prettyPrint = false;
-    private ByteArrayOutputStream internalErrors = new ByteArrayOutputStream();
+    //endregion
+    PrintStream old;
     private List<String> dependencies;
     private EngineType sourceType;
     private Listing messagingType;
@@ -64,8 +66,7 @@ public class EnvironmentInformation {
     private Boolean printOut = false;
     //endregion
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-    //endregion
-
+    private ByteArrayOutputStream sootErrors = new ByteArrayOutputStream();
     //region Constructor
 
     /**
@@ -80,9 +81,53 @@ public class EnvironmentInformation {
      * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
      * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
      * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourcePaths   a {@link java.util.List} object.
+     * @param sourcePkg     a {@link java.lang.String} object.
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourcePaths   a {@link java.util.List} object.
+     * @param sourcePaths   a {@link java.util.List} object.
+     * @param sourcePkg     a {@link java.lang.String} object.
+     * @param sourcePkg     a {@link java.lang.String} object.
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
+     * @param sourceType    {@link main.rule.engine.EngineType} - The type of source (APK/JAR/SourceCode)
      * @param dependencies  {@link java.lang.String} - The location of the directory of the sources dependencies
      * @param messagingType {@link java.lang.String} - The flag passed in to determine the type of messaging system from {@link main.frontEnd.MessagingSystem.routing.Listing}
      * @param sourcePaths   a {@link java.util.List} object.
+     * @param sourcePaths   a {@link java.util.List} object.
+     * @param sourcePkg     a {@link java.lang.String} object.
      * @param sourcePkg     a {@link java.lang.String} object.
      */
     public EnvironmentInformation(@Nonnull List<String> source, @Nonnull EngineType sourceType, Listing messagingType, List<String> dependencies, List<String> sourcePaths, String sourcePkg) {
@@ -119,7 +164,8 @@ public class EnvironmentInformation {
         //endregion
 
         //region Setting Required Attributes
-        System.setOut(new PrintStream(this.internalErrors));
+
+        G.v().out = new PrintStream(this.sootErrors);
 
         this.Source = source;
         this.sourceType = sourceType;
@@ -150,13 +196,6 @@ public class EnvironmentInformation {
         } catch (DatatypeConfigurationException e) {
             return null;
         }
-    }
-
-    /**
-     * A simple method to "re-open" the console output after it was redirected for capture
-     */
-    public void openConsoleStream() {
-        System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
     }
 
     //region Getters and Setters
@@ -197,14 +236,14 @@ public class EnvironmentInformation {
     }
 
     /**
-     * Getter for internalErrors
+     * Getter for sootErrors
      *
-     * <p>getInternalErrors()</p>
+     * <p>getSootErrors()</p>
      *
      * @return a {@link java.lang.String} object.
      */
-    public String getInternalErrors() {
-        return StringUtils.trimToEmpty(internalErrors.toString());
+    public String getSootErrors() {
+        return StringUtils.trimToEmpty(sootErrors.toString());
     }
 
     /**
@@ -669,6 +708,11 @@ public class EnvironmentInformation {
         return fileOut;
     }
 
+    /**
+     * <p>getFileOutName.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getFileOutName() {
         String[] split = this.fileOut.split(System.getProperty("file.separator"));
 

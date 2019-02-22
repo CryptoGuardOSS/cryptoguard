@@ -118,9 +118,7 @@ public class MethodCallSiteInfo {
         return callee.equals(that.callee) && caller.equals(that.caller);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         int result = callee.hashCode();

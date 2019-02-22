@@ -80,9 +80,7 @@ public class SourceEntry implements EntryHandler {
         return issues;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     public void StreamScan(EnvironmentInformation generalInfo, baseStreamWriter streamWriter) {
         generalInfo.startAnalysis();
 
@@ -117,9 +115,7 @@ public class SourceEntry implements EntryHandler {
                     }
 
                     for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
-                        System.out.println(ruleChecker.getClass().getSimpleName());
                         ruleChecker.checkRule(EngineType.DIR, dependencies, otherdependencies, generalInfo.getPrintOut(), generalInfo.getSourcePaths(), streamWriter);
-
                     }
 
                     NamedMethodMap.clearCallerCalleeGraph();

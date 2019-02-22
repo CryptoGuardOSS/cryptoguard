@@ -32,64 +32,58 @@ public class EntryPoint {
      */
     public static void main(String[] args) {
 
-        EnvironmentInformation generalInfo = null;
-
-
-        //Fail Fast on the input validation
         try {
-            generalInfo = ArgumentsCheck.paramaterCheck(Arrays.asList(args));
-        } catch (ExceptionHandler e) {
-            e.printStackTrace();
-            System.exit(0);
-        }
+            //Fail Fast on the input validation
+            EnvironmentInformation generalInfo = ArgumentsCheck.paramaterCheck(Arrays.asList(args));
 
-
-        EntryHandler handler = null;
-        switch (generalInfo.getSourceType()) {
-            case APK:
-                handler = new ApkEntry();
-                break;
-            case JAR:
-                handler = new JarEntry();
-                break;
-            case DIR:
-                handler = new SourceEntry();
-                break;
-            case JAVAFILES:
-                handler = new JavaFileEntry();
-                break;
-            case CLASSFILES:
-                handler = new JavaClassFileEntry();
-                break;
-        }
-
-        if (!generalInfo.getStreaming()) {
-            String outputMessage;
-            String filePath;
-
-            ArrayList<AnalysisIssue> issues = null;
-
-            issues = handler.NonStreamScan(generalInfo);
-
-            outputMessage = MessageRepresentation.getMessage(generalInfo, issues);
-            filePath = generalInfo.getFileOut();
-
-
-            try {
-                Files.write(Paths.get(filePath), outputMessage.getBytes());
-            } catch (Exception e) {
-                System.out.println("File " + filePath + " cannot be written to.");
+            EntryHandler handler = null;
+            switch (generalInfo.getSourceType()) {
+                case APK:
+                    handler = new ApkEntry();
+                    break;
+                case JAR:
+                    handler = new JarEntry();
+                    break;
+                case DIR:
+                    handler = new SourceEntry();
+                    break;
+                case JAVAFILES:
+                    handler = new JavaFileEntry();
+                    break;
+                case CLASSFILES:
+                    handler = new JavaClassFileEntry();
+                    break;
             }
-        } else {
+            if (!generalInfo.getStreaming()) {
+                String outputMessage;
+                String filePath;
 
-            baseStreamWriter writer = Listing.retrieveWriterByType(generalInfo);
+                ArrayList<AnalysisIssue> issues = null;
 
-            handler.StreamScan(generalInfo, writer);
+                issues = handler.NonStreamScan(generalInfo);
 
-            writer.close(generalInfo);
+                outputMessage = MessageRepresentation.getMessage(generalInfo, issues);
+                filePath = generalInfo.getFileOut();
+
+
+                try {
+                    Files.write(Paths.get(filePath), outputMessage.getBytes());
+                } catch (Exception e) {
+                    throw new ExceptionHandler("Issue writing to " + filePath, ExceptionId.FILE_IO);
+                }
+            } else {
+
+                baseStreamWriter writer = Listing.retrieveWriterByType(generalInfo);
+
+                handler.StreamScan(generalInfo, writer);
+
+                writer.close(generalInfo);
+            }
+
+        } catch (ExceptionHandler e) {
+            System.out.print(e.toString());
+            System.exit(e.getErrorCode().getId());
         }
 
     }
-
-
 }

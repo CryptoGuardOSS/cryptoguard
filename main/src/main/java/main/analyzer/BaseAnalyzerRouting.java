@@ -266,7 +266,7 @@ public class BaseAnalyzerRouting {
         }
 
         for (String clazz : classNames) {
-                Scene.v().loadClassAndSupport(clazz);
+            Scene.v().loadClassAndSupport(clazz);
         }
 
         Scene.v().loadNecessaryClasses();

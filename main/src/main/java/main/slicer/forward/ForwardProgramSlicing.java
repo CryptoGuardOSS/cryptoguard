@@ -88,9 +88,7 @@ public class ForwardProgramSlicing extends ForwardFlowAnalysis {
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     protected Object newInitialFlow() {
         return emptySet.clone();

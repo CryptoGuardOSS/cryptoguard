@@ -51,9 +51,7 @@ public class LegacyStream extends baseStreamWriter {
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void streamIntoBody(AnalysisIssue issue) {
         writeln("=======================================", pretty);
@@ -113,9 +111,9 @@ public class LegacyStream extends baseStreamWriter {
     public void writeFooter(EnvironmentInformation info) {
 
         //Only printing console output if it is set and there is output captured
-        if (info.getInternalErrors() != null && info.getInternalErrors().split("\n").length >= 1) {
+        if (info.getSootErrors() != null && info.getSootErrors().split("\n").length >= 1) {
             writeln("=======================================", pretty);
-            writeln("Internal Warnings: \n" + info.getInternalErrors(), pretty);
+            writeln("Internal Warnings: \n" + info.getSootErrors(), pretty);
             writeln("=======================================", pretty);
         }
 

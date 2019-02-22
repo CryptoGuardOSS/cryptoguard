@@ -7,9 +7,7 @@ import main.rule.engine.EngineType;
 import main.util.Utils;
 import org.apache.commons.cli.*;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -47,17 +45,12 @@ public class ArgumentsCheck {
         try {
             cmd = new DefaultParser().parse(cmdLineArgs, args.toArray(new String[0]), true);
         } catch (ParseException e) {
-            System.out.println("====================================================");
+            String arg = null;
 
             if (e.getMessage().startsWith("Missing required option: "))
-                System.out.println("Please enter a valid " +
-                        argsIdentifier.lookup(e.getMessage().replace("Missing required option: ", "")));
-            else
-                System.out.println("Please enter valid information.");
+                arg = argsIdentifier.lookup(e.getMessage().replace("Missing required option: ", "")).getArg();
 
-            System.out.println("====================================================");
-
-            failFast(cmdLineArgs, true);
+            failFast(arg, cmdLineArgs, true);
         }
 
         //endregion
@@ -75,7 +68,7 @@ public class ArgumentsCheck {
 
         //region Printing Help or Version
         if (cmd.hasOption(argsIdentifier.HELP.getId()))
-            failFast(cmdLineArgs, false);
+            failFast(null, cmdLineArgs, false);
         else if (cmd.hasOption(argsIdentifier.VERSION.getId())) {
             try {
                 Properties Properties = new Properties();
@@ -252,7 +245,7 @@ public class ArgumentsCheck {
      *
      * @param args - a {@link org.apache.commons.cli.Options} object.
      */
-    private static void failFast(Options args, Boolean broken) {
+    private static void failFast(String argument, Options args, Boolean broken) throws ExceptionHandler {
 
         HelpFormatter helper = new HelpFormatter();
         helper.setOptionComparator(null);
@@ -266,14 +259,23 @@ public class ArgumentsCheck {
         } catch (IOException e) {
         }
 
-        helper.printHelp(projectName, args, false);
+        StringWriter message = new StringWriter();
+        PrintWriter redirect = new PrintWriter(message);
+
+        if (argument != null)
+            redirect.write("Issue with argument: " + argument + ".\n");
+
+        helper.printHelp(redirect, 100, null, projectName, args, 0, 0, null);
 
         if (!broken) {
             for (Listing listingType : Listing.values())
-                System.out.println(listingType.getInputHelp());
+                redirect.write(listingType.getInputHelp() + "\n");
         }
 
-        System.exit(0);
+        if (broken)
+            throw new ExceptionHandler(message.toString(), ExceptionId.FORMAT_VALID);
+        else
+            throw new ExceptionHandler(message.toString(), ExceptionId.GEN_VALID);
     }
 
 }

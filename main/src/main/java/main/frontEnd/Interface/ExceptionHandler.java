@@ -1,5 +1,7 @@
 package main.frontEnd.Interface;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * <p>ExceptionHandler class.</p>
  *
@@ -12,34 +14,52 @@ package main.frontEnd.Interface;
  */
 public class ExceptionHandler extends Exception {
 
+    //region Attributes
+    private ExceptionId errorCode;
+    private String longDesciption;
+    //endregion
+
     //region Creations
-
     /**
      * <p>Constructor for ExceptionHandler.</p>
      *
      * @param message a {@link java.lang.String} object.
+     * @param id a {@link main.frontEnd.Interface.ExceptionId} object.
      */
-    public ExceptionHandler(String message) {
-        super(message);
+    public ExceptionHandler(String message, ExceptionId id) {
+        this.errorCode = id;
+        this.longDesciption = message;
+        //super(message);
     }
+    //endregion
+
+    //region Overridden Methods
 
     /**
-     * <p>Constructor for ExceptionHandler.</p>
-     *
-     * @param cause a {@link java.lang.Throwable} object.
+     * {@inheritDoc}
      */
-    public ExceptionHandler(Throwable cause) {
-        super(cause);
+    @Override
+    public String toString() {
+        StringBuilder resp = new StringBuilder();
+
+        resp.append("==================================\n");
+        resp.append("ErrorType: ").append(this.errorCode.getMessage()).append("\n");
+        resp.append("Error Message: ").append(this.longDesciption).append("\n");
+        resp.append("==================================");
+
+        return StringUtils.trimToNull(resp.toString());
     }
+    //endregion
+
+    //region Getters
 
     /**
-     * <p>Constructor for ExceptionHandler.</p>
+     * <p>Getter for the field <code>errorCode</code>.</p>
      *
-     * @param message a {@link java.lang.String} object.
-     * @param cause   a {@link java.lang.Throwable} object.
+     * @return a {@link main.frontEnd.Interface.ExceptionId} object.
      */
-    public ExceptionHandler(String message, Throwable cause) {
-        super(message, cause);
+    public ExceptionId getErrorCode() {
+        return errorCode;
     }
     //endregion
 }

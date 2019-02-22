@@ -135,9 +135,7 @@ public class OtherInstructionSlicer extends BackwardFlowAnalysis {
                 && currInstruction.toString().contains(usebox.getValue().toString() + ".<");
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     protected Object newInitialFlow() {
         return emptySet.clone();

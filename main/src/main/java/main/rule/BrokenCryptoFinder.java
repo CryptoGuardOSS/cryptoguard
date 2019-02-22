@@ -61,9 +61,7 @@ public class BrokenCryptoFinder extends PatternMatcherRuleChecker {
         return CRITERIA_LIST;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public List<String> getPatternsToMatch() {
         return BROKEN_CRYPTO;

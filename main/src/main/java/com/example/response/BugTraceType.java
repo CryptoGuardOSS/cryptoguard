@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * <p>Java class for BugTraceType complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="BugTraceType">
  *   &lt;complexContent>
@@ -32,7 +32,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * &lt;/complexType>
  * </pre>
  *
- * 
+ * @author drmonster
+ * @version $Id: $Id
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "BugTraceType", propOrder = {
@@ -53,7 +54,8 @@ public class BugTraceType {
 
     /**
      * Gets the value of the buildId property.
-     * 
+     *
+     * @return a int.
      */
     public int getBuildId() {
         return buildId;
@@ -61,7 +63,8 @@ public class BugTraceType {
 
     /**
      * Sets the value of the buildId property.
-     * 
+     *
+     * @param value a int.
      */
     public void setBuildId(int value) {
         this.buildId = value;
@@ -70,10 +73,7 @@ public class BugTraceType {
     /**
      * Gets the value of the assessmentReportFile property.
      *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return a {@link java.lang.String} object.
      */
     public String getAssessmentReportFile() {
         return assessmentReportFile;
@@ -84,8 +84,7 @@ public class BugTraceType {
      *
      * @param value
      *     allowed object is
-     *     {@link String }
-     *     
+     *     {@link java.lang.String}
      */
     public void setAssessmentReportFile(String value) {
         this.assessmentReportFile = value;
@@ -94,10 +93,7 @@ public class BugTraceType {
     /**
      * Gets the value of the instanceLocation property.
      *
-     * @return
-     *     possible object is
-     *     {@link InstanceLocationType }
-     *     
+     * @return a {@link com.example.response.InstanceLocationType} object.
      */
     public InstanceLocationType getInstanceLocation() {
         return instanceLocation;
@@ -108,8 +104,7 @@ public class BugTraceType {
      *
      * @param value
      *     allowed object is
-     *     {@link InstanceLocationType }
-     *     
+     *     {@link com.example.response.InstanceLocationType}
      */
     public void setInstanceLocation(InstanceLocationType value) {
         this.instanceLocation = value;

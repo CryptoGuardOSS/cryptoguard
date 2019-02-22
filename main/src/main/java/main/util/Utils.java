@@ -2,6 +2,7 @@ package main.util;
 
 import main.analyzer.backward.*;
 import main.frontEnd.Interface.ExceptionHandler;
+import main.frontEnd.Interface.ExceptionId;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.routing.Listing;
 import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
@@ -816,12 +817,12 @@ public class Utils {
         for (String dir : arguments) {
             File dirChecking = new File(dir);
             if (!dirChecking.exists() || !dirChecking.isDirectory())
-                throw new ExceptionHandler(dirChecking.getName() + " is not a valid directory.");
+                throw new ExceptionHandler(dirChecking.getName() + " is not a valid directory.", ExceptionId.FILE_IO);
 
             try {
                 dirs.add(dirChecking.getCanonicalPath());
             } catch (Exception e) {
-                throw new ExceptionHandler("Error retrieving the path of the directory.");
+                throw new ExceptionHandler("Error retrieving the full path of the " + dirChecking + ".", ExceptionId.FILE_IO);
             }
         }
         return dirs;
@@ -837,7 +838,7 @@ public class Utils {
      */
     public static String verifyFileOut(String file, Listing type) throws ExceptionHandler {
         if (!file.endsWith(type.getOutputFileExt()))
-            throw new ExceptionHandler("File " + file + " doesn't have the right file type ");
+            throw new ExceptionHandler("File " + file + " doesn't have the right file type ", ExceptionId.FILE_IO);
 
         File tempFile = new File(file);
 
@@ -848,7 +849,7 @@ public class Utils {
         try {
             return tempFile.getCanonicalPath();
         } catch (Exception e) {
-            throw new ExceptionHandler("Error retrieving the path of the file " + tempFile.getName() + ".");
+            throw new ExceptionHandler("Error retrieving the path of the file " + tempFile.getName() + ".", ExceptionId.FILE_IO);
         }
     }
 
@@ -862,16 +863,16 @@ public class Utils {
      */
     public static String retrieveFilePath(String file, EngineType type) throws ExceptionHandler {
         if (!file.endsWith(type.getInputExtension()))
-            throw new ExceptionHandler("File " + file + " doesn't have the right file type ");
+            throw new ExceptionHandler("File " + file + " doesn't have the right file type ", ExceptionId.FILE_IO);
 
         File tempFile = new File(file);
         if (!tempFile.exists() || !tempFile.isFile())
-            throw new ExceptionHandler(tempFile.getName() + " is not a valid file.");
+            throw new ExceptionHandler(tempFile.getName() + " is not a valid file.", ExceptionId.FILE_IO);
 
         try {
             return tempFile.getCanonicalPath();
         } catch (Exception e) {
-            throw new ExceptionHandler("Error retrieving the path of the file " + tempFile.getName() + ".");
+            throw new ExceptionHandler("Error retrieving the path of the file " + tempFile.getName() + ".", ExceptionId.FILE_IO);
         }
     }
 
@@ -886,7 +887,7 @@ public class Utils {
     public static List<String> retrieveFilesByType(List<String> arguments, EngineType type) throws ExceptionHandler {
         if (type == EngineType.DIR)
             if (arguments.size() != 1)
-                throw new ExceptionHandler("Please enter one argument for this use case.");
+                throw new ExceptionHandler("Please enter one source argument for this use case.", ExceptionId.FILE_IO);
             else
                 return retrieveDirs(arguments);
 
@@ -997,6 +998,7 @@ public class Utils {
      * <p>isArgumentOfInvoke.</p>
      *
      * @param analysis a {@link main.analyzer.backward.Analysis} object.
+     * @param analysisResult a {@link main.analyzer.backward.InvokeUnitContainer} object.
      * @param index a int.
      * @param outSet a {@link java.util.List} object.
      * @param usedFields a {@link java.util.Set} object.
