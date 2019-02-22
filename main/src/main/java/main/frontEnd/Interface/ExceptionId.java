@@ -18,6 +18,8 @@ public enum ExceptionId {
     FORMAT_VALID(2, "Format Specific Argument Validation"),
     ENV_VAR(3, "Environment Variable Not Set"),
     FILE_IO(4, "File IO"),
+    MAR_VAR(5, "Error Marshalling The Output"),
+    SCAN_GEN(6, "General Error Scanning The Program"),
     UNKWN(27, "Unknown");
     //endregion
 

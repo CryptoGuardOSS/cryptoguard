@@ -63,13 +63,17 @@ public class HttpUrlFinder extends PatternMatcherRuleChecker {
         return CRITERIA_LIST;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<String> getPatternsToMatch() {
         return HTTP_URL_PATTERN;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getRuleId() {
         return "7";

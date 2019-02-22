@@ -217,6 +217,7 @@ public class EnvironmentInformation {
     public void setAddExperimentalRules(boolean addExperimentalRules) {
         this.addExperimentalRules = addExperimentalRules;
     }
+
     /**
      * <p>Setter for the field <code>streaming</code>.</p>
      *

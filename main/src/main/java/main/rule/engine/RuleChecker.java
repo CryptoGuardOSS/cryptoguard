@@ -1,9 +1,9 @@
 package main.rule.engine;
 
+import main.frontEnd.Interface.ExceptionHandler;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,9 +25,9 @@ public interface RuleChecker {
      * @param projectDependencyPath the path to the dependencies of the project
      * @param printout              a {@link java.lang.Boolean} object.
      * @param sourcePaths           a {@link java.util.List} object.
+     * @param streamWriter          a {@link main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter} object.
      * @return a {@link java.util.ArrayList} object.
-     * @param streamWriter a {@link main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter} object.
-     * @throws java.io.IOException if any.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
-    ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printout, List<String> sourcePaths, baseStreamWriter streamWriter) throws IOException;
+    ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printout, List<String> sourcePaths, baseStreamWriter streamWriter) throws ExceptionHandler;
 }

@@ -20,11 +20,12 @@ public class ExceptionHandler extends Exception {
     //endregion
 
     //region Creations
+
     /**
      * <p>Constructor for ExceptionHandler.</p>
      *
      * @param message a {@link java.lang.String} object.
-     * @param id a {@link main.frontEnd.Interface.ExceptionId} object.
+     * @param id      a {@link main.frontEnd.Interface.ExceptionId} object.
      */
     public ExceptionHandler(String message, ExceptionId id) {
         this.errorCode = id;

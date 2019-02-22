@@ -76,7 +76,9 @@ public class SlicingCriteria {
 
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         int result = methodCallSiteInfo.hashCode();
@@ -84,7 +86,9 @@ public class SlicingCriteria {
         return result;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return "SlicingCriteria{" +

@@ -3,6 +3,8 @@ package main.frontEnd.MessagingSystem.streamWriters.structures;
 import com.example.response.*;
 import main.CWE_Reader.CWE;
 import main.CWE_Reader.CWEList;
+import main.frontEnd.Interface.ExceptionHandler;
+import main.frontEnd.Interface.ExceptionId;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.AnalysisLocation;
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
@@ -24,10 +26,10 @@ import java.util.HashMap;
  *
  * @author RigorityJTeam
  * Created on 2/7/19.
+ * @version $Id: $Id
  * @since 03.02.00
  *
  * <p>The ScarfXML stream writer.</p>
- * @version $Id: $Id
  */
 public class ScarfXMLStream extends baseStreamWriter {
 
@@ -82,7 +84,7 @@ public class ScarfXMLStream extends baseStreamWriter {
      *
      * @param info a {@link main.frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
      */
-    public ScarfXMLStream(EnvironmentInformation info) {
+    public ScarfXMLStream(EnvironmentInformation info) throws ExceptionHandler {
         super(info);
         this.fileOut = info.getFileOutName();
         this.buildId = info.getBuildId();
@@ -98,7 +100,7 @@ public class ScarfXMLStream extends baseStreamWriter {
      * {@inheritDoc}
      */
     @Override
-    public void writeHeader(EnvironmentInformation info) {
+    public void writeHeader(EnvironmentInformation info) throws ExceptionHandler {
 
         try {
             AnalyzerReport report = new AnalyzerReport();
@@ -143,16 +145,16 @@ public class ScarfXMLStream extends baseStreamWriter {
                 this.write(xml);
 
         } catch (JAXBException e) {
-            //TODO handle this
-            e.printStackTrace();
-
+            throw new ExceptionHandler("Error marshalling xml.", ExceptionId.MAR_VAR);
         }
 
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void streamIntoBody(AnalysisIssue issue) {
+    public void streamIntoBody(AnalysisIssue issue) throws ExceptionHandler {
 
 
         BugInstanceType instance = new BugInstanceType();
@@ -283,16 +285,16 @@ public class ScarfXMLStream extends baseStreamWriter {
                     this.write(xml);
 
         } catch (JAXBException e) {
-            //TODO handle this
-            e.printStackTrace();
-
+            throw new ExceptionHandler("Error marshalling Xml.", ExceptionId.MAR_VAR);
         }
         //endregion
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void writeFooter(EnvironmentInformation info) {
+    public void writeFooter(EnvironmentInformation info) throws ExceptionHandler {
 
         //region Setting the BugSummary
         try {
@@ -325,9 +327,7 @@ public class ScarfXMLStream extends baseStreamWriter {
                     this.write(xml);
 
         } catch (JAXBException e) {
-            //TODO handle this
-            e.printStackTrace();
-
+            throw new ExceptionHandler("Error marshalling XML.", ExceptionId.MAR_VAR);
         }
         //endregion
 

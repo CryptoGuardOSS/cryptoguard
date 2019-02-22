@@ -1,5 +1,6 @@
 package main.frontEnd.MessagingSystem.streamWriters;
 
+import main.frontEnd.Interface.ExceptionHandler;
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
 
 /**
@@ -7,10 +8,10 @@ import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
  *
  * @author RigorityJTeam
  * Created on 2/7/19.
+ * @version $Id: $Id
  * @since 03.02.00
  *
  * <p>The list of the different stream writing classes.</p>
- * @version $Id: $Id
  */
 public enum Listing {
     //region Different Values
@@ -38,7 +39,7 @@ public enum Listing {
      * @param info a {@link main.frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
      * @return a {@link main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter} object.
      */
-    public static baseStreamWriter retrieveWriterByType(EnvironmentInformation info) {
+    public static baseStreamWriter retrieveWriterByType(EnvironmentInformation info) throws ExceptionHandler {
         for (Listing writer : Listing.values())
             if (writer.getEngineType() == info.getMessagingType())
                 return writer.getType(info);
@@ -51,7 +52,7 @@ public enum Listing {
      * @param info a {@link main.frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
      * @return a {@link main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter} object.
      */
-    public baseStreamWriter getType(EnvironmentInformation info) {
+    public baseStreamWriter getType(EnvironmentInformation info) throws ExceptionHandler {
 
         try {
             return (baseStreamWriter) this.type.getDeclaredConstructor(EnvironmentInformation.class).newInstance(info);

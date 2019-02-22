@@ -4,6 +4,7 @@ import main.analyzer.backward.Analysis;
 import main.analyzer.backward.AssignInvokeUnitContainer;
 import main.analyzer.backward.InvokeUnitContainer;
 import main.analyzer.backward.UnitContainer;
+import main.frontEnd.Interface.ExceptionHandler;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
 import main.util.Utils;
@@ -255,7 +256,9 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void printAnalysisOutput(Map<String, String> configFiles) {
 
         List<String> predictableSources = new ArrayList<>();
@@ -344,13 +347,12 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
         return output.toString();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, baseStreamWriter writer) {
-
+    public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, baseStreamWriter writer) throws ExceptionHandler {
         return Utils.createAnalysisOutput(xmlFileStr, sourcePaths, predictableSourcMap, rule, writer);
-
-
     }
 
     /**

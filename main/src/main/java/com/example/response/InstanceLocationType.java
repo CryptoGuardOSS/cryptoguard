@@ -60,9 +60,8 @@ public class InstanceLocationType {
     /**
      * Sets the value of the xpath property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link java.lang.String}
+     * @param value allowed object is
+     *              {@link java.lang.String}
      */
     public void setXpath(String value) {
         this.xpath = value;
@@ -80,9 +79,8 @@ public class InstanceLocationType {
     /**
      * Sets the value of the lineNum property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link com.example.response.LineNumType}
+     * @param value allowed object is
+     *              {@link com.example.response.LineNumType}
      */
     public void setLineNum(LineNumType value) {
         this.lineNum = value;

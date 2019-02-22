@@ -4,6 +4,7 @@ import main.analyzer.backward.Analysis;
 import main.analyzer.backward.AssignInvokeUnitContainer;
 import main.analyzer.backward.InvokeUnitContainer;
 import main.analyzer.backward.UnitContainer;
+import main.frontEnd.Interface.ExceptionHandler;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
 import main.rule.base.BaseRuleChecker;
@@ -75,7 +76,9 @@ public class PBEInterationCountFinder extends BaseRuleChecker {
         return CRITERIA_LIST;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void analyzeSlice(Analysis analysis) {
         if (analysis.getAnalysisResult().isEmpty()) {
@@ -216,7 +219,9 @@ public class PBEInterationCountFinder extends BaseRuleChecker {
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void printAnalysisOutput(Map<String, String> configFiles) {
 
         List<String> predictableSources = new ArrayList<>();
@@ -255,6 +260,7 @@ public class PBEInterationCountFinder extends BaseRuleChecker {
                 " ***Constants: " +
                 constants;
     }
+
     private String getOthersToPrint(Map<String, String> xmlFileStr, Collection<String> others, String rule, String ruleDesc) {
 
         StringBuilder output = new StringBuilder(getPrintableMsg(others, rule + "a", ruleDesc));
@@ -301,9 +307,11 @@ public class PBEInterationCountFinder extends BaseRuleChecker {
         return output.toString();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, baseStreamWriter writer) {
+    public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, baseStreamWriter writer) throws ExceptionHandler {
 
         return Utils.createAnalysisOutput(xmlFileStr, sourcePaths, predictableSourcMap, rule, writer);
 

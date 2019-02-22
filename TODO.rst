@@ -15,11 +15,11 @@ BUGS
 
 * [ ] CWE's (several issues defaulting to CWE: -1)
 * [ ] ScarfXML specific arguments (valid id/values are error-prone/not registering)
-* [ ] Fully wrap the output
+* [X] Fully wrap the output with exceptions
     * [X] |cutS| APK |cutE| Soot scanning isn't wrapped
-    * [ ] set error messages (Exception)
-        * [ ] code - 0-27 (0:success 1-27 = self-define)
-        * [ ] message
+    * [~] set error messages (Exception)
+        * [X] code - 0-27 (0:success 1-27 = self-define)
+        * [X] message
 
 TODO
 ------------------

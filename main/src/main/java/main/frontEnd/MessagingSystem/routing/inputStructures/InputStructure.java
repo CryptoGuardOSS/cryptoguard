@@ -1,5 +1,6 @@
 package main.frontEnd.MessagingSystem.routing.inputStructures;
 
+import main.frontEnd.Interface.ExceptionHandler;
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
 
 /**
@@ -20,8 +21,9 @@ public interface InputStructure {
      * @param info {@link main.frontEnd.MessagingSystem.routing.EnvironmentInformation} - the continuation of the environmental info to be added onto.
      * @param args {@link String[]} - The subset of arguments passed from the command line
      * @return {@link java.lang.Boolean} - an indication if the validation passed.
+     * @throws {@link main.frontEnd.Interface.ExceptionHandler} - The main controlled exception.
      */
-    Boolean inputValidation(EnvironmentInformation info, String[] args);
+    Boolean inputValidation(EnvironmentInformation info, String[] args) throws ExceptionHandler;
 
     /**
      * A method to print out help for using a given messaging input

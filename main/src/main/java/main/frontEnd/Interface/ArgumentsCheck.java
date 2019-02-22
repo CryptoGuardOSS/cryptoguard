@@ -70,14 +70,16 @@ public class ArgumentsCheck {
         if (cmd.hasOption(argsIdentifier.HELP.getId()))
             failFast(null, cmdLineArgs, false);
         else if (cmd.hasOption(argsIdentifier.VERSION.getId())) {
+            String version = "UNKNOWN";
             try {
                 Properties Properties = new Properties();
                 Properties.load(new FileInputStream(PropertiesFile));
-                System.out.print(Properties.getProperty("version"));
+                version = Properties.getProperty("version");
+                {
+                }
             } catch (IOException e) {
-                System.out.print("UNKNOWN");
+                throw new ExceptionHandler("V:" + version, ExceptionId.HELP);
             }
-            System.exit(0);
         }
         //endregion
 
@@ -168,8 +170,7 @@ public class ArgumentsCheck {
         //endregion
 
         if (!messaging.getTypeOfMessagingInput().inputValidation(info, args.toArray(new String[0]))) {
-            System.out.println(messaging.getInputHelp());
-            System.exit(0);
+            throw new ExceptionHandler(messaging.getInputHelp(), ExceptionId.FORMAT_VALID);
         }
 
         info.setPrettyPrint(cmd.hasOption(argsIdentifier.PRETTY.getId()));
@@ -273,9 +274,9 @@ public class ArgumentsCheck {
         }
 
         if (broken)
-            throw new ExceptionHandler(message.toString(), ExceptionId.FORMAT_VALID);
-        else
             throw new ExceptionHandler(message.toString(), ExceptionId.GEN_VALID);
+        else
+            throw new ExceptionHandler(message.toString(), ExceptionId.HELP);
     }
 
 }

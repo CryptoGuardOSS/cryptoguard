@@ -1,5 +1,7 @@
 package main.frontEnd.MessagingSystem.routing.inputStructures;
 
+import main.frontEnd.Interface.ExceptionHandler;
+import main.frontEnd.Interface.ExceptionId;
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import main.frontEnd.argsIdentifier;
 import org.apache.commons.cli.*;
@@ -29,25 +31,22 @@ public class ScarfXML implements InputStructure {
      * @param args an array of {@link java.lang.String} objects.
      * @return a {@link java.lang.Boolean} object.
      */
-    public Boolean inputValidation(EnvironmentInformation info, String[] args) {
+    public Boolean inputValidation(EnvironmentInformation info, String[] args) throws ExceptionHandler {
 
         CommandLine cmd = null;
         Options cmdLineArgs = setOptions();
         try {
             cmd = new DefaultParser().parse(cmdLineArgs, args);
         } catch (ParseException e) {
-            System.out.println("====================================================");
+            String arg = null;
 
             if (e.getMessage().startsWith("Missing required option: "))
-                System.out.println("Please enter a valid " +
-                        argsIdentifier.lookup(e.getMessage().replace("Missing required option: ", "")));
+                arg = argsIdentifier.lookup(e.getMessage().replace("Missing required option: ", "")).getArg();
+
+            if (arg == null)
+                throw new ExceptionHandler(this.helpInfo(), ExceptionId.FORMAT_VALID);
             else
-                System.out.println("Please enter valid information.");
-
-            System.out.println("====================================================");
-
-            System.out.println(this.helpInfo());
-            System.exit(0);
+                throw new ExceptionHandler("Issue with the argument: " + arg, ExceptionId.FORMAT_VALID);
         }
 
         //region Retrieving and setting the values

@@ -4,6 +4,7 @@ import main.analyzer.backward.Analysis;
 import main.analyzer.backward.AssignInvokeUnitContainer;
 import main.analyzer.backward.InvokeUnitContainer;
 import main.analyzer.backward.UnitContainer;
+import main.frontEnd.Interface.ExceptionHandler;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
 import main.rule.base.BaseRuleChecker;
@@ -77,7 +78,9 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
         return CRITERIA_LIST;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void analyzeSlice(Analysis analysis) {
         if (analysis.getAnalysisResult().isEmpty()) {
@@ -245,7 +248,9 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
         this.initializationCallsites = initializationCallsites;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void printAnalysisOutput(Map<String, String> xmlFileStr) {
 
@@ -267,9 +272,11 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, baseStreamWriter writer) {
+    public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, baseStreamWriter writer) throws ExceptionHandler {
         ArrayList<AnalysisIssue> outList = new ArrayList<>();
 
         for (UnitContainer unit : predictableSourcMap.keySet()) {

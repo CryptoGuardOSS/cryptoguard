@@ -69,16 +69,20 @@ public class Utils {
      * @return a {@link java.util.List} object.
      * @throws java.io.IOException if any.
      */
-    public static List<String> getClassNamesFromJarArchive(String jarPath) throws IOException {
+    public static List<String> getClassNamesFromJarArchive(String jarPath) throws ExceptionHandler {
         List<String> classNames = new ArrayList<>();
-        ZipInputStream zip = new ZipInputStream(new FileInputStream(jarPath));
-        for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
-            if (!entry.isDirectory() && entry.getName().endsWith(".class")) {
-                String className = entry.getName().replace('/', '.');
-                classNames.add(className.substring(0, className.length() - ".class".length()));
+        try {
+            ZipInputStream zip = new ZipInputStream(new FileInputStream(jarPath));
+            for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
+                if (!entry.isDirectory() && entry.getName().endsWith(".class")) {
+                    String className = entry.getName().replace('/', '.');
+                    classNames.add(className.substring(0, className.length() - ".class".length()));
+                }
             }
+            return classNames;
+        } catch (IOException e) {
+            throw new ExceptionHandler("Error with file " + jarPath, ExceptionId.FILE_IO);
         }
-        return classNames;
     }
 
     /**
@@ -111,58 +115,62 @@ public class Utils {
      * @return a {@link java.lang.String} object.
      * @throws java.io.IOException if any.
      */
-    public static String getBasePackageNameFromJar(String jarPath, boolean isMain) throws IOException {
+    public static String getBasePackageNameFromJar(String jarPath, boolean isMain) throws ExceptionHandler {
 
-        ZipInputStream zip = new ZipInputStream(new FileInputStream(jarPath));
+        try {
+            ZipInputStream zip = new ZipInputStream(new FileInputStream(jarPath));
 
-        List<String> basePackages = new ArrayList<>();
+            List<String> basePackages = new ArrayList<>();
 
-        for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
-            if (!entry.isDirectory() && entry.getName().endsWith(".class")) {
-                String className = entry.getName().replace('/', '.');
-                className = className.substring(0, className.length() - ".class".length());
+            for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
+                if (!entry.isDirectory() && entry.getName().endsWith(".class")) {
+                    String className = entry.getName().replace('/', '.');
+                    className = className.substring(0, className.length() - ".class".length());
 
-                String[] splits = className.split("\\.");
-                StringBuilder basePackage = new StringBuilder();
+                    String[] splits = className.split("\\.");
+                    StringBuilder basePackage = new StringBuilder();
 
-                if (splits.length > 3) { // assumption package structure is org.apache.xyz.main
-                    basePackage.append(splits[0])
-                            .append(".")
-                            .append(splits[1])
-                            .append(".")
-                            .append(splits[2]);
-                } else if (splits.length == 3) {
-                    basePackage.append(splits[0])
-                            .append(".")
-                            .append(splits[1]);
-                } else {
-                    basePackage.append(splits[0]);
-                }
+                    if (splits.length > 3) { // assumption package structure is org.apache.xyz.main
+                        basePackage.append(splits[0])
+                                .append(".")
+                                .append(splits[1])
+                                .append(".")
+                                .append(splits[2]);
+                    } else if (splits.length == 3) {
+                        basePackage.append(splits[0])
+                                .append(".")
+                                .append(splits[1]);
+                    } else {
+                        basePackage.append(splits[0]);
+                    }
 
-                String basePackageStr = basePackage.toString();
+                    String basePackageStr = basePackage.toString();
 
-                if (!basePackages.toString().contains(basePackageStr)) {
-                    basePackages.add(basePackageStr);
+                    if (!basePackages.toString().contains(basePackageStr)) {
+                        basePackages.add(basePackageStr);
+                    }
                 }
             }
+
+            if (basePackages.size() == 1) {
+                return basePackages.get(0);
+            } else if (basePackages.size() > 1) {
+
+                if (isMain) {
+                    System.out.println("***Multiple Base packages of " + jarPath + " : " + basePackages.toString());
+                }
+
+                for (String basePackage : basePackages) {
+                    if (basePackage.split("\\.").length > 2 && jarPath.contains(basePackage.split("\\.")[2])) {
+                        return basePackage;
+                    }
+                }
+            }
+
+            return null;
+        } catch (IOException e) {
+            throw new ExceptionHandler("Error with file " + jarPath, ExceptionId.FILE_IO);
         }
-
-        if (basePackages.size() == 1) {
-            return basePackages.get(0);
-        } else if (basePackages.size() > 1) {
-
-            if (isMain) {
-                System.out.println("***Multiple Base packages of " + jarPath + " : " + basePackages.toString());
-            }
-
-            for (String basePackage : basePackages) {
-                if (basePackage.split("\\.").length > 2 && jarPath.contains(basePackage.split("\\.")[2])) {
-                    return basePackage;
-                }
-            }
-        }
-
-        return null;
 
     }
 
@@ -173,21 +181,24 @@ public class Utils {
      * @return a {@link java.util.List} object.
      * @throws java.io.IOException if any.
      */
-    public static List<String> getClassNamesFromApkArchive(String apkfile) throws IOException {
+    public static List<String> getClassNamesFromApkArchive(String apkfile) throws ExceptionHandler {
         List<String> classNames = new ArrayList<>();
 
         File zipFile = new File(apkfile);
 
-        DexFile dexFile = DexFileFactory.loadDexEntry(zipFile, "classes.dex", true, Opcodes.forApi(23));
+        try {
+            DexFile dexFile = DexFileFactory.loadDexEntry(zipFile, "classes.dex", true, Opcodes.forApi(23));
 
-        for (ClassDef classDef : dexFile.getClasses()) {
-            String className = classDef.getType().replace('/', '.');
-            if (!className.contains("android.")) {
-                classNames.add(className.substring(1, className.length() - 1));
+            for (ClassDef classDef : dexFile.getClasses()) {
+                String className = classDef.getType().replace('/', '.');
+                if (!className.contains("android.")) {
+                    classNames.add(className.substring(1, className.length() - 1));
+                }
             }
+            return classNames;
+        } catch (IOException e) {
+            throw new ExceptionHandler("Error with dex file classes.dex", ExceptionId.FILE_IO);
         }
-
-        return classNames;
     }
 
     /**
@@ -321,9 +332,9 @@ public class Utils {
      * @param projectJarPath a {@link java.lang.String} object.
      * @param excludes       a {@link java.util.List} object.
      * @return a {@link java.util.Map} object.
-     * @throws java.io.IOException if any.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
-    public static Map<String, String> getXmlFiles(String projectJarPath, List<String> excludes) throws IOException {
+    public static Map<String, String> getXmlFiles(String projectJarPath, List<String> excludes) throws ExceptionHandler {
         Map<String, String> fileStrs = new HashMap<>();
 
         if (new File(projectJarPath).isDirectory()) {
@@ -340,24 +351,35 @@ public class Utils {
         return fileStrs;
     }
 
-    private static List<String> getXmlFileNamesFromJarArchive(String jarPath, List<String> excludes) throws IOException {
+    private static List<String> getXmlFileNamesFromJarArchive(String jarPath, List<String> excludes) throws ExceptionHandler {
         List<String> classNames = new ArrayList<>();
-        ZipInputStream zip = new ZipInputStream(new FileInputStream(jarPath));
-        for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
-            for (String exclude : excludes) {
-                if (!entry.isDirectory() && entry.getName().endsWith(".xml") && !entry.getName().endsWith(exclude)) {
-                    String className = entry.getName();
-                    classNames.add(className);
+        try {
+            ZipInputStream zip = new ZipInputStream(new FileInputStream(jarPath));
+
+            for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
+                for (String exclude : excludes) {
+                    if (!entry.isDirectory() && entry.getName().endsWith(".xml") && !entry.getName().endsWith(exclude)) {
+                        String className = entry.getName();
+                        classNames.add(className);
+                    }
                 }
             }
+        } catch (FileNotFoundException e) {
+            throw new ExceptionHandler("File " + jarPath + " is not found.", ExceptionId.FILE_IO);
+        } catch (IOException e) {
+            throw new ExceptionHandler("Error Reading " + jarPath + ".", ExceptionId.FILE_IO);
         }
         return classNames;
     }
 
-    private static InputStream readFileFromZip(String jarPath, String file) throws IOException {
-        ZipFile zipFile = new ZipFile(jarPath);
-        ZipEntry entry = zipFile.getEntry(file);
-        return zipFile.getInputStream(entry);
+    private static InputStream readFileFromZip(String jarPath, String file) throws ExceptionHandler {
+        try {
+            ZipFile zipFile = new ZipFile(jarPath);
+            ZipEntry entry = zipFile.getEntry(file);
+            return zipFile.getInputStream(entry);
+        } catch (IOException e) {
+            throw new ExceptionHandler("Error Reading " + jarPath + ".", ExceptionId.FILE_IO);
+        }
     }
 
     private static String convertStreamToString(java.io.InputStream is) {
@@ -520,7 +542,6 @@ public class Utils {
             try {
                 relativeFilePath = file.getCanonicalPath().replace(file.getName(), "");
             } catch (IOException e) {
-
             }
 
             if (!filePaths.contains(relativeFilePath))
@@ -619,12 +640,12 @@ public class Utils {
      * <p>getJAVA_HOME.</p>
      *
      * @return a {@link java.lang.String} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
-    public static String getJAVA_HOME() {
+    public static String getJAVA_HOME() throws ExceptionHandler {
         String JAVA_HOME = System.getenv("JAVA_HOME");
         if (StringUtils.isEmpty(JAVA_HOME)) {
-            System.out.println("Please Set JAVA_HOME");
-            System.exit(1);
+            throw new ExceptionHandler("Environment Variable: JAVA_HOME is not set.", ExceptionId.ENV_VAR);
         }
         return JAVA_HOME;
     }
@@ -633,12 +654,12 @@ public class Utils {
      * <p>getJAVA7_HOME.</p>
      *
      * @return a {@link java.lang.String} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
-    public static String getJAVA7_HOME() {
+    public static String getJAVA7_HOME() throws ExceptionHandler {
         String JAVA7_HOME = System.getenv("JAVA7_HOME");
         if (StringUtils.isEmpty(JAVA7_HOME)) {
-            System.out.println("Please Set JAVA7_HOME");
-            System.exit(1);
+            throw new ExceptionHandler("Environment Variable: JAVA7_HOME is not set.", ExceptionId.ENV_VAR);
         }
         return JAVA7_HOME;
     }
@@ -647,12 +668,12 @@ public class Utils {
      * <p>getANDROID.</p>
      *
      * @return a {@link java.lang.String} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
-    public static String getANDROID() {
+    public static String getANDROID() throws ExceptionHandler {
         String ANDROID_HOME = System.getenv("ANDROID_HOME");
         if (StringUtils.isEmpty(ANDROID_HOME)) {
-            System.out.println("Please Set ANDROID_HOME");
-            System.exit(1);
+            throw new ExceptionHandler("Environment Variable: ANDROID_HOME is not set.", ExceptionId.ENV_VAR);
         }
         return ANDROID_HOME;
     }
@@ -662,7 +683,7 @@ public class Utils {
      *
      * @return a {@link java.lang.String} object.
      */
-    public static String getBaseSOOT() {
+    public static String getBaseSOOT() throws ExceptionHandler {
         String rt = Utils.join(Utils.fileSep, "jre", "lib", "rt.jar:");
         String jce = Utils.join(Utils.fileSep, "jre", "lib", "jce.jar");
 
@@ -674,7 +695,7 @@ public class Utils {
      *
      * @return a {@link java.lang.String} object.
      */
-    public static String getBaseSOOT7() {
+    public static String getBaseSOOT7() throws ExceptionHandler {
         String rt = Utils.join(Utils.fileSep, "jre", "lib", "rt.jar:");
         String jce = Utils.join(Utils.fileSep, "jre", "lib", "jce.jar");
 
@@ -997,11 +1018,11 @@ public class Utils {
     /**
      * <p>isArgumentOfInvoke.</p>
      *
-     * @param analysis a {@link main.analyzer.backward.Analysis} object.
+     * @param analysis       a {@link main.analyzer.backward.Analysis} object.
      * @param analysisResult a {@link main.analyzer.backward.InvokeUnitContainer} object.
-     * @param index a int.
-     * @param outSet a {@link java.util.List} object.
-     * @param usedFields a {@link java.util.Set} object.
+     * @param index          a int.
+     * @param outSet         a {@link java.util.List} object.
+     * @param usedFields     a {@link java.util.Set} object.
      * @param analysisResult a {@link main.analyzer.backward.InvokeUnitContainer} object.
      * @return a boolean.
      */
@@ -1253,14 +1274,14 @@ public class Utils {
     /**
      * <p>createAnalysisOutput.</p>
      *
-     * @param xmlFileStr  a {@link java.util.Map} object.
-     * @param sourcePaths a {@link java.util.List} object.
-     * @return a {@link java.util.ArrayList} object.
+     * @param xmlFileStr          a {@link java.util.Map} object.
+     * @param sourcePaths         a {@link java.util.List} object.
      * @param predictableSourcMap a {@link java.util.Map} object.
-     * @param rule a {@link java.lang.String} object.
-     * @param writer a {@link main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter} object.
+     * @param rule                a {@link java.lang.String} object.
+     * @param writer              a {@link main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter} object.
+     * @return a {@link java.util.ArrayList} object.
      */
-    public static ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, Map<UnitContainer, List<String>> predictableSourcMap, String rule, baseStreamWriter writer) {
+    public static ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, Map<UnitContainer, List<String>> predictableSourcMap, String rule, baseStreamWriter writer) throws ExceptionHandler {
         ArrayList<AnalysisIssue> outList = new ArrayList<>();
 
         Integer ruleNumber = Integer.parseInt(rule);

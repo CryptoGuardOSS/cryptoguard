@@ -1,11 +1,11 @@
 package main.analyzer;
 
+import main.frontEnd.Interface.ExceptionHandler;
 import main.rule.engine.EngineType;
 import main.util.Utils;
 import soot.Scene;
 import soot.options.Options;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -41,7 +41,7 @@ public class UniqueRuleAnalyzer {
      * @param routingType           a {@link main.rule.engine.EngineType} object.
      * @return a {@link java.util.List} object.
      */
-    public static List<String> environmentRouting(List<String> projectJarPath, List<String> projectDependencyPath, EngineType routingType) {
+    public static List<String> environmentRouting(List<String> projectJarPath, List<String> projectDependencyPath, EngineType routingType) throws ExceptionHandler {
         if (routingType == EngineType.JAR) {
             return setupBaseJarEnv(projectJarPath.get(0),
                     projectDependencyPath.size() >= 1
@@ -65,7 +65,7 @@ public class UniqueRuleAnalyzer {
      * @param projectDependencyPath a {@link java.lang.String} object.
      * @return a {@link java.util.List} object.
      */
-    public static List<String> setupBaseJarEnv(String projectJarPath, String projectDependencyPath) {
+    public static List<String> setupBaseJarEnv(String projectJarPath, String projectDependencyPath) throws ExceptionHandler {
 
         String java_home = Utils.getJAVA_HOME();
 
@@ -81,11 +81,8 @@ public class UniqueRuleAnalyzer {
 
         Utils.loadSootClasses(null);
 
-        try {
-            return Utils.getClassNamesFromJarArchive(projectJarPath);
-        } catch (IOException e) {
-            return null;
-        }
+
+        return Utils.getClassNamesFromJarArchive(projectJarPath);
 
     }
 
@@ -95,7 +92,7 @@ public class UniqueRuleAnalyzer {
      * @param projectJarPath a {@link java.lang.String} object.
      * @return a {@link java.util.List} object.
      */
-    public static List<String> setupBaseAPKEnv(String projectJarPath) {
+    public static List<String> setupBaseAPKEnv(String projectJarPath) throws ExceptionHandler {
 
         Options.v().set_src_prec(Options.src_prec_apk);
         Options.v().set_android_jars(Utils.getANDROID() + "/platforms");
@@ -106,11 +103,8 @@ public class UniqueRuleAnalyzer {
 
         Utils.loadSootClasses(null);
 
-        try {
-            return Utils.getClassNamesFromApkArchive(projectJarPath);
-        } catch (IOException e) {
-            return null;
-        }
+        return Utils.getClassNamesFromApkArchive(projectJarPath);
+
     }
 
     /**
@@ -120,7 +114,7 @@ public class UniqueRuleAnalyzer {
      * @param projectDependencyPath a {@link java.util.List} object.
      * @return a {@link java.util.List} object.
      */
-    public static List<String> setupBaseSourceEnv(List<String> snippetPath, List<String> projectDependencyPath) {
+    public static List<String> setupBaseSourceEnv(List<String> snippetPath, List<String> projectDependencyPath) throws ExceptionHandler {
 
         List<String> classNames = Utils.getClassNamesFromSnippet(snippetPath);
 
@@ -147,7 +141,7 @@ public class UniqueRuleAnalyzer {
      * @param projectDependencyPath a {@link java.util.List} object.
      * @return a {@link java.util.List} object.
      */
-    public static List<String> setupJavaFileEnv(List<String> snippetPath, List<String> projectDependencyPath) {
+    public static List<String> setupJavaFileEnv(List<String> snippetPath, List<String> projectDependencyPath) throws ExceptionHandler {
 
         List<String> classNames = Utils.retrieveFullyQualifiedName(snippetPath);
 
@@ -182,7 +176,7 @@ public class UniqueRuleAnalyzer {
      * @param projectDependencyPath a {@link java.util.List} object.
      * @return a {@link java.util.List} object.
      */
-    public static List<String> setupJavaClassFileEnv(List<String> javaClassFiles, List<String> projectDependencyPath) {
+    public static List<String> setupJavaClassFileEnv(List<String> javaClassFiles, List<String> projectDependencyPath) throws ExceptionHandler {
 
         Scene.v().setSootClassPath(Utils.getBaseSOOT());
 

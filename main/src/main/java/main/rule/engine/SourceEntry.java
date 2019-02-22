@@ -1,5 +1,7 @@
 package main.rule.engine;
 
+import main.frontEnd.Interface.ExceptionHandler;
+import main.frontEnd.Interface.ExceptionId;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
@@ -27,7 +29,7 @@ public class SourceEntry implements EntryHandler {
     /**
      * {@inheritDoc}
      */
-    public ArrayList<AnalysisIssue> NonStreamScan(EnvironmentInformation generalInfo) {
+    public ArrayList<AnalysisIssue> NonStreamScan(EnvironmentInformation generalInfo) throws ExceptionHandler {
         ArrayList<AnalysisIssue> issues = generalInfo.getPrintOut() ? null : new ArrayList<AnalysisIssue>();
         generalInfo.startAnalysis();
         //region Core
@@ -72,16 +74,17 @@ public class SourceEntry implements EntryHandler {
                 }
             }
         } catch (Exception e) {
-            //TODO - Handle this
-            e.printStackTrace();
+            throw new ExceptionHandler("Error running the scan.", ExceptionId.SCAN_GEN);
         }
         //endregion
         generalInfo.stopAnalysis();
         return issues;
     }
 
-    /** {@inheritDoc} */
-    public void StreamScan(EnvironmentInformation generalInfo, baseStreamWriter streamWriter) {
+    /**
+     * {@inheritDoc}
+     */
+    public void StreamScan(EnvironmentInformation generalInfo, baseStreamWriter streamWriter) throws ExceptionHandler {
         generalInfo.startAnalysis();
 
         //region Core
@@ -123,8 +126,7 @@ public class SourceEntry implements EntryHandler {
                 }
             }
         } catch (Exception e) {
-            //TODO - Handle this
-            e.printStackTrace();
+            throw new ExceptionHandler("Error running the scan.", ExceptionId.SCAN_GEN);
         }
         //endregion
 

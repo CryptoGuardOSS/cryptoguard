@@ -2,6 +2,7 @@ package main.rule;
 
 import main.analyzer.UniqueRuleAnalyzer;
 import main.analyzer.backward.UnitContainer;
+import main.frontEnd.Interface.ExceptionHandler;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
 import main.rule.engine.EngineType;
@@ -12,7 +13,6 @@ import main.util.NamedMethodMap;
 import soot.*;
 import soot.jimple.Constant;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +35,7 @@ public class HostNameVerifierFinder implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printOut, List<String> sourcePaths, baseStreamWriter streamWriter) throws IOException {
+    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printOut, List<String> sourcePaths, baseStreamWriter streamWriter) throws ExceptionHandler {
 
         Map<String, List<UnitContainer>> analysisLists = getHostNameVerifiers(
                 UniqueRuleAnalyzer.environmentRouting(projectJarPath, projectDependencyPath, type)

@@ -35,8 +35,8 @@ import java.util.zip.ZipFile;
  * <p>ProcessManifest class.</p>
  *
  * @author RigorityJTeam
- * @since V01.00.00
  * @version $Id: $Id
+ * @since V01.00.00
  */
 public class ProcessManifest {
 

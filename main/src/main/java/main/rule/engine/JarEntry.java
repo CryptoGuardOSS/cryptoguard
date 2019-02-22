@@ -1,10 +1,10 @@
 package main.rule.engine;
 
+import main.frontEnd.Interface.ExceptionHandler;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -22,42 +22,36 @@ public class JarEntry implements EntryHandler {
     /**
      * {@inheritDoc}
      */
-    public ArrayList<AnalysisIssue> NonStreamScan(EnvironmentInformation generalInfo) {
+    public ArrayList<AnalysisIssue> NonStreamScan(EnvironmentInformation generalInfo) throws ExceptionHandler {
 
         ArrayList<AnalysisIssue> issues = generalInfo.getPrintOut() ? null : new ArrayList<AnalysisIssue>();
 
         generalInfo.startAnalysis();
         //region Core
-        try {
-            for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
+        for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
 
-                ArrayList<AnalysisIssue> tempIssues = ruleChecker.checkRule(EngineType.JAR, generalInfo.getSource(), generalInfo.getDependencies(),
-                        generalInfo.getPrintOut(), generalInfo.getSourcePaths(), null);
-                if (!generalInfo.getPrintOut())
-                    issues.addAll(tempIssues);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            //TODO - Handle This
+            ArrayList<AnalysisIssue> tempIssues = ruleChecker.checkRule(EngineType.JAR, generalInfo.getSource(), generalInfo.getDependencies(),
+                    generalInfo.getPrintOut(), generalInfo.getSourcePaths(), null);
+            if (!generalInfo.getPrintOut())
+                issues.addAll(tempIssues);
         }
+
         //endregion
         generalInfo.stopAnalysis();
         return issues;
     }
 
-    /** {@inheritDoc} */
-    public void StreamScan(EnvironmentInformation generalInfo, baseStreamWriter streamWriter) {
+    /**
+     * {@inheritDoc}
+     */
+    public void StreamScan(EnvironmentInformation generalInfo, baseStreamWriter streamWriter) throws ExceptionHandler {
         generalInfo.startAnalysis();
         //region Core
-        try {
-            for (RuleChecker ruleChecker : CommonRules.ruleCheckerList)
-                ruleChecker.checkRule(EngineType.JAR, generalInfo.getSource(), generalInfo.getDependencies(),
-                        generalInfo.getPrintOut(), generalInfo.getSourcePaths(), streamWriter);
+        for (RuleChecker ruleChecker : CommonRules.ruleCheckerList)
+            ruleChecker.checkRule(EngineType.JAR, generalInfo.getSource(), generalInfo.getDependencies(),
+                    generalInfo.getPrintOut(), generalInfo.getSourcePaths(), streamWriter);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-            //TODO - Handle This
-        }
+
         //endregion
         generalInfo.stopAnalysis();
     }

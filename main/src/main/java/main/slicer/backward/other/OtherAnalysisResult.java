@@ -24,10 +24,10 @@ public class OtherAnalysisResult {
     /**
      * <p>Constructor for OtherAnalysisResult.</p>
      *
-     * @param instruction       a {@link java.lang.String} object.
-     * @param method            a {@link soot.SootMethod} object.
-     * @param analysis          a {@link java.util.List} object.
-     * @param propertyUseMap    a {@link java.util.Map<java.lang.String,java.util.List<main.slicer.backward.property.PropertyAnalysisResult>>} object.
+     * @param instruction    a {@link java.lang.String} object.
+     * @param method         a {@link soot.SootMethod} object.
+     * @param analysis       a {@link java.util.List} object.
+     * @param propertyUseMap a {@link java.util.Map<java.lang.String,java.util.List<main.slicer.backward.property.PropertyAnalysisResult>>} object.
      */
     public OtherAnalysisResult(String instruction,
                                SootMethod method,

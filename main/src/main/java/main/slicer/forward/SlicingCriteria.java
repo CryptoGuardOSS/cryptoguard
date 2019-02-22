@@ -51,7 +51,9 @@ public class SlicingCriteria {
         return methodName.equals(that.methodName);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return methodName.hashCode();

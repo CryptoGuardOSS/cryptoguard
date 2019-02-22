@@ -102,7 +102,9 @@ public class MethodCallSiteInfo {
 
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         int result = slicingCriteria.hashCode();

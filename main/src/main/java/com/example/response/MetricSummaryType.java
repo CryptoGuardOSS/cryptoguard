@@ -84,9 +84,8 @@ public class MetricSummaryType {
     /**
      * Sets the value of the type property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link java.lang.String}
+     * @param value allowed object is
+     *              {@link java.lang.String}
      */
     public void setType(String value) {
         this.type = value;

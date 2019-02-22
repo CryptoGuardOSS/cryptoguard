@@ -128,7 +128,7 @@ public enum Listing {
 
     /**
      * A method to dynamically retrieve the args of messaging structure asked for by the flag type for help
-     *  with error checking.
+     * with error checking.
      *
      * @return string - the help string provided by each messaging interface
      */

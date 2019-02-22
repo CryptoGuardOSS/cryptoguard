@@ -1,5 +1,6 @@
 package main.frontEnd.MessagingSystem.streamWriters.structures;
 
+import main.frontEnd.Interface.ExceptionHandler;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.AnalysisLocation;
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
@@ -15,10 +16,10 @@ import java.util.List;
  *
  * @author RigorityJTeam
  * Created on 2/7/19.
+ * @version $Id: $Id
  * @since 03.02.00
  *
  * <p>The Legacy stream writer.</p>
- * @version $Id: $Id
  */
 public class LegacyStream extends baseStreamWriter {
 
@@ -29,7 +30,7 @@ public class LegacyStream extends baseStreamWriter {
      *
      * @param info a {@link main.frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
      */
-    public LegacyStream(EnvironmentInformation info) {
+    public LegacyStream(EnvironmentInformation info) throws ExceptionHandler {
         super(info);
     }
 
@@ -37,7 +38,7 @@ public class LegacyStream extends baseStreamWriter {
      * {@inheritDoc}
      */
     @Override
-    public void writeHeader(EnvironmentInformation info) {
+    public void writeHeader(EnvironmentInformation info) throws ExceptionHandler {
 
         this.write("Analyzing " + info.getSourceType() + ": ");
 
@@ -51,9 +52,11 @@ public class LegacyStream extends baseStreamWriter {
 
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void streamIntoBody(AnalysisIssue issue) {
+    public void streamIntoBody(AnalysisIssue issue) throws ExceptionHandler {
         writeln("=======================================", pretty);
 
         writeln("***Violated Rule " + issue.getRuleId() + ": " + issue.getRule().getDesc(), pretty);
@@ -106,9 +109,11 @@ public class LegacyStream extends baseStreamWriter {
         writeln("=======================================", pretty);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void writeFooter(EnvironmentInformation info) {
+    public void writeFooter(EnvironmentInformation info) throws ExceptionHandler {
 
         //Only printing console output if it is set and there is output captured
         if (info.getSootErrors() != null && info.getSootErrors().split("\n").length >= 1) {

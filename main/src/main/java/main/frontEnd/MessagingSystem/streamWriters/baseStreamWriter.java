@@ -1,5 +1,7 @@
 package main.frontEnd.MessagingSystem.streamWriters;
 
+import main.frontEnd.Interface.ExceptionHandler;
+import main.frontEnd.Interface.ExceptionId;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import main.rule.engine.EngineType;
@@ -13,10 +15,10 @@ import java.nio.charset.Charset;
  *
  * @author RigorityJTeam
  * Created on 2/7/19.
+ * @version $Id: $Id
  * @since 03.02.00
  *
  * <p>The "interface" for the stream writing.</p>
- * @version $Id: $Id
  */
 public abstract class baseStreamWriter {
 
@@ -28,17 +30,15 @@ public abstract class baseStreamWriter {
      * <p>Constructor for baseStreamWriter.</p>
      *
      * @param info a {@link main.frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
-    public baseStreamWriter(EnvironmentInformation info) {
+    public baseStreamWriter(EnvironmentInformation info) throws ExceptionHandler {
 
         this.type = info.getSourceType();
         try {
             this.streamOut = new FileOutputStream(new File(info.getFileOut()));
         } catch (Exception e) {
-            //TODO - handle this
-            System.out.println("ERROR CREATING THE PRINTWRITER.");
-            e.printStackTrace();
-            System.exit(0);
+            throw new ExceptionHandler("Error creating the output stream with " + info.getFileOutName(), ExceptionId.FILE_IO);
         }
         this.writeHeader(info);
     }
@@ -48,31 +48,28 @@ public abstract class baseStreamWriter {
      *
      * @param output a {@link java.lang.String} object.
      * @param pretty a {@link java.lang.Boolean} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
-    public void writeln(String output, Boolean pretty) {
+    public void writeln(String output, Boolean pretty) throws ExceptionHandler {
         try {
             if (pretty)
                 output += "\n";
             this.streamOut.write(output.getBytes(chars));
         } catch (Exception e) {
-            //TODO - handle this
-            System.out.println("ERROR writing THE PRINTWRITER.");
-            e.printStackTrace();
-            System.exit(0);
+            throw new ExceptionHandler("Error writing the output " + output, ExceptionId.FILE_IO);
         }
     }
 
     /**
      * <p>newln.</p>
+     *
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
-    public void newln() {
+    public void newln() throws ExceptionHandler {
         try {
             this.streamOut.write("\n".getBytes(chars));
         } catch (Exception e) {
-            //TODO - handle this
-            System.out.println("ERROR writing THE PRINTWRITER.");
-            e.printStackTrace();
-            System.exit(0);
+            throw new ExceptionHandler("Error writing the nextline.", ExceptionId.FILE_IO);
         }
     }
 
@@ -80,15 +77,13 @@ public abstract class baseStreamWriter {
      * <p>write.</p>
      *
      * @param output a {@link java.lang.String} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
-    public void write(String output) {
+    public void write(String output) throws ExceptionHandler {
         try {
             this.streamOut.write(output.getBytes(chars));
         } catch (Exception e) {
-            //TODO - handle this
-            System.out.println("ERROR writing THE PRINTWRITER.");
-            e.printStackTrace();
-            System.exit(0);
+            throw new ExceptionHandler("Error writing the output " + output, ExceptionId.FILE_IO);
         }
     }
 
@@ -96,16 +91,14 @@ public abstract class baseStreamWriter {
      * <p>close.</p>
      *
      * @param info a {@link main.frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
-    public void close(EnvironmentInformation info) {
+    public void close(EnvironmentInformation info) throws ExceptionHandler {
         this.writeFooter(info);
         try {
             this.streamOut.close();
         } catch (Exception e) {
-            //TODO - handle this
-            System.out.println("ERROR closing THE PRINTWRITER.");
-            e.printStackTrace();
-            System.exit(0);
+            throw new ExceptionHandler("Error closing the stream.", ExceptionId.FILE_IO);
         }
     }
 
@@ -114,21 +107,21 @@ public abstract class baseStreamWriter {
      *
      * @param info a {@link main.frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
      */
-    public abstract void writeHeader(EnvironmentInformation info);
+    public abstract void writeHeader(EnvironmentInformation info) throws ExceptionHandler;
 
     /**
      * <p>streamIntoBody.</p>
      *
      * @param issue a {@link main.frontEnd.MessagingSystem.AnalysisIssue} object.
      */
-    public abstract void streamIntoBody(AnalysisIssue issue);
+    public abstract void streamIntoBody(AnalysisIssue issue) throws ExceptionHandler;
 
     /**
      * <p>writeFooter.</p>
      *
      * @param info a {@link main.frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
      */
-    public abstract void writeFooter(EnvironmentInformation info);
+    public abstract void writeFooter(EnvironmentInformation info) throws ExceptionHandler;
 
     /**
      * <p>Getter for the field <code>type</code>.</p>

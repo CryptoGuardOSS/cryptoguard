@@ -1,11 +1,11 @@
 package main.rule;
 
+import main.frontEnd.Interface.ExceptionHandler;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
 import main.rule.engine.EngineType;
 import main.rule.engine.RuleChecker;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +40,7 @@ public class InsecureAssymCryptoFinder implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printOut, List<String> sourcePaths, baseStreamWriter streamWriter) throws IOException {
+    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printOut, List<String> sourcePaths, baseStreamWriter streamWriter) throws ExceptionHandler {
 
         ArrayList<AnalysisIssue> issues = printOut ? null : new ArrayList<AnalysisIssue>();
         ArrayList<AnalysisIssue> resultOne = checkAssym(type, projectJarPath, projectDependencyPath, AssymType.RSA, printOut, sourcePaths, streamWriter);
@@ -58,7 +58,7 @@ public class InsecureAssymCryptoFinder implements RuleChecker {
     private ArrayList<AnalysisIssue> checkAssym(EngineType type,
                                                 List<String> projectJarPath,
                                                 List<String> projectDependencyPath,
-                                                AssymType assymType, Boolean printOut, List<String> sourcePaths, baseStreamWriter streamWriter) throws IOException {
+                                                AssymType assymType, Boolean printOut, List<String> sourcePaths, baseStreamWriter streamWriter) throws ExceptionHandler {
 
         ArrayList<AnalysisIssue> issues = printOut ? null : new ArrayList<AnalysisIssue>();
 

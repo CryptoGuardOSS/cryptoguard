@@ -17,10 +17,9 @@ import java.util.List;
 
 
 /**
- *
- *                 The root tag AnalyzerReport can have a child element
- *                 with BugSummary tag. There can be only one occurrence of
- *                 BugSummary.
+ * The root tag AnalyzerReport can have a child element
+ * with BugSummary tag. There can be only one occurrence of
+ * BugSummary.
  *
  *
  * <p>Java class for BugSummaryType complex type.

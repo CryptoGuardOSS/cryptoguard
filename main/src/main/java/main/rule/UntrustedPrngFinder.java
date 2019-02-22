@@ -1,6 +1,7 @@
 package main.rule;
 
 import main.analyzer.UniqueRuleAnalyzer;
+import main.frontEnd.Interface.ExceptionHandler;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
 import main.rule.engine.EngineType;
@@ -9,7 +10,6 @@ import soot.*;
 import soot.toolkits.graph.DirectedGraph;
 import soot.toolkits.graph.ExceptionalUnitGraph;
 
-import java.io.IOException;
 import java.util.*;
 
 /**
@@ -32,7 +32,7 @@ public class UntrustedPrngFinder implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printOut, List<String> sourcePaths, baseStreamWriter streamWriter) throws IOException {
+    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printOut, List<String> sourcePaths, baseStreamWriter streamWriter) throws ExceptionHandler {
 
         Map<String, List<Unit>> analysisLists = getUntrustedPrngInstructions(
                 UniqueRuleAnalyzer.environmentRouting(projectJarPath, projectDependencyPath, type));
@@ -57,8 +57,6 @@ public class UntrustedPrngFinder implements RuleChecker {
                                 "Found: Untrused PRNG (java.util.Random)", sourcePaths
 
                         );
-
-                        ;
                         if (streamWriter != null) {
                             streamWriter.streamIntoBody(issue);
                         } else {
