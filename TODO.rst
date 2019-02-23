@@ -32,6 +32,10 @@ TODO
 	#. [~] java/class files work
 
 #. [ ] Allow property file be sent in with arguments
+#. [ ] Verify if format/argument matches format/stream
+    * ex1: Format X doesn't support streaming and streaming flag enabled -> break and show error
+    * ex2: Format Y only supports streaming and streaming flag not enabled -> send out warning in output
+
 #. [ ] path adaptions
     * [ ] build-dir: full path
     * [ ] package-dir: relative paths
