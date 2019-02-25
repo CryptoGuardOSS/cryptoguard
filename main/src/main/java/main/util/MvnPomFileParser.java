@@ -1,10 +1,13 @@
 package main.util;
 
+import main.frontEnd.Interface.ExceptionHandler;
+import main.frontEnd.Interface.ExceptionId;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
@@ -29,29 +32,36 @@ public class MvnPomFileParser implements BuildFileParser {
      * <p>Constructor for MvnPomFileParser.</p>
      *
      * @param fileName a {@link java.lang.String} object.
-     * @throws java.lang.Exception if any.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
-    public MvnPomFileParser(String fileName) throws Exception {
+    public MvnPomFileParser(String fileName) throws ExceptionHandler {
 
-        File xmlFile = new File(fileName);
-        DocumentBuilderFactory docbuildFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder docBuilder = docbuildFactory.newDocumentBuilder();
-        Document document = docBuilder.parse(xmlFile);
+        try {
 
-        NodeList nodeList = document.getElementsByTagName("module");
+            File xmlFile = new File(fileName);
+            DocumentBuilderFactory docbuildFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docbuildFactory.newDocumentBuilder();
+            Document document = docBuilder.parse(xmlFile);
 
-        String[] splits = fileName.split("/");
-        String projectName = splits[splits.length - 2];
-        String projectRoot = fileName.substring(0, fileName.lastIndexOf('/'));
+            NodeList nodeList = document.getElementsByTagName("module");
 
-        if (nodeList.getLength() == 0) {
-            moduleVsPath.put(projectName, projectRoot);
-        } else {
+            String[] splits = fileName.split("/");
+            String projectName = splits[splits.length - 2];
+            String projectRoot = fileName.substring(0, fileName.lastIndexOf('/'));
 
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                String moduleName = nodeList.item(i).getTextContent();
-                moduleVsPath.put(moduleName, projectRoot + "/" + moduleName);
+            if (nodeList.getLength() == 0) {
+                moduleVsPath.put(projectName, projectRoot);
+            } else {
+
+                for (int i = 0; i < nodeList.getLength(); i++) {
+                    String moduleName = nodeList.item(i).getTextContent();
+                    moduleVsPath.put(moduleName, projectRoot + "/" + moduleName);
+                }
             }
+        } catch (ParserConfigurationException e) {
+            throw new ExceptionHandler("Error creating file parser", ExceptionId.FILE_IO);
+        } catch (org.xml.sax.SAXException | java.io.IOException e) {
+            throw new ExceptionHandler("Error parsing " + fileName, ExceptionId.FILE_IO);
         }
     }
 
@@ -59,44 +69,56 @@ public class MvnPomFileParser implements BuildFileParser {
      * {@inheritDoc}
      */
     @Override
-    public Map<String, List<String>> getDependencyList() throws Exception {
+    public Map<String, List<String>> getDependencyList() throws ExceptionHandler {
 
-        Map<String, List<String>> moduleVsDependencies = new HashMap<>();
+        String currentModule = "";
+        try {
 
-        for (String module : moduleVsPath.keySet()) {
+            Map<String, List<String>> moduleVsDependencies = new HashMap<>();
 
-            File xmlFile = new File(moduleVsPath.get(module) + "/pom.xml");
-            DocumentBuilderFactory docbuildFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder docBuilder = docbuildFactory.newDocumentBuilder();
-            Document document = docBuilder.parse(xmlFile);
+            for (String module : moduleVsPath.keySet()) {
+                currentModule = module;
 
-            XPath xPath = XPathFactory.newInstance().newXPath();
-            NodeList nodeList = (NodeList) xPath.compile("/project/dependencies/dependency/artifactId")
-                    .evaluate(document, XPathConstants.NODESET);
+                File xmlFile = new File(moduleVsPath.get(module) + "/pom.xml");
+                DocumentBuilderFactory docbuildFactory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder docBuilder = docbuildFactory.newDocumentBuilder();
+                Document document = docBuilder.parse(xmlFile);
 
-            List<String> dependencies = new ArrayList<>();
+                XPath xPath = XPathFactory.newInstance().newXPath();
+                NodeList nodeList = (NodeList) xPath.compile("/project/dependencies/dependency/artifactId")
+                        .evaluate(document, XPathConstants.NODESET);
 
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                String dependency = nodeList.item(i).getTextContent();
+                List<String> dependencies = new ArrayList<>();
 
-                if (moduleVsPath.keySet().contains(dependency)) {
-                    dependencies.add(dependency);
+                for (int i = 0; i < nodeList.getLength(); i++) {
+                    String dependency = nodeList.item(i).getTextContent();
+
+                    if (moduleVsPath.keySet().contains(dependency)) {
+                        dependencies.add(dependency);
+                    }
                 }
+
+                moduleVsDependencies.put(module, dependencies);
             }
 
-            moduleVsDependencies.put(module, dependencies);
+            Map<String, List<String>> moduleVsDependencyPaths = new HashMap<>();
+
+            for (String module : moduleVsDependencies.keySet()) {
+                List<String> dependencyPaths = new ArrayList<>();
+                calcAlldependenciesForModule(module, moduleVsDependencies, dependencyPaths);
+                dependencyPaths.add(moduleVsPath.get(module) + "/src/main/java");
+                moduleVsDependencyPaths.put(module, dependencyPaths);
+            }
+
+            return moduleVsDependencyPaths;
+
+        } catch (ParserConfigurationException e) {
+            throw new ExceptionHandler("Error creating file parser", ExceptionId.FILE_IO);
+        } catch (javax.xml.xpath.XPathExpressionException e) {
+            throw new ExceptionHandler("Error parsing artifacts from" + currentModule + "/pom.xml", ExceptionId.FILE_IO);
+        } catch (org.xml.sax.SAXException | java.io.IOException e) {
+            throw new ExceptionHandler("Error parsing " + currentModule + "/pom.xml", ExceptionId.FILE_IO);
         }
-
-        Map<String, List<String>> moduleVsDependencyPaths = new HashMap<>();
-
-        for (String module : moduleVsDependencies.keySet()) {
-            List<String> dependencyPaths = new ArrayList<>();
-            calcAlldependenciesForModule(module, moduleVsDependencies, dependencyPaths);
-            dependencyPaths.add(moduleVsPath.get(module) + "/src/main/java");
-            moduleVsDependencyPaths.put(module, dependencyPaths);
-        }
-
-        return moduleVsDependencyPaths;
 
     }
 

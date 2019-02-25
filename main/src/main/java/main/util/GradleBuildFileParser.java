@@ -1,5 +1,7 @@
 package main.util;
 
+import main.frontEnd.Interface.ExceptionHandler;
+import main.frontEnd.Interface.ExceptionId;
 import org.codehaus.groovy.ast.ASTNode;
 import org.codehaus.groovy.ast.CodeVisitorSupport;
 import org.codehaus.groovy.ast.GroovyCodeVisitor;
@@ -11,6 +13,7 @@ import org.codehaus.groovy.ast.expr.MethodCallExpression;
 import org.codehaus.groovy.ast.stmt.BlockStatement;
 import org.codehaus.groovy.ast.stmt.Statement;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -34,76 +37,29 @@ public class GradleBuildFileParser implements BuildFileParser {
      * <p>Constructor for GradleBuildFileParser.</p>
      *
      * @param fileName a {@link java.lang.String} object.
-     * @throws java.lang.Exception if any.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
-    public GradleBuildFileParser(String fileName) throws Exception {
+    public GradleBuildFileParser(String fileName) throws ExceptionHandler {
+        try {
 
-        final String content = new String(Files.readAllBytes(Paths.get(fileName)), "UTF-8");
-
-        List<ASTNode> astNodes = new AstBuilder().buildFromString(content);
-
-        String[] splits = fileName.split("/");
-        String projectName = splits[splits.length - 2];
-        final String projectRoot = fileName.substring(0, fileName.lastIndexOf('/'));
-
-        GroovyCodeVisitor visitor = new CodeVisitorSupport() {
-
-            @Override
-            public void visitMethodCallExpression(MethodCallExpression call) {
-
-                List<Expression> args = ((ArgumentListExpression) call.getArguments()).getExpressions();
-
-                for (Expression arg : args) {
-
-                    moduleVsPath.put(arg.getText(), projectRoot + "/" + arg.getText());
-                }
-            }
-        };
-
-        for (ASTNode astNode : astNodes) {
-            astNode.visit(visitor);
-        }
-
-        if (moduleVsPath.isEmpty()) {
-            moduleVsPath.put(projectName, projectRoot);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Map<String, List<String>> getDependencyList() throws Exception {
-
-        Map<String, List<String>> moduleVsDependencies = new HashMap<>();
-
-        for (String module : moduleVsPath.keySet()) {
-
-            final List<String> dependencies = new ArrayList<>();
-
-            String buildFile = moduleVsPath.get(module) + "/build.gradle";
-
-            String content = new String(Files.readAllBytes(Paths.get(buildFile)), "UTF-8");
+            final String content = new String(Files.readAllBytes(Paths.get(fileName)), "UTF-8");
 
             List<ASTNode> astNodes = new AstBuilder().buildFromString(content);
+
+            String[] splits = fileName.split("/");
+            String projectName = splits[splits.length - 2];
+            final String projectRoot = fileName.substring(0, fileName.lastIndexOf('/'));
 
             GroovyCodeVisitor visitor = new CodeVisitorSupport() {
 
                 @Override
-                public void visitClosureExpression(ClosureExpression expression) {
+                public void visitMethodCallExpression(MethodCallExpression call) {
 
-                    Statement block = expression.getCode();
-                    if (block instanceof BlockStatement) {
-                        BlockStatement bs = (BlockStatement) block;
-                        for (Statement statement : bs.getStatements()) {
+                    List<Expression> args = ((ArgumentListExpression) call.getArguments()).getExpressions();
 
-                            String stmtStr = statement.getText();
+                    for (Expression arg : args) {
 
-                            if (stmtStr.contains("this.compile(this.project(:")) {
-                                String dependency = stmtStr.substring(stmtStr.indexOf(':') + 1, stmtStr.indexOf(')'));
-                                dependencies.add(dependency);
-                            }
-                        }
+                        moduleVsPath.put(arg.getText(), projectRoot + "/" + arg.getText());
                     }
                 }
             };
@@ -112,19 +68,74 @@ public class GradleBuildFileParser implements BuildFileParser {
                 astNode.visit(visitor);
             }
 
-            moduleVsDependencies.put(module, dependencies);
+            if (moduleVsPath.isEmpty()) {
+                moduleVsPath.put(projectName, projectRoot);
+            }
+        } catch (IOException e) {
+            throw new ExceptionHandler("Error reading file " + fileName, ExceptionId.FILE_IO);
         }
+    }
 
-        Map<String, List<String>> moduleVsDependencyPaths = new HashMap<>();
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Map<String, List<String>> getDependencyList() throws ExceptionHandler {
+        String buildFile = "";
+        try {
+            Map<String, List<String>> moduleVsDependencies = new HashMap<>();
 
-        for (String module : moduleVsDependencies.keySet()) {
-            List<String> dependencyPaths = new ArrayList<>();
-            calcAlldependenciesForModule(module, moduleVsDependencies, dependencyPaths);
-            dependencyPaths.add(moduleVsPath.get(module) + "/src/main/java");
-            moduleVsDependencyPaths.put(module, dependencyPaths);
+            for (String module : moduleVsPath.keySet()) {
+
+                final List<String> dependencies = new ArrayList<>();
+
+                buildFile = moduleVsPath.get(module) + "/build.gradle";
+
+                String content = new String(Files.readAllBytes(Paths.get(buildFile)), "UTF-8");
+
+                List<ASTNode> astNodes = new AstBuilder().buildFromString(content);
+
+                GroovyCodeVisitor visitor = new CodeVisitorSupport() {
+
+                    @Override
+                    public void visitClosureExpression(ClosureExpression expression) {
+
+                        Statement block = expression.getCode();
+                        if (block instanceof BlockStatement) {
+                            BlockStatement bs = (BlockStatement) block;
+                            for (Statement statement : bs.getStatements()) {
+
+                                String stmtStr = statement.getText();
+
+                                if (stmtStr.contains("this.compile(this.project(:")) {
+                                    String dependency = stmtStr.substring(stmtStr.indexOf(':') + 1, stmtStr.indexOf(')'));
+                                    dependencies.add(dependency);
+                                }
+                            }
+                        }
+                    }
+                };
+
+                for (ASTNode astNode : astNodes) {
+                    astNode.visit(visitor);
+                }
+
+                moduleVsDependencies.put(module, dependencies);
+            }
+
+            Map<String, List<String>> moduleVsDependencyPaths = new HashMap<>();
+
+            for (String module : moduleVsDependencies.keySet()) {
+                List<String> dependencyPaths = new ArrayList<>();
+                calcAlldependenciesForModule(module, moduleVsDependencies, dependencyPaths);
+                dependencyPaths.add(moduleVsPath.get(module) + "/src/main/java");
+                moduleVsDependencyPaths.put(module, dependencyPaths);
+            }
+
+            return moduleVsDependencyPaths;
+        } catch (IOException e) {
+            throw new ExceptionHandler("Error reading file " + buildFile, ExceptionId.FILE_IO);
         }
-
-        return moduleVsDependencyPaths;
     }
 
     private void calcAlldependenciesForModule(String module, Map<String, List<String>> mVsds, List<String> dependencyPaths) {

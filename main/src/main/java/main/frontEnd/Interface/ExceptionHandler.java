@@ -50,10 +50,14 @@ public class ExceptionHandler extends Exception {
 
         return StringUtils.trimToNull(resp.toString());
     }
+
+    @Override
+    public void printStackTrace() {
+        System.err.println(this.toString());
+    }
     //endregion
 
     //region Getters
-
     /**
      * <p>Getter for the field <code>errorCode</code>.</p>
      *

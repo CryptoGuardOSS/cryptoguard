@@ -1,5 +1,8 @@
 package main.util;
 
+import main.frontEnd.Interface.ExceptionHandler;
+import main.frontEnd.Interface.ExceptionId;
+
 import java.io.File;
 
 /**
@@ -16,9 +19,9 @@ public class BuildFileParserFactory {
      *
      * @param projectRoot a {@link java.lang.String} object.
      * @return a {@link main.util.BuildFileParser} object.
-     * @throws java.lang.Exception if any.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
-    public static BuildFileParser getBuildfileParser(String projectRoot) throws Exception {
+    public static BuildFileParser getBuildfileParser(String projectRoot) throws ExceptionHandler {
 
         File pomFile = new File(projectRoot + "/" + "pom.xml");
 
@@ -32,7 +35,7 @@ public class BuildFileParserFactory {
             return new GradleBuildFileParser(projectRoot + "/" + "settings.gradle");
         }
 
-        throw new RuntimeException("Only maven and gradle projects are supported ...");
+        throw new ExceptionHandler("Only Maven and Gradle Projects are supported", ExceptionId.GEN_VALID);
 
     }
 }

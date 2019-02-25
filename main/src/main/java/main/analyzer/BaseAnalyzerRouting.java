@@ -1,6 +1,7 @@
 package main.analyzer;
 
 import main.frontEnd.Interface.ExceptionHandler;
+import main.frontEnd.Interface.ExceptionId;
 import main.rule.base.BaseRuleChecker;
 import main.rule.engine.EngineType;
 import main.util.Utils;
@@ -260,18 +261,27 @@ public class BaseAnalyzerRouting {
      */
     public static void loadBaseSootInfo(List<String> classNames, String criteriaClass,
                                         String criteriaMethod,
-                                        int criteriaParam, BaseRuleChecker checker) {
+                                        int criteriaParam, BaseRuleChecker checker) throws ExceptionHandler {
 
 
         Options.v().set_keep_line_number(true);
         Options.v().set_allow_phantom_refs(true);
 
         for (String clazz : BaseAnalyzer.CRITERIA_CLASSES) {
-            Scene.v().loadClassAndSupport(clazz);
+            try {
+                Scene.v().loadClassAndSupport(clazz);
+            } catch (Error e) {
+                throw new ExceptionHandler("Error loading class: " + clazz, ExceptionId.FILE_IO);
+            }
         }
 
         for (String clazz : classNames) {
-            Scene.v().loadClassAndSupport(clazz);
+            try {
+                Scene.v().loadClassAndSupport(clazz);
+            } catch (Error e) {
+                throw new ExceptionHandler("Error loading class: " + clazz, ExceptionId.FILE_IO);
+            }
+
         }
 
         Scene.v().loadNecessaryClasses();

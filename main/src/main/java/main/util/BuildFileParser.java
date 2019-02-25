@@ -1,5 +1,7 @@
 package main.util;
 
+import main.frontEnd.Interface.ExceptionHandler;
+
 import java.util.List;
 import java.util.Map;
 
@@ -16,8 +18,8 @@ public interface BuildFileParser {
      * <p>getDependencyList.</p>
      *
      * @return a {@link java.util.Map} object.
-     * @throws java.lang.Exception if any.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
-    Map<String, List<String>> getDependencyList() throws Exception;
+    Map<String, List<String>> getDependencyList() throws ExceptionHandler;
 
 }

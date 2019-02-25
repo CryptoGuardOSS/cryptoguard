@@ -863,10 +863,10 @@ public class Utils {
 
         File tempFile = new File(file);
 
-        //TODO - Add flag to verify overwrite a file?
         /*if (tempFile.exists() || tempFile.isFile())
             throw new ExceptionHandler(tempFile.getName() + " is already a valid file.");
-*/
+        */
+
         try {
             return tempFile.getCanonicalPath();
         } catch (Exception e) {

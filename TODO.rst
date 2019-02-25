@@ -13,11 +13,12 @@ Project TODO
 BUGS
 ------------------
 
-* [ ] CWE's (several issues defaulting to CWE: -1)
-* [ ] ScarfXML specific arguments (valid id/values are error-prone/not registering)
+* [~] CWE's (several issues defaulting to CWE: -1)
+    * [~] It may only show up when running the tests via cmdline?
+* [X] ScarfXML specific arguments (valid id/values are error-prone/not registering)
 * [X] Fully wrap the output with exceptions
     * [X] |cutS| APK |cutE| Soot scanning isn't wrapped
-    * [~] set error messages (Exception)
+    * [X] set error messages (Exception)
         * [X] code - 0-27 (0:success 1-27 = self-define)
         * [X] message
 
@@ -31,6 +32,7 @@ TODO
 	#. [X] new paths work (jar/apk/dir)
 	#. [~] java/class files work
 
+#. [ ] Add argument to overwrite file
 #. [ ] Allow property file be sent in with arguments
 #. [ ] Verify if format/argument matches format/stream
     * ex1: Format X doesn't support streaming and streaming flag enabled -> break and show error
@@ -45,9 +47,6 @@ TODO
     * [ ] at the next minor update?
 #. Ask
 	#. Documentation
-		* [~] Inline
-		* [~] TODO
-		* [ ] *
 #. [ ] Need to get the package version, default to 0.
 	* [ ] How to easily pull this dynamically from files?
 		* [ ] Maven -> pom.xml
@@ -59,5 +58,4 @@ TODO
 #. [~] Add time checks
 	1. [X] time check for analysis
 	#. [ ] time check for message parsing :sub:`only applicable for non-streaming`
-#. [ ] Upgrade to JDK 1.8.182
-	1. [ ] Remove the annoying rt.jar/jce.jar dependency
+#. [ ] Upgrade to JDK ?

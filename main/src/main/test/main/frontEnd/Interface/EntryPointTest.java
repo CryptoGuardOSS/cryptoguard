@@ -1,6 +1,7 @@
 package main.frontEnd.Interface;
 
 import com.example.response.AnalyzerReport;
+import com.example.response.BugInstanceType;
 import main.frontEnd.MessagingSystem.routing.Listing;
 import main.frontEnd.argsIdentifier;
 import main.rule.engine.EngineType;
@@ -23,7 +24,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 public class EntryPointTest {
 
@@ -137,6 +138,11 @@ public class EntryPointTest {
                     xmlToJava.setSchema(schema);
 
                     AnalyzerReport result = (AnalyzerReport) xmlToJava.unmarshal(new File(tempFileOutXML));
+
+                    for (BugInstanceType in : result.getBugInstance()) {
+                        assertEquals(1, in.getCweId().size());
+                        assertNotEquals(-1, in.getCweId().get(0));
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -176,6 +182,12 @@ public class EntryPointTest {
                     xmlToJava.setSchema(schema);
 
                     AnalyzerReport result = (AnalyzerReport) xmlToJava.unmarshal(new File(tempFileOutXML));
+
+                    for (BugInstanceType in : result.getBugInstance()) {
+                        assertEquals(1, in.getCweId().size());
+                        assertNotEquals(-1, in.getCweId().get(0));
+                    }
+
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -202,6 +214,11 @@ public class EntryPointTest {
                     xmlToJava.setSchema(schema);
 
                     AnalyzerReport result = (AnalyzerReport) xmlToJava.unmarshal(new File(tempStreamXML));
+
+                    for (BugInstanceType in : result.getBugInstance()) {
+                        assertEquals(1, in.getCweId().size());
+                        assertNotEquals(-1, in.getCweId().get(0));
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -260,6 +277,11 @@ public class EntryPointTest {
                     xmlToJava.setSchema(schema);
 
                     AnalyzerReport result = (AnalyzerReport) xmlToJava.unmarshal(new File(tempFileOutXML));
+
+                    for (BugInstanceType in : result.getBugInstance()) {
+                        assertEquals(1, in.getCweId().size());
+                        assertNotEquals(-1, in.getCweId().get(0));
+                    }
                 }
 
             } catch (Exception e) {
@@ -287,6 +309,11 @@ public class EntryPointTest {
                     xmlToJava.setSchema(schema);
 
                     AnalyzerReport result = (AnalyzerReport) xmlToJava.unmarshal(new File(tempStreamXML));
+
+                    for (BugInstanceType in : result.getBugInstance()) {
+                        assertEquals(1, in.getCweId().size());
+                        assertNotEquals(-1, in.getCweId().get(0));
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
