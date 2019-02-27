@@ -6,10 +6,8 @@ import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import main.frontEnd.argsIdentifier;
 import org.apache.commons.cli.*;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileDescriptor;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
+import java.io.*;
+import java.util.Properties;
 
 /**
  * <p>ScarfXML class.</p>
@@ -44,20 +42,31 @@ public class ScarfXML implements InputStructure {
                 arg = argsIdentifier.lookup(e.getMessage().replace("Missing required option: ", "")).getArg();
 
             if (arg == null)
-                throw new ExceptionHandler(this.helpInfo(), ExceptionId.FORMAT_VALID);
+                throw new ExceptionHandler(this.helpInfo(), ExceptionId.GEN_VALID);
             else
-                throw new ExceptionHandler("Issue with the argument: " + arg, ExceptionId.FORMAT_VALID);
+                throw new ExceptionHandler("Issue with the argument: " + arg, ExceptionId.GEN_VALID);
         }
 
-        //region Retrieving and setting the values
-        info.setAssessmentFramework(cmd.getOptionValue(ScarfXMLId.AssessmentFramework.getId(), "UNKNOWN"));
-        info.setAssessmentFrameworkVersion(cmd.getOptionValue(ScarfXMLId.AssessmentFrameworkVersion.getId(), "UNKNOWN"));
-        info.setBuildRootDir(cmd.getOptionValue(ScarfXMLId.BuildRootDir.getId(), "UNKNOWN"));
-        info.setPackageRootDir(cmd.getOptionValue(ScarfXMLId.PackageRootDir.getId(), "UNKNOWN"));
-        info.setParserName(cmd.getOptionValue(ScarfXMLId.ParserName.getId(), "UNKNOWN"));
-        info.setParserVersion(cmd.getOptionValue(ScarfXMLId.ParserVersion.getId(), "UNKNOWN"));
-        info.setUUID(cmd.getOptionValue(ScarfXMLId.UUID.getId(), java.util.UUID.randomUUID().toString()));
-        //endregion
+        if (cmd.hasOption(ScarfXMLId.ConfigFile.getId())) {
+            //region Retrieving and setting the values
+            Properties SWAMPProperties = loadProperties(cmd.getOptionValue(ScarfXMLId.ConfigFile.getId()));
+
+            info.setAssessmentFramework(SWAMPProperties.getProperty("assess_fw", "UNKNOWN"));
+            info.setAssessmentFrameworkVersion(SWAMPProperties.getProperty("assess_fw_version", "UNKNOWN"));
+            info.setAssessmentStartTime(SWAMPProperties.getProperty("assessment_start_ts", null));
+            info.setBuildFramework(SWAMPProperties.getProperty("build_fw", "UNKNOWN"));
+            info.setBuildFrameworkVersion(SWAMPProperties.getProperty("build_fw_version", "UNKNOWN"));
+            info.setBuildRootDir(SWAMPProperties.getProperty("build_root_dir", "UNKNOWN"));
+            info.setPackageName(SWAMPProperties.getProperty("package_name", "UNKNOWN"));
+            info.setPackageRootDir(SWAMPProperties.getProperty("package_root_dir", "UNKNOWN"));
+            info.setPackageVersion(SWAMPProperties.getProperty("package_version", "UNKNOWN"));
+            info.setParserName(SWAMPProperties.getProperty("parser_fw", "UNKNOWN"));
+            info.setParserVersion(SWAMPProperties.getProperty("parser_fw_version", "UNKNOWN"));
+            info.setUUID(SWAMPProperties.getProperty("uuid", null));
+
+
+            //endregion
+        }
 
         return true;
     }
@@ -83,45 +92,28 @@ public class ScarfXML implements InputStructure {
 
     }
 
-    private static Options setOptions() {
+    Options setOptions() {
         Options cmdLineArgs = new Options();
 
-        Option AssessmentFramework = Option.builder(ScarfXMLId.AssessmentFramework.getId()).hasArg().argName("string").desc(ScarfXMLId.AssessmentFramework.getDesc()).build();
-        AssessmentFramework.setType(String.class);
-        AssessmentFramework.setOptionalArg(false);
-        cmdLineArgs.addOption(AssessmentFramework);
-
-        Option AssessmentFrameworkVersion = Option.builder(ScarfXMLId.AssessmentFrameworkVersion.getId()).hasArg().argName("string").desc(ScarfXMLId.AssessmentFrameworkVersion.getDesc()).build();
-        AssessmentFrameworkVersion.setType(String.class);
-        AssessmentFrameworkVersion.setOptionalArg(false);
-        cmdLineArgs.addOption(AssessmentFrameworkVersion);
-
-        Option BuildRootDir = Option.builder(ScarfXMLId.BuildRootDir.getId()).hasArg().argName("string").desc(ScarfXMLId.BuildRootDir.getDesc()).build();
-        BuildRootDir.setType(String.class);
-        BuildRootDir.setOptionalArg(false);
-        cmdLineArgs.addOption(BuildRootDir);
-
-        Option PackageRootDir = Option.builder(ScarfXMLId.PackageRootDir.getId()).hasArg().argName("string").desc(ScarfXMLId.PackageRootDir.getDesc()).build();
-        PackageRootDir.setType(String.class);
-        PackageRootDir.setOptionalArg(true);
-        cmdLineArgs.addOption(PackageRootDir);
-
-        Option ParserName = Option.builder(ScarfXMLId.ParserName.getId()).hasArg().argName("string").desc(ScarfXMLId.ParserName.getDesc()).build();
-        ParserName.setType(String.class);
-        ParserName.setOptionalArg(false);
-        cmdLineArgs.addOption(ParserName);
-
-        Option ParserVersion = Option.builder(ScarfXMLId.ParserVersion.getId()).hasArg().argName("string").desc(ScarfXMLId.ParserVersion.getDesc()).build();
-        ParserVersion.setType(String.class);
-        ParserVersion.setOptionalArg(false);
-        cmdLineArgs.addOption(ParserVersion);
-
-        Option UUID = Option.builder(ScarfXMLId.UUID.getId()).hasArg().argName("string").desc(ScarfXMLId.UUID.getDesc()).build();
-        UUID.setType(String.class);
-        UUID.setOptionalArg(false);
-        cmdLineArgs.addOption(UUID);
+        Option config = Option.builder(ScarfXMLId.ConfigFile.getId()).hasArg().argName("file.properties").desc(ScarfXMLId.ConfigFile.getDesc()).build();
+        config.setType(String.class);
+        config.setOptionalArg(false);
+        cmdLineArgs.addOption(config);
 
         return cmdLineArgs;
+    }
+
+    Properties loadProperties(String path) throws ExceptionHandler {
+        try {
+            Properties SWAMPProperties = new Properties();
+            SWAMPProperties.load(new FileInputStream(path));
+
+            return SWAMPProperties;
+        } catch (FileNotFoundException e) {
+            throw new ExceptionHandler("Config File: " + path + " not found", ExceptionId.FILE_AFK);
+        } catch (IOException e) {
+            throw new ExceptionHandler("Error Loading: " + path, ExceptionId.FILE_READ);
+        }
     }
 
 }

@@ -69,7 +69,7 @@ public class EntryPoint {
                 try {
                     Files.write(Paths.get(filePath), outputMessage.getBytes());
                 } catch (Exception e) {
-                    throw new ExceptionHandler("Issue writing to " + filePath, ExceptionId.FILE_IO);
+                    throw new ExceptionHandler("Issue writing to " + filePath, ExceptionId.FILE_O);
                 }
             } else {
 
@@ -81,7 +81,7 @@ public class EntryPoint {
             }
 
         } catch (ExceptionHandler e) {
-            System.out.print(e.toString());
+            System.err.print(e.toString());
             System.exit(e.getErrorCode().getId());
         }
 

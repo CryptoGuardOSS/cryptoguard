@@ -75,6 +75,11 @@ sourceSets {
     }
 }
 
+//Ensuring all of the processors are being used for tests
+test {
+    maxParallelForks = Runtime.runtime.availableProcessors()
+}
+
 javadoc {
     exclude "com/example/response/**"
 }
@@ -88,6 +93,9 @@ dependencies {
     compile group: 'com.sun.xml.bind', name: 'jaxb-core', version: '2.3.0'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
     compile 'commons-cli:commons-cli:1.4'
+    implementation 'org.mockito:mockito-core:2.24.5'
+    compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
+
 }
 
 //compileJava.dependsOn xsd2java

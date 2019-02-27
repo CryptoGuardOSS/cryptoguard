@@ -15,23 +15,22 @@ BUGS
 
 * [~] CWE's (several issues defaulting to CWE: -1)
     * [~] It may only show up when running the tests via cmdline?
-* [X] ScarfXML specific arguments (valid id/values are error-prone/not registering)
-* [X] Fully wrap the output with exceptions
-    * [X] |cutS| APK |cutE| Soot scanning isn't wrapped
-    * [X] set error messages (Exception)
-        * [X] code - 0-27 (0:success 1-27 = self-define)
-        * [X] message
 
 TODO
 ------------------
 
-1. [ ] Verify
+1. [~] Verify
 	1. [X] the scarf-output is valid
 	#. [X] old paths still work
 	#. [!] verify the experimental rules 'a' are not showing up
 	#. [X] new paths work (jar/apk/dir)
-	#. [~] java/class files work
+	#. [!] java/class files work
 
+#. [~] Ask
+    * [X] For the ScarfXML Format, take in a property file
+    * [X] Use the 1 - ... - 127 as error codes
+    * [ ] possibly populate the std out/err
+        * maybe make it a flag?
 #. [ ] Add argument to overwrite file
 #. [ ] Allow property file be sent in with arguments
 #. [ ] Verify if format/argument matches format/stream
@@ -45,8 +44,6 @@ TODO
 
 #. [ ] Github release (from master only)
     * [ ] at the next minor update?
-#. Ask
-	#. Documentation
 #. [ ] Need to get the package version, default to 0.
 	* [ ] How to easily pull this dynamically from files?
 		* [ ] Maven -> pom.xml

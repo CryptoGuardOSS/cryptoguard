@@ -9,7 +9,6 @@ import soot.Scene;
 import soot.options.Options;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -164,16 +163,10 @@ public class BaseAnalyzerRouting {
                                     List<String> projectDependency,
                                     BaseRuleChecker checker) throws ExceptionHandler {
 
-        Utils.getJAVA7_HOME();
-
         Options.v().set_output_format(Options.output_format_jimple);
         Options.v().set_src_prec(Options.src_prec_java);
 
-        String srcPaths = Utils.join(":", snippetPath);
-
-        String tempSoot = Utils.getBaseSOOT() + ":" + srcPaths + ":" + Utils.buildSootClassPath(projectDependency);
-
-        Scene.v().setSootClassPath(tempSoot);
+        Scene.v().setSootClassPath(Utils.getBaseSOOT() + ":" + Utils.join(":", snippetPath) + ":" + Utils.buildSootClassPath(projectDependency));
 
         List<String> classNames = Utils.getClassNamesFromSnippet(snippetPath);
 
@@ -202,14 +195,12 @@ public class BaseAnalyzerRouting {
                                      List<String> projectDependency,
                                      BaseRuleChecker checker) throws ExceptionHandler {
 
-        Scene.v().setSootClassPath(Utils.getBaseSOOT7() + ":" + Utils.buildSootClassPath(projectDependency));
+        Options.v().set_output_format(Options.output_format_jimple);
+        Options.v().set_src_prec(Options.src_prec_java);
 
+        Scene.v().setSootClassPath(Utils.getBaseSOOT() + ":" + Utils.retrievePackageFromJavaFiles(snippetPath) + ":" + Utils.buildSootClassPath(projectDependency));
 
-        List<String> classNames = new ArrayList<>();
-
-        for (String snippit : snippetPath)
-            classNames.addAll(Utils.retrieveFullyQualifiedName(Arrays.asList(snippit)));
-
+        List<String> classNames = Utils.retrieveFullyQualifiedName(snippetPath);
 
         loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
     }
@@ -271,7 +262,7 @@ public class BaseAnalyzerRouting {
             try {
                 Scene.v().loadClassAndSupport(clazz);
             } catch (Error e) {
-                throw new ExceptionHandler("Error loading class: " + clazz, ExceptionId.FILE_IO);
+                throw new ExceptionHandler("Error loading Class: " + clazz, ExceptionId.LOADING);
             }
         }
 
@@ -279,7 +270,7 @@ public class BaseAnalyzerRouting {
             try {
                 Scene.v().loadClassAndSupport(clazz);
             } catch (Error e) {
-                throw new ExceptionHandler("Error loading class: " + clazz, ExceptionId.FILE_IO);
+                throw new ExceptionHandler("Error loading class: " + clazz, ExceptionId.LOADING);
             }
 
         }

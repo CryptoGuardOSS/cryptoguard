@@ -106,11 +106,11 @@ public class ScarfXMLStream extends baseStreamWriter {
             AnalyzerReport report = new AnalyzerReport();
 
             //region Setting Attributes
-          /*  report.setAssessFw(info.getAssessmentFramework());
-            report.setAssessFwVersion(info.getAssessmentFrameworkVersion());*/
-            report.setAssessmentStartTs(info.getStartTimeStamp());
-           /* report.setBuildFw(info.getBuildFramework());
-            report.setBuildFwVersion(info.getBuildFrameworkVersion());*/
+            report.setAssessFw(info.getAssessmentFramework());
+            report.setAssessFwVersion(info.getAssessmentFrameworkVersion());
+            report.setAssessmentStartTs(info.getAssessmentStartTime());
+            report.setBuildFw(info.getBuildFramework());
+            report.setBuildFwVersion(info.getBuildFrameworkVersion());
             report.setPackageName(info.getPackageName());
             report.setPackageVersion(info.getPackageVersion());
             report.setPackageRootDir(info.getPackageRootDir());
@@ -145,7 +145,7 @@ public class ScarfXMLStream extends baseStreamWriter {
                 this.write(xml);
 
         } catch (JAXBException e) {
-            throw new ExceptionHandler("Error marshalling xml.", ExceptionId.MAR_VAR);
+            throw new ExceptionHandler("Error writing xml.", ExceptionId.MAR_VAR);
         }
 
     }
@@ -285,7 +285,7 @@ public class ScarfXMLStream extends baseStreamWriter {
                     this.write(xml);
 
         } catch (JAXBException e) {
-            throw new ExceptionHandler("Error marshalling Xml.", ExceptionId.MAR_VAR);
+            throw new ExceptionHandler("Error writing Xml.", ExceptionId.MAR_VAR);
         }
         //endregion
     }
@@ -327,7 +327,7 @@ public class ScarfXMLStream extends baseStreamWriter {
                     this.write(xml);
 
         } catch (JAXBException e) {
-            throw new ExceptionHandler("Error marshalling XML.", ExceptionId.MAR_VAR);
+            throw new ExceptionHandler("Error writing XML.", ExceptionId.MAR_VAR);
         }
         //endregion
 

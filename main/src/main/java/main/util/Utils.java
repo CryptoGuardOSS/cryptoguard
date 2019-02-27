@@ -24,6 +24,8 @@ import soot.options.Options;
 import soot.util.Chain;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -60,6 +62,7 @@ public class Utils {
     private static Pattern sootMthdPattern = Pattern.compile("<((?:[a-zA-Z0-9]+))>");
     private static Pattern sootMthdPatternTwo = Pattern.compile("((?:[a-zA-Z0-9_]+))\\(");
     private static Pattern sootFoundMatchPattern = Pattern.compile("\"{1}(.+)\"{1}");
+    private static Pattern packagePattern = Pattern.compile("package ([[a-zA-Z]+?.]+);");
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");
 
     /**
@@ -81,7 +84,7 @@ public class Utils {
             }
             return classNames;
         } catch (IOException e) {
-            throw new ExceptionHandler("Error with file " + jarPath, ExceptionId.FILE_IO);
+            throw new ExceptionHandler("Error with file " + jarPath, ExceptionId.FILE_I);
         }
     }
 
@@ -169,7 +172,7 @@ public class Utils {
 
             return null;
         } catch (IOException e) {
-            throw new ExceptionHandler("Error with file " + jarPath, ExceptionId.FILE_IO);
+            throw new ExceptionHandler("Error with file " + jarPath, ExceptionId.FILE_I);
         }
 
     }
@@ -197,7 +200,7 @@ public class Utils {
             }
             return classNames;
         } catch (IOException e) {
-            throw new ExceptionHandler("Error with dex file classes.dex", ExceptionId.FILE_IO);
+            throw new ExceptionHandler("Error with dex file classes.dex", ExceptionId.FILE_I);
         }
     }
 
@@ -365,9 +368,9 @@ public class Utils {
                 }
             }
         } catch (FileNotFoundException e) {
-            throw new ExceptionHandler("File " + jarPath + " is not found.", ExceptionId.FILE_IO);
+            throw new ExceptionHandler("File " + jarPath + " is not found.", ExceptionId.FILE_AFK);
         } catch (IOException e) {
-            throw new ExceptionHandler("Error Reading " + jarPath + ".", ExceptionId.FILE_IO);
+            throw new ExceptionHandler("Error Reading " + jarPath + ".", ExceptionId.FILE_I);
         }
         return classNames;
     }
@@ -378,7 +381,7 @@ public class Utils {
             ZipEntry entry = zipFile.getEntry(file);
             return zipFile.getInputStream(entry);
         } catch (IOException e) {
-            throw new ExceptionHandler("Error Reading " + jarPath + ".", ExceptionId.FILE_IO);
+            throw new ExceptionHandler("Error Reading " + jarPath + ".", ExceptionId.FILE_I);
         }
     }
 
@@ -524,6 +527,41 @@ public class Utils {
             sourcePackage = paths[paths.length - 2] + "." + sourcePackage;
         }
         return sourcePackage;
+    }
+
+    public static String retrievePackageFromJavaFiles(String... sourceFiles) {
+        return retrievePackageFromJavaFiles(Arrays.asList(sourceFiles));
+    }
+
+    public static String retrievePackageFromJavaFiles(List<String> sourceFiles) {
+        String commonPath = null;
+
+        for (String in : sourceFiles) {
+
+            String tempPath = in.replace(retrievePackageFromJavaFiles(in), "");
+
+            if (commonPath == null)
+                commonPath = tempPath;
+            else if (!commonPath.equals(in)) {
+                String removable = commonPath.replace(in, "");
+                commonPath = commonPath.replace(removable, "");
+            }
+        }
+
+        return commonPath;//commonPath.replaceAll(Utils.fileSep + "$", "");
+    }
+
+    public static String retrievePackageFromJavaFiles(String file) {
+        try {
+            File in = new File(file);
+            for (String line : Files.readAllLines(in.toPath(), Charset.forName("UTF-8"))) {
+                Matcher matches = packagePattern.matcher(line);
+                if (matches.find())
+                    return Utils.fileSep + StringUtils.trimToNull(matches.group(1)) + Utils.fileSep + in.getName();
+            }
+        } catch (IOException e) {
+        }
+        return file;
     }
 
     /**
@@ -838,12 +876,12 @@ public class Utils {
         for (String dir : arguments) {
             File dirChecking = new File(dir);
             if (!dirChecking.exists() || !dirChecking.isDirectory())
-                throw new ExceptionHandler(dirChecking.getName() + " is not a valid directory.", ExceptionId.FILE_IO);
+                throw new ExceptionHandler(dirChecking.getName() + " is not a valid directory.", ExceptionId.ARG_VALID);
 
             try {
                 dirs.add(dirChecking.getCanonicalPath());
             } catch (Exception e) {
-                throw new ExceptionHandler("Error retrieving the full path of the " + dirChecking + ".", ExceptionId.FILE_IO);
+                throw new ExceptionHandler("Error retrieving the full path of the " + dirChecking + ".", ExceptionId.FILE_AFK);
             }
         }
         return dirs;
@@ -859,7 +897,7 @@ public class Utils {
      */
     public static String verifyFileOut(String file, Listing type) throws ExceptionHandler {
         if (!file.endsWith(type.getOutputFileExt()))
-            throw new ExceptionHandler("File " + file + " doesn't have the right file type ", ExceptionId.FILE_IO);
+            throw new ExceptionHandler("File " + file + " doesn't have the right file type ", ExceptionId.ARG_VALID);
 
         File tempFile = new File(file);
 
@@ -870,7 +908,7 @@ public class Utils {
         try {
             return tempFile.getCanonicalPath();
         } catch (Exception e) {
-            throw new ExceptionHandler("Error retrieving the path of the file " + tempFile.getName() + ".", ExceptionId.FILE_IO);
+            throw new ExceptionHandler("Error retrieving the path of the file " + tempFile.getName() + ".", ExceptionId.FILE_AFK);
         }
     }
 
@@ -884,16 +922,16 @@ public class Utils {
      */
     public static String retrieveFilePath(String file, EngineType type) throws ExceptionHandler {
         if (!file.endsWith(type.getInputExtension()))
-            throw new ExceptionHandler("File " + file + " doesn't have the right file type ", ExceptionId.FILE_IO);
+            throw new ExceptionHandler("File " + file + " doesn't have the right file type ", ExceptionId.ARG_VALID);
 
         File tempFile = new File(file);
         if (!tempFile.exists() || !tempFile.isFile())
-            throw new ExceptionHandler(tempFile.getName() + " is not a valid file.", ExceptionId.FILE_IO);
+            throw new ExceptionHandler(tempFile.getName() + " is not a valid file.", ExceptionId.ARG_VALID);
 
         try {
             return tempFile.getCanonicalPath();
         } catch (Exception e) {
-            throw new ExceptionHandler("Error retrieving the path of the file " + tempFile.getName() + ".", ExceptionId.FILE_IO);
+            throw new ExceptionHandler("Error retrieving the path of the file " + tempFile.getName() + ".", ExceptionId.FILE_AFK);
         }
     }
 
@@ -908,7 +946,7 @@ public class Utils {
     public static List<String> retrieveFilesByType(List<String> arguments, EngineType type) throws ExceptionHandler {
         if (type == EngineType.DIR)
             if (arguments.size() != 1)
-                throw new ExceptionHandler("Please enter one source argument for this use case.", ExceptionId.FILE_IO);
+                throw new ExceptionHandler("Please enter one source argument for this use case.", ExceptionId.GEN_VALID);
             else
                 return retrieveDirs(arguments);
 

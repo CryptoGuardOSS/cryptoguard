@@ -8,13 +8,7 @@ package main.frontEnd.MessagingSystem.routing.inputStructures;
  */
 public enum ScarfXMLId {
 
-    AssessmentFramework("Saf", "The assessment framework."),
-    AssessmentFrameworkVersion("Safv", "The assessment framework version."),
-    BuildRootDir("Sbrd", "The directory of the root."),
-    PackageRootDir("Sprd", "The directory of the package ."),
-    ParserName("Spn", "The name of the parser."),
-    ParserVersion("Spv", "The version of the parser."),
-    UUID("Sid", "The uuid of the current id.");
+    ConfigFile("Sconfig", "The configuration file for Scarf Header attributes.");
 
     private String id;
     private String desc;

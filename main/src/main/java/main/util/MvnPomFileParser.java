@@ -59,9 +59,9 @@ public class MvnPomFileParser implements BuildFileParser {
                 }
             }
         } catch (ParserConfigurationException e) {
-            throw new ExceptionHandler("Error creating file parser", ExceptionId.FILE_IO);
+            throw new ExceptionHandler("Error creating file parser", ExceptionId.FILE_CON);
         } catch (org.xml.sax.SAXException | java.io.IOException e) {
-            throw new ExceptionHandler("Error parsing " + fileName, ExceptionId.FILE_IO);
+            throw new ExceptionHandler("Error parsing " + fileName, ExceptionId.FILE_O);
         }
     }
 
@@ -113,11 +113,11 @@ public class MvnPomFileParser implements BuildFileParser {
             return moduleVsDependencyPaths;
 
         } catch (ParserConfigurationException e) {
-            throw new ExceptionHandler("Error creating file parser", ExceptionId.FILE_IO);
+            throw new ExceptionHandler("Error creating file parser", ExceptionId.FILE_CON);
         } catch (javax.xml.xpath.XPathExpressionException e) {
-            throw new ExceptionHandler("Error parsing artifacts from" + currentModule + "/pom.xml", ExceptionId.FILE_IO);
+            throw new ExceptionHandler("Error parsing artifacts from" + currentModule + "/pom.xml", ExceptionId.FILE_READ);
         } catch (org.xml.sax.SAXException | java.io.IOException e) {
-            throw new ExceptionHandler("Error parsing " + currentModule + "/pom.xml", ExceptionId.FILE_IO);
+            throw new ExceptionHandler("Error parsing " + currentModule + "/pom.xml", ExceptionId.FILE_READ);
         }
 
     }

@@ -12,15 +12,40 @@ package main.frontEnd.Interface;
  */
 public enum ExceptionId {
     //region Values
+
+    //region Range 0: Success
     HELP(0, "Asking For Help"),
     VERSION(0, "Asking For Version"),
+    //endregion
+    //region Range 1 -> 14 : Input Validation
     GEN_VALID(1, "General Argument Validation"),
-    FORMAT_VALID(2, "Format Specific Argument Validation"),
-    ENV_VAR(3, "Environment Variable Not Set"),
-    FILE_IO(4, "File IO"),
-    MAR_VAR(5, "Error Marshalling The Output"),
-    SCAN_GEN(6, "General Error Scanning The Program"),
-    UNKWN(27, "Unknown");
+    ARG_VALID(2, "Argument Value Validation"),
+    FORMAT_VALID(7, "Format Specific Argument Validation"),
+    //endregion
+    //region Range 15 -> 29 : File I
+    FILE_I(15, "File Input Error"),
+    FILE_READ(16, "Reading File Error"),
+    FILE_AFK(17, "File Not Available"),
+    //endregion
+    //region Range 30 -> 44 : File O
+    FILE_O(30, "File Output Error"),
+    FILE_CON(31, "Output File Creation Error"),
+    FILE_CUT(32, "Error Closing The File"),
+    //endregion
+    //region Range 45 -> 49 : Environment Variable
+    ENV_VAR(45, "Environment Variable Not Set"),
+    //endregion
+    //region Range 50 ->... -> 99 : TBD
+    //endregion
+    //region Range 100 -> 119 : Our Issue
+    MAR_VAR(100, "Error Marshalling The Output"),
+    //endregion
+    //region Range 120 -> 127 : Hail Mary
+    SCAN_GEN(120, "General Error Scanning The Program"),
+    LOADING(121, "Error Loading Class"),
+    UNKWN(127, "Unknown"),
+    //endregion
+    ;
     //endregion
 
     //region Attributes

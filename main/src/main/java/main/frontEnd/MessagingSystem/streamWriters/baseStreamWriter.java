@@ -38,7 +38,7 @@ public abstract class baseStreamWriter {
         try {
             this.streamOut = new FileOutputStream(new File(info.getFileOut()));
         } catch (Exception e) {
-            throw new ExceptionHandler("Error creating the output stream with " + info.getFileOutName(), ExceptionId.FILE_IO);
+            throw new ExceptionHandler("Error creating the output stream with " + info.getFileOutName(), ExceptionId.FILE_CON);
         }
         this.writeHeader(info);
     }
@@ -56,7 +56,7 @@ public abstract class baseStreamWriter {
                 output += "\n";
             this.streamOut.write(output.getBytes(chars));
         } catch (Exception e) {
-            throw new ExceptionHandler("Error writing the output " + output, ExceptionId.FILE_IO);
+            throw new ExceptionHandler("Error writing the output " + output, ExceptionId.FILE_O);
         }
     }
 
@@ -69,7 +69,7 @@ public abstract class baseStreamWriter {
         try {
             this.streamOut.write("\n".getBytes(chars));
         } catch (Exception e) {
-            throw new ExceptionHandler("Error writing the nextline.", ExceptionId.FILE_IO);
+            throw new ExceptionHandler("Error writing the nextline.", ExceptionId.FILE_O);
         }
     }
 
@@ -83,7 +83,7 @@ public abstract class baseStreamWriter {
         try {
             this.streamOut.write(output.getBytes(chars));
         } catch (Exception e) {
-            throw new ExceptionHandler("Error writing the output " + output, ExceptionId.FILE_IO);
+            throw new ExceptionHandler("Error writing the output " + output, ExceptionId.FILE_O);
         }
     }
 
@@ -98,7 +98,7 @@ public abstract class baseStreamWriter {
         try {
             this.streamOut.close();
         } catch (Exception e) {
-            throw new ExceptionHandler("Error closing the stream.", ExceptionId.FILE_IO);
+            throw new ExceptionHandler("Error closing the stream.", ExceptionId.FILE_CUT);
         }
     }
 

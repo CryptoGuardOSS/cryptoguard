@@ -15,7 +15,7 @@
 			</xsd:sequence>
 			<xsd:attribute name="assess_fw" type="xsd:normalizedString"/>
 			<xsd:attribute name="assess_fw_version" type="xsd:normalizedString"/>
-			<xsd:attribute name="assessment_start_ts" type="xsd:dateTime" use="required"/>
+			<xsd:attribute name="assessment_start_ts" type="xsd:normalizedString" use="required"/>
 			<xsd:attribute name="build_fw" type="xsd:normalizedString"/>
 			<xsd:attribute name="build_fw_version" type="xsd:normalizedString"/>
 			<xsd:attribute name="package_name" type="xsd:normalizedString" use="required"/>

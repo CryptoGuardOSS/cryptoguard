@@ -1,17 +1,19 @@
 package main.frontEnd.MessagingSystem.routing;
 
+import main.frontEnd.Interface.ExceptionHandler;
 import main.rule.engine.EngineType;
 import main.util.Utils;
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import soot.G;
 
 import javax.annotation.Nonnull;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.*;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * The class containing the analysis rule information.
@@ -29,9 +31,8 @@ public class EnvironmentInformation {
     private final String PropertiesFile = "gradle.properties";
     private final String ToolFramework;
     private final String ToolFrameworkVersion;
-    private final XMLGregorianCalendar startTimeStamp;
-    private final String BuildFramework;
-    private final String BuildFrameworkVersion;
+    private String BuildFramework;
+    private String BuildFrameworkVersion;
     private final String platformName = Utils.getPlatform();
     private String packageName = "UNKNOWN";
     private String packageVersion = "UNKNOWN";
@@ -56,7 +57,9 @@ public class EnvironmentInformation {
     //region From Outside and defaulted unless set
     private String AssessmentFramework = "UNKNOWN";
     private String AssessmentFrameworkVersion = "UNKNOWN";
-    private String AssessmentStartTime = "UNKNOWN";
+    private DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd_HH:mm:ss");
+    private DateTime startTime = new DateTime();
+    private String AssessmentStartTime = formatter.print(startTime);
     private String ParserName = "UNKNOWN";
     private String ParserVersion = "UNKNOWN";
     private String packageRootDir = "UNKNOWN";
@@ -65,7 +68,6 @@ public class EnvironmentInformation {
     private String xPath;
     private Boolean printOut = false;
     //endregion
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     private ByteArrayOutputStream sootErrors = new ByteArrayOutputStream();
     //region Constructor
 
@@ -130,41 +132,31 @@ public class EnvironmentInformation {
      * @param sourcePkg     a {@link java.lang.String} object.
      * @param sourcePkg     a {@link java.lang.String} object.
      */
-    public EnvironmentInformation(@Nonnull List<String> source, @Nonnull EngineType sourceType, Listing messagingType, List<String> dependencies, List<String> sourcePaths, String sourcePkg) {
+    public EnvironmentInformation(@Nonnull List<String> source, @Nonnull EngineType sourceType, Listing messagingType, List<String> dependencies, List<String> sourcePaths, String sourcePkg) throws ExceptionHandler {
 
         //region Setting Internal Version Settings
         String tempToolFrameworkVersion;
         String tempToolFramework;
-        String tempBuildFramework;
-        String tempBuildFrameworkVersion;
         try {
             Properties.load(new FileInputStream(PropertiesFile));
 
             tempToolFrameworkVersion = Properties.getProperty("version");
             tempToolFramework = Properties.getProperty("projectName");
-            tempBuildFramework = Properties.getProperty("buildFrameWork");
-            tempBuildFrameworkVersion = Properties.getProperty("buildVersion");
 
         } catch (FileNotFoundException e) {
             tempToolFrameworkVersion = "Property Not Found";
             tempToolFramework = "Property Not Found";
-            tempBuildFramework = "Property Not Found";
-            tempBuildFrameworkVersion = "Property Not Found";
         } catch (IOException e) {
             tempToolFrameworkVersion = "Not Available";
             tempToolFramework = "Not Available";
-            tempBuildFramework = "Not Available";
-            tempBuildFrameworkVersion = "Not Available";
         }
         ToolFrameworkVersion = tempToolFrameworkVersion;
         ToolFramework = tempToolFramework;
-        startTimeStamp = getCurrentDate();
-        BuildFramework = tempBuildFramework;
-        BuildFrameworkVersion = tempBuildFrameworkVersion;
         //endregion
 
         //region Setting Required Attributes
 
+        //Redirecting the Soot Output - might need to change this
         G.v().out = new PrintStream(this.sootErrors);
 
         this.Source = source;
@@ -178,27 +170,23 @@ public class EnvironmentInformation {
         this.packageRootDir = sourcePkg;
         //endregion
 
+
     }
     //endregion
 
-    /**
-     * A short method to generate a  XMLGregorian type from the current date
-     * NOTE: For the future may need to push this method down into the Schema outputs and make this a normal timestamp
-     *
-     * @return XML Gregorian Calendar - a timestamp for use directly with the xsd schema
-     */
-    public XMLGregorianCalendar getCurrentDate() {
-        try {
-            GregorianCalendar calander = new GregorianCalendar();
-            DatatypeFactory translator = DatatypeFactory.newInstance();
-            calander.setTime(new Date());
-            return translator.newXMLGregorianCalendar(calander);
-        } catch (DatatypeConfigurationException e) {
-            return null;
-        }
+    //region Getters and Setters
+    public String getAssessmentStartTime() {
+        return AssessmentStartTime;
     }
 
-    //region Getters and Setters
+
+    public void setBuildFramework(String buildFramework) {
+        BuildFramework = buildFramework;
+    }
+
+    public void setBuildFrameworkVersion(String buildFrameworkVersion) {
+        BuildFrameworkVersion = buildFrameworkVersion;
+    }
 
     /**
      * <p>Getter for the field <code>addExperimentalRules</code>.</p>
@@ -307,14 +295,6 @@ public class EnvironmentInformation {
         return ToolFrameworkVersion;
     }
 
-    /**
-     * <p>Getter for the field <code>startTimeStamp</code>.</p>
-     *
-     * @return a {@link javax.xml.datatype.XMLGregorianCalendar} object.
-     */
-    public XMLGregorianCalendar getStartTimeStamp() {
-        return startTimeStamp;
-    }
 
     /**
      * <p>getBuildFramework.</p>
@@ -361,14 +341,6 @@ public class EnvironmentInformation {
         return AssessmentFrameworkVersion;
     }
 
-    /**
-     * <p>getAssessmentStartTime.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    public String getAssessmentStartTime() {
-        return AssessmentStartTime;
-    }
 
     /**
      * <p>getParserName.</p>
@@ -398,20 +370,9 @@ public class EnvironmentInformation {
         if (this.UUID == null)
             this.UUID = java.util.UUID.randomUUID().toString();
 
-
         return this.UUID;
 
     }
-
-    /**
-     * <p>Getter for the field <code>dateFormat</code>.</p>
-     *
-     * @return a {@link java.text.SimpleDateFormat} object.
-     */
-    public SimpleDateFormat getDateFormat() {
-        return dateFormat;
-    }
-
     /**
      * <p>Getter for the field <code>packageName</code>.</p>
      *

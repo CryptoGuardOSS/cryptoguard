@@ -41,11 +41,11 @@ public class ScarfXML implements OutputStructure {
 
             //region Setting the report for marshalling
             //region Setting Attributes
-            /*report.setAssessFw(source.getAssessmentFramework());
-            report.setAssessFwVersion(source.getAssessmentFrameworkVersion());*/
-            report.setAssessmentStartTs(source.getStartTimeStamp());
-/*            report.setBuildFw(source.getBuildFramework());
-            report.setBuildFwVersion(source.getBuildFrameworkVersion());*/
+            report.setAssessFw(source.getAssessmentFramework());
+            report.setAssessFwVersion(source.getAssessmentFrameworkVersion());
+            report.setAssessmentStartTs(source.getAssessmentStartTime());
+            report.setBuildFw(source.getBuildFramework());
+            report.setBuildFwVersion(source.getBuildFrameworkVersion());
             report.setPackageName(source.getPackageName());
             report.setPackageVersion(source.getPackageVersion());
             report.setPackageRootDir(source.getPackageRootDir());

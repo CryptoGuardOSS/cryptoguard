@@ -35,7 +35,7 @@ public class BuildFileParserFactory {
             return new GradleBuildFileParser(projectRoot + "/" + "settings.gradle");
         }
 
-        throw new ExceptionHandler("Only Maven and Gradle Projects are supported", ExceptionId.GEN_VALID);
+        throw new ExceptionHandler("Only Maven and Gradle Projects are supported", ExceptionId.ARG_VALID);
 
     }
 }

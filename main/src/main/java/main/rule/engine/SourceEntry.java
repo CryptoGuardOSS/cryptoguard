@@ -1,7 +1,6 @@
 package main.rule.engine;
 
 import main.frontEnd.Interface.ExceptionHandler;
-import main.frontEnd.Interface.ExceptionId;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
@@ -33,7 +32,6 @@ public class SourceEntry implements EntryHandler {
         ArrayList<AnalysisIssue> issues = generalInfo.getPrintOut() ? null : new ArrayList<AnalysisIssue>();
         generalInfo.startAnalysis();
         //region Core
-        try {
             BuildFileParser buildFileParser = BuildFileParserFactory.getBuildfileParser(generalInfo.getSource().get(0));
 
             Map<String, List<String>> moduleVsDependency = buildFileParser.getDependencyList();
@@ -73,9 +71,6 @@ public class SourceEntry implements EntryHandler {
                     FieldInitializationInstructionMap.reset();
                 }
             }
-        } catch (Exception e) {
-            throw new ExceptionHandler("Error running the scan.", ExceptionId.SCAN_GEN);
-        }
         //endregion
         generalInfo.stopAnalysis();
         return issues;
@@ -88,7 +83,6 @@ public class SourceEntry implements EntryHandler {
         generalInfo.startAnalysis();
 
         //region Core
-        try {
             BuildFileParser buildFileParser = BuildFileParserFactory.getBuildfileParser(generalInfo.getSource().get(0));
 
             Map<String, List<String>> moduleVsDependency = buildFileParser.getDependencyList();
@@ -125,9 +119,6 @@ public class SourceEntry implements EntryHandler {
                     FieldInitializationInstructionMap.reset();
                 }
             }
-        } catch (Exception e) {
-            throw new ExceptionHandler("Error running the scan.", ExceptionId.SCAN_GEN);
-        }
         //endregion
 
         generalInfo.stopAnalysis();
