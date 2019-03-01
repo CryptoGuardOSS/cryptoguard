@@ -125,7 +125,10 @@ public enum EngineType {
         StringBuilder out = new StringBuilder("[");
 
         for (EngineType type : EngineType.values())
-            out.append(type.getFlag()).append(" ");
+            if (type == EngineType.CLASSFILES)
+                out.append(type.getFlag()).append("(experimental) ");
+            else
+                out.append(type.getFlag()).append(" ");
 
         return StringUtils.trimToNull(out.toString()) + "]";
     }

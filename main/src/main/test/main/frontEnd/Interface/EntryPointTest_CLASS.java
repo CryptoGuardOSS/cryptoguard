@@ -19,16 +19,16 @@ import static junit.framework.TestCase.assertTrue;
 import static main.TestUtilities.makeArg;
 import static org.junit.Assert.assertNull;
 
-public class EntryPointTest_JAVA {
+public class EntryPointTest_CLASS {
 
     private final Boolean isLinux = !System.getProperty("os.name").contains("Windows");
     private final String basePath = System.getProperty("user.dir");
     private final String srcOneGrv = basePath.replace("main", "testable-jar");
-    private final String src = Utils.osPathJoin(srcOneGrv, "src", "main", "java", "tester");
-    private final String[] files = {Utils.osPathJoin(src, "PBEUsage.java"), Utils.osPathJoin(src, "UrlFrameWorks.java")};
+    private final String src = Utils.osPathJoin(srcOneGrv, "build", "classes", "main", "tester");
+    private final String[] files = {Utils.osPathJoin(src, "PBEUsage.class"), Utils.osPathJoin(src, "UrlFrameWorks.class")};
     private final String srcOneGrvDep = Utils.osPathJoin(srcOneGrv, "build", "dependencies");
-    private final String tempFileOutTxt = Utils.osPathJoin(System.getProperty("user.dir"), "testable-jar_javaFiles.txt");
-    private final String tempFileOutXML = Utils.osPathJoin(System.getProperty("user.dir"), "testable-jar_javaFiles.xml");
+    private final String tempFileOutTxt = Utils.osPathJoin(System.getProperty("user.dir"), "testable-jar_classFiles.txt");
+    private final String tempFileOutXML = Utils.osPathJoin(System.getProperty("user.dir"), "testable-jar_classFiles.xml");
     //region Attributes
     private EntryPoint engine;
     private ByteArrayOutputStream out;
@@ -134,13 +134,13 @@ public class EntryPointTest_JAVA {
 
     }
 
-    @Test
+    //@Test
     public void main_TestableFiles_SingleTest() {
         if (isLinux) {
             String args =
-                    makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES.getFlag()) +
-                            makeArg(argsIdentifier.SOURCE, files[0]) +
-                            makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
+                    makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES.getFlag()) +
+                            makeArg(argsIdentifier.SOURCE, files[0]) +/*
+                            makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +*/
                             makeArg(argsIdentifier.OUT, tempFileOutTxt);
 
             try {
@@ -164,13 +164,13 @@ public class EntryPointTest_JAVA {
         }
     }
 
-    @Test
+    //@Test
     public void main_TestableFiles_MultiTest() {
         if (isLinux) {
             String args =
-                    makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES.getFlag()) +
-                            makeArg(argsIdentifier.SOURCE, Utils.join(" ", files)) +
-                            makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
+                    makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES.getFlag()) +
+                            makeArg(argsIdentifier.SOURCE, Utils.join(" ", files)) +/*
+                            makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +*/
                             makeArg(argsIdentifier.OUT, tempFileOutTxt);
 
             try {

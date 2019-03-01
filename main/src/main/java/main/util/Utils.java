@@ -542,23 +542,28 @@ public class Utils {
 
             if (commonPath == null)
                 commonPath = tempPath;
-            else if (!commonPath.equals(in)) {
+            else if (!commonPath.equals(tempPath)) {
                 String removable = commonPath.replace(in, "");
                 commonPath = commonPath.replace(removable, "");
             }
+
         }
 
-        return commonPath;//commonPath.replaceAll(Utils.fileSep + "$", "");
+        return commonPath;
     }
 
     public static String retrievePackageFromJavaFiles(String file) {
         try {
             File in = new File(file);
-            for (String line : Files.readAllLines(in.toPath(), Charset.forName("UTF-8"))) {
-                Matcher matches = packagePattern.matcher(line);
-                if (matches.find())
-                    return Utils.fileSep + StringUtils.trimToNull(matches.group(1)) + Utils.fileSep + in.getName();
-            }
+
+            if (file.endsWith(".java")) {
+                for (String line : Files.readAllLines(in.toPath(), Charset.forName("UTF-8"))) {
+                    Matcher matches = packagePattern.matcher(line);
+                    if (matches.find())
+                        return Utils.fileSep + StringUtils.trimToNull(matches.group(1)) + Utils.fileSep + in.getName();
+                }
+            } else
+                return in.getName();
         } catch (IOException e) {
         }
         return file;
@@ -666,9 +671,11 @@ public class Utils {
     public static String join(String delimiter, List<String> elements) {
         StringBuilder tempString = new StringBuilder();
         for (String in : elements) {
-            tempString.append(in);
-            if (!in.equals(elements.get(elements.size() - 1)))
-                tempString.append(delimiter);
+            if (in != null) {
+                tempString.append(in);
+                if (!in.equals(elements.get(elements.size() - 1)))
+                    tempString.append(delimiter);
+            }
         }
 
         return tempString.toString();

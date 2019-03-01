@@ -58,7 +58,11 @@ public class BaseAnalyzerRouting {
                 setupBaseJava(criteriaClass, criteriaMethod, criteriaParam, snippetPath, projectDependency, checker);
                 break;
             case CLASSFILES:
-                setupBaseJavaClass(criteriaClass, criteriaMethod, criteriaParam, snippetPath, projectDependency, checker);
+                setupBaseJavaClass(criteriaClass, criteriaMethod, criteriaParam, snippetPath,
+                        projectDependency.size() >= 1
+                                ? projectDependency.get(0)
+                                : null,
+                        checker);
                 break;
         }
 
@@ -224,14 +228,25 @@ public class BaseAnalyzerRouting {
                                           String criteriaMethod,
                                           int criteriaParam,
                                           List<String> sourceJavaClasses,
-                                          List<String> projectDependencyPath,
+                                          String projectDependencyPath,
                                           BaseRuleChecker checker) throws ExceptionHandler {
 
-        Scene.v().setSootClassPath(Utils.getBaseSOOT() + ":" + Utils.join(":", projectDependencyPath));
+        Options.v().set_src_prec(Options.src_prec_only_class);
+        Options.v().set_output_format(Options.output_format_jimple);
 
-        List<String> classNames = new ArrayList<>();
-        for (String in : sourceJavaClasses)
-            classNames.add(Utils.retrieveFullyQualifiedName(in));
+        Options.v().set_prepend_classpath(true);
+        Options.v().set_whole_program(true);
+
+        List<String> classNames = Utils.retrieveFullyQualifiedName(sourceJavaClasses);
+
+        if (projectDependencyPath != null)
+            for (String dependency : Utils.getJarsInDirectory(projectDependencyPath)) {
+                classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
+            }
+
+        String temp = Utils.join(":", Utils.getBaseSOOT(), Utils.retrievePackageFromJavaFiles(sourceJavaClasses), projectDependencyPath);
+        //String temp = Utils.join(":",Utils.getBaseSOOT(),Utils.join(":", sourceJavaClasses),projectDependencyPath);
+        Scene.v().setSootClassPath(temp);
 
         loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
 
