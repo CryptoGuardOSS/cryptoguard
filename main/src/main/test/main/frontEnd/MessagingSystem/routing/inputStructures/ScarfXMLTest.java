@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Properties;
 
 import static junit.framework.TestCase.assertTrue;
@@ -112,7 +112,7 @@ public class ScarfXMLTest {
         //endregion
 
         try {
-            testInfo = new EnvironmentInformation(new ArrayList<String>(), EngineType.JAR, Listing.ScarfXML, null, new ArrayList<String>(), "");
+            testInfo = new EnvironmentInformation(Arrays.asList("test"), EngineType.JAR, Listing.ScarfXML, null, Arrays.asList("test"), "");
 
             doReturn(sampleProp).when(inputTest).loadProperties(Mockito.anyString());
 

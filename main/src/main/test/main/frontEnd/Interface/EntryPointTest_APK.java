@@ -16,6 +16,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
+import static main.TestUtilities.*;
 import static org.junit.Assert.assertNull;
 
 public class EntryPointTest_APK {
@@ -23,17 +24,8 @@ public class EntryPointTest_APK {
     //region Attributes
     private EntryPoint engine;
     private ByteArrayOutputStream out;
-    private final Boolean isLinux = !System.getProperty("os.name").contains("Windows");
-
-    private final String basePath = System.getProperty("user.dir");
-    private final String scarfArgs = Utils.osPathJoin(basePath, "rsc", "sample.properties");
-    private final String srcOneGrv = basePath.replace("main", "testable-jar");
-    private final String jarOne = Utils.osPathJoin(srcOneGrv, "build", "libs", "testable-jar.jar");
-    private final String srcOneGrvDep = Utils.osPathJoin(srcOneGrv, "build", "dependencies");
-    private final String tempFileOutApk = Utils.osPathJoin(System.getProperty("user.dir"), "app-debug.txt");
-    private final String tempFileOutApk_Scarf = Utils.osPathJoin(System.getProperty("user.dir"), "app-debug.xml");
-    private final String pathToSchema = Utils.osPathJoin(basePath, "src", "main", "schema", "xsd", "Scarf", "Scarf.xsd");
-    private final String pathToAPK = Utils.osPathJoin(basePath.replace("main", ""), "app-debug.apk");
+    private final String tempFileOutApk = Utils.osPathJoin(testPath, "app-debug.txt");
+    private final String tempFileOutApk_Scarf = Utils.osPathJoin(testPath, "app-debug.xml");
 
     private Boolean validateXML = false;
 

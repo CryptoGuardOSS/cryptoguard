@@ -4,8 +4,7 @@ import main.analyzer.BaseAnalyzerRouting;
 import main.analyzer.backward.Analysis;
 import main.analyzer.backward.UnitContainer;
 import main.frontEnd.Interface.ExceptionHandler;
-import main.frontEnd.MessagingSystem.AnalysisIssue;
-import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
+import main.frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import main.rule.engine.Criteria;
 import main.rule.engine.EngineType;
 import main.rule.engine.RuleChecker;
@@ -50,7 +49,7 @@ public abstract class BaseRuleChecker implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectPaths, List<String> projectDependencyPath, Boolean printout, List<String> sourcePaths, baseStreamWriter streamWriter) throws ExceptionHandler {
+    public void checkRule(EngineType type, List<String> projectPaths, List<String> projectDependencyPath, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler {
 
         String[] excludes = {"web.xml", "pom.xml"};
 
@@ -64,11 +63,7 @@ public abstract class BaseRuleChecker implements RuleChecker {
                     projectDependencyPath, this);
         }
 
-        if (printout) {
-            printAnalysisOutput(xmlFileStr);
-            return null;
-        } else
-            return createAnalysisOutput(xmlFileStr, sourcePaths, streamWriter);
+        createAnalysisOutput(xmlFileStr, sourcePaths, output);
     }
 
     /**
@@ -86,22 +81,14 @@ public abstract class BaseRuleChecker implements RuleChecker {
     public abstract void analyzeSlice(Analysis analysis);
 
     /**
-     * <p>printAnalysisOutput.</p>
-     *
-     * @param xmlFileStr a {@link java.util.Map} object.
-     */
-    public abstract void printAnalysisOutput(Map<String, String> xmlFileStr);
-
-    /**
      * <p>createAnalysisOutput.</p>
      *
-     * @param xmlFileStr  a {@link java.util.Map} object.
+     * @param xmlFileStr a {@link java.util.Map} object.
      * @param sourcePaths a {@link java.util.List} object.
-     * @param writer      a {@link main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter} object.
-     * @return a {@link java.util.ArrayList} object.
+     * @param output a {@link main.frontEnd.MessagingSystem.routing.outputStructures.OutputStructure} object.
      * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
-    public abstract ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, baseStreamWriter writer) throws ExceptionHandler;
+    public abstract void createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler;
 
     /**
      * <p>putIntoMap.</p>

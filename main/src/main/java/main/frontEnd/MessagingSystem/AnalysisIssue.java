@@ -73,19 +73,7 @@ public class AnalysisIssue {
 
         this.info = Info;
 
-        if (sourcePaths.size() == 1) {
-            String fullSource = sourcePaths.get(0);
-            if (fullSource.endsWith(":dir"))
-                this.fullPathName = Utils.osPathJoin(fullSource.replace(":dir", ""), "src", "main", "java", className.replace(".", System.getProperty("file.separator")) + ".java");
-            else
-                this.fullPathName = Utils.osPathJoin(fullSource, "src", "main", "java", className.replace(".", System.getProperty("file.separator")));
-        } else {
-            for (String in : sourcePaths)
-                if (in.contains(className))
-                    this.fullPathName = in;
-
-            this.fullPathName = "UNKNOWN";
-        }
+        this.fullPathName = getPathFromSource(sourcePaths, className);
     }
 
     /**
@@ -143,22 +131,43 @@ public class AnalysisIssue {
         if (this.getMethods().empty())
             this.addMethod(methodName);
 
-
-        if (sourcePaths.size() == 1) {
-            String fullSource = sourcePaths.get(0);
-            if (fullSource.endsWith(":dir"))
-                this.fullPathName = Utils.osPathJoin(fullSource.replace(":dir", ""), "src", "main", "java", className.replace(".", System.getProperty("file.separator")) + ".java");
-            else
-                this.fullPathName = Utils.osPathJoin(fullSource, "src", "main", "java", className.replace(".", System.getProperty("file.separator")));
-        } else {
-            for (String in : sourcePaths)
-                if (in.contains(className))
-                    this.fullPathName = in;
-
-            this.fullPathName = "UNKNOWN";
-        }
+        this.fullPathName = getPathFromSource(sourcePaths, className);
     }
 
+    //endregion
+
+    //region Helper Methods
+
+    /**
+     * <p>getPathFromSource.</p>
+     *
+     * @param sources   a {@link java.util.List} object.
+     * @param className a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public String getPathFromSource(List<String> sources, String className) {
+        String relativePath = null;
+        if (sources.size() == 1) {
+            String fullSource = sources.get(0);
+            String[] split = fullSource.split(Utils.fileSep);
+            fullSource = split[split.length - 1];
+
+            if (fullSource.endsWith(":dir"))
+                relativePath = Utils.osPathJoin(fullSource.replace(":dir", ""), "src", "main", "java", className.replace(".", System.getProperty("file.separator")) + ".java");
+            else
+                relativePath = Utils.osPathJoin(fullSource, className.replace(".", System.getProperty("file.separator")) + ".class");
+        } else {
+            for (String in : sources)
+                if (in.contains(className)) {
+                    String[] split = in.split(Utils.fileSep);
+                    relativePath = split[split.length - 1];
+                }
+        }
+        if (relativePath == null)
+            return "UNKNOWN";
+        else
+            return relativePath;
+    }
     //endregion
 
     //region Getters/Setters

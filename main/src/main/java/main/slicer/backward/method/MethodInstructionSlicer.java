@@ -239,9 +239,7 @@ public class MethodInstructionSlicer extends BackwardFlowAnalysis {
         inSet1.union(inSet2, outSet);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     protected void copy(Object source, Object dest) {
         FlowSet srcSet = (FlowSet) source,

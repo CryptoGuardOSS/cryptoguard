@@ -269,8 +269,7 @@ public class ArgumentsCheck {
         helper.printHelp(redirect, 100, null, projectName, args, 0, 0, null);
 
         if (!broken) {
-            for (Listing listingType : Listing.values())
-                redirect.write(listingType.getInputHelp() + "\n");
+            redirect.write(Listing.getInputFullHelp());
         }
 
         if (broken)

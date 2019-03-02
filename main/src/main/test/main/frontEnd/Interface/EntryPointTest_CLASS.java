@@ -16,19 +16,16 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
-import static main.TestUtilities.makeArg;
+import static main.TestUtilities.*;
 import static org.junit.Assert.assertNull;
 
 public class EntryPointTest_CLASS {
 
-    private final Boolean isLinux = !System.getProperty("os.name").contains("Windows");
-    private final String basePath = System.getProperty("user.dir");
-    private final String srcOneGrv = basePath.replace("main", "testable-jar");
     private final String src = Utils.osPathJoin(srcOneGrv, "build", "classes", "main", "tester");
     private final String[] files = {Utils.osPathJoin(src, "PBEUsage.class"), Utils.osPathJoin(src, "UrlFrameWorks.class")};
     private final String srcOneGrvDep = Utils.osPathJoin(srcOneGrv, "build", "dependencies");
-    private final String tempFileOutTxt = Utils.osPathJoin(System.getProperty("user.dir"), "testable-jar_classFiles.txt");
-    private final String tempFileOutXML = Utils.osPathJoin(System.getProperty("user.dir"), "testable-jar_classFiles.xml");
+    private final String tempFileOutTxt = Utils.osPathJoin(testPath, "testable-jar_classFiles.txt");
+    private final String tempFileOutXML = Utils.osPathJoin(testPath, "testable-jar_classFiles.xml");
     //region Attributes
     private EntryPoint engine;
     private ByteArrayOutputStream out;
@@ -134,7 +131,7 @@ public class EntryPointTest_CLASS {
 
     }
 
-    //@Test
+    //@Test TODO - Check This
     public void main_TestableFiles_SingleTest() {
         if (isLinux) {
             String args =
@@ -164,7 +161,7 @@ public class EntryPointTest_CLASS {
         }
     }
 
-    //@Test
+    //@Test TODO - Check This
     public void main_TestableFiles_MultiTest() {
         if (isLinux) {
             String args =

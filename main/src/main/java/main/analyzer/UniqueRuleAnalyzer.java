@@ -40,6 +40,7 @@ public class UniqueRuleAnalyzer {
      * @param projectDependencyPath a {@link java.util.List} object.
      * @param routingType           a {@link main.rule.engine.EngineType} object.
      * @return a {@link java.util.List} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
     public static List<String> environmentRouting(List<String> projectJarPath, List<String> projectDependencyPath, EngineType routingType) throws ExceptionHandler {
         if (routingType == EngineType.JAR) {
@@ -64,6 +65,7 @@ public class UniqueRuleAnalyzer {
      * @param projectJarPath        a {@link java.lang.String} object.
      * @param projectDependencyPath a {@link java.lang.String} object.
      * @return a {@link java.util.List} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
     public static List<String> setupBaseJarEnv(String projectJarPath, String projectDependencyPath) throws ExceptionHandler {
 
@@ -91,6 +93,7 @@ public class UniqueRuleAnalyzer {
      *
      * @param projectJarPath a {@link java.lang.String} object.
      * @return a {@link java.util.List} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
     public static List<String> setupBaseAPKEnv(String projectJarPath) throws ExceptionHandler {
 
@@ -113,6 +116,7 @@ public class UniqueRuleAnalyzer {
      * @param snippetPath           a {@link java.util.List} object.
      * @param projectDependencyPath a {@link java.util.List} object.
      * @return a {@link java.util.List} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
     public static List<String> setupBaseSourceEnv(List<String> snippetPath, List<String> projectDependencyPath) throws ExceptionHandler {
 
@@ -140,6 +144,7 @@ public class UniqueRuleAnalyzer {
      * @param snippetPath           a {@link java.util.List} object.
      * @param projectDependencyPath a {@link java.util.List} object.
      * @return a {@link java.util.List} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
     public static List<String> setupJavaFileEnv(List<String> snippetPath, List<String> projectDependencyPath) throws ExceptionHandler {
 
@@ -175,6 +180,7 @@ public class UniqueRuleAnalyzer {
      * @param javaClassFiles        a {@link java.util.List} object.
      * @param projectDependencyPath a {@link java.util.List} object.
      * @return a {@link java.util.List} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
     public static List<String> setupJavaClassFileEnv(List<String> javaClassFiles, List<String> projectDependencyPath) throws ExceptionHandler {
 

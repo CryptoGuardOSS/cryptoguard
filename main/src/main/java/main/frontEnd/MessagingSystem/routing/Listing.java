@@ -1,6 +1,7 @@
 package main.frontEnd.MessagingSystem.routing;
 
-import main.frontEnd.MessagingSystem.routing.inputStructures.InputStructure;
+import main.frontEnd.Interface.ExceptionHandler;
+import main.frontEnd.Interface.ExceptionId;
 import main.frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 
 /**
@@ -12,15 +13,17 @@ import main.frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
  */
 public enum Listing {
     //region Different Values
-    Legacy("Legacy", "L", ".txt"),
-    ScarfXML("ScarfXML", "SX", ".xml");
+    Legacy("Legacy", "L", ".txt", true),
+    ScarfXML("ScarfXML", "SX", ".xml", true);
     //endregion
     //region Attributes
     private String type;
     private String flag;
     private String outputFileExt;
+    private final String blockPath = "main.frontEnd.MessagingSystem.routing.outputStructures.block.";
     private final String inputPath = "main.frontEnd.MessagingSystem.routing.inputStructures";
-    private final String outputPath = "main.frontEnd.MessagingSystem.routing.outputStructures";
+    private final String streamPath = "main.frontEnd.MessagingSystem.routing.outputStructures.stream.";
+    private Boolean streamEnabled;
     //endregion
 
     //region Constructor
@@ -31,21 +34,28 @@ public enum Listing {
      * @param Type - the string value of the type of
      * @param Flag - the flag used to identify the specific messaging type
      */
-    Listing(String Type, String Flag, String outputFileExt) {
+    Listing(String Type, String Flag, String outputFileExt, Boolean streamed) {
         this.type = Type;
         this.flag = Flag;
         this.outputFileExt = outputFileExt;
+        this.streamEnabled = streamed;
     }
     //endregion
 
     //region Overridden Methods
 
     /**
-     * {@inheritDoc}
+     * <p>getInputFullHelp.</p>
+     *
+     * @return a {@link java.lang.String} object.
      */
-    @Override
-    public String toString() {
-        return "{ \"type\": \"" + this.type + "\", \"flag\": \"" + this.flag + "\"}";
+    public static String getInputFullHelp() {
+        StringBuilder out = new StringBuilder();
+
+        for (Listing listingType : Listing.values())
+            out.append(listingType.getInputHelp()).append("\n");
+
+        return out.toString();
     }
     //endregion
 
@@ -91,23 +101,58 @@ public enum Listing {
 
     //region Helpers Based on the enum type
 
+    //region Output Helpers
+
     /**
-     * A method to dynamically retrieve the type of messaging structure asked for by the flag type.
-     * NOTE: if there is any kind of issue instantiating the class name, it will default to the Legacy Output
-     *
-     * @return outputStructure - the type of messaging structure to be used to return information
+     * {@inheritDoc}
      */
-    public OutputStructure getTypeOfMessagingOutput() {
+    @Override
+    public String toString() {
+        return "{ \"type\": \"" + this.type + "\", \"flag\": \"" + this.flag + "\"}";
+    }
 
+    /**
+     * <p>getTypeOfMessagingOutput.</p>
+     *
+     * @param stream a boolean.
+     * @param info a {@link main.frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
+     * @return a {@link main.frontEnd.MessagingSystem.routing.outputStructures.OutputStructure} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
+     */
+    public OutputStructure getTypeOfMessagingOutput(boolean stream, EnvironmentInformation info) throws ExceptionHandler {
 
-        try {
-            //Return a dynamically loaded instantiation of the class
-            return (OutputStructure) Class.forName(this.outputPath + "." + this.type).newInstance();
+        if (stream) {
+            if (!this.streamEnabled)
+                throw new ExceptionHandler("Streaming is not supported for the format: " + this.getType(), ExceptionId.GEN_VALID);
+            else {
+                try {
+                    return (main.frontEnd.MessagingSystem.routing.outputStructures.stream.Structure) Class.forName(this.streamPath + this.type).getConstructor(EnvironmentInformation.class).newInstance(info);
+                } catch (Exception e) {
+                    return new main.frontEnd.MessagingSystem.routing.outputStructures.stream.Legacy(info);
+                }
+            }
+        } else //non-streamed
+        {
+            try {
+                return (main.frontEnd.MessagingSystem.routing.outputStructures.block.Structure) Class.forName(this.blockPath + this.type).getConstructor(EnvironmentInformation.class).newInstance(info);
+            } catch (Exception e) {
+                return new main.frontEnd.MessagingSystem.routing.outputStructures.block.Legacy(info);
+            }
         }
-        //In Case of any error, default to the Legacy Output
-        catch (Exception e) {
-            return new main.frontEnd.MessagingSystem.routing.outputStructures.Legacy();
-        }
+
+    }
+
+    //endregion
+
+    //region InputHelpers
+
+    /**
+     * <p>Getter for the field <code>outputFileExt</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getOutputFileExt() {
+        return outputFileExt;
     }
 
     /**
@@ -116,11 +161,11 @@ public enum Listing {
      *
      * @return outputStructure - the type of messaging structure to be used to return information
      */
-    public InputStructure getTypeOfMessagingInput() {
+    public main.frontEnd.MessagingSystem.routing.inputStructures.Structure getTypeOfMessagingInput() {
 
         try {
             //Return a dynamically loaded instantiation of the class
-            return (InputStructure) Class.forName(inputPath + "." + this.type).newInstance();
+            return (main.frontEnd.MessagingSystem.routing.inputStructures.Structure) Class.forName(inputPath + "." + this.type).newInstance();
         } catch (Exception e) {
             return new main.frontEnd.MessagingSystem.routing.inputStructures.Legacy();
         }
@@ -136,19 +181,12 @@ public enum Listing {
 
         try {
             //Return a dynamically loaded instantiation of the class
-            return ((InputStructure) Class.forName(inputPath + "." + this.type).newInstance()).helpInfo();
+            return ((main.frontEnd.MessagingSystem.routing.inputStructures.Structure) Class.forName(inputPath + "." + this.type).newInstance()).helpInfo();
         } catch (Exception e) {
             return new main.frontEnd.MessagingSystem.routing.inputStructures.Legacy().helpInfo();
         }
     }
+    //endregion
 
-    /**
-     * <p>Getter for the field <code>outputFileExt</code>.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    public String getOutputFileExt() {
-        return outputFileExt;
-    }
     //endregion
 }

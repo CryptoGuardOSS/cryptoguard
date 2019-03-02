@@ -6,7 +6,7 @@ import main.analyzer.backward.InvokeUnitContainer;
 import main.analyzer.backward.UnitContainer;
 import main.frontEnd.Interface.ExceptionHandler;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
-import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
+import main.frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import main.rule.base.BaseRuleChecker;
 import main.rule.engine.Criteria;
 import main.util.Utils;
@@ -248,10 +248,8 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
         this.initializationCallsites = initializationCallsites;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
+    //region LEGACY
+    /*
     public void printAnalysisOutput(Map<String, String> xmlFileStr) {
 
         List<String> predictableSources = new ArrayList<>();
@@ -272,27 +270,6 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, baseStreamWriter writer) throws ExceptionHandler {
-        ArrayList<AnalysisIssue> outList = new ArrayList<>();
-
-        for (UnitContainer unit : predictableSourcMap.keySet()) {
-            String sootString = predictableSourcMap.get(unit).size() <= 0
-                    ? ""
-                    : "Found: \"" + predictableSourcMap.get(unit).get(0).replaceAll("\"", "") + "\"";
-
-            if (writer == null)
-                outList.add(new AnalysisIssue(unit, Integer.parseInt(rule), sootString, sourcePaths));
-            else
-                writer.streamIntoBody(new AnalysisIssue(unit, Integer.parseInt(rule), sootString, sourcePaths));
-        }
-
-        return outList;
-    }
-
 
     private String getPrintableMsg(Collection<String> constants, String rule, String ruleDesc) {
         return "***Violated Rule " +
@@ -301,4 +278,22 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
                 " ***Constants: " +
                 constants;
     }
+    */
+    //endregion
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler {
+        ArrayList<AnalysisIssue> outList = new ArrayList<>();
+
+        for (UnitContainer unit : predictableSourcMap.keySet()) {
+            String sootString = predictableSourcMap.get(unit).size() <= 0 ? ""
+                    : "Found: \"" + predictableSourcMap.get(unit).get(0).replaceAll("\"", "") + "\"";
+
+            output.addIssue(new AnalysisIssue(unit, Integer.parseInt(rule), sootString, sourcePaths));
+        }
+    }
+
 }

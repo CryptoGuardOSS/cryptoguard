@@ -1,15 +1,8 @@
 package main.frontEnd.Interface;
 
-import main.frontEnd.MessagingSystem.AnalysisIssue;
-import main.frontEnd.MessagingSystem.MessageRepresentation;
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
-import main.frontEnd.MessagingSystem.streamWriters.Listing;
-import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
 import main.rule.engine.*;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -54,31 +47,11 @@ public class EntryPoint {
                     handler = new JavaClassFileEntry();
                     break;
             }
-            if (!generalInfo.getStreaming()) {
-                String outputMessage;
-                String filePath;
+            generalInfo.startScanning();
 
-                ArrayList<AnalysisIssue> issues = null;
+            handler.Scan(generalInfo);
 
-                issues = handler.NonStreamScan(generalInfo);
-
-                outputMessage = MessageRepresentation.getMessage(generalInfo, issues);
-                filePath = generalInfo.getFileOut();
-
-
-                try {
-                    Files.write(Paths.get(filePath), outputMessage.getBytes());
-                } catch (Exception e) {
-                    throw new ExceptionHandler("Issue writing to " + filePath, ExceptionId.FILE_O);
-                }
-            } else {
-
-                baseStreamWriter writer = Listing.retrieveWriterByType(generalInfo);
-
-                handler.StreamScan(generalInfo, writer);
-
-                writer.close(generalInfo);
-            }
+            generalInfo.stopScanning();
 
         } catch (ExceptionHandler e) {
             System.err.print(e.toString());

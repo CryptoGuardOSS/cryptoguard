@@ -44,7 +44,6 @@ public class ScarfXMLTest {
     private String propertyErrorMessage;
     private String marshallErrorMessage;
     private String result;
-    private OutputStructure messagingSystem;
     private EnvironmentInformation env;
     private EngineType type;
     private ArrayList<AnalysisIssue> brokenRules;
@@ -86,7 +85,6 @@ public class ScarfXMLTest {
         this.propertyErrorMessage = null;
         this.marshallErrorMessage = null;
         this.result = null;
-        this.messagingSystem = null;
         this.source = null;
         this.type = null;
         this.brokenRules = null;
@@ -96,8 +94,9 @@ public class ScarfXMLTest {
     //region Tests
     //@Test
     public void simpleFiveRuleTest() {
-        String xmlStream = this.messagingSystem.getOutput(this.env, this.brokenRules);
-
+        //String xmlStream = this.messagingSystem.getOutput(this.env, this.brokenRules);
+//TODO - Fix this
+        String xmlStream = "";
         assertTrue(StringUtils.isNoneBlank(xmlStream));
         assertFalse(xmlStream.contains("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"));
         try {

@@ -8,7 +8,7 @@ package main.frontEnd.Interface;
  * @version $Id: $Id
  * @since 03.02.11
  *
- * <p>{Description Here}</p>
+ * <p>The enumeration of the error codes.</p>
  */
 public enum ExceptionId {
     //region Values

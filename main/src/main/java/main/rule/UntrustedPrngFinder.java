@@ -3,7 +3,7 @@ package main.rule;
 import main.analyzer.UniqueRuleAnalyzer;
 import main.frontEnd.Interface.ExceptionHandler;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
-import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
+import main.frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import main.rule.engine.EngineType;
 import main.rule.engine.RuleChecker;
 import soot.*;
@@ -32,41 +32,32 @@ public class UntrustedPrngFinder implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printOut, List<String> sourcePaths, baseStreamWriter streamWriter) throws ExceptionHandler {
+    public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler {
 
         Map<String, List<Unit>> analysisLists = getUntrustedPrngInstructions(
                 UniqueRuleAnalyzer.environmentRouting(projectJarPath, projectDependencyPath, type));
-
-        ArrayList<AnalysisIssue> issues = printOut ? null : new ArrayList<AnalysisIssue>();
 
         if (!analysisLists.isEmpty()) {
             for (String method : analysisLists.keySet()) {
                 List<Unit> analysis = analysisLists.get(method);
 
                 if (!analysis.isEmpty()) {
-                    if (printOut) {
+                    //region LEGACY
+                    /*
                         System.out.println("=============================================");
                         String output = "***Violated Rule 13: Untrused PRNG (java.util.Random) Found in " + method;
                         System.out.println(output);
                         System.out.println("=============================================");
-                    } else {
-                        //TODO - Location not showing up
-                        AnalysisIssue issue = new AnalysisIssue(
-                                method,
-                                13,
-                                "Found: Untrused PRNG (java.util.Random)", sourcePaths
+                    */
+                    //endregion
+                    //TODO - Location not showing up
+                    AnalysisIssue issue = new AnalysisIssue(method, 13,
+                            "Found: Untrused PRNG (java.util.Random)", sourcePaths);
 
-                        );
-                        if (streamWriter != null) {
-                            streamWriter.streamIntoBody(issue);
-                        } else {
-                            issues.add(issue);
-                        }
-                    }
+                    output.addIssue(issue);
                 }
             }
         }
-        return issues;
     }
 
     private static Map<String, List<Unit>> getUntrustedPrngInstructions(List<String> classNames) {

@@ -1,11 +1,7 @@
 package main.rule.engine;
 
 import main.frontEnd.Interface.ExceptionHandler;
-import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
-import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
-
-import java.util.ArrayList;
 
 /**
  * <p>JarEntry class.</p>
@@ -22,37 +18,11 @@ public class JarEntry implements EntryHandler {
     /**
      * {@inheritDoc}
      */
-    public ArrayList<AnalysisIssue> NonStreamScan(EnvironmentInformation generalInfo) throws ExceptionHandler {
+    public void Scan(EnvironmentInformation generalInfo) throws ExceptionHandler {
 
-        ArrayList<AnalysisIssue> issues = generalInfo.getPrintOut() ? null : new ArrayList<AnalysisIssue>();
-
-        generalInfo.startAnalysis();
-        //region Core
         for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
-
-            ArrayList<AnalysisIssue> tempIssues = ruleChecker.checkRule(EngineType.JAR, generalInfo.getSource(), generalInfo.getDependencies(),
-                    generalInfo.getPrintOut(), generalInfo.getSourcePaths(), null);
-            if (!generalInfo.getPrintOut())
-                issues.addAll(tempIssues);
+            ruleChecker.checkRule(EngineType.JAR, generalInfo.getSource(), generalInfo.getDependencies(), generalInfo.getSourcePaths(), generalInfo.getOutput());
         }
-
-        //endregion
-        generalInfo.stopAnalysis();
-        return issues;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void StreamScan(EnvironmentInformation generalInfo, baseStreamWriter streamWriter) throws ExceptionHandler {
-        generalInfo.startAnalysis();
-        //region Core
-        for (RuleChecker ruleChecker : CommonRules.ruleCheckerList)
-            ruleChecker.checkRule(EngineType.JAR, generalInfo.getSource(), generalInfo.getDependencies(),
-                    generalInfo.getPrintOut(), generalInfo.getSourcePaths(), streamWriter);
-
-
-        //endregion
-        generalInfo.stopAnalysis();
-    }
 }

@@ -4,7 +4,7 @@ import main.frontEnd.Interface.ExceptionHandler;
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
 
 /**
- * <p>InputStructure interface.</p>
+ * <p>Structure interface.</p>
  *
  * @author RigorityJTeam
  * Created on 12/13/18.
@@ -13,7 +13,7 @@ import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
  *
  * <p>The interface containing the commandline check for each messaging useage</p>
  */
-public interface InputStructure {
+public interface Structure {
 
     /**
      * The interface for each type of routing to handle the raw command line arguments.

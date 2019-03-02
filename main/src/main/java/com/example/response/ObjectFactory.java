@@ -12,18 +12,20 @@ import javax.xml.bind.annotation.XmlRegistry;
 
 
 /**
- * This object contains factory methods for each 
- * Java content interface and Java element interface 
- * generated in the com.example.response package. 
- * <p>An ObjectFactory allows you to programatically 
- * construct new instances of the Java representation 
- * for XML content. The Java representation of XML 
- * content can consist of schema derived interfaces 
- * and classes representing the binding of schema 
- * type definitions, element declarations and model 
- * groups.  Factory methods for each of these are 
+ * This object contains factory methods for each
+ * Java content interface and Java element interface
+ * generated in the com.example.response package.
+ * <p>An ObjectFactory allows you to programatically
+ * construct new instances of the Java representation
+ * for XML content. The Java representation of XML
+ * content can consist of schema derived interfaces
+ * and classes representing the binding of schema
+ * type definitions, element declarations and model
+ * groups.  Factory methods for each of these are
  * provided in this class.
- * 
+ *
+ * @author drmonster
+ * @version $Id: $Id
  */
 @XmlRegistry
 public class ObjectFactory {
@@ -31,118 +33,131 @@ public class ObjectFactory {
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: com.example.response
-     * 
      */
     public ObjectFactory() {
     }
 
     /**
-     * Create an instance of {@link AnalyzerReport }
-     * 
+     * Create an instance of {@link com.example.response.AnalyzerReport}
+     *
+     * @return a {@link com.example.response.AnalyzerReport} object.
      */
     public AnalyzerReport createAnalyzerReport() {
         return new AnalyzerReport();
     }
 
     /**
-     * Create an instance of {@link BugInstanceType }
-     * 
+     * Create an instance of {@link com.example.response.BugInstanceType}
+     *
+     * @return a {@link com.example.response.BugInstanceType} object.
      */
     public BugInstanceType createBugInstanceType() {
         return new BugInstanceType();
     }
 
     /**
-     * Create an instance of {@link BugSummaryType }
-     * 
+     * Create an instance of {@link com.example.response.BugSummaryType}
+     *
+     * @return a {@link com.example.response.BugSummaryType} object.
      */
     public BugSummaryType createBugSummaryType() {
         return new BugSummaryType();
     }
 
     /**
-     * Create an instance of {@link MetricType }
-     * 
+     * Create an instance of {@link com.example.response.MetricType}
+     *
+     * @return a {@link com.example.response.MetricType} object.
      */
     public MetricType createMetricType() {
         return new MetricType();
     }
 
     /**
-     * Create an instance of {@link MetricSummariesType }
-     * 
+     * Create an instance of {@link com.example.response.MetricSummariesType}
+     *
+     * @return a {@link com.example.response.MetricSummariesType} object.
      */
     public MetricSummariesType createMetricSummariesType() {
         return new MetricSummariesType();
     }
 
     /**
-     * Create an instance of {@link BugLocationsType }
-     * 
+     * Create an instance of {@link com.example.response.BugLocationsType}
+     *
+     * @return a {@link com.example.response.BugLocationsType} object.
      */
     public BugLocationsType createBugLocationsType() {
         return new BugLocationsType();
     }
 
     /**
-     * Create an instance of {@link MetricSummaryType }
-     * 
+     * Create an instance of {@link com.example.response.MetricSummaryType}
+     *
+     * @return a {@link com.example.response.MetricSummaryType} object.
      */
     public MetricSummaryType createMetricSummaryType() {
         return new MetricSummaryType();
     }
 
     /**
-     * Create an instance of {@link LineNumType }
-     * 
+     * Create an instance of {@link com.example.response.LineNumType}
+     *
+     * @return a {@link com.example.response.LineNumType} object.
      */
     public LineNumType createLineNumType() {
         return new LineNumType();
     }
 
     /**
-     * Create an instance of {@link InstanceLocationType }
-     * 
+     * Create an instance of {@link com.example.response.InstanceLocationType}
+     *
+     * @return a {@link com.example.response.InstanceLocationType} object.
      */
     public InstanceLocationType createInstanceLocationType() {
         return new InstanceLocationType();
     }
 
     /**
-     * Create an instance of {@link LocationType }
-     * 
+     * Create an instance of {@link com.example.response.LocationType}
+     *
+     * @return a {@link com.example.response.LocationType} object.
      */
     public LocationType createLocationType() {
         return new LocationType();
     }
 
     /**
-     * Create an instance of {@link MethodType }
-     * 
+     * Create an instance of {@link com.example.response.MethodType}
+     *
+     * @return a {@link com.example.response.MethodType} object.
      */
     public MethodType createMethodType() {
         return new MethodType();
     }
 
     /**
-     * Create an instance of {@link MethodsType }
-     * 
+     * Create an instance of {@link com.example.response.MethodsType}
+     *
+     * @return a {@link com.example.response.MethodsType} object.
      */
     public MethodsType createMethodsType() {
         return new MethodsType();
     }
 
     /**
-     * Create an instance of {@link BugCategoryType }
-     * 
+     * Create an instance of {@link com.example.response.BugCategoryType}
+     *
+     * @return a {@link com.example.response.BugCategoryType} object.
      */
     public BugCategoryType createBugCategoryType() {
         return new BugCategoryType();
     }
 
     /**
-     * Create an instance of {@link BugTraceType }
-     * 
+     * Create an instance of {@link com.example.response.BugTraceType}
+     *
+     * @return a {@link com.example.response.BugTraceType} object.
      */
     public BugTraceType createBugTraceType() {
         return new BugTraceType();

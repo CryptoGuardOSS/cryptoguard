@@ -1,10 +1,8 @@
 package main.rule.engine;
 
 import main.frontEnd.Interface.ExceptionHandler;
-import main.frontEnd.MessagingSystem.AnalysisIssue;
-import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
+import main.frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,17 +15,14 @@ import java.util.List;
 public interface RuleChecker {
 
     /**
-     * The checkRule will verify the allocated rules for the given source.
-     * Any failed rules will be printed to the commandline.
+     * <p>checkRule.</p>
      *
-     * @param type                  the type of engine to be used for the processing
-     * @param projectJarPath        the path to the used jar(s)
-     * @param projectDependencyPath the path to the dependencies of the project
-     * @param printout              a {@link java.lang.Boolean} object.
-     * @param sourcePaths           a {@link java.util.List} object.
-     * @param streamWriter          a {@link main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter} object.
-     * @return a {@link java.util.ArrayList} object.
+     * @param type a {@link main.rule.engine.EngineType} object.
+     * @param projectJarPath a {@link java.util.List} object.
+     * @param projectDependencyPath a {@link java.util.List} object.
+     * @param sourcePaths a {@link java.util.List} object.
+     * @param output a {@link main.frontEnd.MessagingSystem.routing.outputStructures.OutputStructure} object.
      * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
-    ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printout, List<String> sourcePaths, baseStreamWriter streamWriter) throws ExceptionHandler;
+    void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler;
 }

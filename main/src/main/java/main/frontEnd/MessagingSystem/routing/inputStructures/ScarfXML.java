@@ -19,7 +19,7 @@ import java.util.Properties;
  *
  * <p>The Scarf Input check implementation.</p>
  */
-public class ScarfXML implements InputStructure {
+public class ScarfXML implements Structure {
 
     /**
      * {@inheritDoc}
@@ -28,6 +28,7 @@ public class ScarfXML implements InputStructure {
      * @param info a {@link main.frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
      * @param args an array of {@link java.lang.String} objects.
      * @return a {@link java.lang.Boolean} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
     public Boolean inputValidation(EnvironmentInformation info, String[] args) throws ExceptionHandler {
 

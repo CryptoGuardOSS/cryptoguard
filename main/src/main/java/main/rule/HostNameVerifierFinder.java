@@ -4,7 +4,7 @@ import main.analyzer.UniqueRuleAnalyzer;
 import main.analyzer.backward.UnitContainer;
 import main.frontEnd.Interface.ExceptionHandler;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
-import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
+import main.frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import main.rule.engine.EngineType;
 import main.rule.engine.RuleChecker;
 import main.slicer.backward.other.OtherInfluencingInstructions;
@@ -35,13 +35,11 @@ public class HostNameVerifierFinder implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printOut, List<String> sourcePaths, baseStreamWriter streamWriter) throws ExceptionHandler {
+    public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler {
 
         Map<String, List<UnitContainer>> analysisLists = getHostNameVerifiers(
                 UniqueRuleAnalyzer.environmentRouting(projectJarPath, projectDependencyPath, type)
         );
-
-        ArrayList<AnalysisIssue> issues = printOut ? null : new ArrayList<AnalysisIssue>();
 
         for (String className : analysisLists.keySet()) {
             List<UnitContainer> analysis = analysisLists.get(className);
@@ -66,7 +64,8 @@ public class HostNameVerifierFinder implements RuleChecker {
                 }
 
                 if (!usedSecondParam) {
-                    if (printOut) {
+                    //region LEGACY
+                        /*
                         System.out.println("=======================================");
                         String output = "*** Violated Rule 6: Uses untrusted HostNameVerifier";
                         if (!constants.isEmpty()) {
@@ -74,23 +73,16 @@ public class HostNameVerifierFinder implements RuleChecker {
                         }
                         System.out.println(output);
                         System.out.println("=======================================");
-                    } else {
-                        AnalysisIssue issue = new AnalysisIssue(
-                                className,
-                                6,
-                                "Cause: Fixed \"" + constants.toString().replaceAll("\"", "") + "\"",
-                                sourcePaths
-                        );
-                        if (streamWriter != null) {
-                            streamWriter.streamIntoBody(issue);
-                        } else {
-                            issues.add(issue);
-                        }
-                    }
+                   */
+                    //endregion
+                    AnalysisIssue issue = new AnalysisIssue(className, 6,
+                            "Cause: Fixed \"" + constants.toString().replaceAll("\"", "") + "\"",
+                            sourcePaths);
+
+                    output.addIssue(issue);
                 }
             }
         }
-        return issues;
     }
 
     private static Map<String, List<UnitContainer>> getHostNameVerifiers(List<String> classNames) {

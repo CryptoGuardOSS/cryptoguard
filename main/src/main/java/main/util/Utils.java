@@ -5,7 +5,7 @@ import main.frontEnd.Interface.ExceptionHandler;
 import main.frontEnd.Interface.ExceptionId;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.routing.Listing;
-import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
+import main.frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import main.rule.engine.EngineType;
 import main.slicer.backward.heuristic.HeuristicBasedAnalysisResult;
 import main.slicer.backward.heuristic.HeuristicBasedInstructions;
@@ -54,7 +54,19 @@ public class Utils {
      * {@link main.util.Utils#getClassNamesFromJarArchive}
      */
 
-    private static String fileSep = System.getProperty("file.separator");
+    public final static String fileSep = System.getProperty("file.separator");
+    /**
+     * Constant <code>lineSep="System.getProperty(line.separator)"</code>
+     */
+    public final static String lineSep = System.getProperty("line.separator");
+    /**
+     * Constant <code>localPath="System.getProperty(user.dir)"</code>
+     */
+    public final static String localPath = System.getProperty("user.dir");
+    /**
+     * Constant <code>userPath="System.getProperty(user.home)"</code>
+     */
+    public final static String userPath = System.getProperty("user.home");
     private static Pattern sootClassPattern = Pattern.compile("[<](.+)[:]");
     private static Pattern sootClassPatternTwo = Pattern.compile("([a-zA-Z0-9]+[.][a-zA-Z0-9]+)\\$[0-9]+");
     private static Pattern sootFoundPattern = Pattern.compile("\\[(.+)\\]");
@@ -70,7 +82,7 @@ public class Utils {
      *
      * @param jarPath a {@link java.lang.String} object.
      * @return a {@link java.util.List} object.
-     * @throws java.io.IOException if any.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
     public static List<String> getClassNamesFromJarArchive(String jarPath) throws ExceptionHandler {
         List<String> classNames = new ArrayList<>();
@@ -116,7 +128,7 @@ public class Utils {
      * @param jarPath a {@link java.lang.String} object.
      * @param isMain  a boolean.
      * @return a {@link java.lang.String} object.
-     * @throws java.io.IOException if any.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
     public static String getBasePackageNameFromJar(String jarPath, boolean isMain) throws ExceptionHandler {
 
@@ -182,7 +194,7 @@ public class Utils {
      *
      * @param apkfile a {@link java.lang.String} object.
      * @return a {@link java.util.List} object.
-     * @throws java.io.IOException if any.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
     public static List<String> getClassNamesFromApkArchive(String apkfile) throws ExceptionHandler {
         List<String> classNames = new ArrayList<>();
@@ -529,10 +541,22 @@ public class Utils {
         return sourcePackage;
     }
 
+    /**
+     * <p>retrievePackageFromJavaFiles.</p>
+     *
+     * @param sourceFiles a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String retrievePackageFromJavaFiles(String... sourceFiles) {
         return retrievePackageFromJavaFiles(Arrays.asList(sourceFiles));
     }
 
+    /**
+     * <p>retrievePackageFromJavaFiles.</p>
+     *
+     * @param sourceFiles a {@link java.util.List} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String retrievePackageFromJavaFiles(List<String> sourceFiles) {
         String commonPath = null;
 
@@ -552,6 +576,12 @@ public class Utils {
         return commonPath;
     }
 
+    /**
+     * <p>retrievePackageFromJavaFiles.</p>
+     *
+     * @param file a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String retrievePackageFromJavaFiles(String file) {
         try {
             File in = new File(file);
@@ -727,6 +757,7 @@ public class Utils {
      * <p>getBaseSOOT.</p>
      *
      * @return a {@link java.lang.String} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
     public static String getBaseSOOT() throws ExceptionHandler {
         String rt = Utils.join(Utils.fileSep, "jre", "lib", "rt.jar:");
@@ -739,6 +770,7 @@ public class Utils {
      * <p>getBaseSOOT7.</p>
      *
      * @return a {@link java.lang.String} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
     public static String getBaseSOOT7() throws ExceptionHandler {
         String rt = Utils.join(Utils.fileSep, "jre", "lib", "rt.jar:");
@@ -976,6 +1008,23 @@ public class Utils {
     }
 
     /**
+     * <p>getRelativeFilePath.</p>
+     *
+     * @param filePath a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
+     */
+    public static String getRelativeFilePath(String filePath) throws ExceptionHandler {
+        try {
+            String fullPath = new File(filePath).getCanonicalPath();
+
+            return Utils.osPathJoin("~", fullPath.replaceAll(Utils.userPath + fileSep, ""));
+        } catch (IOException e) {
+            throw new ExceptionHandler("Error reading file: " + filePath, ExceptionId.FILE_I);
+        }
+    }
+
+    /**
      * <p>createAssignInvokeUnitContainer.</p>
      *
      * @param currInstruction a {@link soot.Unit} object.
@@ -1065,9 +1114,13 @@ public class Utils {
      *
      * @param analysis       a {@link main.analyzer.backward.Analysis} object.
      * @param analysisResult a {@link main.analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link main.analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link main.analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link main.analyzer.backward.InvokeUnitContainer} object.
      * @param index          a int.
      * @param outSet         a {@link java.util.List} object.
      * @param usedFields     a {@link java.util.Set} object.
+     * @param analysisResult a {@link main.analyzer.backward.InvokeUnitContainer} object.
      * @param analysisResult a {@link main.analyzer.backward.InvokeUnitContainer} object.
      * @return a boolean.
      */
@@ -1316,126 +1369,26 @@ public class Utils {
         return unitContainer;
     }
 
+
     /**
      * <p>createAnalysisOutput.</p>
      *
-     * @param xmlFileStr          a {@link java.util.Map} object.
-     * @param sourcePaths         a {@link java.util.List} object.
+     * @param xmlFileStr a {@link java.util.Map} object.
+     * @param sourcePaths a {@link java.util.List} object.
      * @param predictableSourcMap a {@link java.util.Map} object.
-     * @param rule                a {@link java.lang.String} object.
-     * @param writer              a {@link main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter} object.
-     * @return a {@link java.util.ArrayList} object.
+     * @param rule a {@link java.lang.String} object.
+     * @param output a {@link main.frontEnd.MessagingSystem.routing.outputStructures.OutputStructure} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
-    public static ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, Map<UnitContainer, List<String>> predictableSourcMap, String rule, baseStreamWriter writer) throws ExceptionHandler {
-        ArrayList<AnalysisIssue> outList = new ArrayList<>();
-
+    public static void createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, Map<UnitContainer, List<String>> predictableSourcMap, String rule, OutputStructure output) throws ExceptionHandler {
         Integer ruleNumber = Integer.parseInt(rule);
-
-        //region Stubbed Stuff
-        //region Old Method
-        /*for (UnitContainer unit : predictableSourcMap.keySet()) {
-            String sootString = predictableSourcMap.get(unit).size() <= 0
-                    ? ""
-                    : "Found: \"" + predictableSourcMap.get(unit).get(0).replaceAll("\"", "") + "\"";
-            outList.add(new AnalysisIssue(unit, Integer.parseInt(rule), sootString, sourcePaths));
-        }*/
-        //endregion
-        //region Newer Methods
-        /*for (UnitContainer unit : predictableSourcMap.keySet()) {
-            if (predictableSourcMap.get(unit).size() <= 0)
-                outList.add(new AnalysisIssue(unit, ruleNumber, "", sourcePaths));
-            else
-                for (String sootString : predictableSourcMap.get(unit))
-                    outList.add(new AnalysisIssue(unit, ruleNumber, "Found: \"" + sootString + "\"", sourcePaths));
-
-        }
-
-        if (ruleNumber == 7)
-            for (UnitContainer unit : othersSourceMap.keySet())
-                for (String sootString : othersSourceMap.get(unit))
-                    outList.add(new AnalysisIssue(unit, ruleNumber, "Found: \"" + sootString + "\"", sourcePaths));*/
-        //endregion
-        //endregion
 
         for (UnitContainer unit : predictableSourcMap.keySet())
             if (predictableSourcMap.get(unit).size() <= 0)
-                if (writer == null)
-                    outList.add(new AnalysisIssue(unit, ruleNumber, "", sourcePaths));
-                else
-                    writer.streamIntoBody(new AnalysisIssue(unit, ruleNumber, "", sourcePaths));
+                output.addIssue(new AnalysisIssue(unit, ruleNumber, "", sourcePaths));
             else
                 for (String sootString : predictableSourcMap.get(unit))
-                    if (writer == null)
-                        outList.add(new AnalysisIssue(unit, ruleNumber, "Found: \"" + sootString.replaceAll("\"", "") + "\"", sourcePaths));
-                    else
-                        writer.streamIntoBody(new AnalysisIssue(unit, ruleNumber, "Found: \"" + sootString.replaceAll("\"", "") + "\"", sourcePaths));
+                    output.addIssue(new AnalysisIssue(unit, ruleNumber, "Found: \"" + sootString.replaceAll("\"", "") + "\"", sourcePaths));
 
-        /*for (UnitContainer unit : othersSourceMap.keySet())
-            if (ruleNumber != 7) {
-                String sootString = othersSourceMap.get(unit).size() <= 0
-                        ? ""
-                        : "Found: Constant \"" + othersSourceMap.get(unit).get(0).replaceAll("\"", "") + "\"";
-
-                if (writer == null)
-                    outList.add(new AnalysisIssue(unit, Integer.parseInt(rule), sootString, sourcePaths));
-                else
-                    writer.streamIntoBody(new AnalysisIssue(unit, Integer.parseInt(rule), sootString, sourcePaths));
-            } else
-                for (String sootString : othersSourceMap.get(unit))
-                    if (writer == null)
-                        outList.add(new AnalysisIssue(unit, ruleNumber, "Found: Constant  \"" + sootString.replaceAll("\"", "") + "\"", sourcePaths));
-                    else
-                        writer.streamIntoBody(new AnalysisIssue(unit, ruleNumber, "Found: Constant  \"" + sootString.replaceAll("\"", "") + "\"", sourcePaths));
-
-
-        List<String> others = new ArrayList<>();
-
-        for (List<String> values : othersSourceMap.values()) {
-            others.addAll(values);
-        }
-
-        for (String config : others) {
-            for (String configFile : xmlFileStr.keySet()) {
-
-                String val = config.replace("\"", "");
-                Pattern p = Pattern.compile("[^a-zA-Z.]");
-                boolean hasSpecialChar = p.matcher(val).find();
-
-                if (!hasSpecialChar) {
-                    val = ">" + val + "<";
-                    String[] lines = xmlFileStr.get(configFile).split("\n");
-
-                    for (int index = 0; index < lines.length; index++) {
-
-                        if (lines[index].contains(val)) {
-
-                            AnalysisIssue issue = new AnalysisIssue(ruleNumber);
-
-                            issue.setClassName(Utils.retrieveClassNameFromSootString(configFile));
-
-                            String methodName = Utils.retrieveMethodFromSootString(configFile);
-
-                            if (!methodName.equals("UNKNOWN"))
-                                issue.addMethod(methodName, new AnalysisLocation(Integer.valueOf(lines[index].trim())));
-                            else
-                                issue.addLocation(new AnalysisLocation(Integer.valueOf(lines[index].trim())));
-
-                            if (index + 1 < lines.length) {
-                                issue.setInfo("Issue with config and value " + lines[index + 1].trim());
-                            } else {
-                                issue.setInfo("Issue with config.");
-                            }
-
-                            if (writer != null)
-                                writer.streamIntoBody(issue);
-                            else
-                                outList.add(issue);
-                        }
-                    }
-                }
-            }
-        }*/
-
-        return outList;
     }
 }

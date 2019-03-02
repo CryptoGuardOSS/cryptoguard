@@ -1,11 +1,7 @@
 package main.rule.engine;
 
 import main.frontEnd.Interface.ExceptionHandler;
-import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
-import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
-
-import java.util.ArrayList;
 
 /**
  * <p>EntryHandler interface.</p>
@@ -20,21 +16,10 @@ import java.util.ArrayList;
 public interface EntryHandler {
 
     /**
-     * The method to return all of the Analysis Issues in a block style method.
+     * <p>Scan.</p>
      *
-     * @param generalInfo {@link main.frontEnd.MessagingSystem.routing.EnvironmentInformation} - The basic information retrieved from the command line.
-     * @return {@link main.frontEnd.MessagingSystem.AnalysisIssue} - Returns a list of captured issues.
+     * @param generalInfo a {@link main.frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
      * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
-    public ArrayList<AnalysisIssue> NonStreamScan(EnvironmentInformation generalInfo) throws ExceptionHandler;
-
-
-    /**
-     * <p>StreamScan.</p>
-     *
-     * @param generalInfo  a {@link main.frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
-     * @param streamWriter a {@link main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter} object.
-     * @throws main.frontEnd.Interface.ExceptionHandler if any.
-     */
-    public void StreamScan(EnvironmentInformation generalInfo, baseStreamWriter streamWriter) throws ExceptionHandler;
+    void Scan(EnvironmentInformation generalInfo) throws ExceptionHandler;
 }

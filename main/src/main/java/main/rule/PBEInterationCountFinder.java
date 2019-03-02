@@ -5,8 +5,7 @@ import main.analyzer.backward.AssignInvokeUnitContainer;
 import main.analyzer.backward.InvokeUnitContainer;
 import main.analyzer.backward.UnitContainer;
 import main.frontEnd.Interface.ExceptionHandler;
-import main.frontEnd.MessagingSystem.AnalysisIssue;
-import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
+import main.frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import main.rule.base.BaseRuleChecker;
 import main.rule.engine.Criteria;
 import main.util.Utils;
@@ -20,7 +19,6 @@ import soot.jimple.internal.JAssignStmt;
 import soot.jimple.internal.JInvokeStmt;
 
 import java.util.*;
-import java.util.regex.Pattern;
 
 /**
  * Created by krishnokoli on 10/22/17.
@@ -219,10 +217,8 @@ public class PBEInterationCountFinder extends BaseRuleChecker {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void printAnalysisOutput(Map<String, String> configFiles) {
+    //region LEGACY
+    /*public void printAnalysisOutput(Map<String, String> configFiles) {
 
         List<String> predictableSources = new ArrayList<>();
         List<UnitContainer> predictableSourceInst = new ArrayList<>();
@@ -305,15 +301,16 @@ public class PBEInterationCountFinder extends BaseRuleChecker {
         }
 
         return output.toString();
-    }
+    }*/
+    //endregion
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, baseStreamWriter writer) throws ExceptionHandler {
+    public void createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler {
 
-        return Utils.createAnalysisOutput(xmlFileStr, sourcePaths, predictableSourcMap, rule, writer);
+        Utils.createAnalysisOutput(xmlFileStr, sourcePaths, predictableSourcMap, rule, output);
 
     }
 }

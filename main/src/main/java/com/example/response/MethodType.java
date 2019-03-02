@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * <p>Java class for MethodType complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="MethodType">
  *   &lt;simpleContent>
@@ -29,7 +29,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * &lt;/complexType>
  * </pre>
  *
- * 
+ * @author drmonster
+ * @version $Id: $Id
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "MethodType", propOrder = {
@@ -49,10 +50,7 @@ public class MethodType {
     /**
      * Gets the value of the value property.
      *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * @return a {@link java.lang.String} object.
      */
     public String getValue() {
         return value;
@@ -63,8 +61,7 @@ public class MethodType {
      *
      * @param value
      *     allowed object is
-     *     {@link String }
-     *     
+     *     {@link java.lang.String}
      */
     public void setValue(String value) {
         this.value = value;
@@ -72,7 +69,8 @@ public class MethodType {
 
     /**
      * Gets the value of the id property.
-     * 
+     *
+     * @return a int.
      */
     public int getId() {
         return id;
@@ -80,7 +78,8 @@ public class MethodType {
 
     /**
      * Sets the value of the id property.
-     * 
+     *
+     * @param value a int.
      */
     public void setId(int value) {
         this.id = value;
@@ -88,7 +87,8 @@ public class MethodType {
 
     /**
      * Gets the value of the primary property.
-     * 
+     *
+     * @return a boolean.
      */
     public boolean isPrimary() {
         return primary;
@@ -96,7 +96,8 @@ public class MethodType {
 
     /**
      * Sets the value of the primary property.
-     * 
+     *
+     * @param value a boolean.
      */
     public void setPrimary(boolean value) {
         this.primary = value;

@@ -23,20 +23,14 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
+import static main.TestUtilities.*;
 import static org.junit.Assert.*;
 
 public class EntryPointTest_SOURCE {
 
-    private final Boolean isLinux = !System.getProperty("os.name").contains("Windows");
-    private final String basePath = System.getProperty("user.dir");
-    private final String scarfArgs = Utils.osPathJoin(basePath, "rsc", "sample.properties");
-    private final String srcOneGrv = basePath.replace("main", "testable-jar");
-    private final String jarOne = Utils.osPathJoin(srcOneGrv, "build", "libs", "testable-jar.jar");
-    private final String srcOneGrvDep = Utils.osPathJoin(srcOneGrv, "build", "dependencies");
-    private final String tempFileOutTxt = Utils.osPathJoin(System.getProperty("user.dir"), "testable-jar.txt");
-    private final String tempFileOutXML = Utils.osPathJoin(System.getProperty("user.dir"), "testable-jar.xml");
-    private final String tempStreamXML = Utils.osPathJoin(System.getProperty("user.dir"), "testable-jar_Stream.xml");
-    private final String pathToSchema = Utils.osPathJoin(basePath, "src", "main", "schema", "xsd", "Scarf", "Scarf.xsd");
+    private final String tempFileOutTxt = Utils.osPathJoin(testPath, "testable-jar.txt");
+    private final String tempFileOutXML = Utils.osPathJoin(testPath, "testable-jar.xml");
+    private final String tempStreamXML = Utils.osPathJoin(testPath, "testable-jar_Stream.xml");
     //region Attributes
     private EntryPoint engine;
     private ByteArrayOutputStream out;

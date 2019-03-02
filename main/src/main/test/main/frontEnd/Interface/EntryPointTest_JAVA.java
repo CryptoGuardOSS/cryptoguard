@@ -1,5 +1,8 @@
 package main.frontEnd.Interface;
 
+import com.example.response.AnalyzerReport;
+import com.example.response.BugInstanceType;
+import main.frontEnd.MessagingSystem.routing.Listing;
 import main.frontEnd.argsIdentifier;
 import main.rule.engine.EngineType;
 import main.util.Utils;
@@ -8,6 +11,11 @@ import org.junit.Before;
 import org.junit.Test;
 import soot.G;
 
+import javax.xml.XMLConstants;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.nio.charset.Charset;
@@ -16,19 +24,16 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
-import static main.TestUtilities.makeArg;
-import static org.junit.Assert.assertNull;
+import static main.TestUtilities.*;
+import static org.junit.Assert.*;
 
 public class EntryPointTest_JAVA {
 
-    private final Boolean isLinux = !System.getProperty("os.name").contains("Windows");
-    private final String basePath = System.getProperty("user.dir");
-    private final String srcOneGrv = basePath.replace("main", "testable-jar");
     private final String src = Utils.osPathJoin(srcOneGrv, "src", "main", "java", "tester");
     private final String[] files = {Utils.osPathJoin(src, "PBEUsage.java"), Utils.osPathJoin(src, "UrlFrameWorks.java")};
     private final String srcOneGrvDep = Utils.osPathJoin(srcOneGrv, "build", "dependencies");
-    private final String tempFileOutTxt = Utils.osPathJoin(System.getProperty("user.dir"), "testable-jar_javaFiles.txt");
-    private final String tempFileOutXML = Utils.osPathJoin(System.getProperty("user.dir"), "testable-jar_javaFiles.xml");
+    private final String tempFileOutTxt = Utils.osPathJoin(testPath, "testable-jar_javaFiles.txt");
+    private final String tempFileOutXML = Utils.osPathJoin(testPath, "testable-jar_javaFiles.xml");
     //region Attributes
     private EntryPoint engine;
     private ByteArrayOutputStream out;
@@ -155,6 +160,43 @@ public class EntryPointTest_JAVA {
                         count++;
 
                 assertTrue(count > 0);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    @Test
+    public void main_TestableFiles_SingleTest_Scarf() {
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES.getFlag()) +
+                            makeArg(argsIdentifier.SOURCE, files[0]) +
+                            makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML.getFlag()) +
+                            makeArg(argsIdentifier.OUT, tempFileOutXML) +
+                            makeArg(argsIdentifier.PRETTY);
+
+            try {
+
+                engine.main(args.split(" "));
+
+                if (validateXML) {
+                    Schema schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(new File(pathToSchema));
+
+                    Unmarshaller xmlToJava = JAXBContext.newInstance(AnalyzerReport.class).createUnmarshaller();
+                    xmlToJava.setSchema(schema);
+
+                    AnalyzerReport result = (AnalyzerReport) xmlToJava.unmarshal(new File(tempFileOutXML));
+
+                    for (BugInstanceType in : result.getBugInstance()) {
+                        assertEquals(1, in.getCweId().size());
+                        assertNotEquals(-1, in.getCweId().get(0));
+                    }
+                }
 
 
             } catch (Exception e) {

@@ -1,11 +1,7 @@
 package main.rule.engine;
 
 import main.frontEnd.Interface.ExceptionHandler;
-import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
-import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
-
-import java.util.ArrayList;
 
 /**
  * <p>JavaClassFileEntry class.</p>
@@ -22,39 +18,13 @@ public class JavaClassFileEntry implements EntryHandler {
     /**
      * {@inheritDoc}
      */
-    public ArrayList<AnalysisIssue> NonStreamScan(EnvironmentInformation generalInfo) throws ExceptionHandler {
-        ArrayList<AnalysisIssue> issues = generalInfo.getPrintOut() ? null : new ArrayList<AnalysisIssue>();
+    public void Scan(EnvironmentInformation generalInfo) throws ExceptionHandler {
 
-        generalInfo.startAnalysis();
-        //region Core Handling
         for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
-            ArrayList<AnalysisIssue> tempIssues = ruleChecker.checkRule(generalInfo.getSourceType(), generalInfo.getSource(), generalInfo.getDependencies(),
-                    generalInfo.getPrintOut(), generalInfo.getSourcePaths(), null);
+            ruleChecker.checkRule(generalInfo.getSourceType(), generalInfo.getSource(), generalInfo.getDependencies(), generalInfo.getSourcePaths(), generalInfo.getOutput());
 
-
-            if (!generalInfo.getPrintOut())
-                issues.addAll(tempIssues);
         }
-
-        //endregion
-
-
-        generalInfo.stopAnalysis();
-        return issues;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void StreamScan(EnvironmentInformation generalInfo, baseStreamWriter streamWriter) throws ExceptionHandler {
-        generalInfo.startAnalysis();
-        //region Core
-        for (RuleChecker ruleChecker : CommonRules.ruleCheckerList)
-            ruleChecker.checkRule(generalInfo.getSourceType(), generalInfo.getSource(), generalInfo.getDependencies(),
-                    generalInfo.getPrintOut(), generalInfo.getSourcePaths(), streamWriter);
-
-        //endregion
-        generalInfo.stopAnalysis();
-    }
 
 }

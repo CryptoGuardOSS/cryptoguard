@@ -3,14 +3,14 @@ package main.rule.base;
 import main.analyzer.backward.Analysis;
 import main.analyzer.backward.UnitContainer;
 import main.frontEnd.Interface.ExceptionHandler;
-import main.frontEnd.MessagingSystem.AnalysisIssue;
-import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
+import main.frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import main.util.Utils;
 import soot.ValueBox;
 import soot.jimple.Constant;
 
-import java.util.*;
-import java.util.regex.Pattern;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>Abstract PatternMatcherRuleChecker class.</p>
@@ -63,16 +63,12 @@ public abstract class PatternMatcherRuleChecker extends BaseRuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, baseStreamWriter writer) throws ExceptionHandler {
-
-        return Utils.createAnalysisOutput(xmlFileStr, sourcePaths, predictableSourcMap, rule, writer);
-
+    public void createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler {
+        Utils.createAnalysisOutput(xmlFileStr, sourcePaths, predictableSourcMap, rule, output);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void printAnalysisOutput(Map<String, String> configFiles) {
+    //region LEGACY
+    /*public void printAnalysisOutput(Map<String, String> configFiles) {
         List<String> predictableSources = new ArrayList<>();
         List<UnitContainer> predictableSourceInst = new ArrayList<>();
         List<String> others = new ArrayList<>();
@@ -101,15 +97,6 @@ public abstract class PatternMatcherRuleChecker extends BaseRuleChecker {
             System.out.println("=======================================");
         }
     }
-
-    private String getPrintableMsg(Collection<String> constants, String rule, String ruleDesc) {
-        return "***Violated Rule " +
-                rule + ": " +
-                ruleDesc +
-                " ***Constants: " +
-                constants;
-    }
-
     private String getOthersToPrint(Map<String, String> xmlFileStr, Collection<String> others, String rule, String ruleDesc) {
 
         StringBuilder output = new StringBuilder(getPrintableMsg(others, rule + "a", ruleDesc));
@@ -155,6 +142,16 @@ public abstract class PatternMatcherRuleChecker extends BaseRuleChecker {
 
         return output.toString();
     }
+    private String getPrintableMsg(Collection<String> constants, String rule, String ruleDesc) {
+        return "***Violated Rule " +
+                rule + ": " +
+                ruleDesc +
+                " ***Constants: " +
+                constants;
+    }
+    */
+    //endregion
+
 
     /**
      * <p>getPatternsToMatch.</p>

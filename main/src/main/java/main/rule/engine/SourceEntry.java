@@ -1,9 +1,7 @@
 package main.rule.engine;
 
 import main.frontEnd.Interface.ExceptionHandler;
-import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
-import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
 import main.util.BuildFileParser;
 import main.util.BuildFileParserFactory;
 import main.util.FieldInitializationInstructionMap;
@@ -28,100 +26,46 @@ public class SourceEntry implements EntryHandler {
     /**
      * {@inheritDoc}
      */
-    public ArrayList<AnalysisIssue> NonStreamScan(EnvironmentInformation generalInfo) throws ExceptionHandler {
-        ArrayList<AnalysisIssue> issues = generalInfo.getPrintOut() ? null : new ArrayList<AnalysisIssue>();
-        generalInfo.startAnalysis();
-        //region Core
-            BuildFileParser buildFileParser = BuildFileParserFactory.getBuildfileParser(generalInfo.getSource().get(0));
+    public void Scan(EnvironmentInformation generalInfo) throws ExceptionHandler {
 
-            Map<String, List<String>> moduleVsDependency = buildFileParser.getDependencyList();
-            List<String> analyzedModules = new ArrayList<>();
 
-            for (String module : moduleVsDependency.keySet()) {
+        BuildFileParser buildFileParser = BuildFileParserFactory.getBuildfileParser(generalInfo.getSource().get(0));
 
-                if (!analyzedModules.contains(module)) {
+        Map<String, List<String>> moduleVsDependency = buildFileParser.getDependencyList();
+        List<String> analyzedModules = new ArrayList<>();
 
-                    List<String> dependencies = moduleVsDependency.get(module);
-                    List<String> otherdependencies = new ArrayList<>();
+        for (String module : moduleVsDependency.keySet()) {
 
-                    for (String dependency : dependencies) {
+            if (!analyzedModules.contains(module)) {
 
-                        String dependencyModule;
+                List<String> dependencies = moduleVsDependency.get(module);
+                List<String> otherdependencies = new ArrayList<>();
 
-                        if (dependency.equals(generalInfo.getSource().get(0) + "/src/main/java"))
-                            dependencyModule = generalInfo.getSource().get(0).substring(generalInfo.getSource().get(0).lastIndexOf("/") + 1);
-                        else
-                            dependencyModule = dependency.substring(generalInfo.getSource().get(0).length() + 1, dependency.length() - 14);
+                for (String dependency : dependencies) {
 
-                        /* This is needed when the dependency path is relative*/
-                        //otherdependencies.add(dependency.substring(0, dependency.length() - 13) + generalInfo.getDependencies());
-                        otherdependencies.addAll(generalInfo.getDependencies());
+                    String dependencyModule;
 
-                        analyzedModules.add(dependencyModule);
-                    }
+                    if (dependency.equals(generalInfo.getSource().get(0) + "/src/main/java"))
+                        dependencyModule = generalInfo.getSource().get(0).substring(generalInfo.getSource().get(0).lastIndexOf("/") + 1);
+                    else
+                        dependencyModule = dependency.substring(generalInfo.getSource().get(0).length() + 1, dependency.length() - 14);
 
-                    for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
-                        ArrayList<AnalysisIssue> tempIssues = ruleChecker.checkRule(EngineType.DIR, dependencies, otherdependencies, generalInfo.getPrintOut(), generalInfo.getSourcePaths(), null);
+                    /* This is needed when the dependency path is relative*/
+                    //otherdependencies.add(dependency.substring(0, dependency.length() - 13) + generalInfo.getDependencies());
+                    otherdependencies.addAll(generalInfo.getDependencies());
 
-                        if (!generalInfo.getPrintOut())
-                            issues.addAll(tempIssues);
-                    }
-
-                    NamedMethodMap.clearCallerCalleeGraph();
-                    FieldInitializationInstructionMap.reset();
+                    analyzedModules.add(dependencyModule);
                 }
+
+                for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
+                    ruleChecker.checkRule(EngineType.DIR, dependencies, otherdependencies, generalInfo.getSourcePaths(), generalInfo.getOutput());
+                }
+
+                NamedMethodMap.clearCallerCalleeGraph();
+                FieldInitializationInstructionMap.reset();
             }
-        //endregion
-        generalInfo.stopAnalysis();
-        return issues;
+        }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void StreamScan(EnvironmentInformation generalInfo, baseStreamWriter streamWriter) throws ExceptionHandler {
-        generalInfo.startAnalysis();
-
-        //region Core
-            BuildFileParser buildFileParser = BuildFileParserFactory.getBuildfileParser(generalInfo.getSource().get(0));
-
-            Map<String, List<String>> moduleVsDependency = buildFileParser.getDependencyList();
-            List<String> analyzedModules = new ArrayList<>();
-
-            for (String module : moduleVsDependency.keySet()) {
-
-                if (!analyzedModules.contains(module)) {
-
-                    List<String> dependencies = moduleVsDependency.get(module);
-                    List<String> otherdependencies = new ArrayList<>();
-
-                    for (String dependency : dependencies) {
-
-                        String dependencyModule;
-
-                        if (dependency.equals(generalInfo.getSource().get(0) + "/src/main/java"))
-                            dependencyModule = generalInfo.getSource().get(0).substring(generalInfo.getSource().get(0).lastIndexOf("/") + 1);
-                        else
-                            dependencyModule = dependency.substring(generalInfo.getSource().get(0).length() + 1, dependency.length() - 14);
-
-                        /* This is needed when the dependency path is relative*/
-                        //otherdependencies.add(dependency.substring(0, dependency.length() - 13) + generalInfo.getDependencies());
-                        otherdependencies.addAll(generalInfo.getDependencies());
-
-                        analyzedModules.add(dependencyModule);
-                    }
-
-                    for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
-                        ruleChecker.checkRule(EngineType.DIR, dependencies, otherdependencies, generalInfo.getPrintOut(), generalInfo.getSourcePaths(), streamWriter);
-                    }
-
-                    NamedMethodMap.clearCallerCalleeGraph();
-                    FieldInitializationInstructionMap.reset();
-                }
-            }
-        //endregion
-
-        generalInfo.stopAnalysis();
-    }
 
 }

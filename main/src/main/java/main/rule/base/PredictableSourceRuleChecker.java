@@ -5,8 +5,7 @@ import main.analyzer.backward.AssignInvokeUnitContainer;
 import main.analyzer.backward.InvokeUnitContainer;
 import main.analyzer.backward.UnitContainer;
 import main.frontEnd.Interface.ExceptionHandler;
-import main.frontEnd.MessagingSystem.AnalysisIssue;
-import main.frontEnd.MessagingSystem.streamWriters.baseStreamWriter;
+import main.frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import main.util.Utils;
 import soot.*;
 import soot.jimple.AssignStmt;
@@ -17,7 +16,6 @@ import soot.jimple.internal.JInvokeStmt;
 import soot.jimple.internal.RValueBox;
 
 import java.util.*;
-import java.util.regex.Pattern;
 
 /**
  * Created by krishnokoli on 11/26/17.
@@ -256,9 +254,8 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    //region LEGACY
+    /*
     public void printAnalysisOutput(Map<String, String> configFiles) {
 
         List<String> predictableSources = new ArrayList<>();
@@ -345,14 +342,15 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
         }
 
         return output.toString();
-    }
+    }*/
+    //endregion
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, baseStreamWriter writer) throws ExceptionHandler {
-        return Utils.createAnalysisOutput(xmlFileStr, sourcePaths, predictableSourcMap, rule, writer);
+    public void createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler {
+        Utils.createAnalysisOutput(xmlFileStr, sourcePaths, predictableSourcMap, rule, output);
     }
 
     /**

@@ -13,6 +13,7 @@ import java.util.Arrays;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
+import static main.TestUtilities.*;
 import static org.junit.Assert.*;
 
 public class ArgumentsCheckTest {
@@ -20,12 +21,8 @@ public class ArgumentsCheckTest {
     //region Attributes
     private EnvironmentInformation info;
 
-    private final String basePath = System.getProperty("user.dir");
-    private final String jarOne = Utils.osPathJoin(basePath, "rsc", "test", "testable-jar.jar");
-    private final String srcOneGrv = basePath.replace("main", "testable-jar");
-    private final String srcOneGrvDep = Utils.osPathJoin(srcOneGrv, "build", "dependencies");
-    private final String fileOut = Utils.osPathJoin(srcOneGrv, "tmp", "txt.xml");
-    private final String fileOutTxt = Utils.osPathJoin(srcOneGrv, "tmp", "txt.txt");
+    private final String fileOut = Utils.osPathJoin(testPath, "txt.xml");
+    private final String fileOutTxt = Utils.osPathJoin(testPath, "txt.txt");
     //endregion
 
     //region Test Environment Setup

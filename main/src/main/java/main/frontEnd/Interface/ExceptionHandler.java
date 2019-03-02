@@ -51,6 +51,9 @@ public class ExceptionHandler extends Exception {
         return StringUtils.trimToNull(resp.toString());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void printStackTrace() {
         System.err.println(this.toString());
@@ -58,6 +61,7 @@ public class ExceptionHandler extends Exception {
     //endregion
 
     //region Getters
+
     /**
      * <p>Getter for the field <code>errorCode</code>.</p>
      *
