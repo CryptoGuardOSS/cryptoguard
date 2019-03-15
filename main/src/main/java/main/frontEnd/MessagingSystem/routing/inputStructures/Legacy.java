@@ -12,7 +12,7 @@ import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
  *
  * <p>The input check for the Legacy Output</p>
  */
-public class Legacy implements InputStructure {
+public class Legacy implements Structure {
 
     /**
      * {@inheritDoc}

@@ -1,6 +1,6 @@
 package main.rule.engine;
 
-import main.frontEnd.MessagingSystem.AnalysisIssue;
+import main.frontEnd.Interface.ExceptionHandler;
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import main.util.BuildFileParser;
 import main.util.BuildFileParserFactory;
@@ -26,52 +26,46 @@ public class SourceEntry implements EntryHandler {
     /**
      * {@inheritDoc}
      */
-    public ArrayList<AnalysisIssue> NonStreamScan(EnvironmentInformation generalInfo) {
-        ArrayList<AnalysisIssue> issues = generalInfo.getPrintOut() ? null : new ArrayList<AnalysisIssue>();
+    public void Scan(EnvironmentInformation generalInfo) throws ExceptionHandler {
 
-        try {
-            BuildFileParser buildFileParser = BuildFileParserFactory.getBuildfileParser(generalInfo.getSource().get(0));
 
-            Map<String, List<String>> moduleVsDependency = buildFileParser.getDependencyList();
-            List<String> analyzedModules = new ArrayList<>();
+        BuildFileParser buildFileParser = BuildFileParserFactory.getBuildfileParser(generalInfo.getSource().get(0));
 
-            for (String module : moduleVsDependency.keySet()) {
+        Map<String, List<String>> moduleVsDependency = buildFileParser.getDependencyList();
+        List<String> analyzedModules = new ArrayList<>();
 
-                if (!analyzedModules.contains(module)) {
+        for (String module : moduleVsDependency.keySet()) {
 
-                    List<String> dependencies = moduleVsDependency.get(module);
-                    List<String> otherdependencies = new ArrayList<>();
+            if (!analyzedModules.contains(module)) {
 
-                    for (String dependency : dependencies) {
+                List<String> dependencies = moduleVsDependency.get(module);
+                List<String> otherdependencies = new ArrayList<>();
 
-                        String dependencyModule;
+                for (String dependency : dependencies) {
 
-                        if (dependency.equals(generalInfo.getSource().get(0) + "/src/main/java"))
-                            dependencyModule = generalInfo.getSource().get(0).substring(generalInfo.getSource().get(0).lastIndexOf("/") + 1);
-                        else
-                            dependencyModule = dependency.substring(generalInfo.getSource().get(0).length() + 1, dependency.length() - 14);
+                    String dependencyModule;
 
-                        otherdependencies.add(dependency.substring(0, dependency.length() - 13) + generalInfo.getDependencies());
+                    if (dependency.equals(generalInfo.getSource().get(0) + "/src/main/java"))
+                        dependencyModule = generalInfo.getSource().get(0).substring(generalInfo.getSource().get(0).lastIndexOf("/") + 1);
+                    else
+                        dependencyModule = dependency.substring(generalInfo.getSource().get(0).length() + 1, dependency.length() - 14);
 
-                        analyzedModules.add(dependencyModule);
-                    }
+                    /* This is needed when the dependency path is relative*/
+                    //otherdependencies.add(dependency.substring(0, dependency.length() - 13) + generalInfo.getDependencies());
+                    otherdependencies.addAll(generalInfo.getDependencies());
 
-                    generalInfo.startAnalysis();
-                    for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
-                        ArrayList<AnalysisIssue> tempIssues = ruleChecker.checkRule(EngineType.DIR, dependencies, otherdependencies, generalInfo.getPrintOut(), generalInfo.getSourcePaths());
-
-                        if (!generalInfo.getPrintOut())
-                            issues.addAll(tempIssues);
-                    }
-                    generalInfo.stopAnalysis();
-
-                    NamedMethodMap.clearCallerCalleeGraph();
-                    FieldInitializationInstructionMap.reset();
+                    analyzedModules.add(dependencyModule);
                 }
+
+                for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
+                    ruleChecker.checkRule(EngineType.DIR, dependencies, otherdependencies, generalInfo.getSourcePaths(), generalInfo.getOutput());
+                }
+
+                NamedMethodMap.clearCallerCalleeGraph();
+                FieldInitializationInstructionMap.reset();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return issues;
     }
+
+
 }

@@ -1,23 +1,31 @@
 package main.util;
 
-import main.analyzer.backward.UnitContainer;
+import main.analyzer.backward.*;
 import main.frontEnd.Interface.ExceptionHandler;
+import main.frontEnd.Interface.ExceptionId;
+import main.frontEnd.MessagingSystem.AnalysisIssue;
 import main.frontEnd.MessagingSystem.routing.Listing;
+import main.frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import main.rule.engine.EngineType;
+import main.slicer.backward.heuristic.HeuristicBasedAnalysisResult;
+import main.slicer.backward.heuristic.HeuristicBasedInstructions;
 import main.util.manifest.ProcessManifest;
 import org.apache.commons.lang3.StringUtils;
 import org.jf.dexlib2.DexFileFactory;
 import org.jf.dexlib2.Opcodes;
 import org.jf.dexlib2.iface.ClassDef;
 import org.jf.dexlib2.iface.DexFile;
-import soot.Scene;
-import soot.SootClass;
-import soot.Unit;
-import soot.ValueBox;
+import soot.*;
+import soot.jimple.Constant;
+import soot.jimple.InvokeExpr;
+import soot.jimple.internal.JAssignStmt;
+import soot.jimple.internal.JInvokeStmt;
 import soot.options.Options;
 import soot.util.Chain;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -25,6 +33,8 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
+
+import static soot.SootClass.BODIES;
 
 /**
  * <p>Utils class.</p>
@@ -44,7 +54,19 @@ public class Utils {
      * {@link main.util.Utils#getClassNamesFromJarArchive}
      */
 
-    private static String fileSep = System.getProperty("file.separator");
+    public final static String fileSep = System.getProperty("file.separator");
+    /**
+     * Constant <code>lineSep="System.getProperty(line.separator)"</code>
+     */
+    public final static String lineSep = System.getProperty("line.separator");
+    /**
+     * Constant <code>localPath="System.getProperty(user.dir)"</code>
+     */
+    public final static String localPath = System.getProperty("user.dir");
+    /**
+     * Constant <code>userPath="System.getProperty(user.home)"</code>
+     */
+    public final static String userPath = System.getProperty("user.home");
     private static Pattern sootClassPattern = Pattern.compile("[<](.+)[:]");
     private static Pattern sootClassPatternTwo = Pattern.compile("([a-zA-Z0-9]+[.][a-zA-Z0-9]+)\\$[0-9]+");
     private static Pattern sootFoundPattern = Pattern.compile("\\[(.+)\\]");
@@ -52,6 +74,7 @@ public class Utils {
     private static Pattern sootMthdPattern = Pattern.compile("<((?:[a-zA-Z0-9]+))>");
     private static Pattern sootMthdPatternTwo = Pattern.compile("((?:[a-zA-Z0-9_]+))\\(");
     private static Pattern sootFoundMatchPattern = Pattern.compile("\"{1}(.+)\"{1}");
+    private static Pattern packagePattern = Pattern.compile("package ([[a-zA-Z]+?.]+);");
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");
 
     /**
@@ -59,18 +82,22 @@ public class Utils {
      *
      * @param jarPath a {@link java.lang.String} object.
      * @return a {@link java.util.List} object.
-     * @throws java.io.IOException if any.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
-    public static List<String> getClassNamesFromJarArchive(String jarPath) throws IOException {
+    public static List<String> getClassNamesFromJarArchive(String jarPath) throws ExceptionHandler {
         List<String> classNames = new ArrayList<>();
-        ZipInputStream zip = new ZipInputStream(new FileInputStream(jarPath));
-        for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
-            if (!entry.isDirectory() && entry.getName().endsWith(".class")) {
-                String className = entry.getName().replace('/', '.');
-                classNames.add(className.substring(0, className.length() - ".class".length()));
+        try {
+            ZipInputStream zip = new ZipInputStream(new FileInputStream(jarPath));
+            for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
+                if (!entry.isDirectory() && entry.getName().endsWith(".class")) {
+                    String className = entry.getName().replace('/', '.');
+                    classNames.add(className.substring(0, className.length() - ".class".length()));
+                }
             }
+            return classNames;
+        } catch (IOException e) {
+            throw new ExceptionHandler("Error with file " + jarPath, ExceptionId.FILE_I);
         }
-        return classNames;
     }
 
     /**
@@ -78,12 +105,21 @@ public class Utils {
      *
      * @param apkPath a {@link java.lang.String} object.
      * @return a {@link java.lang.String} object.
-     * @throws java.io.IOException if any.
      */
-    public static String getBasePackageNameFromApk(String apkPath) throws IOException {
+    public static String getBasePackageNameFromApk(String apkPath) {
+
+        String basePackage = null;
+
         ProcessManifest processManifest = new ProcessManifest();
-        processManifest.loadManifestFile(apkPath);
-        return processManifest.getPackageName();
+
+        try {
+            processManifest.loadManifestFile(apkPath);
+            basePackage = processManifest.getPackageName();
+        } catch (Exception e) {
+            System.out.println("Couldn't load manifest file.");
+        }
+
+        return basePackage;
     }
 
     /**
@@ -92,60 +128,64 @@ public class Utils {
      * @param jarPath a {@link java.lang.String} object.
      * @param isMain  a boolean.
      * @return a {@link java.lang.String} object.
-     * @throws java.io.IOException if any.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
-    public static String getBasePackageNameFromJar(String jarPath, boolean isMain) throws IOException {
+    public static String getBasePackageNameFromJar(String jarPath, boolean isMain) throws ExceptionHandler {
 
-        ZipInputStream zip = new ZipInputStream(new FileInputStream(jarPath));
+        try {
+            ZipInputStream zip = new ZipInputStream(new FileInputStream(jarPath));
 
-        List<String> basePackages = new ArrayList<>();
+            List<String> basePackages = new ArrayList<>();
 
-        for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
-            if (!entry.isDirectory() && entry.getName().endsWith(".class")) {
-                String className = entry.getName().replace('/', '.');
-                className = className.substring(0, className.length() - ".class".length());
+            for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
+                if (!entry.isDirectory() && entry.getName().endsWith(".class")) {
+                    String className = entry.getName().replace('/', '.');
+                    className = className.substring(0, className.length() - ".class".length());
 
-                String[] splits = className.split("\\.");
-                StringBuilder basePackage = new StringBuilder();
+                    String[] splits = className.split("\\.");
+                    StringBuilder basePackage = new StringBuilder();
 
-                if (splits.length > 3) { // assumption package structure is org.apache.xyz.main
-                    basePackage.append(splits[0])
-                            .append(".")
-                            .append(splits[1])
-                            .append(".")
-                            .append(splits[2]);
-                } else if (splits.length == 3) {
-                    basePackage.append(splits[0])
-                            .append(".")
-                            .append(splits[1]);
-                } else {
-                    basePackage.append(splits[0]);
-                }
+                    if (splits.length > 3) { // assumption package structure is org.apache.xyz.main
+                        basePackage.append(splits[0])
+                                .append(".")
+                                .append(splits[1])
+                                .append(".")
+                                .append(splits[2]);
+                    } else if (splits.length == 3) {
+                        basePackage.append(splits[0])
+                                .append(".")
+                                .append(splits[1]);
+                    } else {
+                        basePackage.append(splits[0]);
+                    }
 
-                String basePackageStr = basePackage.toString();
+                    String basePackageStr = basePackage.toString();
 
-                if (!basePackages.toString().contains(basePackageStr)) {
-                    basePackages.add(basePackageStr);
-                }
-            }
-        }
-
-        if (basePackages.size() == 1) {
-            return basePackages.get(0);
-        } else if (basePackages.size() > 1) {
-
-//            if (isMain) {
-//                System.out.println("***Multiple Base packages of " + jarPath + " : " + basePackages.toString());
-//            }
-
-            for (String basePackage : basePackages) {
-                if (basePackage.split("\\.").length > 2 && jarPath.contains(basePackage.split("\\.")[2])) {
-                    return basePackage;
+                    if (!basePackages.toString().contains(basePackageStr)) {
+                        basePackages.add(basePackageStr);
+                    }
                 }
             }
-        }
 
-        return null;
+            if (basePackages.size() == 1) {
+                return basePackages.get(0);
+            } else if (basePackages.size() > 1) {
+
+                if (isMain) {
+                    System.out.println("***Multiple Base packages of " + jarPath + " : " + basePackages.toString());
+                }
+
+                for (String basePackage : basePackages) {
+                    if (basePackage.split("\\.").length > 2 && jarPath.contains(basePackage.split("\\.")[2])) {
+                        return basePackage;
+                    }
+                }
+            }
+
+            return null;
+        } catch (IOException e) {
+            throw new ExceptionHandler("Error with file " + jarPath, ExceptionId.FILE_I);
+        }
 
     }
 
@@ -154,23 +194,26 @@ public class Utils {
      *
      * @param apkfile a {@link java.lang.String} object.
      * @return a {@link java.util.List} object.
-     * @throws java.io.IOException if any.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
-    public static List<String> getClassNamesFromApkArchive(String apkfile) throws IOException {
+    public static List<String> getClassNamesFromApkArchive(String apkfile) throws ExceptionHandler {
         List<String> classNames = new ArrayList<>();
 
         File zipFile = new File(apkfile);
 
-        DexFile dexFile = DexFileFactory.loadDexEntry(zipFile, "classes.dex", true, Opcodes.forApi(23));
+        try {
+            DexFile dexFile = DexFileFactory.loadDexEntry(zipFile, "classes.dex", true, Opcodes.forApi(23));
 
-        for (ClassDef classDef : dexFile.getClasses()) {
-            String className = classDef.getType().replace('/', '.');
-            if (!className.contains("android.")) {
-                classNames.add(className.substring(1, className.length() - 1));
+            for (ClassDef classDef : dexFile.getClasses()) {
+                String className = classDef.getType().replace('/', '.');
+                if (!className.contains("android.")) {
+                    classNames.add(className.substring(1, className.length() - 1));
+                }
             }
+            return classNames;
+        } catch (IOException e) {
+            throw new ExceptionHandler("Error with dex file classes.dex", ExceptionId.FILE_I);
         }
-
-        return classNames;
     }
 
     /**
@@ -304,9 +347,9 @@ public class Utils {
      * @param projectJarPath a {@link java.lang.String} object.
      * @param excludes       a {@link java.util.List} object.
      * @return a {@link java.util.Map} object.
-     * @throws java.io.IOException if any.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
-    public static Map<String, String> getXmlFiles(String projectJarPath, List<String> excludes) throws IOException {
+    public static Map<String, String> getXmlFiles(String projectJarPath, List<String> excludes) throws ExceptionHandler {
         Map<String, String> fileStrs = new HashMap<>();
 
         if (new File(projectJarPath).isDirectory()) {
@@ -323,24 +366,35 @@ public class Utils {
         return fileStrs;
     }
 
-    private static List<String> getXmlFileNamesFromJarArchive(String jarPath, List<String> excludes) throws IOException {
+    private static List<String> getXmlFileNamesFromJarArchive(String jarPath, List<String> excludes) throws ExceptionHandler {
         List<String> classNames = new ArrayList<>();
-        ZipInputStream zip = new ZipInputStream(new FileInputStream(jarPath));
-        for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
-            for (String exclude : excludes) {
-                if (!entry.isDirectory() && entry.getName().endsWith(".xml") && !entry.getName().endsWith(exclude)) {
-                    String className = entry.getName();
-                    classNames.add(className);
+        try {
+            ZipInputStream zip = new ZipInputStream(new FileInputStream(jarPath));
+
+            for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
+                for (String exclude : excludes) {
+                    if (!entry.isDirectory() && entry.getName().endsWith(".xml") && !entry.getName().endsWith(exclude)) {
+                        String className = entry.getName();
+                        classNames.add(className);
+                    }
                 }
             }
+        } catch (FileNotFoundException e) {
+            throw new ExceptionHandler("File " + jarPath + " is not found.", ExceptionId.FILE_AFK);
+        } catch (IOException e) {
+            throw new ExceptionHandler("Error Reading " + jarPath + ".", ExceptionId.FILE_I);
         }
         return classNames;
     }
 
-    private static InputStream readFileFromZip(String jarPath, String file) throws IOException {
-        ZipFile zipFile = new ZipFile(jarPath);
-        ZipEntry entry = zipFile.getEntry(file);
-        return zipFile.getInputStream(entry);
+    private static InputStream readFileFromZip(String jarPath, String file) throws ExceptionHandler {
+        try {
+            ZipFile zipFile = new ZipFile(jarPath);
+            ZipEntry entry = zipFile.getEntry(file);
+            return zipFile.getInputStream(entry);
+        } catch (IOException e) {
+            throw new ExceptionHandler("Error Reading " + jarPath + ".", ExceptionId.FILE_I);
+        }
     }
 
     private static String convertStreamToString(java.io.InputStream is) {
@@ -488,6 +542,64 @@ public class Utils {
     }
 
     /**
+     * <p>retrievePackageFromJavaFiles.</p>
+     *
+     * @param sourceFiles a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String retrievePackageFromJavaFiles(String... sourceFiles) {
+        return retrievePackageFromJavaFiles(Arrays.asList(sourceFiles));
+    }
+
+    /**
+     * <p>retrievePackageFromJavaFiles.</p>
+     *
+     * @param sourceFiles a {@link java.util.List} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String retrievePackageFromJavaFiles(List<String> sourceFiles) {
+        String commonPath = null;
+
+        for (String in : sourceFiles) {
+
+            String tempPath = in.replace(retrievePackageFromJavaFiles(in), "");
+
+            if (commonPath == null)
+                commonPath = tempPath;
+            else if (!commonPath.equals(tempPath)) {
+                String removable = commonPath.replace(in, "");
+                commonPath = commonPath.replace(removable, "");
+            }
+
+        }
+
+        return commonPath;
+    }
+
+    /**
+     * <p>retrievePackageFromJavaFiles.</p>
+     *
+     * @param file a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String retrievePackageFromJavaFiles(String file) {
+        try {
+            File in = new File(file);
+
+            if (file.endsWith(".java")) {
+                for (String line : Files.readAllLines(in.toPath(), Charset.forName("UTF-8"))) {
+                    Matcher matches = packagePattern.matcher(line);
+                    if (matches.find())
+                        return Utils.fileSep + StringUtils.trimToNull(matches.group(1)) + Utils.fileSep + in.getName();
+                }
+            } else
+                return in.getName();
+        } catch (IOException e) {
+        }
+        return file;
+    }
+
+    /**
      * <p>retrieveTrimmedSourcePaths.</p>
      *
      * @param files a {@link java.util.List} object.
@@ -503,7 +615,6 @@ public class Utils {
             try {
                 relativeFilePath = file.getCanonicalPath().replace(file.getName(), "");
             } catch (IOException e) {
-
             }
 
             if (!filePaths.contains(relativeFilePath))
@@ -590,9 +701,11 @@ public class Utils {
     public static String join(String delimiter, List<String> elements) {
         StringBuilder tempString = new StringBuilder();
         for (String in : elements) {
-            tempString.append(in);
-            if (!in.equals(elements.get(elements.size() - 1)))
-                tempString.append(delimiter);
+            if (in != null) {
+                tempString.append(in);
+                if (!in.equals(elements.get(elements.size() - 1)))
+                    tempString.append(delimiter);
+            }
         }
 
         return tempString.toString();
@@ -602,12 +715,12 @@ public class Utils {
      * <p>getJAVA_HOME.</p>
      *
      * @return a {@link java.lang.String} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
-    public static String getJAVA_HOME() {
+    public static String getJAVA_HOME() throws ExceptionHandler {
         String JAVA_HOME = System.getenv("JAVA_HOME");
         if (StringUtils.isEmpty(JAVA_HOME)) {
-            System.out.println("Please Set JAVA_HOME");
-            System.exit(1);
+            throw new ExceptionHandler("Environment Variable: JAVA_HOME is not set.", ExceptionId.ENV_VAR);
         }
         return JAVA_HOME;
     }
@@ -616,12 +729,12 @@ public class Utils {
      * <p>getJAVA7_HOME.</p>
      *
      * @return a {@link java.lang.String} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
-    public static String getJAVA7_HOME() {
+    public static String getJAVA7_HOME() throws ExceptionHandler {
         String JAVA7_HOME = System.getenv("JAVA7_HOME");
         if (StringUtils.isEmpty(JAVA7_HOME)) {
-            System.out.println("Please Set JAVA7_HOME");
-            System.exit(1);
+            throw new ExceptionHandler("Environment Variable: JAVA7_HOME is not set.", ExceptionId.ENV_VAR);
         }
         return JAVA7_HOME;
     }
@@ -630,12 +743,12 @@ public class Utils {
      * <p>getANDROID.</p>
      *
      * @return a {@link java.lang.String} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
-    public static String getANDROID() {
+    public static String getANDROID() throws ExceptionHandler {
         String ANDROID_HOME = System.getenv("ANDROID_HOME");
         if (StringUtils.isEmpty(ANDROID_HOME)) {
-            System.out.println("Please Set ANDROID_HOME");
-            System.exit(1);
+            throw new ExceptionHandler("Environment Variable: ANDROID_HOME is not set.", ExceptionId.ENV_VAR);
         }
         return ANDROID_HOME;
     }
@@ -644,8 +757,9 @@ public class Utils {
      * <p>getBaseSOOT.</p>
      *
      * @return a {@link java.lang.String} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
-    public static String getBaseSOOT() {
+    public static String getBaseSOOT() throws ExceptionHandler {
         String rt = Utils.join(Utils.fileSep, "jre", "lib", "rt.jar:");
         String jce = Utils.join(Utils.fileSep, "jre", "lib", "jce.jar");
 
@@ -656,8 +770,9 @@ public class Utils {
      * <p>getBaseSOOT7.</p>
      *
      * @return a {@link java.lang.String} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
-    public static String getBaseSOOT7() {
+    public static String getBaseSOOT7() throws ExceptionHandler {
         String rt = Utils.join(Utils.fileSep, "jre", "lib", "rt.jar:");
         String jce = Utils.join(Utils.fileSep, "jre", "lib", "jce.jar");
 
@@ -800,12 +915,12 @@ public class Utils {
         for (String dir : arguments) {
             File dirChecking = new File(dir);
             if (!dirChecking.exists() || !dirChecking.isDirectory())
-                throw new ExceptionHandler(dirChecking.getName() + " is not a valid directory.");
+                throw new ExceptionHandler(dirChecking.getName() + " is not a valid directory.", ExceptionId.ARG_VALID);
 
             try {
                 dirs.add(dirChecking.getCanonicalPath());
             } catch (Exception e) {
-                throw new ExceptionHandler("Error retrieving the path of the directory.");
+                throw new ExceptionHandler("Error retrieving the full path of the " + dirChecking + ".", ExceptionId.FILE_AFK);
             }
         }
         return dirs;
@@ -821,18 +936,18 @@ public class Utils {
      */
     public static String verifyFileOut(String file, Listing type) throws ExceptionHandler {
         if (!file.endsWith(type.getOutputFileExt()))
-            throw new ExceptionHandler("File " + file + " doesn't have the right file type ");
+            throw new ExceptionHandler("File " + file + " doesn't have the right file type ", ExceptionId.ARG_VALID);
 
         File tempFile = new File(file);
 
-        //TODO - Add flag to verify overwrite a file?
         /*if (tempFile.exists() || tempFile.isFile())
             throw new ExceptionHandler(tempFile.getName() + " is already a valid file.");
-*/
+        */
+
         try {
             return tempFile.getCanonicalPath();
         } catch (Exception e) {
-            throw new ExceptionHandler("Error retrieving the path of the file " + tempFile.getName() + ".");
+            throw new ExceptionHandler("Error retrieving the path of the file " + tempFile.getName() + ".", ExceptionId.FILE_AFK);
         }
     }
 
@@ -846,16 +961,16 @@ public class Utils {
      */
     public static String retrieveFilePath(String file, EngineType type) throws ExceptionHandler {
         if (!file.endsWith(type.getInputExtension()))
-            throw new ExceptionHandler("File " + file + " doesn't have the right file type ");
+            throw new ExceptionHandler("File " + file + " doesn't have the right file type ", ExceptionId.ARG_VALID);
 
         File tempFile = new File(file);
         if (!tempFile.exists() || !tempFile.isFile())
-            throw new ExceptionHandler(tempFile.getName() + " is not a valid file.");
+            throw new ExceptionHandler(tempFile.getName() + " is not a valid file.", ExceptionId.ARG_VALID);
 
         try {
             return tempFile.getCanonicalPath();
         } catch (Exception e) {
-            throw new ExceptionHandler("Error retrieving the path of the file " + tempFile.getName() + ".");
+            throw new ExceptionHandler("Error retrieving the path of the file " + tempFile.getName() + ".", ExceptionId.FILE_AFK);
         }
     }
 
@@ -870,7 +985,7 @@ public class Utils {
     public static List<String> retrieveFilesByType(List<String> arguments, EngineType type) throws ExceptionHandler {
         if (type == EngineType.DIR)
             if (arguments.size() != 1)
-                throw new ExceptionHandler("Please enter one argument for this use case.");
+                throw new ExceptionHandler("Please enter one source argument for this use case.", ExceptionId.GEN_VALID);
             else
                 return retrieveDirs(arguments);
 
@@ -889,6 +1004,391 @@ public class Utils {
      */
     public static String getCurrentTimeStamp() {
         return dateFormat.format(new Date());
+
+    }
+
+    /**
+     * <p>getRelativeFilePath.</p>
+     *
+     * @param filePath a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
+     */
+    public static String getRelativeFilePath(String filePath) throws ExceptionHandler {
+        try {
+            String fullPath = new File(filePath).getCanonicalPath();
+
+            return Utils.osPathJoin("~", fullPath.replaceAll(Utils.userPath + fileSep, ""));
+        } catch (IOException e) {
+            throw new ExceptionHandler("Error reading file: " + filePath, ExceptionId.FILE_I);
+        }
+    }
+
+    /**
+     * <p>createAssignInvokeUnitContainer.</p>
+     *
+     * @param currInstruction a {@link soot.Unit} object.
+     * @return a {@link main.analyzer.backward.UnitContainer} object.
+     */
+    public static UnitContainer createAssignInvokeUnitContainer(Unit currInstruction) {
+
+        AssignInvokeUnitContainer unitContainer = new AssignInvokeUnitContainer();
+
+        SootMethod method = ((JAssignStmt) currInstruction).getInvokeExpr().getMethod();
+        if (method != null && method.isConcrete()) {
+
+            Scene.v().forceResolve(method.getDeclaringClass().getName(), BODIES);
+
+            HeuristicBasedInstructions returnInfluencingInstructions = new HeuristicBasedInstructions(method,
+                    "return");
+
+            List<UnitContainer> intraAnalysis = returnInfluencingInstructions.getAnalysisResult().getAnalysis();
+
+//            System.out.println(intraAnalysis);
+
+            // Get args
+            List<Integer> args = Utils.findInfluencingParamters(intraAnalysis);
+
+            // Get fields
+            Set<String> usedFields = new HashSet<>();
+            for (UnitContainer iUnit : intraAnalysis) {
+                for (ValueBox usebox : iUnit.getUnit().getUseBoxes()) {
+                    if (usebox.getValue().toString().startsWith("r0.") || usebox.getValue().toString().startsWith("this.")) {
+                        usedFields.add(usebox.getValue().toString());
+                    }
+                }
+            }
+
+            unitContainer.setArgs(args);
+            unitContainer.setAnalysisResult(intraAnalysis);
+            unitContainer.setProperties(usedFields);
+        }
+
+        return unitContainer;
+    }
+
+    /**
+     * <p>isArgOfAssignInvoke.</p>
+     *
+     * @param useBox a {@link soot.ValueBox} object.
+     * @param unit   a {@link soot.Unit} object.
+     * @return a int.
+     */
+    public static int isArgOfAssignInvoke(ValueBox useBox, Unit unit) {
+
+        if (unit instanceof JAssignStmt && unit.toString().contains("invoke ")) {
+
+            InvokeExpr invokeExpr = ((JAssignStmt) unit).getInvokeExpr();
+            List<Value> args = invokeExpr.getArgs();
+            for (int index = 0; index < args.size(); index++) {
+                if (args.get(index).equivTo(useBox.getValue())) {
+                    return index;
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    /**
+     * <p>isArgOfByteArrayCreation.</p>
+     *
+     * @param useBox a {@link soot.ValueBox} object.
+     * @param unit   a {@link soot.Unit} object.
+     * @return a boolean.
+     */
+    public static boolean isArgOfByteArrayCreation(ValueBox useBox, Unit unit) {
+        if (unit.toString().contains(" newarray ")) {
+            for (ValueBox valueBox : unit.getUseBoxes()) {
+                if (valueBox.getValue().equivTo(useBox.getValue())) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * <p>isArgumentOfInvoke.</p>
+     *
+     * @param analysis       a {@link main.analyzer.backward.Analysis} object.
+     * @param analysisResult a {@link main.analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link main.analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link main.analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link main.analyzer.backward.InvokeUnitContainer} object.
+     * @param index          a int.
+     * @param outSet         a {@link java.util.List} object.
+     * @param usedFields     a {@link java.util.Set} object.
+     * @param analysisResult a {@link main.analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link main.analyzer.backward.InvokeUnitContainer} object.
+     * @return a boolean.
+     */
+    public static boolean isArgumentOfInvoke(Analysis analysis, int index,
+                                             List<UnitContainer> outSet,
+                                             Set<String> usedFields, InvokeUnitContainer analysisResult) {
+        UnitContainer baseUnit = analysis.getAnalysisResult().get(index);
+
+        if (baseUnit.getUnit() instanceof JInvokeStmt) {
+
+            InvokeExpr invokeExpr = ((JInvokeStmt) baseUnit.getUnit()).getInvokeExpr();
+
+            List<Value> args = invokeExpr.getArgs();
+
+            for (int x = 0; x < args.size(); x++) {
+                if (args.get(x) instanceof Constant) {
+
+                    InvokeUnitContainer container = getDefinedFieldsFromInvoke(invokeExpr.getMethod(), usedFields);
+
+                    analysisResult.getAnalysisResult().addAll(container.getAnalysisResult());
+                    analysisResult.setDefinedFields(container.getDefinedFields());
+                    analysisResult.setArgs(container.getArgs());
+                    analysisResult.setUnit(baseUnit.getUnit());
+                    return true;
+
+                }
+            }
+        }
+
+
+        outSet.add(analysis.getAnalysisResult().get(index));
+
+        for (int i = index; i >= 0; i--) {
+
+            UnitContainer curUnit = analysis.getAnalysisResult().get(i);
+
+            List<UnitContainer> inset = new ArrayList<>();
+            inset.addAll(outSet);
+
+            for (UnitContainer insetIns : inset) {
+                if (insetIns instanceof PropertyFakeUnitContainer) {
+                    String property = ((PropertyFakeUnitContainer) insetIns).getOriginalProperty();
+
+                    if (curUnit.getUnit() instanceof JInvokeStmt) {
+                        if (curUnit.getUnit().toString().contains(property + ".<")) {
+                            if (!outSet.toString().contains(curUnit.toString())) {
+                                outSet.add(curUnit);
+                            }
+                        } else {
+
+                            InvokeExpr invokeExpr = ((JInvokeStmt) curUnit.getUnit()).getInvokeExpr();
+
+                            List<Value> args = invokeExpr.getArgs();
+
+                            for (int x = 0; x < args.size(); x++) {
+                                if (args.get(x).toString().contains(property)) {
+
+                                    InvokeUnitContainer container = getDefinedFieldsFromInvoke(invokeExpr.getMethod(), usedFields);
+
+                                    if (container.getArgs().contains(x)) {
+                                        analysisResult.getAnalysisResult().addAll(container.getAnalysisResult());
+                                        analysisResult.setDefinedFields(container.getDefinedFields());
+                                        analysisResult.setArgs(container.getArgs());
+
+                                    }
+
+                                    analysisResult.setUnit(curUnit.getUnit());
+                                    return true;
+                                }
+                            }
+                        }
+
+                    } else {
+                        for (ValueBox useBox : curUnit.getUnit().getUseBoxes()) {
+                            if (useBox.getValue().toString().contains(property)) {
+                                if (!outSet.toString().contains(curUnit.toString())) {
+                                    outSet.add(curUnit);
+                                }
+                            }
+                        }
+                    }
+                } else if (insetIns instanceof ParamFakeUnitContainer) {
+
+                    int param = ((ParamFakeUnitContainer) insetIns).getParam();
+                    String method = ((ParamFakeUnitContainer) insetIns).getCallee();
+
+                    for (ValueBox useBox : curUnit.getUnit().getUseBoxes()) {
+                        String useboxStr = useBox.getValue().toString();
+                        if (useboxStr.contains("@parameter")) {
+                            Integer parameter = Integer.valueOf(useboxStr.substring("@parameter".length(), useboxStr.indexOf(':')));
+                            if (parameter.equals(param) && curUnit.getMethod().equals(method)) {
+                                if (!outSet.toString().contains(curUnit.toString())) {
+                                    outSet.add(curUnit);
+                                }
+                            }
+                        }
+                    }
+                } else if (insetIns.getUnit() instanceof JAssignStmt) {
+                    if (curUnit.getUnit() instanceof JInvokeStmt) {
+
+                        for (ValueBox defBox : insetIns.getUnit().getDefBoxes()) {
+
+                            if (((JInvokeStmt) curUnit.getUnit()).containsInvokeExpr()) {
+
+                                InvokeExpr invokeExpr = ((JInvokeStmt) curUnit.getUnit()).getInvokeExpr();
+                                List<Value> args = invokeExpr.getArgs();
+
+                                for (int x = 0; x < args.size(); x++) {
+                                    if (args.get(x).equivTo(defBox.getValue()) ||
+                                            isArrayUseBox(curUnit, insetIns, defBox, args.get(x))) {
+
+                                        InvokeUnitContainer container = getDefinedFieldsFromInvoke(invokeExpr.getMethod(), usedFields);
+
+                                        if (container.getArgs().contains(x)) {
+                                            analysisResult.getAnalysisResult().addAll(container.getAnalysisResult());
+                                            analysisResult.setDefinedFields(container.getDefinedFields());
+                                            analysisResult.setArgs(container.getArgs());
+                                        }
+                                        analysisResult.setUnit(curUnit.getUnit());
+                                        return true;
+                                    }
+                                }
+                            } else if (curUnit.getUnit().toString().contains(defBox + ".<")) {
+                                if (!outSet.toString().contains(curUnit.toString())) {
+                                    outSet.add(curUnit);
+                                }
+                            }
+                        }
+
+                    } else {
+                        for (ValueBox defBox : insetIns.getUnit().getDefBoxes()) {
+
+                            if ((defBox.getValue().toString().equals("r0") && insetIns.getUnit().toString().startsWith("r0.")) ||
+                                    (defBox.getValue().toString().equals("this") && insetIns.getUnit().toString().startsWith("this."))) {
+                                continue;
+                            }
+
+                            for (ValueBox useBox : curUnit.getUnit().getUseBoxes()) {
+
+                                if (defBox.getValue().equivTo(useBox.getValue())
+                                        || isArrayUseBox(curUnit, insetIns, defBox, useBox.getValue())) {
+                                    if (!outSet.toString().contains(curUnit.toString())) {
+                                        outSet.add(curUnit);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                } else {
+
+                    if (curUnit.getUnit() instanceof JInvokeStmt) {
+                        for (ValueBox defBox : insetIns.getUnit().getDefBoxes()) {
+                            if (curUnit.getUnit().toString().contains(defBox + ".<")) {
+                                if (!outSet.toString().contains(curUnit.toString())) {
+                                    outSet.add(curUnit);
+                                }
+                            } else {
+
+                                InvokeExpr invokeExpr = ((JInvokeStmt) curUnit.getUnit()).getInvokeExpr();
+
+                                List<Value> args = invokeExpr.getArgs();
+
+                                for (int x = 0; x < args.size(); x++) {
+                                    if (args.get(x).equivTo(defBox.getValue()) ||
+                                            isArrayUseBox(curUnit, insetIns, defBox, args.get(x))) {
+
+                                        InvokeUnitContainer container = getDefinedFieldsFromInvoke(invokeExpr.getMethod(), usedFields);
+                                        if (container.getArgs().contains(x)) {
+                                            analysisResult.getAnalysisResult().addAll(container.getAnalysisResult());
+                                            analysisResult.setDefinedFields(container.getDefinedFields());
+                                            analysisResult.setArgs(container.getArgs());
+                                        }
+
+                                        analysisResult.setUnit(curUnit.getUnit());
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+
+                    } else {
+                        for (ValueBox defBox : insetIns.getUnit().getDefBoxes()) {
+
+                            if ((defBox.getValue().toString().equals("r0") && insetIns.getUnit().toString().startsWith("r0.")) ||
+                                    (defBox.getValue().toString().equals("this") && insetIns.getUnit().toString().startsWith("this."))) {
+                                continue;
+                            }
+
+                            for (ValueBox useBox : curUnit.getUnit().getUseBoxes()) {
+
+                                if (defBox.getValue().equivTo(useBox.getValue())
+                                        || isArrayUseBox(curUnit, insetIns, defBox, useBox.getValue())) {
+                                    if (!outSet.toString().contains(curUnit.toString())) {
+                                        outSet.add(curUnit);
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private static boolean isArrayUseBox(UnitContainer curUnit, UnitContainer insetIns, ValueBox defBox, Value useBox) {
+        return (defBox.getValue().toString().contains(useBox.toString())
+                && curUnit.getMethod().equals(insetIns.getMethod())
+                && useBox.getType() instanceof ArrayType);
+    }
+
+    private static InvokeUnitContainer getDefinedFieldsFromInvoke(SootMethod method, Set<String> usedFields) {
+
+        Chain<SootField> fields = method.getDeclaringClass().getFields();
+
+        InvokeUnitContainer unitContainer = new InvokeUnitContainer();
+
+        for (String usedField : usedFields) {
+            for (SootField field : fields) {
+                if (usedField.contains(field.toString())) {
+                    unitContainer.getDefinedFields().add(usedField);
+                }
+            }
+        }
+
+        for (String field : unitContainer.getDefinedFields()) {
+
+            HeuristicBasedInstructions influencingInstructions = new HeuristicBasedInstructions(method, field);
+
+            HeuristicBasedAnalysisResult propAnalysis = influencingInstructions.getAnalysisResult();
+
+            if (propAnalysis.getAnalysis() != null) {
+
+                // Get args
+                List<Integer> args = Utils.findInfluencingParamters(propAnalysis.getAnalysis());
+                unitContainer.setArgs(args);
+
+                unitContainer.setAnalysisResult(propAnalysis.getAnalysis());
+            }
+        }
+
+        return unitContainer;
+    }
+
+
+    /**
+     * <p>createAnalysisOutput.</p>
+     *
+     * @param xmlFileStr a {@link java.util.Map} object.
+     * @param sourcePaths a {@link java.util.List} object.
+     * @param predictableSourcMap a {@link java.util.Map} object.
+     * @param rule a {@link java.lang.String} object.
+     * @param output a {@link main.frontEnd.MessagingSystem.routing.outputStructures.OutputStructure} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
+     */
+    public static void createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, Map<UnitContainer, List<String>> predictableSourcMap, String rule, OutputStructure output) throws ExceptionHandler {
+        Integer ruleNumber = Integer.parseInt(rule);
+
+        for (UnitContainer unit : predictableSourcMap.keySet())
+            if (predictableSourcMap.get(unit).size() <= 0)
+                output.addIssue(new AnalysisIssue(unit, ruleNumber, "", sourcePaths));
+            else
+                for (String sootString : predictableSourcMap.get(unit))
+                    output.addIssue(new AnalysisIssue(unit, ruleNumber, "Found: \"" + sootString.replaceAll("\"", "") + "\"", sourcePaths));
 
     }
 }

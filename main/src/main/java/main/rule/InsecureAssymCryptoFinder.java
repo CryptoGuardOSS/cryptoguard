@@ -1,10 +1,10 @@
 package main.rule;
 
-import main.frontEnd.MessagingSystem.AnalysisIssue;
+import main.frontEnd.Interface.ExceptionHandler;
+import main.frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import main.rule.engine.EngineType;
 import main.rule.engine.RuleChecker;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,27 +39,17 @@ public class InsecureAssymCryptoFinder implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printOut, List<String> sourcePaths) throws IOException {
+    public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler {
 
-        ArrayList<AnalysisIssue> issues = printOut ? null : new ArrayList<AnalysisIssue>();
-        ArrayList<AnalysisIssue> resultOne = checkAssym(type, projectJarPath, projectDependencyPath, AssymType.RSA, printOut, sourcePaths);
-        ArrayList<AnalysisIssue> resultTwo = checkAssym(type, projectJarPath, projectDependencyPath, AssymType.EC, printOut, sourcePaths);
-
-        if (!printOut) {
-            issues.addAll(resultOne);
-            issues.addAll(resultTwo);
-        }
-
-        return issues;
+        checkAssym(type, projectJarPath, projectDependencyPath, AssymType.RSA, sourcePaths, output);
+        checkAssym(type, projectJarPath, projectDependencyPath, AssymType.EC, sourcePaths, output);
 
     }
 
-    private ArrayList<AnalysisIssue> checkAssym(EngineType type,
-                                                List<String> projectJarPath,
-                                                List<String> projectDependencyPath,
-                                                AssymType assymType, Boolean printOut, List<String> sourcePaths) throws IOException {
-
-        ArrayList<AnalysisIssue> issues = printOut ? null : new ArrayList<AnalysisIssue>();
+    private void checkAssym(EngineType type,
+                            List<String> projectJarPath,
+                            List<String> projectDependencyPath,
+                            AssymType assymType, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler {
 
         List<String> cryptoType = new ArrayList<>();
         cryptoType.add("\"" + assymType.name() + "\"");
@@ -69,26 +59,19 @@ public class InsecureAssymCryptoFinder implements RuleChecker {
         ExportGradeKeyInitializationFinder insecureInitializationFinder = new ExportGradeKeyInitializationFinder();
 
         assymCryptoFinder.setCrypto(cryptoType);
-        ArrayList<AnalysisIssue> resultOne = assymCryptoFinder.checkRule(type, projectJarPath, projectDependencyPath, printOut, sourcePaths);
+        assymCryptoFinder.checkRule(type, projectJarPath, projectDependencyPath, sourcePaths, output);
 
         ArrayList<String> foundSites = assymCryptoFinder.getOccurrenceSites();
 
         initializationFinder.setMethodsToLook(foundSites);
         initializationFinder.setDefaultSecure(IS_DEFAULT_SECURE_MAP.get(assymType));
-        ArrayList<AnalysisIssue> resultTwo = initializationFinder.checkRule(type, projectJarPath, projectDependencyPath, printOut, sourcePaths);
+        initializationFinder.checkRule(type, projectJarPath, projectDependencyPath, sourcePaths, output);
 
         ArrayList<String> initializationCallsites = initializationFinder.getInitializationCallsites();
 
         insecureInitializationFinder.setInitializationCallsites(initializationCallsites);
         insecureInitializationFinder.setMinSize(SIZE_MAP.get(assymType));
-        ArrayList<AnalysisIssue> resultThree = insecureInitializationFinder.checkRule(type, projectJarPath, projectDependencyPath, printOut, sourcePaths);
+        insecureInitializationFinder.checkRule(type, projectJarPath, projectDependencyPath, sourcePaths, output);
 
-        if (!printOut) {
-            issues.addAll(resultOne);
-            issues.addAll(resultTwo);
-            issues.addAll(resultThree);
-        }
-
-        return issues;
     }
 }

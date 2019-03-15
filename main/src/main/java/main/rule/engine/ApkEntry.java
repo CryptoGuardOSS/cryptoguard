@@ -1,10 +1,7 @@
 package main.rule.engine;
 
-import main.frontEnd.MessagingSystem.AnalysisIssue;
+import main.frontEnd.Interface.ExceptionHandler;
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
-
-import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * <p>ApkEntry class.</p>
@@ -21,22 +18,11 @@ public class ApkEntry implements EntryHandler {
     /**
      * {@inheritDoc}
      */
-    public ArrayList<AnalysisIssue> NonStreamScan(EnvironmentInformation generalInfo) {
-        ArrayList<AnalysisIssue> issues = generalInfo.getPrintOut() ? null : new ArrayList<AnalysisIssue>();
+    public void Scan(EnvironmentInformation generalInfo) throws ExceptionHandler {
 
-        try {
-
-            generalInfo.stopAnalysis();
-            for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
-                ArrayList<AnalysisIssue> tempIssues = ruleChecker.checkRule(EngineType.APK, generalInfo.getSource(), null, generalInfo.getPrintOut(), generalInfo.getSourcePaths());
-
-                if (!generalInfo.getPrintOut())
-                    issues.addAll(tempIssues);
-            }
-            generalInfo.stopAnalysis();
-        } catch (IOException e) {
-
+        for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
+            ruleChecker.checkRule(EngineType.APK, generalInfo.getSource(), null, generalInfo.getSourcePaths(), generalInfo.getOutput());
         }
-        return issues;
     }
+
 }

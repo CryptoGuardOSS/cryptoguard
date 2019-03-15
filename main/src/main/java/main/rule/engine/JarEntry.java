@@ -1,10 +1,7 @@
 package main.rule.engine;
 
-import main.frontEnd.MessagingSystem.AnalysisIssue;
+import main.frontEnd.Interface.ExceptionHandler;
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
-
-import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * <p>JarEntry class.</p>
@@ -21,23 +18,11 @@ public class JarEntry implements EntryHandler {
     /**
      * {@inheritDoc}
      */
-    public ArrayList<AnalysisIssue> NonStreamScan(EnvironmentInformation generalInfo) {
+    public void Scan(EnvironmentInformation generalInfo) throws ExceptionHandler {
 
-        ArrayList<AnalysisIssue> issues = generalInfo.getPrintOut() ? null : new ArrayList<AnalysisIssue>();
-        try {
-            generalInfo.startAnalysis();
-            for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
-                ArrayList<AnalysisIssue> tempIssues = ruleChecker.checkRule(EngineType.JAR, generalInfo.getSource(), generalInfo.getDependencies(),
-                        generalInfo.getPrintOut(), generalInfo.getSourcePaths());
-
-
-                if (!generalInfo.getPrintOut())
-                    issues.addAll(tempIssues);
-            }
-            generalInfo.stopAnalysis();
-        } catch (IOException e) {
-
+        for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
+            ruleChecker.checkRule(EngineType.JAR, generalInfo.getSource(), generalInfo.getDependencies(), generalInfo.getSourcePaths(), generalInfo.getOutput());
         }
-        return issues;
     }
+
 }

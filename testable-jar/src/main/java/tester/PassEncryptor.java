@@ -12,6 +12,6 @@ public class PassEncryptor {
     }
 
     byte[] encPass(String pass, String src) throws Exception {
-        return symCrypto.encrypt(pass, src);
+        return symCrypto.encrypt(pass, "hardcoded");
     }
 }

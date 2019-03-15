@@ -2,7 +2,7 @@ package main.rule;
 
 import main.analyzer.backward.Analysis;
 import main.analyzer.backward.UnitContainer;
-import main.frontEnd.MessagingSystem.AnalysisIssue;
+import main.frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import main.rule.base.BaseRuleChecker;
 import main.rule.engine.Criteria;
 import soot.ValueBox;
@@ -104,14 +104,6 @@ public class AssymCryptoFinder extends BaseRuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public void printAnalysisOutput(Map<String, String> xmlFileStr) {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths) {
-        return new ArrayList<>();
+    public void createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, OutputStructure output) {
     }
 }

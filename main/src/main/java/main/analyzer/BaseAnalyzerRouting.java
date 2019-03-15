@@ -1,14 +1,14 @@
 package main.analyzer;
 
+import main.frontEnd.Interface.ExceptionHandler;
+import main.frontEnd.Interface.ExceptionId;
 import main.rule.base.BaseRuleChecker;
 import main.rule.engine.EngineType;
 import main.util.Utils;
 import soot.Scene;
 import soot.options.Options;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,30 +34,40 @@ public class BaseAnalyzerRouting {
      * @param snippetPath       a {@link java.util.List} object.
      * @param projectDependency a {@link java.util.List} object.
      * @param checker           a {@link main.rule.base.BaseRuleChecker} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
     public static void environmentRouting(EngineType routingType,
                                           String criteriaClass, String criteriaMethod,
                                           int criteriaParam, List<String> snippetPath,
-                                          List<String> projectDependency, BaseRuleChecker checker) {
-        try {
-            if (routingType == EngineType.JAR) {
+                                          List<String> projectDependency, BaseRuleChecker checker) throws ExceptionHandler {
+
+        switch (routingType) {
+            case JAR:
                 setupBaseJar(criteriaClass, criteriaMethod, criteriaParam, snippetPath.get(0),
                         projectDependency.size() >= 1
                                 ? projectDependency.get(0)
                                 : null,
                         checker);
-            } else if (routingType == EngineType.APK) {
+                break;
+            case APK:
                 setupBaseAPK(criteriaClass, criteriaMethod, criteriaParam, snippetPath.get(0), checker);
-            } else if (routingType == EngineType.DIR) {
+                break;
+            case DIR:
                 setupBaseDir(criteriaClass, criteriaMethod, criteriaParam, snippetPath, projectDependency, checker);
-            } else if (routingType == EngineType.JAVAFILES) {
+                break;
+            case JAVAFILES:
                 setupBaseJava(criteriaClass, criteriaMethod, criteriaParam, snippetPath, projectDependency, checker);
-            } else { //if (routingType == EngineType.JAVACLASSFILES)
-                setupBaseJavaClass(criteriaClass, criteriaMethod, criteriaParam, snippetPath, projectDependency, checker);
-            }
-        } catch (IOException e) {
-
+                break;
+            case CLASSFILES:
+                setupBaseJavaClass(criteriaClass, criteriaMethod, criteriaParam, snippetPath,
+                        projectDependency.size() >= 1
+                                ? projectDependency.get(0)
+                                : null,
+                        checker);
+                break;
         }
+
+
     }
 
     //region Case Handlers
@@ -73,27 +83,21 @@ public class BaseAnalyzerRouting {
      * @param projectJarPath        a {@link java.lang.String} object.
      * @param projectDependencyPath a {@link java.lang.String} object.
      * @param checker               a {@link main.rule.base.BaseRuleChecker} object.
-     * @throws java.io.IOException if any.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
     public static void setupBaseJar(String criteriaClass,
                                     String criteriaMethod,
                                     int criteriaParam,
                                     String projectJarPath,
-                                    String projectDependencyPath, BaseRuleChecker checker) throws IOException {
+                                    String projectDependencyPath, BaseRuleChecker checker) throws ExceptionHandler {
 
         String java_home = Utils.getJAVA_HOME();
-
-        String basePackageName = Utils.getBasePackageNameFromJar(projectJarPath, true);
 
         List<String> classNames = Utils.getClassNamesFromJarArchive(projectJarPath);
 
         if (projectDependencyPath != null)
             for (String dependency : Utils.getJarsInDirectory(projectDependencyPath)) {
-                for (String dependencyClazz : Utils.getClassNamesFromJarArchive(dependency)) {
-                    if (dependencyClazz.contains(basePackageName)) {
-                        classNames.add(dependencyClazz);
-                    }
-                }
+                classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
             }
 
         List<String> sootPaths = new ArrayList<>();
@@ -102,7 +106,7 @@ public class BaseAnalyzerRouting {
         sootPaths.add(Utils.osPathJoin(java_home, "jre", "lib", "jce.jar"));
 
         if (projectDependencyPath != null)
-            sootPaths.add(projectJarPath);
+            sootPaths.add(projectDependencyPath);
 
         Scene.v().setSootClassPath(Utils.buildSootClassPath(sootPaths));
 
@@ -121,13 +125,13 @@ public class BaseAnalyzerRouting {
      * @param criteriaParam  a int.
      * @param projectJarPath a {@link java.lang.String} object.
      * @param checker        a {@link main.rule.base.BaseRuleChecker} object.
-     * @throws java.io.IOException if any.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
     public static void setupBaseAPK(String criteriaClass,
                                     String criteriaMethod,
                                     int criteriaParam,
                                     String projectJarPath,
-                                    BaseRuleChecker checker) throws IOException {
+                                    BaseRuleChecker checker) throws ExceptionHandler {
 
         List<String> classNames = Utils.getClassNamesFromApkArchive(projectJarPath);
 
@@ -153,25 +157,19 @@ public class BaseAnalyzerRouting {
      * @param snippetPath       a {@link java.util.List} object.
      * @param projectDependency a {@link java.util.List} object.
      * @param checker           a {@link main.rule.base.BaseRuleChecker} object.
-     * @throws java.io.IOException if any.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
     public static void setupBaseDir(String criteriaClass,
                                     String criteriaMethod,
                                     int criteriaParam,
                                     List<String> snippetPath,
                                     List<String> projectDependency,
-                                    BaseRuleChecker checker) throws IOException {
-
-        Utils.getJAVA7_HOME();
+                                    BaseRuleChecker checker) throws ExceptionHandler {
 
         Options.v().set_output_format(Options.output_format_jimple);
         Options.v().set_src_prec(Options.src_prec_java);
 
-        String srcPaths = Utils.join(":", snippetPath);
-
-        String tempSoot = Utils.getBaseSOOT() + ":" + srcPaths + ":" + Utils.buildSootClassPath(projectDependency);
-
-        Scene.v().setSootClassPath(tempSoot);
+        Scene.v().setSootClassPath(Utils.getBaseSOOT() + ":" + Utils.join(":", snippetPath) + ":" + Utils.buildSootClassPath(projectDependency));
 
         List<String> classNames = Utils.getClassNamesFromSnippet(snippetPath);
 
@@ -191,23 +189,21 @@ public class BaseAnalyzerRouting {
      * @param snippetPath       a {@link java.util.List} object.
      * @param projectDependency a {@link java.util.List} object.
      * @param checker           a {@link main.rule.base.BaseRuleChecker} object.
-     * @throws java.io.IOException if any.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
     public static void setupBaseJava(String criteriaClass,
                                      String criteriaMethod,
                                      int criteriaParam,
                                      List<String> snippetPath,
                                      List<String> projectDependency,
-                                     BaseRuleChecker checker) throws IOException {
+                                     BaseRuleChecker checker) throws ExceptionHandler {
 
-        Scene.v().setSootClassPath(Utils.getBaseSOOT7() + ":" + Utils.buildSootClassPath(projectDependency));
+        Options.v().set_output_format(Options.output_format_jimple);
+        Options.v().set_src_prec(Options.src_prec_java);
 
+        Scene.v().setSootClassPath(Utils.getBaseSOOT() + ":" + Utils.retrievePackageFromJavaFiles(snippetPath) + ":" + Utils.buildSootClassPath(projectDependency));
 
-        List<String> classNames = new ArrayList<>();
-
-        for (String snippit : snippetPath)
-            classNames.addAll(Utils.retrieveFullyQualifiedName(Arrays.asList(snippit)));
-
+        List<String> classNames = Utils.retrieveFullyQualifiedName(snippetPath);
 
         loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
     }
@@ -225,20 +221,34 @@ public class BaseAnalyzerRouting {
      * @param sourceJavaClasses     a {@link java.util.List} object.
      * @param projectDependencyPath a {@link java.util.List} object.
      * @param checker               a {@link main.rule.base.BaseRuleChecker} object.
-     * @throws java.io.IOException if any.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
     public static void setupBaseJavaClass(String criteriaClass,
                                           String criteriaMethod,
                                           int criteriaParam,
                                           List<String> sourceJavaClasses,
-                                          List<String> projectDependencyPath,
-                                          BaseRuleChecker checker) throws IOException {
+                                          String projectDependencyPath,
+                                          BaseRuleChecker checker) throws ExceptionHandler {
 
-        Scene.v().setSootClassPath(Utils.getBaseSOOT() + ":" + Utils.join(":", projectDependencyPath));
+        Options.v().set_src_prec(Options.src_prec_only_class);
+        Options.v().set_output_format(Options.output_format_jimple);
 
-        List<String> classNames = new ArrayList<>();
-        for (String in : sourceJavaClasses)
-            classNames.add(Utils.retrieveFullyQualifiedName(in));
+        Options.v().set_prepend_classpath(true);
+        Options.v().set_whole_program(true);
+
+        List<String> classNames = Utils.retrieveFullyQualifiedName(sourceJavaClasses);
+
+        if (projectDependencyPath != null)
+            for (String dependency : Utils.getJarsInDirectory(projectDependencyPath)) {
+                classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
+            }
+
+        String tempTest = Utils.retrievePackageFromJavaFiles(sourceJavaClasses);
+        String tempPath = tempTest.substring(0, tempTest.lastIndexOf(System.getProperty("file.separator")));
+
+        String temp = Utils.join(":", Utils.getBaseSOOT(), tempPath, projectDependencyPath);
+        //String temp = Utils.join(":",Utils.getBaseSOOT(),Utils.join(":", sourceJavaClasses),projectDependencyPath);
+        Scene.v().setSootClassPath(temp);
 
         loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
 
@@ -256,22 +266,31 @@ public class BaseAnalyzerRouting {
      * @param criteriaMethod a {@link java.lang.String} object.
      * @param criteriaParam  a int.
      * @param checker        a {@link main.rule.base.BaseRuleChecker} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
     public static void loadBaseSootInfo(List<String> classNames, String criteriaClass,
                                         String criteriaMethod,
-                                        int criteriaParam, BaseRuleChecker checker) {
+                                        int criteriaParam, BaseRuleChecker checker) throws ExceptionHandler {
 
 
         Options.v().set_keep_line_number(true);
         Options.v().set_allow_phantom_refs(true);
 
         for (String clazz : BaseAnalyzer.CRITERIA_CLASSES) {
-            Scene.v().loadClassAndSupport(clazz);
+            try {
+                Scene.v().loadClassAndSupport(clazz);
+            } catch (Error e) {
+                throw new ExceptionHandler("Error loading Class: " + clazz, ExceptionId.LOADING);
+            }
         }
 
         for (String clazz : classNames) {
-            if (!clazz.contains("UrlFrameWorks"))//TODO - Really Weird issue...
+            try {
                 Scene.v().loadClassAndSupport(clazz);
+            } catch (Error e) {
+                throw new ExceptionHandler("Error loading class: " + clazz, ExceptionId.LOADING);
+            }
+
         }
 
         Scene.v().loadNecessaryClasses();

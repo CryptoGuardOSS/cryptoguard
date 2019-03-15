@@ -2,7 +2,9 @@ package main.rule;
 
 import main.analyzer.UniqueRuleAnalyzer;
 import main.analyzer.backward.UnitContainer;
+import main.frontEnd.Interface.ExceptionHandler;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
+import main.frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import main.rule.engine.EngineType;
 import main.rule.engine.RuleChecker;
 import main.slicer.backward.other.OtherAnalysisResult;
@@ -16,7 +18,6 @@ import soot.jimple.internal.JInvokeStmt;
 import soot.toolkits.graph.DirectedGraph;
 import soot.toolkits.graph.ExceptionalUnitGraph;
 
-import java.io.IOException;
 import java.util.*;
 
 /**
@@ -43,14 +44,13 @@ public class CustomTrustManagerFinder implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printOut, List<String> sourcePaths) throws IOException {
+    public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler {
 
         Map<String, List<OtherAnalysisResult>> analysisLists =
                 getAnalysisForTrustManager(
                         UniqueRuleAnalyzer.environmentRouting(projectJarPath, projectDependencyPath, type)
                 );
 
-        ArrayList<AnalysisIssue> issues = printOut ? null : new ArrayList<AnalysisIssue>();
 
         for (String className : analysisLists.keySet()) {
 
@@ -63,19 +63,21 @@ public class CustomTrustManagerFinder implements RuleChecker {
                         (!isThrowException(analysis.getMethod()) ||
                                 hasTryCatch(analysis.getMethod()))) {
 
-                    if (printOut) {
-                        System.out.println("=======================================");
-                        String output = "***Violated Rule 4: Uses untrusted TrustManager";
-                        output += " ***Should throw java.security.cert.CertificateException in check(Client|Server)Trusted method of " + className;
-                        System.out.println(output);
-                        System.out.println("=======================================");
-                    } else {
-                        issues.add(
-                                new AnalysisIssue(className,
-                                        4,
-                                        "Should throw java.security.cert.CertificateException in check(Client|Server)Trusted method of " +
-                                                Utils.retrieveClassNameFromSootString(className), sourcePaths));
-                    }
+                    //region LEGACY
+                    /*
+                    System.out.println("=======================================");
+                    String output = "***Violated Rule 4: Uses untrusted TrustManager";
+                    output += " ***Should throw java.security.cert.CertificateException in check(Client|Server)Trusted method of " + className;
+                    System.out.println(output);
+                    System.out.println("=======================================");
+                    */
+                    //endregion
+                    AnalysisIssue issue = new AnalysisIssue(className,
+                            4,
+                            "Should throw java.security.cert.CertificateException in check(Client|Server)Trusted method of " +
+                                    Utils.retrieveClassNameFromSootString(className), sourcePaths);
+
+                    output.addIssue(issue);
 
                 }
 
@@ -86,17 +88,18 @@ public class CustomTrustManagerFinder implements RuleChecker {
                         if (unit.getUnit() instanceof JAssignStmt &&
                                 unit.getUnit().toString().contains("[0]")) {
 
-                            if (printOut) {
+                            //region LEGACY
+                    /*
                                 System.out.println("=======================================");
                                 String output = "***Violated Rule 4: Uses untrusted TrustManager";
                                 output += " ***Should not use unpinned self-signed certification in " + className;
                                 System.out.println(output);
                                 System.out.println("=======================================");
-                            } else {
-                                issues.add(new AnalysisIssue(
-                                        unit, 4, className, sourcePaths
-                                ));
-                            }
+                                */
+                            //endregion
+                            AnalysisIssue issue = new AnalysisIssue(unit, 4, className, sourcePaths);
+
+                            output.addIssue(issue);
                         }
                     }
                 }
@@ -112,25 +115,27 @@ public class CustomTrustManagerFinder implements RuleChecker {
                     }
 
                     if (!callsGetAcceptedIssuers) {
-                        if (printOut) {
-                            System.out.println("=======================================");
+
+                        //region LEGACY
+                        /*
+                        System.out.println("=======================================");
                             String output = "***Violated Rule 4: Uses untrusted TrustManager";
                             output += " ***Should at least get One accepted Issuer from Other Sources in getAcceptedIssuers method of " + className;
                             System.out.println(output);
                             System.out.println("=======================================");
-                        } else {
-                            issues.add(
-                                    new AnalysisIssue(className + " <getAcceptedIssuers>",
-                                            4,
-                                            "Should at least get One accepted Issuer from Other Sources in getAcceptedIssuers method of " +
-                                                    Utils.retrieveClassNameFromSootString(className), sourcePaths));
-                        }
+                         */
+                        //endregion
+                        AnalysisIssue issue = new AnalysisIssue(className + " <getAcceptedIssuers>",
+                                4,
+                                "Should at least get One accepted Issuer from Other Sources in getAcceptedIssuers method of " +
+                                        Utils.retrieveClassNameFromSootString(className), sourcePaths);
+
+                        output.addIssue(issue);
                     }
                 }
             }
         }
 
-        return issues;
     }
 
     private boolean isThrowException(SootMethod method) {

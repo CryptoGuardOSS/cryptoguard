@@ -1,7 +1,9 @@
 package main.rule;
 
 import main.analyzer.UniqueRuleAnalyzer;
+import main.frontEnd.Interface.ExceptionHandler;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
+import main.frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import main.rule.engine.EngineType;
 import main.rule.engine.RuleChecker;
 import main.slicer.forward.ForwardInfluenceInstructions;
@@ -14,7 +16,6 @@ import soot.jimple.internal.JAssignStmt;
 import soot.toolkits.graph.ExceptionalUnitGraph;
 import soot.toolkits.graph.UnitGraph;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,13 +47,10 @@ public class SSLSocketFactoryFinder implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printOut, List<String> sourcePaths) throws IOException {
-
-        ArrayList<AnalysisIssue> issues = printOut ? null : new ArrayList<AnalysisIssue>();
+    public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler {
 
         for (String slicing_criterion : SLICING_CRITERIA) {
 
-//            System.out.println(slicing_criterion);
             SlicingCriteria criteria = new SlicingCriteria(slicing_criterion);
             Map<String, List<Unit>> analysisLists = getForwardSlice(
                     UniqueRuleAnalyzer.environmentRouting(projectJarPath, projectDependencyPath, type)
@@ -95,26 +93,26 @@ public class SSLSocketFactoryFinder implements RuleChecker {
                     }
 
                     if (getSocketAppeared && isVulnerable) {
-                        if (printOut) {
+                        //region LEGACY
+                        /*
                             System.out.println("=======================================");
                             String output = "***Violated Rule 12: Does not manually verify the hostname";
                             output += "\n***Cause: should have manually verify hostname in " + method;
                             System.out.println(output);
                             System.out.println("=======================================");
-                        } else {
-                            issues.add(new AnalysisIssue(
-                                    method,
-                                    12,
-                                    "Didn't manually verify hostname in " +
-                                            Utils.retrieveMethodFromSootString(method), sourcePaths
-                            ));
-                        }
+                        */
+                        //endregion
+                        AnalysisIssue issue = new AnalysisIssue(method, 12,
+                                "Didn't manually verify hostname in " +
+                                        Utils.retrieveMethodFromSootString(method), sourcePaths);
+
+                        output.addIssue(issue);
+
                     }
 
                 }
             }
         }
-        return issues;
     }
 
     private static Map<String, List<Unit>> getForwardSlice(List<String> classNames, SlicingCriteria slicingCriteria) {

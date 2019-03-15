@@ -1,7 +1,9 @@
 package main.rule;
 
 import main.analyzer.UniqueRuleAnalyzer;
+import main.frontEnd.Interface.ExceptionHandler;
 import main.frontEnd.MessagingSystem.AnalysisIssue;
+import main.frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import main.rule.engine.EngineType;
 import main.rule.engine.RuleChecker;
 import main.slicer.forward.ForwardInfluenceInstructions;
@@ -11,7 +13,6 @@ import soot.*;
 import soot.toolkits.graph.ExceptionalUnitGraph;
 import soot.toolkits.graph.UnitGraph;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,9 +47,7 @@ public class DefaultExportGradeKeyFinder implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, Boolean printOut, List<String> sourcePaths) throws IOException {
-
-        ArrayList<AnalysisIssue> issues = printOut ? null : new ArrayList<AnalysisIssue>();
+    public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler {
 
         for (String slicing_criterion : SLICING_CRITERIA) {
 
@@ -80,26 +79,27 @@ public class DefaultExportGradeKeyFinder implements RuleChecker {
                     }
 
                     if (isDefault && !defaultSecure) {
-                        if (printOut) {
+
+
+                        //region LEGACY
+                        /*
                             System.out.println("=======================================");
                             String output = "***Violated Rule 5: Used export grade public Key ";
                             output += "\n***Cause: Used default key size in method: " + method;
                             System.out.println(output);
                             System.out.println("=======================================");
-                        } else {
-                            issues.add(new AnalysisIssue(
-                                    method,
-                                    5,
-                                    "Cause: Used default key size", sourcePaths
+                        */
+                        //endregion
+                        AnalysisIssue issue = new AnalysisIssue(method, 5,
+                                "Cause: Used default key size", sourcePaths);
 
-                            ));
-                        }
+                        output.addIssue(issue);
+
                     }
 
                 }
             }
         }
-        return issues;
     }
 
     /**

@@ -19,7 +19,7 @@ public class SymCrypto {
         String keyStr = getKey(key);
 
         if (keyStr == null) {
-            byte[] keyBytes = new byte[size];
+            byte[] keyBytes = new byte[12];
             keyBytes[0] = 0;
             keyBytes[1] = 1;
 
@@ -33,7 +33,7 @@ public class SymCrypto {
 
     public byte[] encrypt(String txt, String key) throws Exception {
         if (key == null) {
-            key = defaultKey;
+            key = new String(defaultKey);
         } else if (key.isEmpty()) {
             key = new String(keyGenerator.generateKey().getEncoded());
         }
@@ -46,6 +46,13 @@ public class SymCrypto {
     }
 
     public String getKey(String src) {
-        return System.getProperty(src);
+
+        String val = System.getProperty(src);
+
+        if (val == null) {
+            val = new String("defalultval");
+        }
+
+        return val;
     }
 }

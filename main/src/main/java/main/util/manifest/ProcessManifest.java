@@ -10,13 +10,12 @@
  ******************************************************************************/
 package main.util.manifest;
 
-import android.content.res.AXmlResourceParser;
+//import android.content.res.AXmlResourceParser;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import org.xmlpull.v1.XmlPullParser;
-import test.AXMLPrinter;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -30,10 +29,13 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+//import test.AXMLPrinter;
+
 /**
  * <p>ProcessManifest class.</p>
  *
  * @author RigorityJTeam
+ * @version $Id: $Id
  * @since V01.00.00
  */
 public class ProcessManifest {
@@ -116,7 +118,7 @@ public class ProcessManifest {
      * @param manifestIS a {@link java.io.InputStream} object.
      */
     protected void loadClassesFromBinaryManifest(InputStream manifestIS) {
-        try {
+       /* try {
             AXmlResourceParser parser = new AXmlResourceParser();
             parser.open(manifestIS);
 
@@ -187,7 +189,7 @@ public class ProcessManifest {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     /**
@@ -207,13 +209,13 @@ public class ProcessManifest {
         }
     }
 
-    private String getAttributeValue(AXmlResourceParser parser, String attributeName) {
+   /* private String getAttributeValue(AXmlResourceParser parser, String attributeName) {
         for (int i = 0; i < parser.getAttributeCount(); i++)
             if (parser.getAttributeName(i).equals(attributeName)) {
                 return AXMLPrinter.getAttributeValue(parser, i);
             }
         return "";
-    }
+    }*/
 
     /**
      * <p>loadClassesFromTextManifest.</p>

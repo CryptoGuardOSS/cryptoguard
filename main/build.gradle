@@ -1,7 +1,7 @@
 apply plugin: 'application'
 mainClassName = 'main.rule.engine.RuleEngine'
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+sourceCompatibility = JavaVersion.VERSION_1_7
+targetCompatibility = JavaVersion.VERSION_1_7
 
 repositories {
     flatDir {
@@ -54,7 +54,6 @@ task xsd2java() {
 
     }
 }
-
 jar {
 
     from {
@@ -63,7 +62,7 @@ jar {
 
     manifest {
         attributes(
-                'Main-Class': 'main.rule.engine.RuleEngine'
+                'Main-Class': 'main.frontEnd.Interface.EntryPoint'
         )
     }
 }
@@ -74,6 +73,11 @@ sourceSets {
             srcDirs = ["src/main/test"]
         }
     }
+}
+
+//Ensuring all of the processors are being used for tests
+test {
+    maxParallelForks = Runtime.runtime.availableProcessors()
 }
 
 javadoc {
@@ -88,7 +92,10 @@ dependencies {
     compile group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '2.3.0'
     compile group: 'com.sun.xml.bind', name: 'jaxb-core', version: '2.3.0'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
-    implementation 'commons-cli:commons-cli:1.4'
+    compile 'commons-cli:commons-cli:1.4'
+    implementation 'org.mockito:mockito-core:2.24.5'
+    compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
+
 }
 
 //compileJava.dependsOn xsd2java

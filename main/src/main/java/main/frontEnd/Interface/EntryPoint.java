@@ -1,14 +1,8 @@
 package main.frontEnd.Interface;
 
-import main.frontEnd.MessagingSystem.AnalysisIssue;
-import main.frontEnd.MessagingSystem.MessageRepresentation;
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import main.rule.engine.*;
-import main.util.Utils;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -31,16 +25,10 @@ public class EntryPoint {
      */
     public static void main(String[] args) {
 
-        String outputMessage;
-        String filePath;
-
-        //Fail Fast on the input validation
         try {
+            //Fail Fast on the input validation
             EnvironmentInformation generalInfo = ArgumentsCheck.paramaterCheck(Arrays.asList(args));
-            if (generalInfo == null)
-                System.exit(0);
 
-            ArrayList<AnalysisIssue> issues = null;
             EntryHandler handler = null;
             switch (generalInfo.getSourceType()) {
                 case APK:
@@ -59,24 +47,16 @@ public class EntryPoint {
                     handler = new JavaClassFileEntry();
                     break;
             }
-            issues = handler.NonStreamScan(generalInfo);
+            generalInfo.startScanning();
 
-            outputMessage = MessageRepresentation.getMessage(generalInfo, issues);
-            filePath = generalInfo.getFileOut();
+            handler.Scan(generalInfo);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            filePath = Utils.osPathJoin(System.getProperty("user.dir"), "ERROR.txt");
-            outputMessage = e.getLocalizedMessage();
-        }
+            generalInfo.stopScanning();
 
-        try {
-            Files.write(Paths.get(filePath), outputMessage.getBytes());
-        } catch (Exception e) {
-            System.out.println("File " + filePath + " cannot be written to.");
+        } catch (ExceptionHandler e) {
+            System.err.print(e.toString());
+            System.exit(e.getErrorCode().getId());
         }
 
     }
-
-
 }

@@ -3,13 +3,13 @@ package main.rule.base;
 import main.analyzer.BaseAnalyzerRouting;
 import main.analyzer.backward.Analysis;
 import main.analyzer.backward.UnitContainer;
-import main.frontEnd.MessagingSystem.AnalysisIssue;
+import main.frontEnd.Interface.ExceptionHandler;
+import main.frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import main.rule.engine.Criteria;
 import main.rule.engine.EngineType;
 import main.rule.engine.RuleChecker;
 import main.util.Utils;
 
-import java.io.IOException;
 import java.util.*;
 
 /**
@@ -33,7 +33,7 @@ public abstract class BaseRuleChecker implements RuleChecker {
         RULE_VS_DESCRIPTION.put("3", "Used constant keys in code");  // Rule 1, 2
         RULE_VS_DESCRIPTION.put("4", "Used untrusted TrustManager"); // Rule 5
         RULE_VS_DESCRIPTION.put("5", "Used export grade public Key"); // Rule 15
-        RULE_VS_DESCRIPTION.put("6", "Used untrusted HostNameVerifier"); // Rule 14
+        RULE_VS_DESCRIPTION.put("6", "Used untrusted HostNameVerifier"); // Rule 4
         RULE_VS_DESCRIPTION.put("7", "Used HTTP Protocol"); // Rule 7
         RULE_VS_DESCRIPTION.put("8", "Used < 1000 iteration for PBE"); // Rule 13
         RULE_VS_DESCRIPTION.put("9", "Found constant salts in code"); // Rule 10
@@ -49,7 +49,7 @@ public abstract class BaseRuleChecker implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<AnalysisIssue> checkRule(EngineType type, List<String> projectPaths, List<String> projectDependencyPath, Boolean printout, List<String> sourcePaths) throws IOException {
+    public void checkRule(EngineType type, List<String> projectPaths, List<String> projectDependencyPath, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler {
 
         String[] excludes = {"web.xml", "pom.xml"};
 
@@ -63,11 +63,7 @@ public abstract class BaseRuleChecker implements RuleChecker {
                     projectDependencyPath, this);
         }
 
-        if (printout) {
-            printAnalysisOutput(xmlFileStr);
-            return null;
-        } else
-            return createAnalysisOutput(xmlFileStr, sourcePaths);
+        createAnalysisOutput(xmlFileStr, sourcePaths, output);
     }
 
     /**
@@ -85,20 +81,14 @@ public abstract class BaseRuleChecker implements RuleChecker {
     public abstract void analyzeSlice(Analysis analysis);
 
     /**
-     * <p>printAnalysisOutput.</p>
-     *
-     * @param xmlFileStr a {@link java.util.Map} object.
-     */
-    public abstract void printAnalysisOutput(Map<String, String> xmlFileStr);
-
-    /**
      * <p>createAnalysisOutput.</p>
      *
-     * @param xmlFileStr  a {@link java.util.Map} object.
+     * @param xmlFileStr a {@link java.util.Map} object.
      * @param sourcePaths a {@link java.util.List} object.
-     * @return a {@link java.util.ArrayList} object.
+     * @param output a {@link main.frontEnd.MessagingSystem.routing.outputStructures.OutputStructure} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
-    public abstract ArrayList<AnalysisIssue> createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths);
+    public abstract void createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler;
 
     /**
      * <p>putIntoMap.</p>

@@ -1,8 +1,13 @@
 package main.frontEnd.MessagingSystem.routing.inputStructures;
 
+import main.frontEnd.Interface.ExceptionHandler;
+import main.frontEnd.Interface.ExceptionId;
 import main.frontEnd.MessagingSystem.routing.EnvironmentInformation;
+import main.frontEnd.argsIdentifier;
+import org.apache.commons.cli.*;
 
-import java.util.Arrays;
+import java.io.*;
+import java.util.Properties;
 
 /**
  * <p>ScarfXML class.</p>
@@ -14,9 +19,7 @@ import java.util.Arrays;
  *
  * <p>The Scarf Input check implementation.</p>
  */
-public class ScarfXML implements InputStructure {
-
-    private ScarfJsonInput inputReader = new ScarfJsonInput();
+public class ScarfXML implements Structure {
 
     /**
      * {@inheritDoc}
@@ -25,17 +28,46 @@ public class ScarfXML implements InputStructure {
      * @param info a {@link main.frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
      * @param args an array of {@link java.lang.String} objects.
      * @return a {@link java.lang.Boolean} object.
+     * @throws main.frontEnd.Interface.ExceptionHandler if any.
      */
-    public Boolean inputValidation(EnvironmentInformation info, String[] args) {
+    public Boolean inputValidation(EnvironmentInformation info, String[] args) throws ExceptionHandler {
 
-        String[] subArgs = args.length > 0 ? Arrays.copyOfRange(args, 0, args.length) : new String[]{};
-        inputReader.parseArguments(subArgs);
-        info.setAssessmentFramework(inputReader.getAssessmentFramework());
-        info.setAssessmentFrameworkVersion(inputReader.getAssessmentFrameworkVersion());
-        info.setBuildRootDir(inputReader.getBuildRootDir());
-        info.setPackageRootDir(inputReader.getPackageRootDir());
-        info.setParserName(inputReader.getParserName());
-        info.setParserVersion(inputReader.getParserVersion());
+        CommandLine cmd = null;
+        Options cmdLineArgs = setOptions();
+        try {
+            cmd = new DefaultParser().parse(cmdLineArgs, args);
+        } catch (ParseException e) {
+            String arg = null;
+
+            if (e.getMessage().startsWith("Missing required option: "))
+                arg = argsIdentifier.lookup(e.getMessage().replace("Missing required option: ", "")).getArg();
+
+            if (arg == null)
+                throw new ExceptionHandler(this.helpInfo(), ExceptionId.GEN_VALID);
+            else
+                throw new ExceptionHandler("Issue with the argument: " + arg, ExceptionId.GEN_VALID);
+        }
+
+        if (cmd.hasOption(ScarfXMLId.ConfigFile.getId())) {
+            //region Retrieving and setting the values
+            Properties SWAMPProperties = loadProperties(cmd.getOptionValue(ScarfXMLId.ConfigFile.getId()));
+
+            info.setAssessmentFramework(SWAMPProperties.getProperty("assess_fw", "UNKNOWN"));
+            info.setAssessmentFrameworkVersion(SWAMPProperties.getProperty("assess_fw_version", "UNKNOWN"));
+            info.setAssessmentStartTime(SWAMPProperties.getProperty("assessment_start_ts", null));
+            info.setBuildFramework(SWAMPProperties.getProperty("build_fw", "UNKNOWN"));
+            info.setBuildFrameworkVersion(SWAMPProperties.getProperty("build_fw_version", "UNKNOWN"));
+            info.setBuildRootDir(SWAMPProperties.getProperty("build_root_dir", "UNKNOWN"));
+            info.setPackageName(SWAMPProperties.getProperty("package_name", "UNKNOWN"));
+            info.setPackageRootDir(SWAMPProperties.getProperty("package_root_dir", "UNKNOWN"));
+            info.setPackageVersion(SWAMPProperties.getProperty("package_version", "UNKNOWN"));
+            info.setParserName(SWAMPProperties.getProperty("parser_fw", "UNKNOWN"));
+            info.setParserVersion(SWAMPProperties.getProperty("parser_fw_version", "UNKNOWN"));
+            info.setUUID(SWAMPProperties.getProperty("uuid", null));
+
+
+            //endregion
+        }
 
         return true;
     }
@@ -47,137 +79,42 @@ public class ScarfXML implements InputStructure {
      * @return a {@link java.lang.String} object.
      */
     public String helpInfo() {
-        return inputReader.helpInfo();
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(out));
+
+        HelpFormatter helper = new HelpFormatter();
+        helper.setOptionComparator(null);
+        helper.printHelp("ScarfXML", setOptions(), false);
+
+        System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
+
+        return out.toString();
+
     }
 
+    Options setOptions() {
+        Options cmdLineArgs = new Options();
 
-    //region Sub Class Reader
+        Option config = Option.builder(ScarfXMLId.ConfigFile.getId()).hasArg().argName("file.properties").desc(ScarfXMLId.ConfigFile.getDesc()).build();
+        config.setType(String.class);
+        config.setOptionalArg(false);
+        cmdLineArgs.addOption(config);
 
-    /**
-     * A sub class to read the information Scarf Input Reader
-     * This is externalized to be able to read from multiple forms of input
-     */
-    private class ScarfJsonInput {
-        //region Attributes
-        private String assessmentFramework = "UNAVAILABLE";
-        private String assessmentFrameworkVersion = "UNAVAILABLE";
-        private String buildRootDir = "UNAVAILABLE";
-        private String packageRootDir = "UNAVAILABLE";
-        private String parserName = "UNAVAILABLE";
-        private String parserVersion = "UNAVAILABLE";
-        //endregion
-
-
-        /**
-         * An Empty Constructor
-         */
-        public ScarfJsonInput() {
-
-        }
-
-        /**
-         * The method to parse the raw arguments from the console.
-         *
-         * @param args {@link String[]} - The raw command arguments passed in from the command line.
-         */
-        public void parseArguments(String[] args) {
-
-            if (args.length >= 1)
-                this.assessmentFramework = args[0];
-            if (args.length >= 2)
-                this.assessmentFrameworkVersion = args[1];
-            if (args.length >= 3)
-                this.buildRootDir = args[2];
-            if (args.length >= 4)
-                this.packageRootDir = args[3];
-            if (args.length >= 5)
-                this.parserName = args[4];
-            if (args.length >= 6)
-                this.parserVersion = args[5];
-        }
-
-        public String helpInfo() {
-            StringBuilder help = new StringBuilder();
-
-            help.append("Usage: (AssessmentFramework) (AssessmentFrameworkVersion) (BuildRootDir) (PackageRootDir) (ParserName) (ParserVersion)\n")
-                    .append("\tAssessmentFramework: Default => STUBBED").append("\n")
-                    .append("\tAssessmentFrameworkVersion: Default => STUBBED").append("\n")
-                    .append("\tBuildRootDir: Default => STUBBED").append("\n")
-                    .append("\tPackageRootDir: Default => STUBBED").append("\n")
-                    .append("\tParserName: Default => STUBBED").append("\n")
-                    .append("\tParserVersion: Default => STUBBED");
-
-            return help.toString();
-        }
-
-        //region Getters
-
-        /**
-         * Getter for assessmentFramework
-         *
-         * <p>getAssessmentFramework()</p>
-         *
-         * @return {@link String} - The assessmentFramework.
-         */
-        public String getAssessmentFramework() {
-            return assessmentFramework;
-        }
-
-        /**
-         * Getter for assessmentFrameworkVersion
-         *
-         * <p>getAssessmentFrameworkVersion()</p>
-         *
-         * @return {@link String} - The assessmentFrameworkVersion.
-         */
-        public String getAssessmentFrameworkVersion() {
-            return assessmentFrameworkVersion;
-        }
-
-        /**
-         * Getter for buildRootDir
-         *
-         * <p>getBuildRootDir()</p>
-         *
-         * @return {@link String} - The buildRootDir.
-         */
-        public String getBuildRootDir() {
-            return buildRootDir;
-        }
-
-        /**
-         * Getter for packageRootDir
-         *
-         * <p>getPackageRootDir()</p>
-         *
-         * @return {@link String} - The packageRootDir.
-         */
-        public String getPackageRootDir() {
-            return packageRootDir;
-        }
-
-        /**
-         * Getter for parserName
-         *
-         * <p>getParserName()</p>
-         *
-         * @return {@link String} - The parserName.
-         */
-        public String getParserName() {
-            return parserName;
-        }
-
-        /**
-         * Getter for parserVersion
-         *
-         * <p>getParserVersion()</p>
-         *
-         * @return {@link String} - The parserVersion.
-         */
-        public String getParserVersion() {
-            return parserVersion;
-        }
-        //endregion
+        return cmdLineArgs;
     }
-    //endregion
+
+    Properties loadProperties(String path) throws ExceptionHandler {
+        try {
+            Properties SWAMPProperties = new Properties();
+            SWAMPProperties.load(new FileInputStream(path));
+
+            return SWAMPProperties;
+        } catch (FileNotFoundException e) {
+            throw new ExceptionHandler("Config File: " + path + " not found", ExceptionId.FILE_AFK);
+        } catch (IOException e) {
+            throw new ExceptionHandler("Error Loading: " + path, ExceptionId.FILE_READ);
+        }
+    }
+
 }

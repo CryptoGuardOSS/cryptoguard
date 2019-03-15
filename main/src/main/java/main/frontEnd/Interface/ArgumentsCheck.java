@@ -7,9 +7,7 @@ import main.rule.engine.EngineType;
 import main.util.Utils;
 import org.apache.commons.cli.*;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -45,35 +43,43 @@ public class ArgumentsCheck {
         CommandLine cmd = null;
 
         try {
-            cmd = new DefaultParser().parse(cmdLineArgs, args.toArray(new String[0]));
+            cmd = new DefaultParser().parse(cmdLineArgs, args.toArray(new String[0]), true);
         } catch (ParseException e) {
-            System.out.println("====================================================");
+            String arg = null;
 
             if (e.getMessage().startsWith("Missing required option: "))
-                System.out.println("Please enter a valid " +
-                        argsIdentifier.lookup(e.getMessage().replace("Missing required option: ", "")));
-            else
-                System.out.println("Please enter valid information.");
+                arg = argsIdentifier.lookup(e.getMessage().replace("Missing required option: ", "")).getArg();
 
-            System.out.println("====================================================");
-
-            failFast(cmdLineArgs);
+            failFast(arg, cmdLineArgs, true);
         }
 
         //endregion
 
+        //region Cleaning retrieved values from args
+        ArrayList<String> upgradedArgs = new ArrayList<>(args);
+        for (argsIdentifier arg : argsIdentifier.values()) {
+            if (cmd.hasOption(arg.getId())) {
+                upgradedArgs.remove("-" + arg.getId());
+                upgradedArgs.remove(cmd.getOptionValue(arg.getId()));
+            }
+        }
+        args = upgradedArgs;
+        //endregion
+
         //region Printing Help or Version
         if (cmd.hasOption(argsIdentifier.HELP.getId()))
-            failFast(cmdLineArgs);
+            failFast(null, cmdLineArgs, false);
         else if (cmd.hasOption(argsIdentifier.VERSION.getId())) {
+            String version = "UNKNOWN";
             try {
                 Properties Properties = new Properties();
                 Properties.load(new FileInputStream(PropertiesFile));
-                System.out.print(Properties.getProperty("version"));
+                version = Properties.getProperty("version");
+                {
+                }
             } catch (IOException e) {
-                System.out.print("UNKNOWN");
+                throw new ExceptionHandler("V:" + version, ExceptionId.HELP);
             }
-            System.exit(0);
         }
         //endregion
 
@@ -163,8 +169,13 @@ public class ArgumentsCheck {
 
         //endregion
 
+        if (!messaging.getTypeOfMessagingInput().inputValidation(info, args.toArray(new String[0]))) {
+            throw new ExceptionHandler(messaging.getInputHelp(), ExceptionId.FORMAT_VALID);
+        }
+
         info.setPrettyPrint(cmd.hasOption(argsIdentifier.PRETTY.getId()));
         info.setShowTimes(cmd.hasOption(argsIdentifier.TIMEMEASURE.getId()));
+        info.setStreaming(cmd.hasOption(argsIdentifier.STREAM.getId()));
 
         return info;
 
@@ -173,24 +184,24 @@ public class ArgumentsCheck {
     private static Options setOptions() {
         Options cmdLineArgs = new Options();
 
-        //cmdLineArgs.addOption("f", false, "Output the time of the internal processes.");
-        Option format = OptionBuilder.withArgName("format").hasArg().withDescription(argsIdentifier.FORMAT.getDesc()).isRequired().create(argsIdentifier.FORMAT.getId());
+
+        Option format = Option.builder(argsIdentifier.FORMAT.getId()).required().hasArg().argName("format").desc(argsIdentifier.FORMAT.getDesc()).build();
         format.setType(String.class);
         format.setOptionalArg(false);
         cmdLineArgs.addOption(format);
 
-        Option sources = OptionBuilder.withArgName("file(s)/dir").hasArgs().withDescription(argsIdentifier.SOURCE.getDesc()).isRequired().create(argsIdentifier.SOURCE.getId());
+        Option sources = Option.builder(argsIdentifier.SOURCE.getId()).required().hasArgs().argName("file(s)/dir").desc(argsIdentifier.SOURCE.getDesc()).build();
         sources.setType(String.class);
         sources.setValueSeparator(' ');
         sources.setOptionalArg(false);
         cmdLineArgs.addOption(sources);
 
-        Option dependency = OptionBuilder.withArgName("dir").hasArg().withDescription(argsIdentifier.DEPENDENCY.getDesc()).create(argsIdentifier.DEPENDENCY.getId());
+        Option dependency = Option.builder(argsIdentifier.DEPENDENCY.getId()).hasArg().argName("dir").desc(argsIdentifier.DEPENDENCY.getDesc()).build();
         dependency.setType(String.class);
         dependency.setOptionalArg(false);
         cmdLineArgs.addOption(dependency);
 
-        Option output = OptionBuilder.withArgName("file").hasArg().withDescription(argsIdentifier.OUT.getDesc()).create(argsIdentifier.OUT.getId());
+        Option output = Option.builder(argsIdentifier.OUT.getId()).hasArg().argName("file").desc(argsIdentifier.OUT.getDesc()).build();
         output.setType(String.class);
         output.setOptionalArg(true);
         cmdLineArgs.addOption(output);
@@ -199,11 +210,11 @@ public class ArgumentsCheck {
         timing.setOptionalArg(true);
         cmdLineArgs.addOption(timing);
 
-        Option formatOut = OptionBuilder.withArgName("formatType").hasArg().withDescription(argsIdentifier.FORMATOUT.getDesc()).create(argsIdentifier.FORMATOUT.getId());
+        Option formatOut = Option.builder(argsIdentifier.FORMATOUT.getId()).hasArg().argName("formatType").desc(argsIdentifier.FORMATOUT.getDesc()).build();
         formatOut.setOptionalArg(false);
         cmdLineArgs.addOption(formatOut);
 
-        Option prettyPrint = new Option(argsIdentifier.PRETTY.getId(), true, argsIdentifier.PRETTY.getDesc());
+        Option prettyPrint = new Option(argsIdentifier.PRETTY.getId(), false, argsIdentifier.PRETTY.getDesc());
         prettyPrint.setOptionalArg(true);
         cmdLineArgs.addOption(prettyPrint);
 
@@ -223,13 +234,19 @@ public class ArgumentsCheck {
         skipInput.setOptionalArg(true);
         cmdLineArgs.addOption(timeStamp);
 
+        Option stream = new Option(argsIdentifier.STREAM.getId(), false, argsIdentifier.STREAM.getDesc());
+        stream.setOptionalArg(true);
+        cmdLineArgs.addOption(stream);
+
         return cmdLineArgs;
     }
 
     /**
      * A universal method to return failure/help message
+     *
+     * @param args - a {@link org.apache.commons.cli.Options} object.
      */
-    private static void failFast(Options args) {
+    private static void failFast(String argument, Options args, Boolean broken) throws ExceptionHandler {
 
         HelpFormatter helper = new HelpFormatter();
         helper.setOptionComparator(null);
@@ -243,8 +260,22 @@ public class ArgumentsCheck {
         } catch (IOException e) {
         }
 
-        helper.printHelp(projectName, args, false);
-        System.exit(0);
+        StringWriter message = new StringWriter();
+        PrintWriter redirect = new PrintWriter(message);
+
+        if (argument != null)
+            redirect.write("Issue with argument: " + argument + ".\n");
+
+        helper.printHelp(redirect, 100, null, projectName, args, 0, 0, null);
+
+        if (!broken) {
+            redirect.write(Listing.getInputFullHelp());
+        }
+
+        if (broken)
+            throw new ExceptionHandler(message.toString(), ExceptionId.GEN_VALID);
+        else
+            throw new ExceptionHandler(message.toString(), ExceptionId.HELP);
     }
 
 }

@@ -18,7 +18,6 @@ public class LegacyTest {
 
     //region Attributes
     private String result;
-    private OutputStructure messagingSystem;
     private String source;
     private EnvironmentInformation env;
     private EngineType type;
@@ -35,7 +34,6 @@ public class LegacyTest {
 
         this.result = sampleOne.toString();
 
-        this.messagingSystem = new Legacy();
 
         this.brokenRules = new ArrayList<>();
         //endregion
@@ -44,7 +42,6 @@ public class LegacyTest {
     @After
     public void tearDown() {
         this.result = null;
-        this.messagingSystem = null;
         this.source = null;
         this.type = null;
         this.brokenRules = null;
