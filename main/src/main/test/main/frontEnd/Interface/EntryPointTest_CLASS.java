@@ -5,7 +5,6 @@ import main.rule.engine.EngineType;
 import main.util.Utils;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 import soot.G;
 
 import java.io.ByteArrayOutputStream;
@@ -110,7 +109,7 @@ public class EntryPointTest_CLASS {
     //endregion
 
     //region Tests
-    @Test
+    //@Test
     public void testEnvironmentVariables() {
         String[] dirLists = new String[]{srcOneGrv, srcOneGrvDep};
 
