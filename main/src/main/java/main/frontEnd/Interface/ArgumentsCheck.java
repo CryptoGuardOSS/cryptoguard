@@ -49,6 +49,16 @@ public class ArgumentsCheck {
 
             if (e.getMessage().startsWith("Missing required option: "))
                 arg = argsIdentifier.lookup(e.getMessage().replace("Missing required option: ", "")).getArg();
+            else if (e.getMessage().startsWith("Missing required options: ")) {
+                String[] argIds = e.getMessage().replace("Missing required options: ", "").replace(" ", "").split(",");
+                arg = "";
+
+                for (String argId : argIds)
+                    arg += argsIdentifier.lookup(argId) + ", ";
+
+                arg = arg.substring(0, arg.length() - ", ".length());
+
+            }
 
             failFast(arg, cmdLineArgs, true);
         }
@@ -266,7 +276,7 @@ public class ArgumentsCheck {
         if (argument != null)
             redirect.write("Issue with argument: " + argument + ".\n");
 
-        helper.printHelp(redirect, 100, null, projectName, args, 0, 0, null);
+        helper.printHelp(redirect, 100, projectName, null, args, 0, 0, null);
 
         if (!broken) {
             redirect.write(Listing.getInputFullHelp());
