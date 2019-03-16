@@ -21,11 +21,6 @@ configurations {
     xsd2java
 }
 
-dependencies {
-    xsd2java "com.sun.xml.bind:jaxb-xjc:2.2.6"
-    xsd2java "com.sun.xml.bind:jaxb-impl:2.2.6"
-}
-
 //Only Run this command to re-generate the schema files
 task xsd2java() {
     ext {
@@ -48,12 +43,15 @@ task xsd2java() {
         ) {
             //arg(value: "-Xannotate")
         }
-
-        //Heavily Hard Coded, removes the namespace so the xml output doesn't have a namespace : nmls
-        //ant.replace(file:"src/main/java/com/example/response/package-info.java",token:"namespace = \"https://www.swamp.com/com/scarf/struct\", ",value:"")
-
     }
 }
+
+task prepscarfXMLForRelease << {
+    //Heavily Hard Coded, removes the namespace so the xml output doesn't have a namespace : nmls
+    ant.replace(file: "src/main/java/com/example/response/package-info.java", token: "namespace = \"https://www.swamp.com/com/scarf/struct\", ", value: "")
+}
+
+
 jar {
 
     from {
@@ -80,11 +78,45 @@ test {
     maxParallelForks = Runtime.runtime.availableProcessors()
 }
 
+//A Task for specifying explicit release commands
+task Release {
+
+    //Orders the tasks for release
+    def tasks = [clean, prepscarfXMLForRelease, test, build]
+    for (int itr = 0; itr < tasks.size() - 1; itr++) {
+        tasks[itr + 1].mustRunAfter(tasks[itr])
+    }
+
+    //This task calls the previous tasks in order
+    dependsOn(tasks)
+
+    //This will now move the built jar to the current directory under the new name
+    doLast {
+        Properties props = new Properties()
+        InputStream ins = new FileInputStream(file("gradle.properties"))
+        props.load(ins)
+
+        copy {
+            from "build/libs/main-" + props.getProperty("version") + ".jar"
+            into '.'
+            rename {
+                String fileName -> props.getProperty("projectName") + ".jar"
+            }
+        }
+
+        ins.close()
+        ant.replace(file: "src/main/java/com/example/response/package-info.java", token: "(elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)", value: "(namespace = \"https://www.swamp.com/com/scarf/struct\", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)")
+
+    }
+}
+
 javadoc {
     exclude "com/example/response/**"
 }
 
 dependencies {
+    xsd2java "com.sun.xml.bind:jaxb-xjc:2.2.6"
+    xsd2java "com.sun.xml.bind:jaxb-impl:2.2.6"
     compile name: 'soot-trunk'
     compile "org.codehaus.groovy:groovy:2.5.2"
     compile group: 'junit', name: 'junit', version: '4.12'
