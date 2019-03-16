@@ -44,7 +44,8 @@ public class ExceptionHandler extends Exception {
         StringBuilder resp = new StringBuilder();
 
         resp.append("==================================\n");
-        resp.append("ErrorType: ").append(this.errorCode.getMessage()).append("\n");
+        resp.append("Error ID: ").append(this.errorCode.getId()).append("\n");
+        resp.append("Error Type: ").append(this.errorCode.getMessage()).append("\n");
         resp.append("Error Message: ").append(this.longDesciption).append("\n");
         resp.append("==================================");
 
