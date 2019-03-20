@@ -7,3 +7,5 @@ out
 build
 apk
 docs/
+*gradlew
+*gradlew.bat
