@@ -51,8 +51,8 @@ Java Files
 
 `cd /path/to/cryptoguard && java -jar main/build/libs/main-{Version Here}.jar -in java -s /path/to/java/files.java's`
 
-Java Class Files
-^^^^^^^^^^^^^^^^
+Java Class Files (Experimental)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 `cd /path/to/cryptoguard && java -jar main/build/libs/main-{Version Here}.jar -in class -s /path/to/java/files.class's`
 
