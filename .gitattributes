@@ -2,5 +2,8 @@
 .gitignore text eol=lf
 *.java text eol=lf
 *.md text eol=lf
+*.txt text eol=lf
+*.rst text eol=lf
 build.gradle text eol=lf
+settings.gradle text eol=lf
 gradle.properties text eol=lf

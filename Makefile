@@ -2,14 +2,14 @@ dir=./
 java7=${JAVA7_HOME}/bin/java
 
 ver=03.03.04
-scan=$(java7) -jar $(dir)main/build/libs/main-$(ver).jar
+scan=$(java7) -jar $(dir)build/libs/main-$(ver).jar
 marshal=$(dir)main/src/main/java/com/example/response/package-info.java
 scarfXSD=$(dir)main/src/main/schema/xsd/Scarf/scarf_v1.2.xsd
 
-jarLoc=$(dir)testable-jar/build/libs/testable-jar.jar
-depLoc=$(dir)testable-jar/build/dependencies
+jarLoc=$(dir)samples/testable-jar.jar
 dirLoc=$(dir)testable-jar
-apkLoc=$(dir)app-debug.apk
+depLoc=$(dirLoc)/build/dependencies
+apkLoc=$(dir)samples/app-debug.apk
 
 default:: build
 
