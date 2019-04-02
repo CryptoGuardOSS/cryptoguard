@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import rule.engine.EngineType;
 import soot.G;
+import test.TestUtilities;
 import util.Utils;
 
 import javax.xml.XMLConstants;
@@ -35,7 +36,7 @@ public class EntryPointTest_JAR {
     //region Attributes
     private EntryPoint engine;
     private ByteArrayOutputStream out;
-    private Boolean validateXML = false;
+    private Boolean validateXML = TestUtilities.validateXML();
 
     //region Scarf Properties
     private String assessment_start_ts;
@@ -60,18 +61,6 @@ public class EntryPointTest_JAR {
         //Cleaning the current scene since setup carries throughout the VM
         //tldr - one test setting up the scene will carry over to the next test, this'll stop that
         G.reset();
-
-        //region Determining to validate the XML against the schema or not
-        try {
-            File scarfXMLMarshaller = new File(Utils.osPathJoin(basePath, "src", "main", "java", "com", "example", "response", "package-info.java"));
-            assertTrue(scarfXMLMarshaller.exists());
-
-            List<String> contents = Files.readAllLines(scarfXMLMarshaller.toPath(), Charset.forName("UTF-8"));
-            if (contents.contains("@javax.xml.bind.annotation.XmlSchema(namespace = \"https://www.swamp.com/com/scarf/struct\", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)"))
-                validateXML = true;
-        } catch (Exception e) {
-        }
-        //endregion
 
         engine = new EntryPoint();
         out = new ByteArrayOutputStream();

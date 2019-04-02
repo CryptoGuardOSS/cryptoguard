@@ -2,14 +2,14 @@ dir=./
 testDir=$(dir)build/tmp/
 java7=${JAVA7_HOME}/bin/java
 
-ver=03.03.04
+ver=V03.03.05
 scan=$(java7) -jar $(dir)build/libs/rigorityj-$(ver).jar
 marshal=$(dir)src/main/java/com/example/response/package-info.java
 scarfXSD=$(dir)src/main/resources/Scarf/scarf_v1.2.xsd
 
 jarLoc=$(dir)samples/testable-jar.jar
-dirLoc=$(dir)testable-jar
-depLoc=$(dirLoc)/build/dependencies
+dirLoc=$(dir)samples/testable-jar
+depLoc=$(dir)samples/testable-jar/build/dependencies
 apkLoc=$(dir)samples/app-debug.apk
 
 default:: build
@@ -54,13 +54,15 @@ buildTest:
 	gradle -p $(dir) clean build
 
 fullBuild:
-    make buildTest
-    make buildNoTest
+	make buildTest
+	make buildNoTest
 
 help:
 	$(scan) -h
 
 scans:
+	make buildNoTest
+	make cleanScans
 	-make scanJar
 	-make scanJar_Scarf
 	-make scanDir
@@ -76,7 +78,7 @@ cleanScans:
 build:
 	make fullBuild
 	make buildNoTest
-	make help
+	make cleanScans
 
 clean:
 	gradle -p $(dir) clean

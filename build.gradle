@@ -1,8 +1,33 @@
-plugins {
-    id 'java'
-}
+apply plugin: "java"
 sourceCompatibility = JavaVersion.VERSION_1_7
 targetCompatibility = JavaVersion.VERSION_1_7
+
+group = groupName
+version = versionNumber
+
+task updateVersion {
+    Properties props = new Properties()
+    InputStream ins = new FileInputStream(file("gradle.properties"))
+    props.load(ins)
+
+    ant.replaceregexp(
+            match:'V[0-9]{2}[.][0-9]{2}[.][0-9]{2}',
+            replace:props.getProperty("versionNumber"),
+            flags:'g',
+            byline:true) {
+
+        fileset(
+                dir: '.',
+                includes: '*.rst'
+        )
+        fileset(
+                dir: '.',
+                includes: 'Makefile'
+        )
+    }
+}
+
+build.dependsOn(updateVersion)
 
 repositories {
     mavenCentral()
@@ -62,7 +87,7 @@ jar {
 
     manifest {
         attributes(
-                'Main-Class': 'main.frontEnd.Interface.EntryPoint'
+                'Main-Class': 'frontEnd.Interface.EntryPoint'
         )
     }
 }
@@ -91,7 +116,7 @@ task Release {
         props.load(ins)
 
         copy {
-            from "build/libs/main-" + props.getProperty("version") + ".jar"
+            from "build/libs/" + props.getProperty("projectName") + "-" + props.getProperty("version") + ".jar"
             into '.'
             rename {
                 String fileName -> props.getProperty("projectName") + ".jar"
@@ -122,5 +147,3 @@ dependencies {
     implementation 'org.mockito:mockito-core:2.24.5'
     compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
 }
-
-//compileJava.dependsOn xsd2java
