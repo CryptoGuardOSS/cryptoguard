@@ -47,7 +47,7 @@ public class ExceptionHandler extends Exception {
         resp.append("Error ID: ").append(this.errorCode.getId()).append("\n");
         resp.append("Error Type: ").append(this.errorCode.getMessage()).append("\n");
         resp.append("Error Message: ").append(this.longDesciption).append("\n");
-        resp.append("==================================");
+        resp.append("==================================\n\n\n");
 
         return StringUtils.trimToNull(resp.toString());
     }

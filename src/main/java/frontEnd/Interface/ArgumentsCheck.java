@@ -266,7 +266,7 @@ public class ArgumentsCheck {
         try {
             Properties Properties = new Properties();
             Properties.load(new FileInputStream(PropertiesFile));
-            projectName = Properties.getProperty("projectName") + ": " + Properties.getProperty("version");
+            projectName = Properties.getProperty("projectName") + ": " + Properties.getProperty("versionNumber");
         } catch (IOException e) {
         }
 

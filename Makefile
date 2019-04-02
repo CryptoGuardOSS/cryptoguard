@@ -2,8 +2,9 @@ dir=./
 testDir=$(dir)build/tmp/
 java7=${JAVA7_HOME}/bin/java
 
-ver=V03.03.06
-scan=$(java7) -jar $(dir)build/libs/rigorityj-$(ver).jar
+ver=V03.03.07
+name=rigorityj
+scan=$(java7) -jar $(dir)build/libs/$(name)-$(ver).jar
 marshal=$(dir)src/main/java/com/example/response/package-info.java
 scarfXSD=$(dir)src/main/resources/Scarf/scarf_v1.2.xsd
 
@@ -12,7 +13,7 @@ dirLoc=$(dir)samples/testable-jar
 depLoc=$(dir)samples/testable-jar/build/dependencies
 apkLoc=$(dir)samples/app-debug.apk
 
-default:: build
+default:: fullBuild
 
 scanJar:
 	$(scan) -in jar -s $(jarLoc) -d $(depLoc) -o $(testDir)results_newJar.txt
@@ -56,6 +57,7 @@ buildTest:
 fullBuild:
 	make buildTest
 	make buildNoTest
+	cp $(dir)build/libs/$(name)-$(ver).jar $(dir)$(name).jar
 
 help:
 	$(scan) -h

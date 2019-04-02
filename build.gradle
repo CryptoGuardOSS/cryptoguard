@@ -98,7 +98,7 @@ test {
 }
 
 //A Task for specifying explicit release commands
-task Release {
+task release {
 
     //Orders the tasks for release
     def tasks = [clean, prepscarfXMLForRelease, test, build]
