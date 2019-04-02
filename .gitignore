@@ -1,7 +1,7 @@
 # Compiled class file
 .gradle
 .idea
-build
+/build/
 docs
 *.iml
 *gradlew
