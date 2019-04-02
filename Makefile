@@ -2,7 +2,7 @@ dir=./
 testDir=$(dir)build/tmp/
 java7=${JAVA7_HOME}/bin/java
 
-ver=V03.03.05
+ver=V03.03.06
 scan=$(java7) -jar $(dir)build/libs/rigorityj-$(ver).jar
 marshal=$(dir)src/main/java/com/example/response/package-info.java
 scarfXSD=$(dir)src/main/resources/Scarf/scarf_v1.2.xsd

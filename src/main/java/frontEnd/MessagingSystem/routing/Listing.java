@@ -22,9 +22,9 @@ public enum Listing {
     private String type;
     private String flag;
     private String outputFileExt;
-    private final String blockPath = "main.frontEnd.MessagingSystem.routing.outputStructures.block.";
-    private final String inputPath = "main.frontEnd.MessagingSystem.routing.inputStructures";
-    private final String streamPath = "main.frontEnd.MessagingSystem.routing.outputStructures.stream.";
+    private final String blockPath = "frontEnd.MessagingSystem.routing.outputStructures.block.";
+    private final String inputPath = "frontEnd.MessagingSystem.routing.inputStructures";
+    private final String streamPath = "frontEnd.MessagingSystem.routing.outputStructures.stream.";
     private Boolean streamEnabled;
     //endregion
 

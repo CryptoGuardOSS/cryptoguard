@@ -1979,7 +1979,7 @@ public class EnvironmentInformation {
         String tempToolFramework;
         try {
             Properties.load(new FileInputStream(PropertiesFile));
-            tempToolFrameworkVersion = Properties.getProperty("version");
+            tempToolFrameworkVersion = Properties.getProperty("versionNumber");
             tempToolFramework = Properties.getProperty("projectName");
         } catch (FileNotFoundException e) {
             tempToolFrameworkVersion = "Property Not Found";
