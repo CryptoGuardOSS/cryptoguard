@@ -105,12 +105,16 @@ public class HeuristicBasedInstructionSlicer extends BackwardFlowAnalysis {
         }
     }
 
-    private static final List<String> WHITE_LISTED_METHODS = new ArrayList<>();
+    private static final List<String> ASSIGN_WHITE_LISTED_METHODS = new ArrayList<>();
+    private static final List<String> INVOKE_WHITE_LISTED_METHODS = new ArrayList<>();
     private static final List<String> BLACK_LISTED_METHODS = new ArrayList<>();
 
     static {
-        WHITE_LISTED_METHODS.add("<javax.xml.bind.DatatypeConverterInterface: byte[] parseBase64Binary(java.lang.String)>");
-        WHITE_LISTED_METHODS.add("<javax.xml.bind.DatatypeConverterInterface: byte[] parseHexBinary(java.lang.String)>");
+        ASSIGN_WHITE_LISTED_METHODS.add("<javax.xml.bind.DatatypeConverterInterface: byte[] parseBase64Binary(java.lang.String)>");
+        ASSIGN_WHITE_LISTED_METHODS.add("<javax.xml.bind.DatatypeConverterInterface: byte[] parseHexBinary(java.lang.String)>");
+        ASSIGN_WHITE_LISTED_METHODS.add("<java.util.Arrays: byte[] copyOf(byte[],int)>");
+
+        INVOKE_WHITE_LISTED_METHODS.add("<java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>");
 
         BLACK_LISTED_METHODS.add("<javax.crypto.KeyGenerator: void <init>");
         BLACK_LISTED_METHODS.add("<javax.crypto.Cipher: void <init>");
@@ -126,7 +130,7 @@ public class HeuristicBasedInstructionSlicer extends BackwardFlowAnalysis {
 
         if (unit instanceof JAssignStmt && unit.toString().contains("invoke ")) {
 
-            for (String whitelisted : WHITE_LISTED_METHODS) {
+            for (String whitelisted : ASSIGN_WHITE_LISTED_METHODS) {
                 if (unit.toString().contains(whitelisted)) {
                     return false;
                 }
@@ -162,8 +166,18 @@ public class HeuristicBasedInstructionSlicer extends BackwardFlowAnalysis {
     }
 
     private boolean isSpecialInvokeOn(Unit currInstruction, ValueBox usebox) {
-        return currInstruction instanceof JInvokeStmt && currInstruction.toString().contains("specialinvoke")
+        boolean specialinvoke = currInstruction instanceof JInvokeStmt && currInstruction.toString().contains("specialinvoke")
                 && currInstruction.toString().contains(usebox.getValue().toString() + ".<");
+
+        for (String whitelisted : INVOKE_WHITE_LISTED_METHODS) {
+            if (currInstruction.toString().contains(whitelisted) &&
+                    currInstruction.toString().contains(", " + usebox.getValue().toString() + ",")) {
+                specialinvoke = true;
+                break;
+            }
+        }
+
+        return specialinvoke;
     }
 
     @Override
