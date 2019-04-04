@@ -91,8 +91,6 @@ public class BaseAnalyzerRouting {
                                     String projectJarPath,
                                     String projectDependencyPath, BaseRuleChecker checker) throws ExceptionHandler {
 
-        String java_home = Utils.getJAVA_HOME();
-
         List<String> classNames = Utils.getClassNamesFromJarArchive(projectJarPath);
 
         if (projectDependencyPath != null)
@@ -102,8 +100,7 @@ public class BaseAnalyzerRouting {
 
         List<String> sootPaths = new ArrayList<>();
         sootPaths.add(projectJarPath);
-        sootPaths.add(Utils.osPathJoin(java_home, "jre", "lib", "rt.jar"));
-        sootPaths.add(Utils.osPathJoin(java_home, "jre", "lib", "jce.jar"));
+        sootPaths.add(Utils.getBaseSOOT());
 
         if (projectDependencyPath != null)
             sootPaths.add(projectDependencyPath);

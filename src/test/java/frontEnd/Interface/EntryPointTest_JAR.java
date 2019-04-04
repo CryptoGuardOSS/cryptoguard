@@ -149,7 +149,7 @@ public class EntryPointTest_JAR {
     @Test
     public void main_TestableJar_Scarf() {
         if (isLinux) {
-            String args = "-in " + EngineType.JAR.getFlag() + " -s " + jarOne + " -d " + srcOneGrvDep + " -m " + Listing.ScarfXML.getFlag() + " -o " + tempFileOutXML + " -t";
+            String args = "-in " + EngineType.JAR.getFlag() + " -s " + jarOne + " -d " + srcOneGrvDep + " -m " + Listing.ScarfXML.getFlag() + " -o " + tempFileOutXML + " -t" + " " + argsIdentifier.PRETTY.getArg();
 
             try {
                 engine.main(args.split(" "));
@@ -232,7 +232,7 @@ public class EntryPointTest_JAR {
     @Test
     public void main_TestableJar_Scarf_Stream() {
         if (isLinux) {
-            String args = "-in " + EngineType.JAR.getFlag() + " -s " + jarOne + " -d " + srcOneGrvDep + " -m " + Listing.ScarfXML.getFlag() + " -o " + tempStreamXML + " -st" + " -t";
+            String args = "-in " + EngineType.JAR.getFlag() + " -s " + jarOne + " -d " + srcOneGrvDep + " -m " + Listing.ScarfXML.getFlag() + " -o " + tempStreamXML + " -st" + " -t" + " " + argsIdentifier.PRETTY.getArg();
 
             try {
                 engine.main(args.split(" "));

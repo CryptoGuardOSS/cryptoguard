@@ -24,6 +24,10 @@ task updateVersion {
                 dir: '.',
                 includes: 'Makefile'
         )
+        fileset(
+                dir: '.',
+                includes: 'pom.xml'
+        )
     }
 }
 
@@ -146,4 +150,5 @@ dependencies {
     compile 'commons-cli:commons-cli:1.4'
     implementation 'org.mockito:mockito-core:2.24.5'
     compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
+    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.9.8'
 }

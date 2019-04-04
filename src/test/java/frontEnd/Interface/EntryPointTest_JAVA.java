@@ -136,6 +136,7 @@ public class EntryPointTest_JAVA {
                     makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES.getFlag()) +
                             makeArg(argsIdentifier.SOURCE, files[0]) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
+                            " " + argsIdentifier.PRETTY.getArg() +
                             makeArg(argsIdentifier.OUT, tempFileOutTxt);
 
             try {

@@ -3,6 +3,7 @@ package frontEnd.Interface;
 import com.example.response.AnalyzerReport;
 import com.example.response.BugInstanceType;
 import frontEnd.MessagingSystem.routing.Listing;
+import frontEnd.argsIdentifier;
 import org.junit.After;
 import org.junit.Before;
 import rule.engine.EngineType;
@@ -145,7 +146,7 @@ public class EntryPointTest_SOURCE {
     //@Test
     public void main_TestableJarSourceScarf() {
         if (isLinux) {
-            String args = "-in " + EngineType.DIR.getFlag() + " -s " + srcOneGrv + " -d " + srcOneGrvDep + " -m " + Listing.ScarfXML.getFlag() + " -o " + tempFileOutXML;
+            String args = "-in " + EngineType.DIR.getFlag() + " -s " + srcOneGrv + " -d " + srcOneGrvDep + " -m " + Listing.ScarfXML.getFlag() + " -o " + tempFileOutXML + " " + argsIdentifier.PRETTY.getArg();
 
             try {
                 engine.main(args.split(" "));
@@ -177,7 +178,7 @@ public class EntryPointTest_SOURCE {
     //@Test
     public void main_TestableJarSourceScarf_Stream() {
         if (isLinux) {
-            String args = "-in " + EngineType.DIR.getFlag() + " -s " + srcOneGrv + " -d " + srcOneGrvDep + " -n -m " + Listing.ScarfXML.getFlag() + " -o " + tempStreamXML + " -st";
+            String args = "-in " + EngineType.DIR.getFlag() + " -s " + srcOneGrv + " -d " + srcOneGrvDep + " -n -m " + Listing.ScarfXML.getFlag() + " -o " + tempStreamXML + " -st" + " " + argsIdentifier.PRETTY.getArg();
 
             try {
                 engine.main(args.split(" "));
