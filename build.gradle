@@ -5,6 +5,14 @@ targetCompatibility = JavaVersion.VERSION_1_7
 group = groupName
 version = versionNumber
 
+sourceSets {
+    test {
+       java {
+        srcDir 'src/test/java'
+       }
+    }
+}
+
 task updateVersion {
     Properties props = new Properties()
     InputStream ins = new FileInputStream(file("gradle.properties"))
@@ -48,41 +56,6 @@ configurations.all {
     }
 }
 
-configurations {
-    xsd2java
-}
-
-//Only Run this command to re-generate the schema files
-task xsd2java() {
-    ext {
-        scarfPackage = 'com.example.response'
-        scarfSchema = 'src/main/resources/Scarf/Scarf.xsd'
-    }
-
-    System.setProperty('javax.xml.accessExternalSchema', 'all')
-
-    doLast {
-        file("src/main/java").mkdirs()
-
-        ant.taskdef(name: 'xjc', classname: 'com.sun.tools.xjc.XJCTask', classpath: configurations.xsd2java.asPath)
-        ant.jaxbTargetDir = file("src/main")
-
-        ant.xjc(
-                destdir: '${jaxbTargetDir}',
-                package: scarfPackage,
-                schema: scarfSchema
-        ) {
-            //arg(value: "-Xannotate")
-        }
-    }
-}
-
-task prepscarfXMLForRelease << {
-    //Heavily Hard Coded, removes the namespace so the xml output doesn't have a namespace : nmls
-    ant.replace(file: "src/main/java/com/example/response/package-info.java", token: "namespace = \"https://www.swamp.com/com/scarf/struct\", ", value: "")
-}
-
-
 jar {
 
     from {
@@ -105,7 +78,7 @@ test {
 task release {
 
     //Orders the tasks for release
-    def tasks = [clean, prepscarfXMLForRelease, test, build]
+    def tasks = [clean, test, build]
     for (int itr = 0; itr < tasks.size() - 1; itr++) {
         tasks[itr + 1].mustRunAfter(tasks[itr])
     }
@@ -128,21 +101,13 @@ task release {
         }
 
         ins.close()
-        ant.replace(file: "src/main/java/com/example/response/package-info.java", token: "(elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)", value: "(namespace = \"https://www.swamp.com/com/scarf/struct\", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)")
-
     }
-}
-
-javadoc {
-    exclude "com/example/response/**"
 }
 
 dependencies {
     compile name: 'soot-trunk'
     //compile 'ca.mcgill.sable:soot:3.3.0'
     compile "org.codehaus.groovy:groovy:2.5.2"
-    xsd2java "com.sun.xml.bind:jaxb-xjc:2.2.6"
-    xsd2java "com.sun.xml.bind:jaxb-impl:2.2.6"
     compile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'junit', name: 'junit', version: '4.12'
     compile group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '2.3.0'
@@ -153,4 +118,6 @@ dependencies {
     compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
     compileOnly "org.projectlombok:lombok:1.16.16"
     compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.9.8'
+    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.9.8'
+
 }

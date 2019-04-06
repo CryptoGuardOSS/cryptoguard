@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 import rule.engine.EngineType;
 import soot.G;
-import test.TestUtilities;
 import util.Utils;
 
 import java.io.ByteArrayOutputStream;
@@ -27,8 +26,6 @@ public class EntryPointTest_APK {
     private ByteArrayOutputStream out;
     private final String tempFileOutApk = Utils.osPathJoin(testPath, "app-debug.txt");
     private final String tempFileOutApk_Scarf = Utils.osPathJoin(testPath, "app-debug.xml");
-
-    private Boolean validateXML = TestUtilities.validateXML();
     ;
 
     //region Scarf Properties

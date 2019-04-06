@@ -5,7 +5,7 @@ import frontEnd.Interface.ExceptionHandler;
 import frontEnd.MessagingSystem.AnalysisIssue;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import frontEnd.MessagingSystem.routing.structure.Scarf.BugCategory;
-import frontEnd.MessagingSystem.routing.structure.Scarf.BugCategoryList;
+import frontEnd.MessagingSystem.routing.structure.Scarf.BugSummary;
 import rule.engine.EngineType;
 import rule.engine.RuleList;
 
@@ -84,14 +84,8 @@ public abstract class OutputStructure {
     //endregion
 
     //region Public helper methods
-
-    /**
-     * <p>createBugCategoryList.</p>
-     *
-     * @return a {@link com.example.response.BugSummaryType} object.
-     */
-    public BugCategoryList createBugCategoryList() {
-        BugCategoryList bugDict = new BugCategoryList();
+    public BugSummary createBugCategoryList() {
+        BugSummary bugDict = new BugSummary();
 
         //region Creating A Bug Category with counts per the Broken Rules
         for (int ruleNumber : countOfBugs.keySet()) {

@@ -2,12 +2,18 @@ package frontEnd.MessagingSystem.routing.structure.Scarf;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import frontEnd.Interface.ExceptionHandler;
+import frontEnd.Interface.ExceptionId;
+import frontEnd.MessagingSystem.routing.outputStructures.common.JacksonSerializer;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -784,6 +790,20 @@ public class AnalyzerReport implements Serializable {
         }
         AnalyzerReport rhs = ((AnalyzerReport) other);
         return new EqualsBuilder().append(buildFw, rhs.buildFw).append(bugCategory, rhs.bugCategory).append(packageName, rhs.packageName).append(assessFw, rhs.assessFw).append(toolVersion, rhs.toolVersion).append(buildFwVersion, rhs.buildFwVersion).append(parserFw, rhs.parserFw).append(toolName, rhs.toolName).append(bugInstance, rhs.bugInstance).append(packageVersion, rhs.packageVersion).append(assessmentStartTs, rhs.assessmentStartTs).append(metricSummaries, rhs.metricSummaries).append(platformName, rhs.platformName).append(metric, rhs.metric).append(buildRootDir, rhs.buildRootDir).append(uuid, rhs.uuid).append(parserFwVersion, rhs.parserFwVersion).append(packageRootDir, rhs.packageRootDir).append(assessFwVersion, rhs.assessFwVersion).isEquals();
+    }
+
+
+    public static AnalyzerReport deserialize(JacksonSerializer.JacksonType inputType, File file) throws ExceptionHandler {
+        try {
+
+            ObjectMapper deserializer = inputType.getOutputMapper();
+
+            return deserializer.readValue(file, AnalyzerReport.class);
+
+        } catch (IOException e) {
+            throw new ExceptionHandler(file.getName() + " : " + e.getMessage(), ExceptionId.FILE_READ);
+        }
+
     }
 
 }

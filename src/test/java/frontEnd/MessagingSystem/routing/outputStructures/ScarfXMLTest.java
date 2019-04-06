@@ -1,36 +1,19 @@
 package frontEnd.MessagingSystem.routing.outputStructures;
 
-import com.example.response.AnalyzerReport;
-import com.example.response.BugCategoryType;
-import com.example.response.BugInstanceType;
-import com.example.response.LocationType;
 import frontEnd.MessagingSystem.AnalysisIssue;
-import frontEnd.MessagingSystem.AnalysisLocation;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import frontEnd.MessagingSystem.routing.Listing;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Before;
-import org.xml.sax.SAXException;
 import rule.engine.EngineType;
-import rule.engine.RuleList;
 
-import javax.xml.XMLConstants;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
-import static junit.framework.TestCase.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertTrue;
+import static test.TestUtilities.jarOne;
 
 /**
  * <p>MessageRepresentationTest class.</p>
@@ -47,11 +30,6 @@ public class ScarfXMLTest {
     private EnvironmentInformation env;
     private EngineType type;
     private ArrayList<AnalysisIssue> brokenRules;
-    private final String SchemaPath = System.getProperty("user.dir") + "/src/main/";
-    private final File ScarfSchema = new File(SchemaPath + "Scarf/Scarf.xsd");
-    private final String jar = "testable-jar.jar";
-    private final String pathToJar = "testable-jar/build/libs/";
-    private String source = this.pathToJar + this.jar;
     //endregion
 
     //region Test Environment Management
@@ -63,7 +41,7 @@ public class ScarfXMLTest {
 
         this.type = EngineType.JAR;
 
-        this.env = new EnvironmentInformation(Arrays.asList(source), this.type, Listing.ScarfXML, null, null, null);
+        this.env = new EnvironmentInformation(Arrays.asList(jarOne), this.type, Listing.ScarfXML, null, null, null);
         //region Setting Scarf XML Required Fields
         this.env.setAssessmentFramework("STUBBED");
         this.env.setAssessmentFrameworkVersion("STUBBED");
@@ -71,7 +49,7 @@ public class ScarfXMLTest {
         this.env.setPackageRootDir("STUBBED");
         this.env.setParserName("STUBBED");
         this.env.setParserVersion("STUBBED");
-        this.env.setPackageName(this.jar);
+        this.env.setPackageName(jarOne);
         this.env.setPackageVersion("0.0");
         //endregion
         this.env.setPrettyPrint(true);
@@ -85,7 +63,6 @@ public class ScarfXMLTest {
         this.propertyErrorMessage = null;
         this.marshallErrorMessage = null;
         this.result = null;
-        this.source = null;
         this.type = null;
         this.brokenRules = null;
     }
@@ -95,14 +72,15 @@ public class ScarfXMLTest {
     //@Test
     public void simpleFiveRuleTest() {
         //String xmlStream = this.messagingSystem.getOutput(this.env, this.brokenRules);
-//TODO - Fix this
+        //TODO - Fix this
         String xmlStream = "";
         assertTrue(StringUtils.isNoneBlank(xmlStream));
         assertFalse(xmlStream.contains("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"));
+        /*
         try {
             //Creating the settings for the unmarshaller
             Unmarshaller unmarshaller = JAXBContext.newInstance(AnalyzerReport.class).createUnmarshaller();
-            Schema schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(ScarfSchema);
+            Schema schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(new File(TestUtilities.pathToSchema));
             unmarshaller.setSchema(schema);
 
             //Unmarshalling the AnalyzerReport from the stream, as well validating the xml
@@ -160,6 +138,7 @@ public class ScarfXMLTest {
             assertNull(e);
             e.printStackTrace();
         }
+        */
     }
     //endregion
 }

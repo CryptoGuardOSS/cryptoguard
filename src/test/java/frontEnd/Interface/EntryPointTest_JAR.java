@@ -1,22 +1,16 @@
 package frontEnd.Interface;
 
-import com.example.response.AnalyzerReport;
-import com.example.response.BugInstanceType;
 import frontEnd.MessagingSystem.routing.Listing;
+import frontEnd.MessagingSystem.routing.outputStructures.common.JacksonSerializer;
+import frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport;
 import frontEnd.argsIdentifier;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import rule.engine.EngineType;
 import soot.G;
-import test.TestUtilities;
 import util.Utils;
 
-import javax.xml.XMLConstants;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.nio.charset.Charset;
@@ -25,18 +19,19 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNull;
 import static test.TestUtilities.*;
 
 public class EntryPointTest_JAR {
 
     private final String tempFileOutTxt = Utils.osPathJoin(testPath, "testable-jar.txt");
-    private final String tempFileOutXML = Utils.osPathJoin(testPath, "testable-jar.xml");
+    private final String tempFileOutXML_0 = Utils.osPathJoin(testPath, "testable-jar_012.xml");
+    private final String tempFileOutXML_1 = Utils.osPathJoin(testPath, "testable-jar_123.xml");
+    private final String tempFileOutXML_2 = Utils.osPathJoin(testPath, "testable-jar_234.xml");
     private final String tempStreamXML = Utils.osPathJoin(testPath, "testable-jar_Stream.xml");
     //region Attributes
     private EntryPoint engine;
     private ByteArrayOutputStream out;
-    private Boolean validateXML = TestUtilities.validateXML();
 
     //region Scarf Properties
     private String assessment_start_ts;
@@ -149,27 +144,17 @@ public class EntryPointTest_JAR {
     @Test
     public void main_TestableJar_Scarf() {
         if (isLinux) {
-            String args = "-in " + EngineType.JAR.getFlag() + " -s " + jarOne + " -d " + srcOneGrvDep + " -m " + Listing.ScarfXML.getFlag() + " -o " + tempFileOutXML + " -t" + " " + argsIdentifier.PRETTY.getArg();
+            String args = "-in " + EngineType.JAR.getFlag() + " -s " + jarOne + " -d " + srcOneGrvDep + " -m " + Listing.ScarfXML.getFlag() + " -o " + tempFileOutXML_0 + " -t" + " " + argsIdentifier.PRETTY.getArg();
 
             try {
                 engine.main(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempFileOutXML), Charset.forName("UTF-8"));
+                List<String> results = Files.readAllLines(Paths.get(tempFileOutXML_0), Charset.forName("UTF-8"));
                 assertTrue(results.size() >= 1);
 
-                if (validateXML) {
-                    Schema schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(new File(pathToSchema));
 
-                    Unmarshaller xmlToJava = JAXBContext.newInstance(AnalyzerReport.class).createUnmarshaller();
-                    xmlToJava.setSchema(schema);
+                AnalyzerReport report = AnalyzerReport.deserialize(JacksonSerializer.JacksonType.XML, new File(tempFileOutXML_0));
 
-                    AnalyzerReport result = (AnalyzerReport) xmlToJava.unmarshal(new File(tempFileOutXML));
-
-                    for (BugInstanceType in : result.getBugInstance()) {
-                        assertEquals(1, in.getCweId().size());
-                        assertNotEquals(-1, in.getCweId().get(0));
-                    }
-                }
             } catch (Exception e) {
                 e.printStackTrace();
                 assertNull(e);
@@ -184,7 +169,7 @@ public class EntryPointTest_JAR {
                     " -s " + jarOne +
                     " -d " + srcOneGrvDep +
                     " -m " + Listing.ScarfXML.getFlag() +
-                    " -o " + tempFileOutXML +
+                    " -o " + tempFileOutXML_1 +
                     " -t" +
                     " -n" +
                     " -Sconfig " + scarfArgs;
@@ -192,36 +177,11 @@ public class EntryPointTest_JAR {
             try {
                 engine.main(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempFileOutXML), Charset.forName("UTF-8"));
+                List<String> results = Files.readAllLines(Paths.get(tempFileOutXML_1), Charset.forName("UTF-8"));
                 assertTrue(results.size() >= 1);
 
-                if (validateXML) {
-                    Schema schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(new File(pathToSchema));
 
-                    Unmarshaller xmlToJava = JAXBContext.newInstance(AnalyzerReport.class).createUnmarshaller();
-                    xmlToJava.setSchema(schema);
-
-                    AnalyzerReport result = (AnalyzerReport) xmlToJava.unmarshal(new File(tempFileOutXML));
-
-                    for (BugInstanceType in : result.getBugInstance()) {
-                        assertEquals(1, in.getCweId().size());
-                        assertNotEquals(-1, in.getCweId().get(0));
-                    }
-
-                    assertEquals(assess_fw, result.getAssessFw());
-                    assertEquals(assess_fw_version, result.getAssessFwVersion());
-                    assertEquals(assessment_start_ts, result.getAssessmentStartTs());
-                    assertEquals(build_fw, result.getBuildFw());
-                    assertEquals(build_fw_version, result.getBuildFwVersion());
-                    assertEquals(build_root_dir, result.getBuildRootDir());
-                    assertEquals(package_root_dir, result.getPackageRootDir());
-                    assertEquals(package_name, result.getPackageName());
-                    assertEquals(package_version, result.getPackageVersion());
-                    assertEquals(parser_fw, result.getParserFw());
-                    assertEquals(parser_fw_version, result.getParserFwVersion());
-                    assertEquals(uuid, result.getUuid());
-
-                }
+                AnalyzerReport report = AnalyzerReport.deserialize(JacksonSerializer.JacksonType.XML, new File(tempFileOutXML_1));
             } catch (Exception e) {
                 e.printStackTrace();
                 assertNull(e);
@@ -240,19 +200,8 @@ public class EntryPointTest_JAR {
                 List<String> results = Files.readAllLines(Paths.get(tempStreamXML), Charset.forName("UTF-8"));
                 assertTrue(results.size() >= 1);
 
-                if (validateXML) {
-                    Schema schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(new File(pathToSchema));
 
-                    Unmarshaller xmlToJava = JAXBContext.newInstance(AnalyzerReport.class).createUnmarshaller();
-                    xmlToJava.setSchema(schema);
-
-                    AnalyzerReport result = (AnalyzerReport) xmlToJava.unmarshal(new File(tempStreamXML));
-
-                    for (BugInstanceType in : result.getBugInstance()) {
-                        assertEquals(1, in.getCweId().size());
-                        assertNotEquals(-1, in.getCweId().get(0));
-                    }
-                }
+                AnalyzerReport report = AnalyzerReport.deserialize(JacksonSerializer.JacksonType.XML, new File(tempStreamXML));
             } catch (Exception e) {
                 e.printStackTrace();
                 assertNull(e);
@@ -263,7 +212,7 @@ public class EntryPointTest_JAR {
     @Test
     public void main_TestableJar_ScarfTimeStamp() {
         if (isLinux) {
-            String args = "-in " + EngineType.JAR.getFlag() + " -s " + jarOne + " -d " + srcOneGrvDep + " -m " + Listing.ScarfXML.getFlag() + " -o " + tempFileOutXML + " " + argsIdentifier.TIMESTAMP.getArg() + " " + argsIdentifier.PRETTY.getArg();
+            String args = "-in " + EngineType.JAR.getFlag() + " -s " + jarOne + " -d " + srcOneGrvDep + " -m " + Listing.ScarfXML.getFlag() + " -o " + tempFileOutXML_2 + " " + argsIdentifier.TIMESTAMP.getArg() + " " + argsIdentifier.PRETTY.getArg();
 
             try {
                 engine.main(args.split(" "));

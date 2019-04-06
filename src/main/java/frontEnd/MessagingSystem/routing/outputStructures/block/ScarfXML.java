@@ -60,7 +60,7 @@ public class ScarfXML extends Structure {
         //endregion
 
         //region Marshalling
-        String xmlStream = JacksonSerializer.serializeXML(report, true);
+        String xmlStream = JacksonSerializer.serialize(report, true, JacksonSerializer.JacksonType.XML);
         //endregion
 
         //region Writing any extra footer comments

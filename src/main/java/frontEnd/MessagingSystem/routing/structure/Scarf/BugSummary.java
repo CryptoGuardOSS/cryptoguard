@@ -18,21 +18,23 @@ import java.util.List;
  *
  * <p>{Description Here}</p>
  */
-public class BugCategoryList {
+public class BugSummary {
 
     //region Attribute
-    @JacksonXmlElementWrapper(localName = "BugSummary")
+    @JacksonXmlElementWrapper(useWrapping = false)
     @JacksonXmlProperty(localName = "BugCategory")
     private List<BugCategory> summaryContainer;
 
     //endregion
     //region Getters/Setters
+    @JacksonXmlElementWrapper(useWrapping = false)
     public List<BugCategory> getSummaryContainer() {
         if (this.summaryContainer == null)
             this.summaryContainer = new ArrayList<>();
         return summaryContainer;
     }
 
+    @JacksonXmlElementWrapper(useWrapping = false)
     public void setSummaryContainer(List<BugCategory> summaryContainer) {
         this.summaryContainer = summaryContainer;
     }
@@ -60,10 +62,10 @@ public class BugCategoryList {
         if (other == this) {
             return true;
         }
-        if ((other instanceof BugCategoryList) == false) {
+        if ((other instanceof BugSummary) == false) {
             return false;
         }
-        BugCategoryList rhs = ((BugCategoryList) other);
+        BugSummary rhs = ((BugSummary) other);
         return new EqualsBuilder().append(summaryContainer, rhs.summaryContainer).isEquals();
     }
     //endregion

@@ -201,9 +201,9 @@ public class BugInstance implements Serializable {
      * (Required)
      */
     @JacksonXmlElementWrapper(useWrapping = true, localName = "BugLocations")
-    @JsonProperty("BugLocations")
-    public void setBugLocations(List<Location> bugLocations) {
-        this.location = bugLocations;
+    @JsonProperty("Location")
+    public void setLocation(List<Location> locations) {
+        this.location = locations;
     }
 
     public BugInstance withBugLocations(List<Location> bugLocations) {

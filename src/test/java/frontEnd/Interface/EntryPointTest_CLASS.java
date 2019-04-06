@@ -5,7 +5,6 @@ import org.junit.After;
 import org.junit.Before;
 import rule.engine.EngineType;
 import soot.G;
-import test.TestUtilities;
 import util.Utils;
 
 import java.io.ByteArrayOutputStream;
@@ -29,7 +28,6 @@ public class EntryPointTest_CLASS {
     //region Attributes
     private EntryPoint engine;
     private ByteArrayOutputStream out;
-    private Boolean validateXML = TestUtilities.validateXML();
 
     //region Scarf Properties
     private String assessment_start_ts;

@@ -2,10 +2,9 @@ dir=./
 testDir=$(dir)build/tmp/
 java7=${JAVA7_HOME}/bin/java
 
-ver=V03.03.09
+ver=V03.03.10
 name=cryptoguard
 scan=$(java7) -jar $(dir)build/libs/$(name)-$(ver).jar
-marshal=$(dir)src/main/java/com/example/response/package-info.java
 scarfXSD=$(dir)src/main/resources/Scarf/scarf_v1.2.xsd
 
 jarLoc=$(dir)samples/testable-jar.jar
@@ -36,22 +35,12 @@ scanAPK_Scarf:
 	$(scan) -in apk -s $(apkLoc) -o $(testDir)results_newApk_Scarf.xml -m SX -n
 	xmllint --schema $(scarfXSD) $(testDir)results_newApk_Scarf.xml>$(testDir)lint_APK.out 2>$(testDir)lint_APK.err
 
-#Sets the namespace for the xml, needed for unit/integration tests
-setNS:
-	sed -i 's+(elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)+(namespace = "https://www.swamp.com/com/scarf/struct", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)+g' $(marshal)
-
-#Removes the namespace from the xml, needed for ScarfXML format output
-rmvNS:
-	sed -i 's+(namespace = "https://www.swamp.com/com/scarf/struct", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)+(elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)+g' $(marshal)
-
 #This build skips the tests and removes the namespace from the xml creation
 buildNoTest:
-	make rmvNS
 	gradle -p $(dir) clean build -x test
 
 #This build skips the tests and removes the namespace from the xml creation
 buildTest:
-	make setNS
 	gradle -p $(dir) clean build
 
 fullBuild:

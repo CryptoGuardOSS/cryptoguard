@@ -5,8 +5,8 @@ import frontEnd.MessagingSystem.AnalysisIssue;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import frontEnd.MessagingSystem.routing.outputStructures.common.JacksonSerializer;
 import frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport;
-import frontEnd.MessagingSystem.routing.structure.Scarf.BugCategoryList;
 import frontEnd.MessagingSystem.routing.structure.Scarf.BugInstance;
+import frontEnd.MessagingSystem.routing.structure.Scarf.BugSummary;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -53,7 +53,7 @@ public class ScarfXML extends Structure {
 
         AnalyzerReport report = frontEnd.MessagingSystem.routing.outputStructures.common.ScarfXML.marshalling(this.getSource());
 
-        String xmlStream = JacksonSerializer.serializeXML(report, true);
+        String xmlStream = JacksonSerializer.serialize(report, true, JacksonSerializer.JacksonType.XML);
 
         String xml = StringUtils.trimToNull(xmlStream.toString().replace("/>", ">"));
 
@@ -71,7 +71,7 @@ public class ScarfXML extends Structure {
 
         BugInstance instance = frontEnd.MessagingSystem.routing.outputStructures.common.ScarfXML.marshalling(issue, super.getCwes(), super.getSource().getFileOutName(), getId(), this.buildId, this.xPath);
 
-        String xml = JacksonSerializer.serializeXML(instance, true);
+        String xml = JacksonSerializer.serialize(instance, true, JacksonSerializer.JacksonType.XML);
 
         if (!xml.endsWith("/>"))
             this.write(xml);
@@ -86,9 +86,9 @@ public class ScarfXML extends Structure {
     public void writeFooter() throws ExceptionHandler {
 
         //region Setting the BugSummary
-        BugCategoryList summary = super.createBugCategoryList();
+        BugSummary summary = super.createBugCategoryList();
 
-        String xml = JacksonSerializer.serializeXML(summary, true);
+        String xml = JacksonSerializer.serialize(summary, true, JacksonSerializer.JacksonType.XML);
 
         if (!xml.endsWith("/>"))
             this.write(xml);
