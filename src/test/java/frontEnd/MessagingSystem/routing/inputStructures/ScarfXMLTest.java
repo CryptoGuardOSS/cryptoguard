@@ -1,7 +1,10 @@
 package frontEnd.MessagingSystem.routing.inputStructures;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import frontEnd.MessagingSystem.routing.Listing;
+import frontEnd.MessagingSystem.routing.structure.Scarf.Method;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,8 +18,7 @@ import java.util.Arrays;
 import java.util.Properties;
 
 import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 
@@ -102,6 +104,20 @@ public class ScarfXMLTest {
     }
     //endregion
 
+    @Test
+    public void simpleTest_1() {
+        try {
+            Method method = new Method(23, true, "hai");
+
+            XmlMapper xmlMapper = new XmlMapper();
+            String xml = xmlMapper.writeValueAsString(method);
+            assertNotNull(xml);
+            System.out.println(xml);
+        } catch (JsonProcessingException e) {
+            assertNull(e);
+            e.printStackTrace();
+        }
+    }
 
     @Test
     public void testAllArguments_inputValidation() {

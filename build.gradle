@@ -139,6 +139,7 @@ javadoc {
 
 dependencies {
     compile name: 'soot-trunk'
+    //compile 'ca.mcgill.sable:soot:3.3.0'
     compile "org.codehaus.groovy:groovy:2.5.2"
     xsd2java "com.sun.xml.bind:jaxb-xjc:2.2.6"
     xsd2java "com.sun.xml.bind:jaxb-impl:2.2.6"
@@ -150,5 +151,6 @@ dependencies {
     compile 'commons-cli:commons-cli:1.4'
     implementation 'org.mockito:mockito-core:2.24.5'
     compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
+    compileOnly "org.projectlombok:lombok:1.16.16"
     compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.9.8'
 }

@@ -27,12 +27,15 @@ public class TestUtilities {
     public static String makeArg(argsIdentifier id, String value) {
         return makeArg(id.getId(), value);
     }
+
     public static String makeArg(argsIdentifier id) {
         return id.getArg() + " ";
     }
+
     public static String makeArg(ScarfXMLId id, String value) {
         return makeArg(id.getId(), value);
     }
+
     public static String makeArg(String id, String value) {
         return "-" + id + " " + value + " ";
     }

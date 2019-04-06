@@ -1,21 +1,13 @@
 package frontEnd.MessagingSystem.routing.outputStructures.stream;
 
-import com.example.response.AnalyzerReport;
-import com.example.response.BugInstanceType;
-import com.example.response.BugSummaryType;
 import frontEnd.Interface.ExceptionHandler;
-import frontEnd.Interface.ExceptionId;
 import frontEnd.MessagingSystem.AnalysisIssue;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
+import frontEnd.MessagingSystem.routing.outputStructures.common.JacksonSerializer;
+import frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport;
+import frontEnd.MessagingSystem.routing.structure.Scarf.BugCategoryList;
+import frontEnd.MessagingSystem.routing.structure.Scarf.BugInstance;
 import org.apache.commons.lang3.StringUtils;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.namespace.QName;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 
 /**
  * <p>ScarfXML class.</p>
@@ -59,30 +51,14 @@ public class ScarfXML extends Structure {
     @Override
     public void writeHeader() throws ExceptionHandler {
 
-        try {
-            AnalyzerReport report = frontEnd.MessagingSystem.routing.outputStructures.common.ScarfXML.marshalling(this.getSource());
+        AnalyzerReport report = frontEnd.MessagingSystem.routing.outputStructures.common.ScarfXML.marshalling(this.getSource());
 
-            //Creating Marshaller for the Analyzer Report
-            Marshaller marshaller = JAXBContext.newInstance(AnalyzerReport.class).createMarshaller();
+        String xmlStream = JacksonSerializer.serializeXML(report, true);
 
-            //Settings Properties of the Marshaller
-            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, super.getSource().prettyPrint());
+        String xml = StringUtils.trimToNull(xmlStream.toString().replace("/>", ">"));
 
-            //Removing the <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-            //From the marshaller output
-            marshaller.setProperty("com.sun.xml.bind.xmlDeclaration", Boolean.FALSE);
+        this.write(xml);
 
-            //Creating the Stream for the marshalling and marshalling
-            ByteArrayOutputStream xmlStream = new ByteArrayOutputStream();
-            marshaller.marshal(report, new PrintStream(xmlStream));
-
-            String xml = StringUtils.trimToNull(xmlStream.toString().replace("/>", ">"));
-
-            this.write(xml);
-
-        } catch (JAXBException e) {
-            throw new ExceptionHandler("Error writing xml.", ExceptionId.MAR_VAR);
-        }
 
     }
 
@@ -93,39 +69,13 @@ public class ScarfXML extends Structure {
     public void addIssue(AnalysisIssue issue) throws ExceptionHandler {
         super.addIssue(issue);
 
-        BugInstanceType instance = frontEnd.MessagingSystem.routing.outputStructures.common.ScarfXML.marshalling(issue, super.getCwes(), super.getSource().getFileOutName(), getId(), this.buildId, this.xPath);
+        BugInstance instance = frontEnd.MessagingSystem.routing.outputStructures.common.ScarfXML.marshalling(issue, super.getCwes(), super.getSource().getFileOutName(), getId(), this.buildId, this.xPath);
 
+        String xml = JacksonSerializer.serializeXML(instance, true);
 
-        //region Writing the Bug
-        try {
-            //Creating Marshaller for the Analyzer Report
-            Marshaller marshaller = JAXBContext.newInstance(BugInstanceType.class).createMarshaller();
+        if (!xml.endsWith("/>"))
+            this.write(xml);
 
-            // To format XML
-            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, this.getSource().prettyPrint());
-
-            //If we DO NOT have JAXB annotated class
-            JAXBElement<BugInstanceType> jaxbElement = new JAXBElement<BugInstanceType>(
-                    new QName("", "BugInstance"),
-                    BugInstanceType.class,
-                    instance);
-
-            //Removing the <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-            //From the marshaller output
-            marshaller.setProperty("com.sun.xml.bind.xmlDeclaration", Boolean.FALSE);
-
-            //Creating the Stream for the marshalling and marshalling
-            ByteArrayOutputStream xmlStream = new ByteArrayOutputStream();
-            marshaller.marshal(jaxbElement, new PrintStream(xmlStream));
-
-            String xml = xmlStringClean(xmlStream.toString());
-
-            if (!xml.endsWith("/>"))
-                this.write(xml);
-
-        } catch (JAXBException e) {
-            throw new ExceptionHandler("Error writing Xml.", ExceptionId.MAR_VAR);
-        }
         //endregion
     }
 
@@ -136,35 +86,13 @@ public class ScarfXML extends Structure {
     public void writeFooter() throws ExceptionHandler {
 
         //region Setting the BugSummary
-        try {
-            //Creating Marshaller for the Analyzer Report
-            Marshaller marshaller = JAXBContext.newInstance(BugSummaryType.class).createMarshaller();
+        BugCategoryList summary = super.createBugCategoryList();
 
-            // To format XML
-            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, this.getSource().prettyPrint());
+        String xml = JacksonSerializer.serializeXML(summary, true);
 
-            //If we DO NOT have JAXB annotated class
-            JAXBElement<BugSummaryType> jaxbElement = new JAXBElement<>(
-                    new QName("", "BugSummary"),
-                    BugSummaryType.class,
-                    super.createBugSummary());
+        if (!xml.endsWith("/>"))
+            this.write(xml);
 
-            //Removing the <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-            //From the marshaller output
-            marshaller.setProperty("com.sun.xml.bind.xmlDeclaration", Boolean.FALSE);
-
-            //Creating the Stream for the marshalling and marshalling
-            ByteArrayOutputStream xmlStream = new ByteArrayOutputStream();
-            marshaller.marshal(jaxbElement, new PrintStream(xmlStream));
-
-            String xml = xmlStringClean(xmlStream.toString());
-
-            if (!xml.endsWith("/>"))
-                this.write(xml);
-
-        } catch (JAXBException e) {
-            throw new ExceptionHandler("Error writing XML.", ExceptionId.MAR_VAR);
-        }
         //endregion
 
         this.write(footerCatch);
@@ -195,10 +123,6 @@ public class ScarfXML extends Structure {
     //endregion
 
     //region Helper Methods
-    private String xmlStringClean(String in) {
-        return StringUtils.trimToNull(in.replace(" xmlns:ns2=\"https://www.swamp.com/com/scarf/struct\"", "").replaceAll("<ns2:", "<").replaceAll("</ns2:", "</"));
-    }
-
     private Integer getId() {
         return this.issueID++;
     }

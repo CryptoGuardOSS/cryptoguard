@@ -1,11 +1,11 @@
 package frontEnd.MessagingSystem.routing.outputStructures;
 
 import CWE_Reader.CWEList;
-import com.example.response.BugCategoryType;
-import com.example.response.BugSummaryType;
 import frontEnd.Interface.ExceptionHandler;
 import frontEnd.MessagingSystem.AnalysisIssue;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
+import frontEnd.MessagingSystem.routing.structure.Scarf.BugCategory;
+import frontEnd.MessagingSystem.routing.structure.Scarf.BugCategoryList;
 import rule.engine.EngineType;
 import rule.engine.RuleList;
 
@@ -19,10 +19,10 @@ import java.util.HashMap;
  *
  * @author RigorityJTeam
  * Created on 3/1/19.
+ * @version $Id: $Id
  * @since 03.03.00
  *
  * <p>The general class encompassing the output structure (stream and blocked).</p>
- * @version $Id: $Id
  */
 public abstract class OutputStructure {
 
@@ -86,22 +86,22 @@ public abstract class OutputStructure {
     //region Public helper methods
 
     /**
-     * <p>createBugSummary.</p>
+     * <p>createBugCategoryList.</p>
      *
      * @return a {@link com.example.response.BugSummaryType} object.
      */
-    public BugSummaryType createBugSummary() {
-        BugSummaryType bugDict = new BugSummaryType();
+    public BugCategoryList createBugCategoryList() {
+        BugCategoryList bugDict = new BugCategoryList();
 
         //region Creating A Bug Category with counts per the Broken Rules
         for (int ruleNumber : countOfBugs.keySet()) {
-            BugCategoryType ruleType = new BugCategoryType();
+            BugCategory ruleType = new BugCategory();
 
             ruleType.setGroup(RuleList.getRuleByRuleNumber(ruleNumber).getDesc());
             ruleType.setCode(String.valueOf(ruleNumber));
             ruleType.setCount(countOfBugs.get(ruleNumber));
 
-            bugDict.getBugCategory().add(ruleType);
+            bugDict.addBugSummary(ruleType);
         }
         //endregion
 

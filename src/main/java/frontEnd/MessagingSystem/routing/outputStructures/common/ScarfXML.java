@@ -2,10 +2,10 @@ package frontEnd.MessagingSystem.routing.outputStructures.common;
 
 import CWE_Reader.CWE;
 import CWE_Reader.CWEList;
-import com.example.response.*;
 import frontEnd.MessagingSystem.AnalysisIssue;
 import frontEnd.MessagingSystem.AnalysisLocation;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
+import frontEnd.MessagingSystem.routing.structure.Scarf.*;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -61,8 +61,8 @@ public class ScarfXML {
      * @param xPath    a {@link java.lang.String} object.
      * @return a {@link com.example.response.BugInstanceType} object.
      */
-    public static BugInstanceType marshalling(AnalysisIssue issue, CWEList cwes, String fileName, Integer id, Integer buildId, String xPath) {
-        BugInstanceType instance = new BugInstanceType();
+    public static BugInstance marshalling(AnalysisIssue issue, CWEList cwes, String fileName, Integer id, Integer buildId, String xPath) {
+        BugInstance instance = new BugInstance();
 
         //region Setting the instance
 
@@ -72,7 +72,7 @@ public class ScarfXML {
         instance.setBugMessage(issue.getRule().getDesc());
 
         if (buildId != null || xPath != null) {
-            BugTraceType trace = new BugTraceType();
+            BugTrace trace = new BugTrace();
 
             if (buildId != null)
                 trace.setBuildId(buildId);
@@ -92,29 +92,26 @@ public class ScarfXML {
 
         //region Setting Methods If there are any, currently the first is the primary one
         if (!issue.getMethods().isEmpty()) {
-            MethodsType methods = new MethodsType();
             for (int methodKtr = 0; methodKtr < issue.getMethods().size(); methodKtr++) {
-                MethodType newMethod = new MethodType();
+                Method newMethod = new Method();
 
                 newMethod.setId(methodKtr);
                 newMethod.setPrimary(methodKtr == 0);
-                newMethod.setValue((String) issue.getMethods().get(methodKtr));
+                newMethod.setSelf((String) issue.getMethods().get(methodKtr));
 
-                methods.getMethod().add(newMethod);
+                instance.addMethod(newMethod);
             }
-            instance.setMethods(methods);
         }
         //endregion
 
         //region Setting Bug Locations
-        BugLocationsType bugLocations = new BugLocationsType();
         if (!issue.getLocations().isEmpty()) {
             for (int locationKtr = 0; locationKtr < issue.getLocations().size(); locationKtr++) {
-                LocationType newLocation = new LocationType();
+                Location newLocation = new Location();
                 AnalysisLocation createdLoc = issue.getLocations().get(locationKtr);
 
-                newLocation.setId(locationKtr);
-                newLocation.setPrimary(locationKtr == 0);
+                //newLocation.setId(locationKtr); //TODO - Look at this
+                //newLocation.setPrimary(locationKtr == 0); //TODO - Look at this
 
                 if (createdLoc.getLineStart() != -1)
                     newLocation.setStartLine(createdLoc.getLineStart());
@@ -124,16 +121,14 @@ public class ScarfXML {
                 if (createdLoc.getLineEnd() > 0 && !createdLoc.getLineEnd().equals(createdLoc.getLineStart())) {
                     newLocation.setEndLine(createdLoc.getLineEnd());
                 }
-
-                bugLocations.getLocation().add(newLocation);
+                instance.addBugLocation(newLocation);
             }
         } else {
-            LocationType newLocation = new LocationType();
+            Location newLocation = new Location();
             newLocation.setSourceFile(issue.getFullPathName());
-            newLocation.setPrimary(true);
-            bugLocations.getLocation().add(newLocation);
+            // newLocation.setPrimary(true); //TODO - Look at this
+            instance.addBugLocation(newLocation);
         }
-        instance.setBugLocations(bugLocations);
         //endregion
 
         //region Setting Bug Message
@@ -149,7 +144,7 @@ public class ScarfXML {
         //endregion
 
         //region Setting BugTrace
-        BugTraceType trace = new BugTraceType();
+        BugTrace trace = new BugTrace();
 
         if (buildId != null)
             trace.setBuildId(buildId);

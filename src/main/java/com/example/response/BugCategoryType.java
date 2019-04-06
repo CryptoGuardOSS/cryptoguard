@@ -63,9 +63,8 @@ public class BugCategoryType {
     /**
      * Sets the value of the group property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link java.lang.String}
+     * @param value allowed object is
+     *              {@link java.lang.String}
      */
     public void setGroup(String value) {
         this.group = value;
@@ -83,9 +82,8 @@ public class BugCategoryType {
     /**
      * Sets the value of the code property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link java.lang.String}
+     * @param value allowed object is
+     *              {@link java.lang.String}
      */
     public void setCode(String value) {
         this.code = value;

@@ -84,9 +84,8 @@ public class LocationType {
     /**
      * Sets the value of the sourceFile property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link java.lang.String}
+     * @param value allowed object is
+     *              {@link java.lang.String}
      */
     public void setSourceFile(String value) {
         this.sourceFile = value;
@@ -104,9 +103,8 @@ public class LocationType {
     /**
      * Sets the value of the startLine property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link java.lang.Integer}
+     * @param value allowed object is
+     *              {@link java.lang.Integer}
      */
     public void setStartLine(Integer value) {
         this.startLine = value;
@@ -124,9 +122,8 @@ public class LocationType {
     /**
      * Sets the value of the endLine property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link java.lang.Integer}
+     * @param value allowed object is
+     *              {@link java.lang.Integer}
      */
     public void setEndLine(Integer value) {
         this.endLine = value;
@@ -144,9 +141,8 @@ public class LocationType {
     /**
      * Sets the value of the startColumn property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link java.lang.Integer}
+     * @param value allowed object is
+     *              {@link java.lang.Integer}
      */
     public void setStartColumn(Integer value) {
         this.startColumn = value;
@@ -164,9 +160,8 @@ public class LocationType {
     /**
      * Sets the value of the endColumn property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link java.lang.Integer}
+     * @param value allowed object is
+     *              {@link java.lang.Integer}
      */
     public void setEndColumn(Integer value) {
         this.endColumn = value;
@@ -184,9 +179,8 @@ public class LocationType {
     /**
      * Sets the value of the explanation property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link java.lang.String}
+     * @param value allowed object is
+     *              {@link java.lang.String}
      */
     public void setExplanation(String value) {
         this.explanation = value;

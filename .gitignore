@@ -1,8 +1,9 @@
-# Compiled class file
+# Compiled class filetarget/
 .gradle
 .idea
 /build/
 /target/
+/*.jar
 .attach_pid*
 docs
 *.iml

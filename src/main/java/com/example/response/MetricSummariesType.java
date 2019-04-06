@@ -17,10 +17,9 @@ import java.util.List;
 
 
 /**
- *
- * 				The root tag AnalyzerReport can have MetricSummaries as a child element. There
- * 				can be only one occurrence of MetricSummaries, if and only if there is at least one
- * 				Metric.
+ * The root tag AnalyzerReport can have MetricSummaries as a child element. There
+ * can be only one occurrence of MetricSummaries, if and only if there is at least one
+ * Metric.
  *
  *
  * <p>Java class for MetricSummariesType complex type.

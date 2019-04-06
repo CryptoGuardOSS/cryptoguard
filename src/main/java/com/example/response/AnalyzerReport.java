@@ -173,9 +173,8 @@ public class AnalyzerReport {
     /**
      * Sets the value of the bugSummary property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link com.example.response.BugSummaryType}
+     * @param value allowed object is
+     *              {@link com.example.response.BugSummaryType}
      */
     public void setBugSummary(BugSummaryType value) {
         this.bugSummary = value;
@@ -222,9 +221,8 @@ public class AnalyzerReport {
     /**
      * Sets the value of the metricSummaries property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link com.example.response.MetricSummariesType}
+     * @param value allowed object is
+     *              {@link com.example.response.MetricSummariesType}
      */
     public void setMetricSummaries(MetricSummariesType value) {
         this.metricSummaries = value;
@@ -242,9 +240,8 @@ public class AnalyzerReport {
     /**
      * Sets the value of the assessFw property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link java.lang.String}
+     * @param value allowed object is
+     *              {@link java.lang.String}
      */
     public void setAssessFw(String value) {
         this.assessFw = value;
@@ -262,9 +259,8 @@ public class AnalyzerReport {
     /**
      * Sets the value of the assessFwVersion property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link java.lang.String}
+     * @param value allowed object is
+     *              {@link java.lang.String}
      */
     public void setAssessFwVersion(String value) {
         this.assessFwVersion = value;
@@ -282,9 +278,8 @@ public class AnalyzerReport {
     /**
      * Sets the value of the assessmentStartTs property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link java.lang.String}
+     * @param value allowed object is
+     *              {@link java.lang.String}
      */
     public void setAssessmentStartTs(String value) {
         this.assessmentStartTs = value;
@@ -302,9 +297,8 @@ public class AnalyzerReport {
     /**
      * Sets the value of the buildFw property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link java.lang.String}
+     * @param value allowed object is
+     *              {@link java.lang.String}
      */
     public void setBuildFw(String value) {
         this.buildFw = value;
@@ -322,9 +316,8 @@ public class AnalyzerReport {
     /**
      * Sets the value of the buildFwVersion property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link java.lang.String}
+     * @param value allowed object is
+     *              {@link java.lang.String}
      */
     public void setBuildFwVersion(String value) {
         this.buildFwVersion = value;
@@ -342,9 +335,8 @@ public class AnalyzerReport {
     /**
      * Sets the value of the packageName property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link java.lang.String}
+     * @param value allowed object is
+     *              {@link java.lang.String}
      */
     public void setPackageName(String value) {
         this.packageName = value;
@@ -362,9 +354,8 @@ public class AnalyzerReport {
     /**
      * Sets the value of the packageVersion property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link java.lang.String}
+     * @param value allowed object is
+     *              {@link java.lang.String}
      */
     public void setPackageVersion(String value) {
         this.packageVersion = value;
@@ -382,9 +373,8 @@ public class AnalyzerReport {
     /**
      * Sets the value of the buildRootDir property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link java.lang.String}
+     * @param value allowed object is
+     *              {@link java.lang.String}
      */
     public void setBuildRootDir(String value) {
         this.buildRootDir = value;
@@ -402,9 +392,8 @@ public class AnalyzerReport {
     /**
      * Sets the value of the packageRootDir property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link java.lang.String}
+     * @param value allowed object is
+     *              {@link java.lang.String}
      */
     public void setPackageRootDir(String value) {
         this.packageRootDir = value;
@@ -422,9 +411,8 @@ public class AnalyzerReport {
     /**
      * Sets the value of the parserFw property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link java.lang.String}
+     * @param value allowed object is
+     *              {@link java.lang.String}
      */
     public void setParserFw(String value) {
         this.parserFw = value;
@@ -442,9 +430,8 @@ public class AnalyzerReport {
     /**
      * Sets the value of the parserFwVersion property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link java.lang.String}
+     * @param value allowed object is
+     *              {@link java.lang.String}
      */
     public void setParserFwVersion(String value) {
         this.parserFwVersion = value;
@@ -462,9 +449,8 @@ public class AnalyzerReport {
     /**
      * Sets the value of the platformName property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link java.lang.String}
+     * @param value allowed object is
+     *              {@link java.lang.String}
      */
     public void setPlatformName(String value) {
         this.platformName = value;
@@ -482,9 +468,8 @@ public class AnalyzerReport {
     /**
      * Sets the value of the toolName property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link java.lang.String}
+     * @param value allowed object is
+     *              {@link java.lang.String}
      */
     public void setToolName(String value) {
         this.toolName = value;
@@ -502,9 +487,8 @@ public class AnalyzerReport {
     /**
      * Sets the value of the toolVersion property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link java.lang.String}
+     * @param value allowed object is
+     *              {@link java.lang.String}
      */
     public void setToolVersion(String value) {
         this.toolVersion = value;
@@ -522,9 +506,8 @@ public class AnalyzerReport {
     /**
      * Sets the value of the uuid property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link java.lang.String}
+     * @param value allowed object is
+     *              {@link java.lang.String}
      */
     public void setUuid(String value) {
         this.uuid = value;

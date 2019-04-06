@@ -117,7 +117,7 @@ public enum Listing {
      * <p>getTypeOfMessagingOutput.</p>
      *
      * @param stream a boolean.
-     * @param info a {@link EnvironmentInformation} object.
+     * @param info   a {@link EnvironmentInformation} object.
      * @return a {@link OutputStructure} object.
      * @throws ExceptionHandler if any.
      */

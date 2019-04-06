@@ -1375,11 +1375,11 @@ public class Utils {
     /**
      * <p>createAnalysisOutput.</p>
      *
-     * @param xmlFileStr a {@link java.util.Map} object.
-     * @param sourcePaths a {@link java.util.List} object.
+     * @param xmlFileStr          a {@link java.util.Map} object.
+     * @param sourcePaths         a {@link java.util.List} object.
      * @param predictableSourcMap a {@link java.util.Map} object.
-     * @param rule a {@link java.lang.String} object.
-     * @param output a {@link OutputStructure} object.
+     * @param rule                a {@link java.lang.String} object.
+     * @param output              a {@link OutputStructure} object.
      * @throws ExceptionHandler if any.
      */
     public static void createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, Map<UnitContainer, List<String>> predictableSourcMap, String rule, OutputStructure output) throws ExceptionHandler {

@@ -59,9 +59,8 @@ public class MethodType {
     /**
      * Sets the value of the value property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link java.lang.String}
+     * @param value allowed object is
+     *              {@link java.lang.String}
      */
     public void setValue(String value) {
         this.value = value;

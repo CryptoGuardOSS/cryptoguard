@@ -82,9 +82,8 @@ public class BugTraceType {
     /**
      * Sets the value of the assessmentReportFile property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link java.lang.String}
+     * @param value allowed object is
+     *              {@link java.lang.String}
      */
     public void setAssessmentReportFile(String value) {
         this.assessmentReportFile = value;
@@ -102,9 +101,8 @@ public class BugTraceType {
     /**
      * Sets the value of the instanceLocation property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link com.example.response.InstanceLocationType}
+     * @param value allowed object is
+     *              {@link com.example.response.InstanceLocationType}
      */
     public void setInstanceLocation(InstanceLocationType value) {
         this.instanceLocation = value;

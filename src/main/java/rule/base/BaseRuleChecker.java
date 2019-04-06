@@ -83,9 +83,9 @@ public abstract class BaseRuleChecker implements RuleChecker {
     /**
      * <p>createAnalysisOutput.</p>
      *
-     * @param xmlFileStr a {@link java.util.Map} object.
+     * @param xmlFileStr  a {@link java.util.Map} object.
      * @param sourcePaths a {@link java.util.List} object.
-     * @param output a {@link OutputStructure} object.
+     * @param output      a {@link OutputStructure} object.
      * @throws ExceptionHandler if any.
      */
     public abstract void createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler;

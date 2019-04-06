@@ -17,11 +17,11 @@ public interface RuleChecker {
     /**
      * <p>checkRule.</p>
      *
-     * @param type a {@link EngineType} object.
-     * @param projectJarPath a {@link java.util.List} object.
+     * @param type                  a {@link EngineType} object.
+     * @param projectJarPath        a {@link java.util.List} object.
      * @param projectDependencyPath a {@link java.util.List} object.
-     * @param sourcePaths a {@link java.util.List} object.
-     * @param output a {@link OutputStructure} object.
+     * @param sourcePaths           a {@link java.util.List} object.
+     * @param output                a {@link OutputStructure} object.
      * @throws ExceptionHandler if any.
      */
     void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler;
