@@ -79,7 +79,7 @@ public class AnalysisIssue {
     /**
      * <p>Constructor for AnalysisIssue.</p>
      *
-     * @param unit        a {@link UnitContainer} object.
+     * @param unit        a {@link analyzer.backward.UnitContainer} object.
      * @param ruleNumber  a {@link java.lang.Integer} object.
      * @param sootString  a {@link java.lang.String} object.
      * @param sourcePaths a {@link java.util.List} object.
@@ -221,7 +221,7 @@ public class AnalysisIssue {
     /**
      * <p>Getter for the field <code>rule</code>.</p>
      *
-     * @return a {@link RuleList} object.
+     * @return a {@link rule.engine.RuleList} object.
      */
     public RuleList getRule() {
         return rule;
@@ -267,7 +267,7 @@ public class AnalysisIssue {
     /**
      * <p>addLocation.</p>
      *
-     * @param newLocation a {@link AnalysisLocation} object.
+     * @param newLocation a {@link frontEnd.MessagingSystem.AnalysisLocation} object.
      */
     public void addLocation(AnalysisLocation newLocation) {
         this.getLocations().add(newLocation);
@@ -286,7 +286,7 @@ public class AnalysisIssue {
      * <p>addMethod.</p>
      *
      * @param methodName a {@link java.lang.String} object.
-     * @param location   a {@link AnalysisLocation} object.
+     * @param location   a {@link frontEnd.MessagingSystem.AnalysisLocation} object.
      */
     public void addMethod(String methodName, AnalysisLocation location) {
         location.setMethodNumber(this.getMethods().size());

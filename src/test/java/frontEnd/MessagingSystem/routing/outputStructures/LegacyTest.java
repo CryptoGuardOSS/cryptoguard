@@ -13,6 +13,7 @@ import java.util.ArrayList;
  *
  * @author RigorityJTeam
  * @since V01.00.01
+ * @version $Id: $Id
  */
 public class LegacyTest {
 
@@ -25,6 +26,10 @@ public class LegacyTest {
     //endregion
 
     //region Test Environment Setup
+
+    /**
+     * <p>setUp.</p>
+     */
     @Before
     public void setUp() {
         this.source = "testable-jar/build/libs/testable-jar.jar";
@@ -39,6 +44,9 @@ public class LegacyTest {
         //endregion
     }
 
+    /**
+     * <p>tearDown.</p>
+     */
     @After
     public void tearDown() {
         this.result = null;

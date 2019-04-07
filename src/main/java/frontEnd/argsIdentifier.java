@@ -67,7 +67,7 @@ public enum argsIdentifier {
      * <p>lookup.</p>
      *
      * @param id a {@link java.lang.String} object.
-     * @return a {@link argsIdentifier} object.
+     * @return a {@link frontEnd.argsIdentifier} object.
      */
     public static argsIdentifier lookup(String id) {
         for (argsIdentifier in : argsIdentifier.values())

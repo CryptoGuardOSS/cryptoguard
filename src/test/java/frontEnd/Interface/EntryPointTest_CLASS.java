@@ -18,6 +18,13 @@ import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertNull;
 import static test.TestUtilities.*;
 
+/**
+ * <p>EntryPointTest_CLASS class.</p>
+ *
+ * @author drmonster
+ * @version $Id: $Id
+ * @since V03.03.10
+ */
 public class EntryPointTest_CLASS {
 
     private final String src = Utils.osPathJoin(srcOneGrv, "build", "classes", "main", "tester");
@@ -47,6 +54,12 @@ public class EntryPointTest_CLASS {
     //endregion
 
     //region Test Environment Setup
+
+    /**
+     * <p>setUp.</p>
+     *
+     * @throws java.lang.Exception if any.
+     */
     @Before
     public void setUp() throws Exception {
         //Cleaning the current scene since setup carries throughout the VM
@@ -72,6 +85,11 @@ public class EntryPointTest_CLASS {
         //endregion
     }
 
+    /**
+     * <p>tearDown.</p>
+     *
+     * @throws java.lang.Exception if any.
+     */
     @After
     public void tearDown() throws Exception {
         engine = null;
@@ -97,6 +115,10 @@ public class EntryPointTest_CLASS {
 
     //region Tests
     //@Test
+
+    /**
+     * <p>testEnvironmentVariables.</p>
+     */
     public void testEnvironmentVariables() {
         String[] dirLists = new String[]{srcOneGrv, srcOneGrvDep};
 
@@ -118,6 +140,10 @@ public class EntryPointTest_CLASS {
     }
 
     //@Test TODO - Check This
+
+    /**
+     * <p>main_TestableFiles_SingleTest.</p>
+     */
     public void main_TestableFiles_SingleTest() {
         if (isLinux) {
             String args =
@@ -148,6 +174,10 @@ public class EntryPointTest_CLASS {
     }
 
     //@Test TODO - Check This
+
+    /**
+     * <p>main_TestableFiles_MultiTest.</p>
+     */
     public void main_TestableFiles_MultiTest() {
         if (isLinux) {
             String args =

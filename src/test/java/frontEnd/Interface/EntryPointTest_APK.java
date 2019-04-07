@@ -19,6 +19,13 @@ import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertNull;
 import static test.TestUtilities.*;
 
+/**
+ * <p>EntryPointTest_APK class.</p>
+ *
+ * @author drmonster
+ * @version $Id: $Id
+ * @since V03.03.10
+ */
 public class EntryPointTest_APK {
 
     //region Attributes
@@ -46,6 +53,12 @@ public class EntryPointTest_APK {
     //endregion
 
     //region Test Environment Setup
+
+    /**
+     * <p>setUp.</p>
+     *
+     * @throws java.lang.Exception if any.
+     */
     @Before
     public void setUp() throws Exception {
         //Cleaning the current scene since setup carries throughout the VM
@@ -71,6 +84,11 @@ public class EntryPointTest_APK {
         //endregion
     }
 
+    /**
+     * <p>tearDown.</p>
+     *
+     * @throws java.lang.Exception if any.
+     */
     @After
     public void tearDown() throws Exception {
         engine = null;
@@ -95,6 +113,10 @@ public class EntryPointTest_APK {
     //endregion
 
     //region Tests
+
+    /**
+     * <p>testEnvironmentVariables.</p>
+     */
     @Test
     public void testEnvironmentVariables() {
         String[] fileLists = new String[]{jarOne, pathToSchema};
@@ -117,6 +139,9 @@ public class EntryPointTest_APK {
 
     }
 
+    /**
+     * <p>main_TestableApk.</p>
+     */
     @Test
     public void main_TestableApk() {
         if (isLinux) {
@@ -136,6 +161,9 @@ public class EntryPointTest_APK {
         }
     }
 
+    /**
+     * <p>main_TestableApk_Scarf.</p>
+     */
     @Test
     public void main_TestableApk_Scarf() {
         if (isLinux) {

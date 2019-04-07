@@ -8,6 +8,13 @@ import util.Utils;
 
 import java.io.ByteArrayOutputStream;
 
+/**
+ * <p>JavaFileEntryTest class.</p>
+ *
+ * @author drmonster
+ * @version $Id: $Id
+ * @since V03.03.10
+ */
 public class JavaFileEntryTest {
 
 
@@ -29,11 +36,22 @@ public class JavaFileEntryTest {
     //endregion
 
     //region Test Environment Setup
+
+    /**
+     * <p>setUp.</p>
+     *
+     * @throws java.lang.Exception if any.
+     */
     @Before
     public void setUp() throws Exception {
         this.customStream = new ByteArrayOutputStream();
     }
 
+    /**
+     * <p>tearDown.</p>
+     *
+     * @throws java.lang.Exception if any.
+     */
     @After
     public void tearDown() throws Exception {
         this.customStream = null;

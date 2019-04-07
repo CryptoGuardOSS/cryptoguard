@@ -67,7 +67,7 @@ public enum Listing {
      * The dynamic loader for the Listing Type based on the flag
      *
      * @param flag {@link java.lang.String} - The input type looking for the flag type
-     * @return {@link Listing} - The messaging Type retrieved by flag, if not found the default will be used
+     * @return {@link frontEnd.MessagingSystem.routing.Listing} - The messaging Type retrieved by flag, if not found the default will be used
      */
     public static Listing retrieveListingType(String flag) {
         if (flag != null)
@@ -117,9 +117,9 @@ public enum Listing {
      * <p>getTypeOfMessagingOutput.</p>
      *
      * @param stream a boolean.
-     * @param info   a {@link EnvironmentInformation} object.
-     * @return a {@link OutputStructure} object.
-     * @throws ExceptionHandler if any.
+     * @param info   a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.outputStructures.OutputStructure} object.
+     * @throws frontEnd.Interface.ExceptionHandler if any.
      */
     public OutputStructure getTypeOfMessagingOutput(boolean stream, EnvironmentInformation info) throws ExceptionHandler {
 

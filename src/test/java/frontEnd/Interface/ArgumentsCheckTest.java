@@ -16,6 +16,13 @@ import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.*;
 import static test.TestUtilities.*;
 
+/**
+ * <p>ArgumentsCheckTest class.</p>
+ *
+ * @author drmonster
+ * @version $Id: $Id
+ * @since V03.03.10
+ */
 public class ArgumentsCheckTest {
 
     //region Attributes
@@ -26,10 +33,21 @@ public class ArgumentsCheckTest {
     //endregion
 
     //region Test Environment Setup
+
+    /**
+     * <p>setUp.</p>
+     *
+     * @throws java.lang.Exception if any.
+     */
     @Before
     public void setUp() throws Exception {
     }
 
+    /**
+     * <p>tearDown.</p>
+     *
+     * @throws java.lang.Exception if any.
+     */
     @After
     public void tearDown() throws Exception {
         info = null;
@@ -37,6 +55,10 @@ public class ArgumentsCheckTest {
     //endregion
 
     //region Tests
+
+    /**
+     * <p>testEnvironmentVariables.</p>
+     */
     @Test
     public void testEnvironmentVariables() {
         String[] fileLists = new String[]{jarOne};
@@ -59,6 +81,9 @@ public class ArgumentsCheckTest {
 
     }
 
+    /**
+     * <p>paramaterCheck_jar_SkipValidation.</p>
+     */
     @Test
     public void paramaterCheck_jar_SkipValidation() {
         StringBuilder args = new StringBuilder();
@@ -92,6 +117,9 @@ public class ArgumentsCheckTest {
         assertEquals(Listing.Legacy, info.getMessagingType());
     }
 
+    /**
+     * <p>paramaterCheck_jar.</p>
+     */
     @Test
     public void paramaterCheck_jar() {
 
@@ -126,6 +154,9 @@ public class ArgumentsCheckTest {
         assertEquals(Listing.ScarfXML, info.getMessagingType());
     }
 
+    /**
+     * <p>paramaterCheck_Barejar.</p>
+     */
     @Test
     public void paramaterCheck_Barejar() {
 
@@ -152,6 +183,9 @@ public class ArgumentsCheckTest {
         assertEquals(Listing.Legacy, info.getMessagingType());
     }
 
+    /**
+     * <p>parameterCheck_gdl.</p>
+     */
     @Test
     public void parameterCheck_gdl() {
         StringBuilder args = new StringBuilder();

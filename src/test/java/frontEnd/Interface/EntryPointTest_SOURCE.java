@@ -1,26 +1,21 @@
 package frontEnd.Interface;
 
-import frontEnd.MessagingSystem.routing.Listing;
-import frontEnd.MessagingSystem.routing.outputStructures.common.JacksonSerializer;
-import frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport;
-import frontEnd.argsIdentifier;
 import org.junit.After;
 import org.junit.Before;
-import rule.engine.EngineType;
 import soot.G;
 import util.Utils;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
 
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertNull;
-import static test.TestUtilities.*;
+import static test.TestUtilities.testPath;
 
+/**
+ * <p>EntryPointTest_SOURCE class.</p>
+ *
+ * @author drmonster
+ * @version $Id: $Id
+ * @since V03.03.10
+ */
 public class EntryPointTest_SOURCE {
 
     private final String tempFileOutTxt = Utils.osPathJoin(testPath, "testable-jar.txt");
@@ -48,6 +43,12 @@ public class EntryPointTest_SOURCE {
     //endregion
 
     //region Test Environment Setup
+
+    /**
+     * <p>setUp.</p>
+     *
+     * @throws java.lang.Exception if any.
+     */
     @Before
     public void setUp() throws Exception {
         //Cleaning the current scene since setup carries throughout the VM
@@ -73,6 +74,11 @@ public class EntryPointTest_SOURCE {
         //endregion
     }
 
+    /**
+     * <p>tearDown.</p>
+     *
+     * @throws java.lang.Exception if any.
+     */
     @After
     public void tearDown() throws Exception {
         engine = null;
@@ -97,7 +103,8 @@ public class EntryPointTest_SOURCE {
     //endregion
 
     //region Tests
-    //@Test
+    /*
+    @Test
     public void testEnvironmentVariables() {
         String[] fileLists = new String[]{jarOne, pathToSchema};
         String[] dirLists = new String[]{srcOneGrv, srcOneGrvDep};
@@ -119,7 +126,7 @@ public class EntryPointTest_SOURCE {
 
     }
 
-    //@Test
+    @Test
     public void main_TestableJarSource() {
         if (isLinux) {
             String args = "-in " + EngineType.DIR.getFlag() + " -s " + srcOneGrv + " -d " + srcOneGrvDep + " -o " + tempFileOutTxt;
@@ -136,7 +143,7 @@ public class EntryPointTest_SOURCE {
         }
     }
 
-    //@Test
+    @Test
     public void main_TestableJarSourceScarf() {
         if (isLinux) {
             String args = "-in " + EngineType.DIR.getFlag() + " -s " + srcOneGrv + " -d " + srcOneGrvDep + " -m " + Listing.ScarfXML.getFlag() + " -o " + tempFileOutXML + " " + argsIdentifier.PRETTY.getArg();
@@ -157,7 +164,7 @@ public class EntryPointTest_SOURCE {
         }
     }
 
-    //@Test
+    @Test
     public void main_TestableJarSourceScarf_Stream() {
         if (isLinux) {
             String args = "-in " + EngineType.DIR.getFlag() + " -s " + srcOneGrv + " -d " + srcOneGrvDep + " -n -m " + Listing.ScarfXML.getFlag() + " -o " + tempStreamXML + " -st" + " " + argsIdentifier.PRETTY.getArg();
@@ -176,7 +183,7 @@ public class EntryPointTest_SOURCE {
                 assertNull(e);
             }
         }
-    }
+    }*/
 
     //endregion
 }

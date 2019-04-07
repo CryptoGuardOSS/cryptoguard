@@ -22,6 +22,13 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 
+/**
+ * <p>ScarfXMLTest class.</p>
+ *
+ * @author drmonster
+ * @version $Id: $Id
+ * @since V03.03.10
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class ScarfXMLTest {
 
@@ -47,6 +54,12 @@ public class ScarfXMLTest {
     //endregion
 
     //region Test Environment Management
+
+    /**
+     * <p>setUp.</p>
+     *
+     * @throws java.lang.Exception if any.
+     */
     @Before
     public void setUp() throws Exception {
         inputTest = spy(ScarfXML.class);
@@ -82,6 +95,11 @@ public class ScarfXMLTest {
         sampleProp.setProperty("uuid", uuid);
     }
 
+    /**
+     * <p>tearDown.</p>
+     *
+     * @throws java.lang.Exception if any.
+     */
     @After
     public void tearDown() throws Exception {
         testInfo = null;
@@ -104,6 +122,9 @@ public class ScarfXMLTest {
     }
     //endregion
 
+    /**
+     * <p>simpleTest_1.</p>
+     */
     @Test
     public void simpleTest_1() {
         try {
@@ -119,6 +140,9 @@ public class ScarfXMLTest {
         }
     }
 
+    /**
+     * <p>testAllArguments_inputValidation.</p>
+     */
     @Test
     public void testAllArguments_inputValidation() {
         StringBuilder args = new StringBuilder();

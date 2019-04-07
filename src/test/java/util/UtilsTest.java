@@ -11,6 +11,13 @@ import static org.junit.Assert.assertNotNull;
 import static util.Utils.retrieveFullyQualifiedName;
 import static util.Utils.trimFilePath;
 
+/**
+ * <p>UtilsTest class.</p>
+ *
+ * @author drmonster
+ * @version $Id: $Id
+ * @since V03.03.10
+ */
 public class UtilsTest {
 
     //region Attributes
@@ -31,6 +38,12 @@ public class UtilsTest {
     //endregion
 
     //region Test Environment
+
+    /**
+     * <p>setUp.</p>
+     *
+     * @throws java.lang.Exception if any.
+     */
     @Before
     public void setUp() throws Exception {
 
@@ -56,6 +69,11 @@ public class UtilsTest {
 
     }
 
+    /**
+     * <p>tearDown.</p>
+     *
+     * @throws java.lang.Exception if any.
+     */
     @After
     public void tearDown() throws Exception {
         fullJavaFile = null;
@@ -65,6 +83,9 @@ public class UtilsTest {
 
     //region Tests
 
+    /**
+     * <p>trimFilePathTestOne.</p>
+     */
     @Test
     public void trimFilePathTestOne() {
         String fileNameExt = trimFilePath(fullJavaFile);
@@ -74,6 +95,9 @@ public class UtilsTest {
 
     }
 
+    /**
+     * <p>trimFilePathTestTwo.</p>
+     */
     @Test
     public void trimFilePathTestTwo() {
         String fileNameExt = trimFilePath(fullJavaClassFile);
@@ -85,6 +109,10 @@ public class UtilsTest {
 
     //TODO - reimplement this
     //@Test
+
+    /**
+     * <p>retrieveFullyQualifiedNameTest.</p>
+     */
     public void retrieveFullyQualifiedNameTest() {
         String packageName = retrieveFullyQualifiedName(Arrays.asList(javaFile)).get(0);
 

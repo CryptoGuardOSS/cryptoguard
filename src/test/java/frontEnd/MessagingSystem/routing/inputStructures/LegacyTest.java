@@ -6,6 +6,13 @@ import org.junit.After;
 import org.junit.Before;
 import rule.engine.EngineType;
 
+/**
+ * <p>LegacyTest class.</p>
+ *
+ * @author drmonster
+ * @version $Id: $Id
+ * @since V03.03.10
+ */
 public class LegacyTest {
 
     //region Attributes
@@ -18,12 +25,23 @@ public class LegacyTest {
     //endregion
 
     //region Test Environment Management
+
+    /**
+     * <p>setUp.</p>
+     *
+     * @throws java.lang.Exception if any.
+     */
     @Before
     public void setUp() throws Exception {
         inputTest = new Legacy();
         args = new String[]{"TestSource", type.getName(), dependencies, Listing.Legacy.getFlag()};
     }
 
+    /**
+     * <p>tearDown.</p>
+     *
+     * @throws java.lang.Exception if any.
+     */
     @After
     public void tearDown() throws Exception {
         testInfo = null;

@@ -22,6 +22,13 @@ import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertNull;
 import static test.TestUtilities.*;
 
+/**
+ * <p>EntryPointTest_JAR class.</p>
+ *
+ * @author drmonster
+ * @version $Id: $Id
+ * @since V03.03.10
+ */
 public class EntryPointTest_JAR {
 
     private final String tempFileOutTxt = Utils.osPathJoin(testPath, "testable-jar.txt");
@@ -51,6 +58,12 @@ public class EntryPointTest_JAR {
     //endregion
 
     //region Test Environment Setup
+
+    /**
+     * <p>setUp.</p>
+     *
+     * @throws java.lang.Exception if any.
+     */
     @Before
     public void setUp() throws Exception {
         //Cleaning the current scene since setup carries throughout the VM
@@ -76,6 +89,11 @@ public class EntryPointTest_JAR {
         //endregion
     }
 
+    /**
+     * <p>tearDown.</p>
+     *
+     * @throws java.lang.Exception if any.
+     */
     @After
     public void tearDown() throws Exception {
         engine = null;
@@ -100,6 +118,10 @@ public class EntryPointTest_JAR {
     //endregion
 
     //region Tests
+
+    /**
+     * <p>testEnvironmentVariables.</p>
+     */
     @Test
     public void testEnvironmentVariables() {
         String[] fileLists = new String[]{jarOne, pathToSchema};
@@ -122,6 +144,9 @@ public class EntryPointTest_JAR {
 
     }
 
+    /**
+     * <p>main_TestableJar.</p>
+     */
     @Test
     public void main_TestableJar() {
         if (isLinux) {
@@ -141,6 +166,9 @@ public class EntryPointTest_JAR {
         }
     }
 
+    /**
+     * <p>main_TestableJar_Scarf.</p>
+     */
     @Test
     public void main_TestableJar_Scarf() {
         if (isLinux) {
@@ -162,6 +190,9 @@ public class EntryPointTest_JAR {
         }
     }
 
+    /**
+     * <p>main_TestableJar_Scarf_Args.</p>
+     */
     @Test
     public void main_TestableJar_Scarf_Args() {
         if (isLinux) {
@@ -189,6 +220,9 @@ public class EntryPointTest_JAR {
         }
     }
 
+    /**
+     * <p>main_TestableJar_Scarf_Stream.</p>
+     */
     @Test
     public void main_TestableJar_Scarf_Stream() {
         if (isLinux) {
@@ -209,6 +243,9 @@ public class EntryPointTest_JAR {
         }
     }
 
+    /**
+     * <p>main_TestableJar_ScarfTimeStamp.</p>
+     */
     @Test
     public void main_TestableJar_ScarfTimeStamp() {
         if (isLinux) {

@@ -20,6 +20,7 @@ import static test.TestUtilities.jarOne;
  *
  * @author RigorityJTeam
  * @since V01.00.03
+ * @version $Id: $Id
  */
 public class ScarfXMLTest {
 
@@ -33,6 +34,12 @@ public class ScarfXMLTest {
     //endregion
 
     //region Test Environment Management
+
+    /**
+     * <p>setUp.</p>
+     *
+     * @throws java.lang.Exception if any.
+     */
     @Before
     public void setUp() throws Exception {
         propertyErrorMessage = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ERROR>\nThere has been an issue setting properties.\n</ERROR>";
@@ -58,6 +65,11 @@ public class ScarfXMLTest {
         StringBuilder sampleOne = new StringBuilder();
     }
 
+    /**
+     * <p>tearDown.</p>
+     *
+     * @throws java.lang.Exception if any.
+     */
     @After
     public void tearDown() throws Exception {
         this.propertyErrorMessage = null;
@@ -70,6 +82,10 @@ public class ScarfXMLTest {
 
     //region Tests
     //@Test
+
+    /**
+     * <p>simpleFiveRuleTest.</p>
+     */
     public void simpleFiveRuleTest() {
         //String xmlStream = this.messagingSystem.getOutput(this.env, this.brokenRules);
         //TODO - Fix this

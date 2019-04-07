@@ -25,7 +25,7 @@ public class ExceptionHandler extends Exception {
      * <p>Constructor for ExceptionHandler.</p>
      *
      * @param message a {@link java.lang.String} object.
-     * @param id      a {@link ExceptionId} object.
+     * @param id      a {@link frontEnd.Interface.ExceptionId} object.
      */
     public ExceptionHandler(String message, ExceptionId id) {
         this.errorCode = id;
@@ -52,9 +52,7 @@ public class ExceptionHandler extends Exception {
         return StringUtils.trimToNull(resp.toString());
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void printStackTrace() {
         System.err.println(this.toString());
@@ -66,7 +64,7 @@ public class ExceptionHandler extends Exception {
     /**
      * <p>Getter for the field <code>errorCode</code>.</p>
      *
-     * @return a {@link ExceptionId} object.
+     * @return a {@link frontEnd.Interface.ExceptionId} object.
      */
     public ExceptionId getErrorCode() {
         return errorCode;

@@ -801,7 +801,7 @@ public class AnalyzerReport implements Serializable {
             return deserializer.readValue(file, AnalyzerReport.class);
 
         } catch (IOException e) {
-            throw new ExceptionHandler(file.getName() + " : " + e.getMessage(), ExceptionId.FILE_READ);
+            throw new ExceptionHandler("Issue de-serializing file: " + file.getName(), ExceptionId.FILE_READ);
         }
 
     }

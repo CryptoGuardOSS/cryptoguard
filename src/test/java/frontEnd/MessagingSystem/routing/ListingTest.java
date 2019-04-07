@@ -14,6 +14,7 @@ import static org.junit.Assert.*;
  *
  * @author RigorityJTeam
  * @since V01.00.02
+ * @version $Id: $Id
  */
 public class ListingTest {
     //region Test Attributes
@@ -30,6 +31,12 @@ public class ListingTest {
     //endregion
 
     //region Test Environment Configuration
+
+    /**
+     * <p>setUp.</p>
+     *
+     * @throws java.lang.Exception if any.
+     */
     @Before
     public void setUp() throws Exception {
 
@@ -55,6 +62,9 @@ public class ListingTest {
         this.scarfXMLBlock = new frontEnd.MessagingSystem.routing.outputStructures.block.ScarfXML(info);
     }
 
+    /**
+     * <p>tearDown.</p>
+     */
     @After
     public void tearDown() {
         this.info = null;
@@ -72,12 +82,20 @@ public class ListingTest {
 
     //region Tests
     //@Test
+
+    /**
+     * <p>toStringTest.</p>
+     */
     public void toStringTest() {
         for (int sizeKounter = 0; sizeKounter < this.ListingSet.size(); sizeKounter++)
             assertEquals(this.ListingSet.get(sizeKounter).toString(), this.ListingStringValues.get(sizeKounter));
     }
 
     //@Test
+
+    /**
+     * <p>getTypeOfMessagingTest.</p>
+     */
     public void getTypeOfMessagingTest() {
         try {
             assertTrue(Listing.Legacy.getTypeOfMessagingOutput(false, this.info) instanceof frontEnd.MessagingSystem.routing.outputStructures.block.Legacy);
