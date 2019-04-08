@@ -3,6 +3,7 @@ CryptoGuard: Source Code
 =============================
 
 An program analysis tool to find cryptographic misuse in Java and Android.
+Current Version: V03.04.00
 
 Prerequisites to use CryptoGuard:
 ---------------------------------

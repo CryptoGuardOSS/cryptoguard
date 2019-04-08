@@ -1,11 +1,12 @@
-# Compiled class file
-!build.gradle
+# Compiled class filetarget/
 .gradle
-out
 .idea
+/build/
+/target/
+/*.jar
+.attach_pid*
+docs
 *.iml
-build
-apk
-docs/
+*.log
 *gradlew
 *gradlew.bat

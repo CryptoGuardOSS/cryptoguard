@@ -1,0 +1,467 @@
+{
+  "definitions": {
+    "-id": {
+      "type": "integer",
+      "additionalProperties": false,
+      "default": 0,
+      "examples": [
+        0
+      ],
+      "title": "id",
+      "pattern": "^([0-9]+)$"
+    },
+    "MetricSummaryType": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Type": {
+          "type": "string"
+        },
+        "Count": {
+          "type": "integer"
+        },
+        "Sum": {
+          "type": "integer"
+        },
+        "SumOfSquares": {
+          "type": "integer"
+        },
+        "Minimum": {
+          "type": "integer"
+        },
+        "Maximum": {
+          "type": "integer"
+        },
+        "Average": {
+          "type": "number"
+        },
+        "StandardDeviation": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "Type",
+        "Count",
+        "Sum",
+        "SumOfSquares",
+        "Minimum",
+        "Maximum",
+        "Average",
+        "StandardDeviation"
+      ],
+      "title": "MetricSummaryType"
+    },
+    "MetricType": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "-id": {
+          "$ref": "#/definitions/-id"
+        },
+        "Location": {
+          "type": "string"
+        },
+        "Class": {
+          "type": "string"
+        },
+        "Method": {
+          "type": "string"
+        },
+        "Type": {
+          "type": "string"
+        },
+        "Value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "-id",
+        "Location",
+        "Type",
+        "Value"
+      ],
+      "title": "MetricType"
+    },
+    "BugCategoryType": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "-group": {
+          "type": "string"
+        },
+        "-code": {
+          "type": "string"
+        },
+        "-count": {
+          "type": "integer"
+        },
+        "-bytes": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "-group",
+        "-code",
+        "-count",
+        "-bytes"
+      ],
+      "title": "BugCategoryType"
+    },
+    "LocationType": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "SourceFile": {
+          "type": "string"
+        },
+        "StartLine": {
+          "type": "integer"
+        },
+        "EndLine": {
+          "type": "integer"
+        },
+        "StartColumn": {
+          "type": "integer"
+        },
+        "EndColumn": {
+          "type": "integer"
+        },
+        "Explanation": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "SourceFile"
+      ],
+      "title": "LocationType"
+    },
+    "MethodType": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "-id": {
+          "$ref": "#/definitions/-id"
+        },
+        "-primary": {
+          "type": "boolean"
+        },
+        "-self": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "-id",
+        "-primary"
+      ],
+      "title": "MethodType"
+    },
+    "BugInstanceType": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ClassName": {
+          "type": "string"
+        },
+        "Method": {
+          "type": "array",
+          "additionalItems": false,
+          "items": {
+            "$ref": "#/definitions/MethodType"
+          },
+          "title": "Method"
+        },
+        "Location": {
+          "type": "array",
+          "additionalItems": false,
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/LocationType"
+          },
+          "title": "Location"
+        },
+        "CweId": {
+          "type": "array",
+          "additionalItems": false,
+          "items": {
+            "type": "string"
+          },
+          "title": "CweId"
+        },
+        "BugGroup": {
+          "type": "string"
+        },
+        "BugCode": {
+          "type": "string"
+        },
+        "BugRank": {
+          "type": "integer"
+        },
+        "BugSeverity": {
+          "type": "integer"
+        },
+        "BugMessage": {
+          "type": "string"
+        },
+        "ResolutionSuggestion": {
+          "type": "string"
+        },
+        "BugTrace": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "BuildId": {
+              "type": "integer"
+            },
+            "AssessmentReportFile": {
+              "type": "string"
+            },
+            "InstanceLocation": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "Xpath": {
+                  "type": "string"
+                },
+                "LineNum": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "Start": {
+                      "type": "integer"
+                    },
+                    "End": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "Start",
+                    "End"
+                  ],
+                  "title": "LineNum"
+                }
+              }
+            }
+          },
+          "required": [
+            "Start",
+            "End"
+          ],
+          "title": "BugTrace"
+        },
+        "-id": {
+          "$ref": "#/definitions/-id"
+        }
+      },
+      "required": [
+        "-id",
+        "BugLocations",
+        "BugCode"
+      ],
+      "title": "BugInstanceType"
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "object",
+  "additionalProperties": false,
+  "title": "AnalyzerReport",
+  "required": [
+    "-assessment_start_ts",
+    "-package_name",
+    "-package_version",
+    "-build_root_dir",
+    "-package_root_dir",
+    "-parser_fw",
+    "-parser_fw_version",
+    "-platform_name",
+    "-tool_name",
+    "-tool_version",
+    "-uuid",
+    "BugSummary"
+  ],
+  "properties": {
+    "-assess_fw": {
+      "$id": "#/properties/AnalyzerReport/properties/-assess_fw",
+      "type": "string",
+      "title": "The -assess_fw Schema",
+      "default": "",
+      "examples": [
+        "UNKNOWN"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "-assess_fw_version": {
+      "$id": "#/properties/AnalyzerReport/properties/-assess_fw_version",
+      "type": "string",
+      "title": "The -assess_fw_version Schema",
+      "default": "",
+      "examples": [
+        "UNKNOWN"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "-assessment_start_ts": {
+      "$id": "#/properties/AnalyzerReport/properties/-assessment_start_ts",
+      "type": "string",
+      "title": "The -assessment_start_ts Schema",
+      "default": "",
+      "examples": [
+        "2019-04-04_13:35:31"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "-build_fw": {
+      "$id": "#/properties/AnalyzerReport/properties/-build_fw",
+      "type": "string",
+      "title": "The -package_name Schema",
+      "default": "",
+      "examples": [
+        "testable-jar"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "-build_fw_version": {
+      "$id": "#/properties/AnalyzerReport/properties/-build_fw_version",
+      "type": "string",
+      "title": "The -package_name Schema",
+      "default": "",
+      "examples": [
+        "testable-jar"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "-package_name": {
+      "$id": "#/properties/AnalyzerReport/properties/-package_name",
+      "type": "string",
+      "title": "The -package_name Schema",
+      "default": "",
+      "examples": [
+        "testable-jar"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "-package_version": {
+      "$id": "#/properties/AnalyzerReport/properties/-package_version",
+      "type": "string",
+      "title": "The -package_version Schema",
+      "default": "",
+      "examples": [
+        "UNKNOWN"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "-build_root_dir": {
+      "$id": "#/properties/AnalyzerReport/properties/-build_root_dir",
+      "type": "string",
+      "title": "The -build_root_dir Schema",
+      "default": "",
+      "examples": [
+        "/home/drmonster/.Workspaces/intellij/rigorityj/testable-jar.jar"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "-package_root_dir": {
+      "$id": "#/properties/AnalyzerReport/properties/-package_root_dir",
+      "type": "string",
+      "title": "The -package_root_dir Schema",
+      "default": "",
+      "examples": [
+        "testable-jar.jar/"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "-parser_fw": {
+      "$id": "#/properties/AnalyzerReport/properties/-parser_fw",
+      "type": "string",
+      "title": "The -parser_fw Schema",
+      "default": "",
+      "examples": [
+        "UNKNOWN"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "-parser_fw_version": {
+      "$id": "#/properties/AnalyzerReport/properties/-parser_fw_version",
+      "type": "string",
+      "title": "The -parser_fw_version Schema",
+      "default": "",
+      "examples": [
+        "UNKNOWN"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "-platform_name": {
+      "$id": "#/properties/AnalyzerReport/properties/-platform_name",
+      "type": "string",
+      "title": "The -platform_name Schema",
+      "default": "",
+      "examples": [
+        "Ubuntu_18.04.2_LTS"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "-tool_name": {
+      "$id": "#/properties/AnalyzerReport/properties/-tool_name",
+      "type": "string",
+      "title": "The -tool_name Schema",
+      "default": "",
+      "examples": [
+        "Cryptoguard"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "-tool_version": {
+      "$id": "#/properties/AnalyzerReport/properties/-tool_version",
+      "type": "string",
+      "title": "The -tool_version Schema",
+      "default": "",
+      "examples": [
+        "V03.03.09"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "-uuid": {
+      "$id": "#/properties/AnalyzerReport/properties/-uuid",
+      "type": "string",
+      "title": "The -uuid Schema",
+      "default": "",
+      "examples": [
+        "73b65515-bdea-4acb-92af-cfc94f67d804"
+      ],
+      "pattern": "^([0-9a-zA-Z-?]+)$"
+    },
+    "BugInstance": {
+      "$id": "#/properties/AnalyzerReport/properties/BugInstance",
+      "type": "array",
+      "additionalItems": false,
+      "items": {
+        "$ref": "#/definitions/BugInstanceType"
+      },
+      "title": "BugInstance"
+    },
+    "BugCategory": {
+      "$id": "#/properties/AnalyzerReport/properties/BugSummary",
+      "type": "array",
+      "minItems": 1,
+      "additionalItems": false,
+      "items": {
+        "$ref": "#/definitions/BugCategoryType"
+      },
+      "title": "BugCategory"
+    },
+    "Metric": {
+      "$id": "#/properties/AnalyzerReport/properties/Metric",
+      "type": "array",
+      "additionalItems": false,
+      "items": {
+        "$ref": "#/definitions/MetricType"
+      },
+      "title": "Metric"
+    },
+    "MetricSummaries": {
+      "$id": "#/properties/AnalyzerReport/properties/MetricSummaries",
+      "$ref": "#/definitions/MetricSummaryType",
+      "title": "MetricSummaries"
+    }
+  }
+}
