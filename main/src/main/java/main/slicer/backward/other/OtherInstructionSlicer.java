@@ -92,7 +92,7 @@ public class OtherInstructionSlicer extends BackwardFlowAnalysis {
             if (propertyUseMap.get(usebox.getValue().toString()) == null) {
 
                 List<PropertyAnalysisResult> specialInitInsts;
-                if (usebox.getValue().toString().startsWith("r0.")) {
+                if (usebox.getValue().toString().matches("r[0-9]+\\.<[^\\>]+>")) {
                     specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString().substring(3));
                 } else if (usebox.getValue().toString().startsWith("this.")) {
                     specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString().substring(5));

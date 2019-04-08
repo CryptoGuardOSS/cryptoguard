@@ -41,6 +41,7 @@ public class PropertyInstructionSlicer extends BackwardFlowAnalysis {
 
     @Override
     protected void flowThrough(Object in, Object node, Object out) {
+
         FlowSet inSet = (FlowSet) in,
                 outSet = (FlowSet) out;
         Unit currInstruction = (Unit) node;
@@ -51,7 +52,7 @@ public class PropertyInstructionSlicer extends BackwardFlowAnalysis {
                     if (currInstruction.getUseBoxes().size() == 1) {
                         Value localValue = new BafLocal("$fakeLocal_" + defBox.getValue().toString(), currInstruction.getUseBoxes().get(0).getValue().getType());
                         AssignStmt assignStmt = Jimple.v().newAssignStmt(localValue, currInstruction.getUseBoxes().get(0).getValue());
-                        addFakeInstInOutSet(outSet, assignStmt, defBox.getValue().toString());
+                        addFakeInstInOutSet(outSet, assignStmt, defBox.getValue().toString(), inSet);
                         return;
                     } else if (currInstruction.getUseBoxes().size() > 1) {
 
@@ -60,14 +61,14 @@ public class PropertyInstructionSlicer extends BackwardFlowAnalysis {
                                 if (useBox.getValue().toString().contains("invoke ")) {
                                     Value localValue = new BafLocal("$fakeLocal_" + defBox.getValue().toString(), useBox.getValue().getType());
                                     AssignStmt assignStmt = Jimple.v().newAssignStmt(localValue, useBox.getValue());
-                                    addFakeInstInOutSet(outSet, assignStmt, defBox.getValue().toString());
+                                    addFakeInstInOutSet(outSet, assignStmt, defBox.getValue().toString(), inSet);
                                     return;
                                 }
                             }
                         } else if (currInstruction.getUseBoxes().size() == 2) {
                             Value localValue = new BafLocal("$fakeLocal_" + defBox.getValue().toString(), currInstruction.getUseBoxes().get(1).getValue().getType());
                             AssignStmt assignStmt = Jimple.v().newAssignStmt(localValue, currInstruction.getUseBoxes().get(1).getValue());
-                            addFakeInstInOutSet(outSet, assignStmt, defBox.getValue().toString());
+                            addFakeInstInOutSet(outSet, assignStmt, defBox.getValue().toString(), inSet);
                             return;
                         }
                     }
@@ -152,7 +153,7 @@ public class PropertyInstructionSlicer extends BackwardFlowAnalysis {
             if (propertyUseMap.get(usebox.getValue().toString()) == null) {
 
                 List<PropertyAnalysisResult> specialInitInsts = null;
-                if (usebox.getValue().toString().startsWith("r0.")) {
+                if (usebox.getValue().toString().matches("r[0-9]+\\.<[^\\>]+>")) {
                     specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString().substring(3));
                 } else if (usebox.getValue().toString().startsWith("this.")) {
                     specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString().substring(5));
@@ -178,7 +179,7 @@ public class PropertyInstructionSlicer extends BackwardFlowAnalysis {
         outSet.add(currUnitContainer);
     }
 
-    private void addFakeInstInOutSet(FlowSet outSet, Unit fake, String original) {
+    private void addFakeInstInOutSet(FlowSet outSet, Unit fake, String original, FlowSet inset) {
 
         if (original.startsWith("r0.")) {
             original = original.substring(3);
@@ -192,6 +193,7 @@ public class PropertyInstructionSlicer extends BackwardFlowAnalysis {
         currUnitContainer.setOriginalProperty(original);
 
         outSet.add(currUnitContainer);
+        outSet.union(inset);
     }
 
     private boolean isInvokeOn(Unit currInstruction, ValueBox usebox) {

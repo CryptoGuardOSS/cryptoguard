@@ -1,6 +1,7 @@
 package main.rule.base;
 
 import main.analyzer.backward.Analysis;
+import main.analyzer.backward.AssignInvokeUnitContainer;
 import main.analyzer.backward.UnitContainer;
 import soot.ValueBox;
 import soot.jimple.Constant;
@@ -22,21 +23,34 @@ public abstract class PatternMatcherRuleChecker extends BaseRuleChecker {
         }
 
         for (UnitContainer e : analysis.getAnalysisResult()) {
-            for (ValueBox usebox : e.getUnit().getUseBoxes()) {
-                if (usebox.getValue() instanceof Constant) {
-                    boolean found = false;
 
-                    for (String regex : getPatternsToMatch()) {
-                        if (usebox.getValue().toString().matches(regex)) {
-                            putIntoMap(predictableSourcMap, e, usebox.getValue().toString());
-                            found = true;
-                            break;
-                        }
-                    }
+            if (e instanceof AssignInvokeUnitContainer) {
+                List<UnitContainer> resFromInside = ((AssignInvokeUnitContainer) e).getAnalysisResult();
 
-                    if (!found) {
-                        putIntoMap(othersSourceMap, e, usebox.getValue().toString());
+                for (UnitContainer unit : resFromInside) {
+                    checkForMatch(unit);
+                }
+            }
+
+            checkForMatch(e);
+        }
+    }
+
+    private void checkForMatch(UnitContainer e) {
+        for (ValueBox usebox : e.getUnit().getUseBoxes()) {
+            if (usebox.getValue() instanceof Constant) {
+                boolean found = false;
+
+                for (String regex : getPatternsToMatch()) {
+                    if (usebox.getValue().toString().matches(regex)) {
+                        putIntoMap(predictableSourcMap, e, usebox.getValue().toString());
+                        found = true;
+                        break;
                     }
+                }
+
+                if (!found) {
+                    putIntoMap(othersSourceMap, e, usebox.getValue().toString());
                 }
             }
         }
