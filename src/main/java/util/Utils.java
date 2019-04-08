@@ -41,7 +41,7 @@ import static soot.SootClass.BODIES;
  *
  * @author RigorityJTeam
  * @version $Id: $Id
- * @since V01.00.00
+ * @since 01.00.00
  */
 public class Utils {
     /**
@@ -63,6 +63,8 @@ public class Utils {
      * Constant <code>localPath="System.getProperty(user.dir)"</code>
      */
     public final static String localPath = System.getProperty("user.dir");
+    public final static String projectVersion = "V03.04.00";
+    public final static String projectName = "CryptoGuard";
     /**
      * Constant <code>userPath="System.getProperty(user.home)"</code>
      */

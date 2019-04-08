@@ -7,11 +7,13 @@ import org.apache.commons.cli.*;
 import rule.engine.EngineType;
 import util.Utils;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
 
 /**
  * <p>ArgumentsCheck class.</p>
@@ -25,7 +27,6 @@ import java.util.Properties;
  */
 public class ArgumentsCheck {
 
-    private static final String PropertiesFile = "gradle.properties";
 
     /**
      * The fail fast parameter Check method
@@ -79,18 +80,6 @@ public class ArgumentsCheck {
         //region Printing Help or Version
         if (cmd.hasOption(argsIdentifier.HELP.getId()))
             failFast(null, cmdLineArgs, false);
-        else if (cmd.hasOption(argsIdentifier.VERSION.getId())) {
-            String version = "UNKNOWN";
-            try {
-                Properties Properties = new Properties();
-                Properties.load(new FileInputStream(PropertiesFile));
-                version = Properties.getProperty("version");
-                {
-                }
-            } catch (IOException e) {
-                throw new ExceptionHandler("V:" + version, ExceptionId.HELP);
-            }
-        }
         //endregion
 
         EngineType type = EngineType.getFromFlag(cmd.getOptionValue(argsIdentifier.FORMAT.getId()));
@@ -261,15 +250,7 @@ public class ArgumentsCheck {
         HelpFormatter helper = new HelpFormatter();
         helper.setOptionComparator(null);
 
-        String projectName = "Project";
-
-        try {
-            Properties Properties = new Properties();
-            Properties.load(new FileInputStream(PropertiesFile));
-            projectName = Properties.getProperty("projectName") + ": " + Properties.getProperty("versionNumber");
-        } catch (IOException e) {
-        }
-
+        String projectName = Utils.projectName + ": " + Utils.projectVersion;
         StringWriter message = new StringWriter();
         PrintWriter redirect = new PrintWriter(message);
 

@@ -188,6 +188,17 @@ public enum Listing {
             return new frontEnd.MessagingSystem.routing.inputStructures.Legacy().helpInfo();
         }
     }
+
+    public static String getShortHelp() {
+        StringBuilder helpString = new StringBuilder("{");
+
+        for (Listing in : Listing.values())
+            helpString.append(in.getType()).append(": ").append(in.getFlag()).append(", ");
+
+        helpString.append("}");
+
+        return helpString.toString();
+    }
     //endregion
 
     //endregion

@@ -1,5 +1,6 @@
 package frontEnd;
 
+import frontEnd.MessagingSystem.routing.Listing;
 import rule.engine.EngineType;
 
 /**
@@ -19,7 +20,7 @@ public enum argsIdentifier {
     DEPENDENCY("d", "The dependency to be scanned, (use the relative path)."),
     OUT("o", "The file to be created with the output (default will be the project name)."),
     TIMEMEASURE("t", "Output the time of the internal processes."),
-    FORMATOUT("m", "The output format you want to produce."),
+    FORMATOUT("m", "The output format you want to produce " + Listing.getShortHelp() + "."),
     PRETTY("n", "Output the analysis information in a 'pretty' format."),
     SKIPINPUTVALIDATION("x", "Skip input validation."),
     EXPERIMENTRESULTS("exp", "View the experiment based results."),

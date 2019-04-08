@@ -36,6 +36,10 @@ task updateVersion {
                 dir: '.',
                 includes: 'pom.xml'
         )
+        fileset(
+                dir: 'src/main/java/util',
+                includes: 'Utils.java'
+        )
     }
 }
 
