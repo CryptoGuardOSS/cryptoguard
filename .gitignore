@@ -7,5 +7,6 @@
 .attach_pid*
 docs
 *.iml
+*.log
 *gradlew
 *gradlew.bat

@@ -191,6 +191,10 @@ public class EntryPointTest_JAVA {
                 //region Validating output
                 AnalyzerReport report = AnalyzerReport.deserialize(JacksonSerializer.JacksonType.XML, new File(javaFileOne));
                 //endregion
+
+                List<String> results = Files.readAllLines(Paths.get(javaFileOne), Charset.forName("UTF-8"));
+
+                assertTrue(results.size() > 1);
             } catch (Exception e) {
                 assertNull(e);
                 e.printStackTrace();
@@ -219,12 +223,7 @@ public class EntryPointTest_JAVA {
 
                 List<String> results = Files.readAllLines(Paths.get(javaFileThree), Charset.forName("UTF-8"));
 
-                int count = 0;
-                for (String line : results)
-                    if (line.contains("Violated"))
-                        count++;
-
-                //assertTrue(count > 0);
+                assertTrue(results.size() > 1);
 
 
             } catch (Exception e) {
