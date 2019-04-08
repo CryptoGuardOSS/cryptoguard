@@ -2,7 +2,7 @@ dir=./
 testDir=$(dir)build/tmp/
 java7=${JAVA7_HOME}/bin/java
 
-ver=V03.04.00
+ver=V03.04.01
 name=cryptoguard
 scan=$(java7) -jar $(dir)build/libs/$(name)-$(ver).jar
 scarfXSD=$(dir)src/main/resources/Scarf/scarf_v1.2.xsd

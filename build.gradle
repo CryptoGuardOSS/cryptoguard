@@ -1,3 +1,6 @@
+import java.text.SimpleDateFormat
+import java.util.Date
+
 apply plugin: "java"
 sourceCompatibility = JavaVersion.VERSION_1_7
 targetCompatibility = JavaVersion.VERSION_1_7
@@ -43,7 +46,28 @@ task updateVersion {
     }
 }
 
+task updateCopyRightYear {
+    Properties props = new Properties()
+    InputStream ins = new FileInputStream(file("gradle.properties"))
+    props.load(ins)
+
+    SimpleDateFormat year = new SimpleDateFormat ("yyyy")
+
+    ant.replaceregexp(
+            match:'Copyright © [0-9]{4} CryptoGuard',
+            replace:'Copyright © ' + year.format(new Date()) + ' CryptoGuard',
+            flags:'g',
+            byline:true) {
+
+        fileset(
+                dir: '.',
+                includes: '*.rst'
+        )
+    }
+}
+
 build.dependsOn(updateVersion)
+build.dependsOn(updateCopyRightYear)
 
 repositories {
     mavenCentral()
