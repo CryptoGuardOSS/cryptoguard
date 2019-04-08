@@ -68,7 +68,10 @@ public class UnitContainer {
      */
     @Override
     public int hashCode() {
-        return unit.toString().hashCode();
+        return ("UnitContainer{" +
+                "unit=" + unit +
+                ", method='" + method + "\'" +
+                "}").hashCode();
     }
 
     /**
