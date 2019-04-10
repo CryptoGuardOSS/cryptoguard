@@ -133,8 +133,8 @@ task release {
 }
 
 dependencies {
-    compile name: 'soot-trunk'
-    //compile 'ca.mcgill.sable:soot:3.3.0'
+    //compile name: 'soot_j9_20190409'
+    compile name: 'soot_3.3.0'
     compile "org.codehaus.groovy:groovy:2.5.2"
     compile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'junit', name: 'junit', version: '4.12'

@@ -138,7 +138,7 @@ public class EntryPointTest_JAVA {
 
     }
 
-    @Test
+    //@Test
     /**
      * <p>main_TestableFiles_SingleTest.</p>
      */
@@ -171,7 +171,7 @@ public class EntryPointTest_JAVA {
         }
     }
 
-    @Test
+    //@Test
     /**
      * <p>main_TestableFiles_SingleTest_Scarf.</p>
      */
@@ -205,7 +205,7 @@ public class EntryPointTest_JAVA {
 
     }
 
-    @Test
+    //@Test
     /**
      * <p>main_TestableFiles_MultiTest.</p>
      */
