@@ -26,6 +26,8 @@ public class TestUtilities {
     public static final String testRec = Utils.osPathJoin(basePath, "src", "test", "resources");
     public static final String srcOneGrv = Utils.osPathJoin(testRec, "testable-jar");
     public static final String javaSource = Utils.osPathJoin(srcOneGrv, "src", "main", "java", "tester");
+    public static final String classSource = Utils.osPathJoin(srcOneGrv, "build", "classes", "java", "main", "tester");
+    public static final String[] classFiles = {Utils.osPathJoin(classSource, "PBEUsage.class"), Utils.osPathJoin(classSource, "UrlFrameWorks.class")};
     public static final String[] javaFiles = {Utils.osPathJoin(javaSource, "PBEUsage.java"), Utils.osPathJoin(javaSource, "UrlFrameWorks.java")};
     /** Constant <code>jarOne="Utils.osPathJoin(basePath, samples, tes"{trunked}</code> */
     public static final String jarOne = Utils.osPathJoin(testRec, "testable-jar", "build", "libs", "testable-jar.jar");

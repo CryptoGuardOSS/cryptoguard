@@ -8,7 +8,6 @@ import soot.G;
 import util.Utils;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -27,9 +26,6 @@ import static test.TestUtilities.*;
  */
 public class EntryPointTest_CLASS {
 
-    private final String src = Utils.osPathJoin(srcOneGrv, "build", "classes", "main", "tester");
-    private final String[] files = {Utils.osPathJoin(src, "PBEUsage.class"), Utils.osPathJoin(src, "UrlFrameWorks.class")};
-    private final String srcOneGrvDep = Utils.osPathJoin(srcOneGrv, "build", "dependencies");
     private final String tempFileOutTxt = Utils.osPathJoin(testPath, "testable-jar_classFiles.txt");
     private final String tempFileOutXML = Utils.osPathJoin(testPath, "testable-jar_classFiles.xml");
     //region Attributes
@@ -115,32 +111,6 @@ public class EntryPointTest_CLASS {
 
     //region Tests
     //@Test
-
-    /**
-     * <p>testEnvironmentVariables.</p>
-     */
-    public void testEnvironmentVariables() {
-        String[] dirLists = new String[]{srcOneGrv, srcOneGrvDep};
-
-        for (String file : files) {
-            File tempFile = new File(file);
-
-            assertTrue(tempFile.exists());
-            assertTrue(tempFile.isFile());
-        }
-
-        for (String dir : dirLists) {
-            File tempDir = new File(dir);
-
-            assertTrue(tempDir.exists());
-            assertTrue(tempDir.isDirectory());
-        }
-
-
-    }
-
-    //@Test TODO - Check This
-
     /**
      * <p>main_TestableFiles_SingleTest.</p>
      */
@@ -148,8 +118,8 @@ public class EntryPointTest_CLASS {
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES.getFlag()) +
-                            makeArg(argsIdentifier.SOURCE, files[0]) +/*
-                            makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +*/
+                            makeArg(argsIdentifier.SOURCE, classFiles[0]) +
+                            makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.OUT, tempFileOutTxt);
 
             try {
@@ -173,8 +143,7 @@ public class EntryPointTest_CLASS {
         }
     }
 
-    //@Test TODO - Check This
-
+    //@Test
     /**
      * <p>main_TestableFiles_MultiTest.</p>
      */
@@ -182,8 +151,8 @@ public class EntryPointTest_CLASS {
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES.getFlag()) +
-                            makeArg(argsIdentifier.SOURCE, Utils.join(" ", files)) +/*
-                            makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +*/
+                            makeArg(argsIdentifier.SOURCE, Utils.join(" ", classFiles)) +
+                            makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.OUT, tempFileOutTxt);
 
             try {
