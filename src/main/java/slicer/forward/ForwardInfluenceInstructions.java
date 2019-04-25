@@ -22,7 +22,7 @@ public class ForwardInfluenceInstructions implements InfluenceInstructions {
      * <p>Constructor for ForwardInfluenceInstructions.</p>
      *
      * @param graph           a {@link soot.toolkits.graph.DirectedGraph} object.
-     * @param slicingCriteria a {@link SlicingCriteria} object.
+     * @param slicingCriteria a {@link slicer.forward.SlicingCriteria} object.
      */
     public ForwardInfluenceInstructions(DirectedGraph graph,
                                         SlicingCriteria slicingCriteria) {

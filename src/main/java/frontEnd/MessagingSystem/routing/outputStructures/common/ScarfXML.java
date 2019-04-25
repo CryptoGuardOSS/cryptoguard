@@ -23,8 +23,8 @@ public class ScarfXML {
     /**
      * <p>marshalling.</p>
      *
-     * @param info a {@link EnvironmentInformation} object.
-     * @return a {@link com.example.response.AnalyzerReport} object.
+     * @param info a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
+     * @return a {@link AnalyzerReport} object.
      */
     public static AnalyzerReport marshalling(EnvironmentInformation info) {
         AnalyzerReport report = new AnalyzerReport();
@@ -53,13 +53,13 @@ public class ScarfXML {
     /**
      * <p>marshalling.</p>
      *
-     * @param issue    a {@link AnalysisIssue} object.
-     * @param cwes     a {@link CWEList} object.
+     * @param issue    a {@link frontEnd.MessagingSystem.AnalysisIssue} object.
+     * @param cwes     a {@link CWE_Reader.CWEList} object.
      * @param fileName a {@link java.lang.String} object.
      * @param id       a {@link java.lang.Integer} object.
      * @param buildId  a {@link java.lang.Integer} object.
      * @param xPath    a {@link java.lang.String} object.
-     * @return a {@link com.example.response.BugInstanceType} object.
+     * @return a {@link BugInstance} object.
      */
     public static BugInstance marshalling(AnalysisIssue issue, CWEList cwes, String fileName, Integer id, Integer buildId, String xPath) {
         BugInstance instance = new BugInstance();

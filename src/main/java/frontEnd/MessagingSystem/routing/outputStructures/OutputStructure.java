@@ -41,7 +41,7 @@ public abstract class OutputStructure {
     /**
      * <p>Constructor for OutputStructure.</p>
      *
-     * @param info a {@link EnvironmentInformation} object.
+     * @param info a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
      */
     public OutputStructure(EnvironmentInformation info) {
         this.source = info;
@@ -56,15 +56,15 @@ public abstract class OutputStructure {
     /**
      * <p>startAnalyzing.</p>
      *
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public abstract void startAnalyzing() throws ExceptionHandler;
 
     /**
      * <p>addIssue.</p>
      *
-     * @param issue a {@link AnalysisIssue} object.
-     * @throws ExceptionHandler if any.
+     * @param issue a {@link frontEnd.MessagingSystem.AnalysisIssue} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public void addIssue(AnalysisIssue issue) throws ExceptionHandler {
         //Keeping a rolling count of the different kinds of bugs occuring
@@ -78,12 +78,18 @@ public abstract class OutputStructure {
     /**
      * <p>stopAnalyzing.</p>
      *
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public abstract void stopAnalyzing() throws ExceptionHandler;
     //endregion
 
     //region Public helper methods
+
+    /**
+     * <p>createBugCategoryList.</p>
+     *
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.BugSummary} object.
+     */
     public BugSummary createBugCategoryList() {
         BugSummary bugDict = new BugSummary();
 
@@ -105,7 +111,7 @@ public abstract class OutputStructure {
     /**
      * <p>Getter for the field <code>source</code>.</p>
      *
-     * @return a {@link EnvironmentInformation} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
      */
     public EnvironmentInformation getSource() {
         return source;
@@ -123,7 +129,7 @@ public abstract class OutputStructure {
     /**
      * <p>addIssueToCollection.</p>
      *
-     * @param issue a {@link AnalysisIssue} object.
+     * @param issue a {@link frontEnd.MessagingSystem.AnalysisIssue} object.
      */
     public void addIssueToCollection(AnalysisIssue issue) {
         //Keeping a rolling count of the different kinds of bugs occuring
@@ -148,7 +154,7 @@ public abstract class OutputStructure {
     /**
      * <p>Getter for the field <code>type</code>.</p>
      *
-     * @return a {@link EngineType} object.
+     * @return a {@link rule.engine.EngineType} object.
      */
     public EngineType getType() {
         return type;
@@ -175,7 +181,7 @@ public abstract class OutputStructure {
     /**
      * <p>Getter for the field <code>cwes</code>.</p>
      *
-     * @return a {@link CWEList} object.
+     * @return a {@link CWE_Reader.CWEList} object.
      */
     public CWEList getCwes() {
         return cwes;

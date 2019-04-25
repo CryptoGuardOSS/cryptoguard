@@ -17,6 +17,9 @@ import java.util.List;
 /**
  * BugInstanceType
  * <p>
+ *
+ * @author franceme
+ * @version $Id: $Id
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -97,18 +100,20 @@ public class BugInstance implements Serializable {
     }
 
     /**
-     * @param id
-     * @param bugCode
-     * @param bugTrace
-     * @param bugSeverity
-     * @param bugRank
-     * @param bugMessage
-     * @param cweId
-     * @param method
-     * @param className
-     * @param bugGroup
-     * @param resolutionSuggestion
-     * @param location
+     * <p>Constructor for BugInstance.</p>
+     *
+     * @param id a int.
+     * @param bugCode a {@link java.lang.String} object.
+     * @param bugTrace a {@link frontEnd.MessagingSystem.routing.structure.Scarf.BugTrace} object.
+     * @param bugSeverity a int.
+     * @param bugRank a int.
+     * @param bugMessage a {@link java.lang.String} object.
+     * @param cweId a {@link java.util.List} object.
+     * @param method a {@link java.util.List} object.
+     * @param className a {@link java.lang.String} object.
+     * @param bugGroup a {@link java.lang.String} object.
+     * @param resolutionSuggestion a {@link java.lang.String} object.
+     * @param location a {@link java.util.List} object.
      */
     public BugInstance(String className, List<Method> method, List<Location> location, List<String> cweId, String bugGroup, String bugCode, int bugRank, int bugSeverity, String bugMessage, String resolutionSuggestion, BugTrace bugTrace, int id) {
         super();
@@ -126,16 +131,32 @@ public class BugInstance implements Serializable {
         this.id = id;
     }
 
+    /**
+     * <p>Getter for the field <code>className</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     @JsonProperty("ClassName")
     public String getClassName() {
         return className;
     }
 
+    /**
+     * <p>Setter for the field <code>className</code>.</p>
+     *
+     * @param className a {@link java.lang.String} object.
+     */
     @JsonProperty("ClassName")
     public void setClassName(String className) {
         this.className = className;
     }
 
+    /**
+     * <p>withClassName.</p>
+     *
+     * @param className a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.BugInstance} object.
+     */
     public BugInstance withClassName(String className) {
         this.className = className;
         return this;
@@ -144,6 +165,8 @@ public class BugInstance implements Serializable {
     /**
      * Method
      * <p>
+     *
+     * @return a {@link java.util.List} object.
      */
     @JacksonXmlElementWrapper(useWrapping = true, localName = "Methods")
     @JsonProperty("Method")
@@ -153,6 +176,11 @@ public class BugInstance implements Serializable {
         return method;
     }
 
+    /**
+     * <p>addMethod.</p>
+     *
+     * @param newMethod a {@link frontEnd.MessagingSystem.routing.structure.Scarf.Method} object.
+     */
     public void addMethod(Method newMethod) {
         if (this.method == null)
             this.method = new ArrayList<>();
@@ -162,6 +190,8 @@ public class BugInstance implements Serializable {
     /**
      * Method
      * <p>
+     *
+     * @param method a {@link java.util.List} object.
      */
     @JsonProperty("Method")
     @JacksonXmlElementWrapper(useWrapping = true, localName = "Methods")
@@ -169,6 +199,12 @@ public class BugInstance implements Serializable {
         this.method = method;
     }
 
+    /**
+     * <p>withMethod.</p>
+     *
+     * @param method a {@link java.util.List} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.BugInstance} object.
+     */
     public BugInstance withMethod(List<Method> method) {
         this.method = method;
         return this;
@@ -179,6 +215,8 @@ public class BugInstance implements Serializable {
      * <p>
      * <p>
      * (Required)
+     *
+     * @return a {@link java.util.List} object.
      */
     @JacksonXmlElementWrapper(useWrapping = true, localName = "BugLocations")
     @JsonProperty("Location")
@@ -188,6 +226,11 @@ public class BugInstance implements Serializable {
         return location;
     }
 
+    /**
+     * <p>addBugLocation.</p>
+     *
+     * @param location a {@link frontEnd.MessagingSystem.routing.structure.Scarf.Location} object.
+     */
     public void addBugLocation(Location location) {
         if (this.location == null)
             this.location = new ArrayList<>();
@@ -199,6 +242,8 @@ public class BugInstance implements Serializable {
      * <p>
      * <p>
      * (Required)
+     *
+     * @param locations a {@link java.util.List} object.
      */
     @JacksonXmlElementWrapper(useWrapping = true, localName = "BugLocations")
     @JsonProperty("Location")
@@ -206,6 +251,12 @@ public class BugInstance implements Serializable {
         this.location = locations;
     }
 
+    /**
+     * <p>withBugLocations.</p>
+     *
+     * @param bugLocations a {@link java.util.List} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.BugInstance} object.
+     */
     public BugInstance withBugLocations(List<Location> bugLocations) {
         this.location = bugLocations;
         return this;
@@ -214,6 +265,8 @@ public class BugInstance implements Serializable {
     /**
      * CweId
      * <p>
+     *
+     * @return a {@link java.util.List} object.
      */
     @JacksonXmlElementWrapper(useWrapping = false)
     @JsonProperty("CweId")
@@ -226,6 +279,8 @@ public class BugInstance implements Serializable {
     /**
      * CweId
      * <p>
+     *
+     * @param cweId a {@link java.util.List} object.
      */
     @JacksonXmlElementWrapper(useWrapping = false)
     @JsonProperty("CweId")
@@ -233,21 +288,43 @@ public class BugInstance implements Serializable {
         this.cweId = cweId;
     }
 
+    /**
+     * <p>withCweId.</p>
+     *
+     * @param cweId a {@link java.util.List} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.BugInstance} object.
+     */
     public BugInstance withCweId(List<String> cweId) {
         this.cweId = cweId;
         return this;
     }
 
+    /**
+     * <p>Getter for the field <code>bugGroup</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     @JsonProperty("BugGroup")
     public String getBugGroup() {
         return bugGroup;
     }
 
+    /**
+     * <p>Setter for the field <code>bugGroup</code>.</p>
+     *
+     * @param bugGroup a {@link java.lang.String} object.
+     */
     @JsonProperty("BugGroup")
     public void setBugGroup(String bugGroup) {
         this.bugGroup = bugGroup;
     }
 
+    /**
+     * <p>withBugGroup.</p>
+     *
+     * @param bugGroup a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.BugInstance} object.
+     */
     public BugInstance withBugGroup(String bugGroup) {
         this.bugGroup = bugGroup;
         return this;
@@ -255,6 +332,8 @@ public class BugInstance implements Serializable {
 
     /**
      * (Required)
+     *
+     * @return a {@link java.lang.String} object.
      */
     @JsonProperty("BugCode")
     public String getBugCode() {
@@ -263,72 +342,144 @@ public class BugInstance implements Serializable {
 
     /**
      * (Required)
+     *
+     * @param bugCode a {@link java.lang.String} object.
      */
     @JsonProperty("BugCode")
     public void setBugCode(String bugCode) {
         this.bugCode = bugCode;
     }
 
+    /**
+     * <p>withBugCode.</p>
+     *
+     * @param bugCode a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.BugInstance} object.
+     */
     public BugInstance withBugCode(String bugCode) {
         this.bugCode = bugCode;
         return this;
     }
 
+    /**
+     * <p>Getter for the field <code>bugRank</code>.</p>
+     *
+     * @return a int.
+     */
     @JsonProperty("BugRank")
     public int getBugRank() {
         return bugRank;
     }
 
+    /**
+     * <p>Setter for the field <code>bugRank</code>.</p>
+     *
+     * @param bugRank a int.
+     */
     @JsonProperty("BugRank")
     public void setBugRank(int bugRank) {
         this.bugRank = bugRank;
     }
 
+    /**
+     * <p>withBugRank.</p>
+     *
+     * @param bugRank a int.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.BugInstance} object.
+     */
     public BugInstance withBugRank(int bugRank) {
         this.bugRank = bugRank;
         return this;
     }
 
+    /**
+     * <p>Getter for the field <code>bugSeverity</code>.</p>
+     *
+     * @return a int.
+     */
     @JsonProperty("BugSeverity")
     public int getBugSeverity() {
         return bugSeverity;
     }
 
+    /**
+     * <p>Setter for the field <code>bugSeverity</code>.</p>
+     *
+     * @param bugSeverity a int.
+     */
     @JsonProperty("BugSeverity")
     public void setBugSeverity(int bugSeverity) {
         this.bugSeverity = bugSeverity;
     }
 
+    /**
+     * <p>withBugSeverity.</p>
+     *
+     * @param bugSeverity a int.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.BugInstance} object.
+     */
     public BugInstance withBugSeverity(int bugSeverity) {
         this.bugSeverity = bugSeverity;
         return this;
     }
 
+    /**
+     * <p>Getter for the field <code>bugMessage</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     @JsonProperty("BugMessage")
     public String getBugMessage() {
         return bugMessage;
     }
 
+    /**
+     * <p>Setter for the field <code>bugMessage</code>.</p>
+     *
+     * @param bugMessage a {@link java.lang.String} object.
+     */
     @JsonProperty("BugMessage")
     public void setBugMessage(String bugMessage) {
         this.bugMessage = bugMessage;
     }
 
+    /**
+     * <p>withBugMessage.</p>
+     *
+     * @param bugMessage a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.BugInstance} object.
+     */
     public BugInstance withBugMessage(String bugMessage) {
         this.bugMessage = bugMessage;
         return this;
     }
 
+    /**
+     * <p>Getter for the field <code>resolutionSuggestion</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     @JsonProperty("ResolutionSuggestion")
     public String getResolutionSuggestion() {
         return resolutionSuggestion;
     }
 
+    /**
+     * <p>Setter for the field <code>resolutionSuggestion</code>.</p>
+     *
+     * @param resolutionSuggestion a {@link java.lang.String} object.
+     */
     @JsonProperty("ResolutionSuggestion")
     public void setResolutionSuggestion(String resolutionSuggestion) {
         this.resolutionSuggestion = resolutionSuggestion;
     }
 
+    /**
+     * <p>withResolutionSuggestion.</p>
+     *
+     * @param resolutionSuggestion a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.BugInstance} object.
+     */
     public BugInstance withResolutionSuggestion(String resolutionSuggestion) {
         this.resolutionSuggestion = resolutionSuggestion;
         return this;
@@ -337,6 +488,8 @@ public class BugInstance implements Serializable {
     /**
      * BugTrace
      * <p>
+     *
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.BugTrace} object.
      */
     @JsonProperty("BugTrace")
     public BugTrace getBugTrace() {
@@ -346,12 +499,20 @@ public class BugInstance implements Serializable {
     /**
      * BugTrace
      * <p>
+     *
+     * @param bugTrace a {@link frontEnd.MessagingSystem.routing.structure.Scarf.BugTrace} object.
      */
     @JsonProperty("BugTrace")
     public void setBugTrace(BugTrace bugTrace) {
         this.bugTrace = bugTrace;
     }
 
+    /**
+     * <p>withBugTrace.</p>
+     *
+     * @param bugTrace a {@link frontEnd.MessagingSystem.routing.structure.Scarf.BugTrace} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.BugInstance} object.
+     */
     public BugInstance withBugTrace(BugTrace bugTrace) {
         this.bugTrace = bugTrace;
         return this;
@@ -362,6 +523,8 @@ public class BugInstance implements Serializable {
      * <p>
      * <p>
      * (Required)
+     *
+     * @return a int.
      */
     @JsonProperty("-id")
     @JacksonXmlProperty(isAttribute = true, localName = "id")
@@ -374,6 +537,8 @@ public class BugInstance implements Serializable {
      * <p>
      * <p>
      * (Required)
+     *
+     * @param id a int.
      */
     @JsonProperty("-id")
     @JacksonXmlProperty(isAttribute = true, localName = "id")
@@ -381,21 +546,36 @@ public class BugInstance implements Serializable {
         this.id = id;
     }
 
+    /**
+     * <p>withId.</p>
+     *
+     * @param id a int.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.BugInstance} object.
+     */
     public BugInstance withId(int id) {
         this.id = id;
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("className", className).append("method", method).append("location", location).append("cweId", cweId).append("bugGroup", bugGroup).append("bugCode", bugCode).append("bugRank", bugRank).append("bugSeverity", bugSeverity).append("bugMessage", bugMessage).append("resolutionSuggestion", resolutionSuggestion).append("bugTrace", bugTrace).append("id", id).toString();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(bugCode).append(bugTrace).append(bugSeverity).append(location).append(bugRank).append(bugMessage).append(resolutionSuggestion).append(id).append(cweId).append(method).append(className).append(bugGroup).toHashCode();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object other) {
         if (other == this) {

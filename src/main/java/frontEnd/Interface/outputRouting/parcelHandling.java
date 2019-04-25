@@ -23,6 +23,11 @@ public class parcelHandling {
 
     private static final int Width = 140;
 
+    /**
+     * <p>retrieveHeaderInfo.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public static String retrieveHeaderInfo() {
         StringBuilder output = new StringBuilder();
         output.append(Utils.projectName).append(": ").append(Utils.projectVersion);
@@ -30,6 +35,11 @@ public class parcelHandling {
         return output.toString();
     }
 
+    /**
+     * <p>getUsage.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public static String getUsage() {
         StringBuilder output = new StringBuilder();
         output.append("java -jar ").append(Utils.projectName.toLowerCase()).append(" ");
@@ -43,6 +53,13 @@ public class parcelHandling {
         return output.toString();
     }
 
+    /**
+     * <p>retrieveHelpFromOptions.</p>
+     *
+     * @param args     a {@link org.apache.commons.cli.Options} object.
+     * @param argIssue a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String retrieveHelpFromOptions(Options args, String argIssue) {
 
         HelpFormatter helper = new HelpFormatter();

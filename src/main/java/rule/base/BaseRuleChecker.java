@@ -76,7 +76,7 @@ public abstract class BaseRuleChecker implements RuleChecker {
     /**
      * <p>analyzeSlice.</p>
      *
-     * @param analysis a {@link Analysis} object.
+     * @param analysis a {@link analyzer.backward.Analysis} object.
      */
     public abstract void analyzeSlice(Analysis analysis);
 
@@ -85,8 +85,8 @@ public abstract class BaseRuleChecker implements RuleChecker {
      *
      * @param xmlFileStr  a {@link java.util.Map} object.
      * @param sourcePaths a {@link java.util.List} object.
-     * @param output      a {@link OutputStructure} object.
-     * @throws ExceptionHandler if any.
+     * @param output      a {@link frontEnd.MessagingSystem.routing.outputStructures.OutputStructure} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public abstract void createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler;
 
@@ -94,7 +94,7 @@ public abstract class BaseRuleChecker implements RuleChecker {
      * <p>putIntoMap.</p>
      *
      * @param unitStringMap a {@link java.util.Map} object.
-     * @param e             a {@link UnitContainer} object.
+     * @param e             a {@link analyzer.backward.UnitContainer} object.
      * @param value         a {@link java.lang.String} object.
      */
     protected void putIntoMap(Map<UnitContainer, List<String>> unitStringMap, UnitContainer e, String value) {

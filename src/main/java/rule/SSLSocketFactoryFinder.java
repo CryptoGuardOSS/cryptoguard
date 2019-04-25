@@ -145,9 +145,9 @@ public class SSLSocketFactoryFinder implements RuleChecker {
     /**
      * <p>getInfluencingInstructions.</p>
      *
-     * @param slicingCriteria a {@link SlicingCriteria} object.
+     * @param slicingCriteria a {@link slicer.forward.SlicingCriteria} object.
      * @param m               a {@link soot.SootMethod} object.
-     * @return a {@link SlicingResult} object.
+     * @return a {@link slicer.forward.SlicingResult} object.
      */
     public static SlicingResult getInfluencingInstructions(SlicingCriteria slicingCriteria,
                                                            SootMethod m) {

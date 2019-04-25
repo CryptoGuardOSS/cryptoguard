@@ -10,14 +10,26 @@ import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.Interface.outputRouting.ExceptionId;
 
 /**
+ * <p>JacksonSerializer class.</p>
+ *
  * @author RigorityJTeam
  * Created on 4/6/19.
  * @since {VersionHere}
  *
  * <p>{Description Here}</p>
+ * @version $Id: $Id
  */
 public class JacksonSerializer {
 
+    /**
+     * <p>serialize.</p>
+     *
+     * @param obj         a {@link java.lang.Object} object.
+     * @param prettyPrint a {@link java.lang.Boolean} object.
+     * @param outputType  a {@link frontEnd.MessagingSystem.routing.outputStructures.common.JacksonSerializer.JacksonType} object.
+     * @return a {@link java.lang.String} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
     public static String serialize(Object obj, Boolean prettyPrint, JacksonType outputType) throws ExceptionHandler {
         ObjectMapper serializer = outputType.getOutputMapper();
         serializer.setSerializationInclusion(Include.NON_EMPTY);

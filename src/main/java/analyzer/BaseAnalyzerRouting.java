@@ -27,14 +27,14 @@ public class BaseAnalyzerRouting {
     /**
      * <p>environmentRouting.</p>
      *
-     * @param routingType       a {@link EngineType} object.
+     * @param routingType       a {@link rule.engine.EngineType} object.
      * @param criteriaClass     a {@link java.lang.String} object.
      * @param criteriaMethod    a {@link java.lang.String} object.
      * @param criteriaParam     a int.
      * @param snippetPath       a {@link java.util.List} object.
      * @param projectDependency a {@link java.util.List} object.
-     * @param checker           a {@link BaseRuleChecker} object.
-     * @throws ExceptionHandler if any.
+     * @param checker           a {@link rule.base.BaseRuleChecker} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static void environmentRouting(EngineType routingType,
                                           String criteriaClass, String criteriaMethod,
@@ -82,8 +82,8 @@ public class BaseAnalyzerRouting {
      * @param criteriaParam         a int.
      * @param projectJarPath        a {@link java.lang.String} object.
      * @param projectDependencyPath a {@link java.lang.String} object.
-     * @param checker               a {@link BaseRuleChecker} object.
-     * @throws ExceptionHandler if any.
+     * @param checker               a {@link rule.base.BaseRuleChecker} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static void setupBaseJar(String criteriaClass,
                                     String criteriaMethod,
@@ -121,8 +121,8 @@ public class BaseAnalyzerRouting {
      * @param criteriaMethod a {@link java.lang.String} object.
      * @param criteriaParam  a int.
      * @param projectJarPath a {@link java.lang.String} object.
-     * @param checker        a {@link BaseRuleChecker} object.
-     * @throws ExceptionHandler if any.
+     * @param checker        a {@link rule.base.BaseRuleChecker} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static void setupBaseAPK(String criteriaClass,
                                     String criteriaMethod,
@@ -153,8 +153,8 @@ public class BaseAnalyzerRouting {
      * @param criteriaParam     a int.
      * @param snippetPath       a {@link java.util.List} object.
      * @param projectDependency a {@link java.util.List} object.
-     * @param checker           a {@link BaseRuleChecker} object.
-     * @throws ExceptionHandler if any.
+     * @param checker           a {@link rule.base.BaseRuleChecker} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static void setupBaseDir(String criteriaClass,
                                     String criteriaMethod,
@@ -185,8 +185,8 @@ public class BaseAnalyzerRouting {
      * @param criteriaParam     a int.
      * @param snippetPath       a {@link java.util.List} object.
      * @param projectDependency a {@link java.util.List} object.
-     * @param checker           a {@link BaseRuleChecker} object.
-     * @throws ExceptionHandler if any.
+     * @param checker           a {@link rule.base.BaseRuleChecker} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static void setupBaseJava(String criteriaClass,
                                      String criteriaMethod,
@@ -217,8 +217,8 @@ public class BaseAnalyzerRouting {
      * @param criteriaParam         a int.
      * @param sourceJavaClasses     a {@link java.util.List} object.
      * @param projectDependencyPath a {@link java.util.List} object.
-     * @param checker               a {@link BaseRuleChecker} object.
-     * @throws ExceptionHandler if any.
+     * @param checker               a {@link rule.base.BaseRuleChecker} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static void setupBaseJavaClass(String criteriaClass,
                                           String criteriaMethod,
@@ -262,8 +262,8 @@ public class BaseAnalyzerRouting {
      * @param criteriaClass  a {@link java.lang.String} object.
      * @param criteriaMethod a {@link java.lang.String} object.
      * @param criteriaParam  a int.
-     * @param checker        a {@link BaseRuleChecker} object.
-     * @throws ExceptionHandler if any.
+     * @param checker        a {@link rule.base.BaseRuleChecker} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static void loadBaseSootInfo(List<String> classNames, String criteriaClass,
                                         String criteriaMethod,

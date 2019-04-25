@@ -43,7 +43,7 @@ public class MethodInstructionSlicer extends BackwardFlowAnalysis {
      * <p>Constructor for MethodInstructionSlicer.</p>
      *
      * @param g                  a {@link soot.toolkits.graph.DirectedGraph} object.
-     * @param methodCallSiteInfo a {@link MethodCallSiteInfo} object.
+     * @param methodCallSiteInfo a {@link slicer.backward.MethodCallSiteInfo} object.
      * @param slicingParams      a {@link java.util.List} object.
      */
     public MethodInstructionSlicer(DirectedGraph g,
@@ -227,9 +227,7 @@ public class MethodInstructionSlicer extends BackwardFlowAnalysis {
         return emptySet.clone();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     protected void merge(Object in1, Object in2, Object out) {
         FlowSet inSet1 = (FlowSet) in1,
@@ -239,9 +237,7 @@ public class MethodInstructionSlicer extends BackwardFlowAnalysis {
         inSet1.union(inSet2, outSet);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     protected void copy(Object source, Object dest) {
         FlowSet srcSet = (FlowSet) source,
@@ -252,7 +248,7 @@ public class MethodInstructionSlicer extends BackwardFlowAnalysis {
     /**
      * <p>Getter for the field <code>methodCallSiteInfo</code>.</p>
      *
-     * @return a {@link MethodCallSiteInfo} object.
+     * @return a {@link slicer.backward.MethodCallSiteInfo} object.
      */
     public MethodCallSiteInfo getMethodCallSiteInfo() {
         return methodCallSiteInfo;

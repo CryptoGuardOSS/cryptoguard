@@ -26,8 +26,8 @@ public class Legacy extends Structure {
     /**
      * <p>Constructor for Legacy.</p>
      *
-     * @param info a {@link EnvironmentInformation} object.
-     * @throws ExceptionHandler if any.
+     * @param info a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public Legacy(EnvironmentInformation info) throws ExceptionHandler {
         super(info);

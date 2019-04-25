@@ -71,7 +71,7 @@ public class CWEList {
      * <p>CWE_Lookup({@link java.lang.Integer})</p>
      *
      * @param cweId {@link java.lang.Integer}
-     * @return a {@link CWE} object.
+     * @return a {@link CWE_Reader.CWE} object.
      */
     public CWE CWE_Lookup(Integer cweId) {
         if (this.getCweList().containsKey(cweId))

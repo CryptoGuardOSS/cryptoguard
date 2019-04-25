@@ -81,7 +81,7 @@ public class NamedMethodMap {
      * <p>getMethod.</p>
      *
      * @param methodName a {@link java.lang.String} object.
-     * @return a {@link MethodWrapper} object.
+     * @return a {@link analyzer.backward.MethodWrapper} object.
      */
     public static MethodWrapper getMethod(String methodName) {
 

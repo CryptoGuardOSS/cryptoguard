@@ -23,7 +23,7 @@ public class PropertyAnalysisResult {
     /**
      * <p>Getter for the field <code>methodWrapper</code>.</p>
      *
-     * @return a {@link MethodWrapper} object.
+     * @return a {@link analyzer.backward.MethodWrapper} object.
      */
     public MethodWrapper getMethodWrapper() {
         return methodWrapper;
@@ -32,7 +32,7 @@ public class PropertyAnalysisResult {
     /**
      * <p>Setter for the field <code>methodWrapper</code>.</p>
      *
-     * @param methodWrapper a {@link MethodWrapper} object.
+     * @param methodWrapper a {@link analyzer.backward.MethodWrapper} object.
      */
     public void setMethodWrapper(MethodWrapper methodWrapper) {
         this.methodWrapper = methodWrapper;

@@ -18,8 +18,8 @@ public interface EntryHandler {
     /**
      * <p>Scan.</p>
      *
-     * @param generalInfo a {@link EnvironmentInformation} object.
-     * @throws ExceptionHandler if any.
+     * @param generalInfo a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     void Scan(EnvironmentInformation generalInfo) throws ExceptionHandler;
 }

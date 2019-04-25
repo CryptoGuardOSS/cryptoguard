@@ -9,6 +9,12 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.io.Serializable;
 
+/**
+ * <p>InstanceLocation class.</p>
+ *
+ * @author franceme
+ * @version $Id: $Id
+ */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "Xpath",
@@ -33,8 +39,10 @@ public class InstanceLocation implements Serializable {
     }
 
     /**
-     * @param lineNum
-     * @param xpath
+     * <p>Constructor for InstanceLocation.</p>
+     *
+     * @param lineNum a {@link frontEnd.MessagingSystem.routing.structure.Scarf.LineNum} object.
+     * @param xpath a {@link java.lang.String} object.
      */
     public InstanceLocation(String xpath, LineNum lineNum) {
         super();
@@ -42,16 +50,32 @@ public class InstanceLocation implements Serializable {
         this.lineNum = lineNum;
     }
 
+    /**
+     * <p>Getter for the field <code>xpath</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     @JsonProperty("Xpath")
     public String getXpath() {
         return xpath;
     }
 
+    /**
+     * <p>Setter for the field <code>xpath</code>.</p>
+     *
+     * @param xpath a {@link java.lang.String} object.
+     */
     @JsonProperty("Xpath")
     public void setXpath(String xpath) {
         this.xpath = xpath;
     }
 
+    /**
+     * <p>withXpath.</p>
+     *
+     * @param xpath a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.InstanceLocation} object.
+     */
     public InstanceLocation withXpath(String xpath) {
         this.xpath = xpath;
         return this;
@@ -60,6 +84,8 @@ public class InstanceLocation implements Serializable {
     /**
      * LineNum
      * <p>
+     *
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.LineNum} object.
      */
     @JsonProperty("LineNum")
     public LineNum getLineNum() {
@@ -69,27 +95,44 @@ public class InstanceLocation implements Serializable {
     /**
      * LineNum
      * <p>
+     *
+     * @param lineNum a {@link frontEnd.MessagingSystem.routing.structure.Scarf.LineNum} object.
      */
     @JsonProperty("LineNum")
     public void setLineNum(LineNum lineNum) {
         this.lineNum = lineNum;
     }
 
+    /**
+     * <p>withLineNum.</p>
+     *
+     * @param lineNum a {@link frontEnd.MessagingSystem.routing.structure.Scarf.LineNum} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.InstanceLocation} object.
+     */
     public InstanceLocation withLineNum(LineNum lineNum) {
         this.lineNum = lineNum;
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("xpath", xpath).append("lineNum", lineNum).toString();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(lineNum).append(xpath).toHashCode();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object other) {
         if (other == this) {

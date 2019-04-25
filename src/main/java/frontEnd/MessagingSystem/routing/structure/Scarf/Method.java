@@ -15,6 +15,9 @@ import java.io.Serializable;
 /**
  * MethodType
  * <p>
+ *
+ * @author franceme
+ * @version $Id: $Id
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -52,9 +55,11 @@ public class Method implements Serializable {
     }
 
     /**
-     * @param id
-     * @param primary
-     * @param self
+     * <p>Constructor for Method.</p>
+     *
+     * @param id a int.
+     * @param primary a boolean.
+     * @param self a {@link java.lang.String} object.
      */
     public Method(int id, boolean primary, String self) {
         super();
@@ -68,6 +73,8 @@ public class Method implements Serializable {
      * <p>
      * <p>
      * (Required)
+     *
+     * @return a int.
      */
     @JsonProperty("-id")
     @JacksonXmlProperty(isAttribute = true, localName = "id")
@@ -80,6 +87,8 @@ public class Method implements Serializable {
      * <p>
      * <p>
      * (Required)
+     *
+     * @param id a int.
      */
     @JsonProperty("-id")
     @JacksonXmlProperty(isAttribute = true, localName = "id")
@@ -87,6 +96,12 @@ public class Method implements Serializable {
         this.id = id;
     }
 
+    /**
+     * <p>withId.</p>
+     *
+     * @param id a int.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.Method} object.
+     */
     public Method withId(int id) {
         this.id = id;
         return this;
@@ -94,6 +109,8 @@ public class Method implements Serializable {
 
     /**
      * (Required)
+     *
+     * @return a boolean.
      */
     @JsonProperty("-primary")
     @JacksonXmlProperty(isAttribute = true, localName = "primary")
@@ -103,6 +120,8 @@ public class Method implements Serializable {
 
     /**
      * (Required)
+     *
+     * @param primary a boolean.
      */
     @JsonProperty("-primary")
     @JacksonXmlProperty(isAttribute = true, localName = "primary")
@@ -110,38 +129,69 @@ public class Method implements Serializable {
         this.primary = primary;
     }
 
+    /**
+     * <p>withPrimary.</p>
+     *
+     * @param primary a boolean.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.Method} object.
+     */
     public Method withPrimary(boolean primary) {
         this.primary = primary;
         return this;
     }
 
+    /**
+     * <p>Getter for the field <code>self</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     @JacksonXmlText
     @JsonProperty("-self")
     public String getSelf() {
         return self;
     }
 
+    /**
+     * <p>Setter for the field <code>self</code>.</p>
+     *
+     * @param self a {@link java.lang.String} object.
+     */
     @JacksonXmlText
     @JsonProperty("-self")
     public void setSelf(String self) {
         this.self = self;
     }
 
+    /**
+     * <p>withSelf.</p>
+     *
+     * @param self a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.Method} object.
+     */
     public Method withSelf(String self) {
         this.self = self;
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("id", id).append("primary", primary).append("self", self).toString();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(id).append(primary).append(self).toHashCode();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object other) {
         if (other == this) {

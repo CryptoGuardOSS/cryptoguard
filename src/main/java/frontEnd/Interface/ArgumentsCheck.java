@@ -34,7 +34,7 @@ public class ArgumentsCheck {
      *
      * @param args {@link java.lang.String} - the raw arguments passed into the console
      * @return {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} - when not null, the general Information is created for usage within any output structure.
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static EnvironmentInformation paramaterCheck(List<String> args) throws ExceptionHandler {
 

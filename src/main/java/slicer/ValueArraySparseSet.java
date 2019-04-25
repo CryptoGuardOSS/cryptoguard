@@ -43,7 +43,7 @@ public class ValueArraySparseSet extends ArraySparseSet {
     /**
      * <p>Constructor for ValueArraySparseSet.</p>
      *
-     * @param other a {@link ValueArraySparseSet} object.
+     * @param other a {@link slicer.ValueArraySparseSet} object.
      */
     protected ValueArraySparseSet(ValueArraySparseSet other) {
         numElements = other.numElements;
@@ -63,7 +63,7 @@ public class ValueArraySparseSet extends ArraySparseSet {
     /**
      * <p>clone.</p>
      *
-     * @return a {@link ValueArraySparseSet} object.
+     * @return a {@link slicer.ValueArraySparseSet} object.
      */
     public ValueArraySparseSet clone() {
         return new ValueArraySparseSet(this);
@@ -72,7 +72,7 @@ public class ValueArraySparseSet extends ArraySparseSet {
     /**
      * <p>emptySet.</p>
      *
-     * @return a {@link ValueArraySparseSet} object.
+     * @return a {@link slicer.ValueArraySparseSet} object.
      */
     public ValueArraySparseSet emptySet() {
         return new ValueArraySparseSet();
@@ -190,9 +190,7 @@ public class ValueArraySparseSet extends ArraySparseSet {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     public void intersection(FlowSet otherFlow, FlowSet destFlow) {
         if (sameType(otherFlow) && sameType(destFlow)) {
             ValueArraySparseSet other = (ValueArraySparseSet) otherFlow;
@@ -220,9 +218,7 @@ public class ValueArraySparseSet extends ArraySparseSet {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     public void difference(FlowSet otherFlow, FlowSet destFlow) {
         if (sameType(otherFlow) && sameType(destFlow)) {
             ValueArraySparseSet other = (ValueArraySparseSet) otherFlow;
@@ -250,9 +246,7 @@ public class ValueArraySparseSet extends ArraySparseSet {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     public boolean contains(Object obj) {
         for (int i = 0; i < numElements; i++)
             if (elements[i] instanceof EquivTo
@@ -265,9 +259,7 @@ public class ValueArraySparseSet extends ArraySparseSet {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     public boolean equals(Object otherFlow) {
         if (sameType(otherFlow)) {
             ValueArraySparseSet other = (ValueArraySparseSet) otherFlow;
@@ -299,9 +291,7 @@ public class ValueArraySparseSet extends ArraySparseSet {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     public void copy(FlowSet destFlow) {
         if (sameType(destFlow)) {
             ValueArraySparseSet dest = (ValueArraySparseSet) destFlow;

@@ -13,6 +13,9 @@ import java.io.Serializable;
 /**
  * LineNum
  * <p>
+ *
+ * @author franceme
+ * @version $Id: $Id
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -40,8 +43,10 @@ public class LineNum implements Serializable {
     }
 
     /**
-     * @param start
-     * @param end
+     * <p>Constructor for LineNum.</p>
+     *
+     * @param start a int.
+     * @param end a int.
      */
     public LineNum(int start, int end) {
         super();
@@ -51,6 +56,8 @@ public class LineNum implements Serializable {
 
     /**
      * (Required)
+     *
+     * @return a int.
      */
     @JsonProperty("Start")
     public int getStart() {
@@ -59,12 +66,20 @@ public class LineNum implements Serializable {
 
     /**
      * (Required)
+     *
+     * @param start a int.
      */
     @JsonProperty("Start")
     public void setStart(int start) {
         this.start = start;
     }
 
+    /**
+     * <p>withStart.</p>
+     *
+     * @param start a int.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.LineNum} object.
+     */
     public LineNum withStart(int start) {
         this.start = start;
         return this;
@@ -72,6 +87,8 @@ public class LineNum implements Serializable {
 
     /**
      * (Required)
+     *
+     * @return a int.
      */
     @JsonProperty("End")
     public int getEnd() {
@@ -80,27 +97,44 @@ public class LineNum implements Serializable {
 
     /**
      * (Required)
+     *
+     * @param end a int.
      */
     @JsonProperty("End")
     public void setEnd(int end) {
         this.end = end;
     }
 
+    /**
+     * <p>withEnd.</p>
+     *
+     * @param end a int.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.LineNum} object.
+     */
     public LineNum withEnd(int end) {
         this.end = end;
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("start", start).append("end", end).toString();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(start).append(end).toHashCode();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object other) {
         if (other == this) {

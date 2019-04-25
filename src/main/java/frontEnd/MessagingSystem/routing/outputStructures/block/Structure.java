@@ -30,7 +30,7 @@ public abstract class Structure extends OutputStructure {
     /**
      * <p>Constructor for Structure.</p>
      *
-     * @param info a {@link EnvironmentInformation} object.
+     * @param info a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
      */
     public Structure(EnvironmentInformation info) {
         super(info);
@@ -69,7 +69,7 @@ public abstract class Structure extends OutputStructure {
      * <p>handleOutput.</p>
      *
      * @return a {@link java.lang.String} object.
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public abstract String handleOutput() throws ExceptionHandler;
     //endregion
@@ -80,7 +80,7 @@ public abstract class Structure extends OutputStructure {
      * <p>WriteIntoFile.</p>
      *
      * @param in a {@link java.lang.String} object.
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public void WriteIntoFile(String in) throws ExceptionHandler {
         try {

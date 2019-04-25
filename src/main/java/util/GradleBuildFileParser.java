@@ -37,7 +37,7 @@ public class GradleBuildFileParser implements BuildFileParser {
      * <p>Constructor for GradleBuildFileParser.</p>
      *
      * @param fileName a {@link java.lang.String} object.
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public GradleBuildFileParser(String fileName) throws ExceptionHandler {
         try {

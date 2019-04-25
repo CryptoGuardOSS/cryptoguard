@@ -1,7 +1,5 @@
 package frontEnd.MessagingSystem.routing.inputStructures;
 
-import frontEnd.argsIdentifier;
-
 /**
  * <p>ScarfXMLId class.</p>
  *
@@ -51,7 +49,7 @@ public enum ScarfXMLId {
      * <p>lookup.</p>
      *
      * @param id a {@link java.lang.String} object.
-     * @return a {@link argsIdentifier} object.
+     * @return a {@link frontEnd.argsIdentifier} object.
      */
     public static ScarfXMLId lookup(String id) {
         for (ScarfXMLId in : ScarfXMLId.values())

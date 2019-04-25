@@ -67,14 +67,29 @@ public enum argsIdentifier {
         return this.name() + ": " + this.desc;
     }
 
+    /**
+     * <p>hasDefaultArg.</p>
+     *
+     * @return a {@link java.lang.Boolean} object.
+     */
     public Boolean hasDefaultArg() {
         return defaultArg != null;
     }
 
+    /**
+     * <p>Getter for the field <code>defaultArg</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getDefaultArg() {
         return defaultArg;
     }
 
+    /**
+     * <p>Setter for the field <code>defaultArg</code>.</p>
+     *
+     * @param defaultArg a {@link java.lang.String} object.
+     */
     public void setDefaultArg(String defaultArg) {
         this.defaultArg = defaultArg;
     }

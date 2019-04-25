@@ -29,8 +29,8 @@ public abstract class Structure extends OutputStructure {
     /**
      * <p>Constructor for Structure.</p>
      *
-     * @param info a {@link EnvironmentInformation} object.
-     * @throws ExceptionHandler if any.
+     * @param info a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public Structure(EnvironmentInformation info) throws ExceptionHandler {
         super(info);
@@ -69,14 +69,14 @@ public abstract class Structure extends OutputStructure {
     /**
      * <p>writeHeader.</p>
      *
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public abstract void writeHeader() throws ExceptionHandler;
 
     /**
      * <p>writeFooter.</p>
      *
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public abstract void writeFooter() throws ExceptionHandler;
     //endregion
@@ -88,7 +88,7 @@ public abstract class Structure extends OutputStructure {
      * <p>writeln.</p>
      *
      * @param output a {@link java.lang.String} object.
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public void writeln(String output) throws ExceptionHandler {
         this.write(output + "\n");
@@ -98,7 +98,7 @@ public abstract class Structure extends OutputStructure {
      * <p>write.</p>
      *
      * @param output a {@link java.lang.String} object.
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public void write(String output) throws ExceptionHandler {
         output = StringUtils.trimToNull(output);
@@ -112,7 +112,7 @@ public abstract class Structure extends OutputStructure {
     /**
      * <p>close.</p>
      *
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public void close() throws ExceptionHandler {
         try {

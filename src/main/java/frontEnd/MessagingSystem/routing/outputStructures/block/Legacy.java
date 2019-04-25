@@ -22,7 +22,7 @@ public class Legacy extends Structure {
     /**
      * {@inheritDoc}
      *
-     * @param info a {@link EnvironmentInformation} object.
+     * @param info a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
      */
     public Legacy(EnvironmentInformation info) {
         super(info);

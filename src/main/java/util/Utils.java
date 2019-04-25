@@ -45,15 +45,8 @@ import static soot.SootClass.BODIES;
  */
 public class Utils {
     /**
-     * {@link Utils#getClassNamesFromJarArchive}
-     * {@link Utils#retrieveFullyQualifiedName}
-     * - Enhance this to look for package declarations not at the top of the file
-     * License - TLDR
-     * package org.main.hello;
-     * {@link Utils#getClassNamesFromJarArchive}
-     * {@link Utils#getClassNamesFromJarArchive}
+     * Constant <code>lineSep="System.getProperty(file.separator)"</code>
      */
-
     public final static String fileSep = System.getProperty("file.separator");
     /**
      * Constant <code>lineSep="System.getProperty(line.separator)"</code>
@@ -63,7 +56,13 @@ public class Utils {
      * Constant <code>localPath="System.getProperty(user.dir)"</code>
      */
     public final static String localPath = System.getProperty("user.dir");
+    /**
+     * Constant <code>projectVersion="V03.04.04"</code>
+     */
     public final static String projectVersion = "V03.04.04";
+    /**
+     * Constant <code>projectName="CryptoGuard"</code>
+     */
     public final static String projectName = "CryptoGuard";
     /**
      * Constant <code>userPath="System.getProperty(user.home)"</code>
@@ -84,7 +83,7 @@ public class Utils {
      *
      * @param jarPath a {@link java.lang.String} object.
      * @return a {@link java.util.List} object.
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static List<String> getClassNamesFromJarArchive(String jarPath) throws ExceptionHandler {
         List<String> classNames = new ArrayList<>();
@@ -130,7 +129,7 @@ public class Utils {
      * @param jarPath a {@link java.lang.String} object.
      * @param isMain  a boolean.
      * @return a {@link java.lang.String} object.
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static String getBasePackageNameFromJar(String jarPath, boolean isMain) throws ExceptionHandler {
 
@@ -196,7 +195,7 @@ public class Utils {
      *
      * @param apkfile a {@link java.lang.String} object.
      * @return a {@link java.util.List} object.
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static List<String> getClassNamesFromApkArchive(String apkfile) throws ExceptionHandler {
         List<String> classNames = new ArrayList<>();
@@ -349,7 +348,7 @@ public class Utils {
      * @param projectJarPath a {@link java.lang.String} object.
      * @param excludes       a {@link java.util.List} object.
      * @return a {@link java.util.Map} object.
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static Map<String, String> getXmlFiles(String projectJarPath, List<String> excludes) throws ExceptionHandler {
         Map<String, String> fileStrs = new HashMap<>();
@@ -717,7 +716,7 @@ public class Utils {
      * <p>getJAVA_HOME.</p>
      *
      * @return a {@link java.lang.String} object.
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static String getJAVA_HOME() throws ExceptionHandler {
         String JAVA_HOME = System.getenv("JAVA_HOME");
@@ -731,7 +730,7 @@ public class Utils {
      * <p>getJAVA7_HOME.</p>
      *
      * @return a {@link java.lang.String} object.
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static String getJAVA7_HOME() throws ExceptionHandler {
         String JAVA7_HOME = System.getenv("JAVA7_HOME");
@@ -745,7 +744,7 @@ public class Utils {
      * <p>getANDROID.</p>
      *
      * @return a {@link java.lang.String} object.
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static String getANDROID() throws ExceptionHandler {
         String ANDROID_HOME = System.getenv("ANDROID_HOME");
@@ -760,7 +759,7 @@ public class Utils {
      * <p>getBaseSOOT.</p>
      *
      * @return a {@link java.lang.String} object.
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static String getBaseSOOT() throws ExceptionHandler {
         String rt = Utils.join(Utils.fileSep, "jre", "lib", "rt.jar:");
@@ -774,7 +773,7 @@ public class Utils {
      * <p>getBaseSOOT7.</p>
      *
      * @return a {@link java.lang.String} object.
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static String getBaseSOOT7() throws ExceptionHandler {
         String rt = Utils.join(Utils.fileSep, "jre", "lib", "rt.jar:");
@@ -912,7 +911,7 @@ public class Utils {
      *
      * @param arguments a {@link java.util.List} object.
      * @return a {@link java.util.List} object.
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static List<String> retrieveDirs(List<String> arguments) throws ExceptionHandler {
         List<String> dirs = new ArrayList<>();
@@ -934,9 +933,9 @@ public class Utils {
      * <p>verifyFileOut.</p>
      *
      * @param file a {@link java.lang.String} object.
-     * @param type a {@link Listing} object.
+     * @param type a {@link frontEnd.MessagingSystem.routing.Listing} object.
      * @return a {@link java.lang.String} object.
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static String verifyFileOut(String file, Listing type) throws ExceptionHandler {
         if (!file.endsWith(type.getOutputFileExt()))
@@ -959,9 +958,9 @@ public class Utils {
      * <p>retrieveFilePath.</p>
      *
      * @param file a {@link java.lang.String} object.
-     * @param type a {@link EngineType} object.
+     * @param type a {@link rule.engine.EngineType} object.
      * @return a {@link java.lang.String} object.
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static String retrieveFilePath(String file, EngineType type) throws ExceptionHandler {
         if (!file.endsWith(type.getInputExtension()))
@@ -982,9 +981,9 @@ public class Utils {
      * <p>retrieveFilesByType.</p>
      *
      * @param arguments a {@link java.util.List} object.
-     * @param type      a {@link EngineType} object.
+     * @param type      a {@link rule.engine.EngineType} object.
      * @return a {@link java.util.List} object.
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static List<String> retrieveFilesByType(List<String> arguments, EngineType type) throws ExceptionHandler {
         if (type == EngineType.DIR)
@@ -1016,7 +1015,7 @@ public class Utils {
      *
      * @param filePath a {@link java.lang.String} object.
      * @return a {@link java.lang.String} object.
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static String getRelativeFilePath(String filePath) throws ExceptionHandler {
         try {
@@ -1032,7 +1031,7 @@ public class Utils {
      * <p>createAssignInvokeUnitContainer.</p>
      *
      * @param currInstruction a {@link soot.Unit} object.
-     * @return a {@link UnitContainer} object.
+     * @return a {@link analyzer.backward.UnitContainer} object.
      */
     public static UnitContainer createAssignInvokeUnitContainer(Unit currInstruction) {
 
@@ -1116,16 +1115,46 @@ public class Utils {
     /**
      * <p>isArgumentOfInvoke.</p>
      *
-     * @param analysis       a {@link Analysis} object.
-     * @param analysisResult a {@link InvokeUnitContainer} object.
-     * @param analysisResult a {@link InvokeUnitContainer} object.
-     * @param analysisResult a {@link InvokeUnitContainer} object.
-     * @param analysisResult a {@link InvokeUnitContainer} object.
+     * @param analysis       a {@link analyzer.backward.Analysis} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
      * @param index          a int.
      * @param outSet         a {@link java.util.List} object.
      * @param usedFields     a {@link java.util.Set} object.
-     * @param analysisResult a {@link InvokeUnitContainer} object.
-     * @param analysisResult a {@link InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
+     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
      * @return a boolean.
      */
     public static boolean isArgumentOfInvoke(Analysis analysis, int index,
@@ -1381,8 +1410,8 @@ public class Utils {
      * @param sourcePaths         a {@link java.util.List} object.
      * @param predictableSourcMap a {@link java.util.Map} object.
      * @param rule                a {@link java.lang.String} object.
-     * @param output              a {@link OutputStructure} object.
-     * @throws ExceptionHandler if any.
+     * @param output              a {@link frontEnd.MessagingSystem.routing.outputStructures.OutputStructure} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static void createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, Map<UnitContainer, List<String>> predictableSourcMap, String rule, OutputStructure output) throws ExceptionHandler {
         Integer ruleNumber = Integer.parseInt(rule);

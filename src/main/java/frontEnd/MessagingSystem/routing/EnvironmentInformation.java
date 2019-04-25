@@ -77,8 +77,13 @@ public class EnvironmentInformation {
     /**
      * The main constructor for setting all of the environmental variables used  for the outputs.
      *
-     *
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     * @param source a {@link java.util.List} object.
+     * @param sourceType a {@link rule.engine.EngineType} object.
+     * @param messagingType a {@link frontEnd.MessagingSystem.routing.Listing} object.
+     * @param dependencies a {@link java.util.List} object.
+     * @param sourcePaths a {@link java.util.List} object.
+     * @param sourcePkg a {@link java.lang.String} object.
      */
     public EnvironmentInformation(@Nonnull List<String> source, @Nonnull EngineType sourceType, Listing messagingType, List<String> dependencies, List<String> sourcePaths, String sourcePkg) throws ExceptionHandler {
 
@@ -138,7 +143,7 @@ public class EnvironmentInformation {
     /**
      * <p>startScanning.</p>
      *
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public void startScanning() throws ExceptionHandler {
         this.getOutput().startAnalyzing();
@@ -148,7 +153,7 @@ public class EnvironmentInformation {
     /**
      * <p>stopScanning.</p>
      *
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public void stopScanning() throws ExceptionHandler {
         this.stopAnalysis();
@@ -158,8 +163,8 @@ public class EnvironmentInformation {
     /**
      * <p>Getter for the field <code>output</code>.</p>
      *
-     * @return a {@link OutputStructure} object.
-     * @throws ExceptionHandler if any.
+     * @return a {@link frontEnd.MessagingSystem.routing.outputStructures.OutputStructure} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public OutputStructure getOutput() throws ExceptionHandler {
         if (this.output == null)
@@ -501,7 +506,7 @@ public class EnvironmentInformation {
      *
      * <p>getSourceType()</p>
      *
-     * @return a {@link EngineType} object.
+     * @return a {@link rule.engine.EngineType} object.
      */
     public EngineType getSourceType() {
         return sourceType;
@@ -512,7 +517,7 @@ public class EnvironmentInformation {
      *
      * <p>getMessagingType()</p>
      *
-     * @return a {@link Listing} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.Listing} object.
      */
     public Listing getMessagingType() {
         return messagingType;
@@ -522,8 +527,8 @@ public class EnvironmentInformation {
     /**
      * <p>getMessagingOutput.</p>
      *
-     * @return a {@link OutputStructure} object.
-     * @throws ExceptionHandler if any.
+     * @return a {@link frontEnd.MessagingSystem.routing.outputStructures.OutputStructure} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public OutputStructure getMessagingOutput() throws ExceptionHandler {
         if (this.output == null)
@@ -592,7 +597,7 @@ public class EnvironmentInformation {
      *
      * <p>setPackageRootDir(java.lang.String packageRootDir)</p>
      *
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public void setPackageRootDir() throws ExceptionHandler {
         switch (this.getSourceType()) {
@@ -626,7 +631,7 @@ public class EnvironmentInformation {
      * <p>setPackageRootDir(java.lang.String packageRootDir)</p>
      *
      * @param packageRootDir {@link java.lang.String} - The value to set as packageRootDir
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public void setPackageRootDir(String packageRootDir) throws ExceptionHandler {
         this.packageRootDir = packageRootDir;
@@ -637,7 +642,7 @@ public class EnvironmentInformation {
      *
      * <p>setBuildRootDir(java.lang.String buildRootDir)</p>
      *
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public void setBuildRootDir() throws ExceptionHandler {
         try {
@@ -663,7 +668,7 @@ public class EnvironmentInformation {
      * <p>setBuildRootDir(java.lang.String buildRootDir)</p>
      *
      * @param buildRootDir {@link java.lang.String} - The value to set as buildRootDir
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public void setBuildRootDir(String buildRootDir) throws ExceptionHandler {
         this.buildRootDir = buildRootDir;

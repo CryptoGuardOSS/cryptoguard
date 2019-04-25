@@ -52,7 +52,7 @@ public class HeuristicBasedInstructions {
     /**
      * <p>Getter for the field <code>analysisResult</code>.</p>
      *
-     * @return a {@link HeuristicBasedAnalysisResult} object.
+     * @return a {@link slicer.backward.heuristic.HeuristicBasedAnalysisResult} object.
      */
     public HeuristicBasedAnalysisResult getAnalysisResult() {
         return analysisResult;

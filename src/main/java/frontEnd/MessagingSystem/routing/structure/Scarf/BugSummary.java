@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * <p>BugSummary class.</p>
+ *
  * @author RigorityJTeam
  * Created on 4/5/19.
  * @since {VersionHere}
@@ -17,6 +19,7 @@ import java.util.List;
  * This is the only custom created class as the BugSummary container was self contained within the Analyzer Report
  *
  * <p>{Description Here}</p>
+ * @version $Id: $Id
  */
 public class BugSummary {
 
@@ -27,6 +30,12 @@ public class BugSummary {
 
     //endregion
     //region Getters/Setters
+
+    /**
+     * <p>Getter for the field <code>summaryContainer</code>.</p>
+     *
+     * @return a {@link java.util.List} object.
+     */
     @JacksonXmlElementWrapper(useWrapping = false)
     public List<BugCategory> getSummaryContainer() {
         if (this.summaryContainer == null)
@@ -34,11 +43,21 @@ public class BugSummary {
         return summaryContainer;
     }
 
+    /**
+     * <p>Setter for the field <code>summaryContainer</code>.</p>
+     *
+     * @param summaryContainer a {@link java.util.List} object.
+     */
     @JacksonXmlElementWrapper(useWrapping = false)
     public void setSummaryContainer(List<BugCategory> summaryContainer) {
         this.summaryContainer = summaryContainer;
     }
 
+    /**
+     * <p>addBugSummary.</p>
+     *
+     * @param summary a {@link frontEnd.MessagingSystem.routing.structure.Scarf.BugCategory} object.
+     */
     public void addBugSummary(BugCategory summary) {
         if (this.summaryContainer == null)
             this.summaryContainer = new ArrayList<>();
@@ -47,16 +66,26 @@ public class BugSummary {
 
     //endregion
     //region Overridden Methods
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("summaryContainer", summaryContainer).toString();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(summaryContainer).toHashCode();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object other) {
         if (other == this) {

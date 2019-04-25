@@ -53,7 +53,7 @@ public class OtherInfluencingInstructions {
     /**
      * <p>Getter for the field <code>analysisResult</code>.</p>
      *
-     * @return a {@link OtherAnalysisResult} object.
+     * @return a {@link slicer.backward.other.OtherAnalysisResult} object.
      */
     public OtherAnalysisResult getAnalysisResult() {
         return analysisResult;

@@ -24,7 +24,7 @@ public class ScarfXML extends Structure {
     /**
      * {@inheritDoc}
      *
-     * @param info a {@link EnvironmentInformation} object.
+     * @param info a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
      */
     public ScarfXML(EnvironmentInformation info) {
         super(info);

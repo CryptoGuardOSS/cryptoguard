@@ -17,7 +17,7 @@ public class SlicingCriteria {
     /**
      * <p>Constructor for SlicingCriteria.</p>
      *
-     * @param methodCallSiteInfo a {@link MethodCallSiteInfo} object.
+     * @param methodCallSiteInfo a {@link slicer.backward.MethodCallSiteInfo} object.
      * @param parameters         a {@link java.util.List} object.
      */
     public SlicingCriteria(MethodCallSiteInfo methodCallSiteInfo, List<Integer> parameters) {
@@ -28,7 +28,7 @@ public class SlicingCriteria {
     /**
      * <p>Getter for the field <code>methodCallSiteInfo</code>.</p>
      *
-     * @return a {@link MethodCallSiteInfo} object.
+     * @return a {@link slicer.backward.MethodCallSiteInfo} object.
      */
     public MethodCallSiteInfo getMethodCallSiteInfo() {
         return methodCallSiteInfo;
@@ -37,7 +37,7 @@ public class SlicingCriteria {
     /**
      * <p>Setter for the field <code>methodCallSiteInfo</code>.</p>
      *
-     * @param methodCallSiteInfo a {@link MethodCallSiteInfo} object.
+     * @param methodCallSiteInfo a {@link slicer.backward.MethodCallSiteInfo} object.
      */
     public void setMethodCallSiteInfo(MethodCallSiteInfo methodCallSiteInfo) {
         this.methodCallSiteInfo = methodCallSiteInfo;

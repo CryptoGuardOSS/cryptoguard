@@ -22,7 +22,7 @@ public class Legacy {
     /**
      * <p>marshallingHeader.</p>
      *
-     * @param sourceType a {@link EngineType} object.
+     * @param sourceType a {@link rule.engine.EngineType} object.
      * @param sources    a {@link java.util.List} object.
      * @return a {@link java.lang.String} object.
      */
@@ -63,8 +63,8 @@ public class Legacy {
     /**
      * <p>marshalling.</p>
      *
-     * @param issue      a {@link AnalysisIssue} object.
-     * @param sourceType a {@link EngineType} object.
+     * @param issue      a {@link frontEnd.MessagingSystem.AnalysisIssue} object.
+     * @param sourceType a {@link rule.engine.EngineType} object.
      * @return a {@link java.lang.String} object.
      */
     public static String marshalling(AnalysisIssue issue, EngineType sourceType) {

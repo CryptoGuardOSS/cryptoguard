@@ -25,10 +25,10 @@ public class ScarfXML implements Structure {
      * {@inheritDoc}
      * The overridden method for the ScarfXML output.
      *
-     * @param info a {@link EnvironmentInformation} object.
+     * @param info a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
      * @param args an array of {@link java.lang.String} objects.
      * @return a {@link java.lang.Boolean} object.
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public Boolean inputValidation(EnvironmentInformation info, String[] args) throws ExceptionHandler {
 
