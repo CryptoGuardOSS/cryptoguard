@@ -1,4 +1,4 @@
-package frontEnd.Interface;
+package frontEnd.Interface.outputRouting;
 
 /**
  * <p>ExceptionId class.</p>

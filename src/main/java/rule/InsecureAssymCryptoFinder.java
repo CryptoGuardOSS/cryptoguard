@@ -1,6 +1,6 @@
 package rule;
 
-import frontEnd.Interface.ExceptionHandler;
+import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import rule.engine.EngineType;
 import rule.engine.RuleChecker;

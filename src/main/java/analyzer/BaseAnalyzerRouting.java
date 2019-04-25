@@ -1,7 +1,7 @@
 package analyzer;
 
-import frontEnd.Interface.ExceptionHandler;
-import frontEnd.Interface.ExceptionId;
+import frontEnd.Interface.outputRouting.ExceptionHandler;
+import frontEnd.Interface.outputRouting.ExceptionId;
 import rule.base.BaseRuleChecker;
 import rule.engine.EngineType;
 import soot.Scene;

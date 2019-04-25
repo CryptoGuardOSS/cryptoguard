@@ -1,7 +1,7 @@
 package util;
 
-import frontEnd.Interface.ExceptionHandler;
-import frontEnd.Interface.ExceptionId;
+import frontEnd.Interface.outputRouting.ExceptionHandler;
+import frontEnd.Interface.outputRouting.ExceptionId;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 

@@ -1,5 +1,8 @@
 package frontEnd.Interface;
 
+import frontEnd.Interface.outputRouting.ExceptionHandler;
+import frontEnd.Interface.outputRouting.ExceptionId;
+import frontEnd.Interface.outputRouting.parcelHandling;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import frontEnd.MessagingSystem.routing.Listing;
 import frontEnd.argsIdentifier;
@@ -9,8 +12,6 @@ import util.Utils;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,14 +28,13 @@ import java.util.List;
  */
 public class ArgumentsCheck {
 
-
     /**
      * The fail fast parameter Check method
      * <p>This method will attempt to create the Environment Information and provide help if the usage doesn't match</p>
      *
      * @param args {@link java.lang.String} - the raw arguments passed into the console
      * @return {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} - when not null, the general Information is created for usage within any output structure.
-     * @throws frontEnd.Interface.ExceptionHandler if any.
+     * @throws ExceptionHandler if any.
      */
     public static EnvironmentInformation paramaterCheck(List<String> args) throws ExceptionHandler {
 
@@ -42,6 +42,14 @@ public class ArgumentsCheck {
 
         Options cmdLineArgs = setOptions();
         CommandLine cmd = null;
+
+        //region Printing Version
+        if (args.contains(argsIdentifier.HELP.getArg()))
+            throw new ExceptionHandler(parcelHandling.retrieveHelpFromOptions(cmdLineArgs, null), ExceptionId.HELP);
+
+        if (args.contains(argsIdentifier.VERSION.getArg()))
+            throw new ExceptionHandler(parcelHandling.retrieveHeaderInfo(), ExceptionId.VERSION);
+        //endregion
 
         try {
             cmd = new DefaultParser().parse(cmdLineArgs, args.toArray(new String[0]), true);
@@ -61,7 +69,7 @@ public class ArgumentsCheck {
 
             }
 
-            failFast(arg, cmdLineArgs, true);
+            throw new ExceptionHandler(parcelHandling.retrieveHelpFromOptions(cmdLineArgs, arg), ExceptionId.ARG_VALID);
         }
 
         //endregion
@@ -77,11 +85,6 @@ public class ArgumentsCheck {
         args = upgradedArgs;
         //endregion
 
-        //region Printing Help or Version
-        if (cmd.hasOption(argsIdentifier.HELP.getId()))
-            failFast(null, cmdLineArgs, false);
-        //endregion
-
         EngineType type = EngineType.getFromFlag(cmd.getOptionValue(argsIdentifier.FORMAT.getId()));
 
         Boolean verify = !cmd.hasOption(argsIdentifier.SKIPINPUTVALIDATION.getId());
@@ -95,7 +98,6 @@ public class ArgumentsCheck {
         //endregion
 
         //region Setting the dependency path
-
         List<String> dependencies = null;
         if (cmd.hasOption(argsIdentifier.DEPENDENCY.getId()))
             dependencies = verify ? Utils.retrieveDirs(
@@ -238,35 +240,6 @@ public class ArgumentsCheck {
         cmdLineArgs.addOption(stream);
 
         return cmdLineArgs;
-    }
-
-    /**
-     * A universal method to return failure/help message
-     *
-     * @param args - a {@link org.apache.commons.cli.Options} object.
-     */
-    private static void failFast(String argument, Options args, Boolean broken) throws ExceptionHandler {
-
-        HelpFormatter helper = new HelpFormatter();
-        helper.setOptionComparator(null);
-
-        String projectName = Utils.projectName + ": " + Utils.projectVersion;
-        StringWriter message = new StringWriter();
-        PrintWriter redirect = new PrintWriter(message);
-
-        if (argument != null)
-            redirect.write("Issue with argument: " + argument + ".\n");
-
-        helper.printHelp(redirect, 100, projectName, null, args, 0, 0, null);
-
-        if (!broken) {
-            redirect.write(Listing.getInputFullHelp());
-        }
-
-        if (broken)
-            throw new ExceptionHandler(message.toString(), ExceptionId.GEN_VALID);
-        else
-            throw new ExceptionHandler(message.toString(), ExceptionId.HELP);
     }
 
 }

@@ -1,7 +1,7 @@
 package frontEnd.MessagingSystem.routing;
 
-import frontEnd.Interface.ExceptionHandler;
-import frontEnd.Interface.ExceptionId;
+import frontEnd.Interface.outputRouting.ExceptionHandler;
+import frontEnd.Interface.outputRouting.ExceptionId;
 import frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;

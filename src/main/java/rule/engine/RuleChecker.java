@@ -1,6 +1,6 @@
 package rule.engine;
 
-import frontEnd.Interface.ExceptionHandler;
+import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 
 import java.util.List;

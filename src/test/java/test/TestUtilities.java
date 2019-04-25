@@ -83,6 +83,6 @@ public class TestUtilities {
      * @return a {@link java.lang.String} object.
      */
     public static String makeArg(String id, String value) {
-        return "-" + id + " " + value + " ";
+        return " -" + id + " " + value;
     }
 }

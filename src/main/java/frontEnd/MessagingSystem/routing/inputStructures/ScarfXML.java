@@ -1,7 +1,7 @@
 package frontEnd.MessagingSystem.routing.inputStructures;
 
-import frontEnd.Interface.ExceptionHandler;
-import frontEnd.Interface.ExceptionId;
+import frontEnd.Interface.outputRouting.ExceptionHandler;
+import frontEnd.Interface.outputRouting.ExceptionId;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import frontEnd.argsIdentifier;
 import org.apache.commons.cli.*;

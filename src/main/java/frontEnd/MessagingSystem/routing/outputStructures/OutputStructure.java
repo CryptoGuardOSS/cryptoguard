@@ -1,7 +1,7 @@
 package frontEnd.MessagingSystem.routing.outputStructures;
 
 import CWE_Reader.CWEList;
-import frontEnd.Interface.ExceptionHandler;
+import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.MessagingSystem.AnalysisIssue;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import frontEnd.MessagingSystem.routing.structure.Scarf.BugCategory;

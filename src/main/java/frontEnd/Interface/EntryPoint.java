@@ -1,9 +1,11 @@
 package frontEnd.Interface;
 
+import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
+import org.apache.commons.lang3.StringUtils;
 import rule.engine.*;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 
 /**
  * <p>EntryPoint class.</p>
@@ -25,9 +27,14 @@ public class EntryPoint {
      */
     public static void main(String[] args) {
 
+        ArrayList<String> strippedArgs = new ArrayList<>();
+        for (String arg : args)
+            if (StringUtils.isNotEmpty(arg))
+                strippedArgs.add(arg);
+
         try {
             //Fail Fast on the input validation
-            EnvironmentInformation generalInfo = ArgumentsCheck.paramaterCheck(Arrays.asList(args));
+            EnvironmentInformation generalInfo = ArgumentsCheck.paramaterCheck(strippedArgs);
 
             EntryHandler handler = null;
             switch (generalInfo.getSourceType()) {
@@ -54,7 +61,12 @@ public class EntryPoint {
             generalInfo.stopScanning();
 
         } catch (ExceptionHandler e) {
-            System.err.print(e.toString());
+
+            if (e.getErrorCode().getId().equals(0))
+                System.out.print(e.getLongDesciption());
+            else
+                System.err.print(e.toString());
+
             System.exit(e.getErrorCode().getId());
         }
 

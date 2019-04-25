@@ -1,6 +1,6 @@
 package analyzer;
 
-import frontEnd.Interface.ExceptionHandler;
+import frontEnd.Interface.outputRouting.ExceptionHandler;
 import rule.*;
 import rule.engine.EngineType;
 import soot.Scene;

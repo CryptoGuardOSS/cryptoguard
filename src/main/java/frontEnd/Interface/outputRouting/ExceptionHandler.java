@@ -1,4 +1,4 @@
-package frontEnd.Interface;
+package frontEnd.Interface.outputRouting;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -25,7 +25,7 @@ public class ExceptionHandler extends Exception {
      * <p>Constructor for ExceptionHandler.</p>
      *
      * @param message a {@link java.lang.String} object.
-     * @param id      a {@link frontEnd.Interface.ExceptionId} object.
+     * @param id      a {@link ExceptionId} object.
      */
     public ExceptionHandler(String message, ExceptionId id) {
         this.errorCode = id;
@@ -47,9 +47,9 @@ public class ExceptionHandler extends Exception {
         resp.append("Error ID: ").append(this.errorCode.getId()).append("\n");
         resp.append("Error Type: ").append(this.errorCode.getMessage()).append("\n");
         resp.append("Error Message: ").append(this.longDesciption).append("\n");
-        resp.append("==================================\n\n\n");
+        resp.append("==================================");
 
-        return StringUtils.trimToNull(resp.toString());
+        return StringUtils.trimToNull(resp.toString()).concat("\n\n\n");
     }
 
     /** {@inheritDoc} */
@@ -64,10 +64,14 @@ public class ExceptionHandler extends Exception {
     /**
      * <p>Getter for the field <code>errorCode</code>.</p>
      *
-     * @return a {@link frontEnd.Interface.ExceptionId} object.
+     * @return a {@link ExceptionId} object.
      */
     public ExceptionId getErrorCode() {
         return errorCode;
+    }
+
+    public String getLongDesciption() {
+        return longDesciption;
     }
     //endregion
 }

@@ -1,6 +1,6 @@
 package rule.engine;
 
-import frontEnd.Interface.ExceptionHandler;
+import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import util.BuildFileParser;
 import util.BuildFileParserFactory;

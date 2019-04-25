@@ -1,8 +1,8 @@
 package util;
 
 import analyzer.backward.*;
-import frontEnd.Interface.ExceptionHandler;
-import frontEnd.Interface.ExceptionId;
+import frontEnd.Interface.outputRouting.ExceptionHandler;
+import frontEnd.Interface.outputRouting.ExceptionId;
 import frontEnd.MessagingSystem.AnalysisIssue;
 import frontEnd.MessagingSystem.routing.Listing;
 import frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
@@ -63,7 +63,7 @@ public class Utils {
      * Constant <code>localPath="System.getProperty(user.dir)"</code>
      */
     public final static String localPath = System.getProperty("user.dir");
-    public final static String projectVersion = "V03.04.03";
+    public final static String projectVersion = "V03.04.04";
     public final static String projectName = "CryptoGuard";
     /**
      * Constant <code>userPath="System.getProperty(user.home)"</code>
