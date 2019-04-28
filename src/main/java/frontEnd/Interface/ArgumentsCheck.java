@@ -60,7 +60,7 @@ public class ArgumentsCheck {
                 arg = argsIdentifier.lookup(e.getMessage().replace("Missing required option: ", "")).getArg();
             else if (e.getMessage().startsWith("Missing required options: ")) {
                 String[] argIds = e.getMessage().replace("Missing required options: ", "").replace(" ", "").split(",");
-                arg = "";
+                arg = "Issue with the following argument(s) ";
 
                 for (String argId : argIds)
                     arg += argsIdentifier.lookup(argId) + ", ";
@@ -184,7 +184,6 @@ public class ArgumentsCheck {
 
     private static Options setOptions() {
         Options cmdLineArgs = new Options();
-
 
         Option format = Option.builder(argsIdentifier.FORMAT.getId()).required().hasArg().argName("format").desc(argsIdentifier.FORMAT.getDesc()).build();
         format.setType(String.class);

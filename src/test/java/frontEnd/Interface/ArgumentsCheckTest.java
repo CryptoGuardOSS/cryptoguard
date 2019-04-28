@@ -19,7 +19,7 @@ import static test.TestUtilities.*;
 /**
  * <p>ArgumentsCheckTest class.</p>
  *
- * @author drmonster
+ * @author franceme
  * @version $Id: $Id
  * @since V03.03.10
  */

@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * <p>HeuristicBasedInstructionSlicer class.</p>
  *
- * @author drmonster
+ * @author franceme
  * @version $Id: $Id
  */
 public class HeuristicBasedInstructionSlicer extends BackwardFlowAnalysis {
@@ -212,7 +212,9 @@ public class HeuristicBasedInstructionSlicer extends BackwardFlowAnalysis {
         return emptySet.clone();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void merge(Object in1, Object in2, Object out) {
         FlowSet inSet1 = (FlowSet) in1,
@@ -222,7 +224,9 @@ public class HeuristicBasedInstructionSlicer extends BackwardFlowAnalysis {
         inSet1.union(inSet2, outSet);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void copy(Object source, Object dest) {
         FlowSet srcSet = (FlowSet) source,

@@ -34,7 +34,6 @@ public abstract class Structure extends OutputStructure {
      */
     public Structure(EnvironmentInformation info) throws ExceptionHandler {
         super(info);
-
         try {
             this.streamOut = new FileOutputStream(super.getOutfile());
         } catch (Exception e) {
@@ -102,11 +101,12 @@ public abstract class Structure extends OutputStructure {
      */
     public void write(String output) throws ExceptionHandler {
         output = StringUtils.trimToNull(output);
-        try {
-            this.streamOut.write(output.getBytes(super.getChars()));
-        } catch (Exception e) {
-            throw new ExceptionHandler("Error writing the output " + output, ExceptionId.FILE_O);
-        }
+        if (output != null)
+            try {
+                this.streamOut.write(output.getBytes(super.getChars()));
+            } catch (Exception e) {
+                throw new ExceptionHandler("Error writing the output " + output, ExceptionId.FILE_O);
+            }
     }
 
     /**

@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * <p>HeuristicBasedInstructions class.</p>
  *
- * @author drmonster
+ * @author franceme
  * @version $Id: $Id
  */
 public class HeuristicBasedInstructions {

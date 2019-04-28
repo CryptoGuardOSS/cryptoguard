@@ -64,7 +64,7 @@ public class BugCategory implements Serializable {
      *
      * @param bytes a int.
      * @param count a int.
-     * @param code a {@link java.lang.String} object.
+     * @param code  a {@link java.lang.String} object.
      * @param group a {@link java.lang.String} object.
      */
     public BugCategory(String group, String code, int count, int bytes) {

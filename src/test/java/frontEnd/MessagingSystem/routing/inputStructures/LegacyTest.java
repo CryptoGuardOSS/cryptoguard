@@ -9,7 +9,7 @@ import rule.engine.EngineType;
 /**
  * <p>LegacyTest class.</p>
  *
- * @author drmonster
+ * @author franceme
  * @version $Id: $Id
  * @since V03.03.10
  */

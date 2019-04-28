@@ -68,12 +68,12 @@ public class Metric implements Serializable {
     /**
      * <p>Constructor for Metric.</p>
      *
-     * @param id a int.
-     * @param _class a {@link java.lang.String} object.
+     * @param id       a int.
+     * @param _class   a {@link java.lang.String} object.
      * @param location a {@link java.lang.String} object.
-     * @param value a {@link java.lang.String} object.
-     * @param method a {@link java.lang.String} object.
-     * @param type a {@link java.lang.String} object.
+     * @param value    a {@link java.lang.String} object.
+     * @param method   a {@link java.lang.String} object.
+     * @param type     a {@link java.lang.String} object.
      */
     public Metric(int id, String location, String _class, String method, String type, String value) {
         super();

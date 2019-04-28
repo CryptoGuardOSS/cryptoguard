@@ -42,7 +42,7 @@ public class InstanceLocation implements Serializable {
      * <p>Constructor for InstanceLocation.</p>
      *
      * @param lineNum a {@link frontEnd.MessagingSystem.routing.structure.Scarf.LineNum} object.
-     * @param xpath a {@link java.lang.String} object.
+     * @param xpath   a {@link java.lang.String} object.
      */
     public InstanceLocation(String xpath, LineNum lineNum) {
         super();

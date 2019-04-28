@@ -43,8 +43,8 @@ public class BugTrace implements Serializable {
      * <p>Constructor for BugTrace.</p>
      *
      * @param assessmentReportFile a {@link java.lang.String} object.
-     * @param buildId a int.
-     * @param instanceLocation a {@link frontEnd.MessagingSystem.routing.structure.Scarf.InstanceLocation} object.
+     * @param buildId              a int.
+     * @param instanceLocation     a {@link frontEnd.MessagingSystem.routing.structure.Scarf.InstanceLocation} object.
      */
     public BugTrace(int buildId, String assessmentReportFile, InstanceLocation instanceLocation) {
         super();

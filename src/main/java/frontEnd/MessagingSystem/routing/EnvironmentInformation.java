@@ -77,13 +77,13 @@ public class EnvironmentInformation {
     /**
      * The main constructor for setting all of the environmental variables used  for the outputs.
      *
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     * @param source a {@link java.util.List} object.
-     * @param sourceType a {@link rule.engine.EngineType} object.
+     * @param source        a {@link java.util.List} object.
+     * @param sourceType    a {@link rule.engine.EngineType} object.
      * @param messagingType a {@link frontEnd.MessagingSystem.routing.Listing} object.
-     * @param dependencies a {@link java.util.List} object.
-     * @param sourcePaths a {@link java.util.List} object.
-     * @param sourcePkg a {@link java.lang.String} object.
+     * @param dependencies  a {@link java.util.List} object.
+     * @param sourcePaths   a {@link java.util.List} object.
+     * @param sourcePkg     a {@link java.lang.String} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public EnvironmentInformation(@Nonnull List<String> source, @Nonnull EngineType sourceType, Listing messagingType, List<String> dependencies, List<String> sourcePaths, String sourcePkg) throws ExceptionHandler {
 

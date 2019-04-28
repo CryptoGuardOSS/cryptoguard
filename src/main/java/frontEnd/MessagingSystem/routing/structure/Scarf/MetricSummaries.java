@@ -81,14 +81,14 @@ public class MetricSummaries implements Serializable {
     /**
      * <p>Constructor for MetricSummaries.</p>
      *
-     * @param sumOfSquares a int.
-     * @param count a int.
-     * @param minimum a int.
-     * @param maximum a int.
+     * @param sumOfSquares      a int.
+     * @param count             a int.
+     * @param minimum           a int.
+     * @param maximum           a int.
      * @param standardDeviation a double.
-     * @param sum a int.
-     * @param type a {@link java.lang.String} object.
-     * @param average a double.
+     * @param sum               a int.
+     * @param type              a {@link java.lang.String} object.
+     * @param average           a double.
      */
     public MetricSummaries(String type, int count, int sum, int sumOfSquares, int minimum, int maximum, double average, double standardDeviation) {
         super();

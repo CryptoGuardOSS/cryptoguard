@@ -46,13 +46,15 @@ public class ExceptionHandler extends Exception {
         resp.append("==================================\n");
         resp.append("Error ID: ").append(this.errorCode.getId()).append("\n");
         resp.append("Error Type: ").append(this.errorCode.getMessage()).append("\n");
-        resp.append("Error Message: ").append(this.longDesciption).append("\n");
+        resp.append("Error Message: \n").append(this.longDesciption).append("\n");
         resp.append("==================================");
 
         return StringUtils.trimToNull(resp.toString()).concat("\n\n\n");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void printStackTrace() {
         System.err.println(this.toString());

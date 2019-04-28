@@ -57,9 +57,9 @@ public class Utils {
      */
     public final static String localPath = System.getProperty("user.dir");
     /**
-     * Constant <code>projectVersion="V03.04.04"</code>
+     * Constant <code>projectVersion="V03.04.05"</code>
      */
-    public final static String projectVersion = "V03.04.04";
+    public final static String projectVersion = "V03.04.05";
     /**
      * Constant <code>projectName="CryptoGuard"</code>
      */

@@ -227,7 +227,9 @@ public class MethodInstructionSlicer extends BackwardFlowAnalysis {
         return emptySet.clone();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void merge(Object in1, Object in2, Object out) {
         FlowSet inSet1 = (FlowSet) in1,
@@ -237,7 +239,9 @@ public class MethodInstructionSlicer extends BackwardFlowAnalysis {
         inSet1.union(inSet2, outSet);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void copy(Object source, Object dest) {
         FlowSet srcSet = (FlowSet) source,

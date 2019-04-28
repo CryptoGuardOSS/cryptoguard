@@ -46,7 +46,7 @@ public class LineNum implements Serializable {
      * <p>Constructor for LineNum.</p>
      *
      * @param start a int.
-     * @param end a int.
+     * @param end   a int.
      */
     public LineNum(int start, int end) {
         super();

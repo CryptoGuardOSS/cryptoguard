@@ -213,25 +213,25 @@ public class AnalyzerReport implements Serializable {
     /**
      * <p>Constructor for AnalyzerReport.</p>
      *
-     * @param buildFw a {@link java.lang.String} object.
-     * @param assessFw a {@link java.lang.String} object.
-     * @param packageName a {@link java.lang.String} object.
-     * @param toolVersion a {@link java.lang.String} object.
-     * @param buildFwVersion a {@link java.lang.String} object.
-     * @param parserFw a {@link java.lang.String} object.
-     * @param toolName a {@link java.lang.String} object.
-     * @param bugCategory a {@link java.util.List} object.
-     * @param bugInstance a {@link java.util.List} object.
+     * @param buildFw           a {@link java.lang.String} object.
+     * @param assessFw          a {@link java.lang.String} object.
+     * @param packageName       a {@link java.lang.String} object.
+     * @param toolVersion       a {@link java.lang.String} object.
+     * @param buildFwVersion    a {@link java.lang.String} object.
+     * @param parserFw          a {@link java.lang.String} object.
+     * @param toolName          a {@link java.lang.String} object.
+     * @param bugCategory       a {@link java.util.List} object.
+     * @param bugInstance       a {@link java.util.List} object.
      * @param assessmentStartTs a {@link java.lang.String} object.
-     * @param packageVersion a {@link java.lang.String} object.
-     * @param metricSummaries a {@link frontEnd.MessagingSystem.routing.structure.Scarf.MetricSummaries} object.
-     * @param platformName a {@link java.lang.String} object.
-     * @param metric a {@link java.util.List} object.
-     * @param buildRootDir a {@link java.lang.String} object.
-     * @param uuid a {@link java.lang.String} object.
-     * @param packageRootDir a {@link java.lang.String} object.
-     * @param parserFwVersion a {@link java.lang.String} object.
-     * @param assessFwVersion a {@link java.lang.String} object.
+     * @param packageVersion    a {@link java.lang.String} object.
+     * @param metricSummaries   a {@link frontEnd.MessagingSystem.routing.structure.Scarf.MetricSummaries} object.
+     * @param platformName      a {@link java.lang.String} object.
+     * @param metric            a {@link java.util.List} object.
+     * @param buildRootDir      a {@link java.lang.String} object.
+     * @param uuid              a {@link java.lang.String} object.
+     * @param packageRootDir    a {@link java.lang.String} object.
+     * @param parserFwVersion   a {@link java.lang.String} object.
+     * @param assessFwVersion   a {@link java.lang.String} object.
      */
     public AnalyzerReport(String assessFw, String assessFwVersion, String assessmentStartTs, String buildFw, String buildFwVersion, String packageName, String packageVersion, String buildRootDir, String packageRootDir, String parserFw, String parserFwVersion, String platformName, String toolName, String toolVersion, String uuid, List<BugInstance> bugInstance, List<BugCategory> bugCategory, List<Metric> metric, MetricSummaries metricSummaries) {
         super();
@@ -1001,7 +1001,7 @@ public class AnalyzerReport implements Serializable {
      * <p>deserialize.</p>
      *
      * @param inputType a {@link frontEnd.MessagingSystem.routing.outputStructures.common.JacksonSerializer.JacksonType} object.
-     * @param file a {@link java.io.File} object.
+     * @param file      a {@link java.io.File} object.
      * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */

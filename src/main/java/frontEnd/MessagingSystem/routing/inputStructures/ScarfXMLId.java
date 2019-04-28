@@ -3,7 +3,7 @@ package frontEnd.MessagingSystem.routing.inputStructures;
 /**
  * <p>ScarfXMLId class.</p>
  *
- * @author drmonster
+ * @author franceme
  * @version $Id: $Id
  */
 public enum ScarfXMLId {

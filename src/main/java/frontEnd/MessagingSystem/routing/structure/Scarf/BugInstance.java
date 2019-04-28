@@ -102,18 +102,18 @@ public class BugInstance implements Serializable {
     /**
      * <p>Constructor for BugInstance.</p>
      *
-     * @param id a int.
-     * @param bugCode a {@link java.lang.String} object.
-     * @param bugTrace a {@link frontEnd.MessagingSystem.routing.structure.Scarf.BugTrace} object.
-     * @param bugSeverity a int.
-     * @param bugRank a int.
-     * @param bugMessage a {@link java.lang.String} object.
-     * @param cweId a {@link java.util.List} object.
-     * @param method a {@link java.util.List} object.
-     * @param className a {@link java.lang.String} object.
-     * @param bugGroup a {@link java.lang.String} object.
+     * @param id                   a int.
+     * @param bugCode              a {@link java.lang.String} object.
+     * @param bugTrace             a {@link frontEnd.MessagingSystem.routing.structure.Scarf.BugTrace} object.
+     * @param bugSeverity          a int.
+     * @param bugRank              a int.
+     * @param bugMessage           a {@link java.lang.String} object.
+     * @param cweId                a {@link java.util.List} object.
+     * @param method               a {@link java.util.List} object.
+     * @param className            a {@link java.lang.String} object.
+     * @param bugGroup             a {@link java.lang.String} object.
      * @param resolutionSuggestion a {@link java.lang.String} object.
-     * @param location a {@link java.util.List} object.
+     * @param location             a {@link java.util.List} object.
      */
     public BugInstance(String className, List<Method> method, List<Location> location, List<String> cweId, String bugGroup, String bugCode, int bugRank, int bugSeverity, String bugMessage, String resolutionSuggestion, BugTrace bugTrace, int id) {
         super();

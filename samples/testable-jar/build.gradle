@@ -1,0 +1,26 @@
+apply plugin: 'application'
+mainClassName = 'tester.Crypto'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+//jar {
+//
+//    from {
+//        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+//    }
+//}
+
+task copyDepJars(type: Copy) {
+    from configurations.compile
+    into 'build/dependencies'
+}
+
+build.dependsOn copyDepJars
+
+dependencies {
+    compile 'com.squareup.okhttp3:okhttp:3.9.0'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+}
+

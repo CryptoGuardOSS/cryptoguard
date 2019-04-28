@@ -54,12 +54,12 @@ public class Location implements Serializable {
     /**
      * <p>Constructor for Location.</p>
      *
-     * @param startLine a int.
-     * @param sourceFile a {@link java.lang.String} object.
+     * @param startLine   a int.
+     * @param sourceFile  a {@link java.lang.String} object.
      * @param explanation a {@link java.lang.String} object.
-     * @param endLine a int.
+     * @param endLine     a int.
      * @param startColumn a int.
-     * @param endColumn a int.
+     * @param endColumn   a int.
      */
     public Location(String sourceFile, int startLine, int endLine, int startColumn, int endColumn, String explanation) {
         super();

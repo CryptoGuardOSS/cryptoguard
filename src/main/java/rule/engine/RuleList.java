@@ -10,8 +10,8 @@ import java.util.ArrayList;
  * <p>STATUS: IC</p>
  *
  * @author franceme
- * @since V01.00.01
  * @version $Id: $Id
+ * @since V01.00.01
  */
 public enum RuleList {
     //region Values

@@ -190,7 +190,9 @@ public class ValueArraySparseSet extends ArraySparseSet {
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void intersection(FlowSet otherFlow, FlowSet destFlow) {
         if (sameType(otherFlow) && sameType(destFlow)) {
             ValueArraySparseSet other = (ValueArraySparseSet) otherFlow;
@@ -218,7 +220,9 @@ public class ValueArraySparseSet extends ArraySparseSet {
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void difference(FlowSet otherFlow, FlowSet destFlow) {
         if (sameType(otherFlow) && sameType(destFlow)) {
             ValueArraySparseSet other = (ValueArraySparseSet) otherFlow;
@@ -246,7 +250,9 @@ public class ValueArraySparseSet extends ArraySparseSet {
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean contains(Object obj) {
         for (int i = 0; i < numElements; i++)
             if (elements[i] instanceof EquivTo
@@ -259,7 +265,9 @@ public class ValueArraySparseSet extends ArraySparseSet {
         return false;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean equals(Object otherFlow) {
         if (sameType(otherFlow)) {
             ValueArraySparseSet other = (ValueArraySparseSet) otherFlow;
@@ -291,7 +299,9 @@ public class ValueArraySparseSet extends ArraySparseSet {
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void copy(FlowSet destFlow) {
         if (sameType(destFlow)) {
             ValueArraySparseSet dest = (ValueArraySparseSet) destFlow;

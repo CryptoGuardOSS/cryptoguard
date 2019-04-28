@@ -14,12 +14,12 @@ import java.util.List;
  *
  * @author RigorityJTeam
  * Created on 4/5/19.
+ * @version $Id: $Id
  * @since {VersionHere}
  * <p>
  * This is the only custom created class as the BugSummary container was self contained within the Analyzer Report
  *
  * <p>{Description Here}</p>
- * @version $Id: $Id
  */
 public class BugSummary {
 

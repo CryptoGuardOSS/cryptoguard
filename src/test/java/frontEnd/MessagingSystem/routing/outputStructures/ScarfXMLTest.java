@@ -11,7 +11,6 @@ import rule.engine.EngineType;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 import static test.TestUtilities.jarOne;
 
@@ -19,8 +18,8 @@ import static test.TestUtilities.jarOne;
  * <p>MessageRepresentationTest class.</p>
  *
  * @author RigorityJTeam
- * @since V01.00.03
  * @version $Id: $Id
+ * @since V01.00.03
  */
 public class ScarfXMLTest {
 

@@ -1,13 +1,18 @@
 package frontEnd.Interface;
 
+import frontEnd.MessagingSystem.routing.Listing;
+import frontEnd.MessagingSystem.routing.outputStructures.common.JacksonSerializer;
+import frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport;
 import frontEnd.argsIdentifier;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 import rule.engine.EngineType;
 import soot.G;
 import util.Utils;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -20,33 +25,15 @@ import static test.TestUtilities.*;
 /**
  * <p>EntryPointTest_CLASS class.</p>
  *
- * @author drmonster
+ * @author franceme
  * @version $Id: $Id
  * @since V03.03.10
  */
 public class EntryPointTest_CLASS {
 
-    private final String tempFileOutTxt = Utils.osPathJoin(testPath, "testable-jar_classFiles.txt");
-    private final String tempFileOutXML = Utils.osPathJoin(testPath, "testable-jar_classFiles.xml");
     //region Attributes
     private EntryPoint engine;
     private ByteArrayOutputStream out;
-
-    //region Scarf Properties
-    private String assessment_start_ts;
-    private String build_fw;
-    private String build_fw_version;
-    private String package_name;
-    private String package_version;
-    private String assess_fw;
-    private String assess_fw_version;
-    private String build_root_dir;
-    private String package_root_dir;
-    private String parser_fw;
-    private String parser_fw_version;
-    private String uuid;
-    //endregion
-
     //endregion
 
     //region Test Environment Setup
@@ -64,21 +51,6 @@ public class EntryPointTest_CLASS {
 
         engine = new EntryPoint();
         out = new ByteArrayOutputStream();
-
-        //region Properties Setup
-        assess_fw = "java-assess";
-        assess_fw_version = "1.0.0c";
-        assessment_start_ts = "1516116551.639144";
-        build_fw = "c-assess";
-        build_fw_version = "1.1.12";
-        build_root_dir = "/home";
-        package_name = "RigorityJ";
-        package_root_dir = "CryptoGuard";
-        package_version = "8675309";
-        parser_fw = "example_tool";
-        parser_fw_version = "x.y.z";
-        uuid = "fa109792-9234-4jk2-9f68-alp9woofbeef";
-        //endregion
     }
 
     /**
@@ -90,27 +62,11 @@ public class EntryPointTest_CLASS {
     public void tearDown() throws Exception {
         engine = null;
         out = null;
-
-        //region Properties
-        assess_fw = null;
-        assess_fw_version = null;
-        assessment_start_ts = null;
-        build_fw = null;
-        build_fw_version = null;
-        build_root_dir = null;
-        package_root_dir = null;
-        package_name = null;
-        package_root_dir = null;
-        package_version = null;
-        parser_fw = null;
-        parser_fw_version = null;
-        uuid = null;
-        //endregion
     }
     //endregion
 
     //region Tests
-    //@Test
+    @Test
     /**
      * <p>main_TestableFiles_SingleTest.</p>
      */
@@ -120,13 +76,13 @@ public class EntryPointTest_CLASS {
                     makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES.getFlag()) +
                             makeArg(argsIdentifier.SOURCE, classFiles[0]) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
-                            makeArg(argsIdentifier.OUT, tempFileOutTxt);
+                            makeArg(argsIdentifier.OUT, tempFileOutTxt_Class);
 
             try {
 
                 engine.main(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempFileOutTxt), Charset.forName("UTF-8"));
+                List<String> results = Files.readAllLines(Paths.get(tempFileOutTxt_Class), Charset.forName("UTF-8"));
 
                 int count = 0;
                 for (String line : results)
@@ -143,7 +99,7 @@ public class EntryPointTest_CLASS {
         }
     }
 
-    //@Test
+    @Test
     /**
      * <p>main_TestableFiles_MultiTest.</p>
      */
@@ -153,13 +109,13 @@ public class EntryPointTest_CLASS {
                     makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES.getFlag()) +
                             makeArg(argsIdentifier.SOURCE, Utils.join(" ", classFiles)) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
-                            makeArg(argsIdentifier.OUT, tempFileOutTxt);
+                            makeArg(argsIdentifier.OUT, tempFileOutTxt_two);
 
             try {
 
                 engine.main(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempFileOutTxt), Charset.forName("UTF-8"));
+                List<String> results = Files.readAllLines(Paths.get(tempFileOutTxt_two), Charset.forName("UTF-8"));
 
                 int count = 0;
                 for (String line : results)
@@ -167,6 +123,81 @@ public class EntryPointTest_CLASS {
                         count++;
 
                 assertTrue(count > 0);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    @Test
+    /**
+     * <p>main_TestableFiles_MultiTest_Scarf.</p>
+     */
+    public void main_TestableFiles_MultiTest_Scarf() {
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES.getFlag()) +
+                            makeArg(argsIdentifier.SOURCE, Utils.join(" ", classFiles)) +
+                            makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                            makeArg(argsIdentifier.OUT, tempFileOutXML_Class);
+
+            try {
+
+                engine.main(args.split(" "));
+
+                List<String> results = Files.readAllLines(Paths.get(tempFileOutXML_Class), Charset.forName("UTF-8"));
+
+                int count = 0;
+                for (String line : results)
+                    if (line.contains("Violated"))
+                        count++;
+
+                assertTrue(count > 0);
+
+
+                AnalyzerReport report = AnalyzerReport.deserialize(JacksonSerializer.JacksonType.XML, new File(tempFileOutXML_Class));
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    @Test
+    /**
+     * <p>main_TestableFiles_MultiTest_Scarf_Stream.</p>
+     */
+    public void main_TestableFiles_MultiTest_Scarf_Stream() {
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES.getFlag()) +
+                            makeArg(argsIdentifier.SOURCE, Utils.join(" ", classFiles)) +
+                            makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                            makeArg(argsIdentifier.OUT, tempFileOutXML_Class_Stream) +
+                            makeArg(argsIdentifier.STREAM);
+
+            try {
+
+                engine.main(args.split(" "));
+
+                List<String> results = Files.readAllLines(Paths.get(tempFileOutXML_Class_Stream), Charset.forName("UTF-8"));
+
+                int count = 0;
+                for (String line : results)
+                    if (line.contains("Violated"))
+                        count++;
+
+                assertTrue(count > 0);
+
+
+                AnalyzerReport report = AnalyzerReport.deserialize(JacksonSerializer.JacksonType.XML, new File(tempFileOutXML_Class_Stream));
 
 
             } catch (Exception e) {

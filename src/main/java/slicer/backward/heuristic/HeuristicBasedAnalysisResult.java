@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * <p>HeuristicBasedAnalysisResult class.</p>
  *
- * @author drmonster
+ * @author franceme
  * @version $Id: $Id
  */
 public class HeuristicBasedAnalysisResult {

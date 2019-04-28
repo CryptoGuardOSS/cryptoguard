@@ -8,7 +8,7 @@ import java.util.Set;
 /**
  * <p>InvokeUnitContainer class.</p>
  *
- * @author drmonster
+ * @author franceme
  * @version $Id: $Id
  */
 public class InvokeUnitContainer extends UnitContainer {

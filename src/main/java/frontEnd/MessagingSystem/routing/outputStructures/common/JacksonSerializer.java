@@ -14,10 +14,10 @@ import frontEnd.Interface.outputRouting.ExceptionId;
  *
  * @author RigorityJTeam
  * Created on 4/6/19.
+ * @version $Id: $Id
  * @since {VersionHere}
  *
  * <p>{Description Here}</p>
- * @version $Id: $Id
  */
 public class JacksonSerializer {
 

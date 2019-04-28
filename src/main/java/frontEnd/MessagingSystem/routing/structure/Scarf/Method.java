@@ -57,9 +57,9 @@ public class Method implements Serializable {
     /**
      * <p>Constructor for Method.</p>
      *
-     * @param id a int.
+     * @param id      a int.
      * @param primary a boolean.
-     * @param self a {@link java.lang.String} object.
+     * @param self    a {@link java.lang.String} object.
      */
     public Method(int id, boolean primary, String self) {
         super();
