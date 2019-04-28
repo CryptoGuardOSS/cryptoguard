@@ -6,6 +6,7 @@ import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import frontEnd.MessagingSystem.routing.outputStructures.common.JacksonSerializer;
 import frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport;
 import frontEnd.MessagingSystem.routing.structure.Scarf.BugInstance;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -16,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
  * @version $Id: $Id
  * @since V01.00.03
  */
+@Slf4j
 public class ScarfXML extends Structure {
 
 
@@ -45,22 +47,27 @@ public class ScarfXML extends Structure {
         //reopening the console stream
 
         //region Setting the report for marshalling
+        log.info("Marshalling the AnalyzerReport from the Env. Info.");
         AnalyzerReport report = frontEnd.MessagingSystem.routing.outputStructures.common.ScarfXML.marshalling(super.getSource());
 
         //region Creating Bug Instances
         Integer numOfBugs = 0;
+        log.trace("Adding all of the collected issues");
         for (AnalysisIssue in : super.getCollection()) {
+            log.debug("Marshalling and adding the issue: " + in.getInfo());
             BugInstance marshalled = frontEnd.MessagingSystem.routing.outputStructures.common.ScarfXML.marshalling(in, super.getCwes(), super.getSource().getFileOutName(), numOfBugs++, super.getSource().getBuildId(), super.getSource().getxPath());
             report.getBugInstance().add(marshalled);
         }
         //endregion
 
+        log.info("Marshalling the bug category summary.");
         report.setBugCategory(super.createBugCategoryList().getSummaryContainer());
 
         //endregion
 
         //region Marshalling
-        String xmlStream = JacksonSerializer.serialize(report, true, JacksonSerializer.JacksonType.XML);
+        log.trace("Creating the marshaller");
+        String xmlStream = JacksonSerializer.serialize(report, super.getSource().prettyPrint(), JacksonSerializer.JacksonType.XML);
         //endregion
 
         //region Writing any extra footer comments
@@ -70,11 +77,15 @@ public class ScarfXML extends Structure {
 
         StringBuilder commentedFooter = new StringBuilder();
 
-        if (super.getSource().getSootErrors() != null && super.getSource().getSootErrors().split("\n").length >= 1)
+        if (super.getSource().getSootErrors() != null && super.getSource().getSootErrors().split("\n").length >= 1) {
+            log.info("Adding the Soot Errors");
             commentedFooter.append(prettyTab).append(super.getSource().getSootErrors().replaceAll("\n", prettyLine)).append(prettyLine);
+        }
 
-        if (super.getSource().isShowTimes())
+        if (super.getSource().isShowTimes()) {
+            log.trace("Adding the time measurements");
             commentedFooter.append("Analysis Timing (ms): ").append(super.getSource().getAnalyisisTime()).append(".").append(prettyLine);
+        }
 
         if (StringUtils.isNotBlank(commentedFooter.toString()))
             footer = prettyLine + "<!--" + prettyLine + commentedFooter.toString() + "-->";

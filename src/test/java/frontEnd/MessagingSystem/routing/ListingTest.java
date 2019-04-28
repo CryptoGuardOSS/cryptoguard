@@ -7,6 +7,7 @@ import rule.engine.EngineType;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 

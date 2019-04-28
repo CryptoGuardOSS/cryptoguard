@@ -8,6 +8,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.Interface.outputRouting.ExceptionId;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p>JacksonSerializer class.</p>
@@ -19,6 +20,7 @@ import frontEnd.Interface.outputRouting.ExceptionId;
  *
  * <p>{Description Here}</p>
  */
+@Slf4j
 public class JacksonSerializer {
 
     /**
@@ -32,12 +34,14 @@ public class JacksonSerializer {
      */
     public static String serialize(Object obj, Boolean prettyPrint, JacksonType outputType) throws ExceptionHandler {
         ObjectMapper serializer = outputType.getOutputMapper();
+        log.debug("Serializing output as " + outputType.name());
         serializer.setSerializationInclusion(Include.NON_EMPTY);
         if (prettyPrint)
             serializer.enable(SerializationFeature.INDENT_OUTPUT);
         try {
             return serializer.writeValueAsString(obj);
         } catch (JsonProcessingException e) {
+            log.debug("Error marshalling output: " + e.getMessage());
             throw new ExceptionHandler("Error marshalling output", ExceptionId.MAR_VAR);
         }
     }

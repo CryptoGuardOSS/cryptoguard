@@ -1,5 +1,5 @@
 #################################
-CryptoGuard V03.04.05
+CryptoGuard V03.04.06
 #################################
 
 
@@ -16,10 +16,8 @@ Building From Source
 
 Prerequisites (Environment Variables)
 ==================================================
-1. JDK7_HOME: Point to a valid Java 7 JDK Installation
-    * Needed for Source/Jar/Android/Class/Java
-#. JDK_HOME: Point to a valid Java 8 JDK Installation
-    * Needed for Source/Class
+1. JAVA7_HOME: Point to a valid Java 7 JDK Installation
+    * Needed for all of the scans
 #. ANDROID_SDK_HOME: Point to a valid Android JDK Installation
     * Needed for Android
 
@@ -56,7 +54,8 @@ APK Files
 Java Files
 ----------------------------------------------------------
 * sample Makefile command :code:`make scanJava`
-* raw command :code:`java -jar cryptoguard.jar -in java -s /path/to/java/files.java`
+* raw command :code:`java -jar cryptoguard.jar -in java -s /path/to/java/file.java`
+* raw command (for files) :code:`java -jar cryptoguard.jar -in java -s /path/to/java/file1.java /path/to/java/file2.java`
 
 Note
 ^^^^^
@@ -66,7 +65,8 @@ Note
 Java Class Files (Experimental)
 ----------------------------------------------------------
 * sample Makefile command :code:`make scanClass`
-* raw command :code:`java -jar cryptoguard.jar -in class -s /path/to/java/files.class`
+* raw command :code:`java -jar cryptoguard.jar -in class -s /path/to/java/file.class`
+* raw command (for files) :code:`java -jar cryptoguard.jar -in java -s /path/to/java/file1.class /path/to/java/file2.class`
 
 Note
 ^^^^

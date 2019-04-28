@@ -7,11 +7,11 @@
         </Console>
         <Console name="STDOUT" target="SYSTEM_OUT">
             <PatternLayout
-                    pattern="%highlight{${LOG_LEVEL_PATTERN:-%5p}}{WARN=yellow, INFO=green} | %d{yyyy-MM-dd HH:mm:ss.SSS} | %C{2}.%t:%L | %m%n"/>
+                    pattern="%highlight{${LOG_LEVEL_PATTERN:-%5p}}{WARN=yellow, INFO=green} | %d{yyyy-MM-dd HH:mm:ss.SSS} | %C{2} | %m%n"/>
         </Console>
         <Console name="STDERR" target="SYSTEM_ERR">
             <PatternLayout
-                    pattern="%highlight{${LOG_LEVEL_PATTERN:-%5p}}{FATAL=bg_red, ERROR=red} | %d{yyyy-MM-dd HH:mm:ss.SSS} | %C{2}.%t:%L | %m%n"/>
+                    pattern="%highlight{${LOG_LEVEL_PATTERN:-%5p}}{FATAL=bg_red, ERROR=red} | %d{yyyy-MM-dd HH:mm:ss.SSS} | %C{2} | %m%n"/>
         </Console>
         <Routing name="Sifter">
             <Routes>

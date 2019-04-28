@@ -2,17 +2,14 @@
 dir=./
 testDir=$(dir)build/Makefile-tests/
 testSrc=$(dir)samples/
-javaHome=${JAVA_HOME}/bin/java
 java7=${JAVA7_HOME}/bin/java
 
 #Variables dynamically set when the program is being built from the source
-ver=V03.04.05
+ver=V03.04.06
 name=cryptoguard
 
 #The short hand paths to execute the compiled jar and the scarf xsd for valiation
-scan=$(java7) -jar $(dir)$(name).jar 
-#scan=$(java7) -jar $(dir)build/libs/$(name)-$(ver).jar
-#scanner=$(shell JAVA_HOME="$(java7)" $(scan))
+scan=$(java7) -jar $(dir)$(name).jar
 scarfXSD=$(dir)src/main/resources/Scarf/scarf_v1.2.xsd
 
 #The location of all of the test samples
@@ -33,22 +30,24 @@ javaFile2=$(srcJavaFolder)$(sampleFile2).java
 classFile1=$(srcClassFolder)$(sampleFile1).class
 classFile2=$(srcClassFolder)$(sampleFile2).class
 
-default:: fullBuild
+default:: build
 
-#Will build the project if there wasn't a full build 
-#otherwise it'll reset the JAVA_HOME env variable for gradle
-checkBuild:
+#Will build the project if there wasn't a full build
+build: setHome checkEnv
 ifeq ("$(wildcard $(dir)$(name).jar)","")
-	@echo "Building the project.";
-	@make;
-else
-	@make setHome
+	@$(info Building the project.)
+	@gradle -p $(dir) clean build -x test
+	@$(info Cutting (copying) the source built $(name) jar file, and creating the test directory.)
+	@cp $(dir)build/libs/$(name)-$(ver).jar $(dir)$(name).jar
+	@$(info Creating the test directory.)
+	@$(info $(testDir))
+	@mkdir -p $(testDir)
 endif
 
 #Sets the current environment variable if it's not set
 #Needed for gradle
 setHome:
-	@echo "Resetting the JAVA_HOME env variable (for Gradle).";
+	@$(info Resetting the JAVA_HOME env variable (for Gradle).)
 	@export JAVA_HOME=${JAVA7_HOME}
 
 #Checking if the Java7_Home variable is set 
@@ -58,15 +57,6 @@ ifeq ($(strip ${JAVA7_HOME}),)
 	@$(error Please set the JAVA7_HOME environment variable.)
 else
 	@$(info JAVA7_HOME is set.)
-endif
-
-#Checking if the Java_Home variable is set 
-checkJavaHome:
-	@$(info Verifying the JAVA_HOME environment variable is set.)
-ifeq ($(strip ${JAVA_HOME}),)
-	@$(error Please set the JAVA_HOME environment variable.)
-else
-	@$(info JAVA_HOME is set.)
 endif
 
 #Checking if the ANDROID_HOME variable is set 
@@ -79,20 +69,20 @@ else
 endif
 
 #A method to check if all of the required environment variables are set
-checkEnv: checkJava7Home checkJavaHome checkAndroidSDKHome
+checkEnv: checkJava7Home checkAndroidSDKHome
 	@$(info Envrionment Variables are set.)
 
 #The grouping of Jar Scanning
 scanJar: scanJar_Default scanJar_Scarf
 
 #The command for a default jar scan output
-scanJar_Default: checkJava7Home checkBuild
+scanJar_Default: checkJava7Home build
 	@$(info Scanning the sample jar ($(jarLoc)).)
 	@$(scan) -in jar -s $(jarLoc) -d $(depLoc) -o $(testDir)results_Jar.txt
 	@$(info View the output at $(testDir)results_Jar.txt.)
 
 #The command for a SCARF jar scan output, that also verifies the output
-scanJar_Scarf: checkJava7Home checkBuild
+scanJar_Scarf: checkJava7Home build
 	@$(info Scanning the sample jar ($(jarLoc)).)
 	@$(scan) -in jar -s $(jarLoc) -d $(depLoc) -o $(testDir)results_Jar_Scarf.xml -m SX -n
 	@$(info Verifying the Scarf Output ($(testDir)results_Jar_Scarf.xml).)
@@ -103,13 +93,13 @@ scanJar_Scarf: checkJava7Home checkBuild
 scanAPK: scanAPK_Default scanAPK_Scarf
 
 #The command for a default apk scan output
-scanAPK_Default: checkAndroidSDKHome checkBuild
+scanAPK_Default: checkAndroidSDKHome build
 	@$(info Scanning the sample apk ($(apkLoc)))
 	@$(scan) -in apk -s $(apkLoc) -o $(testDir)results_Apk.txt
 	@$(info View the output at $(testDir)results_Apk.txt.)
 
 #The command for a SCARF apk scan output, that also verifies the output
-scanAPK_Scarf: checkAndroidSDKHome checkBuild
+scanAPK_Scarf: checkAndroidSDKHome build
 	@$(info Scanning the sample apk ($(apkLoc)).)
 	@$(scan) -in apk -s $(apkLoc) -o $(testDir)results_Apk_Scarf.xml -m SX -n
 	@$(info Verifying the Scarf Output ($(testDir)results_Apk_Scarf.xml).)
@@ -120,13 +110,13 @@ scanAPK_Scarf: checkAndroidSDKHome checkBuild
 scanDir: scanDir_Default scanDir_Scarf
 
 #The command for a default directory scan output
-scanDir_Default: checkJavaHome checkBuild
+scanDir_Default: checkJava7Home build
 	@$(info Scanning the sample directory ($(dirLoc)))
 	@$(scan) -in source -s $(dirLoc) -d $(depLoc) -o $(testDir)results_Dir.txt
 	@$(info View the output at $(testDir)results_Dir.txt.)
 
 #The command for a SCARF directory scan output, that also verifies the output
-scanDir_Scarf: checkJavaHome checkBuild
+scanDir_Scarf: checkJava7Home build
 	@$(info Scanning the sample jar ($(dirLoc)).)
 	@$(scan) -in source -s $(dirLoc) -d $(depLoc) -o $(testDir)results_Dir_Scarf.xml -m SX -n
 	@$(info Verifying the Scarf Output ($(testDir)results_Dir_Scarf.xml).)
@@ -137,19 +127,19 @@ scanDir_Scarf: checkJavaHome checkBuild
 scanJavaFile: scanJavaFile_Default scanJavaFiles_Default scanJavaFile_Scarf scanJavaFiles_Scarf
 
 #The command for a default java class file scan output
-scanJavaFile_Default: checkJava7Home checkBuild
+scanJavaFile_Default: checkJava7Home build
 	@$(info Scanning the sample java file ($(javaFile1)).)
 	@$(scan) -in java -s $(javaFile1) -o $(testDir)results_javaFile.txt
 	@$(info View the output at $(testDir)results_javaFile.txt.)
 
 #The command for a default java class file scan output
-scanJavaFiles_Default: checkJava7Home checkBuild
+scanJavaFiles_Default: checkJava7Home build
 	@$(info Scanning the sample java files ($(javaFile1), $(javaFile2)).)
 	@$(scan) -in java -s $(javaFile1) $(javaFile2) -o $(testDir)results_javaFiles.txt
 	@$(info View the output at $(testDir)results_javaFiles.txt.)
 
 #The command for a SCARF directory scan output, that also verifies the output
-scanJavaFile_Scarf: checkJava7Home checkBuild
+scanJavaFile_Scarf: checkJava7Home build
 	@$(info Scanning the sample java class file ($(javaFile1)).)
 	@$(scan) -in java -s $(javaFile1) -o $(testDir)results_javaFile_Scarf.xml -m SX -n
 	@$(info Verifying the Scarf Output ($(testDir)results_javaFile_Scarf.xml).)
@@ -157,7 +147,7 @@ scanJavaFile_Scarf: checkJava7Home checkBuild
 	@$(info View the output at $(testDir)results_javaFile_Scarf.xml.)
 
 #The command for a SCARF directory scan output, that also verifies the output
-scanJavaFiles_Scarf: checkJava7Home checkBuild
+scanJavaFiles_Scarf: checkJava7Home build
 	@$(info Scanning the sample java class files ($(javaFile1), $(javaFile2)).)
 	@$(scan) -in java -s $(javaFile1) $(javaFile2) -o $(testDir)results_javaFiles_Scarf.xml -m SX -n
 	@$(info Verifying the Scarf Output ($(testDir)results_javaFiles_Scarf.xml).)
@@ -168,19 +158,19 @@ scanJavaFiles_Scarf: checkJava7Home checkBuild
 scanJavaClass: scanJavaClass_Default scanJavaClasses_Default scanJavaClass_Scarf scanJavaClasses_Scarf
 
 #The command for a default java class file scan output
-scanJavaClass_Default: checkJava7Home checkBuild
+scanJavaClass_Default: checkJava7Home build
 	@$(info Scanning the sample java class file ($(classFile1)).)
 	@$(scan) -in class -s $(classFile1) -o $(testDir)results_javaClass.txt
 	@$(info View the output at $(testDir)results_javaClass.txt.)
 
 #The command for a default java class file scan output
-scanJavaClasses_Default: checkJava7Home checkBuild
+scanJavaClasses_Default: checkJava7Home build
 	@$(info Scanning the sample java class files ($(classFile1), $(classFile2)).)
 	@$(scan) -in class -s $(classFile1) $(classFile2) -o $(testDir)results_javaClasses.txt
 	@$(info View the output at $(testDir)results_javaClasses.txt.)
 
 #The command for a SCARF directory scan output, that also verifies the output
-scanJavaClass_Scarf: checkJava7Home checkBuild
+scanJavaClass_Scarf: checkJava7Home build
 	@$(info Scanning the sample java class file ($(classFile1)).)
 	@$(scan) -in class -s $(classFile1) -o $(testDir)results_javaClass_Scarf.xml -m SX -n
 	@$(info Verifying the Scarf Output ($(testDir)results_javaClass_Scarf.xml).)
@@ -188,34 +178,22 @@ scanJavaClass_Scarf: checkJava7Home checkBuild
 	@$(info View the output at $(testDir)results_javaClass_Scarf.xml.)
 
 #The command for a SCARF directory scan output, that also verifies the output
-scanJavaClasses_Scarf: checkJava7Home checkBuild
+scanJavaClasses_Scarf: checkJava7Home build
 	@$(info Scanning the sample java class files ($(classFile1), $(classFile2)).)
 	@$(scan) -in class -s $(classFile1) $(classFile2) -o $(testDir)results_javaClasses_Scarf.xml -m SX -n
 	@$(info Verifying the Scarf Output ($(testDir)results_javaClasses_Scarf.xml).)
 	@xmllint --schema $(scarfXSD) $(testDir)results_javaClasses_Scarf.xml>$(testDir)lint_JavaClasses.out 2>$(testDir)lint_JavaClass.err
 	@$(info View the output at $(testDir)results_javaClasses_Scarf.xml.)
 
-#This build skips the tests and removes the namespace from the xml creation
-buildNoTest: setHome checkEnv
-	@$(info Running a gradle clean build without tests.)
-	@gradle -p $(dir) clean build -x test
-
-#Test build is currently skipped as there is an issue with gradle/java version
-fullBuild: buildNoTest
-	@$(info Cutting (copying) the source built $(name) jar file, and creating the test directory.)
-	@mkdir -p $(testDir)
-	@cp $(dir)build/libs/$(name)-$(ver).jar $(dir)$(name).jar
-
 #This runs the help method
-help: checkBuild
+help: build
 	@$(scan) -h
 
 #This build calls all of the scan operations within this Makefile
 scans:\
 setHome\
-buildNoTest\
+build\
 setHome\
-cleanScans\
 scanJar\
 scanAPK\
 scanDir\

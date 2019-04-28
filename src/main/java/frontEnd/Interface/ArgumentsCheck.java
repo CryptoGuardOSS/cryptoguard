@@ -6,6 +6,7 @@ import frontEnd.Interface.outputRouting.parcelHandling;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import frontEnd.MessagingSystem.routing.Listing;
 import frontEnd.argsIdentifier;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.cli.*;
 import rule.engine.EngineType;
 import util.Utils;
@@ -26,6 +27,7 @@ import java.util.List;
  *
  * <p>The main check for the Arguments</p>
  */
+@Log4j2
 public class ArgumentsCheck {
 
     /**
@@ -44,16 +46,22 @@ public class ArgumentsCheck {
         CommandLine cmd = null;
 
         //region Printing Version
-        if (args.contains(argsIdentifier.HELP.getArg()))
+        if (args.contains(argsIdentifier.HELP.getArg())) {
+            log.trace("Retrieving the help as requested.");
             throw new ExceptionHandler(parcelHandling.retrieveHelpFromOptions(cmdLineArgs, null), ExceptionId.HELP);
+        }
 
-        if (args.contains(argsIdentifier.VERSION.getArg()))
+        if (args.contains(argsIdentifier.VERSION.getArg())) {
+            log.trace("Retrieving the version as requested.");
             throw new ExceptionHandler(parcelHandling.retrieveHeaderInfo(), ExceptionId.VERSION);
+        }
         //endregion
 
+        log.trace("Starting the parsing of arguments.");
         try {
             cmd = new DefaultParser().parse(cmdLineArgs, args.toArray(new String[0]), true);
         } catch (ParseException e) {
+            log.debug("Issue with parsing the arguments: " + e.getMessage());
             String arg = null;
 
             if (e.getMessage().startsWith("Missing required option: "))
@@ -75,6 +83,7 @@ public class ArgumentsCheck {
         //endregion
 
         //region Cleaning retrieved values from args
+        log.trace("Cleaning the extra output specific arguments.");
         ArrayList<String> upgradedArgs = new ArrayList<>(args);
         for (argsIdentifier arg : argsIdentifier.values()) {
             if (cmd.hasOption(arg.getId())) {
@@ -83,34 +92,44 @@ public class ArgumentsCheck {
             }
         }
         args = upgradedArgs;
+        log.debug("Output specific arguments: " + args.toString());
         //endregion
 
         EngineType type = EngineType.getFromFlag(cmd.getOptionValue(argsIdentifier.FORMAT.getId()));
+        log.debug("Chose the enginetype: " + type.getName());
 
         Boolean verify = !cmd.hasOption(argsIdentifier.SKIPINPUTVALIDATION.getId());
+        log.debug("Verification flag: " + verify);
 
         //region Setting the source files
+        log.trace("Retrieving the source files.");
         List<String> source = verify ? Utils.retrieveFilesByType(
                 Arrays.asList(
                         cmd.getOptionValues(argsIdentifier.SOURCE.getId())), type)
                 : Arrays.asList(
                 cmd.getOptionValues(argsIdentifier.SOURCE.getId()));
+        log.info("Using the source file(s): " + source.toString());
         //endregion
 
         //region Setting the dependency path
         List<String> dependencies = null;
-        if (cmd.hasOption(argsIdentifier.DEPENDENCY.getId()))
+        if (cmd.hasOption(argsIdentifier.DEPENDENCY.getId())) {
+            log.trace("Retrieving the dependency files.");
             dependencies = verify ? Utils.retrieveDirs(
                     Arrays.asList(
                             cmd.getOptionValues(argsIdentifier.DEPENDENCY.getId())))
                     : Arrays.asList(
                     cmd.getOptionValues(argsIdentifier.DEPENDENCY.getId()))
-                    ;
+            ;
+            log.info("Using the dependency file(s): " + source.toString());
+        }
         //endregion
 
         Listing messaging = Listing.retrieveListingType(cmd.getOptionValue(argsIdentifier.FORMATOUT.getId()));
+        log.info("Using the output " + messaging.getType());
 
         //region Retrieving the package path
+        log.trace("retrieving the package path, may/may not be able to be replaced.");
         List<String> basePath = new ArrayList<String>();
         File sourceFile;
         String pkg = "";
@@ -145,11 +164,13 @@ public class ArgumentsCheck {
                 }
                 break;
         }
+        log.debug("Package path: " + pkg);
         //endregion
 
         EnvironmentInformation info = new EnvironmentInformation(source, type, messaging, dependencies, basePath, pkg);
 
         //region Setting the file out
+        log.trace("Determining the file out.");
         String fileOutPath = "";
         if (cmd.hasOption(argsIdentifier.OUT.getId()))
             if (verify)
@@ -164,19 +185,26 @@ public class ArgumentsCheck {
             String[] tempSplit = fileOutPath.split("\\.\\w+$");
             fileOutPath = tempSplit[0] + "_" + Utils.getCurrentTimeStamp() + info.getMessagingType().getOutputFileExt();
         }
-
+        log.debug("File out: " + fileOutPath);
         info.setFileOut(fileOutPath);
 
 
         //endregion
 
         if (!messaging.getTypeOfMessagingInput().inputValidation(info, args.toArray(new String[0]))) {
+            log.error("Issue Validating Output Specific Arguments.");
+            //TODO - Add better output message for this case
             throw new ExceptionHandler(messaging.getInputHelp(), ExceptionId.FORMAT_VALID);
         }
 
         info.setPrettyPrint(cmd.hasOption(argsIdentifier.PRETTY.getId()));
+        log.debug("Pretty flag: " + argsIdentifier.PRETTY.getId());
+
         info.setShowTimes(cmd.hasOption(argsIdentifier.TIMEMEASURE.getId()));
+        log.debug("Time measure flag: " + argsIdentifier.TIMEMEASURE.getId());
+
         info.setStreaming(cmd.hasOption(argsIdentifier.STREAM.getId()));
+        log.debug("Stream flag: " + argsIdentifier.STREAM.getId());
 
         return info;
 
@@ -238,6 +266,7 @@ public class ArgumentsCheck {
         stream.setOptionalArg(true);
         cmdLineArgs.addOption(stream);
 
+        log.trace("Set the command line options to be used for parsing.");
         return cmdLineArgs;
     }
 

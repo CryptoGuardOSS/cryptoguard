@@ -6,7 +6,9 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
+import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static util.Utils.retrieveFullyQualifiedName;
 import static util.Utils.trimFilePath;
 
 /**

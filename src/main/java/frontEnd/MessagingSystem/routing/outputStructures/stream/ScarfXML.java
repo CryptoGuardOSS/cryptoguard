@@ -7,6 +7,7 @@ import frontEnd.MessagingSystem.routing.outputStructures.common.JacksonSerialize
 import frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport;
 import frontEnd.MessagingSystem.routing.structure.Scarf.BugInstance;
 import frontEnd.MessagingSystem.routing.structure.Scarf.BugSummary;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -19,6 +20,7 @@ import org.apache.commons.lang3.StringUtils;
  *
  * <p>The ScarfXML stream writer.</p>
  */
+@Slf4j
 public class ScarfXML extends Structure {
 
     //region Attributes
@@ -51,6 +53,7 @@ public class ScarfXML extends Structure {
     @Override
     public void writeHeader() throws ExceptionHandler {
 
+        log.info("Marshalling the header.");
         AnalyzerReport report = frontEnd.MessagingSystem.routing.outputStructures.common.ScarfXML.marshalling(this.getSource());
 
         String xmlStream = JacksonSerializer.serialize(report, true, JacksonSerializer.JacksonType.XML);
@@ -69,6 +72,7 @@ public class ScarfXML extends Structure {
     public void addIssue(AnalysisIssue issue) throws ExceptionHandler {
         super.addIssue(issue);
 
+        log.debug("Marshalling and writing the issue: " + issue.getInfo());
         BugInstance instance = frontEnd.MessagingSystem.routing.outputStructures.common.ScarfXML.marshalling(issue, super.getCwes(), super.getSource().getFileOutName(), getId(), this.buildId, this.xPath);
 
         String xml = JacksonSerializer.serialize(instance, true, JacksonSerializer.JacksonType.XML);
@@ -88,7 +92,8 @@ public class ScarfXML extends Structure {
         //region Setting the BugSummary
         BugSummary summary = super.createBugCategoryList();
 
-        String xml = JacksonSerializer.serialize(summary, true, JacksonSerializer.JacksonType.XML);
+        log.info("Marshalling the bug category summary.");
+        String xml = JacksonSerializer.serialize(summary, super.getSource().prettyPrint(), JacksonSerializer.JacksonType.XML);
 
         if (!xml.endsWith("/>"))
             this.write(xml);
@@ -105,14 +110,19 @@ public class ScarfXML extends Structure {
 
         StringBuilder commentedFooter = new StringBuilder();
 
-        if (super.getSource().getSootErrors() != null && super.getSource().getSootErrors().split("\n").length >= 1)
+        if (super.getSource().getSootErrors() != null && super.getSource().getSootErrors().split("\n").length >= 1) {
+            log.info("Adding the Soot Errors");
             commentedFooter.append(prettyTab).append(super.getSource().getSootErrors().replaceAll("\n", prettyLine)).append(prettyLine);
+        }
 
-        if (super.getSource().isShowTimes())
+        if (super.getSource().isShowTimes()) {
+            log.trace("Adding the time measurements");
             commentedFooter.append("Analysis Timing (ms): ").append(super.getSource().getAnalyisisTime()).append(".").append(prettyLine);
+        }
 
         if (StringUtils.isNotBlank(commentedFooter.toString()))
             footer = prettyLine + "<!--" + prettyLine + commentedFooter.toString() + "-->";
+
 
         if (footer != null)
             this.writeln(footer);

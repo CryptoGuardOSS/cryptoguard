@@ -2,6 +2,7 @@ package rule.engine;
 
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
+import lombok.extern.log4j.Log4j2;
 import util.BuildFileParser;
 import util.BuildFileParserFactory;
 import util.FieldInitializationInstructionMap;
@@ -21,6 +22,7 @@ import java.util.Map;
  *
  * <p>The method in the Engine handling Source Scanning</p>
  */
+@Log4j2
 public class SourceEntry implements EntryHandler {
 
     /**
@@ -29,11 +31,14 @@ public class SourceEntry implements EntryHandler {
     public void Scan(EnvironmentInformation generalInfo) throws ExceptionHandler {
 
 
+        log.trace("Retrieving the specific project-based build parser.");
         BuildFileParser buildFileParser = BuildFileParserFactory.getBuildfileParser(generalInfo.getSource().get(0));
+        log.debug("Using the build parser: " + buildFileParser.toString());
 
         Map<String, List<String>> moduleVsDependency = buildFileParser.getDependencyList();
         List<String> analyzedModules = new ArrayList<>();
 
+        log.trace("Module Iteration Start");
         for (String module : moduleVsDependency.keySet()) {
 
             if (!analyzedModules.contains(module)) {
@@ -41,6 +46,7 @@ public class SourceEntry implements EntryHandler {
                 List<String> dependencies = moduleVsDependency.get(module);
                 List<String> otherdependencies = new ArrayList<>();
 
+                log.trace("Dependency Builder Start");
                 for (String dependency : dependencies) {
 
                     String dependencyModule;
@@ -54,17 +60,23 @@ public class SourceEntry implements EntryHandler {
                     //otherdependencies.add(dependency.substring(0, dependency.length() - 13) + generalInfo.getDependencies());
                     otherdependencies.addAll(generalInfo.getDependencies());
 
+                    log.debug("Added the module: " + dependencyModule);
                     analyzedModules.add(dependencyModule);
                 }
+                log.trace("Dependency Builder Stop");
 
+                log.trace("Starting scanner looper");
                 for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
+                    log.debug("Checking the rule: " + ruleChecker.toString());
                     ruleChecker.checkRule(EngineType.DIR, dependencies, otherdependencies, generalInfo.getSourcePaths(), generalInfo.getOutput());
                 }
+                log.trace("Scanner looper stopped");
 
                 NamedMethodMap.clearCallerCalleeGraph();
                 FieldInitializationInstructionMap.reset();
             }
         }
+        log.trace("Module Iteration Stop");
     }
 
 

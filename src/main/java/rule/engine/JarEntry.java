@@ -2,6 +2,7 @@ package rule.engine;
 
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p>JarEntry class.</p>
@@ -13,6 +14,7 @@ import frontEnd.MessagingSystem.routing.EnvironmentInformation;
  *
  * <p>The method in the Engine handling Jar Scanning</p>
  */
+@Slf4j
 public class JarEntry implements EntryHandler {
 
     /**
@@ -20,9 +22,12 @@ public class JarEntry implements EntryHandler {
      */
     public void Scan(EnvironmentInformation generalInfo) throws ExceptionHandler {
 
+        log.trace("Starting scanner looper");
         for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
+            log.debug("Checking the rule: " + ruleChecker.toString());
             ruleChecker.checkRule(EngineType.JAR, generalInfo.getSource(), generalInfo.getDependencies(), generalInfo.getSourcePaths(), generalInfo.getOutput());
         }
+        log.trace("Scanner looper stopped");
     }
 
 }

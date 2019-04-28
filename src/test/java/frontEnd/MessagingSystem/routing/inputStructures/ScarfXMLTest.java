@@ -17,8 +17,11 @@ import test.TestUtilities;
 import java.util.Arrays;
 import java.util.Properties;
 
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 
 /**

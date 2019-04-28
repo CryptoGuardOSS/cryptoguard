@@ -5,6 +5,7 @@ import frontEnd.Interface.outputRouting.ExceptionId;
 import frontEnd.MessagingSystem.AnalysisIssue;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -20,6 +21,7 @@ import java.nio.file.Files;
  *
  * <p>The overarching structure encompassing the block marshalling, extending from the output structure.</p>
  */
+@Slf4j
 public abstract class Structure extends OutputStructure {
 
     //region Attributes
@@ -86,6 +88,7 @@ public abstract class Structure extends OutputStructure {
         try {
             Files.write(this.getOutfile().toPath(), in.getBytes(super.getChars()));
         } catch (IOException e) {
+            log.debug("Error: " + e.getMessage());
             throw new ExceptionHandler("Error writing to file: " + this.getSource().getFileOutName(), ExceptionId.FILE_O);
         }
     }
