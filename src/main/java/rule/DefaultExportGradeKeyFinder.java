@@ -1,7 +1,7 @@
 package rule;
 
 import analyzer.UniqueRuleAnalyzer;
-import frontEnd.Interface.ExceptionHandler;
+import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.MessagingSystem.AnalysisIssue;
 import frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import rule.engine.EngineType;
@@ -154,9 +154,9 @@ public class DefaultExportGradeKeyFinder implements RuleChecker {
     /**
      * <p>getInfluencingInstructions.</p>
      *
-     * @param slicingCriteria a {@link SlicingCriteria} object.
+     * @param slicingCriteria a {@link slicer.forward.SlicingCriteria} object.
      * @param m               a {@link soot.SootMethod} object.
-     * @return a {@link SlicingResult} object.
+     * @return a {@link slicer.forward.SlicingResult} object.
      */
     public static SlicingResult getInfluencingInstructions(SlicingCriteria slicingCriteria,
                                                            SootMethod m) {

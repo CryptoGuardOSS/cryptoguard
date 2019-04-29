@@ -11,7 +11,7 @@ import java.io.ByteArrayOutputStream;
 /**
  * <p>JavaFileEntryTest class.</p>
  *
- * @author drmonster
+ * @author franceme
  * @version $Id: $Id
  * @since V03.03.10
  */

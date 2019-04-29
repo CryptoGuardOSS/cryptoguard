@@ -1,7 +1,7 @@
 package util;
 
-import frontEnd.Interface.ExceptionHandler;
-import frontEnd.Interface.ExceptionId;
+import frontEnd.Interface.outputRouting.ExceptionHandler;
+import frontEnd.Interface.outputRouting.ExceptionId;
 import org.codehaus.groovy.ast.ASTNode;
 import org.codehaus.groovy.ast.CodeVisitorSupport;
 import org.codehaus.groovy.ast.GroovyCodeVisitor;
@@ -37,7 +37,7 @@ public class GradleBuildFileParser implements BuildFileParser {
      * <p>Constructor for GradleBuildFileParser.</p>
      *
      * @param fileName a {@link java.lang.String} object.
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public GradleBuildFileParser(String fileName) throws ExceptionHandler {
         try {

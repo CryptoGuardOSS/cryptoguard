@@ -1,94 +1,108 @@
-=============================
-CryptoGuard: Source Code
-=============================
+#################################
+CryptoGuard V03.05.00
+#################################
+
 
 An program analysis tool to find cryptographic misuse in Java and Android.
-Current Version: V03.04.01
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-Prerequisites to use CryptoGuard:
----------------------------------
 
-1. Download and Install JDK 7.
-#. Set `JAVA7_HOME` environment variable.
-#. Download and Install Gradle.
+Building From Source
+==================================================
+* Run :code:`make`, this will build CryptoGuard and move the jar to the current directory
+* Run :code:`scans` to scan all of the tests included in the source
+    * There is currently a sample project for each scan type within `src/test`
+* Run :code:`clean` to clean the entire project
 
-Additional Prerequisite to use CryptoGuard on Apk:
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Prerequisites (Environment Variables)
+==================================================
+1. JAVA7_HOME: Point to a valid Java 7 JDK Installation
+    * Needed for all of the scans
+#. ANDROID_SDK_HOME: Point to a valid Android JDK Installation
+    * Needed for Android
 
-1. Download and Install Android SDK
-#. Set `ANDROID_SDK_HOME`
+Note
+-----------
+Run :code:`make checkEnv` to verify all of these variables are set.
 
-How to run CryptoGuard:
------------------------
 
-1. Run `cd /path/to/cryptoguard`
-#. Run `make build`
+Different Scanning Options
+==================================================
 
-Source Directory
-^^^^^^^^^^^^^^^^
+Source (Maven or Gradle Project Directory **only**)
+----------------------------------------------------------
+* sample Makefile command :code:`make scanDir`
+* raw command (without dependencies) :code:`java -jar cryptoguard.jar -in source -s /rootPath`
+* raw command (with dependencies) :code:`java -jar cryptoguard.jar -in source -s /rootPath -d /dependencies`
 
-You need to run CryptoGuard on JDK 7 to analyze source codes. If the project does not have any external dependencies then run,
-     
-`cd /path/to/cryptoguard &&  /usr/local/jdk1.7.0_80/bin/java -jar main/build/libs/main-{Version Here}.jar -in source -s /path/to/project/root`
+Note
+^^^^
+If the project have external dependencies then first gather the dependencies under a folder that is relative to the project root (e.g., “build/dependencies”).
 
-If the project have external dependencies then first gather the dependencies under a folder that is relative to the project root (e.g., “build/dependencies”), then run
+If you have multiple subprojects with external dependencies, then you have to gather all the corresponding subproject dependencies under a path that is relative to each of the subprojects.
 
-`cd /path/to/cryptoguard && /usr/local/jdk1.7.0_80/bin/java -jar main/build/libs/main-{Version Here}.jar -in source -s /path/to/project/root -d {fullPath}/build/dependencies`
+JAR Files
+----------------------------------------------------------
+* sample Makefile command :code:`make scanJar`
+* raw command :code:`java -jar cryptoguard.jar -in jar -s /path/to/jar/my-jar.jar`
 
-Note that if you have multiple subprojects with external dependencies, then you have to gather all the corresponding subproject dependencies under a path that is relative to each of the subprojects.
-
-JAR
-^^^
-
-`cd /path/to/cryptoguard && java -jar main/build/libs/main.jar -in jar -s /path/to/jar/my-jar-{Version Here}.jar`
-
-APK
-^^^
-
-`cd /path/to/cryptoguard && java -jar main/build/libs/main-{Version Here}.jar -in apk -s /path/to/apk/my-apk.apk`
+APK Files
+----------------------------------------------------------
+* sample Makefile command :code:`make scanAPK`
+* raw command :code:`java -jar cryptoguard.jar -in apk -s /path/to/apk/my-apk.apk`
 
 Java Files
-^^^^^^^^^^
+----------------------------------------------------------
+* sample Makefile command :code:`make scanJava`
+* raw command :code:`java -jar cryptoguard.jar -in java -s /path/to/java/file.java`
+* raw command (for files) :code:`java -jar cryptoguard.jar -in java -s /path/to/java/file1.java /path/to/java/file2.java`
 
-`cd /path/to/cryptoguard && java -jar main/build/libs/main-{Version Here}.jar -in java -s /path/to/java/files.java's`
+Note
+^^^^^
+* Due to library constraints, Java File Scanning is currently limited to **Java 1.7 files and below**
+
 
 Java Class Files (Experimental)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+----------------------------------------------------------
+* sample Makefile command :code:`make scanClass`
+* raw command :code:`java -jar cryptoguard.jar -in class -s /path/to/java/file.class`
+* raw command (for files) :code:`java -jar cryptoguard.jar -in java -s /path/to/java/file1.class /path/to/java/file2.class`
 
-`cd /path/to/cryptoguard && java -jar main/build/libs/main-{Version Here}.jar -in class -s /path/to/java/files.class's`
+Note
+^^^^
+* This is still **experimental**
+
+
+Different Scanning Output Options
+==================================================
+
+How To Choose
+-----------------
+* using the argument :code:`-m`, you can add the identifier of the other output formats
+
+Default
+-------------
+* Argument :code:`-m L`
+    * example command :code:`java -jar cryptoguard.jar -in jar -s /path/to/jar/my-jar.jar -m L`
+* This will output a txt file used within early CryptoGuard versions
+
+Scarf XML
+-------------
+* Argument :code:`-m SX`
+    * example command :code:`java -jar cryptoguard.jar -in jar -s /path/to/jar/my-jar.jar -m SX`
+* This will ouput an xml file using the `scarf_v1.2.xsd <https://github.com/mirswamp/resultparser/blob/master/xsd/scarf_v1.2.xsd>`_ used by `SWAMP <https://continuousassurance.org/open-source-software/>`_.
+* By using the argument :code:`-Sconfig properties.file`, this will load the properties from within the file
+    * example command :code:`java -jar cryptoguard.jar -in jar -s /path/to/jar/my-jar.jar -m SX -Sconfig properties.file`
 
 Help
 ----
-* If you have any questions or suggestions, please email to cryptoguardorg@gmail.com.
-* Please also run `make help` or `cd /path/to/grptoguard && java -jar main/build/libs/main-{Version Here}.jar -h` for argument help.
+* If you have any questions or suggestions, please email to `cryptoguardorg@gmail.com <mailto:cryptoguardorg@gmail.com>`_.
+* Please also run :code:`make help` or :code:`java -jar cryptoguard.jar -h` for argument help.
 
 FAQ
 ^^^
-* There may be ***silent failures*** if any of the environment variables below are not set.
-
-+------------------------+--------------------+----------------------------------------+------------------------------------+
-| Build Type             | Env. Variable Name | Path Resolution                        | Example                            |
-+------------------------+--------------------+----------------------------------------+------------------------------------+
-| JAR/Dir/APK/Java Class | JAVA_HOME          | Should resolve to the bin of Java 7    | export PATH=...:~/java7/bin:...    |
-+------------------------+--------------------+----------------------------------------+------------------------------------+
-| Source/Java Files      | JAVA7_HOME         | Should resolve to the bin of Java 7    | export PATH=...:~/java7/bin:...    |
-+------------------------+--------------------+----------------------------------------+------------------------------------+
-| APK                    | ANDROID_HOME       | Should resolve to the SDK Android path | export PATH=...:~/Android/Sdk/:... |
-+------------------------+--------------------+----------------------------------------+------------------------------------+
-
-* Also listed below is the current support (tldr) of the project across the various operating systems
-
-+--------------------+-----------+---------+
-| OS                 | Supported | Planned |
-+--------------------+-----------+---------+
-| Ubuntu             | Yes       | ~       |
-+--------------------+-----------+---------+
-| Linux (Non-ubuntu) | ?         | ?       |
-+--------------------+-----------+---------+
-| Mac                | No        | No      |
-+--------------------+-----------+---------+
-| Windows            | No        | No      |
-+--------------------+-----------+---------+
+* There may be **silent failures** if any of the environment variables below are not set.
+    * This can be checked by running :code:`make checkEnv`
 
 Disclaimer
 -----------

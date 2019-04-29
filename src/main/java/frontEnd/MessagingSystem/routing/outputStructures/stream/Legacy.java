@@ -1,6 +1,6 @@
 package frontEnd.MessagingSystem.routing.outputStructures.stream;
 
-import frontEnd.Interface.ExceptionHandler;
+import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.MessagingSystem.AnalysisIssue;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 
@@ -26,8 +26,8 @@ public class Legacy extends Structure {
     /**
      * <p>Constructor for Legacy.</p>
      *
-     * @param info a {@link EnvironmentInformation} object.
-     * @throws ExceptionHandler if any.
+     * @param info a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public Legacy(EnvironmentInformation info) throws ExceptionHandler {
         super(info);

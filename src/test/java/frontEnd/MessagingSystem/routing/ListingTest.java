@@ -7,14 +7,16 @@ import rule.engine.EngineType;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static org.junit.Assert.*;
+import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * <p>MessageRepresentationTest class.</p>
  *
  * @author RigorityJTeam
- * @since V01.00.02
  * @version $Id: $Id
+ * @since V01.00.02
  */
 public class ListingTest {
     //region Test Attributes

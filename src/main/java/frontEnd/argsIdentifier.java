@@ -4,7 +4,7 @@ import frontEnd.MessagingSystem.routing.Listing;
 import rule.engine.EngineType;
 
 /**
- * <p>argsIdentifier class.</p>
+ * <p>argsIdentifier class.</p>" -o " + tempFileOutApk_Scarf
  *
  * @author RigorityJTeam
  * Created on 2/5/19.
@@ -15,25 +15,28 @@ import rule.engine.EngineType;
  */
 public enum argsIdentifier {
 
-    FORMAT("in", "(Req'd) The format of input you want to scan, available styles " + EngineType.retrieveEngineTypeValues() + "."),
-    SOURCE("s", "(Req'd) The source(s) to be scanned, use the absolute path)."),
-    DEPENDENCY("d", "The dependency to be scanned, (use the relative path)."),
-    OUT("o", "The file to be created with the output (default will be the project name)."),
-    TIMEMEASURE("t", "Output the time of the internal processes."),
-    FORMATOUT("m", "The output format you want to produce " + Listing.getShortHelp() + "."),
-    PRETTY("n", "Output the analysis information in a 'pretty' format."),
-    SKIPINPUTVALIDATION("x", "Skip input validation."),
-    EXPERIMENTRESULTS("exp", "View the experiment based results."),
-    VERSION("v", "Output the version number."),
-    TIMESTAMP("ts", "Add a timestamp to the file output."),
-    STREAM("st", "Stream the analysis to the output file (still being tested)."),
-    HELP("h", "Print out the Help Information.");
+    FORMAT("in", "format", "(Req'd) The format of input you want to scan, available styles " + EngineType.retrieveEngineTypeValues() + "."),
+    SOURCE("s", "file(s)/dir", "(Req'd) The source(s) to be scanned, use the absolute path)."),
+    DEPENDENCY("d", "dir", "The dependency to be scanned, (use the relative path)."),
+    OUT("o", "file", "The file to be created with the output (default will be the project name)."),
+    TIMEMEASURE("t", null, "Output the time of the internal processes."),
+    FORMATOUT("m", "formatType", "The output format you want to produce " + Listing.getShortHelp() + "."),
+    PRETTY("n", null, "Output the analysis information in a 'pretty' format."),
+    SKIPINPUTVALIDATION("x", null, "Skip input validation."),
+    EXPERIMENTRESULTS("exp", null, "View the experiment based results."),
+    VERSION("v", null, "Output the version number."),
+    TIMESTAMP("ts", null, "Add a timestamp to the file output."),
+    LOG("L", null, "Enable logging to the console."),
+    STREAM("st", null, "Stream the analysis to the output file (still being tested)."),
+    HELP("h", null, "Print out the Help Information.");
 
     private String id;
+    private String defaultArg;
     private String desc;
 
-    argsIdentifier(String id, String desc) {
+    argsIdentifier(String id, String defaultArg, String desc) {
         this.id = id;
+        this.defaultArg = defaultArg;
         this.desc = desc;
     }
 
@@ -62,6 +65,33 @@ public enum argsIdentifier {
      */
     public String getDesc() {
         return this.name() + ": " + this.desc;
+    }
+
+    /**
+     * <p>hasDefaultArg.</p>
+     *
+     * @return a {@link java.lang.Boolean} object.
+     */
+    public Boolean hasDefaultArg() {
+        return defaultArg != null;
+    }
+
+    /**
+     * <p>Getter for the field <code>defaultArg</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getDefaultArg() {
+        return defaultArg;
+    }
+
+    /**
+     * <p>Setter for the field <code>defaultArg</code>.</p>
+     *
+     * @param defaultArg a {@link java.lang.String} object.
+     */
+    public void setDefaultArg(String defaultArg) {
+        this.defaultArg = defaultArg;
     }
 
     /**

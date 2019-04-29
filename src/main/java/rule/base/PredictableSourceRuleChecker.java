@@ -4,7 +4,7 @@ import analyzer.backward.Analysis;
 import analyzer.backward.AssignInvokeUnitContainer;
 import analyzer.backward.InvokeUnitContainer;
 import analyzer.backward.UnitContainer;
-import frontEnd.Interface.ExceptionHandler;
+import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import soot.*;
 import soot.jimple.AssignStmt;

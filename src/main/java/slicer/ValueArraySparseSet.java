@@ -43,7 +43,7 @@ public class ValueArraySparseSet extends ArraySparseSet {
     /**
      * <p>Constructor for ValueArraySparseSet.</p>
      *
-     * @param other a {@link ValueArraySparseSet} object.
+     * @param other a {@link slicer.ValueArraySparseSet} object.
      */
     protected ValueArraySparseSet(ValueArraySparseSet other) {
         numElements = other.numElements;
@@ -63,7 +63,7 @@ public class ValueArraySparseSet extends ArraySparseSet {
     /**
      * <p>clone.</p>
      *
-     * @return a {@link ValueArraySparseSet} object.
+     * @return a {@link slicer.ValueArraySparseSet} object.
      */
     public ValueArraySparseSet clone() {
         return new ValueArraySparseSet(this);
@@ -72,7 +72,7 @@ public class ValueArraySparseSet extends ArraySparseSet {
     /**
      * <p>emptySet.</p>
      *
-     * @return a {@link ValueArraySparseSet} object.
+     * @return a {@link slicer.ValueArraySparseSet} object.
      */
     public ValueArraySparseSet emptySet() {
         return new ValueArraySparseSet();

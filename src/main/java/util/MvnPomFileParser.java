@@ -1,7 +1,7 @@
 package util;
 
-import frontEnd.Interface.ExceptionHandler;
-import frontEnd.Interface.ExceptionId;
+import frontEnd.Interface.outputRouting.ExceptionHandler;
+import frontEnd.Interface.outputRouting.ExceptionId;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
@@ -32,7 +32,7 @@ public class MvnPomFileParser implements BuildFileParser {
      * <p>Constructor for MvnPomFileParser.</p>
      *
      * @param fileName a {@link java.lang.String} object.
-     * @throws ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public MvnPomFileParser(String fileName) throws ExceptionHandler {
 

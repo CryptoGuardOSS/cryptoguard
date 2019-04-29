@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.io.Serializable;
 
@@ -14,6 +13,9 @@ import java.io.Serializable;
 /**
  * BugCategoryType
  * <p>
+ *
+ * @author franceme
+ * @version $Id: $Id
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -57,10 +59,12 @@ public class BugCategory implements Serializable {
     }
 
     /**
-     * @param bytes
-     * @param count
-     * @param code
-     * @param group
+     * <p>Constructor for BugCategory.</p>
+     *
+     * @param bytes a int.
+     * @param count a int.
+     * @param code  a {@link java.lang.String} object.
+     * @param group a {@link java.lang.String} object.
      */
     public BugCategory(String group, String code, int count, int bytes) {
         super();
@@ -72,6 +76,8 @@ public class BugCategory implements Serializable {
 
     /**
      * (Required)
+     *
+     * @return a {@link java.lang.String} object.
      */
     @JacksonXmlProperty(isAttribute = true, localName = "group")
     @JsonProperty("-group")
@@ -81,6 +87,8 @@ public class BugCategory implements Serializable {
 
     /**
      * (Required)
+     *
+     * @param group a {@link java.lang.String} object.
      */
     @JacksonXmlProperty(isAttribute = true, localName = "group")
     @JsonProperty("-group")
@@ -88,6 +96,12 @@ public class BugCategory implements Serializable {
         this.group = group;
     }
 
+    /**
+     * <p>withGroup.</p>
+     *
+     * @param group a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.BugCategory} object.
+     */
     public BugCategory withGroup(String group) {
         this.group = group;
         return this;
@@ -95,6 +109,8 @@ public class BugCategory implements Serializable {
 
     /**
      * (Required)
+     *
+     * @return a {@link java.lang.String} object.
      */
     @JacksonXmlProperty(isAttribute = true, localName = "code")
     @JsonProperty("-code")
@@ -104,6 +120,8 @@ public class BugCategory implements Serializable {
 
     /**
      * (Required)
+     *
+     * @param code a {@link java.lang.String} object.
      */
     @JacksonXmlProperty(isAttribute = true, localName = "code")
     @JsonProperty("-code")
@@ -111,6 +129,12 @@ public class BugCategory implements Serializable {
         this.code = code;
     }
 
+    /**
+     * <p>withCode.</p>
+     *
+     * @param code a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.BugCategory} object.
+     */
     public BugCategory withCode(String code) {
         this.code = code;
         return this;
@@ -118,6 +142,8 @@ public class BugCategory implements Serializable {
 
     /**
      * (Required)
+     *
+     * @return a int.
      */
     @JacksonXmlProperty(isAttribute = true, localName = "count")
     @JsonProperty("-count")
@@ -127,6 +153,8 @@ public class BugCategory implements Serializable {
 
     /**
      * (Required)
+     *
+     * @param count a int.
      */
     @JacksonXmlProperty(isAttribute = true, localName = "count")
     @JsonProperty("-count")
@@ -134,6 +162,12 @@ public class BugCategory implements Serializable {
         this.count = count;
     }
 
+    /**
+     * <p>withCount.</p>
+     *
+     * @param count a int.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.BugCategory} object.
+     */
     public BugCategory withCount(int count) {
         this.count = count;
         return this;
@@ -141,6 +175,8 @@ public class BugCategory implements Serializable {
 
     /**
      * (Required)
+     *
+     * @return a int.
      */
     @JacksonXmlProperty(isAttribute = true, localName = "bytes")
     @JsonProperty("-bytes")
@@ -150,6 +186,8 @@ public class BugCategory implements Serializable {
 
     /**
      * (Required)
+     *
+     * @param bytes a int.
      */
     @JacksonXmlProperty(isAttribute = true, localName = "bytes")
     @JsonProperty("-bytes")
@@ -157,21 +195,41 @@ public class BugCategory implements Serializable {
         this.bytes = bytes;
     }
 
+    /**
+     * <p>withBytes.</p>
+     *
+     * @param bytes a int.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.BugCategory} object.
+     */
     public BugCategory withBytes(int bytes) {
         this.bytes = bytes;
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("group", group).append("code", code).append("count", count).append("bytes", bytes).toString();
+        return new StringBuilder("BugCategory[")
+                .append("group:").append(group)
+                .append(", code: ").append(code)
+                .append(", count: ").append(count)
+                .append(", bytes: ").append(bytes)
+                .append("]").toString();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(bytes).append(count).append(code).append(group).toHashCode();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object other) {
         if (other == this) {

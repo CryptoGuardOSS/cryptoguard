@@ -18,7 +18,7 @@ public class Legacy implements Structure {
      * {@inheritDoc}
      * The overridden method for the Legacy output.
      *
-     * @param info a {@link EnvironmentInformation} object.
+     * @param info a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
      * @param args an array of {@link java.lang.String} objects.
      * @return a {@link java.lang.Boolean} object.
      */

@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * <p>HeuristicBasedInstructionSlicer class.</p>
  *
- * @author drmonster
+ * @author franceme
  * @version $Id: $Id
  */
 public class HeuristicBasedInstructionSlicer extends BackwardFlowAnalysis {

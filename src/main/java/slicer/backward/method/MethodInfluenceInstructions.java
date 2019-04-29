@@ -26,7 +26,7 @@ public class MethodInfluenceInstructions implements InfluenceInstructions {
      * <p>Constructor for MethodInfluenceInstructions.</p>
      *
      * @param graph              a {@link soot.toolkits.graph.DirectedGraph} object.
-     * @param methodCallSiteInfo a {@link MethodCallSiteInfo} object.
+     * @param methodCallSiteInfo a {@link slicer.backward.MethodCallSiteInfo} object.
      * @param slicingParams      a {@link java.util.List} object.
      */
     public MethodInfluenceInstructions(DirectedGraph graph,
@@ -52,7 +52,7 @@ public class MethodInfluenceInstructions implements InfluenceInstructions {
     /**
      * <p>Getter for the field <code>methodSlicingResult</code>.</p>
      *
-     * @return a {@link MethodSlicingResult} object.
+     * @return a {@link slicer.backward.method.MethodSlicingResult} object.
      */
     public MethodSlicingResult getMethodSlicingResult() {
         return this.methodSlicingResult;

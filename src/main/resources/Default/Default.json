@@ -1,0 +1,220 @@
+{
+  "definitions": {
+    "Timing": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Total": {
+          "type": "string"
+        },
+        "Scan": {
+          "type": "string"
+        },
+        "TimeScale": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Total",
+        "Scan",
+        "TimeScale"
+      ],
+      "title": "Timing"
+    },
+    "TargetInfo": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "-PropertiesFilePath": {
+          "type": "string"
+        },
+        "-ComputerOS": {
+          "type": "string"
+        },
+        "-JVMVersion": {
+          "type": "string"
+        },
+        "-ProjectName": {
+          "type": "string"
+        },
+        "-ProjectVersion": {
+          "type": "string"
+        },
+        "RawCommand": {
+          "type": "string"
+        },
+        "Timing": {
+          "$ref": "#/definitions/Timing"
+        },
+        "FullPath": {
+          "type": "string"
+        },
+        "Type": {
+          "enum": [
+            "APK",
+            "JAR",
+            "Source",
+            "Java",
+            "Class"
+          ]
+        },
+        "ProjectType": {
+          "enum": [
+            "Gradle",
+            "Maven"
+          ]
+        },
+        "TargetSources": {
+          "$id": "#/definitions/TargetSources",
+          "type": "array",
+          "title": "The Sources of the Target",
+          "additionalItems": false,
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "-ComputerOS",
+        "-JVMVersion",
+        "RawCommand",
+        "FullPath",
+        "Type"
+      ],
+      "title": "TargetInfo"
+    },
+    "LocationType": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ClassName": {
+          "type": "string"
+        },
+        "MethodName": {
+          "type": "string"
+        },
+        "LineNumber": {
+          "type": "integer"
+        },
+        "ColumnNumber": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "ClassName",
+        "MethodName"
+      ],
+      "title": "LocationType"
+    },
+    "Issue": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "-FullPath": {
+          "type": "string"
+        },
+        "-Id": {
+          "type": "string"
+        },
+        "Message": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "RuleNumber": {
+          "type": "integer"
+        },
+        "RuleDesc": {
+          "type": "string"
+        },
+        "CWEId": {
+          "type": "integer"
+        },
+        "Severity": {
+          "type": "string"
+        },
+        "Location": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "-FullPath",
+        "-Id",
+        "Message",
+        "RuleNumber",
+        "CWEId",
+        "Severity"
+      ],
+      "title": "Issue"
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "object",
+  "title": "Report",
+  "additionalProperties": false,
+  "required": [
+    "-SchemaVersion",
+    "-DateTime",
+    "-UUID",
+    "ProjectName",
+    "ProjectVersion",
+    "Issues"
+  ],
+  "properties": {
+    "-SchemaVersion": {
+      "$id": "#/properties/-SchemaVersion",
+      "type": "integer",
+      "title": "The Schema Version",
+      "default": "",
+      "examples": [
+        "0"
+      ]
+    },
+    "-DateTime": {
+      "$id": "#/properties/-TargetSources",
+      "type": "string",
+      "title": "Time the scan was instantiated",
+      "additionalItems": false
+    },
+    "-UUID": {
+      "$id": "#/properties/-UUID",
+      "type": "string",
+      "title": "string Time the scan was instantiated"
+    },
+    "ProjectName": {
+      "$id": "#/properties/ProjectName",
+      "type": "string",
+      "title": "The Project Name",
+      "default": "",
+      "examples": [
+        "Crypto Guard"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "ProjectVersion": {
+      "$id": "#/properties/ProjectVersion",
+      "type": "string",
+      "title": "The Project Version",
+      "default": "",
+      "examples": [
+        ""
+      ],
+      "pattern": "^(.*)$"
+    },
+    "Target": {
+      "$ref": "#/definitions/TargetInfo"
+    },
+    "Issues": {
+      "$id": "#/properties/Issues",
+      "type": "array",
+      "additionalItems": false,
+      "items": {
+        "$ref": "#/definitions/Issue"
+      },
+      "title": "Issues"
+    }
+  }
+}

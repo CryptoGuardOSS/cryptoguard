@@ -12,7 +12,7 @@ public interface InfluenceInstructions {
     /**
      * <p>getSlicingResult.</p>
      *
-     * @return a {@link SlicingResult} object.
+     * @return a {@link slicer.forward.SlicingResult} object.
      */
     SlicingResult getSlicingResult();
 }

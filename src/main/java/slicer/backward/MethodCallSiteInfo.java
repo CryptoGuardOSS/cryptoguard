@@ -19,8 +19,8 @@ public class MethodCallSiteInfo {
     /**
      * <p>Constructor for MethodCallSiteInfo.</p>
      *
-     * @param caller       a {@link MethodWrapper} object.
-     * @param callee       a {@link MethodWrapper} object.
+     * @param caller       a {@link analyzer.backward.MethodWrapper} object.
+     * @param callee       a {@link analyzer.backward.MethodWrapper} object.
      * @param lineNumber   a int.
      * @param columnNumber a int.
      */
@@ -34,7 +34,7 @@ public class MethodCallSiteInfo {
     /**
      * <p>Getter for the field <code>callee</code>.</p>
      *
-     * @return a {@link MethodWrapper} object.
+     * @return a {@link analyzer.backward.MethodWrapper} object.
      */
     public MethodWrapper getCallee() {
         return callee;
@@ -43,7 +43,7 @@ public class MethodCallSiteInfo {
     /**
      * <p>Setter for the field <code>callee</code>.</p>
      *
-     * @param callee a {@link MethodWrapper} object.
+     * @param callee a {@link analyzer.backward.MethodWrapper} object.
      */
     public void setCallee(MethodWrapper callee) {
         this.callee = callee;
@@ -88,7 +88,7 @@ public class MethodCallSiteInfo {
     /**
      * <p>Getter for the field <code>caller</code>.</p>
      *
-     * @return a {@link MethodWrapper} object.
+     * @return a {@link analyzer.backward.MethodWrapper} object.
      */
     public MethodWrapper getCaller() {
         return caller;
@@ -97,7 +97,7 @@ public class MethodCallSiteInfo {
     /**
      * <p>Setter for the field <code>caller</code>.</p>
      *
-     * @param caller a {@link MethodWrapper} object.
+     * @param caller a {@link analyzer.backward.MethodWrapper} object.
      */
     public void setCaller(MethodWrapper caller) {
         this.caller = caller;

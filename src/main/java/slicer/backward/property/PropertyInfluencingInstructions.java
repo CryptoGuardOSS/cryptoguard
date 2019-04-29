@@ -27,7 +27,7 @@ public class PropertyInfluencingInstructions {
     /**
      * <p>Constructor for PropertyInfluencingInstructions.</p>
      *
-     * @param initMethod      a {@link MethodWrapper} object.
+     * @param initMethod      a {@link analyzer.backward.MethodWrapper} object.
      * @param slicingCriteria a {@link java.lang.String} object.
      */
     public PropertyInfluencingInstructions(MethodWrapper initMethod, String slicingCriteria) {
@@ -55,7 +55,7 @@ public class PropertyInfluencingInstructions {
     /**
      * <p>Getter for the field <code>slicingResult</code>.</p>
      *
-     * @return a {@link PropertyAnalysisResult} object.
+     * @return a {@link slicer.backward.property.PropertyAnalysisResult} object.
      */
     public PropertyAnalysisResult getSlicingResult() {
         return this.slicingResult;

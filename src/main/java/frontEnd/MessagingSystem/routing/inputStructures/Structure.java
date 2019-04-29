@@ -1,6 +1,6 @@
 package frontEnd.MessagingSystem.routing.inputStructures;
 
-import frontEnd.Interface.ExceptionHandler;
+import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 
 /**
@@ -18,10 +18,10 @@ public interface Structure {
     /**
      * The interface for each type of routing to handle the raw command line arguments.
      *
-     * @param info {@link EnvironmentInformation} - the continuation of the environmental info to be added onto.
+     * @param info {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} - the continuation of the environmental info to be added onto.
      * @param args {@link String[]} - The subset of arguments passed from the command line
      * @return {@link java.lang.Boolean} - an indication if the validation passed.
-     * @throws {@link ExceptionHandler} - The main controlled exception.
+     * @throws {@link frontEnd.Interface.outputRouting.ExceptionHandler} - The main controlled exception.
      */
     Boolean inputValidation(EnvironmentInformation info, String[] args) throws ExceptionHandler;
 

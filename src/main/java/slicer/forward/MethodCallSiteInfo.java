@@ -22,7 +22,7 @@ public class MethodCallSiteInfo {
     /**
      * <p>Constructor for MethodCallSiteInfo.</p>
      *
-     * @param slicingCriteria a {@link SlicingCriteria} object.
+     * @param slicingCriteria a {@link slicer.forward.SlicingCriteria} object.
      * @param lineNumber      a int.
      * @param columnNumber    a int.
      */
@@ -35,7 +35,7 @@ public class MethodCallSiteInfo {
     /**
      * <p>Getter for the field <code>slicingCriteria</code>.</p>
      *
-     * @return a {@link SlicingCriteria} object.
+     * @return a {@link slicer.forward.SlicingCriteria} object.
      */
     public SlicingCriteria getSlicingCriteria() {
         return slicingCriteria;
@@ -44,7 +44,7 @@ public class MethodCallSiteInfo {
     /**
      * <p>Setter for the field <code>slicingCriteria</code>.</p>
      *
-     * @param slicingCriteria a {@link SlicingCriteria} object.
+     * @param slicingCriteria a {@link slicer.forward.SlicingCriteria} object.
      */
     public void setSlicingCriteria(SlicingCriteria slicingCriteria) {
         this.slicingCriteria = slicingCriteria;

@@ -1,7 +1,7 @@
 package frontEnd.MessagingSystem.routing;
 
-import frontEnd.Interface.ExceptionHandler;
-import frontEnd.Interface.ExceptionId;
+import frontEnd.Interface.outputRouting.ExceptionHandler;
+import frontEnd.Interface.outputRouting.ExceptionId;
 import frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import frontEnd.MessagingSystem.routing.outputStructures.block.Structure;
 import frontEnd.MessagingSystem.routing.outputStructures.stream.Legacy;
@@ -119,7 +119,7 @@ public enum Listing {
      * @param stream a boolean.
      * @param info   a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
      * @return a {@link frontEnd.MessagingSystem.routing.outputStructures.OutputStructure} object.
-     * @throws frontEnd.Interface.ExceptionHandler if any.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public OutputStructure getTypeOfMessagingOutput(boolean stream, EnvironmentInformation info) throws ExceptionHandler {
 
@@ -189,6 +189,11 @@ public enum Listing {
         }
     }
 
+    /**
+     * <p>getShortHelp.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public static String getShortHelp() {
         StringBuilder helpString = new StringBuilder("{");
 

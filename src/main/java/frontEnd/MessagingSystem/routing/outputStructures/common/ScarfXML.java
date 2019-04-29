@@ -6,6 +6,7 @@ import frontEnd.MessagingSystem.AnalysisIssue;
 import frontEnd.MessagingSystem.AnalysisLocation;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import frontEnd.MessagingSystem.routing.structure.Scarf.*;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -18,13 +19,14 @@ import org.apache.commons.lang3.StringUtils;
  *
  * <p>The common utilities class for ScarfXML marshalling.</p>
  */
+@Log4j2
 public class ScarfXML {
 
     /**
      * <p>marshalling.</p>
      *
-     * @param info a {@link EnvironmentInformation} object.
-     * @return a {@link com.example.response.AnalyzerReport} object.
+     * @param info a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
+     * @return a {@link AnalyzerReport} object.
      */
     public static AnalyzerReport marshalling(EnvironmentInformation info) {
         AnalyzerReport report = new AnalyzerReport();
@@ -53,13 +55,13 @@ public class ScarfXML {
     /**
      * <p>marshalling.</p>
      *
-     * @param issue    a {@link AnalysisIssue} object.
-     * @param cwes     a {@link CWEList} object.
+     * @param issue    a {@link frontEnd.MessagingSystem.AnalysisIssue} object.
+     * @param cwes     a {@link CWE_Reader.CWEList} object.
      * @param fileName a {@link java.lang.String} object.
      * @param id       a {@link java.lang.Integer} object.
      * @param buildId  a {@link java.lang.Integer} object.
      * @param xPath    a {@link java.lang.String} object.
-     * @return a {@link com.example.response.BugInstanceType} object.
+     * @return a {@link BugInstance} object.
      */
     public static BugInstance marshalling(AnalysisIssue issue, CWEList cwes, String fileName, Integer id, Integer buildId, String xPath) {
         BugInstance instance = new BugInstance();
@@ -171,5 +173,34 @@ public class ScarfXML {
         output.append(message);
         output.append("</ERROR>");
         return output.toString();
+    }
+
+    /**
+     * The method to write the Footer for the ScarfXML output.
+     *
+     * @param info a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object
+     * @return string - the xml format of the error message
+     */
+    public static String writeFooter(EnvironmentInformation info) {
+        String footer = "";
+        String prettyTab = info.prettyPrint() ? "\t" : "";
+        String prettyLine = info.prettyPrint() ? "\n" : " ";
+
+        StringBuilder commentedFooter = new StringBuilder();
+
+        if (info.getSootErrors() != null && info.getSootErrors().split("\n").length >= 1) {
+            log.info("Adding the Soot Errors");
+            commentedFooter.append(prettyTab).append(info.getSootErrors().replaceAll("\n", prettyLine)).append(prettyLine);
+        }
+
+        if (info.isShowTimes()) {
+            log.trace("Adding the time measurements");
+            commentedFooter.append("Analysis Timing (ms): ").append(info.getAnalyisisTime()).append(".").append(prettyLine);
+        }
+
+        if (StringUtils.isNotBlank(commentedFooter.toString()))
+            footer = prettyLine + "<!--" + prettyLine + commentedFooter.toString() + "-->";
+
+        return footer;
     }
 }

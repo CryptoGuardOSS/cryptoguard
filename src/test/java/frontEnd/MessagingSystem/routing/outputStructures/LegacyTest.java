@@ -12,8 +12,8 @@ import java.util.ArrayList;
  * <p>MessageRepresentationTest class.</p>
  *
  * @author RigorityJTeam
- * @since V01.00.01
  * @version $Id: $Id
+ * @since V01.00.01
  */
 public class LegacyTest {
 

@@ -31,7 +31,7 @@ public class ForwardProgramSlicing extends ForwardFlowAnalysis {
      * <p>Constructor for ForwardProgramSlicing.</p>
      *
      * @param g               a {@link soot.toolkits.graph.DirectedGraph} object.
-     * @param slicingCriteria a {@link SlicingCriteria} object.
+     * @param slicingCriteria a {@link slicer.forward.SlicingCriteria} object.
      */
     public ForwardProgramSlicing(DirectedGraph g,
                                  SlicingCriteria slicingCriteria) {
@@ -129,7 +129,7 @@ public class ForwardProgramSlicing extends ForwardFlowAnalysis {
     /**
      * <p>Getter for the field <code>methodCallSiteInfo</code>.</p>
      *
-     * @return a {@link MethodCallSiteInfo} object.
+     * @return a {@link slicer.forward.MethodCallSiteInfo} object.
      */
     public MethodCallSiteInfo getMethodCallSiteInfo() {
         return methodCallSiteInfo;

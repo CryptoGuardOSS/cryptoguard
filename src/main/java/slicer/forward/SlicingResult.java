@@ -19,7 +19,7 @@ public class SlicingResult {
     /**
      * <p>Getter for the field <code>callSiteInfo</code>.</p>
      *
-     * @return a {@link MethodCallSiteInfo} object.
+     * @return a {@link slicer.forward.MethodCallSiteInfo} object.
      */
     public MethodCallSiteInfo getCallSiteInfo() {
         return callSiteInfo;
@@ -28,7 +28,7 @@ public class SlicingResult {
     /**
      * <p>Setter for the field <code>callSiteInfo</code>.</p>
      *
-     * @param callSiteInfo a {@link MethodCallSiteInfo} object.
+     * @param callSiteInfo a {@link slicer.forward.MethodCallSiteInfo} object.
      */
     public void setCallSiteInfo(MethodCallSiteInfo callSiteInfo) {
         this.callSiteInfo = callSiteInfo;

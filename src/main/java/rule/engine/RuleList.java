@@ -10,6 +10,7 @@ import java.util.ArrayList;
  * <p>STATUS: IC</p>
  *
  * @author franceme
+ * @version $Id: $Id
  * @since V01.00.01
  */
 public enum RuleList {
@@ -83,7 +84,7 @@ public enum RuleList {
      * <p>getRuleByRuleNumber.</p>
      *
      * @param ruleNumber a {@link java.lang.Integer} object.
-     * @return a {@link RuleList} object.
+     * @return a {@link rule.engine.RuleList} object.
      */
     public static RuleList getRuleByRuleNumber(Integer ruleNumber) {
         for (RuleList rule : RuleList.values())
@@ -94,10 +95,10 @@ public enum RuleList {
     }
 
     /**
-     * <p>retrieveCWEInfo({@link CWEList})</p>
+     * <p>retrieveCWEInfo({@link CWE_Reader.CWEList})</p>
      *
-     * @param list a {@link CWEList} object.
-     * @return {@link ArrayList} object.
+     * @param list a {@link CWE_Reader.CWEList} object.
+     * @return {@link java.util.ArrayList} object.
      */
     public ArrayList<CWE> retrieveCWEInfo(CWEList list) {
         ArrayList<CWE> out = new ArrayList<>();

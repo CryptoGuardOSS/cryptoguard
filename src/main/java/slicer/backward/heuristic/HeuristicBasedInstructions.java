@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * <p>HeuristicBasedInstructions class.</p>
  *
- * @author drmonster
+ * @author franceme
  * @version $Id: $Id
  */
 public class HeuristicBasedInstructions {
@@ -52,7 +52,7 @@ public class HeuristicBasedInstructions {
     /**
      * <p>Getter for the field <code>analysisResult</code>.</p>
      *
-     * @return a {@link HeuristicBasedAnalysisResult} object.
+     * @return a {@link slicer.backward.heuristic.HeuristicBasedAnalysisResult} object.
      */
     public HeuristicBasedAnalysisResult getAnalysisResult() {
         return analysisResult;

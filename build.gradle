@@ -1,7 +1,8 @@
 import java.text.SimpleDateFormat
-import java.util.Date
 
 apply plugin: "java"
+apply plugin: 'maven'
+
 sourceCompatibility = JavaVersion.VERSION_1_7
 targetCompatibility = JavaVersion.VERSION_1_7
 
@@ -10,9 +11,9 @@ version = versionNumber
 
 sourceSets {
     test {
-       java {
-        srcDir 'src/test/java'
-       }
+        java {
+            srcDir 'src/test/java'
+        }
     }
 }
 
@@ -22,14 +23,14 @@ task updateVersion {
     props.load(ins)
 
     ant.replaceregexp(
-            match:'V[0-9]{2}[.][0-9]{2}[.][0-9]{2}',
-            replace:props.getProperty("versionNumber"),
-            flags:'g',
-            byline:true) {
+            match: 'V[0-9]{2}[.][0-9]{2}[.][0-9]{2}',
+            replace: props.getProperty("versionNumber"),
+            flags: 'g',
+            byline: true) {
 
         fileset(
                 dir: '.',
-                includes: '*.rst'
+                includes: 'README.rst'
         )
         fileset(
                 dir: '.',
@@ -44,6 +45,12 @@ task updateVersion {
                 includes: 'Utils.java'
         )
     }
+
+    ant.replace(
+            dir: 'src/main/java/',
+            token: '@VERSION@',
+            value: props.getProperty("versionNumber").replace("V","")
+    )
 }
 
 task updateCopyRightYear {
@@ -51,13 +58,13 @@ task updateCopyRightYear {
     InputStream ins = new FileInputStream(file("gradle.properties"))
     props.load(ins)
 
-    SimpleDateFormat year = new SimpleDateFormat ("yyyy")
+    SimpleDateFormat year = new SimpleDateFormat("yyyy")
 
     ant.replaceregexp(
-            match:'Copyright © [0-9]{4} CryptoGuard',
-            replace:'Copyright © ' + year.format(new Date()) + ' CryptoGuard',
-            flags:'g',
-            byline:true) {
+            match: 'Copyright © [0-9]{4} CryptoGuard',
+            replace: 'Copyright © ' + year.format(new Date()) + ' CryptoGuard',
+            flags: 'g',
+            byline: true) {
 
         fileset(
                 dir: '.',
@@ -133,8 +140,9 @@ task release {
 }
 
 dependencies {
-    compile name: 'soot-trunk'
-    //compile 'ca.mcgill.sable:soot:3.3.0'
+    //compile name: 'soot_j9_20190409'
+    //compile name: 'soot_3.3.0'
+    compile name: 'soot-unknown'
     compile "org.codehaus.groovy:groovy:2.5.2"
     compile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'junit', name: 'junit', version: '4.12'
@@ -145,6 +153,7 @@ dependencies {
     implementation 'org.mockito:mockito-core:2.24.5'
     compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
     compileOnly "org.projectlombok:lombok:1.16.16"
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1'
     compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.9.8'
     compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.9.8'
 

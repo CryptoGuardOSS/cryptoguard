@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
-import static org.junit.Assert.assertEquals;
+import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static util.Utils.retrieveFullyQualifiedName;
 import static util.Utils.trimFilePath;
@@ -14,7 +14,7 @@ import static util.Utils.trimFilePath;
 /**
  * <p>UtilsTest class.</p>
  *
- * @author drmonster
+ * @author franceme
  * @version $Id: $Id
  * @since V03.03.10
  */

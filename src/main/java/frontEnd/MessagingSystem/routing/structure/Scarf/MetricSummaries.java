@@ -13,6 +13,9 @@ import java.io.Serializable;
 /**
  * MetricSummaryType
  * <p>
+ *
+ * @author franceme
+ * @version $Id: $Id
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -76,14 +79,16 @@ public class MetricSummaries implements Serializable {
     }
 
     /**
-     * @param sumOfSquares
-     * @param count
-     * @param minimum
-     * @param maximum
-     * @param standardDeviation
-     * @param sum
-     * @param type
-     * @param average
+     * <p>Constructor for MetricSummaries.</p>
+     *
+     * @param sumOfSquares      a int.
+     * @param count             a int.
+     * @param minimum           a int.
+     * @param maximum           a int.
+     * @param standardDeviation a double.
+     * @param sum               a int.
+     * @param type              a {@link java.lang.String} object.
+     * @param average           a double.
      */
     public MetricSummaries(String type, int count, int sum, int sumOfSquares, int minimum, int maximum, double average, double standardDeviation) {
         super();
@@ -99,6 +104,8 @@ public class MetricSummaries implements Serializable {
 
     /**
      * (Required)
+     *
+     * @return a {@link java.lang.String} object.
      */
     @JsonProperty("Type")
     public String getType() {
@@ -107,12 +114,20 @@ public class MetricSummaries implements Serializable {
 
     /**
      * (Required)
+     *
+     * @param type a {@link java.lang.String} object.
      */
     @JsonProperty("Type")
     public void setType(String type) {
         this.type = type;
     }
 
+    /**
+     * <p>withType.</p>
+     *
+     * @param type a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.MetricSummaries} object.
+     */
     public MetricSummaries withType(String type) {
         this.type = type;
         return this;
@@ -120,6 +135,8 @@ public class MetricSummaries implements Serializable {
 
     /**
      * (Required)
+     *
+     * @return a int.
      */
     @JsonProperty("Count")
     public int getCount() {
@@ -128,12 +145,20 @@ public class MetricSummaries implements Serializable {
 
     /**
      * (Required)
+     *
+     * @param count a int.
      */
     @JsonProperty("Count")
     public void setCount(int count) {
         this.count = count;
     }
 
+    /**
+     * <p>withCount.</p>
+     *
+     * @param count a int.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.MetricSummaries} object.
+     */
     public MetricSummaries withCount(int count) {
         this.count = count;
         return this;
@@ -141,6 +166,8 @@ public class MetricSummaries implements Serializable {
 
     /**
      * (Required)
+     *
+     * @return a int.
      */
     @JsonProperty("Sum")
     public int getSum() {
@@ -149,12 +176,20 @@ public class MetricSummaries implements Serializable {
 
     /**
      * (Required)
+     *
+     * @param sum a int.
      */
     @JsonProperty("Sum")
     public void setSum(int sum) {
         this.sum = sum;
     }
 
+    /**
+     * <p>withSum.</p>
+     *
+     * @param sum a int.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.MetricSummaries} object.
+     */
     public MetricSummaries withSum(int sum) {
         this.sum = sum;
         return this;
@@ -162,6 +197,8 @@ public class MetricSummaries implements Serializable {
 
     /**
      * (Required)
+     *
+     * @return a int.
      */
     @JsonProperty("SumOfSquares")
     public int getSumOfSquares() {
@@ -170,12 +207,20 @@ public class MetricSummaries implements Serializable {
 
     /**
      * (Required)
+     *
+     * @param sumOfSquares a int.
      */
     @JsonProperty("SumOfSquares")
     public void setSumOfSquares(int sumOfSquares) {
         this.sumOfSquares = sumOfSquares;
     }
 
+    /**
+     * <p>withSumOfSquares.</p>
+     *
+     * @param sumOfSquares a int.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.MetricSummaries} object.
+     */
     public MetricSummaries withSumOfSquares(int sumOfSquares) {
         this.sumOfSquares = sumOfSquares;
         return this;
@@ -183,6 +228,8 @@ public class MetricSummaries implements Serializable {
 
     /**
      * (Required)
+     *
+     * @return a int.
      */
     @JsonProperty("Minimum")
     public int getMinimum() {
@@ -191,12 +238,20 @@ public class MetricSummaries implements Serializable {
 
     /**
      * (Required)
+     *
+     * @param minimum a int.
      */
     @JsonProperty("Minimum")
     public void setMinimum(int minimum) {
         this.minimum = minimum;
     }
 
+    /**
+     * <p>withMinimum.</p>
+     *
+     * @param minimum a int.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.MetricSummaries} object.
+     */
     public MetricSummaries withMinimum(int minimum) {
         this.minimum = minimum;
         return this;
@@ -204,6 +259,8 @@ public class MetricSummaries implements Serializable {
 
     /**
      * (Required)
+     *
+     * @return a int.
      */
     @JsonProperty("Maximum")
     public int getMaximum() {
@@ -212,12 +269,20 @@ public class MetricSummaries implements Serializable {
 
     /**
      * (Required)
+     *
+     * @param maximum a int.
      */
     @JsonProperty("Maximum")
     public void setMaximum(int maximum) {
         this.maximum = maximum;
     }
 
+    /**
+     * <p>withMaximum.</p>
+     *
+     * @param maximum a int.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.MetricSummaries} object.
+     */
     public MetricSummaries withMaximum(int maximum) {
         this.maximum = maximum;
         return this;
@@ -225,6 +290,8 @@ public class MetricSummaries implements Serializable {
 
     /**
      * (Required)
+     *
+     * @return a double.
      */
     @JsonProperty("Average")
     public double getAverage() {
@@ -233,12 +300,20 @@ public class MetricSummaries implements Serializable {
 
     /**
      * (Required)
+     *
+     * @param average a double.
      */
     @JsonProperty("Average")
     public void setAverage(double average) {
         this.average = average;
     }
 
+    /**
+     * <p>withAverage.</p>
+     *
+     * @param average a double.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.MetricSummaries} object.
+     */
     public MetricSummaries withAverage(double average) {
         this.average = average;
         return this;
@@ -246,6 +321,8 @@ public class MetricSummaries implements Serializable {
 
     /**
      * (Required)
+     *
+     * @return a double.
      */
     @JsonProperty("StandardDeviation")
     public double getStandardDeviation() {
@@ -254,27 +331,44 @@ public class MetricSummaries implements Serializable {
 
     /**
      * (Required)
+     *
+     * @param standardDeviation a double.
      */
     @JsonProperty("StandardDeviation")
     public void setStandardDeviation(double standardDeviation) {
         this.standardDeviation = standardDeviation;
     }
 
+    /**
+     * <p>withStandardDeviation.</p>
+     *
+     * @param standardDeviation a double.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.MetricSummaries} object.
+     */
     public MetricSummaries withStandardDeviation(double standardDeviation) {
         this.standardDeviation = standardDeviation;
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("type", type).append("count", count).append("sum", sum).append("sumOfSquares", sumOfSquares).append("minimum", minimum).append("maximum", maximum).append("average", average).append("standardDeviation", standardDeviation).toString();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(sumOfSquares).append(count).append(minimum).append(maximum).append(standardDeviation).append(sum).append(type).append(average).toHashCode();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object other) {
         if (other == this) {

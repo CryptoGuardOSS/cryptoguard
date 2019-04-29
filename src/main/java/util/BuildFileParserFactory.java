@@ -1,7 +1,7 @@
 package util;
 
-import frontEnd.Interface.ExceptionHandler;
-import frontEnd.Interface.ExceptionId;
+import frontEnd.Interface.outputRouting.ExceptionHandler;
+import frontEnd.Interface.outputRouting.ExceptionId;
 
 import java.io.File;
 
@@ -18,8 +18,8 @@ public class BuildFileParserFactory {
      * <p>getBuildfileParser.</p>
      *
      * @param projectRoot a {@link java.lang.String} object.
-     * @return a {@link BuildFileParser} object.
-     * @throws ExceptionHandler if any.
+     * @return a {@link util.BuildFileParser} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static BuildFileParser getBuildfileParser(String projectRoot) throws ExceptionHandler {
 

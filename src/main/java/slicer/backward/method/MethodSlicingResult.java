@@ -24,7 +24,7 @@ public class MethodSlicingResult {
     /**
      * <p>Getter for the field <code>callSiteInfo</code>.</p>
      *
-     * @return a {@link MethodCallSiteInfo} object.
+     * @return a {@link slicer.backward.MethodCallSiteInfo} object.
      */
     public MethodCallSiteInfo getCallSiteInfo() {
         return callSiteInfo;
@@ -33,7 +33,7 @@ public class MethodSlicingResult {
     /**
      * <p>Setter for the field <code>callSiteInfo</code>.</p>
      *
-     * @param callSiteInfo a {@link MethodCallSiteInfo} object.
+     * @param callSiteInfo a {@link slicer.backward.MethodCallSiteInfo} object.
      */
     public void setCallSiteInfo(MethodCallSiteInfo callSiteInfo) {
         this.callSiteInfo = callSiteInfo;

@@ -12,7 +12,7 @@ import static org.junit.Assert.assertNull;
 /**
  * <p>AnalyzerReportTest class.</p>
  *
- * @author drmonster
+ * @author franceme
  * @version $Id: $Id
  * @since V03.03.10
  */

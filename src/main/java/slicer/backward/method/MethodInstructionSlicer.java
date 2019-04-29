@@ -43,7 +43,7 @@ public class MethodInstructionSlicer extends BackwardFlowAnalysis {
      * <p>Constructor for MethodInstructionSlicer.</p>
      *
      * @param g                  a {@link soot.toolkits.graph.DirectedGraph} object.
-     * @param methodCallSiteInfo a {@link MethodCallSiteInfo} object.
+     * @param methodCallSiteInfo a {@link slicer.backward.MethodCallSiteInfo} object.
      * @param slicingParams      a {@link java.util.List} object.
      */
     public MethodInstructionSlicer(DirectedGraph g,
@@ -180,7 +180,7 @@ public class MethodInstructionSlicer extends BackwardFlowAnalysis {
 
                 List<PropertyAnalysisResult> specialInitInsts = null;
 
-                if (usebox.getValue().toString().startsWith("r0.")) {
+                if (usebox.getValue().toString().matches("r[0-9]+\\.<[^\\>]+>")) {
                     specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString().substring(3));
                 } else if (usebox.getValue().toString().startsWith("this.")) {
                     specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString().substring(5));
@@ -252,7 +252,7 @@ public class MethodInstructionSlicer extends BackwardFlowAnalysis {
     /**
      * <p>Getter for the field <code>methodCallSiteInfo</code>.</p>
      *
-     * @return a {@link MethodCallSiteInfo} object.
+     * @return a {@link slicer.backward.MethodCallSiteInfo} object.
      */
     public MethodCallSiteInfo getMethodCallSiteInfo() {
         return methodCallSiteInfo;

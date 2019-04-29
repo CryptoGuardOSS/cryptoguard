@@ -1,7 +1,7 @@
 package rule;
 
 import analyzer.UniqueRuleAnalyzer;
-import frontEnd.Interface.ExceptionHandler;
+import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.MessagingSystem.AnalysisIssue;
 import frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import rule.engine.EngineType;

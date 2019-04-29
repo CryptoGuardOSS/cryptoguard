@@ -12,7 +12,7 @@ public interface InfluenceInstructions {
     /**
      * <p>getMethodSlicingResult.</p>
      *
-     * @return a {@link MethodSlicingResult} object.
+     * @return a {@link slicer.backward.method.MethodSlicingResult} object.
      */
     MethodSlicingResult getMethodSlicingResult();
 }

@@ -1,8 +1,9 @@
 package rule.base;
 
 import analyzer.backward.Analysis;
+import analyzer.backward.AssignInvokeUnitContainer;
 import analyzer.backward.UnitContainer;
-import frontEnd.Interface.ExceptionHandler;
+import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import soot.ValueBox;
 import soot.jimple.Constant;
@@ -39,21 +40,34 @@ public abstract class PatternMatcherRuleChecker extends BaseRuleChecker {
         }
 
         for (UnitContainer e : analysis.getAnalysisResult()) {
-            for (ValueBox usebox : e.getUnit().getUseBoxes()) {
-                if (usebox.getValue() instanceof Constant) {
-                    boolean found = false;
 
-                    for (String regex : getPatternsToMatch()) {
-                        if (usebox.getValue().toString().matches(regex)) {
-                            putIntoMap(predictableSourcMap, e, usebox.getValue().toString());
-                            found = true;
-                            break;
-                        }
-                    }
+            if (e instanceof AssignInvokeUnitContainer) {
+                List<UnitContainer> resFromInside = ((AssignInvokeUnitContainer) e).getAnalysisResult();
 
-                    if (!found) {
-                        putIntoMap(othersSourceMap, e, usebox.getValue().toString());
+                for (UnitContainer unit : resFromInside) {
+                    checkForMatch(unit);
+                }
+            }
+
+            checkForMatch(e);
+        }
+    }
+
+    private void checkForMatch(UnitContainer e) {
+        for (ValueBox usebox : e.getUnit().getUseBoxes()) {
+            if (usebox.getValue() instanceof Constant) {
+                boolean found = false;
+
+                for (String regex : getPatternsToMatch()) {
+                    if (usebox.getValue().toString().matches(regex)) {
+                        putIntoMap(predictableSourcMap, e, usebox.getValue().toString());
+                        found = true;
+                        break;
                     }
+                }
+
+                if (!found) {
+                    putIntoMap(othersSourceMap, e, usebox.getValue().toString());
                 }
             }
         }
@@ -73,12 +87,12 @@ public abstract class PatternMatcherRuleChecker extends BaseRuleChecker {
         List<UnitContainer> predictableSourceInst = new ArrayList<>();
         List<String> others = new ArrayList<>();
 
-        for (List<String> values : predictableSourcMap.values()) {
+        for(List<String> values : predictableSourcMap.values()) {
             predictableSources.addAll(values);
         }
         predictableSourceInst.addAll(predictableSourcMap.keySet());
 
-        for (List<String> values : othersSourceMap.values()) {
+        for(List<String> values : othersSourceMap.values()) {
             others.addAll(values);
         }
 
@@ -97,6 +111,15 @@ public abstract class PatternMatcherRuleChecker extends BaseRuleChecker {
             System.out.println("=======================================");
         }
     }
+
+    private String getPrintableMsg(Collection<String> constants, String rule, String ruleDesc) {
+        return "***Violated Rule " +
+                rule + ": " +
+                ruleDesc +
+                " ***Constants: " +
+                constants;
+    }
+
     private String getOthersToPrint(Map<String, String> xmlFileStr, Collection<String> others, String rule, String ruleDesc) {
 
         StringBuilder output = new StringBuilder(getPrintableMsg(others, rule + "a", ruleDesc));
