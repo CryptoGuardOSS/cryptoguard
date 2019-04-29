@@ -24,7 +24,7 @@ public class JarEntry implements EntryHandler {
 
         log.trace("Starting scanner looper");
         for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
-            log.debug("Checking the rule: " + ruleChecker.toString());
+            log.info("Checking the rule: " + ruleChecker.toString());
             ruleChecker.checkRule(EngineType.JAR, generalInfo.getSource(), generalInfo.getDependencies(), generalInfo.getSourcePaths(), generalInfo.getOutput());
         }
         log.trace("Scanner looper stopped");
