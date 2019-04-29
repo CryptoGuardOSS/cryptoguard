@@ -15,7 +15,7 @@ import java.util.List;
  * @author RigorityJTeam
  * Created on 4/5/19.
  * @version $Id: $Id
- * @since {VersionHere}
+ * @since 03.04.08
  * <p>
  * This is the only custom created class as the BugSummary container was self contained within the Analyzer Report
  *

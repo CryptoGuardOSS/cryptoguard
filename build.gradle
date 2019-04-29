@@ -45,6 +45,12 @@ task updateVersion {
                 includes: 'Utils.java'
         )
     }
+
+    ant.replace(
+            dir: 'src/main/java/',
+            token: '@VERSION@',
+            value: props.getProperty("versionNumber").replace("V","")
+    )
 }
 
 task updateCopyRightYear {
