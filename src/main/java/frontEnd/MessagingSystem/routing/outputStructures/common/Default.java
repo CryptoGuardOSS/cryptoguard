@@ -11,6 +11,6 @@ package frontEnd.MessagingSystem.routing.outputStructures.common;
  */
 public class Default {
 
-    public static final String Version = "0";
+    public static final String Version = "1";
 
 }

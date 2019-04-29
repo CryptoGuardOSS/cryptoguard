@@ -68,23 +68,27 @@ public class parcelHandling {
         StringWriter message = new StringWriter();
         PrintWriter redirect = new PrintWriter(message);
 
-        message.append(StringUtils.repeat("#", Width)).append("\n");
-        message.append(retrieveHeaderInfo()).append("\n");
+        if (argIssue == null)
+            message.append(StringUtils.repeat("#", Width)).append("\n");
 
+        message.append(retrieveHeaderInfo()).append("\n");
 
         StringBuilder headerInfo = new StringBuilder();
         headerInfo.append("\n");
 
         if (argIssue == null)
-            headerInfo.append("General Help Info");
+            headerInfo.append("General Validation Issue");
         else
             headerInfo.append(argIssue);
 
-        headerInfo.append("\n").append(StringUtils.repeat("=", headerInfo.length()));
 
-        helper.printHelp(redirect, Width, getUsage(), headerInfo.toString(), args, 0, 0, null);
-
-        message.append(StringUtils.repeat("#", Width)).append("\n");
+        if (argIssue != null) {
+            headerInfo.append(", please run java7 -jar cryptoguard.jar -h for help.").append("\n").append(StringUtils.repeat("-", headerInfo.length()));
+            message.append(headerInfo);
+        } else {
+            helper.printHelp(redirect, Width, getUsage(), headerInfo.toString(), args, 0, 0, null);
+            message.append(StringUtils.repeat("#", Width)).append("\n");
+        }
 
         return message.toString();
     }

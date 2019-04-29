@@ -77,12 +77,15 @@ public class EntryPoint {
 
         } catch (ExceptionHandler e) {
             log.debug(e.getErrorCode().getMessage() + ": " + e.getLongDesciption());
-            log.fatal(e.getLongDesciption());
 
-            if (e.getErrorCode().getId().equals(0))
+            if (e.getErrorCode().getId().equals(0)) {
+                log.info(e.getErrorCode().getMessage());
                 System.out.print(e.getLongDesciption());
-            else
+            }
+            else {
+                log.fatal(e.getErrorCode().getMessage());
                 System.err.print(e.toString());
+            }
 
             System.exit(e.getErrorCode().getId());
         }

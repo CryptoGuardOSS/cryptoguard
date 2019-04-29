@@ -30,7 +30,7 @@ task updateVersion {
 
         fileset(
                 dir: '.',
-                includes: '*.rst'
+                includes: 'README.rst'
         )
         fileset(
                 dir: '.',
