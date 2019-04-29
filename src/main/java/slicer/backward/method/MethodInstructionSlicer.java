@@ -180,7 +180,7 @@ public class MethodInstructionSlicer extends BackwardFlowAnalysis {
 
                 List<PropertyAnalysisResult> specialInitInsts = null;
 
-                if (usebox.getValue().toString().startsWith("r0.")) {
+                if (usebox.getValue().toString().matches("r[0-9]+\\.<[^\\>]+>")) {
                     specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString().substring(3));
                 } else if (usebox.getValue().toString().startsWith("this.")) {
                     specialInitInsts = FieldInitializationInstructionMap.getInitInstructions(usebox.getValue().toString().substring(5));
