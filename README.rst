@@ -23,8 +23,8 @@ Prerequisites (Environment Variables)
 
 Note
 -----------
-Run :code:`make checkEnv` to verify all of these variables are set.
-
+* Run :code:`make checkEnv` to verify all of these variables are set.
+* This currently is stable on **Java 1.7**
 
 Different Scanning Options
 ==================================================
@@ -32,8 +32,8 @@ Different Scanning Options
 Source (Maven or Gradle Project Directory **only**)
 ----------------------------------------------------------
 * sample Makefile command :code:`make scanDir`
-* raw command (without dependencies) :code:`java -jar cryptoguard.jar -in source -s /rootPath`
-* raw command (with dependencies) :code:`java -jar cryptoguard.jar -in source -s /rootPath -d /dependencies`
+* raw command (without dependencies) :code:`java7 -jar cryptoguard.jar -in source -s /rootPath`
+* raw command (with dependencies) :code:`java7 -jar cryptoguard.jar -in source -s /rootPath -d /dependencies`
 
 Note
 ^^^^
@@ -44,18 +44,18 @@ If you have multiple subprojects with external dependencies, then you have to ga
 JAR Files
 ----------------------------------------------------------
 * sample Makefile command :code:`make scanJar`
-* raw command :code:`java -jar cryptoguard.jar -in jar -s /path/to/jar/my-jar.jar`
+* raw command :code:`java7 -jar cryptoguard.jar -in jar -s /path/to/jar/my-jar.jar`
 
 APK Files
 ----------------------------------------------------------
 * sample Makefile command :code:`make scanAPK`
-* raw command :code:`java -jar cryptoguard.jar -in apk -s /path/to/apk/my-apk.apk`
+* raw command :code:`java7 -jar cryptoguard.jar -in apk -s /path/to/apk/my-apk.apk`
 
 Java Files
 ----------------------------------------------------------
 * sample Makefile command :code:`make scanJava`
-* raw command :code:`java -jar cryptoguard.jar -in java -s /path/to/java/file.java`
-* raw command (for files) :code:`java -jar cryptoguard.jar -in java -s /path/to/java/file1.java /path/to/java/file2.java`
+* raw command :code:`java7 -jar cryptoguard.jar -in java -s /path/to/java/file.java`
+* raw command (for files) :code:`java7 -jar cryptoguard.jar -in java -s /path/to/java/file1.java /path/to/java/file2.java`
 
 Note
 ^^^^^
@@ -65,8 +65,8 @@ Note
 Java Class Files (Experimental)
 ----------------------------------------------------------
 * sample Makefile command :code:`make scanClass`
-* raw command :code:`java -jar cryptoguard.jar -in class -s /path/to/java/file.class`
-* raw command (for files) :code:`java -jar cryptoguard.jar -in java -s /path/to/java/file1.class /path/to/java/file2.class`
+* raw command :code:`java7 -jar cryptoguard.jar -in class -s /path/to/java/file.class`
+* raw command (for files) :code:`java7 -jar cryptoguard.jar -in java -s /path/to/java/file1.class /path/to/java/file2.class`
 
 Note
 ^^^^
@@ -83,21 +83,21 @@ How To Choose
 Default
 -------------
 * Argument :code:`-m L`
-    * example command :code:`java -jar cryptoguard.jar -in jar -s /path/to/jar/my-jar.jar -m L`
+    * example command :code:`java7 -jar cryptoguard.jar -in jar -s /path/to/jar/my-jar.jar -m L`
 * This will output a txt file used within early CryptoGuard versions
 
 Scarf XML
 -------------
 * Argument :code:`-m SX`
-    * example command :code:`java -jar cryptoguard.jar -in jar -s /path/to/jar/my-jar.jar -m SX`
+    * example command :code:`java7 -jar cryptoguard.jar -in jar -s /path/to/jar/my-jar.jar -m SX`
 * This will ouput an xml file using the `scarf_v1.2.xsd <https://github.com/mirswamp/resultparser/blob/master/xsd/scarf_v1.2.xsd>`_ used by `SWAMP <https://continuousassurance.org/open-source-software/>`_.
 * By using the argument :code:`-Sconfig properties.file`, this will load the properties from within the file
-    * example command :code:`java -jar cryptoguard.jar -in jar -s /path/to/jar/my-jar.jar -m SX -Sconfig properties.file`
+    * example command :code:`java7 -jar cryptoguard.jar -in jar -s /path/to/jar/my-jar.jar -m SX -Sconfig properties.file`
 
 Help
 ----
 * If you have any questions or suggestions, please email to `cryptoguardorg@gmail.com <mailto:cryptoguardorg@gmail.com>`_.
-* Please also run :code:`make help` or :code:`java -jar cryptoguard.jar -h` for argument help.
+* Please also run :code:`make help` or :code:`java7 -jar cryptoguard.jar -h` for argument help.
 
 FAQ
 ^^^
