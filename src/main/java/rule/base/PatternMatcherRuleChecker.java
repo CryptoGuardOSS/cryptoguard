@@ -111,6 +111,15 @@ public abstract class PatternMatcherRuleChecker extends BaseRuleChecker {
             System.out.println("=======================================");
         }
     }
+
+    private String getPrintableMsg(Collection<String> constants, String rule, String ruleDesc) {
+        return "***Violated Rule " +
+                rule + ": " +
+                ruleDesc +
+                " ***Constants: " +
+                constants;
+    }
+
     private String getOthersToPrint(Map<String, String> xmlFileStr, Collection<String> others, String rule, String ruleDesc) {
 
         StringBuilder output = new StringBuilder(getPrintableMsg(others, rule + "a", ruleDesc));
