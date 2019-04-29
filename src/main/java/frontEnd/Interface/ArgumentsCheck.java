@@ -126,10 +126,10 @@ public class ArgumentsCheck {
         //endregion
 
         Listing messaging = Listing.retrieveListingType(cmd.getOptionValue(argsIdentifier.FORMATOUT.getId()));
-        log.info("Using the output " + messaging.getType());
+        log.info("Using the output: " + messaging.getType());
 
         //region Retrieving the package path
-        log.trace("retrieving the package path, may/may not be able to be replaced.");
+        log.trace("Retrieving the package path, may/may not be able to be replaced.");
         List<String> basePath = new ArrayList<String>();
         File sourceFile;
         String pkg = "";

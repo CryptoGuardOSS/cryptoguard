@@ -6,6 +6,7 @@ import frontEnd.MessagingSystem.AnalysisIssue;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import frontEnd.MessagingSystem.routing.structure.Scarf.BugCategory;
 import frontEnd.MessagingSystem.routing.structure.Scarf.BugSummary;
+import lombok.extern.log4j.Log4j2;
 import rule.engine.EngineType;
 import rule.engine.RuleList;
 
@@ -24,6 +25,7 @@ import java.util.HashMap;
  *
  * <p>The general class encompassing the output structure (stream and blocked).</p>
  */
+@Log4j2
 public abstract class OutputStructure {
 
     //region Attributes
@@ -67,12 +69,31 @@ public abstract class OutputStructure {
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public void addIssue(AnalysisIssue issue) throws ExceptionHandler {
+        log.debug("Adding Issue: " + issue.getInfo());
         //Keeping a rolling count of the different kinds of bugs occuring
         if (!countOfBugs.containsKey(issue.getRuleId())) {
             countOfBugs.put(issue.getRuleId(), 1);
         } else {
             countOfBugs.put(issue.getRuleId(), countOfBugs.get(issue.getRuleId()) + 1);
         }
+    }
+
+    /**
+     * <p>addIssueToCollection.</p>
+     *
+     * @param issue a {@link frontEnd.MessagingSystem.AnalysisIssue} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
+    public void addIssueToCollection(AnalysisIssue issue) throws ExceptionHandler {
+        log.debug("Adding Issue: " + issue.getInfo());
+        //Keeping a rolling count of the different kinds of bugs occuring
+        if (!countOfBugs.containsKey(issue.getRuleId())) {
+            countOfBugs.put(issue.getRuleId(), 1);
+        } else {
+            countOfBugs.put(issue.getRuleId(), countOfBugs.get(issue.getRuleId()) + 1);
+        }
+
+        this.collection.add(issue);
     }
 
     /**
@@ -91,8 +112,9 @@ public abstract class OutputStructure {
      * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.BugSummary} object.
      */
     public BugSummary createBugCategoryList() {
-        BugSummary bugDict = new BugSummary();
+        log.trace("Creating the Bug Summary");
 
+        BugSummary bugDict = new BugSummary();
         //region Creating A Bug Category with counts per the Broken Rules
         for (int ruleNumber : countOfBugs.keySet()) {
             BugCategory ruleType = new BugCategory();
@@ -102,6 +124,7 @@ public abstract class OutputStructure {
             ruleType.setCount(countOfBugs.get(ruleNumber));
 
             bugDict.addBugSummary(ruleType);
+            log.debug("Added ruleType: " + ruleType.toString());
         }
         //endregion
 
@@ -124,22 +147,6 @@ public abstract class OutputStructure {
      */
     public ArrayList<AnalysisIssue> getCollection() {
         return collection;
-    }
-
-    /**
-     * <p>addIssueToCollection.</p>
-     *
-     * @param issue a {@link frontEnd.MessagingSystem.AnalysisIssue} object.
-     */
-    public void addIssueToCollection(AnalysisIssue issue) {
-        //Keeping a rolling count of the different kinds of bugs occuring
-        if (!countOfBugs.containsKey(issue.getRuleId())) {
-            countOfBugs.put(issue.getRuleId(), 1);
-        } else {
-            countOfBugs.put(issue.getRuleId(), countOfBugs.get(issue.getRuleId()) + 1);
-        }
-
-        this.collection.add(issue);
     }
 
     /**

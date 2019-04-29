@@ -8,7 +8,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.Interface.outputRouting.ExceptionId;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * <p>JacksonSerializer class.</p>
@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
  *
  * <p>{Description Here}</p>
  */
-@Slf4j
+@Log4j2
 public class JacksonSerializer {
 
     /**

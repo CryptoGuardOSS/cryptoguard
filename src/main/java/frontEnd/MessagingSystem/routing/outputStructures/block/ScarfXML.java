@@ -6,8 +6,7 @@ import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import frontEnd.MessagingSystem.routing.outputStructures.common.JacksonSerializer;
 import frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport;
 import frontEnd.MessagingSystem.routing.structure.Scarf.BugInstance;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * The class containing the implementation of the Scarf XML output.
@@ -17,7 +16,7 @@ import org.apache.commons.lang3.StringUtils;
  * @version $Id: $Id
  * @since V01.00.03
  */
-@Slf4j
+@Log4j2
 public class ScarfXML extends Structure {
 
 
@@ -70,29 +69,9 @@ public class ScarfXML extends Structure {
         String xmlStream = JacksonSerializer.serialize(report, super.getSource().prettyPrint(), JacksonSerializer.JacksonType.XML);
         //endregion
 
-        //region Writing any extra footer comments
-        String footer = "";
-        String prettyTab = super.getSource().prettyPrint() ? "\t" : "";
-        String prettyLine = super.getSource().prettyPrint() ? "\n" : " ";
+        String footer = frontEnd.MessagingSystem.routing.outputStructures.common.ScarfXML.writeFooter(super.getSource());
 
-        StringBuilder commentedFooter = new StringBuilder();
-
-        if (super.getSource().getSootErrors() != null && super.getSource().getSootErrors().split("\n").length >= 1) {
-            log.info("Adding the Soot Errors");
-            commentedFooter.append(prettyTab).append(super.getSource().getSootErrors().replaceAll("\n", prettyLine)).append(prettyLine);
-        }
-
-        if (super.getSource().isShowTimes()) {
-            log.trace("Adding the time measurements");
-            commentedFooter.append("Analysis Timing (ms): ").append(super.getSource().getAnalyisisTime()).append(".").append(prettyLine);
-        }
-
-        if (StringUtils.isNotBlank(commentedFooter.toString()))
-            footer = prettyLine + "<!--" + prettyLine + commentedFooter.toString() + "-->";
-        //endregion
-
-        return xmlStream.toString() + footer;
-
+        return xmlStream + footer;
 
     }
 

@@ -3,7 +3,7 @@ package frontEnd.MessagingSystem.routing.outputStructures.block;
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.MessagingSystem.AnalysisIssue;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import rule.engine.RuleList;
 
 import java.util.*;
@@ -16,7 +16,7 @@ import java.util.*;
  * @version $Id: $Id
  * @since V01.00.01
  */
-@Slf4j
+@Log4j2
 public class Legacy extends Structure {
 
     //region Attributes

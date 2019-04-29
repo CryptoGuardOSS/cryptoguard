@@ -2,7 +2,7 @@ package rule.engine;
 
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * <p>JarEntry class.</p>
@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
  *
  * <p>The method in the Engine handling Jar Scanning</p>
  */
-@Slf4j
+@Log4j2
 public class JarEntry implements EntryHandler {
 
     /**

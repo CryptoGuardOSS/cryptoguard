@@ -7,7 +7,7 @@ import frontEnd.MessagingSystem.routing.outputStructures.common.JacksonSerialize
 import frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport;
 import frontEnd.MessagingSystem.routing.structure.Scarf.BugInstance;
 import frontEnd.MessagingSystem.routing.structure.Scarf.BugSummary;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -20,7 +20,7 @@ import org.apache.commons.lang3.StringUtils;
  *
  * <p>The ScarfXML stream writer.</p>
  */
-@Slf4j
+@Log4j2
 public class ScarfXML extends Structure {
 
     //region Attributes
@@ -102,32 +102,10 @@ public class ScarfXML extends Structure {
 
         this.write(footerCatch);
 
-        //region Writing any extra footer comments
-
-        String footer = "";
-        String prettyTab = super.getSource().prettyPrint() ? "\t" : "";
-        String prettyLine = super.getSource().prettyPrint() ? "\n" : " ";
-
-        StringBuilder commentedFooter = new StringBuilder();
-
-        if (super.getSource().getSootErrors() != null && super.getSource().getSootErrors().split("\n").length >= 1) {
-            log.info("Adding the Soot Errors");
-            commentedFooter.append(prettyTab).append(super.getSource().getSootErrors().replaceAll("\n", prettyLine)).append(prettyLine);
-        }
-
-        if (super.getSource().isShowTimes()) {
-            log.trace("Adding the time measurements");
-            commentedFooter.append("Analysis Timing (ms): ").append(super.getSource().getAnalyisisTime()).append(".").append(prettyLine);
-        }
-
-        if (StringUtils.isNotBlank(commentedFooter.toString()))
-            footer = prettyLine + "<!--" + prettyLine + commentedFooter.toString() + "-->";
-
+        String footer = frontEnd.MessagingSystem.routing.outputStructures.common.ScarfXML.writeFooter(super.getSource());
 
         if (footer != null)
             this.writeln(footer);
-
-        //endregion
 
     }
     //endregion

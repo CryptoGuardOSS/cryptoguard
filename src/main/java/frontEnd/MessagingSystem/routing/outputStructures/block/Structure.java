@@ -5,7 +5,7 @@ import frontEnd.Interface.outputRouting.ExceptionId;
 import frontEnd.MessagingSystem.AnalysisIssue;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -21,7 +21,7 @@ import java.nio.file.Files;
  *
  * <p>The overarching structure encompassing the block marshalling, extending from the output structure.</p>
  */
-@Slf4j
+@Log4j2
 public abstract class Structure extends OutputStructure {
 
     //region Attributes
@@ -52,7 +52,7 @@ public abstract class Structure extends OutputStructure {
      * {@inheritDoc}
      */
     @Override
-    public void addIssue(AnalysisIssue issue) {
+    public void addIssue(AnalysisIssue issue) throws ExceptionHandler {
         super.addIssueToCollection(issue);
     }
 

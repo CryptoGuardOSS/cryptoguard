@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.io.Serializable;
 
@@ -212,7 +211,12 @@ public class BugCategory implements Serializable {
      */
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("group", group).append("code", code).append("count", count).append("bytes", bytes).toString();
+        return new StringBuilder("BugCategory[")
+                .append("group:").append(group)
+                .append(", code: ").append(code)
+                .append(", count: ").append(count)
+                .append(", bytes: ").append(bytes)
+                .append("]").toString();
     }
 
     /**

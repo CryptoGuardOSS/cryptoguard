@@ -1,0 +1,228 @@
+{
+  "definitions": {
+    "Timing": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Total": {
+          "type": "string"
+        },
+        "Scan": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Total",
+        "Scan"
+      ],
+      "title": "Timing"
+    },
+    "Target": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "FullPath": {
+          "type": "string"
+        },
+        "ProjectName": {
+          "type": "string"
+        },
+        "Type": {
+          "enum": [
+            "APK",
+            "JAR",
+            "Source",
+            "Java",
+            "Class"
+          ]
+        },
+        "ProjectType": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "FullPath",
+        "Type"
+      ],
+      "title": "Target"
+    },
+    "MetaData": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "PropertiesFilePath": {
+          "type": "string"
+        },
+        "DateTime": {
+          "type": "string"
+        },
+        "ComputerOS": {
+          "type": "string"
+        },
+        "JVMVersion": {
+          "type": "string"
+        },
+        "RawCommand": {
+          "type": "string"
+        },
+        "UUID": {
+          "type": "string"
+        },
+        "Timing": {
+          "$ref": "#/definitions/Timing"
+        },
+        "Target": {
+          "$ref": "#/definitions/Target"
+        }
+      },
+      "required": [
+        "FullPath",
+        "Id"
+      ],
+      "title": "MetaData"
+    },
+    "IssueMetaData": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "FullPath": {
+          "type": "string"
+        },
+        "Id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "FullPath",
+        "Id"
+      ],
+      "title": "IssueMetaData"
+    },
+    "LocationType": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ClassName": {
+          "type": "string"
+        },
+        "MethodName": {
+          "type": "string"
+        },
+        "LineNumber": {
+          "type": "integer"
+        },
+        "ColumnNumber": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "ClassName",
+        "MethodName"
+      ],
+      "title": "LocationType"
+    },
+    "Issue": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "-meta": {
+          "type": "string"
+        },
+        "Message": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "RuleNumber": {
+          "type": "integer"
+        },
+        "RuleDesc": {
+          "type": "string"
+        },
+        "CWEId": {
+          "type": "integer"
+        },
+        "Severity": {
+          "type": "string"
+        },
+        "Location": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "-meta",
+        "Message",
+        "RuleNumber",
+        "CWEId",
+        "Severity"
+      ],
+      "title": "Issue"
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "object",
+  "title": "The Default Schema",
+  "required": [
+    "ProjectName",
+    "ProjectVersion",
+    "-meta",
+    "Issues"
+  ],
+  "properties": {
+    "ProjectName": {
+      "$id": "#/properties/ProjectName",
+      "type": "string",
+      "title": "The Project Name",
+      "default": "",
+      "examples": [
+        ""
+      ],
+      "pattern": "^(.*)$"
+    },
+    "ProjectVersion": {
+      "$id": "#/properties/ProjectVersion",
+      "type": "string",
+      "title": "The Project Version",
+      "default": "",
+      "examples": [
+        ""
+      ],
+      "pattern": "^(.*)$"
+    },
+    "SchemaVersion": {
+      "$id": "#/properties/SchemaVersion",
+      "type": "string",
+      "title": "The Schema Version",
+      "default": "",
+      "examples": [
+        ""
+      ],
+      "pattern": "^(.*)$"
+    },
+    "TargetSources": {
+      "$id": "#/properties/TargetSources",
+      "type": "array",
+      "title": "The Sources of the Target",
+      "additionalItems": false,
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "-meta": {
+      "$ref": "#/definitions/MetaData"
+    },
+    "Issues": {
+      "$id": "#/properties/Issues",
+      "type": "array",
+      "title": "The Issues associated with the target",
+      "additionalItems": false,
+      "items": {
+        "$ref": "#/definitions/Issue"
+      },
+      "title": "Issues"
+    }
+  }
+}
