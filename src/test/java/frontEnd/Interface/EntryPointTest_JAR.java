@@ -191,6 +191,30 @@ public class EntryPointTest_JAR {
     }
 
     /**
+     * <p>main_TestableJar_Scarf.</p>
+     */
+    @Test
+    public void main_TestableJar_Default() {
+        if (isLinux) {
+            String args = "-in " + EngineType.JAR.getFlag() + " -s " + jarOne + " -d " + srcOneGrvDep + " -m " + Listing.Default.getFlag() + " -o " + tempFileOutXML_0.replace(".xml", ".json") + " -t" + " " + argsIdentifier.PRETTY.getArg();
+
+            try {
+                engine.main(args.split(" "));
+
+                List<String> results = Files.readAllLines(Paths.get(tempFileOutXML_0.replace(".xml", ".json")), Charset.forName("UTF-8"));
+                assertTrue(results.size() >= 1);
+
+
+                //AnalyzerReport report = AnalyzerReport.deserialize(JacksonSerializer.JacksonType.XML, new File(tempFileOutXML_0));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    /**
      * <p>main_TestableJar_Scarf_Args.</p>
      */
     @Test

@@ -14,44 +14,62 @@ import java.io.Serializable;
 /**
  * Timing
  * <p>
+ *
+ * 
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "Total",
-        "Scan"
+        "Scan",
+        "TimeScale"
 })
 public class Timing implements Serializable {
 
     /**
+     * 
      * (Required)
+     * 
      */
     @JsonProperty("Total")
     private String total;
     /**
+     * 
      * (Required)
+     * 
      */
     @JsonProperty("Scan")
     private String scan;
-    private final static long serialVersionUID = 8015087845422072204L;
+    /**
+     * (Required)
+     */
+    @JsonProperty("TimeScale")
+    private String timeScale;
+    private final static long serialVersionUID = -7831748094033719806L;
 
     /**
      * No args constructor for use in serialization
+     * 
      */
     public Timing() {
     }
 
     /**
+     * 
      * @param total
+     * @param timeScale
      * @param scan
      */
-    public Timing(String total, String scan) {
+    public Timing(String total, String scan, String timeScale) {
         super();
         this.total = total;
         this.scan = scan;
+        this.timeScale = timeScale;
     }
 
     /**
+     *
      * (Required)
+     *
      */
     @JsonProperty("Total")
     public String getTotal() {
@@ -59,7 +77,9 @@ public class Timing implements Serializable {
     }
 
     /**
+     * 
      * (Required)
+     * 
      */
     @JsonProperty("Total")
     public void setTotal(String total) {
@@ -72,7 +92,9 @@ public class Timing implements Serializable {
     }
 
     /**
+     * 
      * (Required)
+     * 
      */
     @JsonProperty("Scan")
     public String getScan() {
@@ -80,7 +102,9 @@ public class Timing implements Serializable {
     }
 
     /**
+     * 
      * (Required)
+     * 
      */
     @JsonProperty("Scan")
     public void setScan(String scan) {
@@ -92,14 +116,37 @@ public class Timing implements Serializable {
         return this;
     }
 
+    /**
+     *
+     * (Required)
+     *
+     */
+    @JsonProperty("TimeScale")
+    public String getTimeScale() {
+        return timeScale;
+    }
+
+    /**
+     * (Required)
+     */
+    @JsonProperty("TimeScale")
+    public void setTimeScale(String timeScale) {
+        this.timeScale = timeScale;
+    }
+
+    public Timing withTimeScale(String timeScale) {
+        this.timeScale = timeScale;
+        return this;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("total", total).append("scan", scan).toString();
+        return new ToStringBuilder(this).append("total", total).append("scan", scan).append("timeScale", timeScale).toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(total).append(scan).toHashCode();
+        return new HashCodeBuilder().append(total).append(timeScale).append(scan).toHashCode();
     }
 
     @Override
@@ -111,7 +158,7 @@ public class Timing implements Serializable {
             return false;
         }
         Timing rhs = ((Timing) other);
-        return new EqualsBuilder().append(total, rhs.total).append(scan, rhs.scan).isEquals();
+        return new EqualsBuilder().append(total, rhs.total).append(timeScale, rhs.timeScale).append(scan, rhs.scan).isEquals();
     }
 
 }
