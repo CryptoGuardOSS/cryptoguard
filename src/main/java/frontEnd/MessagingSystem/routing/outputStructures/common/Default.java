@@ -47,7 +47,7 @@ public class Default {
         target.setProjectName(info.getPackageName());
         target.setType(mapper(info.getSourceType()));
 
-        //TODO - Not Enabled Yet
+        //TODO - Not Implemented Yet
         //target.setProjectType();
         //target.setProjectVersion();
 
@@ -92,7 +92,9 @@ public class Default {
         issue.setRuleDesc(oldIssue.getRule().getDesc());
         issue.setCWEId(oldIssue.getRule().getCweId()[0]);
         issue.setDescription(oldIssue.getRule().getDesc());
-        issue.setSeverity("TBD");
+
+        //TODO - Not implemented yet
+        //issue.setSeverity("TBD");
 
 
         return issue;

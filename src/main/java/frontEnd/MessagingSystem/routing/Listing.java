@@ -18,7 +18,7 @@ public enum Listing {
     //region Different Values
     Legacy("Legacy", "L", ".txt", true, null),
     ScarfXML("ScarfXML", "SX", null, true, JacksonSerializer.JacksonType.XML),
-    Default("Default", "D", null, false, JacksonSerializer.JacksonType.JSON);
+    Default("Default", "D", null, true, JacksonSerializer.JacksonType.JSON);
     //endregion
     //region Attributes
     private String type;

@@ -204,8 +204,7 @@ public class EntryPointTest_JAR {
                 List<String> results = Files.readAllLines(Paths.get(tempFileOutXML_0.replace(".xml", ".json")), Charset.forName("UTF-8"));
                 assertTrue(results.size() >= 1);
 
-
-                //AnalyzerReport report = AnalyzerReport.deserialize(JacksonSerializer.JacksonType.XML, new File(tempFileOutXML_0));
+                //TODO - Added validation
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -260,6 +259,30 @@ public class EntryPointTest_JAR {
 
 
                 AnalyzerReport report = AnalyzerReport.deserialize(JacksonSerializer.JacksonType.XML, new File(tempStreamXML));
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    /**
+     * <p>main_TestableJar_Scarf_Stream.</p>
+     */
+    @Test
+    public void main_TestableJar_Default_Stream() {
+        if (isLinux) {
+            String args = "-in " + EngineType.JAR.getFlag() + " -s " + jarOne + " -d " + srcOneGrvDep + " -m " + Listing.Default.getFlag() + " -o " + tempStreamXML.replace(".xml", ".json") + " -st" + " -t" + " " + argsIdentifier.PRETTY.getArg();
+
+            try {
+                engine.main(args.split(" "));
+
+                List<String> results = Files.readAllLines(Paths.get(tempStreamXML.replace(".xml", ".json")), Charset.forName("UTF-8"));
+                assertTrue(results.size() >= 1);
+
+                //TODO - Added validation
+
+
             } catch (Exception e) {
                 e.printStackTrace();
                 assertNull(e);
