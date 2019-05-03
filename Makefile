@@ -5,7 +5,7 @@ testSrc=$(dir)samples/
 java7=${JAVA7_HOME}/bin/java
 
 #Variables dynamically set when the program is being built from the source
-ver=V03.05.03
+ver=V03.06.00
 name=cryptoguard
 
 #The short hand paths to execute the compiled jar and the scarf xsd for valiation
@@ -39,10 +39,10 @@ ifeq ("$(wildcard $(dir)$(name).jar)","")
 	@gradle -p $(dir) clean build -x test
 	@$(info Cutting (copying) the source built $(name) jar file, and creating the test directory.)
 	@cp $(dir)build/libs/$(name)-$(ver).jar $(dir)$(name).jar
+endif
 	@$(info Creating the test directory.)
 	@$(info $(testDir))
 	@mkdir -p $(testDir)
-endif
 
 #Sets the current environment variable if it's not set
 #Needed for gradle

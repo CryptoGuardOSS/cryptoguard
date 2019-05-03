@@ -22,4 +22,10 @@ public interface BuildFileParser {
      */
     Map<String, List<String>> getDependencyList() throws ExceptionHandler;
 
+    String getProjectName();
+
+    String getProjectVersion();
+
+    Boolean isGradle();
+
 }

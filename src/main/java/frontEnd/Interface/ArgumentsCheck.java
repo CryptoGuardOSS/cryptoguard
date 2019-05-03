@@ -175,7 +175,7 @@ public class ArgumentsCheck {
         String fileOutPath = "";
         if (cmd.hasOption(argsIdentifier.OUT.getId()))
             if (verify)
-                fileOutPath = Utils.verifyFileOut(cmd.getOptionValue(argsIdentifier.OUT.getId()), messaging);
+                fileOutPath = Utils.verifyFileOut(cmd.getOptionValue(argsIdentifier.OUT.getId()), messaging, cmd.hasOption(argsIdentifier.NEW.getId()));
             else
                 fileOutPath = cmd.getOptionValue(argsIdentifier.OUT.getId());
         else

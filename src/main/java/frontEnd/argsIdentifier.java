@@ -19,6 +19,7 @@ public enum argsIdentifier {
     SOURCE("s", "file(s)/dir", "(Req'd) The source(s) to be scanned, use the absolute path)."),
     DEPENDENCY("d", "dir", "The dependency to be scanned, (use the relative path)."),
     OUT("o", "file", "The file to be created with the output (default will be the project name)."),
+    NEW("new", null, "The file to be created with the output (if existing) will be overwritten."),
     TIMEMEASURE("t", null, "Output the time of the internal processes."),
     FORMATOUT("m", "formatType", "The output format you want to produce " + Listing.getShortHelp() + "."),
     PRETTY("n", null, "Output the analysis information in a 'pretty' format."),

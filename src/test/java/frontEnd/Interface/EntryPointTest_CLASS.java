@@ -104,6 +104,7 @@ public class EntryPointTest_CLASS {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES.getFlag()) +
                             makeArg(argsIdentifier.SOURCE, Utils.join(" ", classFiles)) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.OUT, tempFileOutTxt_two);
 

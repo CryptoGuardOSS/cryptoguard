@@ -2,6 +2,10 @@ package util;
 
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.Interface.outputRouting.ExceptionId;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.groovy.ast.ASTNode;
 import org.codehaus.groovy.ast.CodeVisitorSupport;
 import org.codehaus.groovy.ast.GroovyCodeVisitor;
@@ -13,13 +17,12 @@ import org.codehaus.groovy.ast.expr.MethodCallExpression;
 import org.codehaus.groovy.ast.stmt.BlockStatement;
 import org.codehaus.groovy.ast.stmt.Statement;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>GradleBuildFileParser class.</p>
@@ -28,10 +31,22 @@ import java.util.Map;
  * @version $Id: $Id
  * @since V01.00.00
  */
+@Log4j2
 public class GradleBuildFileParser implements BuildFileParser {
 
 
     Map<String, String> moduleVsPath = new HashMap<>();
+    @Getter
+    @Setter
+    String projectName;
+    @Getter
+    @Setter
+    String projectVersion;
+
+
+    public Boolean isGradle() {
+        return true;
+    }
 
     /**
      * <p>Constructor for GradleBuildFileParser.</p>
@@ -70,6 +85,22 @@ public class GradleBuildFileParser implements BuildFileParser {
 
             if (moduleVsPath.isEmpty()) {
                 moduleVsPath.put(projectName, projectRoot);
+            }
+
+            try {
+                log.trace("Attempting to Read the gradle.property file");
+                Properties gradleProperties = new Properties();
+                gradleProperties.load(new FileInputStream(new File(fileName.replace("settings.gradle", "gradle.property"))));
+
+                log.trace("Attempting to retrieve the project name");
+                projectName = StringUtils.trimToNull(gradleProperties.getProperty("projectName", gradleProperties.getProperty("groupName")));
+
+                log.trace("Attempting to retrieve the project version");
+                projectVersion = StringUtils.trimToNull(gradleProperties.getProperty("theVersion", gradleProperties.getProperty("version", gradleProperties.getProperty("versionNumber"))));
+
+
+            } catch (Exception e) {
+
             }
         } catch (IOException e) {
             throw new ExceptionHandler("Error reading file " + fileName, ExceptionId.FILE_I);
