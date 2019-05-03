@@ -32,5 +32,7 @@ jar {
 
 dependencies {
     compile name: 'soot-trunk'
+    compile name: 'axml-2.0'
+    compile name: 'AXMLPrinter2'
     compile "org.codehaus.groovy:groovy:2.5.2"
 }
