@@ -4,6 +4,7 @@ import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.Interface.outputRouting.ExceptionId;
 import frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import frontEnd.MessagingSystem.routing.outputStructures.block.Structure;
+import frontEnd.MessagingSystem.routing.outputStructures.common.JacksonSerializer;
 import frontEnd.MessagingSystem.routing.outputStructures.stream.Legacy;
 
 /**
@@ -15,8 +16,9 @@ import frontEnd.MessagingSystem.routing.outputStructures.stream.Legacy;
  */
 public enum Listing {
     //region Different Values
-    Legacy("Legacy", "L", ".txt", true),
-    ScarfXML("ScarfXML", "SX", ".xml", true);
+    Legacy("Legacy", "L", ".txt", true, null),
+    ScarfXML("ScarfXML", "SX", null, true, JacksonSerializer.JacksonType.XML),
+    Default("Default", "D", null, true, JacksonSerializer.JacksonType.JSON);
     //endregion
     //region Attributes
     private String type;
@@ -26,6 +28,7 @@ public enum Listing {
     private final String inputPath = "frontEnd.MessagingSystem.routing.inputStructures";
     private final String streamPath = "frontEnd.MessagingSystem.routing.outputStructures.stream.";
     private Boolean streamEnabled;
+    private JacksonSerializer.JacksonType jacksonType;
     //endregion
 
     //region Constructor
@@ -36,11 +39,12 @@ public enum Listing {
      * @param Type - the string value of the type of
      * @param Flag - the flag used to identify the specific messaging type
      */
-    Listing(String Type, String Flag, String outputFileExt, Boolean streamed) {
+    Listing(String Type, String Flag, String outputFileExt, Boolean streamed, JacksonSerializer.JacksonType jacksonType) {
         this.type = Type;
         this.flag = Flag;
         this.outputFileExt = outputFileExt;
         this.streamEnabled = streamed;
+        this.jacksonType = jacksonType;
     }
     //endregion
 
@@ -75,7 +79,7 @@ public enum Listing {
                 if (type.flag.equals(flag))
                     return type;
 
-        return Listing.Legacy;
+        return Listing.Default;
     }
 
     /**
@@ -154,7 +158,15 @@ public enum Listing {
      * @return a {@link java.lang.String} object.
      */
     public String getOutputFileExt() {
-        return outputFileExt;
+
+        if (outputFileExt == null)
+            return this.jacksonType.getExtension();
+        else
+            return outputFileExt;
+    }
+
+    public JacksonSerializer.JacksonType getJacksonType() {
+        return jacksonType;
     }
 
     /**

@@ -1,7 +1,6 @@
 package frontEnd.Interface;
 
 import frontEnd.MessagingSystem.routing.Listing;
-import frontEnd.MessagingSystem.routing.outputStructures.common.JacksonSerializer;
 import frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport;
 import frontEnd.argsIdentifier;
 import org.junit.After;
@@ -11,7 +10,6 @@ import rule.engine.EngineType;
 import soot.G;
 import util.Utils;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -33,7 +31,6 @@ public class EntryPointTest_JAVA {
 
     //region Attributes
     private EntryPoint engine;
-    private ByteArrayOutputStream out;
     //endregion
 
     //region Test Environment Setup
@@ -50,7 +47,6 @@ public class EntryPointTest_JAVA {
         G.reset();
 
         engine = new EntryPoint();
-        out = new ByteArrayOutputStream();
         //endregion
     }
 
@@ -62,7 +58,6 @@ public class EntryPointTest_JAVA {
     @After
     public void tearDown() throws Exception {
         engine = null;
-        out = null;
         //endregion
     }
     //endregion
@@ -101,6 +96,7 @@ public class EntryPointTest_JAVA {
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES.getFlag()) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
                             makeArg(argsIdentifier.SOURCE, javaFiles[1]) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.PRETTY) +
@@ -144,7 +140,7 @@ public class EntryPointTest_JAVA {
                 engine.main(args.split(" "));
 
                 //region Validating output
-                AnalyzerReport report = AnalyzerReport.deserialize(JacksonSerializer.JacksonType.XML, new File(javaFileOne));
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(javaFileOne));
                 //endregion
 
                 List<String> results = Files.readAllLines(Paths.get(javaFileOne), Charset.forName("UTF-8"));

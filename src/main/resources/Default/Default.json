@@ -50,6 +50,7 @@
           "type": "string"
         },
         "Type": {
+          "additionalProperties": false,
           "enum": [
             "APK",
             "JAR",
@@ -59,6 +60,7 @@
           ]
         },
         "ProjectType": {
+          "additionalProperties": false,
           "enum": [
             "Gradle",
             "Maven"
@@ -136,7 +138,7 @@
           "type": "string"
         },
         "Location": {
-          "type": "string"
+          "$ref": "#/definitions/LocationType"
         }
       },
       "required": [
@@ -168,7 +170,7 @@
       "$id": "#/properties/-SchemaVersion",
       "type": "integer",
       "title": "The Schema Version",
-      "default": "",
+      "additionalProperties": false,
       "examples": [
         "0"
       ]
@@ -182,13 +184,14 @@
     "-UUID": {
       "$id": "#/properties/-UUID",
       "type": "string",
+      "additionalProperties": false,
       "title": "string Time the scan was instantiated"
     },
     "ProjectName": {
       "$id": "#/properties/ProjectName",
       "type": "string",
       "title": "The Project Name",
-      "default": "",
+      "additionalProperties": false,
       "examples": [
         "Crypto Guard"
       ],
@@ -198,7 +201,7 @@
       "$id": "#/properties/ProjectVersion",
       "type": "string",
       "title": "The Project Version",
-      "default": "",
+      "additionalProperties": false,
       "examples": [
         ""
       ],

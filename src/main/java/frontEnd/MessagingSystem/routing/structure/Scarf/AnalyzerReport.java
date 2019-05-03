@@ -7,7 +7,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.Interface.outputRouting.ExceptionId;
-import frontEnd.MessagingSystem.routing.outputStructures.common.JacksonSerializer;
+import frontEnd.MessagingSystem.routing.Listing;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -1000,15 +1000,14 @@ public class AnalyzerReport implements Serializable {
     /**
      * <p>deserialize.</p>
      *
-     * @param inputType a {@link frontEnd.MessagingSystem.routing.outputStructures.common.JacksonSerializer.JacksonType} object.
      * @param file      a {@link java.io.File} object.
      * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
-    public static AnalyzerReport deserialize(JacksonSerializer.JacksonType inputType, File file) throws ExceptionHandler {
+    public static AnalyzerReport deserialize(File file) throws ExceptionHandler {
         try {
 
-            ObjectMapper deserializer = inputType.getOutputMapper();
+            ObjectMapper deserializer = Listing.ScarfXML.getJacksonType().getOutputMapper();
 
             return deserializer.readValue(file, AnalyzerReport.class);
 

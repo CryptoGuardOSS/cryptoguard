@@ -44,6 +44,7 @@ public class ArgumentsCheck {
 
         Options cmdLineArgs = setOptions();
         CommandLine cmd = null;
+        List<String> preservedArguments = args;
 
         //region Printing Version
         if (args.contains(argsIdentifier.HELP.getArg())) {
@@ -205,6 +206,9 @@ public class ArgumentsCheck {
 
         info.setStreaming(cmd.hasOption(argsIdentifier.STREAM.getId()));
         log.debug("Stream flag: " + argsIdentifier.STREAM.getId());
+
+        //Setting the raw command within info
+        info.setRawCommand(Utils.join(" ", preservedArguments));
 
         return info;
 

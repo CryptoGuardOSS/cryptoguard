@@ -57,9 +57,9 @@ public class Utils {
      */
     public final static String localPath = System.getProperty("user.dir");
     /**
-     * Constant <code>projectVersion="V03.05.00"</code>
+     * Constant <code>projectVersion="V03.05.03"</code>
      */
-    public final static String projectVersion = "V03.05.00";
+    public final static String projectVersion = "V03.05.03";
     /**
      * Constant <code>projectName="CryptoGuard"</code>
      */
@@ -869,26 +869,12 @@ public class Utils {
      * @return a {@link java.lang.String} object.
      */
     public static String getPlatform() {
-        if (!System.getProperty("os.name").contains("Linux")) {
-            return System.getProperty("os.name") + "_" + System.getProperty("os.version");
-        } else {
-            try {
-                String baseName = System.getProperty("os.name") + "_" + System.getProperty("os.version");
-                Scanner file = new Scanner(new File("/etc/os-release"));
-                String line;
-                while (file.hasNextLine()) {
-                    line = file.nextLine();
-                    if (line.startsWith("PRETTY_NAME=")) {
-                        baseName = line.replace("PRETTY_NAME=", "").replaceAll("\"", "").replaceAll(" ", "_");
-                        break;
-                    }
-                }
-                file.close();
-                return baseName;
-            } catch (FileNotFoundException e) {
-                return System.getProperty("os.name") + "_" + System.getProperty("os.version");
-            }
-        }
+
+        return System.getProperty("os.name") + "_" + System.getProperty("os.version");
+    }
+
+    public static String getJVMInfo() {
+        return System.getProperty("java.runtime.version");
     }
 
     /**

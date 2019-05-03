@@ -1,7 +1,6 @@
 package frontEnd.Interface;
 
 import frontEnd.MessagingSystem.routing.Listing;
-import frontEnd.MessagingSystem.routing.outputStructures.common.JacksonSerializer;
 import frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport;
 import frontEnd.argsIdentifier;
 import org.junit.After;
@@ -11,7 +10,6 @@ import rule.engine.EngineType;
 import soot.G;
 import util.Utils;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -33,7 +31,6 @@ public class EntryPointTest_CLASS {
 
     //region Attributes
     private EntryPoint engine;
-    private ByteArrayOutputStream out;
     //endregion
 
     //region Test Environment Setup
@@ -50,7 +47,6 @@ public class EntryPointTest_CLASS {
         G.reset();
 
         engine = new EntryPoint();
-        out = new ByteArrayOutputStream();
     }
 
     /**
@@ -61,7 +57,6 @@ public class EntryPointTest_CLASS {
     @After
     public void tearDown() throws Exception {
         engine = null;
-        out = null;
     }
     //endregion
 
@@ -74,6 +69,7 @@ public class EntryPointTest_CLASS {
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES.getFlag()) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
                             makeArg(argsIdentifier.SOURCE, classFiles[0]) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.OUT, tempFileOutTxt_Class);
@@ -159,7 +155,7 @@ public class EntryPointTest_CLASS {
                 assertTrue(count > 0);
 
 
-                AnalyzerReport report = AnalyzerReport.deserialize(JacksonSerializer.JacksonType.XML, new File(tempFileOutXML_Class));
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(tempFileOutXML_Class));
 
 
             } catch (Exception e) {
@@ -197,7 +193,7 @@ public class EntryPointTest_CLASS {
                 assertTrue(count > 0);
 
 
-                AnalyzerReport report = AnalyzerReport.deserialize(JacksonSerializer.JacksonType.XML, new File(tempFileOutXML_Class_Stream));
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(tempFileOutXML_Class_Stream));
 
 
             } catch (Exception e) {

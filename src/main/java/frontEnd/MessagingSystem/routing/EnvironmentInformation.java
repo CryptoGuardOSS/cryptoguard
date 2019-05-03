@@ -40,6 +40,7 @@ public class EnvironmentInformation {
     private String packageVersion = "UNKNOWN";
     private boolean showTimes = false;
     private boolean addExperimentalRules = false;
+    private String rawCommand;
     //endregion
     //region Required Elements Set From the Start
     private final List<String> Source;
@@ -130,7 +131,13 @@ public class EnvironmentInformation {
     //endregion
 
     //region Getters and Setters
+    public String getRawCommand() {
+        return rawCommand;
+    }
 
+    public void setRawCommand(String rawCommand) {
+        this.rawCommand = rawCommand;
+    }
     /**
      * <p>getAssessmentStartTime.</p>
      *

@@ -3,6 +3,7 @@ package frontEnd.MessagingSystem.routing.outputStructures.block;
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.MessagingSystem.AnalysisIssue;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
+import frontEnd.MessagingSystem.routing.Listing;
 import frontEnd.MessagingSystem.routing.outputStructures.common.JacksonSerializer;
 import frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport;
 import frontEnd.MessagingSystem.routing.structure.Scarf.BugInstance;
@@ -66,7 +67,7 @@ public class ScarfXML extends Structure {
 
         //region Marshalling
         log.trace("Creating the marshaller");
-        String xmlStream = JacksonSerializer.serialize(report, super.getSource().prettyPrint(), JacksonSerializer.JacksonType.XML);
+        String xmlStream = JacksonSerializer.serialize(report, super.getSource().prettyPrint(), Listing.ScarfXML.getJacksonType());
         //endregion
 
         String footer = frontEnd.MessagingSystem.routing.outputStructures.common.ScarfXML.writeFooter(super.getSource());

@@ -1,7 +1,6 @@
 package frontEnd.Interface;
 
 import frontEnd.MessagingSystem.routing.Listing;
-import frontEnd.MessagingSystem.routing.outputStructures.common.JacksonSerializer;
 import frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport;
 import frontEnd.argsIdentifier;
 import org.junit.After;
@@ -10,7 +9,6 @@ import org.junit.Test;
 import rule.engine.EngineType;
 import soot.G;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -32,7 +30,6 @@ public class EntryPointTest_SOURCE {
 
     //region Attributes
     private EntryPoint engine;
-    private ByteArrayOutputStream out;
     //endregion
 
     //region Test Environment Setup
@@ -49,7 +46,6 @@ public class EntryPointTest_SOURCE {
         G.reset();
 
         engine = new EntryPoint();
-        out = new ByteArrayOutputStream();
     }
 
     /**
@@ -60,7 +56,6 @@ public class EntryPointTest_SOURCE {
     @After
     public void tearDown() throws Exception {
         engine = null;
-        out = null;
     }
     //endregion
 
@@ -127,7 +122,7 @@ public class EntryPointTest_SOURCE {
                 assertTrue(results.size() >= 1);
 
 
-                AnalyzerReport report = AnalyzerReport.deserialize(JacksonSerializer.JacksonType.XML, new File(tempFileOutXML));
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(tempFileOutXML));
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -154,7 +149,7 @@ public class EntryPointTest_SOURCE {
                 assertTrue(results.size() >= 1);
 
 
-                AnalyzerReport report = AnalyzerReport.deserialize(JacksonSerializer.JacksonType.XML, new File(tempStreamXML));
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(tempStreamXML));
 
             } catch (Exception e) {
                 e.printStackTrace();

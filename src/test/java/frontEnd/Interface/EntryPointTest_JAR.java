@@ -1,7 +1,7 @@
 package frontEnd.Interface;
 
 import frontEnd.MessagingSystem.routing.Listing;
-import frontEnd.MessagingSystem.routing.outputStructures.common.JacksonSerializer;
+import frontEnd.MessagingSystem.routing.structure.Default.Report;
 import frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport;
 import frontEnd.argsIdentifier;
 import org.junit.After;
@@ -9,9 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import rule.engine.EngineType;
 import soot.G;
-import util.Utils;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -31,14 +29,9 @@ import static test.TestUtilities.*;
  */
 public class EntryPointTest_JAR {
 
-    private final String tempFileOutTxt = Utils.osPathJoin(testPath, "testable-jar.txt");
-    private final String tempFileOutXML_0 = Utils.osPathJoin(testPath, "testable-jar_012.xml");
-    private final String tempFileOutXML_1 = Utils.osPathJoin(testPath, "testable-jar_123.xml");
-    private final String tempFileOutXML_2 = Utils.osPathJoin(testPath, "testable-jar_234.xml");
-    private final String tempStreamXML = Utils.osPathJoin(testPath, "testable-jar_Stream.xml");
+
     //region Attributes
     private EntryPoint engine;
-    private ByteArrayOutputStream out;
 
     //region Scarf Properties
     private String assessment_start_ts;
@@ -71,7 +64,6 @@ public class EntryPointTest_JAR {
         G.reset();
 
         engine = new EntryPoint();
-        out = new ByteArrayOutputStream();
 
         //region Properties Setup
         assess_fw = "java-assess";
@@ -97,7 +89,6 @@ public class EntryPointTest_JAR {
     @After
     public void tearDown() throws Exception {
         engine = null;
-        out = null;
 
         //region Properties
         assess_fw = null;
@@ -150,12 +141,13 @@ public class EntryPointTest_JAR {
     @Test
     public void main_TestableJar() {
         if (isLinux) {
-            String args = "-in " + EngineType.JAR.getFlag() + " -s " + jarOne + " -d " + srcOneGrvDep + " -o " + tempFileOutTxt;
+            String args = "-in " + EngineType.JAR.getFlag() +
+                    makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) + " -s " + jarOne + " -d " + srcOneGrvDep + " -o " + tempJarFile_txt;
 
             try {
                 engine.main(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempFileOutTxt), Charset.forName("UTF-8"));
+                List<String> results = Files.readAllLines(Paths.get(tempJarFile_txt), Charset.forName("UTF-8"));
                 assertTrue(results.size() >= 10);
 
 
@@ -172,16 +164,43 @@ public class EntryPointTest_JAR {
     @Test
     public void main_TestableJar_Scarf() {
         if (isLinux) {
-            String args = "-in " + EngineType.JAR.getFlag() + " -s " + jarOne + " -d " + srcOneGrvDep + " -m " + Listing.ScarfXML.getFlag() + " -o " + tempFileOutXML_0 + " -t" + " " + argsIdentifier.PRETTY.getArg();
+            String args = "-in " + EngineType.JAR.getFlag() + " -s " + jarOne + " -d " + srcOneGrvDep + " -m " + Listing.ScarfXML.getFlag() + " -o " + tempJarFile_Scarf_0 + " -t" + " " + argsIdentifier.PRETTY.getArg();
 
             try {
                 engine.main(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempFileOutXML_0), Charset.forName("UTF-8"));
+                List<String> results = Files.readAllLines(Paths.get(tempJarFile_Scarf_0), Charset.forName("UTF-8"));
                 assertTrue(results.size() >= 1);
 
 
-                AnalyzerReport report = AnalyzerReport.deserialize(JacksonSerializer.JacksonType.XML, new File(tempFileOutXML_0));
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(tempJarFile_Scarf_0));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    public static String replace(String temp) {
+        return temp.replace(".xml", ".yaml");
+    }
+
+    /**
+     * <p>main_TestableJar_Scarf.</p>
+     */
+    @Test
+    public void main_TestableJar_Default() {
+        if (isLinux) {
+            String args = "-in " + EngineType.JAR.getFlag() + " -s " + jarOne + " -d " + srcOneGrvDep + " -m " + Listing.Default.getFlag() + " -o " + tempJarFile_Default_0 + " -t" + " " + argsIdentifier.PRETTY.getArg();
+
+            try {
+                engine.main(args.split(" "));
+
+                List<String> results = Files.readAllLines(Paths.get(tempJarFile_Default_0), Charset.forName("UTF-8"));
+                assertTrue(results.size() >= 1);
+
+                Report report = Report.deserialize(new File(tempJarFile_Default_0));
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -200,7 +219,7 @@ public class EntryPointTest_JAR {
                     " -s " + jarOne +
                     " -d " + srcOneGrvDep +
                     " -m " + Listing.ScarfXML.getFlag() +
-                    " -o " + tempFileOutXML_1 +
+                    " -o " + tempJarFile_Scarf_1 +
                     " -t" +
                     " -n" +
                     " -Sconfig " + scarfArgs;
@@ -208,11 +227,11 @@ public class EntryPointTest_JAR {
             try {
                 engine.main(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempFileOutXML_1), Charset.forName("UTF-8"));
+                List<String> results = Files.readAllLines(Paths.get(tempJarFile_Scarf_1), Charset.forName("UTF-8"));
                 assertTrue(results.size() >= 1);
 
 
-                AnalyzerReport report = AnalyzerReport.deserialize(JacksonSerializer.JacksonType.XML, new File(tempFileOutXML_1));
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(tempJarFile_Scarf_1));
             } catch (Exception e) {
                 e.printStackTrace();
                 assertNull(e);
@@ -226,16 +245,39 @@ public class EntryPointTest_JAR {
     @Test
     public void main_TestableJar_Scarf_Stream() {
         if (isLinux) {
-            String args = "-in " + EngineType.JAR.getFlag() + " -s " + jarOne + " -d " + srcOneGrvDep + " -m " + Listing.ScarfXML.getFlag() + " -o " + tempStreamXML + " -st" + " -t" + " " + argsIdentifier.PRETTY.getArg();
+            String args = "-in " + EngineType.JAR.getFlag() + " -s " + jarOne + " -d " + srcOneGrvDep + " -m " + Listing.ScarfXML.getFlag() + " -o " + tempJarFile_Scarf_Steam_1 + " -st" + " -t" + " " + argsIdentifier.PRETTY.getArg();
 
             try {
                 engine.main(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempStreamXML), Charset.forName("UTF-8"));
+                List<String> results = Files.readAllLines(Paths.get(tempJarFile_Scarf_Steam_1), Charset.forName("UTF-8"));
                 assertTrue(results.size() >= 1);
 
 
-                AnalyzerReport report = AnalyzerReport.deserialize(JacksonSerializer.JacksonType.XML, new File(tempStreamXML));
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(tempJarFile_Scarf_Steam_1));
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    /**
+     * <p>main_TestableJar_Scarf_Stream.</p>
+     */
+    @Test
+    public void main_TestableJar_Default_Stream() {
+        if (isLinux) {
+            String args = "-in " + EngineType.JAR.getFlag() + " -s " + jarOne + " -d " + srcOneGrvDep + " -m " + Listing.Default.getFlag() + " -o " + tempJarFile_Default_Stream_0 + " -st" + " -t" + " " + argsIdentifier.PRETTY.getArg();
+
+            try {
+                engine.main(args.split(" "));
+
+                List<String> results = Files.readAllLines(Paths.get(tempJarFile_Default_Stream_0), Charset.forName("UTF-8"));
+                assertTrue(results.size() >= 1);
+
+                Report report = Report.deserialize(new File(tempJarFile_Default_Stream_0));
+
             } catch (Exception e) {
                 e.printStackTrace();
                 assertNull(e);
@@ -249,7 +291,7 @@ public class EntryPointTest_JAR {
     @Test
     public void main_TestableJar_ScarfTimeStamp() {
         if (isLinux) {
-            String args = "-in " + EngineType.JAR.getFlag() + " -s " + jarOne + " -d " + srcOneGrvDep + " -m " + Listing.ScarfXML.getFlag() + " -o " + tempFileOutXML_2 + " " + argsIdentifier.TIMESTAMP.getArg() + " " + argsIdentifier.PRETTY.getArg();
+            String args = "-in " + EngineType.JAR.getFlag() + " -s " + jarOne + " -d " + srcOneGrvDep + " -m " + Listing.ScarfXML.getFlag() + " -o " + tempJarFile_Scarf_2 + " " + argsIdentifier.TIMESTAMP.getArg() + " " + argsIdentifier.PRETTY.getArg();
 
             try {
                 engine.main(args.split(" "));

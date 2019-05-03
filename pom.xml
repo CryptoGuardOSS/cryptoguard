@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>vt.edu</groupId>
     <artifactId>Cryptoguard</artifactId>
-    <version>V03.05.00</version>
+    <version>V03.05.03</version>
     <dependencies>
         <dependency>
             <groupId>commons-cli</groupId>

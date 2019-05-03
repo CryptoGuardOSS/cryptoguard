@@ -36,8 +36,10 @@ public class JacksonSerializer {
         ObjectMapper serializer = outputType.getOutputMapper();
         log.debug("Serializing output as " + outputType.name());
         serializer.setSerializationInclusion(Include.NON_EMPTY);
-        if (prettyPrint)
+        if (prettyPrint) {
+            log.trace("Writing with the \"pretty\" format");
             serializer.enable(SerializationFeature.INDENT_OUTPUT);
+        }
         try {
             return serializer.writeValueAsString(obj);
         } catch (JsonProcessingException e) {

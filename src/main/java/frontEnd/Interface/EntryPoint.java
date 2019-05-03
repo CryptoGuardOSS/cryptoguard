@@ -76,7 +76,7 @@ public class EntryPoint {
             generalInfo.stopScanning();
 
         } catch (ExceptionHandler e) {
-            log.debug(e.getErrorCode().getMessage() + ": " + e.getLongDesciption());
+            log.debug(e.getErrorCode().getMessage());
 
             if (e.getErrorCode().getId().equals(0)) {
                 log.info(e.getErrorCode().getMessage());

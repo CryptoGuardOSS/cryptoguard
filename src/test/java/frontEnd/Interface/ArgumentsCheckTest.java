@@ -26,8 +26,6 @@ import static test.TestUtilities.*;
 public class ArgumentsCheckTest {
 
     //region Attributes
-    private EnvironmentInformation info;
-
     private final String fileOut = Utils.osPathJoin(testPath, "txt.xml");
     private final String fileOutTxt = Utils.osPathJoin(testPath, "txt.txt");
     //endregion
@@ -50,7 +48,6 @@ public class ArgumentsCheckTest {
      */
     @After
     public void tearDown() throws Exception {
-        info = null;
     }
     //endregion
 
@@ -114,7 +111,7 @@ public class ArgumentsCheckTest {
         assertTrue(info.isShowTimes());
         assertTrue(info.getPrettyPrint());
         assertEquals(fileOutTxt, info.getFileOut());
-        assertEquals(Listing.Legacy, info.getMessagingType());
+        assertEquals(Listing.Default, info.getMessagingType());
     }
 
     /**
@@ -180,7 +177,7 @@ public class ArgumentsCheckTest {
         assertEquals(jarOne, info.getSource().get(0));
         assertFalse(info.isShowTimes());
         assertFalse(info.getPrettyPrint());
-        assertEquals(Listing.Legacy, info.getMessagingType());
+        assertEquals(Listing.Default, info.getMessagingType());
     }
 
     /**

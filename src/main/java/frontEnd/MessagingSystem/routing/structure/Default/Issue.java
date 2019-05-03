@@ -4,6 +4,7 @@ package frontEnd.MessagingSystem.routing.structure.Default;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -14,10 +15,13 @@ import java.io.Serializable;
 /**
  * Issue
  * <p>
+ *
+ * 
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "-meta",
+        "-FullPath",
+        "-Id",
         "Message",
         "Description",
         "RuleNumber",
@@ -29,57 +33,84 @@ import java.io.Serializable;
 public class Issue implements Serializable {
 
     /**
+     *
      * (Required)
+     *
      */
-    @JsonProperty("-meta")
-    private String meta;
+    @JacksonXmlProperty(isAttribute = true, localName = "FullPath")
+    @JsonProperty("_FullPath")
+    private String fullPath;
     /**
+     *
      * (Required)
+     *
+     */
+    @JacksonXmlProperty(isAttribute = true, localName = "Id")
+    @JsonProperty("_Id")
+    private String id;
+    /**
+     * 
+     * (Required)
+     * 
      */
     @JsonProperty("Message")
     private String message;
     @JsonProperty("Description")
     private String description;
     /**
+     * 
      * (Required)
+     * 
      */
     @JsonProperty("RuleNumber")
     private int ruleNumber;
     @JsonProperty("RuleDesc")
     private String ruleDesc;
     /**
+     * 
      * (Required)
+     * 
      */
     @JsonProperty("CWEId")
     private int cWEId;
     /**
+     * 
      * (Required)
+     * 
      */
     @JsonProperty("Severity")
     private String severity;
+    /**
+     * LocationType
+     * <p>
+     */
     @JsonProperty("Location")
-    private String location;
-    private final static long serialVersionUID = 142666690529949695L;
+    private Location location;
+    private final static long serialVersionUID = -2265209324602378101L;
 
     /**
      * No args constructor for use in serialization
+     * 
      */
     public Issue() {
     }
 
     /**
+     * 
      * @param message
+     * @param id
      * @param location
      * @param ruleNumber
      * @param description
      * @param ruleDesc
      * @param severity
      * @param cWEId
-     * @param meta
+     * @param fullPath
      */
-    public Issue(String meta, String message, String description, int ruleNumber, String ruleDesc, int cWEId, String severity, String location) {
+    public Issue(String fullPath, String id, String message, String description, int ruleNumber, String ruleDesc, int cWEId, String severity, Location location) {
         super();
-        this.meta = meta;
+        this.fullPath = fullPath;
+        this.id = id;
         this.message = message;
         this.description = description;
         this.ruleNumber = ruleNumber;
@@ -90,23 +121,56 @@ public class Issue implements Serializable {
     }
 
     /**
+     * 
      * (Required)
+     * 
      */
-    @JsonProperty("-meta")
-    public String getMeta() {
-        return meta;
+    @JacksonXmlProperty(isAttribute = true, localName = "FullPath")
+    @JsonProperty("_FullPath")
+    public String getFullPath() {
+        return fullPath;
     }
 
     /**
+     * 
      * (Required)
+     * 
      */
-    @JsonProperty("-meta")
-    public void setMeta(String meta) {
-        this.meta = meta;
+    @JacksonXmlProperty(isAttribute = true, localName = "FullPath")
+    @JsonProperty("_FullPath")
+    public void setFullPath(String fullPath) {
+        this.fullPath = fullPath;
     }
 
-    public Issue withMeta(String meta) {
-        this.meta = meta;
+    public Issue withFullPath(String fullPath) {
+        this.fullPath = fullPath;
+        return this;
+    }
+
+    /**
+     * 
+     * (Required)
+     *
+     */
+    @JacksonXmlProperty(isAttribute = true, localName = "Id")
+    @JsonProperty("_Id")
+    public String getId() {
+        return id;
+    }
+
+    /**
+     *
+     * (Required)
+     *
+     */
+    @JacksonXmlProperty(isAttribute = true, localName = "Id")
+    @JsonProperty("_Id")
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Issue withId(String id) {
+        this.id = id;
         return this;
     }
 
@@ -119,7 +183,9 @@ public class Issue implements Serializable {
     }
 
     /**
+     * 
      * (Required)
+     *
      */
     @JsonProperty("Message")
     public void setMessage(String message) {
@@ -147,7 +213,9 @@ public class Issue implements Serializable {
     }
 
     /**
+     * 
      * (Required)
+     *
      */
     @JsonProperty("RuleNumber")
     public int getRuleNumber() {
@@ -155,7 +223,9 @@ public class Issue implements Serializable {
     }
 
     /**
+     * 
      * (Required)
+     *
      */
     @JsonProperty("RuleNumber")
     public void setRuleNumber(int ruleNumber) {
@@ -183,7 +253,9 @@ public class Issue implements Serializable {
     }
 
     /**
+     * 
      * (Required)
+     *
      */
     @JsonProperty("CWEId")
     public int getCWEId() {
@@ -191,7 +263,9 @@ public class Issue implements Serializable {
     }
 
     /**
+     * 
      * (Required)
+     *
      */
     @JsonProperty("CWEId")
     public void setCWEId(int cWEId) {
@@ -204,7 +278,9 @@ public class Issue implements Serializable {
     }
 
     /**
+     * 
      * (Required)
+     *
      */
     @JsonProperty("Severity")
     public String getSeverity() {
@@ -212,41 +288,56 @@ public class Issue implements Serializable {
     }
 
     /**
+     * 
      * (Required)
+     *
      */
     @JsonProperty("Severity")
     public void setSeverity(String severity) {
         this.severity = severity;
     }
 
+    @JacksonXmlProperty(isAttribute = true, localName = "Id")
     public Issue withSeverity(String severity) {
         this.severity = severity;
         return this;
     }
 
+    /**
+     * LocationType
+     * <p>
+     *
+     *
+     */
     @JsonProperty("Location")
-    public String getLocation() {
+    public Location getLocation() {
         return location;
     }
 
+    /**
+     * LocationType
+     * <p>
+     *
+     *
+     */
     @JsonProperty("Location")
-    public void setLocation(String location) {
+    public void setLocation(Location location) {
         this.location = location;
     }
 
-    public Issue withLocation(String location) {
+    public Issue withLocation(Location location) {
         this.location = location;
         return this;
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("meta", meta).append("message", message).append("description", description).append("ruleNumber", ruleNumber).append("ruleDesc", ruleDesc).append("cWEId", cWEId).append("severity", severity).append("location", location).toString();
+        return new ToStringBuilder(this).append("fullPath", fullPath).append("id", id).append("message", message).append("description", description).append("ruleNumber", ruleNumber).append("ruleDesc", ruleDesc).append("cWEId", cWEId).append("severity", severity).append("location", location).toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(message).append(location).append(ruleNumber).append(description).append(ruleDesc).append(severity).append(cWEId).append(meta).toHashCode();
+        return new HashCodeBuilder().append(message).append(id).append(location).append(ruleNumber).append(description).append(ruleDesc).append(severity).append(cWEId).append(fullPath).toHashCode();
     }
 
     @Override
@@ -258,7 +349,7 @@ public class Issue implements Serializable {
             return false;
         }
         Issue rhs = ((Issue) other);
-        return new EqualsBuilder().append(message, rhs.message).append(location, rhs.location).append(ruleNumber, rhs.ruleNumber).append(description, rhs.description).append(ruleDesc, rhs.ruleDesc).append(severity, rhs.severity).append(cWEId, rhs.cWEId).append(meta, rhs.meta).isEquals();
+        return new EqualsBuilder().append(message, rhs.message).append(id, rhs.id).append(location, rhs.location).append(ruleNumber, rhs.ruleNumber).append(description, rhs.description).append(ruleDesc, rhs.ruleDesc).append(severity, rhs.severity).append(cWEId, rhs.cWEId).append(fullPath, rhs.fullPath).isEquals();
     }
 
 }
