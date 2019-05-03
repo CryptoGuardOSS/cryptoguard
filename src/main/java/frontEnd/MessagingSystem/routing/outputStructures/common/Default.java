@@ -44,12 +44,12 @@ public class Default {
         target.setComputerOS(computerOS);
         target.setFullPath(info.getPackageRootDir());
         target.setJVMVersion(jvmInfo);
-        target.setProjectName(info.getPackageName());
+        target.setProjectName(info.getTargetProjectName() == null ? info.getPackageName() : info.getTargetProjectName());
         target.setType(mapper(info.getSourceType()));
 
-        //TODO - Not Implemented Yet
-        //target.setProjectType();
-        //target.setProjectVersion();
+        if (info.getSourceType().equals(EngineType.DIR))
+            target.setProjectType(mapper(info.getIsGradle()));
+        target.setProjectVersion(info.getTargetProjectVersion());
 
         target.setPropertiesFilePath(info.getPropertiesFile());
         target.setRawCommand(info.getRawCommand());
@@ -72,6 +72,13 @@ public class Default {
                 return Target.Type.CLASS;
         }
         return Target.Type.JAR;
+    }
+
+    public static Target.ProjectType mapper(Boolean isGradle) {
+        if (isGradle)
+            return Target.ProjectType.GRADLE;
+        else
+            return Target.ProjectType.MAVEN;
     }
 
 

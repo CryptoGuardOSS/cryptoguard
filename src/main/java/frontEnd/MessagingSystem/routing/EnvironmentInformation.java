@@ -3,6 +3,8 @@ package frontEnd.MessagingSystem.routing;
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.Interface.outputRouting.ExceptionId;
 import frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -41,6 +43,18 @@ public class EnvironmentInformation {
     private boolean showTimes = false;
     private boolean addExperimentalRules = false;
     private String rawCommand;
+    @Getter
+    @Setter
+    private boolean overWriteOutput = false;
+    @Getter
+    @Setter
+    private String targetProjectName;
+    @Getter
+    @Setter
+    private String targetProjectVersion;
+    @Getter
+    @Setter
+    private Boolean isGradle;
     //endregion
     //region Required Elements Set From the Start
     private final List<String> Source;

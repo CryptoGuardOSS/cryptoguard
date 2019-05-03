@@ -2,6 +2,9 @@ package util;
 
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.Interface.outputRouting.ExceptionId;
+import lombok.Getter;
+import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
@@ -27,6 +30,16 @@ import java.util.Map;
 public class MvnPomFileParser implements BuildFileParser {
 
     Map<String, String> moduleVsPath = new HashMap<>();
+    @Getter
+    @Setter
+    String projectName;
+    @Getter
+    @Setter
+    String projectVersion;
+
+    public Boolean isGradle() {
+        return false;
+    }
 
     /**
      * <p>Constructor for MvnPomFileParser.</p>
@@ -58,6 +71,16 @@ public class MvnPomFileParser implements BuildFileParser {
                     moduleVsPath.put(moduleName, projectRoot + "/" + moduleName);
                 }
             }
+
+
+            String groupId = document.getElementsByTagName("groupId").item(0).getNodeValue();
+            String artifactId = document.getElementsByTagName("artifactId").item(0).getNodeValue();
+            projectName = StringUtils.trimToNull(groupId) + ":" + StringUtils.trimToNull(artifactId);
+
+
+            projectVersion = StringUtils.trimToNull(document.getElementsByTagName("version").item(0).getNodeValue());
+
+
         } catch (ParserConfigurationException e) {
             throw new ExceptionHandler("Error creating file parser", ExceptionId.FILE_CON);
         } catch (org.xml.sax.SAXException | java.io.IOException e) {

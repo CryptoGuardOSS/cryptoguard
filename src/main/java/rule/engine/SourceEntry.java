@@ -35,6 +35,12 @@ public class SourceEntry implements EntryHandler {
         BuildFileParser buildFileParser = BuildFileParserFactory.getBuildfileParser(generalInfo.getSource().get(0));
         log.debug("Using the build parser: " + buildFileParser.toString());
 
+        log.trace("Setting the project name/version");
+        generalInfo.setTargetProjectName(buildFileParser.getProjectName());
+        generalInfo.setTargetProjectVersion(buildFileParser.getProjectVersion());
+
+        generalInfo.setIsGradle(buildFileParser.isGradle());
+
         Map<String, List<String>> moduleVsDependency = buildFileParser.getDependencyList();
         List<String> analyzedModules = new ArrayList<>();
 

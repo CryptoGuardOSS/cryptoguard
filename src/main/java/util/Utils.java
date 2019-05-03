@@ -57,9 +57,9 @@ public class Utils {
      */
     public final static String localPath = System.getProperty("user.dir");
     /**
-     * Constant <code>projectVersion="V03.05.03"</code>
+     * Constant <code>projectVersion="V03.06.00"</code>
      */
-    public final static String projectVersion = "V03.05.03";
+    public final static String projectVersion = "V03.06.00";
     /**
      * Constant <code>projectName="CryptoGuard"</code>
      */
@@ -923,15 +923,15 @@ public class Utils {
      * @return a {@link java.lang.String} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
-    public static String verifyFileOut(String file, Listing type) throws ExceptionHandler {
+    public static String verifyFileOut(String file, Listing type, Boolean overWrite) throws ExceptionHandler {
         if (!file.endsWith(type.getOutputFileExt()))
             throw new ExceptionHandler("File " + file + " doesn't have the right file type ", ExceptionId.ARG_VALID);
 
         File tempFile = new File(file);
 
-        /*if (tempFile.exists() || tempFile.isFile())
-            throw new ExceptionHandler(tempFile.getName() + " is already a valid file.");
-        */
+        if (overWrite && (tempFile.exists() || tempFile.isFile()))
+            throw new ExceptionHandler(tempFile.getName() + " is already a valid file.", ExceptionId.FILE_O);
+
 
         try {
             return tempFile.getCanonicalPath();
