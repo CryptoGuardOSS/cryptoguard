@@ -5,7 +5,7 @@ testSrc=$(dir)samples/
 java7=${JAVA7_HOME}/bin/java
 
 #Variables dynamically set when the program is being built from the source
-ver=V03.05.02
+ver=V03.05.03
 name=cryptoguard
 
 #The short hand paths to execute the compiled jar and the scarf xsd for valiation
@@ -73,12 +73,12 @@ checkEnv: checkJava7Home checkAndroidSDKHome
 	@$(info Envrionment Variables are set.)
 
 #The grouping of Jar Scanning
-scanJar: scanJar_Default scanJar_Scarf
+scanJar: scanJar_Legacy scanJar_Scarf scanJar_Default
 
 #The command for a default jar scan output
-scanJar_Default: checkJava7Home build
+scanJar_Legacy: checkJava7Home build
 	@$(info Scanning the sample jar ($(jarLoc)).)
-	@$(scan) -in jar -s $(jarLoc) -d $(depLoc) -o $(testDir)results_Jar.txt
+	@$(scan) -in jar -s $(jarLoc) -d $(depLoc) -m L -o $(testDir)results_Jar.txt
 	@$(info View the output at $(testDir)results_Jar.txt.)
 
 #The command for a SCARF jar scan output, that also verifies the output
@@ -89,13 +89,18 @@ scanJar_Scarf: checkJava7Home build
 	@xmllint --schema $(scarfXSD) $(testDir)results_Jar_Scarf.xml>$(testDir)lint_JAR.out 2>$(testDir)lint_JAR.err
 	@$(info View the output at $(testDir)results_Jar_Scarf.xml.)
 
+#The command for a SCARF jar scan output, that also verifies the output
+scanJar_Default: checkJava7Home build
+	@$(info Scanning the sample jar ($(jarLoc)).)
+	@$(scan) -in jar -s $(jarLoc) -d $(depLoc) -o $(testDir)results_Jar_Default.json -m D -n
+
 #The grouping of Apk Scanning
-scanAPK: scanAPK_Default scanAPK_Scarf
+scanAPK: scanAPK_Legacy scanAPK_Scarf scanAPK_Default
 
 #The command for a default apk scan output
-scanAPK_Default: checkAndroidSDKHome build
+scanAPK_Legacy: checkAndroidSDKHome build
 	@$(info Scanning the sample apk ($(apkLoc)))
-	@$(scan) -in apk -s $(apkLoc) -o $(testDir)results_Apk.txt
+	@$(scan) -in apk -s $(apkLoc) -m L -o $(testDir)results_Apk.txt
 	@$(info View the output at $(testDir)results_Apk.txt.)
 
 #The command for a SCARF apk scan output, that also verifies the output
@@ -106,13 +111,19 @@ scanAPK_Scarf: checkAndroidSDKHome build
 	@xmllint --schema $(scarfXSD) $(testDir)results_Apk_Scarf.xml>$(testDir)lint_APK.out 2>$(testDir)lint_APK.err
 	@$(info View the output at $(testDir)results_Apk_Scarf.xml.)
 
+#The command for a default apk scan output
+scanAPK_Default: checkAndroidSDKHome build
+	@$(info Scanning the sample apk ($(apkLoc)))
+	@$(scan) -in apk -s $(apkLoc) -m D -o $(testDir)results_Apk.json
+	@$(info View the output at $(testDir)results_Apk.json.)
+
 #The grouping of Project Scanning
-scanDir: scanDir_Default scanDir_Scarf
+scanDir: scanDir_Legacy scanDir_Scarf scanDir_Default
 
 #The command for a default directory scan output
-scanDir_Default: checkJava7Home build
+scanDir_Legacy: checkJava7Home build
 	@$(info Scanning the sample directory ($(dirLoc)))
-	@$(scan) -in source -s $(dirLoc) -d $(depLoc) -o $(testDir)results_Dir.txt
+	@$(scan) -in source -s $(dirLoc) -d $(depLoc) -m L -o $(testDir)results_Dir.txt
 	@$(info View the output at $(testDir)results_Dir.txt.)
 
 #The command for a SCARF directory scan output, that also verifies the output
@@ -123,19 +134,25 @@ scanDir_Scarf: checkJava7Home build
 	@xmllint --schema $(scarfXSD) $(testDir)results_Dir_Scarf.xml>$(testDir)lint_DIR.out 2>$(testDir)lint_DIR.err
 	@$(info View the output at $(testDir)results_Dir_Scarf.xml.)
 
+#The command for a default directory scan output
+scanDir_Default: checkJava7Home build
+	@$(info Scanning the sample directory ($(dirLoc)))
+	@$(scan) -in source -s $(dirLoc) -d $(depLoc) -m D -o $(testDir)results_Dir.json
+	@$(info View the output at $(testDir)results_Dir.json.)
+
 #The grouping of Java File Scanning
-scanJavaFile: scanJavaFile_Default scanJavaFiles_Default scanJavaFile_Scarf scanJavaFiles_Scarf
+scanJavaFile: scanJavaFile_Legacy scanJavaFiles_Legacy scanJavaFile_Scarf scanJavaFiles_Scarf scanJavaFile_Default scanJavaFiles_Default
 
 #The command for a default java class file scan output
-scanJavaFile_Default: checkJava7Home build
+scanJavaFile_Legacy: checkJava7Home build
 	@$(info Scanning the sample java file ($(javaFile1)).)
-	@$(scan) -in java -s $(javaFile1) -o $(testDir)results_javaFile.txt
+	@$(scan) -in java -s $(javaFile1) -m L -o $(testDir)results_javaFile.txt
 	@$(info View the output at $(testDir)results_javaFile.txt.)
 
 #The command for a default java class file scan output
-scanJavaFiles_Default: checkJava7Home build
+scanJavaFiles_Legacy: checkJava7Home build
 	@$(info Scanning the sample java files ($(javaFile1), $(javaFile2)).)
-	@$(scan) -in java -s $(javaFile1) $(javaFile2) -o $(testDir)results_javaFiles.txt
+	@$(scan) -in java -s $(javaFile1) $(javaFile2) -m L -o $(testDir)results_javaFiles.txt
 	@$(info View the output at $(testDir)results_javaFiles.txt.)
 
 #The command for a SCARF directory scan output, that also verifies the output
@@ -154,19 +171,31 @@ scanJavaFiles_Scarf: checkJava7Home build
 	@xmllint --schema $(scarfXSD) $(testDir)results_javaFiles_Scarf.xml>$(testDir)lint_JavaFiles.out 2>$(testDir)lint_JavaFiles.err
 	@$(info View the output at $(testDir)results_javaFiles_Scarf.xml.)
 
-#The grouping of Java Class Scanning
-scanJavaClass: scanJavaClass_Default scanJavaClasses_Default scanJavaClass_Scarf scanJavaClasses_Scarf
+#The command for a default java class file scan output
+scanJavaFile_Default: checkJava7Home build
+	@$(info Scanning the sample java file ($(javaFile1)).)
+	@$(scan) -in java -s $(javaFile1) -m D -o $(testDir)results_javaFile.json
+	@$(info View the output at $(testDir)results_javaFile.json.)
 
 #The command for a default java class file scan output
-scanJavaClass_Default: checkJava7Home build
+scanJavaFiles_Default: checkJava7Home build
+	@$(info Scanning the sample java files ($(javaFile1), $(javaFile2)).)
+	@$(scan) -in java -s $(javaFile1) $(javaFile2) -m D -o $(testDir)results_javaFiles.json
+	@$(info View the output at $(testDir)results_javaFiles.json.)
+
+#The grouping of Java Class Scanning
+scanJavaClass: scanJavaClass_Legacy scanJavaClasses_Legacy scanJavaClass_Scarf scanJavaClasses_Scarf scanJavaClass_Default scanJavaClasses_Default
+
+#The command for a default java class file scan output
+scanJavaClass_Legacy: checkJava7Home build
 	@$(info Scanning the sample java class file ($(classFile1)).)
-	@$(scan) -in class -s $(classFile1) -o $(testDir)results_javaClass.txt
+	@$(scan) -in class -s $(classFile1) -m L -o $(testDir)results_javaClass.txt
 	@$(info View the output at $(testDir)results_javaClass.txt.)
 
 #The command for a default java class file scan output
-scanJavaClasses_Default: checkJava7Home build
+scanJavaClasses_Legacy: checkJava7Home build
 	@$(info Scanning the sample java class files ($(classFile1), $(classFile2)).)
-	@$(scan) -in class -s $(classFile1) $(classFile2) -o $(testDir)results_javaClasses.txt
+	@$(scan) -in class -s $(classFile1) $(classFile2) -m L -o $(testDir)results_javaClasses.txt
 	@$(info View the output at $(testDir)results_javaClasses.txt.)
 
 #The command for a SCARF directory scan output, that also verifies the output
@@ -184,6 +213,18 @@ scanJavaClasses_Scarf: checkJava7Home build
 	@$(info Verifying the Scarf Output ($(testDir)results_javaClasses_Scarf.xml).)
 	@xmllint --schema $(scarfXSD) $(testDir)results_javaClasses_Scarf.xml>$(testDir)lint_JavaClasses.out 2>$(testDir)lint_JavaClass.err
 	@$(info View the output at $(testDir)results_javaClasses_Scarf.xml.)
+
+#The command for a default java class file scan output
+scanJavaClass_Default: checkJava7Home build
+	@$(info Scanning the sample java class file ($(classFile1)).)
+	@$(scan) -in class -s $(classFile1) -m D -o $(testDir)results_javaClass.json
+	@$(info View the output at $(testDir)results_javaClass.json.)
+
+#The command for a default java class file scan output
+scanJavaClasses_Default: checkJava7Home build
+	@$(info Scanning the sample java class files ($(classFile1), $(classFile2)).)
+	@$(scan) -in class -s $(classFile1) $(classFile2) -m D -o $(testDir)results_javaClasses.json
+	@$(info View the output at $(testDir)results_javaClasses.json.)
 
 #This runs the help method
 help: build

@@ -1,14 +1,14 @@
 package frontEnd.Interface;
 
 import frontEnd.MessagingSystem.routing.Listing;
+import frontEnd.MessagingSystem.routing.structure.Default.Report;
+import frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import rule.engine.EngineType;
 import soot.G;
-import util.Utils;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -30,25 +30,6 @@ public class EntryPointTest_APK {
 
     //region Attributes
     private EntryPoint engine;
-    private ByteArrayOutputStream out;
-    private final String tempFileOutApk = Utils.osPathJoin(testPath, "app-debug.txt");
-    private final String tempFileOutApk_Scarf = Utils.osPathJoin(testPath, "app-debug.xml");
-    ;
-
-    //region Scarf Properties
-    private String assessment_start_ts;
-    private String build_fw;
-    private String build_fw_version;
-    private String package_name;
-    private String package_version;
-    private String assess_fw;
-    private String assess_fw_version;
-    private String build_root_dir;
-    private String package_root_dir;
-    private String parser_fw;
-    private String parser_fw_version;
-    private String uuid;
-    //endregion
 
     //endregion
 
@@ -66,22 +47,6 @@ public class EntryPointTest_APK {
         G.reset();
 
         engine = new EntryPoint();
-        out = new ByteArrayOutputStream();
-
-        //region Properties Setup
-        assess_fw = "java-assess";
-        assess_fw_version = "1.0.0c";
-        assessment_start_ts = "1516116551.639144";
-        build_fw = "c-assess";
-        build_fw_version = "1.1.12";
-        build_root_dir = "/home";
-        package_name = "RigorityJ";
-        package_root_dir = "CryptoGuard";
-        package_version = "8675309";
-        parser_fw = "example_tool";
-        parser_fw_version = "x.y.z";
-        uuid = "fa109792-9234-4jk2-9f68-alp9woofbeef";
-        //endregion
     }
 
     /**
@@ -92,23 +57,6 @@ public class EntryPointTest_APK {
     @After
     public void tearDown() throws Exception {
         engine = null;
-        out = null;
-
-        //region Properties
-        assess_fw = null;
-        assess_fw_version = null;
-        assessment_start_ts = null;
-        build_fw = null;
-        build_fw_version = null;
-        build_root_dir = null;
-        package_root_dir = null;
-        package_name = null;
-        package_root_dir = null;
-        package_version = null;
-        parser_fw = null;
-        parser_fw_version = null;
-        uuid = null;
-        //endregion
     }
     //endregion
 
@@ -143,7 +91,7 @@ public class EntryPointTest_APK {
      * <p>main_TestableApk.</p>
      */
     @Test
-    public void main_TestableApk() {
+    public void main_TestableApk_Legacy() {
         if (isLinux) {
             String args = "-in " + EngineType.APK.getFlag() + " -s " + pathToAPK + " -o " + tempFileOutApk;
 
@@ -151,6 +99,28 @@ public class EntryPointTest_APK {
                 engine.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempFileOutApk), Charset.forName("UTF-8"));
+                assertTrue(results.size() >= 10);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    /**
+     * <p>main_TestableApk.</p>
+     */
+    @Test
+    public void main_TestableApk_Legacy_Stream() {
+        if (isLinux) {
+            String args = "-in " + EngineType.APK.getFlag() + " -s " + pathToAPK + " -o " + tempFileOutApk_Steam + "-st";
+
+            try {
+                engine.main(args.split(" "));
+
+                List<String> results = Files.readAllLines(Paths.get(tempFileOutApk_Steam), Charset.forName("UTF-8"));
                 assertTrue(results.size() >= 10);
 
 
@@ -175,6 +145,79 @@ public class EntryPointTest_APK {
                 List<String> results = Files.readAllLines(Paths.get(tempFileOutApk_Scarf), Charset.forName("UTF-8"));
                 assertTrue(results.size() >= 10);
 
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(tempFileOutApk_Scarf));
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    /**
+     * <p>main_TestableApk_Scarf.</p>
+     */
+    @Test
+    public void main_TestableApk_Scarf_Stream() {
+        if (isLinux) {
+            String args = "-in " + EngineType.APK.getFlag() + " -s " + pathToAPK + " -o " + tempFileOutApk_Scarf_Steam + " -m " + Listing.ScarfXML.getFlag() + " -n -st";
+
+            try {
+                engine.main(args.split(" "));
+
+                List<String> results = Files.readAllLines(Paths.get(tempFileOutApk_Scarf_Steam), Charset.forName("UTF-8"));
+                assertTrue(results.size() >= 10);
+
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(tempFileOutApk_Scarf_Steam));
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    /**
+     * <p>main_TestableApk_Scarf.</p>
+     */
+    @Test
+    public void main_TestableApk_Default() {
+        if (isLinux) {
+            String args = "-in " + EngineType.APK.getFlag() + " -s " + pathToAPK + " -o " + tempFileOutApk_Default + " -m " + Listing.Default.getFlag() + " -n";
+
+            try {
+                engine.main(args.split(" "));
+
+                List<String> results = Files.readAllLines(Paths.get(tempFileOutApk_Default), Charset.forName("UTF-8"));
+                assertTrue(results.size() >= 10);
+
+                Report report = Report.deserialize(new File(tempFileOutApk_Default));
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    /**
+     * <p>main_TestableApk_Scarf.</p>
+     */
+    @Test
+    public void main_TestableApk_Default_Stream() {
+        if (isLinux) {
+            String args = "-in " + EngineType.APK.getFlag() + " -s " + pathToAPK + " -o " + tempFileOutApk_Default_Steam + " -m " + Listing.ScarfXML.getFlag() + " -n -st";
+
+            try {
+                engine.main(args.split(" "));
+
+                List<String> results = Files.readAllLines(Paths.get(tempFileOutApk_Default_Steam), Charset.forName("UTF-8"));
+                assertTrue(results.size() >= 10);
+
+                Report report = Report.deserialize(new File(tempFileOutApk_Default_Steam));
 
             } catch (Exception e) {
                 e.printStackTrace();

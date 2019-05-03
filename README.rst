@@ -1,5 +1,5 @@
 #################################
-CryptoGuard V03.05.02
+CryptoGuard V03.05.03
 #################################
 
 
@@ -81,6 +81,13 @@ How To Choose
 * using the argument :code:`-m`, you can add the identifier of the other output formats
 
 Default
+-------------
+* Argument :code:`-m D`
+    * example command :code:`java7 -jar cryptoguard.jar -in jar -s /path/to/jar/my-jar.jar -m D`
+* This is a json file that represents a more simplified output
+    * This will be iterated over time as more functionality is available
+
+Legacy
 -------------
 * Argument :code:`-m L`
     * example command :code:`java7 -jar cryptoguard.jar -in jar -s /path/to/jar/my-jar.jar -m L`

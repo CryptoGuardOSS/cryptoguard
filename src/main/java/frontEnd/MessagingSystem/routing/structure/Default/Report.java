@@ -4,11 +4,17 @@ package frontEnd.MessagingSystem.routing.structure.Default;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import frontEnd.Interface.outputRouting.ExceptionHandler;
+import frontEnd.Interface.outputRouting.ExceptionId;
+import frontEnd.MessagingSystem.routing.Listing;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -326,6 +332,26 @@ public class Report implements Serializable {
         }
         Report rhs = ((Report) other);
         return new EqualsBuilder().append(projectVersion, rhs.projectVersion).append(dateTime, rhs.dateTime).append(issues, rhs.issues).append(target, rhs.target).append(uUID, rhs.uUID).append(projectName, rhs.projectName).append(schemaVersion, rhs.schemaVersion).isEquals();
+    }
+
+    /**
+     * <p>deserialize.</p>
+     *
+     * @param file a {@link java.io.File} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
+    public static Report deserialize(File file) throws ExceptionHandler {
+        try {
+
+            ObjectMapper deserializer = Listing.Default.getJacksonType().getOutputMapper();
+
+            return deserializer.readValue(file, Report.class);
+
+        } catch (IOException e) {
+            throw new ExceptionHandler("Issue de-serializing file: " + file.getName(), ExceptionId.FILE_READ);
+        }
+
     }
 
 }

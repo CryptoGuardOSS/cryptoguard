@@ -79,7 +79,7 @@ public enum Listing {
                 if (type.flag.equals(flag))
                     return type;
 
-        return Listing.Legacy;
+        return Listing.Default;
     }
 
     /**

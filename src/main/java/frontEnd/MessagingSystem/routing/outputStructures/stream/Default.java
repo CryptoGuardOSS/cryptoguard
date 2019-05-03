@@ -6,7 +6,7 @@ import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import frontEnd.MessagingSystem.routing.Listing;
 import frontEnd.MessagingSystem.routing.outputStructures.common.JacksonSerializer;
 import frontEnd.MessagingSystem.routing.structure.Default.Issue;
-import frontEnd.MessagingSystem.routing.structure.Default.IssueWrapper;
+import frontEnd.MessagingSystem.routing.structure.Default.Issues;
 import frontEnd.MessagingSystem.routing.structure.Default.Report;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
@@ -70,11 +70,13 @@ public class Default extends Structure {
                 output = output.substring(0, output.lastIndexOf("}"));
                 break;
             case XML:
+                output = output.replace("</" + Report.class.getSimpleName() + ">", "");
+                break;
             case YAML:
                 break;
         }
 
-        log.trace("Current String:" + output);
+        log.trace("Current String:\n" + output);
 
         this.write(output);
 
@@ -98,7 +100,7 @@ public class Default extends Structure {
 
             //region Instantiating and trimming the wrapper content
             log.trace("Writing a initialized list");
-            IssueWrapper issueWrapper = new IssueWrapper();
+            Issues issueWrapper = new Issues();
             issueWrapper.getIssues().add(instance);
 
             log.debug("Marshalling the issue wrapper");
@@ -115,7 +117,12 @@ public class Default extends Structure {
                     output = ", " + output;
                     break;
                 case XML:
+                    output = output.replace("</" + Issues.class.getSimpleName() + ">", "");
+                    break;
                 case YAML:
+                    output = output.replace("---\n", "\n ").replace("\n", "\n  ").replaceFirst("\n  ", "\n");
+                    output = output.substring(0, output.lastIndexOf("\n"));
+                    log.debug("Altered output: " + output);
                     break;
             }
 
@@ -124,11 +131,23 @@ public class Default extends Structure {
         } else {
 
             log.debug("Marshalling the issue");
-            output = ", " + JacksonSerializer.serialize(instance, super.getSource().prettyPrint(), Listing.Default.getJacksonType());
+            output = JacksonSerializer.serialize(instance, super.getSource().prettyPrint(), Listing.Default.getJacksonType());
+
+            switch (super.getSource().getMessagingType().getJacksonType()) {
+                case JSON:
+                    output = ", " + output;
+                    break;
+                case XML:
+                    break;
+                case YAML:
+                    output = output.replace("\n", "\n    ").replace("---\n", "\n- ").replace("\n-     ", "\n  - ");
+                    output = output.substring(0, output.lastIndexOf("\n"));
+                    break;
+            }
         }
 
         log.debug("Writing the marshaled output");
-        this.write(StringUtils.trimToNull(output));
+        this.write(output);
 
     }
 
@@ -145,6 +164,8 @@ public class Default extends Structure {
                 ending = "\n]\n}";
                 break;
             case XML:
+                ending = "\n</" + Issues.class.getSimpleName() + ">\n";
+                ending = ending + "</" + Report.class.getSimpleName() + ">";
             case YAML:
                 break;
         }

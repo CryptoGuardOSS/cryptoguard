@@ -4,7 +4,6 @@ import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.Interface.outputRouting.ExceptionId;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.FileOutputStream;
 
@@ -100,7 +99,7 @@ public abstract class Structure extends OutputStructure {
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public void write(String output) throws ExceptionHandler {
-        output = StringUtils.trimToNull(output);
+        //output = StringUtils.trimToNull(output);
         if (output != null)
             try {
                 this.streamOut.write(output.getBytes(super.getChars()));
