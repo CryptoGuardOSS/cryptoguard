@@ -1,11 +1,8 @@
 package main.rule.engine;
 
-import fj.function.Strings;
 import main.rule.*;
 import main.util.*;
 
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,6 +34,8 @@ public class RuleEngine {
         if (args.length < 2) {
             System.exit(1);
         }
+
+        Utils.initDepth(Integer.parseInt(args[3]));
 
         if (args[0].equals("jar")) {
             String projectJarPath = args[1];
@@ -110,5 +109,26 @@ public class RuleEngine {
                 }
             }
         }
+
+        System.out.println("Total Heuristics: " + Utils.NUM_HEURISTIC);
+        System.out.println("Total Orthogonal: " + Utils.NUM_ORTHOGONAL);
+        System.out.println("Total Constants: " + Utils.NUM_CONSTS_TO_CHECK);
+        System.out.println("Total Slices: " + Utils.NUM_SLICES);
+        System.out.println("Average Length: " + RuleEngine.calculateAverage(Utils.SLICE_LENGTH));
+
+        for (int i = 0; i < Utils.DEPTH_COUNT.length; i++) {
+            System.out.println(String.format("Depth: %d, Count %d", i + 1, Utils.DEPTH_COUNT[i]));
+        }
+    }
+
+    private static double calculateAverage(List<Integer> marks) {
+        Integer sum = 0;
+        if (!marks.isEmpty()) {
+            for (Integer mark : marks) {
+                sum += mark;
+            }
+            return sum.doubleValue() / marks.size();
+        }
+        return sum;
     }
 }

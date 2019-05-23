@@ -41,15 +41,22 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
             return;
         }
 
-        Set<String> usedFields = new HashSet<>();
-        Set<String> usedConstants = new HashSet<>();
+
+
+        HashMap<String, List<String>> callerVsUsedConstants = new HashMap<>();
 
         for (int index = 0; index < analysis.getAnalysisResult().size(); index++) {
+
             UnitContainer e = analysis.getAnalysisResult().get(index);
 
-            if (e instanceof AssignInvokeUnitContainer) {
-                Set<String> fields = ((AssignInvokeUnitContainer) e).getProperties();
-                usedFields.addAll(fields);
+            if (!(e instanceof AssignInvokeUnitContainer) && e.getUnit() instanceof JAssignStmt) {
+
+                List<String> usedConstants = callerVsUsedConstants.get(e.getMethod());
+
+                if (usedConstants == null) {
+                    usedConstants = new ArrayList<>();
+                    callerVsUsedConstants.put(e.getMethod(), usedConstants);
+                }
 
                 if (e.getUnit().toString().contains("interfaceinvoke ")) {
                     for (ValueBox usebox : e.getUnit().getUseBoxes()) {
@@ -59,19 +66,16 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
                     }
                 }
             }
-        }
-
-        for (int index = 0; index < analysis.getAnalysisResult().size(); index++) {
-
-            UnitContainer e = analysis.getAnalysisResult().get(index);
 
             Map<UnitContainer, String> outSet = new HashMap<>();
 
-
             if (e instanceof AssignInvokeUnitContainer) {
                 List<UnitContainer> resFromInside = ((AssignInvokeUnitContainer) e).getAnalysisResult();
-                checkPredictableSource(resFromInside, e, outSet);
+                checkPredictableSourceFromInside(resFromInside, e, outSet);
 
+            } else if (e instanceof InvokeUnitContainer) {
+                List<UnitContainer> resFromInside = ((InvokeUnitContainer) e).getAnalysisResult();
+                checkPredictableSourceFromInside(resFromInside, e, outSet);
             } else {
                 for (String predictableSource : PREDICTABLE_SOURCES) {
                     if (e.getUnit().toString().contains(predictableSource)) {
@@ -90,6 +94,14 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
                     }
                 }
 
+            } else if (e instanceof InvokeUnitContainer) {
+                List<UnitContainer> result = ((InvokeUnitContainer) e).getAnalysisResult();
+                if (result != null) {
+                    for (UnitContainer unit : result) {
+                        checkHeuristics(unit, outSet);
+                    }
+                }
+
             } else {
                 checkHeuristics(e, outSet);
             }
@@ -98,14 +110,18 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
                 continue;
             }
 
-            InvokeUnitContainer invokeResult = new InvokeUnitContainer();
+            UnitContainer invokeResult = Utils.isArgumentOfInvoke(analysis, index, new ArrayList<UnitContainer>());
 
-            if (Utils.isArgumentOfInvoke(analysis, index, new ArrayList<UnitContainer>(), usedFields, invokeResult)) {
-
-                Map<UnitContainer, String> newOutset = new HashMap<>();
-
-                if ((invokeResult.getDefinedFields().isEmpty() || !invokeResult.getArgs().isEmpty())
+            if (invokeResult != null && invokeResult instanceof InvokeUnitContainer) {
+                if ((((InvokeUnitContainer) invokeResult).getDefinedFields().isEmpty() || !((InvokeUnitContainer) invokeResult).getArgs().isEmpty())
                         && invokeResult.getUnit().toString().contains("specialinvoke")) {
+
+                    for (UnitContainer unitContainer : outSet.keySet()) {
+                        putIntoMap(predictableSourcMap, unitContainer, outSet.get(unitContainer));
+                    }
+                }
+            } else if (invokeResult != null && invokeResult.getUnit() instanceof JInvokeStmt) {
+                if (invokeResult.getUnit().toString().contains("specialinvoke")) {
 
                     for (UnitContainer unitContainer : outSet.keySet()) {
                         putIntoMap(predictableSourcMap, unitContainer, outSet.get(unitContainer));
@@ -117,7 +133,7 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
 
                             boolean found = false;
 
-                            for (String constant : usedConstants) {
+                            for (String constant : callerVsUsedConstants.get(e.getMethod())) {
                                 if (((JInvokeStmt) unitContainer.getUnit()).getInvokeExpr().getArg(0).toString().contains(constant)) {
                                     putIntoMap(predictableSourcMap, unitContainer, outSet.get(unitContainer));
                                     found = true;
@@ -134,40 +150,29 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
                         }
                     }
                 }
-
-                List<UnitContainer> resFromInside = invokeResult.getAnalysisResult();
-
-                if (!resFromInside.isEmpty()) {
-                    checkPredictableSource(resFromInside, newOutset);
-
-                } else {
-                    for (String predictableSource : PREDICTABLE_SOURCES) {
-                        if (e.getUnit().toString().contains(predictableSource)) {
-                            newOutset.put(e, e.toString());
-                            break;
-                        }
-                    }
-                }
-
-                for (UnitContainer unit : invokeResult.getAnalysisResult()) {
-                    checkHeuristics(unit, newOutset);
-                }
-
-                for (UnitContainer unitContainer : newOutset.keySet()) {
-                    putIntoMap(predictableSourcMap, unitContainer, newOutset.get(unitContainer));
-                }
-
             } else {
 
                 for (UnitContainer unitContainer : outSet.keySet()) {
+
                     putIntoMap(predictableSourcMap, unitContainer, outSet.get(unitContainer));
                 }
             }
         }
     }
 
-    private void checkPredictableSource(List<UnitContainer> result, UnitContainer e, Map<UnitContainer, String> outSet) {
+    private void checkPredictableSourceFromInside(List<UnitContainer> result, UnitContainer e, Map<UnitContainer, String> outSet) {
         for (UnitContainer key : result) {
+
+            if (key instanceof AssignInvokeUnitContainer) {
+                checkPredictableSourceFromInside(((AssignInvokeUnitContainer) key).getAnalysisResult(), key, outSet);
+                continue;
+            }
+
+            if (key instanceof InvokeUnitContainer) {
+                checkPredictableSourceFromInside(((InvokeUnitContainer) key).getAnalysisResult(), key, outSet);
+                continue;
+            }
+
             for (String predictableSource : PREDICTABLE_SOURCES) {
                 if (key.getUnit().toString().contains(predictableSource)) {
                     outSet.put(e, e.toString());
@@ -176,17 +181,21 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
         }
     }
 
-    private void checkPredictableSource(List<UnitContainer> result, Map<UnitContainer, String> outSet) {
-        for (UnitContainer key : result) {
-            for (String predictableSource : PREDICTABLE_SOURCES) {
-                if (key.getUnit().toString().contains(predictableSource)) {
-                    outSet.put(key, key.toString());
-                }
-            }
-        }
-    }
-
     private void checkHeuristics(UnitContainer e, Map<UnitContainer, String> outSet) {
+
+        if (e instanceof AssignInvokeUnitContainer) {
+            for (UnitContainer u : ((AssignInvokeUnitContainer) e).getAnalysisResult()) {
+                checkHeuristics(u, outSet);
+            }
+            return;
+        }
+
+        if (e instanceof InvokeUnitContainer) {
+            for (UnitContainer u : ((InvokeUnitContainer) e).getAnalysisResult()) {
+                checkHeuristics(u, outSet);
+            }
+            return;
+        }
 
         for (ValueBox usebox : e.getUnit().getUseBoxes()) {
             if (usebox.getValue() instanceof Constant) {
