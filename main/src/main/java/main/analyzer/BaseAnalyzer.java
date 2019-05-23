@@ -11,7 +11,11 @@ import main.slicer.backward.method.MethodSlicingResult;
 import main.slicer.backward.property.PropertyAnalysisResult;
 import main.util.FieldInitializationInstructionMap;
 import main.util.NamedMethodMap;
-import soot.*;
+import main.util.Utils;
+import soot.Body;
+import soot.Scene;
+import soot.SootClass;
+import soot.SootMethod;
 import soot.toolkits.graph.ExceptionalUnitGraph;
 import soot.toolkits.graph.UnitGraph;
 
@@ -91,6 +95,12 @@ public class BaseAnalyzer {
                 for (MethodWrapper methodWrapper : newResult.keySet()) {
                     List<Analysis> analysisList = newResult.get(methodWrapper);
                     for (Analysis analysis : analysisList) {
+
+                        if (!analysis.getAnalysisResult().isEmpty()) {
+                            Utils.NUM_SLICES++;
+                            Utils.SLICE_LENGTH.add(analysis.getAnalysisResult().size());
+                        }
+
                         checker.analyzeSlice(analysis);
                     }
                 }

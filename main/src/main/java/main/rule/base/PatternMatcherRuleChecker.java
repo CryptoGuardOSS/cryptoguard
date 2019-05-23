@@ -2,6 +2,7 @@ package main.rule.base;
 
 import main.analyzer.backward.Analysis;
 import main.analyzer.backward.AssignInvokeUnitContainer;
+import main.analyzer.backward.InvokeUnitContainer;
 import main.analyzer.backward.UnitContainer;
 import soot.ValueBox;
 import soot.jimple.Constant;
@@ -32,11 +33,40 @@ public abstract class PatternMatcherRuleChecker extends BaseRuleChecker {
                 }
             }
 
-            checkForMatch(e);
+            if (e instanceof InvokeUnitContainer) {
+                List<UnitContainer> resFromInside = ((InvokeUnitContainer) e).getAnalysisResult();
+
+                for (UnitContainer unit : resFromInside) {
+                    checkForMatch(unit);
+                }
+            }
+
+            checkForMatchInternal(e);
         }
     }
 
     private void checkForMatch(UnitContainer e) {
+
+        if (e instanceof AssignInvokeUnitContainer) {
+            List<UnitContainer> resFromInside = ((AssignInvokeUnitContainer) e).getAnalysisResult();
+
+            for (UnitContainer unit : resFromInside) {
+                checkForMatch(unit);
+            }
+        }
+
+        if (e instanceof InvokeUnitContainer) {
+            List<UnitContainer> resFromInside = ((InvokeUnitContainer) e).getAnalysisResult();
+
+            for (UnitContainer unit : resFromInside) {
+                checkForMatch(unit);
+            }
+        }
+
+        checkForMatchInternal(e);
+    }
+
+    private void checkForMatchInternal(UnitContainer e) {
         for (ValueBox usebox : e.getUnit().getUseBoxes()) {
             if (usebox.getValue() instanceof Constant) {
                 boolean found = false;
@@ -65,12 +95,12 @@ public abstract class PatternMatcherRuleChecker extends BaseRuleChecker {
         List<UnitContainer> predictableSourceInst = new ArrayList<>();
         List<String> others = new ArrayList<>();
 
-        for(List<String> values : predictableSourcMap.values()) {
+        for (List<String> values : predictableSourcMap.values()) {
             predictableSources.addAll(values);
         }
         predictableSourceInst.addAll(predictableSourcMap.keySet());
 
-        for(List<String> values : othersSourceMap.values()) {
+        for (List<String> values : othersSourceMap.values()) {
             others.addAll(values);
         }
 
