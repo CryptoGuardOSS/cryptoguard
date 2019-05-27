@@ -223,7 +223,9 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
                         List<ValueBox> defBoxes = e.getUnit().getDefBoxes();
 
                         if (defBoxes != null && !defBoxes.isEmpty()) {
-                            if (usebox instanceof RValueBox && defBoxes.get(0).getValue().getType() instanceof ByteType) {
+                            if (usebox instanceof RValueBox &&
+                                    (defBoxes.get(0).getValue().getType() instanceof ByteType
+                                            || defBoxes.get(0).getValue().getType() instanceof CharType)) {
                                 outSet.put(e, usebox.getValue().toString());
                             } else {
                                 putIntoMap(othersSourceMap, e, usebox.getValue().toString());
