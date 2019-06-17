@@ -81,8 +81,7 @@ public class EntryPoint {
             if (e.getErrorCode().getId().equals(0)) {
                 log.info(e.getErrorCode().getMessage());
                 System.out.print(e.getLongDesciption());
-            }
-            else {
+            } else {
                 log.fatal(e.getErrorCode().getMessage());
                 System.err.print(e.toString());
             }

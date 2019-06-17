@@ -131,9 +131,10 @@ public class EnvironmentInformation {
             this.dependencies = dependencies;
         this.messagingType = messagingType;
         this.sourcePaths = sourcePaths;
-        String[] pkgs = sourcePkg.split(System.getProperty("file.separator"));
-        this.packageName = pkgs[pkgs.length - 1].split("\\.")[0];
-
+        if (StringUtils.isNotBlank(sourcePkg)) {
+            String[] pkgs = sourcePkg.split(Utils.fileSep);
+            this.packageName = pkgs[pkgs.length - 1].split("\\.")[0];
+        }
         //this.setPackageRootDir(sourcePkg);
         //this.setBuildRootDir(sourcePkg);
         this.setPackageRootDir();
@@ -152,6 +153,7 @@ public class EnvironmentInformation {
     public void setRawCommand(String rawCommand) {
         this.rawCommand = rawCommand;
     }
+
     /**
      * <p>getAssessmentStartTime.</p>
      *
