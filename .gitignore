@@ -4,6 +4,7 @@
 /build/
 /target/
 /*.jar
+/*.tar
 .attach_pid*
 docs
 *.iml

@@ -1,5 +1,8 @@
 import java.text.SimpleDateFormat
 
+plugins {
+    id 'com.google.cloud.tools.jib' version '1.5.0'
+}
 apply plugin: "java"
 apply plugin: 'maven'
 
@@ -75,6 +78,7 @@ task updateCopyRightYear {
 
 build.dependsOn(updateVersion)
 build.dependsOn(updateCopyRightYear)
+build.dependsOn(jibBuildTar)
 
 repositories {
     mavenCentral()
@@ -132,6 +136,14 @@ task release {
             into '.'
             rename {
                 String fileName -> props.getProperty("projectName") + ".jar"
+            }
+        }
+
+        copy {
+            from "build/jib-image.tar"
+            into '.'
+            rename {
+                String fileName -> props.getProperty("projectName") + ".tar"
             }
         }
 
