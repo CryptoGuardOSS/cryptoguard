@@ -131,6 +131,7 @@ public class HeuristicBasedInstructionSlicer extends BackwardFlowAnalysis {
         ASSIGN_WHITE_LISTED_METHODS.add("<java.util.Arrays: byte[] copyOf(byte[],int)>");
 
         INVOKE_WHITE_LISTED_METHODS.add("<java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>");
+        INVOKE_WHITE_LISTED_METHODS.add("<java.lang.String: void <init>");
 
         BLACK_LISTED_METHODS.add("<javax.crypto.KeyGenerator: void <init>");
         BLACK_LISTED_METHODS.add("<javax.crypto.Cipher: void <init>");

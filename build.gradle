@@ -51,12 +51,6 @@ task updateVersion {
             token: '@VERSION@',
             value: props.getProperty("versionNumber").replace("V","")
     )
-
-    ant.replace(
-            dir: 'src/main/java/',
-            token: '{VersionHere}',
-            value: props.getProperty("versionNumber").replace("V","")
-    )
 }
 
 task updateCopyRightYear {
@@ -149,6 +143,8 @@ dependencies {
     //compile name: 'soot_j9_20190409'
     //compile name: 'soot_3.3.0'
     compile name: 'soot-unknown'
+    compile name: 'axml-2.0'
+    compile name: 'AXMLPrinter2'
     compile "org.codehaus.groovy:groovy:2.5.2"
     compile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'junit', name: 'junit', version: '4.12'

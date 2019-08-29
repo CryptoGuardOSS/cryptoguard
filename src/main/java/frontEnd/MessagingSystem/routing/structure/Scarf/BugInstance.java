@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import frontEnd.MessagingSystem.routing.JacksonFilters.UnknownMethodValueFilter;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -47,7 +46,6 @@ public class BugInstance implements Serializable {
      */
     @JacksonXmlElementWrapper(useWrapping = true, localName = "Methods")
     @JsonProperty("Method")
-    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = UnknownMethodValueFilter.class)
     private List<Method> method = null;
     /**
      * Location

@@ -1,3 +1,4 @@
+
 package frontEnd.MessagingSystem.routing.structure.Default;
 
 import com.fasterxml.jackson.annotation.*;
@@ -16,6 +17,8 @@ import java.util.Map;
 /**
  * TargetInfo
  * <p>
+ *
+ * 
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -62,6 +65,8 @@ public class Target implements Serializable {
     /**
      * Timing
      * <p>
+     *
+     *
      */
     @JsonProperty("Timing")
     private Timing timing;
@@ -71,7 +76,9 @@ public class Target implements Serializable {
     @JsonProperty("FullPath")
     private String fullPath;
     /**
+     * 
      * (Required)
+     * 
      */
     @JsonProperty("Type")
     private Type type;
@@ -80,6 +87,8 @@ public class Target implements Serializable {
     /**
      * The Sources of the Target
      * <p>
+     *
+     *
      */
     @JsonProperty("TargetSources")
     private List<String> targetSources = new ArrayList<String>();
@@ -87,11 +96,13 @@ public class Target implements Serializable {
 
     /**
      * No args constructor for use in serialization
+     * 
      */
     public Target() {
     }
 
     /**
+     *
      * @param projectVersion
      * @param propertiesFilePath
      * @param computerOS
@@ -282,7 +293,9 @@ public class Target implements Serializable {
     }
 
     /**
+     * 
      * (Required)
+     * 
      */
     @JsonProperty("Type")
     public Type getType() {
@@ -290,7 +303,9 @@ public class Target implements Serializable {
     }
 
     /**
+     * 
      * (Required)
+     * 
      */
     @JsonProperty("Type")
     public void setType(Type type) {
@@ -320,6 +335,8 @@ public class Target implements Serializable {
     /**
      * The Sources of the Target
      * <p>
+     *
+     * 
      */
     @JsonProperty("TargetSources")
     public List<String> getTargetSources() {
@@ -329,6 +346,8 @@ public class Target implements Serializable {
     /**
      * The Sources of the Target
      * <p>
+     *
+     *
      */
     @JsonProperty("TargetSources")
     public void setTargetSources(List<String> targetSources) {

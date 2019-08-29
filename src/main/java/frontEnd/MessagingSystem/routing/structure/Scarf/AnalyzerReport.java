@@ -1000,7 +1000,7 @@ public class AnalyzerReport implements Serializable {
     /**
      * <p>deserialize.</p>
      *
-     * @param file a {@link java.io.File} object.
+     * @param file      a {@link java.io.File} object.
      * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */

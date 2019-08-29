@@ -95,7 +95,6 @@ public class ScarfXML {
         //region Setting Methods If there are any, currently the first is the primary one
         if (!issue.getMethods().isEmpty()) {
             for (int methodKtr = 0; methodKtr < issue.getMethods().size(); methodKtr++) {
-
                 Method newMethod = new Method();
 
                 newMethod.setId(methodKtr);
@@ -121,7 +120,7 @@ public class ScarfXML {
 
                 newLocation.setSourceFile(issue.getFullPathName());
 
-                if (!createdLoc.getLineEnd().equals(createdLoc.getLineStart())) {
+                if (createdLoc.getLineEnd() > 0 && !createdLoc.getLineEnd().equals(createdLoc.getLineStart())) {
                     newLocation.setEndLine(createdLoc.getLineEnd());
                 }
                 instance.addBugLocation(newLocation);

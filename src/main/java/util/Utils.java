@@ -14,6 +14,8 @@ import org.jf.dexlib2.iface.DexFile;
 import rule.engine.EngineType;
 import slicer.backward.heuristic.HeuristicBasedAnalysisResult;
 import slicer.backward.heuristic.HeuristicBasedInstructions;
+import slicer.backward.orthogonal.OrthogonalInfluenceInstructions;
+import slicer.backward.orthogonal.OrthogonalSlicingResult;
 import soot.*;
 import soot.jimple.Constant;
 import soot.jimple.InvokeExpr;
@@ -44,6 +46,30 @@ import static soot.SootClass.BODIES;
  * @since 01.00.00
  */
 public class Utils {
+    public static int DEPTH = 0;
+
+    public static int NUM_ORTHOGONAL = 0;
+    public static int NUM_CONSTS_TO_CHECK = 0;
+    public static int NUM_SLICES = 0;
+    public static int NUM_HEURISTIC = 0;
+    public static final ArrayList<Integer> SLICE_LENGTH = new ArrayList<>();
+    public static int[] DEPTH_COUNT;
+
+    public static void initDepth(int depth) {
+        DEPTH = depth;
+        DEPTH_COUNT = new int[depth];
+    }
+
+    private static final List<String> ASSIGN_DONT_VISIT = new ArrayList<>();
+    private static final List<String> INVOKE_DONT_VISIT = new ArrayList<>();
+
+    static {
+        ASSIGN_DONT_VISIT.add("<java.util.Map: java.lang.Object get(java.lang.Object)>");
+
+        INVOKE_DONT_VISIT.add("<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>");
+        INVOKE_DONT_VISIT.add("java.lang.String: void <init>");
+    }
+
     /**
      * Constant <code>lineSep="System.getProperty(file.separator)"</code>
      */
@@ -1019,6 +1045,66 @@ public class Utils {
      * @param currInstruction a {@link soot.Unit} object.
      * @return a {@link analyzer.backward.UnitContainer} object.
      */
+    public static UnitContainer createAssignInvokeUnitContainer(Unit currInstruction, String caller, int depth) {
+
+        for (String dontVisit : ASSIGN_DONT_VISIT) {
+            if (currInstruction.toString().contains(dontVisit)) {
+                UnitContainer unitContainer = new UnitContainer();
+                unitContainer.setUnit(currInstruction);
+                unitContainer.setMethod(caller);
+                return unitContainer;
+            }
+        }
+
+        AssignInvokeUnitContainer unitContainer = new AssignInvokeUnitContainer();
+
+        SootMethod method = ((JAssignStmt) currInstruction).getInvokeExpr().getMethod();
+        if (method != null && method.isConcrete()) {
+
+            Scene.v().forceResolve(method.getDeclaringClass().getName(), BODIES);
+
+            List<UnitContainer> intraAnalysis = null;
+
+            DEPTH_COUNT[depth - 1]++;
+
+            if (depth == 1) {
+
+                NUM_HEURISTIC++;
+
+                HeuristicBasedInstructions returnInfluencingInstructions = new HeuristicBasedInstructions(method,
+                        "return");
+
+                intraAnalysis = returnInfluencingInstructions.getAnalysisResult().getAnalysis();
+            } else {
+
+                NUM_ORTHOGONAL++;
+
+                OrthogonalInfluenceInstructions other = new OrthogonalInfluenceInstructions(method, "return", depth - 1);
+                intraAnalysis = other.getOrthogonalSlicingResult().getAnalysisResult();
+            }
+
+            // Get args
+            List<Integer> args = Utils.findInfluencingParamters(intraAnalysis);
+
+            // Get fields
+            Set<String> usedFields = new HashSet<>();
+            for (UnitContainer iUnit : intraAnalysis) {
+                for (ValueBox usebox : iUnit.getUnit().getUseBoxes()) {
+                    if (usebox.getValue().toString().startsWith("r0.") || usebox.getValue().toString().startsWith("this.")) {
+                        usedFields.add(usebox.getValue().toString());
+                    }
+                }
+            }
+
+            unitContainer.setArgs(args);
+            unitContainer.setAnalysisResult(intraAnalysis);
+            unitContainer.setMethod(caller);
+            unitContainer.setProperties(usedFields);
+        }
+
+        return unitContainer;
+    }
+    /*
     public static UnitContainer createAssignInvokeUnitContainer(Unit currInstruction) {
 
         AssignInvokeUnitContainer unitContainer = new AssignInvokeUnitContainer();
@@ -1055,6 +1141,8 @@ public class Utils {
 
         return unitContainer;
     }
+
+    */
 
     /**
      * <p>isArgOfAssignInvoke.</p>
@@ -1143,9 +1231,10 @@ public class Utils {
      * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
      * @return a boolean.
      */
-    public static boolean isArgumentOfInvoke(Analysis analysis, int index,
-                                             List<UnitContainer> outSet,
-                                             Set<String> usedFields, InvokeUnitContainer analysisResult) {
+    public static UnitContainer isArgumentOfInvoke(Analysis analysis, int index,
+                                                   List<UnitContainer> outSet) {
+        NUM_CONSTS_TO_CHECK++;
+
         UnitContainer baseUnit = analysis.getAnalysisResult().get(index);
 
         if (baseUnit.getUnit() instanceof JInvokeStmt) {
@@ -1156,15 +1245,7 @@ public class Utils {
 
             for (int x = 0; x < args.size(); x++) {
                 if (args.get(x) instanceof Constant) {
-
-                    InvokeUnitContainer container = getDefinedFieldsFromInvoke(invokeExpr.getMethod(), usedFields);
-
-                    analysisResult.getAnalysisResult().addAll(container.getAnalysisResult());
-                    analysisResult.setDefinedFields(container.getDefinedFields());
-                    analysisResult.setArgs(container.getArgs());
-                    analysisResult.setUnit(baseUnit.getUnit());
-                    return true;
-
+                    return baseUnit;
                 }
             }
         }
@@ -1196,18 +1277,7 @@ public class Utils {
 
                             for (int x = 0; x < args.size(); x++) {
                                 if (args.get(x).toString().contains(property)) {
-
-                                    InvokeUnitContainer container = getDefinedFieldsFromInvoke(invokeExpr.getMethod(), usedFields);
-
-                                    if (container.getArgs().contains(x)) {
-                                        analysisResult.getAnalysisResult().addAll(container.getAnalysisResult());
-                                        analysisResult.setDefinedFields(container.getDefinedFields());
-                                        analysisResult.setArgs(container.getArgs());
-
-                                    }
-
-                                    analysisResult.setUnit(curUnit.getUnit());
-                                    return true;
+                                    return curUnit;
                                 }
                             }
                         }
@@ -1250,16 +1320,7 @@ public class Utils {
                                 for (int x = 0; x < args.size(); x++) {
                                     if (args.get(x).equivTo(defBox.getValue()) ||
                                             isArrayUseBox(curUnit, insetIns, defBox, args.get(x))) {
-
-                                        InvokeUnitContainer container = getDefinedFieldsFromInvoke(invokeExpr.getMethod(), usedFields);
-
-                                        if (container.getArgs().contains(x)) {
-                                            analysisResult.getAnalysisResult().addAll(container.getAnalysisResult());
-                                            analysisResult.setDefinedFields(container.getDefinedFields());
-                                            analysisResult.setArgs(container.getArgs());
-                                        }
-                                        analysisResult.setUnit(curUnit.getUnit());
-                                        return true;
+                                        return curUnit;
                                     }
                                 }
                             } else if (curUnit.getUnit().toString().contains(defBox + ".<")) {
@@ -1306,16 +1367,7 @@ public class Utils {
                                 for (int x = 0; x < args.size(); x++) {
                                     if (args.get(x).equivTo(defBox.getValue()) ||
                                             isArrayUseBox(curUnit, insetIns, defBox, args.get(x))) {
-
-                                        InvokeUnitContainer container = getDefinedFieldsFromInvoke(invokeExpr.getMethod(), usedFields);
-                                        if (container.getArgs().contains(x)) {
-                                            analysisResult.getAnalysisResult().addAll(container.getAnalysisResult());
-                                            analysisResult.setDefinedFields(container.getDefinedFields());
-                                            analysisResult.setArgs(container.getArgs());
-                                        }
-
-                                        analysisResult.setUnit(curUnit.getUnit());
-                                        return true;
+                                        return curUnit;
                                     }
                                 }
                             }
@@ -1346,13 +1398,7 @@ public class Utils {
             }
         }
 
-        return false;
-    }
-
-    private static boolean isArrayUseBox(UnitContainer curUnit, UnitContainer insetIns, ValueBox defBox, Value useBox) {
-        return (defBox.getValue().toString().contains(useBox.toString())
-                && curUnit.getMethod().equals(insetIns.getMethod())
-                && useBox.getType() instanceof ArrayType);
+        return null;
     }
 
     private static InvokeUnitContainer getDefinedFieldsFromInvoke(SootMethod method, Set<String> usedFields) {
@@ -1409,5 +1455,110 @@ public class Utils {
                 for (String sootString : predictableSourcMap.get(unit))
                     output.addIssue(new AnalysisIssue(unit, ruleNumber, "Found: \"" + sootString.replaceAll("\"", "") + "\"", sourcePaths));
 
+    }
+
+    //TODO - setup
+    //Utils.initDepth(Integer.parseInt(args[3]));
+
+    private static void printOutInfo() {
+        System.out.println("Total Heuristics: " + Utils.NUM_HEURISTIC);
+        System.out.println("Total Orthogonal: " + Utils.NUM_ORTHOGONAL);
+        System.out.println("Total Constants: " + Utils.NUM_CONSTS_TO_CHECK);
+        System.out.println("Total Slices: " + Utils.NUM_SLICES);
+        System.out.println("Average Length: " + calculateAverage(Utils.SLICE_LENGTH));
+
+        for (int i = 0; i < Utils.DEPTH_COUNT.length; i++) {
+            System.out.println(String.format("Depth: %d, Count %d", i + 1, Utils.DEPTH_COUNT[i]));
+        }
+    }
+
+    private static double calculateAverage(List<Integer> marks) {
+        Integer sum = 0;
+        if (!marks.isEmpty()) {
+            for (Integer mark : marks) {
+                sum += mark;
+            }
+            return sum.doubleValue() / marks.size();
+        }
+        return sum;
+    }
+
+    public static int isArgOfInvoke(ValueBox useBox, Unit unit) {
+
+        if (unit instanceof JInvokeStmt) {
+
+            InvokeExpr invokeExpr = ((JInvokeStmt) unit).getInvokeExpr();
+            List<Value> args = invokeExpr.getArgs();
+            for (int index = 0; index < args.size(); index++) {
+                if (args.get(index).equivTo(useBox.getValue())) {
+                    return index;
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    private static boolean isArrayUseBox(UnitContainer curUnit, UnitContainer insetIns, ValueBox defBox, Value useBox) {
+        return (defBox.getValue().toString().contains(useBox.toString())
+                && curUnit.getMethod().equals(insetIns.getMethod())
+                && useBox.getType() instanceof ArrayType);
+    }
+
+    public static UnitContainer createInvokeUnitContainer(Unit currInstruction, String caller, List<String> usedFields, int depth) {
+
+        for (String dontVisit : INVOKE_DONT_VISIT) {
+            if (currInstruction.toString().contains(dontVisit)) {
+                UnitContainer unitContainer = new UnitContainer();
+                unitContainer.setUnit(currInstruction);
+                unitContainer.setMethod(caller);
+                return unitContainer;
+            }
+        }
+
+        InvokeUnitContainer unitContainer = new InvokeUnitContainer();
+        SootMethod method = ((JInvokeStmt) currInstruction).getInvokeExpr().getMethod();
+
+        if (method.isConcrete()) {
+
+            Scene.v().forceResolve(method.getDeclaringClass().getName(), BODIES);
+
+            if (depth == 1) {
+
+                for (String field : usedFields) {
+
+                    HeuristicBasedInstructions influencingInstructions = new HeuristicBasedInstructions(method, field);
+                    HeuristicBasedAnalysisResult propAnalysis = influencingInstructions.getAnalysisResult();
+
+                    if (propAnalysis.getAnalysis() != null) {
+                        // Get args
+                        List<Integer> args = Utils.findInfluencingParamters(propAnalysis.getAnalysis());
+                        unitContainer.setArgs(args);
+                        unitContainer.setMethod(caller);
+                        unitContainer.getDefinedFields().add(field);
+                        unitContainer.setAnalysisResult(propAnalysis.getAnalysis());
+                    }
+                }
+            } else {
+
+                for (String field : usedFields) {
+
+                    OrthogonalInfluenceInstructions other = new OrthogonalInfluenceInstructions(method, field, depth - 1);
+                    OrthogonalSlicingResult orthoAnalysis = other.getOrthogonalSlicingResult();
+
+                    if (orthoAnalysis.getAnalysisResult() != null) {
+                        // Get args
+                        List<Integer> args = Utils.findInfluencingParamters(orthoAnalysis.getAnalysisResult());
+                        unitContainer.setArgs(args);
+                        unitContainer.setMethod(caller);
+                        unitContainer.getDefinedFields().add(field);
+                        unitContainer.setAnalysisResult(orthoAnalysis.getAnalysisResult());
+                    }
+                }
+
+            }
+        }
+
+        return unitContainer;
     }
 }

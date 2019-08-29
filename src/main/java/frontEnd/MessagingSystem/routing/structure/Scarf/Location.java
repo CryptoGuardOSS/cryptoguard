@@ -3,7 +3,6 @@ package frontEnd.MessagingSystem.routing.structure.Scarf;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import frontEnd.MessagingSystem.routing.JacksonFilters.NegativeNumberFilters;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -35,16 +34,12 @@ public class Location implements Serializable {
     @JsonProperty("SourceFile")
     private String sourceFile;
     @JsonProperty("StartLine")
-    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NegativeNumberFilters.class)
     private int startLine;
     @JsonProperty("EndLine")
-    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NegativeNumberFilters.class)
     private int endLine;
     @JsonProperty("StartColumn")
-    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NegativeNumberFilters.class)
     private int startColumn;
     @JsonProperty("EndColumn")
-    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NegativeNumberFilters.class)
     private int endColumn;
     @JsonProperty("Explanation")
     private String explanation;
