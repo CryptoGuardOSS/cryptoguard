@@ -3,6 +3,7 @@ package frontEnd.Interface;
 import frontEnd.MessagingSystem.routing.Listing;
 import frontEnd.MessagingSystem.routing.structure.Default.Report;
 import frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport;
+import frontEnd.argsIdentifier;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,7 +11,7 @@ import rule.engine.EngineType;
 import soot.G;
 
 import java.io.File;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -93,12 +94,16 @@ public class EntryPointTest_APK {
     @Test
     public void main_TestableApk_Legacy() {
         if (isLinux) {
-            String args = "-in " + EngineType.APK.getFlag() + " -s " + pathToAPK + " -o " + tempFileOutApk;
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.APK) +
+                            makeArg(argsIdentifier.SOURCE, pathToAPK) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
+                            makeArg(argsIdentifier.OUT, tempFileOutApk);
 
             try {
                 engine.main(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempFileOutApk), Charset.forName("UTF-8"));
+                List<String> results = Files.readAllLines(Paths.get(tempFileOutApk), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 10);
 
 
@@ -115,12 +120,17 @@ public class EntryPointTest_APK {
     @Test
     public void main_TestableApk_Legacy_Stream() {
         if (isLinux) {
-            String args = "-in " + EngineType.APK.getFlag() + " -s " + pathToAPK + " -o " + tempFileOutApk_Steam + "-st";
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.APK) +
+                            makeArg(argsIdentifier.SOURCE, pathToAPK) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
+                            makeArg(argsIdentifier.OUT, tempFileOutApk_Steam) +
+                            makeArg(argsIdentifier.STREAM);
 
             try {
                 engine.main(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempFileOutApk_Steam), Charset.forName("UTF-8"));
+                List<String> results = Files.readAllLines(Paths.get(tempFileOutApk_Steam), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 10);
 
 
@@ -137,12 +147,17 @@ public class EntryPointTest_APK {
     @Test
     public void main_TestableApk_Scarf() {
         if (isLinux) {
-            String args = "-in " + EngineType.APK.getFlag() + " -s " + pathToAPK + " -o " + tempFileOutApk_Scarf + " -m " + Listing.ScarfXML.getFlag() + " -n";
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.APK) +
+                            makeArg(argsIdentifier.SOURCE, pathToAPK) +
+                            makeArg(argsIdentifier.OUT, tempFileOutApk_Scarf) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                            makeArg(argsIdentifier.PRETTY);
 
             try {
                 engine.main(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempFileOutApk_Scarf), Charset.forName("UTF-8"));
+                List<String> results = Files.readAllLines(Paths.get(tempFileOutApk_Scarf), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 10);
 
                 AnalyzerReport report = AnalyzerReport.deserialize(new File(tempFileOutApk_Scarf));
@@ -161,12 +176,18 @@ public class EntryPointTest_APK {
     @Test
     public void main_TestableApk_Scarf_Stream() {
         if (isLinux) {
-            String args = "-in " + EngineType.APK.getFlag() + " -s " + pathToAPK + " -o " + tempFileOutApk_Scarf_Steam + " -m " + Listing.ScarfXML.getFlag() + " -n -st";
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.APK) +
+                            makeArg(argsIdentifier.SOURCE, pathToAPK) +
+                            makeArg(argsIdentifier.OUT, tempFileOutApk_Scarf_Steam) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                            makeArg(argsIdentifier.PRETTY) +
+                            makeArg(argsIdentifier.STREAM);
 
             try {
                 engine.main(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempFileOutApk_Scarf_Steam), Charset.forName("UTF-8"));
+                List<String> results = Files.readAllLines(Paths.get(tempFileOutApk_Scarf_Steam), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 10);
 
                 AnalyzerReport report = AnalyzerReport.deserialize(new File(tempFileOutApk_Scarf_Steam));
@@ -185,12 +206,17 @@ public class EntryPointTest_APK {
     @Test
     public void main_TestableApk_Default() {
         if (isLinux) {
-            String args = "-in " + EngineType.APK.getFlag() + " -s " + pathToAPK + " -o " + tempFileOutApk_Default + " -m " + Listing.Default.getFlag() + " -n";
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.APK) +
+                            makeArg(argsIdentifier.SOURCE, pathToAPK) +
+                            makeArg(argsIdentifier.OUT, tempFileOutApk_Default) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.Default) +
+                            makeArg(argsIdentifier.PRETTY);
 
             try {
                 engine.main(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempFileOutApk_Default), Charset.forName("UTF-8"));
+                List<String> results = Files.readAllLines(Paths.get(tempFileOutApk_Default), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 10);
 
                 Report report = Report.deserialize(new File(tempFileOutApk_Default));
@@ -209,15 +235,21 @@ public class EntryPointTest_APK {
     @Test
     public void main_TestableApk_Default_Stream() {
         if (isLinux) {
-            String args = "-in " + EngineType.APK.getFlag() + " -s " + pathToAPK + " -o " + tempFileOutApk_Default_Steam + " -m " + Listing.ScarfXML.getFlag() + " -n -st";
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.APK) +
+                            makeArg(argsIdentifier.SOURCE, pathToAPK) +
+                            makeArg(argsIdentifier.OUT, tempFileOutApk_Scarf_Steam) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                            makeArg(argsIdentifier.PRETTY) +
+                            makeArg(argsIdentifier.STREAM);
 
             try {
                 engine.main(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempFileOutApk_Default_Steam), Charset.forName("UTF-8"));
+                List<String> results = Files.readAllLines(Paths.get(tempFileOutApk_Scarf_Steam), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 10);
 
-                Report report = Report.deserialize(new File(tempFileOutApk_Default_Steam));
+                Report report = Report.deserialize(new File(tempFileOutApk_Scarf_Steam));
 
             } catch (Exception e) {
                 e.printStackTrace();

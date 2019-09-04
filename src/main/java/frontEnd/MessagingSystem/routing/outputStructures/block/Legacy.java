@@ -93,10 +93,17 @@ public class Legacy extends Structure {
         }
         //endregion
 
+        //region Heuristics
+        if (super.getSource().getDisplayHeuristics()) {
+            log.trace("Writing the heuristics");
+            output.append(frontEnd.MessagingSystem.routing.outputStructures.common.Legacy.marshalling(super.getSource()));
+        }
+        //endregion
+
         //region Timing Section
         if (super.getSource().isShowTimes()) {
             log.trace("Writing the time measurements.");
-            output.append(frontEnd.MessagingSystem.routing.outputStructures.common.Legacy.marshallingShowTimes(super.getSource().getAnalyisisTime()));
+            output.append(frontEnd.MessagingSystem.routing.outputStructures.common.Legacy.marshalling(super.getSource().getAnalyisisTime()));
         }
         //endregion
 

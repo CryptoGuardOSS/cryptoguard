@@ -1,4 +1,9 @@
+import java.nio.file.Files
 import java.text.SimpleDateFormat
+import groovy.io.FileType
+import java.nio.file.Paths
+import com.google.common.hash.Hasher
+import com.google.common.hash.Hashing
 
 plugins {
     id 'com.google.cloud.tools.jib' version '1.5.0'
@@ -13,9 +18,20 @@ group = groupName
 version = versionNumber
 
 sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+        }
+        resources {
+            srcDir 'src/main/resources'
+        }
+    }
     test {
         java {
             srcDir 'src/test/java'
+        }
+        resources {
+            srcDir 'src/main/resources'
         }
     }
 }
@@ -52,7 +68,7 @@ task updateVersion {
     ant.replace(
             dir: 'src/main/java/',
             token: '@VERSION@',
-            value: props.getProperty("versionNumber").replace("V","")
+            value: props.getProperty("versionNumber").replace("V", "")
     )
 }
 
@@ -78,7 +94,6 @@ task updateCopyRightYear {
 
 build.dependsOn(updateVersion)
 build.dependsOn(updateCopyRightYear)
-build.dependsOn(jibBuildTar)
 
 repositories {
     mavenCentral()
@@ -116,8 +131,13 @@ test {
 //A Task for specifying explicit release commands
 task release {
 
-    //Orders the tasks for release
-    def tasks = [clean, test, build]
+    doFirst {
+        delete './release'
+        mkdir './release'
+    }
+    //Waiting until all tests are cleared
+    //def tasks = [clean, test, build, jibBuildTar]
+    def tasks = [jibBuildTar]
     for (int itr = 0; itr < tasks.size() - 1; itr++) {
         tasks[itr + 1].mustRunAfter(tasks[itr])
     }
@@ -132,26 +152,45 @@ task release {
         props.load(ins)
 
         copy {
-            from "build/libs/" + props.getProperty("projectName") + "-" + props.getProperty("version") + ".jar"
-            into '.'
-            rename {
-                String fileName -> props.getProperty("projectName") + ".jar"
-            }
-        }
-
-        copy {
             from "build/jib-image.tar"
-            into '.'
+            into './release'
             rename {
                 String fileName -> props.getProperty("projectName") + ".tar"
             }
         }
 
+        copy {
+            from "build/libs/" + props.getProperty("projectName") + "-" + props.getProperty("versionNumber") + ".jar"
+            into './release'
+            rename {
+                String fileName -> props.getProperty("projectName") + ".jar"
+            }
+        }
+
         ins.close()
+
+        //region Writing the hashes of all of the files in the release folder
+        def hashDictionary = [:]
+        new File('./release').eachFileRecurse(FileType.FILES) {
+            file ->
+                Hasher hasher = Hashing.sha512().newHasher();
+                hasher.putBytes(Files.readAllBytes(Paths.get(file.getPath())))
+                hashDictionary[file.name] = hasher.hash().toString()
+
+        }
+
+        File hash = new File('./release/sha512.sums');
+        hashDictionary.each {
+            k, v ->
+                hash.append(v + '  ' + k + '\n')
+        }
+        //endregion
+
     }
 }
 
 dependencies {
+    compile 'com.google.guava:guava:20.0'
     //compile name: 'soot_j9_20190409'
     //compile name: 'soot_3.3.0'
     compile name: 'soot-unknown'

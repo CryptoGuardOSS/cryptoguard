@@ -9,6 +9,8 @@ import frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport;
 import frontEnd.MessagingSystem.routing.structure.Scarf.BugInstance;
 import lombok.extern.log4j.Log4j2;
 
+import static frontEnd.MessagingSystem.routing.outputStructures.common.ScarfXML.marshalling;
+
 /**
  * The class containing the implementation of the Scarf XML output.
  * <p>STATUS: IC</p>
@@ -48,20 +50,27 @@ public class ScarfXML extends Structure {
 
         //region Setting the report for marshalling
         log.info("Marshalling the AnalyzerReport from the Env. Info.");
-        AnalyzerReport report = frontEnd.MessagingSystem.routing.outputStructures.common.ScarfXML.marshalling(super.getSource());
+        AnalyzerReport report = marshalling(super.getSource());
 
         //region Creating Bug Instances
         Integer numOfBugs = 0;
         log.trace("Adding all of the collected issues");
         for (AnalysisIssue in : super.getCollection()) {
             log.debug("Marshalling and adding the issue: " + in.getInfo());
-            BugInstance marshalled = frontEnd.MessagingSystem.routing.outputStructures.common.ScarfXML.marshalling(in, super.getCwes(), super.getSource().getFileOutName(), numOfBugs++, super.getSource().getBuildId(), super.getSource().getxPath());
+            BugInstance marshalled = marshalling(in, super.getCwes(), super.getSource().getFileOutName(), numOfBugs++, super.getSource().getBuildId(), super.getSource().getxPath());
             report.getBugInstance().add(marshalled);
         }
         //endregion
 
         log.info("Marshalling the bug category summary.");
         report.setBugCategory(super.createBugCategoryList().getSummaryContainer());
+
+        //region Heuristics
+        if (super.getSource().getDisplayHeuristics()) {
+            log.trace("Writing the heuristics");
+            report.setHeuristics(marshalling(super.getSource(), super.getSource().getSLICE_AVERAGE_3SigFig()));
+        }
+        //endregion
 
         //endregion
 

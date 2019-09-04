@@ -11,7 +11,7 @@ import soot.G;
 import util.Utils;
 
 import java.io.File;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -68,7 +68,7 @@ public class EntryPointTest_CLASS {
     public void main_TestableFiles_SingleTest() {
         if (isLinux) {
             String args =
-                    makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES.getFlag()) +
+                    makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
                             makeArg(argsIdentifier.SOURCE, classFiles[0]) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
@@ -78,7 +78,7 @@ public class EntryPointTest_CLASS {
 
                 engine.main(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempFileOutTxt_Class), Charset.forName("UTF-8"));
+                List<String> results = Files.readAllLines(Paths.get(tempFileOutTxt_Class), StandardCharsets.UTF_8);
 
                 int count = 0;
                 for (String line : results)
@@ -102,7 +102,7 @@ public class EntryPointTest_CLASS {
     public void main_TestableFiles_MultiTest() {
         if (isLinux) {
             String args =
-                    makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES.getFlag()) +
+                    makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES) +
                             makeArg(argsIdentifier.SOURCE, Utils.join(" ", classFiles)) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
@@ -112,7 +112,7 @@ public class EntryPointTest_CLASS {
 
                 engine.main(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempFileOutTxt_two), Charset.forName("UTF-8"));
+                List<String> results = Files.readAllLines(Paths.get(tempFileOutTxt_two), StandardCharsets.UTF_8);
 
                 int count = 0;
                 for (String line : results)
@@ -136,7 +136,7 @@ public class EntryPointTest_CLASS {
     public void main_TestableFiles_MultiTest_Scarf() {
         if (isLinux) {
             String args =
-                    makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES.getFlag()) +
+                    makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES) +
                             makeArg(argsIdentifier.SOURCE, Utils.join(" ", classFiles)) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
@@ -146,7 +146,7 @@ public class EntryPointTest_CLASS {
 
                 engine.main(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempFileOutXML_Class), Charset.forName("UTF-8"));
+                List<String> results = Files.readAllLines(Paths.get(tempFileOutXML_Class), StandardCharsets.UTF_8);
 
                 int count = 0;
                 for (String line : results)
@@ -173,7 +173,7 @@ public class EntryPointTest_CLASS {
     public void main_TestableFiles_MultiTest_Scarf_Stream() {
         if (isLinux) {
             String args =
-                    makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES.getFlag()) +
+                    makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES) +
                             makeArg(argsIdentifier.SOURCE, Utils.join(" ", classFiles)) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
@@ -184,7 +184,7 @@ public class EntryPointTest_CLASS {
 
                 engine.main(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempFileOutXML_Class_Stream), Charset.forName("UTF-8"));
+                List<String> results = Files.readAllLines(Paths.get(tempFileOutXML_Class_Stream), StandardCharsets.UTF_8);
 
                 int count = 0;
                 for (String line : results)

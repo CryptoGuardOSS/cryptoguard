@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by krishnokoli on 10/14/16.
+ * Created by RigorityJTeam on 10/14/16.
  */
 public class OrthogonalSlicingResult {
 

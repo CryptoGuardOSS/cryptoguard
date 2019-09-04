@@ -5,7 +5,6 @@ import analyzer.backward.AssignInvokeUnitContainer;
 import analyzer.backward.InvokeUnitContainer;
 import analyzer.backward.UnitContainer;
 import frontEnd.Interface.outputRouting.ExceptionHandler;
-import frontEnd.MessagingSystem.AnalysisIssue;
 import frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import rule.base.BaseRuleChecker;
 import rule.engine.Criteria;
@@ -26,9 +25,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by krishnokoli on 11/15/17.
+ * Created by RigorityJTeam on 11/15/17.
  *
- * @author krishnokoli
+ * @author RigorityJTeam
  * @version $Id: $Id
  * @since V01.00.00
  */
@@ -292,6 +291,10 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
      */
     @Override
     public void createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler {
+
+        //region TODO Verify This change works
+        //region Old
+        /*
         ArrayList<AnalysisIssue> outList = new ArrayList<>();
 
         for (UnitContainer unit : predictableSourcMap.keySet()) {
@@ -300,6 +303,14 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
 
             output.addIssue(new AnalysisIssue(unit, Integer.parseInt(rule), sootString, sourcePaths));
         }
+        */
+        //endregion Old
+        //region New
+        Utils.createAnalysisOutput(xmlFileStr, sourcePaths, predictableSourcMap, rule, output);
+        //endregion
+        //endregion
+
+
     }
 
 }

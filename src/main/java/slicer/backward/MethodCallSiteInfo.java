@@ -3,9 +3,9 @@ package slicer.backward;
 import analyzer.backward.MethodWrapper;
 
 /**
- * Created by krishnokoli on 7/3/17.
+ * Created by RigorityJTeam on 7/3/17.
  *
- * @author krishnokoli
+ * @author RigorityJTeam
  * @version $Id: $Id
  * @since V01.00.00
  */

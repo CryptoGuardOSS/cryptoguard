@@ -1,4 +1,3 @@
-
 package frontEnd.MessagingSystem.routing.structure.Default;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -32,7 +31,8 @@ import java.util.List;
         "ProjectName",
         "ProjectVersion",
         "Target",
-        "Issues"
+        "Issues",
+        "Heuristics"
 })
 public class Report implements Serializable {
 
@@ -93,6 +93,12 @@ public class Report implements Serializable {
      */
     @JsonProperty("Issues")
     private List<Issue> issues = new ArrayList<Issue>();
+    /**
+     * HeuristicsType
+     * <p>
+     */
+    @JsonProperty("Heuristics")
+    private Heuristics heuristics;
     private final static long serialVersionUID = 1588567781296372468L;
 
     /**
@@ -104,13 +110,14 @@ public class Report implements Serializable {
     /**
      * @param projectVersion
      * @param dateTime
+     * @param heuristics
      * @param issues
      * @param target
      * @param uUID
      * @param projectName
      * @param schemaVersion
      */
-    public Report(int schemaVersion, String dateTime, String uUID, String projectName, String projectVersion, Target target, List<Issue> issues) {
+    public Report(int schemaVersion, String dateTime, String uUID, String projectName, String projectVersion, Target target, List<Issue> issues, Heuristics heuristics) {
         super();
         this.schemaVersion = schemaVersion;
         this.dateTime = dateTime;
@@ -119,6 +126,7 @@ public class Report implements Serializable {
         this.projectVersion = projectVersion;
         this.target = target;
         this.issues = issues;
+        this.heuristics = heuristics;
     }
 
     /**
@@ -312,14 +320,32 @@ public class Report implements Serializable {
         return this;
     }
 
+    /**
+     * HeuristicsType
+     * <p>
+     */
+    @JsonProperty("Heuristics")
+    public Heuristics getHeuristics() {
+        return heuristics;
+    }
+
+    /**
+     * HeuristicsType
+     * <p>
+     */
+    @JsonProperty("Heuristics")
+    public void setHeuristics(Heuristics heuristics) {
+        this.heuristics = heuristics;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("schemaVersion", schemaVersion).append("dateTime", dateTime).append("uUID", uUID).append("projectName", projectName).append("projectVersion", projectVersion).append("target", target).append("issues", issues).toString();
+        return new ToStringBuilder(this).append("schemaVersion", schemaVersion).append("dateTime", dateTime).append("uUID", uUID).append("projectName", projectName).append("projectVersion", projectVersion).append("target", target).append("issues", issues).append("heuristics", heuristics).toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(projectVersion).append(dateTime).append(issues).append(target).append(uUID).append(projectName).append(schemaVersion).toHashCode();
+        return new HashCodeBuilder().append(projectVersion).append(dateTime).append(heuristics).append(issues).append(target).append(uUID).append(projectName).append(schemaVersion).toHashCode();
     }
 
     @Override
@@ -331,7 +357,7 @@ public class Report implements Serializable {
             return false;
         }
         Report rhs = ((Report) other);
-        return new EqualsBuilder().append(projectVersion, rhs.projectVersion).append(dateTime, rhs.dateTime).append(issues, rhs.issues).append(target, rhs.target).append(uUID, rhs.uUID).append(projectName, rhs.projectName).append(schemaVersion, rhs.schemaVersion).isEquals();
+        return new EqualsBuilder().append(projectVersion, rhs.projectVersion).append(dateTime, rhs.dateTime).append(heuristics, rhs.heuristics).append(issues, rhs.issues).append(target, rhs.target).append(uUID, rhs.uUID).append(projectName, rhs.projectName).append(schemaVersion, rhs.schemaVersion).isEquals();
     }
 
     /**

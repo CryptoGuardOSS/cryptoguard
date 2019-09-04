@@ -156,8 +156,19 @@ public class Default extends Structure {
      */
     @Override
     public void writeFooter() throws ExceptionHandler {
-        String ending = "";
 
+        if (super.getSource().getDisplayHeuristics()) {
+            log.debug("Writing the Heuristics");
+            this.write(JacksonSerializer.serialize(
+                    mapper(
+                            super.getSource(), super.getSource().getSLICE_AVERAGE_3SigFig()
+                    ),
+                    super.getSource().getPrettyPrint(),
+                    super.getSource().getMessagingType().getJacksonType())
+            );
+        }
+
+        String ending = "";
         log.debug("Adding the footer to the output");
         switch (super.getSource().getMessagingType().getJacksonType()) {
             case JSON:

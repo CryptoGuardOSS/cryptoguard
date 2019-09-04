@@ -3,7 +3,11 @@ package test;
 import frontEnd.MessagingSystem.routing.Listing;
 import frontEnd.MessagingSystem.routing.inputStructures.ScarfXMLId;
 import frontEnd.argsIdentifier;
+import rule.engine.EngineType;
 import util.Utils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * <p>TestUtilities class.</p>
@@ -14,6 +18,8 @@ import util.Utils;
  */
 public class TestUtilities {
 
+
+    //region String Statics
     /**
      * Constant <code>isLinux</code>
      */
@@ -84,6 +90,14 @@ public class TestUtilities {
     public static final String tempJarFile_Default_0 = Utils.osPathJoin(testPath, "tempJarFile_Default_0.json");
     public static final String tempJarFile_Default_Stream_0 = Utils.osPathJoin(testPath, "tempJarFile_Default_Stream_0.json");
 
+
+    public static final ArrayList<String> sampleAuxClassPathOneList = new ArrayList<String>(Arrays.asList(testRec, jarOne, javaFiles[0], javaFiles[1], classFiles[0], classFiles[1]));
+    public static final String sampleAuxClassPathOne = Utils.join(":", sampleAuxClassPathOneList);
+
+    public static final ArrayList<String> sampleAuxClassPathTwoList = new ArrayList<String>(Arrays.asList(testRec, jarOne, javaFiles[0], javaFiles[1], classFiles[0], classFiles[1], scarfArgs));
+    public static final String sampleAuxClassPathTwo = Utils.join(":", sampleAuxClassPathTwoList);
+    //endregion
+
     /**
      * <p>makeArg.</p>
      *
@@ -93,6 +107,10 @@ public class TestUtilities {
      */
     public static String makeArg(argsIdentifier id, String value) {
         return makeArg(id.getId(), value);
+    }
+
+    public static String makeArg(argsIdentifier id, EngineType value) {
+        return makeArg(id.getId(), value.getFlag());
     }
 
     /**

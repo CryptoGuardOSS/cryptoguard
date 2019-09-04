@@ -28,7 +28,7 @@ import java.util.*;
  * <p>MethodInstructionSlicer class.</p>
  *
  * @author RigorityJTeam
- * @version $Id: $Id
+ * @version $Id: $Idc
  * @since V01.00.00
  */
 public class MethodInstructionSlicer extends BackwardFlowAnalysis {

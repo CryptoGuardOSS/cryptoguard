@@ -5,7 +5,6 @@ import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import rule.engine.*;
-import util.Utils;
 
 import java.util.ArrayList;
 
@@ -30,8 +29,6 @@ public class EntryPoint {
      */
     public static void main(String[] args) {
 
-        //TODO Implement this
-        Utils.initDepth(1);
         //Removing all of the empty string values, i.e. " "
         ArrayList<String> strippedArgs = new ArrayList<>();
         for (String arg : args)

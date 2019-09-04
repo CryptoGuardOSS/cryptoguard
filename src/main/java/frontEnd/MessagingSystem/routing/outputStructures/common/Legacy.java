@@ -2,6 +2,7 @@ package frontEnd.MessagingSystem.routing.outputStructures.common;
 
 import frontEnd.MessagingSystem.AnalysisIssue;
 import frontEnd.MessagingSystem.AnalysisLocation;
+import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import org.apache.commons.lang3.StringUtils;
 import rule.engine.EngineType;
 
@@ -122,12 +123,28 @@ public class Legacy {
      * @param analysisTime a {@link java.lang.Long} object.
      * @return a {@link java.lang.String} object.
      */
-    public static String marshallingShowTimes(Long analysisTime) {
+    public static String marshalling(Long analysisTime) {
         StringBuilder out = new StringBuilder();
 
         out.append("=======================================\n");
         out.append("Analysis Timing (ms): ").append(analysisTime).append(".\n");
         out.append("=======================================\n");
+
+        return out.toString();
+    }
+
+    public static String marshalling(EnvironmentInformation info) {
+
+        StringBuilder out = new StringBuilder();
+
+        out.append("Total Heuristics: ").append(info.getNUM_HEURISTIC()).append("\n");
+        out.append("Total Orthogonal: ").append(info.getNUM_ORTHOGONAL()).append("\n");
+        out.append("Total Constants: ").append(info.getNUM_CONSTS_TO_CHECK()).append("\n");
+        out.append("Total Slices: ").append(info.getNUM_SLICES()).append("\n");
+        out.append("Average Length: ").append(info.getSLICE_AVERAGE_3SigFig()).append("\n").append("\n");
+
+        for (String depth : info.getDEPTH_COUNT())
+            out.append(depth).append("\n");
 
         return out.toString();
     }

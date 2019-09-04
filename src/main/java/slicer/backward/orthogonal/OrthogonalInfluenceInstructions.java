@@ -13,7 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Created by krishnokoli on 7/1/17.
+ * Created by RigorityJTeam on 7/1/17.
  */
 public class OrthogonalInfluenceInstructions {
 

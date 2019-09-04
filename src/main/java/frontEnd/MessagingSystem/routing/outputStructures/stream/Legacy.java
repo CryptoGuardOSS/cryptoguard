@@ -66,8 +66,14 @@ public class Legacy extends Structure {
     public void writeFooter() throws ExceptionHandler {
         this.writeln(marshallingSootErrors(super.getSource().getSootErrors()));
 
+        //region Heuristics
+        if (super.getSource().getDisplayHeuristics()) {
+            this.writeln(frontEnd.MessagingSystem.routing.outputStructures.common.Legacy.marshalling(super.getSource()));
+        }
+        //endregion
+
         if (super.getSource().isShowTimes()) {
-            this.writeln(marshallingShowTimes(super.getSource().getAnalyisisTime()));
+            this.writeln(frontEnd.MessagingSystem.routing.outputStructures.common.Legacy.marshalling(super.getSource().getAnalyisisTime()));
         }
     }
     //endregion

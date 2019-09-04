@@ -65,6 +65,13 @@ public class Default extends Structure {
         }
         //endregion
 
+        //region Heuristics
+        if (super.getSource().getDisplayHeuristics()) {
+            log.trace("Writing the heuristics");
+            report.setHeuristics(mapper(super.getSource(), super.getSource().getSLICE_AVERAGE_3SigFig()));
+        }
+        //endregion
+
         //endregion
 
         //region Marshalling
