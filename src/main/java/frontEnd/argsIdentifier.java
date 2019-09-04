@@ -15,6 +15,10 @@ import rule.engine.EngineType;
  */
 public enum argsIdentifier {
 
+    /*
+     * TODO - JavaClassPath
+     * TODO - xargs/file config
+     * */
     FORMAT("in", "format", "(Req'd) The format of input you want to scan, available styles " + EngineType.retrieveEngineTypeValues() + "."),
     SOURCE("s", "file(s)/dir", "(Req'd) The source(s) to be scanned, use the absolute path)."),
     DEPENDENCY("d", "dir", "The dependency to be scanned, (use the relative path)."),
@@ -27,7 +31,10 @@ public enum argsIdentifier {
     EXPERIMENTRESULTS("exp", null, "View the experiment based results."),
     VERSION("v", null, "Output the version number."),
     TIMESTAMP("ts", null, "Add a timestamp to the file output."),
+    DEPTH("depth", null, "The depth of slicing to go into"),
     LOG("L", null, "Enable logging to the console."),
+    AUXCLASSPATH("auxclasspath", null, "The auxilary class path to be used (more enhanced dependencies with jars/class files/java files ie. full/path/to/class1:full/path/to/class2)."),
+    HEURISTICS("H", null, "The flag determining whether or not to display heuristics."),
     STREAM("st", null, "Stream the analysis to the output file (still being tested)."),
     HELP("h", null, "Print out the Help Information.");
 

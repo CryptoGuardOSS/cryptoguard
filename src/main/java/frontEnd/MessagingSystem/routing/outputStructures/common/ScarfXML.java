@@ -203,4 +203,15 @@ public class ScarfXML {
 
         return footer;
     }
+
+    public static Heuristics marshalling(EnvironmentInformation info, double roundedSliceAverage) {
+        return new Heuristics(
+                info.getNUM_ORTHOGONAL(),
+                info.getNUM_CONSTS_TO_CHECK(),
+                info.getNUM_SLICES(),
+                info.getNUM_HEURISTIC(),
+                roundedSliceAverage,
+                info.getDEPTH_COUNT()
+        );
+    }
 }

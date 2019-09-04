@@ -4,7 +4,6 @@ import analyzer.backward.*;
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.Interface.outputRouting.ExceptionId;
 import frontEnd.MessagingSystem.AnalysisIssue;
-import frontEnd.MessagingSystem.routing.Listing;
 import frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import org.apache.commons.lang3.StringUtils;
 import org.jf.dexlib2.DexFileFactory;
@@ -14,6 +13,8 @@ import org.jf.dexlib2.iface.DexFile;
 import rule.engine.EngineType;
 import slicer.backward.heuristic.HeuristicBasedAnalysisResult;
 import slicer.backward.heuristic.HeuristicBasedInstructions;
+import slicer.backward.orthogonal.OrthogonalInfluenceInstructions;
+import slicer.backward.orthogonal.OrthogonalSlicingResult;
 import soot.*;
 import soot.jimple.Constant;
 import soot.jimple.InvokeExpr;
@@ -44,6 +45,30 @@ import static soot.SootClass.BODIES;
  * @since 01.00.00
  */
 public class Utils {
+
+    //region Static Variables
+    private static final List<String> ASSIGN_DONT_VISIT = new ArrayList<>();
+    private static final List<String> INVOKE_DONT_VISIT = new ArrayList<>();
+
+    static {
+        ASSIGN_DONT_VISIT.add("<java.util.Map: java.lang.Object get(java.lang.Object)>");
+        INVOKE_DONT_VISIT.add("<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>");
+        INVOKE_DONT_VISIT.add("java.lang.String: void <init>");
+    }
+
+    public static int NUM_ORTHOGONAL = 0;
+    public static int NUM_CONSTS_TO_CHECK = 0;
+    public static int NUM_SLICES = 0;
+    public static int NUM_HEURISTIC = 0;
+    public static final ArrayList<Integer> SLICE_LENGTH = new ArrayList<>();
+    public static int[] DEPTH_COUNT;
+    public static int DEPTH = 0;
+
+    public static void initDepth(int depth) {
+        DEPTH = depth;
+        DEPTH_COUNT = new int[depth];
+    }
+
     /**
      * Constant <code>lineSep="System.getProperty(file.separator)"</code>
      */
@@ -57,9 +82,9 @@ public class Utils {
      */
     public final static String localPath = System.getProperty("user.dir");
     /**
-     * Constant <code>projectVersion="V03.06.00"</code>
+     * Constant <code>projectVersion="V03.07.00"</code>
      */
-    public final static String projectVersion = "V03.06.00";
+    public final static String projectVersion = "V03.07.00";
     /**
      * Constant <code>projectName="CryptoGuard"</code>
      */
@@ -68,15 +93,16 @@ public class Utils {
      * Constant <code>userPath="System.getProperty(user.home)"</code>
      */
     public final static String userPath = System.getProperty("user.home");
-    private static Pattern sootClassPattern = Pattern.compile("[<](.+)[:]");
-    private static Pattern sootClassPatternTwo = Pattern.compile("([a-zA-Z0-9]+[.][a-zA-Z0-9]+)\\$[0-9]+");
-    private static Pattern sootFoundPattern = Pattern.compile("\\[(.+)\\]");
-    private static Pattern sootLineNumPattern = Pattern.compile("\\(\\)\\>\\[(\\d+)\\]");
-    private static Pattern sootMthdPattern = Pattern.compile("<((?:[a-zA-Z0-9]+))>");
-    private static Pattern sootMthdPatternTwo = Pattern.compile("((?:[a-zA-Z0-9_]+))\\(");
-    private static Pattern sootFoundMatchPattern = Pattern.compile("\"{1}(.+)\"{1}");
-    private static Pattern packagePattern = Pattern.compile("package ([[a-zA-Z]+?.]+);");
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");
+    private final static Pattern sootClassPattern = Pattern.compile("[<](.+)[:]");
+    private final static Pattern sootClassPatternTwo = Pattern.compile("([a-zA-Z0-9]+[.][a-zA-Z0-9]+)\\$[0-9]+");
+    private final static Pattern sootFoundPattern = Pattern.compile("\\[(.+)\\]");
+    private final static Pattern sootLineNumPattern = Pattern.compile("\\(\\)\\>\\[(\\d+)\\]");
+    private final static Pattern sootMthdPattern = Pattern.compile("<((?:[a-zA-Z0-9]+))>");
+    private final static Pattern sootMthdPatternTwo = Pattern.compile("((?:[a-zA-Z0-9_]+))\\(");
+    private final static Pattern sootFoundMatchPattern = Pattern.compile("\"{1}(.+)\"{1}");
+    private final static Pattern packagePattern = Pattern.compile("package ([[a-zA-Z]+?.]+);");
+    private final static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");
+    //endregion
 
     /**
      * <p>getClassNamesFromJarArchive.</p>
@@ -239,7 +265,7 @@ public class Utils {
 
         for (String path : paths) {
 
-            if (path.endsWith(".jar")) {
+            if (path.toLowerCase().endsWith(".jar")) {
                 classPath.append(path);
                 classPath.append(":");
             } else {
@@ -253,7 +279,7 @@ public class Utils {
                     }
 
                     for (File file : files) {
-                        if (file.getName().endsWith(".jar")) {
+                        if (file.getName().toLowerCase().endsWith(".jar")) {
                             classPath.append(file.getAbsolutePath());
                             classPath.append(":");
                         }
@@ -284,7 +310,7 @@ public class Utils {
             }
 
             for (File file : files) {
-                if (file.getName().endsWith(".jar")) {
+                if (file.getName().toLowerCase().endsWith(".jar")) {
                     jarFiles.add(file.getAbsolutePath());
                 }
             }
@@ -482,7 +508,7 @@ public class Utils {
 
             for (File file : files) {
                 String name = file.getAbsolutePath();
-                if (name.endsWith(".java")) {
+                if (name.toLowerCase().endsWith(".java")) {
                     String className = name.substring(sourcePath.length() + 1, name.length() - 5);
                     classNames.add(className.replaceAll("/", "."));
                 }
@@ -515,12 +541,12 @@ public class Utils {
     public static String retrieveFullyQualifiedName(String in) {
 
         String sourcePackage = trimFilePath(in);
-        if (in.endsWith(".java")) {
+        if (in.toLowerCase().endsWith(".java")) {
             sourcePackage = sourcePackage.replace(".java", "");
             try (BufferedReader br = new BufferedReader(new FileReader(in))) {
                 String firstLine = br.readLine();
 
-                if (firstLine.startsWith("package ") && firstLine.endsWith(";")) {
+                if (firstLine.startsWith("package ") && firstLine.toLowerCase().endsWith(";")) {
                     sourcePackage = firstLine.substring("package ".length(), firstLine.length() - 1) + "." + sourcePackage;
                 } else //File has no package declaration, retrieving the last folder path
                 {
@@ -532,7 +558,7 @@ public class Utils {
             } catch (IOException e) {
                 System.out.println("Issue Reading File: " + in);
             }
-        } else if (in.endsWith(".class")) {
+        } else if (in.toLowerCase().endsWith(".class")) {
             sourcePackage = sourcePackage.replace(".class", "");
 
             String[] paths = Utils.retrieveFullFilePath(in).split(fileSep);
@@ -587,7 +613,7 @@ public class Utils {
         try {
             File in = new File(file);
 
-            if (file.endsWith(".java")) {
+            if (file.toLowerCase().endsWith(".java")) {
                 for (String line : Files.readAllLines(in.toPath(), Charset.forName("UTF-8"))) {
                     Matcher matches = packagePattern.matcher(line);
                     if (matches.find())
@@ -892,6 +918,18 @@ public class Utils {
         return "UNKNOWN";
     }
 
+    public static String verifyDir(String dir) throws ExceptionHandler {
+        File dirChecking = new File(dir);
+        if (!dirChecking.exists() || !dirChecking.isDirectory())
+            throw new ExceptionHandler(dirChecking.getName() + " is not a valid directory.", ExceptionId.ARG_VALID);
+
+        try {
+            return dirChecking.getCanonicalPath();
+        } catch (Exception e) {
+            throw new ExceptionHandler("Error retrieving the full path of the " + dirChecking + ".", ExceptionId.FILE_AFK);
+        }
+    }
+
     /**
      * <p>retrieveDirs.</p>
      *
@@ -901,43 +939,73 @@ public class Utils {
      */
     public static List<String> retrieveDirs(List<String> arguments) throws ExceptionHandler {
         List<String> dirs = new ArrayList<>();
-        for (String dir : arguments) {
-            File dirChecking = new File(dir);
-            if (!dirChecking.exists() || !dirChecking.isDirectory())
-                throw new ExceptionHandler(dirChecking.getName() + " is not a valid directory.", ExceptionId.ARG_VALID);
+        for (String dir : arguments)
+            dirs.add(Utils.verifyDir(dir));
 
-            try {
-                dirs.add(dirChecking.getCanonicalPath());
-            } catch (Exception e) {
-                throw new ExceptionHandler("Error retrieving the full path of the " + dirChecking + ".", ExceptionId.FILE_AFK);
-            }
-        }
         return dirs;
     }
 
-    /**
-     * <p>verifyFileOut.</p>
-     *
-     * @param file a {@link java.lang.String} object.
-     * @param type a {@link frontEnd.MessagingSystem.routing.Listing} object.
-     * @return a {@link java.lang.String} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static String verifyFileOut(String file, Listing type, Boolean overWrite) throws ExceptionHandler {
-        if (!file.endsWith(type.getOutputFileExt()))
-            throw new ExceptionHandler("File " + file + " doesn't have the right file type ", ExceptionId.ARG_VALID);
-
+    public static String verifyFile(String file, Boolean overWrite) throws ExceptionHandler {
         File tempFile = new File(file);
 
         if (overWrite && (tempFile.exists() || tempFile.isFile()))
             throw new ExceptionHandler(tempFile.getName() + " is already a valid file.", ExceptionId.FILE_O);
-
 
         try {
             return tempFile.getCanonicalPath();
         } catch (Exception e) {
             throw new ExceptionHandler("Error retrieving the path of the file " + tempFile.getName() + ".", ExceptionId.FILE_AFK);
         }
+    }
+
+    public static String verifyFileExt(String file, String fileExt, Boolean overWrite) throws ExceptionHandler {
+        if ("dir".equals(fileExt))
+            return Utils.verifyDir(file);
+        else {
+            if (!file.toLowerCase().endsWith(fileExt))
+                throw new ExceptionHandler("File " + file + " doesn't have the right file type ", ExceptionId.ARG_VALID);
+
+            return Utils.verifyFile(file, overWrite);
+        }
+    }
+
+    public static String verifyFileExts(String file, String[] fileExt, Boolean overWrite) throws ExceptionHandler {
+
+        Boolean matches = false;
+
+        for (String extensions : fileExt)
+            if (file.toLowerCase().endsWith(extensions)) {
+                matches = true;
+                break;
+            }
+
+        //Attempting to verify if the class path is a directory
+        if (matches)
+            return Utils.verifyFile(file, overWrite);
+        else
+            try {
+                return Utils.verifyDir(file);
+            } catch (ExceptionHandler e) {
+                throw new ExceptionHandler("File " + file + " doesn't have the right file type ", ExceptionId.ARG_VALID);
+            }
+    }
+
+    public static ArrayList<String> verifyXArgs(String[] xargFiles) throws ExceptionHandler {
+        ArrayList<String> output = new ArrayList<String>();
+        Scanner input = new Scanner(System.in);
+
+        while (input.hasNextLine())
+            output.add(Utils.verifyFileExts(input.nextLine(), new String[]{".java", ".class"}, false));
+
+        return output;
+    }
+
+    public static ArrayList<String> verifyClassPaths(String classPaths) throws ExceptionHandler {
+        ArrayList<String> output = new ArrayList<String>();
+        for (String path : classPaths.split(":"))
+            output.add(Utils.verifyFileExts(path, new String[]{".java", ".class", ".jar", "dir"}, false));
+
+        return output;
     }
 
     /**
@@ -949,7 +1017,7 @@ public class Utils {
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static String retrieveFilePath(String file, EngineType type) throws ExceptionHandler {
-        if (!file.endsWith(type.getInputExtension()))
+        if (!file.toLowerCase().toLowerCase().endsWith(type.getInputExtension()))
             throw new ExceptionHandler("File " + file + " doesn't have the right file type ", ExceptionId.ARG_VALID);
 
         File tempFile = new File(file);
@@ -1019,7 +1087,16 @@ public class Utils {
      * @param currInstruction a {@link soot.Unit} object.
      * @return a {@link analyzer.backward.UnitContainer} object.
      */
-    public static UnitContainer createAssignInvokeUnitContainer(Unit currInstruction) {
+    public static UnitContainer createAssignInvokeUnitContainer(Unit currInstruction, String caller, int depth) {
+
+        for (String dontVisit : ASSIGN_DONT_VISIT) {
+            if (currInstruction.toString().contains(dontVisit)) {
+                UnitContainer unitContainer = new UnitContainer();
+                unitContainer.setUnit(currInstruction);
+                unitContainer.setMethod(caller);
+                return unitContainer;
+            }
+        }
 
         AssignInvokeUnitContainer unitContainer = new AssignInvokeUnitContainer();
 
@@ -1028,12 +1105,25 @@ public class Utils {
 
             Scene.v().forceResolve(method.getDeclaringClass().getName(), BODIES);
 
-            HeuristicBasedInstructions returnInfluencingInstructions = new HeuristicBasedInstructions(method,
-                    "return");
+            List<UnitContainer> intraAnalysis = null;
 
-            List<UnitContainer> intraAnalysis = returnInfluencingInstructions.getAnalysisResult().getAnalysis();
+            DEPTH_COUNT[depth - 1]++;
 
-//            System.out.println(intraAnalysis);
+            if (depth == 1) {
+
+                NUM_HEURISTIC++;
+
+                HeuristicBasedInstructions returnInfluencingInstructions = new HeuristicBasedInstructions(method,
+                        "return");
+
+                intraAnalysis = returnInfluencingInstructions.getAnalysisResult().getAnalysis();
+            } else {
+
+                NUM_ORTHOGONAL++;
+
+                OrthogonalInfluenceInstructions other = new OrthogonalInfluenceInstructions(method, "return", depth - 1);
+                intraAnalysis = other.getOrthogonalSlicingResult().getAnalysisResult();
+            }
 
             // Get args
             List<Integer> args = Utils.findInfluencingParamters(intraAnalysis);
@@ -1050,6 +1140,7 @@ public class Utils {
 
             unitContainer.setArgs(args);
             unitContainer.setAnalysisResult(intraAnalysis);
+            unitContainer.setMethod(caller);
             unitContainer.setProperties(usedFields);
         }
 
@@ -1101,51 +1192,15 @@ public class Utils {
     /**
      * <p>isArgumentOfInvoke.</p>
      *
-     * @param analysis       a {@link analyzer.backward.Analysis} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param index          a int.
-     * @param outSet         a {@link java.util.List} object.
-     * @param usedFields     a {@link java.util.Set} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @param analysisResult a {@link analyzer.backward.InvokeUnitContainer} object.
-     * @return a boolean.
+     * @param analysis a {@link analyzer.backward.Analysis} object.
+     * @param index    a int.
+     * @param outSet   a {@link java.util.List} object.
+     * @return a {@link UnitContainer} object.
      */
-    public static boolean isArgumentOfInvoke(Analysis analysis, int index,
-                                             List<UnitContainer> outSet,
-                                             Set<String> usedFields, InvokeUnitContainer analysisResult) {
+    public static UnitContainer isArgumentOfInvoke(Analysis analysis, int index,
+                                                   List<UnitContainer> outSet) {
+        NUM_CONSTS_TO_CHECK++;
+
         UnitContainer baseUnit = analysis.getAnalysisResult().get(index);
 
         if (baseUnit.getUnit() instanceof JInvokeStmt) {
@@ -1156,15 +1211,7 @@ public class Utils {
 
             for (int x = 0; x < args.size(); x++) {
                 if (args.get(x) instanceof Constant) {
-
-                    InvokeUnitContainer container = getDefinedFieldsFromInvoke(invokeExpr.getMethod(), usedFields);
-
-                    analysisResult.getAnalysisResult().addAll(container.getAnalysisResult());
-                    analysisResult.setDefinedFields(container.getDefinedFields());
-                    analysisResult.setArgs(container.getArgs());
-                    analysisResult.setUnit(baseUnit.getUnit());
-                    return true;
-
+                    return baseUnit;
                 }
             }
         }
@@ -1180,12 +1227,13 @@ public class Utils {
             inset.addAll(outSet);
 
             for (UnitContainer insetIns : inset) {
+                boolean outSetContainsCurUnit = !outSet.toString().contains(curUnit.toString());
                 if (insetIns instanceof PropertyFakeUnitContainer) {
                     String property = ((PropertyFakeUnitContainer) insetIns).getOriginalProperty();
 
                     if (curUnit.getUnit() instanceof JInvokeStmt) {
                         if (curUnit.getUnit().toString().contains(property + ".<")) {
-                            if (!outSet.toString().contains(curUnit.toString())) {
+                            if (outSetContainsCurUnit) {
                                 outSet.add(curUnit);
                             }
                         } else {
@@ -1196,18 +1244,7 @@ public class Utils {
 
                             for (int x = 0; x < args.size(); x++) {
                                 if (args.get(x).toString().contains(property)) {
-
-                                    InvokeUnitContainer container = getDefinedFieldsFromInvoke(invokeExpr.getMethod(), usedFields);
-
-                                    if (container.getArgs().contains(x)) {
-                                        analysisResult.getAnalysisResult().addAll(container.getAnalysisResult());
-                                        analysisResult.setDefinedFields(container.getDefinedFields());
-                                        analysisResult.setArgs(container.getArgs());
-
-                                    }
-
-                                    analysisResult.setUnit(curUnit.getUnit());
-                                    return true;
+                                    return curUnit;
                                 }
                             }
                         }
@@ -1215,7 +1252,7 @@ public class Utils {
                     } else {
                         for (ValueBox useBox : curUnit.getUnit().getUseBoxes()) {
                             if (useBox.getValue().toString().contains(property)) {
-                                if (!outSet.toString().contains(curUnit.toString())) {
+                                if (outSetContainsCurUnit) {
                                     outSet.add(curUnit);
                                 }
                             }
@@ -1231,7 +1268,7 @@ public class Utils {
                         if (useboxStr.contains("@parameter")) {
                             Integer parameter = Integer.valueOf(useboxStr.substring("@parameter".length(), useboxStr.indexOf(':')));
                             if (parameter.equals(param) && curUnit.getMethod().equals(method)) {
-                                if (!outSet.toString().contains(curUnit.toString())) {
+                                if (outSetContainsCurUnit) {
                                     outSet.add(curUnit);
                                 }
                             }
@@ -1250,20 +1287,11 @@ public class Utils {
                                 for (int x = 0; x < args.size(); x++) {
                                     if (args.get(x).equivTo(defBox.getValue()) ||
                                             isArrayUseBox(curUnit, insetIns, defBox, args.get(x))) {
-
-                                        InvokeUnitContainer container = getDefinedFieldsFromInvoke(invokeExpr.getMethod(), usedFields);
-
-                                        if (container.getArgs().contains(x)) {
-                                            analysisResult.getAnalysisResult().addAll(container.getAnalysisResult());
-                                            analysisResult.setDefinedFields(container.getDefinedFields());
-                                            analysisResult.setArgs(container.getArgs());
-                                        }
-                                        analysisResult.setUnit(curUnit.getUnit());
-                                        return true;
+                                        return curUnit;
                                     }
                                 }
                             } else if (curUnit.getUnit().toString().contains(defBox + ".<")) {
-                                if (!outSet.toString().contains(curUnit.toString())) {
+                                if (outSetContainsCurUnit) {
                                     outSet.add(curUnit);
                                 }
                             }
@@ -1281,7 +1309,7 @@ public class Utils {
 
                                 if (defBox.getValue().equivTo(useBox.getValue())
                                         || isArrayUseBox(curUnit, insetIns, defBox, useBox.getValue())) {
-                                    if (!outSet.toString().contains(curUnit.toString())) {
+                                    if (outSetContainsCurUnit) {
                                         outSet.add(curUnit);
                                     }
                                 }
@@ -1294,7 +1322,7 @@ public class Utils {
                     if (curUnit.getUnit() instanceof JInvokeStmt) {
                         for (ValueBox defBox : insetIns.getUnit().getDefBoxes()) {
                             if (curUnit.getUnit().toString().contains(defBox + ".<")) {
-                                if (!outSet.toString().contains(curUnit.toString())) {
+                                if (outSetContainsCurUnit) {
                                     outSet.add(curUnit);
                                 }
                             } else {
@@ -1306,16 +1334,7 @@ public class Utils {
                                 for (int x = 0; x < args.size(); x++) {
                                     if (args.get(x).equivTo(defBox.getValue()) ||
                                             isArrayUseBox(curUnit, insetIns, defBox, args.get(x))) {
-
-                                        InvokeUnitContainer container = getDefinedFieldsFromInvoke(invokeExpr.getMethod(), usedFields);
-                                        if (container.getArgs().contains(x)) {
-                                            analysisResult.getAnalysisResult().addAll(container.getAnalysisResult());
-                                            analysisResult.setDefinedFields(container.getDefinedFields());
-                                            analysisResult.setArgs(container.getArgs());
-                                        }
-
-                                        analysisResult.setUnit(curUnit.getUnit());
-                                        return true;
+                                        return curUnit;
                                     }
                                 }
                             }
@@ -1333,7 +1352,7 @@ public class Utils {
 
                                 if (defBox.getValue().equivTo(useBox.getValue())
                                         || isArrayUseBox(curUnit, insetIns, defBox, useBox.getValue())) {
-                                    if (!outSet.toString().contains(curUnit.toString())) {
+                                    if (outSetContainsCurUnit) {
                                         outSet.add(curUnit);
                                     }
 
@@ -1346,13 +1365,7 @@ public class Utils {
             }
         }
 
-        return false;
-    }
-
-    private static boolean isArrayUseBox(UnitContainer curUnit, UnitContainer insetIns, ValueBox defBox, Value useBox) {
-        return (defBox.getValue().toString().contains(useBox.toString())
-                && curUnit.getMethod().equals(insetIns.getMethod())
-                && useBox.getType() instanceof ArrayType);
+        return null;
     }
 
     private static InvokeUnitContainer getDefinedFieldsFromInvoke(SootMethod method, Set<String> usedFields) {
@@ -1409,5 +1422,120 @@ public class Utils {
                 for (String sootString : predictableSourcMap.get(unit))
                     output.addIssue(new AnalysisIssue(unit, ruleNumber, "Found: \"" + sootString.replaceAll("\"", "") + "\"", sourcePaths));
 
+    }
+
+    //TODO - setup
+    /*
+    private static void printOutInfo() {
+        System.out.println("Total Heuristics: " + Utils.NUM_HEURISTIC);
+        System.out.println("Total Orthogonal: " + Utils.NUM_ORTHOGONAL);
+        System.out.println("Total Constants: " + Utils.NUM_CONSTS_TO_CHECK);
+        System.out.println("Total Slices: " + Utils.NUM_SLICES);
+        System.out.println("Average Length: " + calculateAverage(Utils.SLICE_LENGTH));
+
+        for (int i = 0; i < Utils.DEPTH_COUNT.length; i++) {
+            System.out.println(String.format("Depth: %d, Count %d", i + 1, Utils.DEPTH_COUNT[i]));
+        }
+    }
+    */
+
+    public static double calculateAverage() {
+        Integer sum = 0;
+        if (!Utils.SLICE_LENGTH.isEmpty()) {
+            for (Integer mark : Utils.SLICE_LENGTH) {
+                sum += mark;
+            }
+            return sum.doubleValue() / Utils.SLICE_LENGTH.size();
+        }
+        return sum;
+    }
+
+    public static ArrayList<String> createDepthCountList() {
+        ArrayList<String> output = new ArrayList<String>();
+
+        for (int i = 0; i < Utils.DEPTH_COUNT.length; i++) {
+            output.add(String.format("Depth: %d, Count %d", i + 1, Utils.DEPTH_COUNT[i]));
+        }
+
+        return output;
+    }
+
+    public static int isArgOfInvoke(ValueBox useBox, Unit unit) {
+
+        if (unit instanceof JInvokeStmt) {
+
+            InvokeExpr invokeExpr = ((JInvokeStmt) unit).getInvokeExpr();
+            List<Value> args = invokeExpr.getArgs();
+            for (int index = 0; index < args.size(); index++) {
+                if (args.get(index).equivTo(useBox.getValue())) {
+                    return index;
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    private static boolean isArrayUseBox(UnitContainer curUnit, UnitContainer insetIns, ValueBox defBox, Value useBox) {
+        return (defBox.getValue().toString().contains(useBox.toString())
+                && curUnit.getMethod().equals(insetIns.getMethod())
+                && useBox.getType() instanceof ArrayType);
+    }
+
+    public static UnitContainer createInvokeUnitContainer(Unit currInstruction, String caller, List<String> usedFields, int depth) {
+
+        for (String dontVisit : INVOKE_DONT_VISIT) {
+            if (currInstruction.toString().contains(dontVisit)) {
+                UnitContainer unitContainer = new UnitContainer();
+                unitContainer.setUnit(currInstruction);
+                unitContainer.setMethod(caller);
+                return unitContainer;
+            }
+        }
+
+        InvokeUnitContainer unitContainer = new InvokeUnitContainer();
+        SootMethod method = ((JInvokeStmt) currInstruction).getInvokeExpr().getMethod();
+
+        if (method.isConcrete()) {
+
+            Scene.v().forceResolve(method.getDeclaringClass().getName(), BODIES);
+
+            if (depth == 1) {
+
+                for (String field : usedFields) {
+
+                    HeuristicBasedInstructions influencingInstructions = new HeuristicBasedInstructions(method, field);
+                    HeuristicBasedAnalysisResult propAnalysis = influencingInstructions.getAnalysisResult();
+
+                    if (propAnalysis.getAnalysis() != null) {
+                        // Get args
+                        List<Integer> args = Utils.findInfluencingParamters(propAnalysis.getAnalysis());
+                        unitContainer.setArgs(args);
+                        unitContainer.setMethod(caller);
+                        unitContainer.getDefinedFields().add(field);
+                        unitContainer.setAnalysisResult(propAnalysis.getAnalysis());
+                    }
+                }
+            } else {
+
+                for (String field : usedFields) {
+
+                    OrthogonalInfluenceInstructions other = new OrthogonalInfluenceInstructions(method, field, depth - 1);
+                    OrthogonalSlicingResult orthoAnalysis = other.getOrthogonalSlicingResult();
+
+                    if (orthoAnalysis.getAnalysisResult() != null) {
+                        // Get args
+                        List<Integer> args = Utils.findInfluencingParamters(orthoAnalysis.getAnalysisResult());
+                        unitContainer.setArgs(args);
+                        unitContainer.setMethod(caller);
+                        unitContainer.getDefinedFields().add(field);
+                        unitContainer.setAnalysisResult(orthoAnalysis.getAnalysisResult());
+                    }
+                }
+
+            }
+        }
+
+        return unitContainer;
     }
 }

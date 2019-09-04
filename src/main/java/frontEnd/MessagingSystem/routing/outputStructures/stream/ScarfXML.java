@@ -11,6 +11,8 @@ import frontEnd.MessagingSystem.routing.structure.Scarf.BugSummary;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 
+import static frontEnd.MessagingSystem.routing.outputStructures.common.ScarfXML.marshalling;
+
 /**
  * <p>ScarfXML class.</p>
  *
@@ -55,7 +57,7 @@ public class ScarfXML extends Structure {
     public void writeHeader() throws ExceptionHandler {
 
         log.info("Marshalling the header.");
-        AnalyzerReport report = frontEnd.MessagingSystem.routing.outputStructures.common.ScarfXML.marshalling(this.getSource());
+        AnalyzerReport report = marshalling(this.getSource());
 
         String xmlStream = JacksonSerializer.serialize(report, true, Listing.ScarfXML.getJacksonType());
 
@@ -74,7 +76,7 @@ public class ScarfXML extends Structure {
         super.addIssue(issue);
 
         log.debug("Marshalling and writing the issue: " + issue.getInfo());
-        BugInstance instance = frontEnd.MessagingSystem.routing.outputStructures.common.ScarfXML.marshalling(issue, super.getCwes(), super.getSource().getFileOutName(), getId(), this.buildId, this.xPath);
+        BugInstance instance = marshalling(issue, super.getCwes(), super.getSource().getFileOutName(), getId(), this.buildId, this.xPath);
 
         String xml = JacksonSerializer.serialize(instance, true, Listing.ScarfXML.getJacksonType());
 
@@ -99,6 +101,20 @@ public class ScarfXML extends Structure {
         if (!xml.endsWith("/>"))
             this.write(xml);
 
+        //endregion
+
+        //region Heuristics
+        if (super.getSource().getDisplayHeuristics()) {
+            log.trace("Writing the heuristics");
+            String heuristicsXML = JacksonSerializer.serialize(
+                    marshalling(super.getSource(), super.getSource().getSLICE_AVERAGE_3SigFig()),
+                    super.getSource().prettyPrint(),
+                    Listing.ScarfXML.getJacksonType()
+            );
+
+            if (!heuristicsXML.endsWith("/>"))
+                this.write(heuristicsXML);
+        }
         //endregion
 
         this.write(footerCatch);

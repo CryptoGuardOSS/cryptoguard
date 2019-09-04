@@ -1,6 +1,7 @@
 package slicer.backward.property;
 
 import analyzer.backward.AssignInvokeUnitContainer;
+import analyzer.backward.InvokeUnitContainer;
 import analyzer.backward.PropertyFakeUnitContainer;
 import analyzer.backward.UnitContainer;
 import slicer.ValueArraySparseSet;
@@ -19,9 +20,7 @@ import soot.toolkits.scalar.FlowSet;
 import util.FieldInitializationInstructionMap;
 import util.Utils;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>PropertyInstructionSlicer class.</p>
@@ -35,6 +34,7 @@ public class PropertyInstructionSlicer extends BackwardFlowAnalysis {
     private FlowSet emptySet;
     private String slicingCriteria;
     private String initMethod;
+    private List<String> usedFields;
     private Map<String, List<PropertyAnalysisResult>> propertyUseMap;
 
     /**
@@ -49,6 +49,7 @@ public class PropertyInstructionSlicer extends BackwardFlowAnalysis {
         this.emptySet = new ValueArraySparseSet();
         this.slicingCriteria = slicingCriteria;
         this.initMethod = initMethod;
+        usedFields = new ArrayList<>();
         this.propertyUseMap = new HashMap<>();
         doAnalysis();
     }
@@ -127,6 +128,19 @@ public class PropertyInstructionSlicer extends BackwardFlowAnalysis {
                         }
                     }
 
+                    if (insetInstruction instanceof InvokeUnitContainer) {
+
+                        int arg = Utils.isArgOfInvoke(usebox, insetInstruction.getUnit());
+
+                        if (arg > -1) {
+                            String args = ((InvokeUnitContainer) insetInstruction).getArgs().toString();
+
+                            if (!args.contains("" + arg)) {
+                                continue;
+                            }
+                        }
+                    }
+
                     if (Utils.isArgOfByteArrayCreation(usebox, insetInstruction.getUnit())) {
                         continue;
                     }
@@ -185,7 +199,13 @@ public class PropertyInstructionSlicer extends BackwardFlowAnalysis {
         }
 
         if (currInstruction instanceof JAssignStmt && currInstruction.toString().contains("invoke ")) {
-            currUnitContainer = Utils.createAssignInvokeUnitContainer(currInstruction);
+            currUnitContainer = Utils.createAssignInvokeUnitContainer(currInstruction, initMethod, Utils.DEPTH);
+            if (currUnitContainer instanceof AssignInvokeUnitContainer) {
+                Set<String> usedProperties = ((AssignInvokeUnitContainer) currUnitContainer).getProperties();
+                usedFields.addAll(usedProperties);
+            }
+        } else if (currInstruction instanceof JInvokeStmt) {
+            currUnitContainer = Utils.createInvokeUnitContainer(currInstruction, initMethod, usedFields, Utils.DEPTH);
         } else {
             currUnitContainer = new UnitContainer();
         }

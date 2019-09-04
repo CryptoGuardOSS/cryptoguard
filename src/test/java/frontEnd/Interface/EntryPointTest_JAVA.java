@@ -11,7 +11,7 @@ import soot.G;
 import util.Utils;
 
 import java.io.File;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -95,7 +95,7 @@ public class EntryPointTest_JAVA {
     public void main_TestableFiles_SingleTest() {
         if (isLinux) {
             String args =
-                    makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES.getFlag()) +
+                    makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
                             makeArg(argsIdentifier.SOURCE, javaFiles[1]) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
@@ -106,7 +106,7 @@ public class EntryPointTest_JAVA {
 
                 engine.main(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(javaFileTwo), Charset.forName("UTF-8"));
+                List<String> results = Files.readAllLines(Paths.get(javaFileTwo), StandardCharsets.UTF_8);
 
                 int count = 0;
                 for (String line : results)
@@ -129,10 +129,10 @@ public class EntryPointTest_JAVA {
     public void main_TestableFiles_SingleTest_Scarf() {
         if (isLinux) {
             String args =
-                    makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES.getFlag()) +
+                    makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES) +
                             makeArg(argsIdentifier.SOURCE, javaFiles[0]) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
-                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML.getFlag()) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.OUT, javaFileOne) +
                             makeArg(argsIdentifier.PRETTY);
 
@@ -143,7 +143,7 @@ public class EntryPointTest_JAVA {
                 AnalyzerReport report = AnalyzerReport.deserialize(new File(javaFileOne));
                 //endregion
 
-                List<String> results = Files.readAllLines(Paths.get(javaFileOne), Charset.forName("UTF-8"));
+                List<String> results = Files.readAllLines(Paths.get(javaFileOne), StandardCharsets.UTF_8);
 
                 assertTrue(results.size() > 1);
             } catch (Exception e) {
@@ -163,16 +163,17 @@ public class EntryPointTest_JAVA {
     public void main_TestableFiles_MultiTest() {
         if (isLinux) {
             String args =
-                    makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES.getFlag()) +
+                    makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES) +
                             makeArg(argsIdentifier.SOURCE, Utils.join(" ", javaFiles)) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
                             makeArg(argsIdentifier.OUT, javaFileThree);
 
             try {
 
                 engine.main(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(javaFileThree), Charset.forName("UTF-8"));
+                List<String> results = Files.readAllLines(Paths.get(javaFileThree), StandardCharsets.UTF_8);
 
                 assertTrue(results.size() > 1);
 

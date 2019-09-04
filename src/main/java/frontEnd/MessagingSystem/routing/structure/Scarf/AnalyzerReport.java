@@ -45,7 +45,8 @@ import java.util.List;
         "BugInstance",
         "BugSummary",
         "Metric",
-        "MetricSummaries"
+        "MetricSummaries",
+        "Heuristics"
 })
 public class AnalyzerReport implements Serializable {
 
@@ -202,6 +203,12 @@ public class AnalyzerReport implements Serializable {
      */
     @JsonProperty("MetricSummaries")
     private MetricSummaries metricSummaries;
+    /**
+     * HeuristicsType
+     * <p>
+     */
+    @JsonProperty("Heuristics")
+    private Heuristics heuristics;
     private final static long serialVersionUID = 4656075134214578571L;
 
     /**
@@ -232,8 +239,9 @@ public class AnalyzerReport implements Serializable {
      * @param packageRootDir    a {@link java.lang.String} object.
      * @param parserFwVersion   a {@link java.lang.String} object.
      * @param assessFwVersion   a {@link java.lang.String} object.
+     * @param heuristics        a {@link Heuristics} object.
      */
-    public AnalyzerReport(String assessFw, String assessFwVersion, String assessmentStartTs, String buildFw, String buildFwVersion, String packageName, String packageVersion, String buildRootDir, String packageRootDir, String parserFw, String parserFwVersion, String platformName, String toolName, String toolVersion, String uuid, List<BugInstance> bugInstance, List<BugCategory> bugCategory, List<Metric> metric, MetricSummaries metricSummaries) {
+    public AnalyzerReport(String assessFw, String assessFwVersion, String assessmentStartTs, String buildFw, String buildFwVersion, String packageName, String packageVersion, String buildRootDir, String packageRootDir, String parserFw, String parserFwVersion, String platformName, String toolName, String toolVersion, String uuid, List<BugInstance> bugInstance, List<BugCategory> bugCategory, List<Metric> metric, MetricSummaries metricSummaries, Heuristics heuristics) {
         super();
         this.assessFw = assessFw;
         this.assessFwVersion = assessFwVersion;
@@ -254,6 +262,7 @@ public class AnalyzerReport implements Serializable {
         this.bugCategory = bugCategory;
         this.metric = metric;
         this.metricSummaries = metricSummaries;
+        this.heuristics = heuristics;
     }
 
     /**
@@ -968,9 +977,28 @@ public class AnalyzerReport implements Serializable {
     /**
      * {@inheritDoc}
      */
+    @JsonProperty("Heuristics")
+    public Heuristics getHeuristics() {
+        return heuristics;
+    }
+
+    /**
+     * HeuristicsType
+     * <p>
+     */
+    @JsonProperty("Heuristics")
+    public void setHeuristics(Heuristics heuristics) {
+        this.heuristics = heuristics;
+    }
+
+    public AnalyzerReport withHeuristics(Heuristics heuristics) {
+        this.heuristics = heuristics;
+        return this;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("assessFw", assessFw).append("assessFwVersion", assessFwVersion).append("assessmentStartTs", assessmentStartTs).append("buildFw", buildFw).append("buildFwVersion", buildFwVersion).append("packageName", packageName).append("packageVersion", packageVersion).append("buildRootDir", buildRootDir).append("packageRootDir", packageRootDir).append("parserFw", parserFw).append("parserFwVersion", parserFwVersion).append("platformName", platformName).append("toolName", toolName).append("toolVersion", toolVersion).append("uuid", uuid).append("bugInstance", bugInstance).append("bugCategory", bugCategory).append("metric", metric).append("metricSummaries", metricSummaries).toString();
+        return new ToStringBuilder(this).append("assessFw", assessFw).append("assessFwVersion", assessFwVersion).append("assessmentStartTs", assessmentStartTs).append("buildFw", buildFw).append("buildFwVersion", buildFwVersion).append("packageName", packageName).append("packageVersion", packageVersion).append("buildRootDir", buildRootDir).append("packageRootDir", packageRootDir).append("parserFw", parserFw).append("parserFwVersion", parserFwVersion).append("platformName", platformName).append("toolName", toolName).append("toolVersion", toolVersion).append("uuid", uuid).append("bugInstance", bugInstance).append("bugCategory", bugCategory).append("metric", metric).append("metricSummaries", metricSummaries).append("heuristics", heuristics).toString();
     }
 
     /**
@@ -978,7 +1006,7 @@ public class AnalyzerReport implements Serializable {
      */
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(buildFw).append(bugCategory).append(packageName).append(assessFw).append(toolVersion).append(buildFwVersion).append(parserFw).append(toolName).append(bugInstance).append(packageVersion).append(assessmentStartTs).append(metricSummaries).append(platformName).append(metric).append(buildRootDir).append(uuid).append(parserFwVersion).append(packageRootDir).append(assessFwVersion).toHashCode();
+        return new HashCodeBuilder().append(buildFw).append(bugCategory).append(packageName).append(assessFw).append(toolVersion).append(buildFwVersion).append(parserFw).append(toolName).append(bugInstance).append(packageVersion).append(assessmentStartTs).append(metricSummaries).append(platformName).append(metric).append(heuristics).append(buildRootDir).append(uuid).append(parserFwVersion).append(packageRootDir).append(assessFwVersion).toHashCode();
     }
 
     /**
@@ -993,14 +1021,14 @@ public class AnalyzerReport implements Serializable {
             return false;
         }
         AnalyzerReport rhs = ((AnalyzerReport) other);
-        return new EqualsBuilder().append(buildFw, rhs.buildFw).append(bugCategory, rhs.bugCategory).append(packageName, rhs.packageName).append(assessFw, rhs.assessFw).append(toolVersion, rhs.toolVersion).append(buildFwVersion, rhs.buildFwVersion).append(parserFw, rhs.parserFw).append(toolName, rhs.toolName).append(bugInstance, rhs.bugInstance).append(packageVersion, rhs.packageVersion).append(assessmentStartTs, rhs.assessmentStartTs).append(metricSummaries, rhs.metricSummaries).append(platformName, rhs.platformName).append(metric, rhs.metric).append(buildRootDir, rhs.buildRootDir).append(uuid, rhs.uuid).append(parserFwVersion, rhs.parserFwVersion).append(packageRootDir, rhs.packageRootDir).append(assessFwVersion, rhs.assessFwVersion).isEquals();
+        return new EqualsBuilder().append(buildFw, rhs.buildFw).append(bugCategory, rhs.bugCategory).append(packageName, rhs.packageName).append(assessFw, rhs.assessFw).append(toolVersion, rhs.toolVersion).append(buildFwVersion, rhs.buildFwVersion).append(parserFw, rhs.parserFw).append(toolName, rhs.toolName).append(bugInstance, rhs.bugInstance).append(packageVersion, rhs.packageVersion).append(assessmentStartTs, rhs.assessmentStartTs).append(metricSummaries, rhs.metricSummaries).append(platformName, rhs.platformName).append(metric, rhs.metric).append(heuristics, rhs.heuristics).append(buildRootDir, rhs.buildRootDir).append(uuid, rhs.uuid).append(parserFwVersion, rhs.parserFwVersion).append(packageRootDir, rhs.packageRootDir).append(assessFwVersion, rhs.assessFwVersion).isEquals();
     }
 
 
     /**
      * <p>deserialize.</p>
      *
-     * @param file      a {@link java.io.File} object.
+     * @param file a {@link java.io.File} object.
      * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */

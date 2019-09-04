@@ -1,5 +1,43 @@
 {
   "definitions": {
+    "HeuristicsType": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "NumberOfOrthogonal": {
+          "type": "integer"
+        },
+        "NumberOfConstantsToCheck": {
+          "type": "integer"
+        },
+        "NumberOfSlices": {
+          "type": "integer"
+        },
+        "NumberOfHeuristics": {
+          "type": "integer"
+        },
+        "AverageSlice": {
+          "type": "number"
+        },
+        "DepthCount": {
+          "type": "array",
+          "additionalItems": false,
+          "items": {
+            "type": "string"
+          },
+          "title": "DepthCount"
+        }
+      },
+      "required": [
+        "NumberOfOrthogonal",
+        "NumberOfConstantsToCheck",
+        "NumberOfSlices",
+        "NumberOfHeuristics",
+        "AverageSlice",
+        "DepthCount"
+      ],
+      "title": "HeuristicsType"
+    },
     "-id": {
       "type": "integer",
       "additionalProperties": false,
@@ -462,6 +500,11 @@
       "$id": "#/properties/AnalyzerReport/properties/MetricSummaries",
       "$ref": "#/definitions/MetricSummaryType",
       "title": "MetricSummaries"
+    },
+    "Heuristics": {
+      "$id": "#/properties/AnalyzerReport/properties/Heuristics",
+      "$ref": "#/definitions/HeuristicsType",
+      "title": "Heuristics"
     }
   }
 }

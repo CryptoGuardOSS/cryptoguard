@@ -1,6 +1,7 @@
 package slicer.backward.method;
 
 import analyzer.backward.AssignInvokeUnitContainer;
+import analyzer.backward.InvokeUnitContainer;
 import analyzer.backward.ParamFakeUnitContainer;
 import analyzer.backward.UnitContainer;
 import slicer.ValueArraySparseSet;
@@ -21,15 +22,13 @@ import soot.toolkits.scalar.FlowSet;
 import util.FieldInitializationInstructionMap;
 import util.Utils;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>MethodInstructionSlicer class.</p>
  *
  * @author RigorityJTeam
- * @version $Id: $Id
+ * @version $Id: $Idc
  * @since V01.00.00
  */
 public class MethodInstructionSlicer extends BackwardFlowAnalysis {
@@ -37,6 +36,7 @@ public class MethodInstructionSlicer extends BackwardFlowAnalysis {
     private FlowSet emptySet;
     private MethodCallSiteInfo methodCallSiteInfo;
     private List<Integer> slicingParams;
+    private List<String> usedFields;
     private Map<String, List<PropertyAnalysisResult>> propertyUseMap;
 
     /**
@@ -52,6 +52,7 @@ public class MethodInstructionSlicer extends BackwardFlowAnalysis {
         this.emptySet = new ValueArraySparseSet();
         this.methodCallSiteInfo = methodCallSiteInfo;
         this.slicingParams = slicingParams;
+        this.usedFields = new ArrayList<>();
         this.propertyUseMap = new HashMap<>();
         doAnalysis();
     }
@@ -136,6 +137,18 @@ public class MethodInstructionSlicer extends BackwardFlowAnalysis {
                         }
                     }
 
+                    if (insetInstruction instanceof InvokeUnitContainer) {
+                        int arg = Utils.isArgOfInvoke(usebox, insetInstruction.getUnit());
+
+                        if (arg > -1) {
+                            String args = ((InvokeUnitContainer) insetInstruction).getArgs().toString();
+
+                            if (!args.contains("" + arg)) {
+                                continue;
+                            }
+                        }
+                    }
+
                     if (Utils.isArgOfByteArrayCreation(usebox, insetInstruction.getUnit())) {
                         continue;
                     }
@@ -195,7 +208,15 @@ public class MethodInstructionSlicer extends BackwardFlowAnalysis {
         }
 
         if (currInstruction instanceof JAssignStmt && currInstruction.toString().contains("invoke ")) {
-            currUnitContainer = Utils.createAssignInvokeUnitContainer(currInstruction);
+            currUnitContainer = Utils.createAssignInvokeUnitContainer(currInstruction, methodCallSiteInfo.getCaller().toString(), Utils.DEPTH);
+
+            if (currUnitContainer instanceof AssignInvokeUnitContainer) {
+                Set<String> usedProperties = ((AssignInvokeUnitContainer) currUnitContainer).getProperties();
+                usedFields.addAll(usedProperties);
+            }
+
+        } else if (currInstruction instanceof JInvokeStmt) {
+            currUnitContainer = Utils.createInvokeUnitContainer(currInstruction, methodCallSiteInfo.getCaller().toString(), usedFields, Utils.DEPTH);
         } else {
             currUnitContainer = new UnitContainer();
         }

@@ -87,6 +87,29 @@ public class EnvironmentInformation {
     private OutputStructure output;
     //endregion
     private ByteArrayOutputStream sootErrors = new ByteArrayOutputStream();
+    //region Heuristics from Utils
+    @Getter
+    @Setter
+    private Boolean displayHeuristics = false;
+    @Getter
+    @Setter
+    private int NUM_ORTHOGONAL = 0;
+    @Getter
+    @Setter
+    private int NUM_CONSTS_TO_CHECK = 0;
+    @Getter
+    @Setter
+    private int NUM_SLICES = 0;
+    @Getter
+    @Setter
+    private int NUM_HEURISTIC = 0;
+    @Getter
+    @Setter
+    private double SLICE_AVERAGE = 0;
+    @Getter
+    @Setter
+    private ArrayList<String> DEPTH_COUNT = new ArrayList<String>();
+    //endregion
     //region Constructor
 
     /**
@@ -152,6 +175,7 @@ public class EnvironmentInformation {
     public void setRawCommand(String rawCommand) {
         this.rawCommand = rawCommand;
     }
+
     /**
      * <p>getAssessmentStartTime.</p>
      *
@@ -159,6 +183,10 @@ public class EnvironmentInformation {
      */
     public String getAssessmentStartTime() {
         return AssessmentStartTime;
+    }
+
+    public void addToDepth_Count(String item) {
+        this.DEPTH_COUNT.add(item);
     }
 
     /**
@@ -178,6 +206,7 @@ public class EnvironmentInformation {
      */
     public void stopScanning() throws ExceptionHandler {
         this.stopAnalysis();
+        this.setHuristicsInfo();
         this.getOutput().stopAnalyzing();
     }
 
@@ -228,6 +257,11 @@ public class EnvironmentInformation {
      */
     public void setAddExperimentalRules(boolean addExperimentalRules) {
         this.addExperimentalRules = addExperimentalRules;
+    }
+
+
+    public double getSLICE_AVERAGE_3SigFig() {
+        return Double.parseDouble(String.format("%.3f", this.SLICE_AVERAGE));
     }
 
     /**
@@ -813,6 +847,18 @@ public class EnvironmentInformation {
      */
     public void setUUID(String UUID) {
         this.UUID = UUID;
+    }
+
+    //endregion
+    //region Helpful Methods
+    public void setHuristicsInfo() {
+        this.NUM_ORTHOGONAL = Utils.NUM_ORTHOGONAL;
+        this.NUM_CONSTS_TO_CHECK = Utils.NUM_CONSTS_TO_CHECK;
+        this.NUM_SLICES = Utils.NUM_SLICES;
+        this.NUM_HEURISTIC = Utils.NUM_HEURISTIC;
+        this.SLICE_AVERAGE = Utils.calculateAverage();
+        this.DEPTH_COUNT = Utils.createDepthCountList();
+
     }
     //endregion
 }

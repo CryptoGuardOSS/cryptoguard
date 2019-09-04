@@ -3,10 +3,7 @@ package frontEnd.MessagingSystem.routing.outputStructures.common;
 import frontEnd.MessagingSystem.AnalysisIssue;
 import frontEnd.MessagingSystem.AnalysisLocation;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
-import frontEnd.MessagingSystem.routing.structure.Default.Issue;
-import frontEnd.MessagingSystem.routing.structure.Default.Location;
-import frontEnd.MessagingSystem.routing.structure.Default.Report;
-import frontEnd.MessagingSystem.routing.structure.Default.Target;
+import frontEnd.MessagingSystem.routing.structure.Default.*;
 import rule.engine.EngineType;
 import util.Utils;
 
@@ -22,7 +19,7 @@ import util.Utils;
 public class Default {
 
     //region Attributes
-    public static final Integer Version = 2;
+    public static final Integer Version = 3;
     //endregion
 
     //region UnMarshallers
@@ -117,5 +114,19 @@ public class Default {
 
         return loc;
     }
-    //endregion
+
+    public static Heuristics mapper(EnvironmentInformation info, double sliceAverageRounded) {
+
+        return new Heuristics(
+                info.getNUM_ORTHOGONAL(),
+                info.getNUM_CONSTS_TO_CHECK(),
+                info.getNUM_SLICES(),
+                info.getNUM_HEURISTIC(),
+                sliceAverageRounded,
+                info.getDEPTH_COUNT()
+        );
+    }
+
+
+//endregion
 }

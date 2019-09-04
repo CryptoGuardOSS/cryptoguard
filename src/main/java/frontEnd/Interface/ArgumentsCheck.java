@@ -113,7 +113,7 @@ public class ArgumentsCheck {
         //endregion
 
         //region Setting the dependency path
-        List<String> dependencies = null;
+        List<String> dependencies = new ArrayList<String>();
         if (cmd.hasOption(argsIdentifier.DEPENDENCY.getId())) {
             log.trace("Retrieving the dependency files.");
             dependencies = verify ? Utils.retrieveDirs(
@@ -124,6 +124,19 @@ public class ArgumentsCheck {
             ;
             log.info("Using the dependency file(s): " + source.toString());
         }
+        //endregion
+
+        //region Retrieving the dependencies via the class path TODO - AUXCLASSPATH
+        /*
+        if (cmd.hasOption(argsIdentifier.AUXCLASSPATH.getId())) {
+            log.trace("Adding all of the auxiliary class paths from the Utils method");
+            log.debug("Adding the auxiliary class paths + " + cmd.getOptionValue(argsIdentifier.AUXCLASSPATH.getId()));
+
+            dependencies.addAll(Utils.verifyClassPaths(cmd.getOptionValue(argsIdentifier.AUXCLASSPATH.getId())));
+
+            log.info("Added the aux class path");
+        }
+        */
         //endregion
 
         Listing messaging = Listing.retrieveListingType(cmd.getOptionValue(argsIdentifier.FORMATOUT.getId()));
@@ -175,7 +188,7 @@ public class ArgumentsCheck {
         String fileOutPath = "";
         if (cmd.hasOption(argsIdentifier.OUT.getId()))
             if (verify)
-                fileOutPath = Utils.verifyFileOut(cmd.getOptionValue(argsIdentifier.OUT.getId()), messaging, cmd.hasOption(argsIdentifier.NEW.getId()));
+                fileOutPath = Utils.verifyFileExt(cmd.getOptionValue(argsIdentifier.OUT.getId()), messaging.getOutputFileExt(), cmd.hasOption(argsIdentifier.NEW.getId()));
             else
                 fileOutPath = cmd.getOptionValue(argsIdentifier.OUT.getId());
         else
@@ -198,14 +211,22 @@ public class ArgumentsCheck {
             throw new ExceptionHandler(messaging.getInputHelp(), ExceptionId.FORMAT_VALID);
         }
 
+        //region Logging Information
         info.setPrettyPrint(cmd.hasOption(argsIdentifier.PRETTY.getId()));
-        log.debug("Pretty flag: " + argsIdentifier.PRETTY.getId());
+        log.debug("Pretty flag: " + cmd.hasOption(argsIdentifier.PRETTY.getId()));
 
         info.setShowTimes(cmd.hasOption(argsIdentifier.TIMEMEASURE.getId()));
-        log.debug("Time measure flag: " + argsIdentifier.TIMEMEASURE.getId());
+        log.debug("Time measure flag: " + cmd.hasOption(argsIdentifier.TIMEMEASURE.getId()));
 
         info.setStreaming(cmd.hasOption(argsIdentifier.STREAM.getId()));
-        log.debug("Stream flag: " + argsIdentifier.STREAM.getId());
+        log.debug("Stream flag: " + cmd.hasOption(argsIdentifier.STREAM.getId()));
+
+        info.setDisplayHeuristics(cmd.hasOption(argsIdentifier.HEURISTICS.getId()));
+        log.debug("Heuristics flag: " + cmd.hasOption(argsIdentifier.HEURISTICS.getId()));
+
+        Utils.initDepth(Integer.parseInt(cmd.getOptionValue(argsIdentifier.DEPTH.getId(), String.valueOf(1))));
+        log.debug("Scanning using a depth of " + Utils.DEPTH);
+        //endregion
 
         //Setting the raw command within info
         info.setRawCommand(Utils.join(" ", preservedArguments));
@@ -232,6 +253,20 @@ public class ArgumentsCheck {
         dependency.setType(String.class);
         dependency.setOptionalArg(false);
         cmdLineArgs.addOption(dependency);
+
+        //region AuxClassPath TODO - AUXCLASSPATH
+        /*
+        Option auxClassPath = Option.builder(argsIdentifier.AUXCLASSPATH.getId()).hasArg().argName("auxclasspath").desc(argsIdentifier.AUXCLASSPATH.getDesc()).build();
+        auxClassPath.setType(String.class);
+        auxClassPath.setOptionalArg(true);
+        cmdLineArgs.addOption(auxClassPath);
+        */
+        //endregion
+
+        Option depth = Option.builder(argsIdentifier.DEPTH.getId()).hasArg().argName("depth").desc(argsIdentifier.DEPTH.getDesc()).build();
+        depth.setType(String.class);
+        depth.setOptionalArg(true);
+        cmdLineArgs.addOption(depth);
 
         Option output = Option.builder(argsIdentifier.OUT.getId()).hasArg().argName("file").desc(argsIdentifier.OUT.getDesc()).build();
         output.setType(String.class);
@@ -261,6 +296,10 @@ public class ArgumentsCheck {
         Option skipInput = new Option(argsIdentifier.SKIPINPUTVALIDATION.getId(), false, argsIdentifier.SKIPINPUTVALIDATION.getDesc());
         skipInput.setOptionalArg(true);
         cmdLineArgs.addOption(skipInput);
+
+        Option displayHeuristcs = new Option(argsIdentifier.HEURISTICS.getId(), false, argsIdentifier.HEURISTICS.getDesc());
+        displayHeuristcs.setOptionalArg(true);
+        cmdLineArgs.addOption(displayHeuristcs);
 
         Option timeStamp = new Option(argsIdentifier.TIMESTAMP.getId(), false, argsIdentifier.TIMESTAMP.getDesc());
         skipInput.setOptionalArg(true);

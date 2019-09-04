@@ -35,7 +35,7 @@ public class SymCrypto {
         if (key == null) {
             key = new String(defaultKey);
         } else if (key.isEmpty()) {
-            key = new String(keyGenerator.generateKey().getEncoded());
+            key = getKey();
         }
 
         byte[] keyBytes = DatatypeConverter.parseBase64Binary(key);
@@ -43,6 +43,14 @@ public class SymCrypto {
         SecretKeySpec keySpc = new SecretKeySpec(keyBytes, ALGO);
         cipher.init(Cipher.ENCRYPT_MODE, keySpc);
         return cipher.doFinal(txtBytes);
+    }
+
+    private String getKey() {
+        return getKeyInternal();
+    }
+
+    private String getKeyInternal(){
+        return "xyzzzzzzzzzzzzzzzzzzzzzz";
     }
 
     public String getKey(String src) {

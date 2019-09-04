@@ -2,6 +2,7 @@ package rule.base;
 
 import analyzer.backward.Analysis;
 import analyzer.backward.AssignInvokeUnitContainer;
+import analyzer.backward.InvokeUnitContainer;
 import analyzer.backward.UnitContainer;
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
@@ -49,11 +50,40 @@ public abstract class PatternMatcherRuleChecker extends BaseRuleChecker {
                 }
             }
 
-            checkForMatch(e);
+            if (e instanceof InvokeUnitContainer) {
+                List<UnitContainer> resFromInside = ((InvokeUnitContainer) e).getAnalysisResult();
+
+                for (UnitContainer unit : resFromInside) {
+                    checkForMatch(unit);
+                }
+            }
+
+            checkForMatchInternal(e);
         }
     }
 
     private void checkForMatch(UnitContainer e) {
+
+        if (e instanceof AssignInvokeUnitContainer) {
+            List<UnitContainer> resFromInside = ((AssignInvokeUnitContainer) e).getAnalysisResult();
+
+            for (UnitContainer unit : resFromInside) {
+                checkForMatch(unit);
+            }
+        }
+
+        if (e instanceof InvokeUnitContainer) {
+            List<UnitContainer> resFromInside = ((InvokeUnitContainer) e).getAnalysisResult();
+
+            for (UnitContainer unit : resFromInside) {
+                checkForMatch(unit);
+            }
+        }
+
+        checkForMatchInternal(e);
+    }
+
+    private void checkForMatchInternal(UnitContainer e) {
         for (ValueBox usebox : e.getUnit().getUseBoxes()) {
             if (usebox.getValue() instanceof Constant) {
                 boolean found = false;

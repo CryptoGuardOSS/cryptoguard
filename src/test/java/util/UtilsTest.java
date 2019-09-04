@@ -1,13 +1,19 @@
 package util;
 
+import frontEnd.Interface.outputRouting.ExceptionHandler;
+import frontEnd.Interface.outputRouting.ExceptionId;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import test.TestUtilities;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static util.Utils.retrieveFullyQualifiedName;
 import static util.Utils.trimFilePath;
 
@@ -118,6 +124,29 @@ public class UtilsTest {
 
         assertNotNull(packageName);
         assertEquals("src.main.java.com.full.fun.test.main", packageName);
+    }
+
+    @Test
+    public void testVerifyClassPathsOne() {
+        try {
+            ArrayList<String> returnedOutput = Utils.verifyClassPaths(TestUtilities.sampleAuxClassPathOne);
+            for (String output : returnedOutput)
+                assertTrue(TestUtilities.sampleAuxClassPathOneList.contains(output));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            assertNull(e);
+        }
+    }
+
+    @Test
+    public void testVerifyClassPathsTwo() {
+        try {
+            ArrayList<String> returnedOutput = Utils.verifyClassPaths(TestUtilities.sampleAuxClassPathTwo);
+            assertNull(returnedOutput);
+        } catch (ExceptionHandler e) {
+            assertEquals(e.getErrorCode(), ExceptionId.ARG_VALID);
+            assertTrue(e.getLongDesciption().contains(TestUtilities.scarfArgs));
+        }
     }
     //endregion
 }

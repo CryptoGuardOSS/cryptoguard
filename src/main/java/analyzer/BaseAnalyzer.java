@@ -17,6 +17,7 @@ import soot.toolkits.graph.ExceptionalUnitGraph;
 import soot.toolkits.graph.UnitGraph;
 import util.FieldInitializationInstructionMap;
 import util.NamedMethodMap;
+import util.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -104,6 +105,12 @@ public class BaseAnalyzer {
                 for (MethodWrapper methodWrapper : newResult.keySet()) {
                     List<Analysis> analysisList = newResult.get(methodWrapper);
                     for (Analysis analysis : analysisList) {
+
+                        if (!analysis.getAnalysisResult().isEmpty()) {
+                            Utils.NUM_SLICES++;
+                            Utils.SLICE_LENGTH.add(analysis.getAnalysisResult().size());
+                        }
+
                         checker.analyzeSlice(analysis);
                     }
                 }

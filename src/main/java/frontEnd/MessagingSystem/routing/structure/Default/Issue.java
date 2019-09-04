@@ -1,4 +1,3 @@
-
 package frontEnd.MessagingSystem.routing.structure.Default;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -15,8 +14,6 @@ import java.io.Serializable;
 /**
  * Issue
  * <p>
- *
- * 
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -33,50 +30,38 @@ import java.io.Serializable;
 public class Issue implements Serializable {
 
     /**
-     *
      * (Required)
-     *
      */
     @JacksonXmlProperty(isAttribute = true, localName = "FullPath")
     @JsonProperty("_FullPath")
     private String fullPath;
     /**
-     *
      * (Required)
-     *
      */
     @JacksonXmlProperty(isAttribute = true, localName = "Id")
     @JsonProperty("_Id")
     private String id;
     /**
-     * 
      * (Required)
-     * 
      */
     @JsonProperty("Message")
     private String message;
     @JsonProperty("Description")
     private String description;
     /**
-     * 
      * (Required)
-     * 
      */
     @JsonProperty("RuleNumber")
     private int ruleNumber;
     @JsonProperty("RuleDesc")
     private String ruleDesc;
     /**
-     * 
      * (Required)
-     * 
      */
     @JsonProperty("CWEId")
     private int cWEId;
     /**
-     * 
      * (Required)
-     * 
      */
     @JsonProperty("Severity")
     private String severity;
@@ -90,13 +75,11 @@ public class Issue implements Serializable {
 
     /**
      * No args constructor for use in serialization
-     * 
      */
     public Issue() {
     }
 
     /**
-     * 
      * @param message
      * @param id
      * @param location
@@ -121,9 +104,7 @@ public class Issue implements Serializable {
     }
 
     /**
-     * 
      * (Required)
-     * 
      */
     @JacksonXmlProperty(isAttribute = true, localName = "FullPath")
     @JsonProperty("_FullPath")
@@ -132,9 +113,7 @@ public class Issue implements Serializable {
     }
 
     /**
-     * 
      * (Required)
-     * 
      */
     @JacksonXmlProperty(isAttribute = true, localName = "FullPath")
     @JsonProperty("_FullPath")
@@ -148,9 +127,7 @@ public class Issue implements Serializable {
     }
 
     /**
-     * 
      * (Required)
-     *
      */
     @JacksonXmlProperty(isAttribute = true, localName = "Id")
     @JsonProperty("_Id")
@@ -159,9 +136,7 @@ public class Issue implements Serializable {
     }
 
     /**
-     *
      * (Required)
-     *
      */
     @JacksonXmlProperty(isAttribute = true, localName = "Id")
     @JsonProperty("_Id")
@@ -183,9 +158,7 @@ public class Issue implements Serializable {
     }
 
     /**
-     * 
      * (Required)
-     *
      */
     @JsonProperty("Message")
     public void setMessage(String message) {
@@ -213,9 +186,7 @@ public class Issue implements Serializable {
     }
 
     /**
-     * 
      * (Required)
-     *
      */
     @JsonProperty("RuleNumber")
     public int getRuleNumber() {
@@ -223,9 +194,7 @@ public class Issue implements Serializable {
     }
 
     /**
-     * 
      * (Required)
-     *
      */
     @JsonProperty("RuleNumber")
     public void setRuleNumber(int ruleNumber) {
@@ -253,9 +222,7 @@ public class Issue implements Serializable {
     }
 
     /**
-     * 
      * (Required)
-     *
      */
     @JsonProperty("CWEId")
     public int getCWEId() {
@@ -263,9 +230,7 @@ public class Issue implements Serializable {
     }
 
     /**
-     * 
      * (Required)
-     *
      */
     @JsonProperty("CWEId")
     public void setCWEId(int cWEId) {
@@ -278,9 +243,7 @@ public class Issue implements Serializable {
     }
 
     /**
-     * 
      * (Required)
-     *
      */
     @JsonProperty("Severity")
     public String getSeverity() {
@@ -288,9 +251,7 @@ public class Issue implements Serializable {
     }
 
     /**
-     * 
      * (Required)
-     *
      */
     @JsonProperty("Severity")
     public void setSeverity(String severity) {
@@ -306,8 +267,6 @@ public class Issue implements Serializable {
     /**
      * LocationType
      * <p>
-     *
-     *
      */
     @JsonProperty("Location")
     public Location getLocation() {
@@ -317,8 +276,6 @@ public class Issue implements Serializable {
     /**
      * LocationType
      * <p>
-     *
-     *
      */
     @JsonProperty("Location")
     public void setLocation(Location location) {

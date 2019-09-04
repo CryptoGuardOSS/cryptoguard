@@ -18,12 +18,15 @@ import soot.jimple.internal.JAssignStmt;
 import soot.jimple.internal.JInvokeStmt;
 import util.Utils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
- * Created by krishnokoli on 10/22/17.
+ * Created by RigorityJTeam on 10/22/17.
  *
- * @author krishnokoli
+ * @author RigorityJTeam
  * @version $Id: $Id
  * @since V01.00.00
  */
@@ -83,15 +86,19 @@ public class PBEInterationCountFinder extends BaseRuleChecker {
             return;
         }
 
-        Set<String> usedFields = new HashSet<>();
-        Set<String> usedConstants = new HashSet<>();
+        HashMap<String, List<String>> callerVsUsedConstants = new HashMap<>();
 
         for (int index = 0; index < analysis.getAnalysisResult().size(); index++) {
             UnitContainer e = analysis.getAnalysisResult().get(index);
 
-            if (e instanceof AssignInvokeUnitContainer) {
-                Set<String> fields = ((AssignInvokeUnitContainer) e).getProperties();
-                usedFields.addAll(fields);
+            if (!(e instanceof AssignInvokeUnitContainer) && e.getUnit() instanceof JAssignStmt) {
+
+                List<String> usedConstants = callerVsUsedConstants.get(e.getMethod());
+
+                if (usedConstants == null) {
+                    usedConstants = new ArrayList<>();
+                    callerVsUsedConstants.put(e.getMethod(), usedConstants);
+                }
 
                 if (e.getUnit().toString().contains("interfaceinvoke ")) {
                     for (ValueBox usebox : e.getUnit().getUseBoxes()) {
@@ -101,11 +108,6 @@ public class PBEInterationCountFinder extends BaseRuleChecker {
                     }
                 }
             }
-        }
-
-
-        for (int index = 0; index < analysis.getAnalysisResult().size(); index++) {
-            UnitContainer e = analysis.getAnalysisResult().get(index);
 
             Map<UnitContainer, String> outSet = new HashMap<>();
 
@@ -116,6 +118,14 @@ public class PBEInterationCountFinder extends BaseRuleChecker {
                         checkHeuristics(unit, outSet);
                     }
                 }
+            } else if (e instanceof InvokeUnitContainer) {
+                List<UnitContainer> result = ((InvokeUnitContainer) e).getAnalysisResult();
+                if (result != null) {
+                    for (UnitContainer unit : result) {
+                        checkHeuristics(unit, outSet);
+                    }
+                }
+
             } else {
                 checkHeuristics(e, outSet);
             }
@@ -124,24 +134,30 @@ public class PBEInterationCountFinder extends BaseRuleChecker {
                 continue;
             }
 
-            InvokeUnitContainer invokeResult = new InvokeUnitContainer();
+            UnitContainer invokeResult = Utils.isArgumentOfInvoke(analysis, index, new ArrayList<UnitContainer>());
 
-            if (Utils.isArgumentOfInvoke(analysis, index, new ArrayList<UnitContainer>(), usedFields, invokeResult)) {
+            if (invokeResult != null && invokeResult instanceof InvokeUnitContainer) {
 
-                if ((invokeResult.getDefinedFields().isEmpty() || !invokeResult.getArgs().isEmpty())
+                if ((((InvokeUnitContainer) invokeResult).getDefinedFields().isEmpty() || !((InvokeUnitContainer) invokeResult).getArgs().isEmpty())
                         && invokeResult.getUnit().toString().contains("specialinvoke")) {
 
                     for (UnitContainer unitContainer : outSet.keySet()) {
                         putIntoMap(predictableSourcMap, unitContainer, outSet.get(unitContainer));
                     }
-                } else {
+                }
+            } else if (invokeResult != null && invokeResult.getUnit() instanceof JInvokeStmt) {
+                if (invokeResult.getUnit().toString().contains("specialinvoke")) {
 
+                    for (UnitContainer unitContainer : outSet.keySet()) {
+                        putIntoMap(predictableSourcMap, unitContainer, outSet.get(unitContainer));
+                    }
+                } else {
                     for (UnitContainer unitContainer : outSet.keySet()) {
                         if (unitContainer.getUnit() instanceof JInvokeStmt && unitContainer.getUnit().toString().contains("interfaceinvoke")) {
 
                             boolean found = false;
 
-                            for (String constant : usedConstants) {
+                            for (String constant : callerVsUsedConstants.get(e.getMethod())) {
                                 if (((JInvokeStmt) unitContainer.getUnit()).getInvokeExpr().getArg(0).toString().contains(constant)) {
                                     putIntoMap(predictableSourcMap, unitContainer, outSet.get(unitContainer));
                                     found = true;
@@ -156,27 +172,14 @@ public class PBEInterationCountFinder extends BaseRuleChecker {
                         } else {
                             putIntoMap(othersSourceMap, unitContainer, outSet.get(unitContainer));
                         }
-
                     }
                 }
-
-                Map<UnitContainer, String> newOutset = new HashMap<>();
-
-                for (UnitContainer unit : invokeResult.getAnalysisResult()) {
-                    checkHeuristics(unit, newOutset);
-                }
-
-                for (UnitContainer unitContainer : newOutset.keySet()) {
-                    putIntoMap(predictableSourcMap, unitContainer, newOutset.get(unitContainer));
-                }
-
             } else {
                 for (UnitContainer unitContainer : outSet.keySet()) {
                     putIntoMap(predictableSourcMap, unitContainer, outSet.get(unitContainer));
                 }
             }
         }
-
     }
 
     private void checkHeuristics(UnitContainer e, Map<UnitContainer, String> outSet) {

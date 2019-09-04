@@ -10,7 +10,7 @@ import rule.engine.EngineType;
 import soot.G;
 
 import java.io.File;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -86,16 +86,17 @@ public class EntryPointTest_SOURCE {
     public void main_TestableJarSource() {
         if (isLinux) {
             String args =
-                    makeArg(argsIdentifier.FORMAT, EngineType.DIR.getFlag()) +
+                    makeArg(argsIdentifier.FORMAT, EngineType.DIR) +
                             makeArg(argsIdentifier.SOURCE, srcOneGrv) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
                             makeArg(argsIdentifier.OUT, tempFileOutTxt);
 
 
             try {
                 engine.main(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempFileOutTxt), Charset.forName("UTF-8"));
+                List<String> results = Files.readAllLines(Paths.get(tempFileOutTxt), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 10);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -108,17 +109,17 @@ public class EntryPointTest_SOURCE {
     public void main_TestableJarSourceScarf() {
         if (isLinux) {
             String args =
-                    makeArg(argsIdentifier.FORMAT, EngineType.DIR.getFlag()) +
+                    makeArg(argsIdentifier.FORMAT, EngineType.DIR) +
                             makeArg(argsIdentifier.SOURCE, srcOneGrv) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
-                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML.getFlag()) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.OUT, tempFileOutXML) +
                             makeArg(argsIdentifier.PRETTY);
 
             try {
                 engine.main(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempFileOutXML), Charset.forName("UTF-8"));
+                List<String> results = Files.readAllLines(Paths.get(tempFileOutXML), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 1);
 
 
@@ -135,17 +136,17 @@ public class EntryPointTest_SOURCE {
     public void main_TestableJarSourceScarf_Stream() {
         if (isLinux) {
             String args =
-                    makeArg(argsIdentifier.FORMAT, EngineType.DIR.getFlag()) +
+                    makeArg(argsIdentifier.FORMAT, EngineType.DIR) +
                             makeArg(argsIdentifier.SOURCE, srcOneGrv) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
-                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML.getFlag()) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.OUT, tempStreamXML) +
                             makeArg(argsIdentifier.PRETTY) +
                             makeArg(argsIdentifier.STREAM);
             try {
                 engine.main(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempStreamXML), Charset.forName("UTF-8"));
+                List<String> results = Files.readAllLines(Paths.get(tempStreamXML), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 1);
 
 

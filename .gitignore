@@ -3,7 +3,11 @@
 .idea
 /build/
 /target/
+/release/
+/.settings/
+.project
 /*.jar
+/*.tar
 .attach_pid*
 docs
 *.iml

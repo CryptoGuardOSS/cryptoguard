@@ -1,4 +1,3 @@
-
 package frontEnd.MessagingSystem.routing.structure.Default;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -14,8 +13,6 @@ import java.io.Serializable;
 /**
  * Timing
  * <p>
- *
- * 
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -26,16 +23,12 @@ import java.io.Serializable;
 public class Timing implements Serializable {
 
     /**
-     * 
      * (Required)
-     * 
      */
     @JsonProperty("Total")
     private String total;
     /**
-     * 
      * (Required)
-     * 
      */
     @JsonProperty("Scan")
     private String scan;
@@ -48,13 +41,11 @@ public class Timing implements Serializable {
 
     /**
      * No args constructor for use in serialization
-     * 
      */
     public Timing() {
     }
 
     /**
-     * 
      * @param total
      * @param timeScale
      * @param scan
@@ -67,9 +58,7 @@ public class Timing implements Serializable {
     }
 
     /**
-     *
      * (Required)
-     *
      */
     @JsonProperty("Total")
     public String getTotal() {
@@ -77,9 +66,7 @@ public class Timing implements Serializable {
     }
 
     /**
-     * 
      * (Required)
-     * 
      */
     @JsonProperty("Total")
     public void setTotal(String total) {
@@ -92,9 +79,7 @@ public class Timing implements Serializable {
     }
 
     /**
-     * 
      * (Required)
-     * 
      */
     @JsonProperty("Scan")
     public String getScan() {
@@ -102,9 +87,7 @@ public class Timing implements Serializable {
     }
 
     /**
-     * 
      * (Required)
-     * 
      */
     @JsonProperty("Scan")
     public void setScan(String scan) {
@@ -117,9 +100,7 @@ public class Timing implements Serializable {
     }
 
     /**
-     *
      * (Required)
-     *
      */
     @JsonProperty("TimeScale")
     public String getTimeScale() {

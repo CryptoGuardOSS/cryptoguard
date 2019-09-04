@@ -2,13 +2,16 @@ package rule;
 
 import analyzer.backward.Analysis;
 import analyzer.backward.UnitContainer;
+import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import rule.base.BaseRuleChecker;
 import rule.engine.Criteria;
 import soot.ValueBox;
 import soot.jimple.Constant;
+import util.Utils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +23,11 @@ import java.util.Map;
  * @since V01.00.00
  */
 public class AssymCryptoFinder extends BaseRuleChecker {
+
+    //region TODO Check this
+    String rule = "23";
+    private Map<UnitContainer, List<String>> predictableSourcMap = new HashMap<>();
+    //endregion
 
     private static final List<Criteria> CRITERIA_LIST = new ArrayList<>();
 
@@ -104,6 +112,23 @@ public class AssymCryptoFinder extends BaseRuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public void createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, OutputStructure output) {
+    public void createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler {
+        //region New Analysis TODO - Verify this
+        //region PBEInterationCountFinder
+        Utils.createAnalysisOutput(xmlFileStr, sourcePaths, predictableSourcMap, rule, output);
+        //endregion
+        //region ExportGradeKeyIniFinder
+        /*
+        ArrayList<AnalysisIssue> outList = new ArrayList<>();
+
+        for (UnitContainer unit : predictableSourcMap.keySet()) {
+            String sootString = predictableSourcMap.get(unit).size() <= 0 ? ""
+                    : "Found: \"" + predictableSourcMap.get(unit).get(0).replaceAll("\"", "") + "\"";
+
+            output.addIssue(new AnalysisIssue(unit, Integer.parseInt(rule), sootString, sourcePaths));
+        }
+        */
+        //endregion
+        //endregion
     }
 }
