@@ -166,7 +166,9 @@ public class BaseAnalyzerRouting {
         Options.v().set_output_format(Options.output_format_jimple);
         Options.v().set_src_prec(Options.src_prec_java);
 
-        Scene.v().setSootClassPath(Utils.getBaseSOOT() + ":" + Utils.join(":", snippetPath) + ":" + Utils.buildSootClassPath(projectDependency));
+        Scene.v().setSootClassPath(Utils.getBaseSOOT() + ":"
+                + Utils.join(":", snippetPath)
+                + ":" + Utils.buildSootClassPath(projectDependency));
 
         List<String> classNames = Utils.getClassNamesFromSnippet(snippetPath);
 
@@ -235,10 +237,11 @@ public class BaseAnalyzerRouting {
 
         List<String> classNames = Utils.retrieveFullyQualifiedName(sourceJavaClasses);
 
-        if (projectDependencyPath != null)
+        if (projectDependencyPath != null) {
             for (String dependency : Utils.getJarsInDirectory(projectDependencyPath)) {
                 classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
             }
+        }
 
         String tempTest = Utils.retrievePackageFromJavaFiles(sourceJavaClasses);
         String tempPath = tempTest.substring(0, tempTest.lastIndexOf(System.getProperty("file.separator")));
@@ -246,6 +249,10 @@ public class BaseAnalyzerRouting {
         String temp = Utils.join(":", Utils.getBaseSOOT(), tempPath, projectDependencyPath);
         //String temp = Utils.join(":",Utils.getBaseSOOT(),Utils.join(":", sourceJavaClasses),projectDependencyPath);
         Scene.v().setSootClassPath(temp);
+
+        for (String clazz : classNames) {
+            Scene.v().extendSootClassPath(clazz);
+        }
 
         loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
 
@@ -269,7 +276,6 @@ public class BaseAnalyzerRouting {
                                         String criteriaMethod,
                                         int criteriaParam, BaseRuleChecker checker) throws ExceptionHandler {
 
-
         Options.v().set_keep_line_number(true);
         Options.v().set_allow_phantom_refs(true);
 
@@ -287,7 +293,6 @@ public class BaseAnalyzerRouting {
             } catch (Error e) {
                 throw new ExceptionHandler("Error loading class: " + clazz, ExceptionId.LOADING);
             }
-
         }
 
         Scene.v().loadNecessaryClasses();
