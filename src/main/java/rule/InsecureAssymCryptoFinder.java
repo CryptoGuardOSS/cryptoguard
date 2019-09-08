@@ -13,15 +13,15 @@ import java.util.Map;
 /**
  * <p>InsecureAssymCryptoFinder class.</p>
  *
- * @author RigorityJTeam
- * @version $Id: $Id
+ * @author CryptoguardTeam
+ * @version 03.07.01
  * @since V01.00.00
  */
 public class InsecureAssymCryptoFinder implements RuleChecker {
 
     private enum AssymType {
         RSA,
-        EC;
+        EC
     }
 
     private static final Map<AssymType, Integer> SIZE_MAP = new HashMap<>();

@@ -15,14 +15,25 @@ import util.Utils;
  * @since 03.04.08
  *
  * <p>{Description Here}</p>
+ * @version 03.07.01
  */
 public class Default {
 
     //region Attributes
+    /**
+     * Constant <code>Version</code>
+     */
     public static final Integer Version = 3;
     //endregion
 
     //region UnMarshallers
+
+    /**
+     * <p>mapper.</p>
+     *
+     * @param info a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Report} object.
+     */
     public static Report mapper(EnvironmentInformation info) {
         Report report = new Report();
 
@@ -35,6 +46,14 @@ public class Default {
         return report;
     }
 
+    /**
+     * <p>mapper.</p>
+     *
+     * @param info a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
+     * @param computerOS a {@link java.lang.String} object.
+     * @param jvmInfo a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Target} object.
+     */
     public static Target mapper(EnvironmentInformation info, String computerOS, String jvmInfo) {
         Target target = new Target();
 
@@ -55,6 +74,12 @@ public class Default {
         return target;
     }
 
+    /**
+     * <p>mapper.</p>
+     *
+     * @param type a {@link rule.engine.EngineType} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Target.Type} object.
+     */
     public static Target.Type mapper(EngineType type) {
         switch (type) {
             case APK:
@@ -71,6 +96,12 @@ public class Default {
         return Target.Type.JAR;
     }
 
+    /**
+     * <p>mapper.</p>
+     *
+     * @param isGradle a {@link java.lang.Boolean} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Target.ProjectType} object.
+     */
     public static Target.ProjectType mapper(Boolean isGradle) {
         if (isGradle)
             return Target.ProjectType.GRADLE;
@@ -79,6 +110,13 @@ public class Default {
     }
 
 
+    /**
+     * <p>mapper.</p>
+     *
+     * @param oldIssue a {@link frontEnd.MessagingSystem.AnalysisIssue} object.
+     * @param id a {@link java.lang.Integer} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Issue} object.
+     */
     public static Issue mapper(AnalysisIssue oldIssue, Integer id) {
         Issue issue = new Issue();
 
@@ -104,6 +142,12 @@ public class Default {
         return issue;
     }
 
+    /**
+     * <p>mapper.</p>
+     *
+     * @param oldLoc a {@link frontEnd.MessagingSystem.AnalysisLocation} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Location} object.
+     */
     public static Location mapper(AnalysisLocation oldLoc) {
         Location loc = new Location();
 
@@ -115,6 +159,13 @@ public class Default {
         return loc;
     }
 
+    /**
+     * <p>mapper.</p>
+     *
+     * @param info a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
+     * @param sliceAverageRounded a double.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Heuristics} object.
+     */
     public static Heuristics mapper(EnvironmentInformation info, double sliceAverageRounded) {
 
         return new Heuristics(

@@ -7,8 +7,8 @@ import java.util.List;
 /**
  * Created by RigorityJTeam on 10/14/16.
  *
- * @author RigorityJTeam
- * @version $Id: $Id
+ * @author CryptoguardTeam
+ * @version 03.07.01
  * @since V01.00.00
  */
 public class SlicingResult {

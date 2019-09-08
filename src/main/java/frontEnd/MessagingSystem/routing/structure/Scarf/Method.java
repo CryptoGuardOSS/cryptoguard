@@ -17,7 +17,7 @@ import java.io.Serializable;
  * <p>
  *
  * @author franceme
- * @version $Id: $Id
+ * @version 03.07.01
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -181,17 +181,13 @@ public class Method implements Serializable {
         return new ToStringBuilder(this).append("id", id).append("primary", primary).append("self", self).toString();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(id).append(primary).append(self).toHashCode();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public boolean equals(Object other) {
         if (other == this) {

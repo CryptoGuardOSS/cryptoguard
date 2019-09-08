@@ -14,11 +14,21 @@ import java.util.List;
 
 /**
  * Created by RigorityJTeam on 7/1/17.
+ *
+ * @author franceme
+ * @version 03.07.01
  */
 public class OrthogonalInfluenceInstructions {
 
     private OrthogonalSlicingResult orthogonalSlicingResult;
 
+    /**
+     * <p>Constructor for OrthogonalInfluenceInstructions.</p>
+     *
+     * @param method          a {@link soot.SootMethod} object.
+     * @param slicingCriteria a {@link java.lang.String} object.
+     * @param depth           a int.
+     */
     public OrthogonalInfluenceInstructions(SootMethod method, String slicingCriteria, int depth) {
 
         Body b = method.retrieveActiveBody();
@@ -39,6 +49,11 @@ public class OrthogonalInfluenceInstructions {
         }
     }
 
+    /**
+     * <p>Getter for the field <code>orthogonalSlicingResult</code>.</p>
+     *
+     * @return a {@link slicer.backward.orthogonal.OrthogonalSlicingResult} object.
+     */
     public OrthogonalSlicingResult getOrthogonalSlicingResult() {
         return this.orthogonalSlicingResult;
     }

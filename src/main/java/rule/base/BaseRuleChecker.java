@@ -15,8 +15,8 @@ import java.util.*;
 /**
  * This file checks on several of the main factors within the outputed Jimple format.
  *
- * @author RigorityJTeam
- * @version $Id: $Id
+ * @author CryptoguardTeam
+ * @version 03.07.01
  * @since V01.00.00
  */
 public abstract class BaseRuleChecker implements RuleChecker {

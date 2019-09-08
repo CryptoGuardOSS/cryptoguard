@@ -9,8 +9,8 @@ import java.util.List;
 /**
  * https://www.javamex.com/tutorials/cryptography/pbe_salt.shtml
  *
- * @author RigorityJTeam
- * @version $Id: $Id
+ * @author CryptoguardTeam
+ * @version 03.07.01
  * @since V01.00.00
  */
 public class PBESaltFinder extends PredictableSourceRuleChecker {
@@ -53,9 +53,7 @@ public class PBESaltFinder extends PredictableSourceRuleChecker {
         return CRITERIA_LIST;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public String getRuleId() {
         return "9";

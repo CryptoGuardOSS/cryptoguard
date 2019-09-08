@@ -7,9 +7,9 @@ import lombok.extern.log4j.Log4j2;
 /**
  * <p>JavaFileEntry class.</p>
  *
- * @author RigorityJTeam
+ * @author CryptoguardTeam
  * Created on 2019-01-17.
- * @version $Id: $Id
+ * @version 03.07.01
  * @since 01.01.11
  *
  * <p>The method in the Engine handling Java File(s) Scanning.</p>

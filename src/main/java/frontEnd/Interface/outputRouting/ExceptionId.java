@@ -3,9 +3,9 @@ package frontEnd.Interface.outputRouting;
 /**
  * <p>ExceptionId class.</p>
  *
- * @author RigorityJTeam
+ * @author CryptoguardTeam
  * Created on 2/21/19.
- * @version $Id: $Id
+ * @version 03.07.01
  * @since 03.02.11
  *
  * <p>The enumeration of the error codes.</p>

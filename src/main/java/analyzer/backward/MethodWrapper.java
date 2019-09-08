@@ -9,8 +9,8 @@ import java.util.List;
 /**
  * Created by RigorityJTeam on 12/27/16.
  *
- * @author RigorityJTeam
- * @version $Id: $Id
+ * @author CryptoguardTeam
+ * @version 03.07.01
  * @since V01.00.00
  */
 public class MethodWrapper {
@@ -98,17 +98,13 @@ public class MethodWrapper {
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         return method.toString().hashCode();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         return method.toString();

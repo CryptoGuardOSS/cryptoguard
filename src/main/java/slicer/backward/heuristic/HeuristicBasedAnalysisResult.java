@@ -11,7 +11,7 @@ import java.util.Map;
  * <p>HeuristicBasedAnalysisResult class.</p>
  *
  * @author franceme
- * @version $Id: $Id
+ * @version 03.07.01
  */
 public class HeuristicBasedAnalysisResult {
 

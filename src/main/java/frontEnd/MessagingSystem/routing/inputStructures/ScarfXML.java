@@ -12,9 +12,9 @@ import java.util.Properties;
 /**
  * <p>ScarfXML class.</p>
  *
- * @author RigorityJTeam
+ * @author CryptoguardTeam
  * Created on 2018-12-14.
- * @version $Id: $Id
+ * @version 03.07.01
  * @since 01.01.07
  *
  * <p>The Scarf Input check implementation.</p>

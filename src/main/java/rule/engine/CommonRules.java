@@ -8,9 +8,9 @@ import java.util.List;
 /**
  * <p>CommonRules class.</p>
  *
- * @author RigorityJTeam
+ * @author CryptoguardTeam
  * Created on 2018-12-14.
- * @version $Id: $Id
+ * @version 03.07.01
  * @since 01.01.06
  *
  * <p>A common stash of rules used by all three methods</p>

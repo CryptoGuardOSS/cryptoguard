@@ -18,6 +18,12 @@ import util.Utils;
 
 import java.util.*;
 
+/**
+ * <p>OrthogonalInstructionSlicer class.</p>
+ *
+ * @author franceme
+ * @version 03.07.01
+ */
 public class OrthogonalInstructionSlicer extends BackwardFlowAnalysis {
 
     private FlowSet emptySet;
@@ -27,6 +33,14 @@ public class OrthogonalInstructionSlicer extends BackwardFlowAnalysis {
     private Map<String, List<PropertyAnalysisResult>> propertyUseMap;
     private int depth;
 
+    /**
+     * <p>Constructor for OrthogonalInstructionSlicer.</p>
+     *
+     * @param g               a {@link soot.toolkits.graph.DirectedGraph} object.
+     * @param slicingCriteria a {@link java.lang.String} object.
+     * @param method          a {@link java.lang.String} object.
+     * @param depth           a int.
+     */
     public OrthogonalInstructionSlicer(DirectedGraph g, String slicingCriteria, String method, int depth) {
         super(g);
         this.emptySet = new ValueArraySparseSet();
@@ -38,6 +52,7 @@ public class OrthogonalInstructionSlicer extends BackwardFlowAnalysis {
         doAnalysis();
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void flowThrough(Object in, Object node, Object out) {
         FlowSet inSet = (FlowSet) in,
@@ -219,16 +234,19 @@ public class OrthogonalInstructionSlicer extends BackwardFlowAnalysis {
         return isInvoke;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected Object newInitialFlow() {
         return emptySet.clone();
     }
 
+    /** {@inheritDoc} */
     @Override
     protected Object entryInitialFlow() {
         return emptySet.clone();
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void merge(Object in1, Object in2, Object out) {
         FlowSet inSet1 = (FlowSet) in1,
@@ -238,6 +256,7 @@ public class OrthogonalInstructionSlicer extends BackwardFlowAnalysis {
         inSet1.union(inSet2, outSet);
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void copy(Object source, Object dest) {
         FlowSet srcSet = (FlowSet) source,
@@ -245,6 +264,11 @@ public class OrthogonalInstructionSlicer extends BackwardFlowAnalysis {
         srcSet.copy(destSet);
     }
 
+    /**
+     * <p>Getter for the field <code>propertyUseMap</code>.</p>
+     *
+     * @return a {@link java.util.Map} object.
+     */
     public Map<String, List<PropertyAnalysisResult>> getPropertyUseMap() {
         return propertyUseMap;
     }

@@ -6,9 +6,9 @@ import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 /**
  * <p>Structure interface.</p>
  *
- * @author RigorityJTeam
+ * @author CryptoguardTeam
  * Created on 12/13/18.
- * @version $Id: $Id
+ * @version 03.07.01
  * @since 01.01.02
  *
  * <p>The interface containing the commandline check for each messaging useage</p>

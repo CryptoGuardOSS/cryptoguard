@@ -12,9 +12,9 @@ import java.util.List;
 /**
  * <p>Legacy class.</p>
  *
- * @author RigorityJTeam
+ * @author CryptoguardTeam
  * Created on 3/2/19.
- * @version $Id: $Id
+ * @version 03.07.01
  * @since 03.03.00
  *
  * <p>The common utilities class for Legacy marshalling.</p>
@@ -133,6 +133,12 @@ public class Legacy {
         return out.toString();
     }
 
+    /**
+     * <p>marshalling.</p>
+     *
+     * @param info a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String marshalling(EnvironmentInformation info) {
 
         StringBuilder out = new StringBuilder();

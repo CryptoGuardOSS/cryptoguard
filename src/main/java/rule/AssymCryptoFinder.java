@@ -18,14 +18,14 @@ import java.util.Map;
 /**
  * <p>AssymCryptoFinder class.</p>
  *
- * @author RigorityJTeam
- * @version $Id: $Id
+ * @author CryptoguardTeam
+ * @version 03.07.01
  * @since V01.00.00
  */
 public class AssymCryptoFinder extends BaseRuleChecker {
 
     //region TODO Check this
-    String rule = "23";
+    String rule = "00";
     private Map<UnitContainer, List<String>> predictableSourcMap = new HashMap<>();
     //endregion
 
@@ -91,9 +91,7 @@ public class AssymCryptoFinder extends BaseRuleChecker {
         return occurrences;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public List<Criteria> getCriteriaList() {
         return CRITERIA_LIST;
@@ -108,9 +106,7 @@ public class AssymCryptoFinder extends BaseRuleChecker {
         this.crypto = crypto;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler {
         //region New Analysis TODO - Verify this

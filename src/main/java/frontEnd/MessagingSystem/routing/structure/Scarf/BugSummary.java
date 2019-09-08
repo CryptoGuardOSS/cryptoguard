@@ -12,9 +12,9 @@ import java.util.List;
 /**
  * <p>BugSummary class.</p>
  *
- * @author RigorityJTeam
+ * @author CryptoguardTeam
  * Created on 4/5/19.
- * @version $Id: $Id
+ * @version 03.07.01
  * @since 03.04.08
  * <p>
  * This is the only custom created class as the BugSummary container was self contained within the Analyzer Report
@@ -75,17 +75,13 @@ public class BugSummary {
         return new ToStringBuilder(this).append("summaryContainer", summaryContainer).toString();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(summaryContainer).toHashCode();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public boolean equals(Object other) {
         if (other == this) {

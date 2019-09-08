@@ -101,7 +101,7 @@ public class EntryPointTest_APK {
                             makeArg(argsIdentifier.OUT, tempFileOutApk);
 
             try {
-                engine.main(args.split(" "));
+                EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempFileOutApk), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 10);
@@ -128,7 +128,7 @@ public class EntryPointTest_APK {
                             makeArg(argsIdentifier.STREAM);
 
             try {
-                engine.main(args.split(" "));
+                EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempFileOutApk_Steam), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 10);
@@ -155,7 +155,7 @@ public class EntryPointTest_APK {
                             makeArg(argsIdentifier.PRETTY);
 
             try {
-                engine.main(args.split(" "));
+                EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempFileOutApk_Scarf), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 10);
@@ -185,7 +185,7 @@ public class EntryPointTest_APK {
                             makeArg(argsIdentifier.STREAM);
 
             try {
-                engine.main(args.split(" "));
+                EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempFileOutApk_Scarf_Steam), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 10);
@@ -214,7 +214,7 @@ public class EntryPointTest_APK {
                             makeArg(argsIdentifier.PRETTY);
 
             try {
-                engine.main(args.split(" "));
+                EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempFileOutApk_Default), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 10);
@@ -232,6 +232,7 @@ public class EntryPointTest_APK {
     /**
      * <p>main_TestableApk_Scarf.</p>
      */
+    //TODO - Implment this test correctly
     @Test
     public void main_TestableApk_Default_Stream() {
         if (isLinux) {
@@ -244,12 +245,12 @@ public class EntryPointTest_APK {
                             makeArg(argsIdentifier.STREAM);
 
             try {
-                engine.main(args.split(" "));
+                EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempFileOutApk_Scarf_Steam), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 10);
 
-                Report report = Report.deserialize(new File(tempFileOutApk_Scarf_Steam));
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(tempFileOutApk_Scarf_Steam));
 
             } catch (Exception e) {
                 e.printStackTrace();

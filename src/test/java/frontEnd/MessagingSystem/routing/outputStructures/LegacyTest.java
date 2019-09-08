@@ -11,7 +11,7 @@ import java.util.ArrayList;
 /**
  * <p>MessageRepresentationTest class.</p>
  *
- * @author RigorityJTeam
+ * @author CryptoguardTeam
  * @version $Id: $Id
  * @since V01.00.01
  */

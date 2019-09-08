@@ -3,9 +3,9 @@ package CWE_Reader;
 /**
  * <p>CWE class.</p>
  *
- * @author RigorityJTeam
+ * @author CryptoguardTeam
  * Created on 2018-12-05.
- * @version $Id: $Id
+ * @version 03.07.01
  * @since 01.00.07
  *
  * <p>The Class containing the CWE Info</p>

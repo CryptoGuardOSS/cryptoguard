@@ -13,6 +13,9 @@ import java.io.Serializable;
 /**
  * Timing
  * <p>
+ *
+ * @author franceme
+ * @version 03.07.01
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -46,9 +49,11 @@ public class Timing implements Serializable {
     }
 
     /**
-     * @param total
-     * @param timeScale
-     * @param scan
+     * <p>Constructor for Timing.</p>
+     *
+     * @param total a {@link java.lang.String} object.
+     * @param timeScale a {@link java.lang.String} object.
+     * @param scan a {@link java.lang.String} object.
      */
     public Timing(String total, String scan, String timeScale) {
         super();
@@ -59,6 +64,8 @@ public class Timing implements Serializable {
 
     /**
      * (Required)
+     *
+     * @return a {@link java.lang.String} object.
      */
     @JsonProperty("Total")
     public String getTotal() {
@@ -67,12 +74,20 @@ public class Timing implements Serializable {
 
     /**
      * (Required)
+     *
+     * @param total a {@link java.lang.String} object.
      */
     @JsonProperty("Total")
     public void setTotal(String total) {
         this.total = total;
     }
 
+    /**
+     * <p>withTotal.</p>
+     *
+     * @param total a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Timing} object.
+     */
     public Timing withTotal(String total) {
         this.total = total;
         return this;
@@ -80,6 +95,8 @@ public class Timing implements Serializable {
 
     /**
      * (Required)
+     *
+     * @return a {@link java.lang.String} object.
      */
     @JsonProperty("Scan")
     public String getScan() {
@@ -88,12 +105,20 @@ public class Timing implements Serializable {
 
     /**
      * (Required)
+     *
+     * @param scan a {@link java.lang.String} object.
      */
     @JsonProperty("Scan")
     public void setScan(String scan) {
         this.scan = scan;
     }
 
+    /**
+     * <p>withScan.</p>
+     *
+     * @param scan a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Timing} object.
+     */
     public Timing withScan(String scan) {
         this.scan = scan;
         return this;
@@ -101,6 +126,8 @@ public class Timing implements Serializable {
 
     /**
      * (Required)
+     *
+     * @return a {@link java.lang.String} object.
      */
     @JsonProperty("TimeScale")
     public String getTimeScale() {
@@ -109,27 +136,40 @@ public class Timing implements Serializable {
 
     /**
      * (Required)
+     *
+     * @param timeScale a {@link java.lang.String} object.
      */
     @JsonProperty("TimeScale")
     public void setTimeScale(String timeScale) {
         this.timeScale = timeScale;
     }
 
+    /**
+     * <p>withTimeScale.</p>
+     *
+     * @param timeScale a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Timing} object.
+     */
     public Timing withTimeScale(String timeScale) {
         this.timeScale = timeScale;
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("total", total).append("scan", scan).append("timeScale", timeScale).toString();
     }
 
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(total).append(timeScale).append(scan).toHashCode();
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean equals(Object other) {
         if (other == this) {

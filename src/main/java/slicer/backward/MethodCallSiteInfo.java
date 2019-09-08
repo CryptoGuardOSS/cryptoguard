@@ -5,8 +5,8 @@ import analyzer.backward.MethodWrapper;
 /**
  * Created by RigorityJTeam on 7/3/17.
  *
- * @author RigorityJTeam
- * @version $Id: $Id
+ * @author CryptoguardTeam
+ * @version 03.07.01
  * @since V01.00.00
  */
 public class MethodCallSiteInfo {
@@ -118,9 +118,7 @@ public class MethodCallSiteInfo {
         return callee.equals(that.callee) && caller.equals(that.caller);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         int result = callee.hashCode();
@@ -130,9 +128,7 @@ public class MethodCallSiteInfo {
         return result;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         return "MethodCallSiteInfo{" +

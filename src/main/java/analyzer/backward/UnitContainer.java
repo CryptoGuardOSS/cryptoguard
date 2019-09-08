@@ -5,8 +5,8 @@ import soot.Unit;
 /**
  * <p>UnitContainer class.</p>
  *
- * @author RigorityJTeam
- * @version $Id: $Id
+ * @author CryptoguardTeam
+ * @version 03.07.01
  * @since V01.00.00
  */
 public class UnitContainer {
@@ -63,9 +63,7 @@ public class UnitContainer {
         return unit.toString().equals(that.unit.toString());
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         return ("UnitContainer{" +
@@ -74,9 +72,7 @@ public class UnitContainer {
                 "}").hashCode();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         return "UnitContainer{" +

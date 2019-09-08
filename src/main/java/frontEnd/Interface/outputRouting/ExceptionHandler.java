@@ -5,9 +5,9 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * <p>ExceptionHandler class.</p>
  *
- * @author RigorityJTeam
+ * @author CryptoguardTeam
  * Created on 2019-01-25.
- * @version $Id: $Id
+ * @version 03.07.01
  * @since 02.00.03
  *
  * <p>The Main Exception Handling for the whole project</p>
@@ -52,9 +52,7 @@ public class ExceptionHandler extends Exception {
         return StringUtils.trimToNull(resp.toString()).concat("\n\n\n");
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void printStackTrace() {
         System.err.println(this.toString());

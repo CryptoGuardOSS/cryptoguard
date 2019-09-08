@@ -69,6 +69,12 @@ task updateVersion {
             token: '@VERSION@',
             value: props.getProperty("versionNumber").replace("V", "")
     )
+
+    ant.replace(
+            dir: 'src/main/java/',
+            token: '@version $Id: $Id',
+            value: '@version ' + props.getProperty("versionNumber").replace("V", "")
+    )
 }
 
 task updateCopyRightYear {
@@ -135,8 +141,7 @@ task release {
         mkdir './release'
     }
     //Waiting until all tests are cleared
-    //def tasks = [clean, test, build, jibBuildTar]
-    def tasks = [jibBuildTar]
+    def tasks = [clean, test, build, jibBuildTar]
     for (int itr = 0; itr < tasks.size() - 1; itr++) {
         tasks[itr + 1].mustRunAfter(tasks[itr])
     }

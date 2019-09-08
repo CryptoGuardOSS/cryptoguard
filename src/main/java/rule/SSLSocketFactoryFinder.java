@@ -24,8 +24,8 @@ import java.util.Map;
 /**
  * <p>SSLSocketFactoryFinder class.</p>
  *
- * @author RigorityJTeam
- * @version $Id: $Id
+ * @author CryptoguardTeam
+ * @version 03.07.01
  * @since V01.00.00
  */
 public class SSLSocketFactoryFinder implements RuleChecker {
@@ -93,15 +93,6 @@ public class SSLSocketFactoryFinder implements RuleChecker {
                     }
 
                     if (getSocketAppeared && isVulnerable) {
-                        //region LEGACY
-                        /*
-                            System.out.println("=======================================");
-                            String output = "***Violated Rule 12: Does not manually verify the hostname";
-                            output += "\n***Cause: should have manually verify hostname in " + method;
-                            System.out.println(output);
-                            System.out.println("=======================================");
-                        */
-                        //endregion
                         AnalysisIssue issue = new AnalysisIssue(method, 12,
                                 "Didn't manually verify hostname in " +
                                         Utils.retrieveMethodFromSootString(method), sourcePaths);

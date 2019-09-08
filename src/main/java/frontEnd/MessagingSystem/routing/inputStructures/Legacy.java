@@ -5,9 +5,9 @@ import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 /**
  * <p>Legacy class.</p>
  *
- * @author RigorityJTeam
+ * @author CryptoguardTeam
  * Created on 12/13/18.
- * @version $Id: $Id
+ * @version 03.07.01
  * @since 01.01.02
  *
  * <p>The input check for the Legacy Output</p>

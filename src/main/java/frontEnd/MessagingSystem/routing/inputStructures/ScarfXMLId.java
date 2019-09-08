@@ -4,7 +4,7 @@ package frontEnd.MessagingSystem.routing.inputStructures;
  * <p>ScarfXMLId class.</p>
  *
  * @author franceme
- * @version $Id: $Id
+ * @version 03.07.01
  */
 public enum ScarfXMLId {
 

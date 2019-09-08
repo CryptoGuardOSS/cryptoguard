@@ -12,9 +12,9 @@ import java.io.StringWriter;
 /**
  * <p>ExceptionId class.</p>
  *
- * @author RigorityJTeam
+ * @author CryptoguardTeam
  * Created on 04/25/19.
- * @version $Id: $Id
+ * @version 03.07.01
  * @since 03.04.04
  *
  * <p>The enumeration of the error codes.</p>

@@ -19,6 +19,7 @@ import static frontEnd.MessagingSystem.routing.outputStructures.common.Default.m
  * @since 03.05.01
  *
  * <p>{Description Here}</p>
+ * @version 03.07.01
  */
 @Log4j2
 public class Default extends Structure {

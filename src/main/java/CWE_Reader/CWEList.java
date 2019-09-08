@@ -6,9 +6,9 @@ import java.util.Map;
 /**
  * <p>CWEList class.</p>
  *
- * @author RigorityJTeam
+ * @author CryptoguardTeam
  * Created on 2018-12-05.
- * @version $Id: $Id
+ * @version 03.07.01
  * @since 01.00.07
  *
  * <p>The Lazy CWE Loader that retrieves CWES for Java</p>

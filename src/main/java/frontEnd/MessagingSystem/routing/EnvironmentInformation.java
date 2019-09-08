@@ -24,7 +24,7 @@ import java.util.Properties;
  * <p>STATUS: IC</p>
  *
  * @author franceme
- * @version $Id: $Id
+ * @version 03.07.01
  * @since V01.00.04
  */
 public class EnvironmentInformation {
@@ -168,10 +168,21 @@ public class EnvironmentInformation {
     //endregion
 
     //region Getters and Setters
+
+    /**
+     * <p>Getter for the field <code>rawCommand</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getRawCommand() {
         return rawCommand;
     }
 
+    /**
+     * <p>Setter for the field <code>rawCommand</code>.</p>
+     *
+     * @param rawCommand a {@link java.lang.String} object.
+     */
     public void setRawCommand(String rawCommand) {
         this.rawCommand = rawCommand;
     }
@@ -185,6 +196,11 @@ public class EnvironmentInformation {
         return AssessmentStartTime;
     }
 
+    /**
+     * <p>addToDepth_Count.</p>
+     *
+     * @param item a {@link java.lang.String} object.
+     */
     public void addToDepth_Count(String item) {
         this.DEPTH_COUNT.add(item);
     }
@@ -260,6 +276,11 @@ public class EnvironmentInformation {
     }
 
 
+    /**
+     * <p>getSLICE_AVERAGE_3SigFig.</p>
+     *
+     * @return a double.
+     */
     public double getSLICE_AVERAGE_3SigFig() {
         return Double.parseDouble(String.format("%.3f", this.SLICE_AVERAGE));
     }
@@ -851,6 +872,10 @@ public class EnvironmentInformation {
 
     //endregion
     //region Helpful Methods
+
+    /**
+     * <p>setHuristicsInfo.</p>
+     */
     public void setHuristicsInfo() {
         this.NUM_ORTHOGONAL = Utils.NUM_ORTHOGONAL;
         this.NUM_CONSTS_TO_CHECK = Utils.NUM_CONSTS_TO_CHECK;

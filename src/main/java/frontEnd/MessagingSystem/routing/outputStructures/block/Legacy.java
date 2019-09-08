@@ -13,7 +13,7 @@ import java.util.*;
  * <p>STATUS: IC</p>
  *
  * @author franceme
- * @version $Id: $Id
+ * @version 03.07.01
  * @since V01.00.01
  */
 @Log4j2

@@ -20,6 +20,7 @@ import org.codehaus.groovy.ast.stmt.Statement;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -27,8 +28,8 @@ import java.util.*;
 /**
  * <p>GradleBuildFileParser class.</p>
  *
- * @author RigorityJTeam
- * @version $Id: $Id
+ * @author CryptoguardTeam
+ * @version 03.07.01
  * @since V01.00.00
  */
 @Log4j2
@@ -44,6 +45,11 @@ public class GradleBuildFileParser implements BuildFileParser {
     String projectVersion;
 
 
+    /**
+     * <p>isGradle.</p>
+     *
+     * @return a {@link java.lang.Boolean} object.
+     */
     public Boolean isGradle() {
         return true;
     }
@@ -57,7 +63,7 @@ public class GradleBuildFileParser implements BuildFileParser {
     public GradleBuildFileParser(String fileName) throws ExceptionHandler {
         try {
 
-            final String content = new String(Files.readAllBytes(Paths.get(fileName)), "UTF-8");
+            final String content = new String(Files.readAllBytes(Paths.get(fileName)), StandardCharsets.UTF_8);
 
             List<ASTNode> astNodes = new AstBuilder().buildFromString(content);
 
@@ -122,7 +128,7 @@ public class GradleBuildFileParser implements BuildFileParser {
 
                 buildFile = moduleVsPath.get(module) + "/build.gradle";
 
-                String content = new String(Files.readAllBytes(Paths.get(buildFile)), "UTF-8");
+                String content = new String(Files.readAllBytes(Paths.get(buildFile)), StandardCharsets.UTF_8);
 
                 List<ASTNode> astNodes = new AstBuilder().buildFromString(content);
 

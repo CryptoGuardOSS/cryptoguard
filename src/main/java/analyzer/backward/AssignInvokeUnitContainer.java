@@ -9,7 +9,7 @@ import java.util.Set;
  * <p>AssignInvokeUnitContainer class.</p>
  *
  * @author franceme
- * @version $Id: $Id
+ * @version 03.07.01
  */
 public class AssignInvokeUnitContainer extends UnitContainer {
     private List<Integer> args = new ArrayList<>();

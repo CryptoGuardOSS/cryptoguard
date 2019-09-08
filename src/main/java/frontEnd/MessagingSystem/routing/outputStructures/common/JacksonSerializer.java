@@ -13,9 +13,9 @@ import lombok.extern.log4j.Log4j2;
 /**
  * <p>JacksonSerializer class.</p>
  *
- * @author RigorityJTeam
+ * @author CryptoguardTeam
  * Created on 4/6/19.
- * @version $Id: $Id
+ * @version 03.07.01
  * @since 03.04.08
  *
  * <p>{Description Here}</p>
@@ -49,7 +49,7 @@ public class JacksonSerializer {
     }
 
     /**
-     * @author RigorityJTeam
+     * @author CryptoguardTeam
      * Created on 4/6/19.
      * @since 03.04.08
      *

@@ -11,9 +11,9 @@ import java.util.ArrayList;
 /**
  * <p>EntryPoint class.</p>
  *
- * @author RigorityJTeam
+ * @author CryptoguardTeam
  * Created on 12/5/18.
- * @version $Id: $Id
+ * @version 03.07.01
  * @since 01.00.06
  *
  * <p>The main entry point of the program when this program

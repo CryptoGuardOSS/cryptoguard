@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * <p>STATUS: IC</p>
  *
  * @author franceme
- * @version $Id: $Id
+ * @version 03.07.01
  * @since V01.00.01
  */
 public enum RuleList {

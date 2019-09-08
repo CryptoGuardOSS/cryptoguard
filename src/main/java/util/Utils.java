@@ -25,7 +25,7 @@ import soot.util.Chain;
 import util.manifest.ProcessManifest;
 
 import java.io.*;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -40,8 +40,8 @@ import static soot.SootClass.BODIES;
 /**
  * <p>Utils class.</p>
  *
- * @author RigorityJTeam
- * @version $Id: $Id
+ * @author CryptoguardTeam
+ * @version 03.07.01
  * @since 01.00.00
  */
 public class Utils {
@@ -56,14 +56,28 @@ public class Utils {
         INVOKE_DONT_VISIT.add("java.lang.String: void <init>");
     }
 
+    /**
+     * Constant <code>NUM_ORTHOGONAL=0</code>
+     */
     public static int NUM_ORTHOGONAL = 0;
+    /** Constant <code>NUM_CONSTS_TO_CHECK=0</code> */
     public static int NUM_CONSTS_TO_CHECK = 0;
+    /** Constant <code>NUM_SLICES=0</code> */
     public static int NUM_SLICES = 0;
+    /** Constant <code>NUM_HEURISTIC=0</code> */
     public static int NUM_HEURISTIC = 0;
+    /** Constant <code>SLICE_LENGTH</code> */
     public static final ArrayList<Integer> SLICE_LENGTH = new ArrayList<>();
+    /** Constant <code>DEPTH_COUNT</code> */
     public static int[] DEPTH_COUNT;
+    /** Constant <code>DEPTH=0</code> */
     public static int DEPTH = 0;
 
+    /**
+     * <p>initDepth.</p>
+     *
+     * @param depth a int.
+     */
     public static void initDepth(int depth) {
         DEPTH = depth;
         DEPTH_COUNT = new int[depth];
@@ -82,9 +96,9 @@ public class Utils {
      */
     public final static String localPath = System.getProperty("user.dir");
     /**
-     * Constant <code>projectVersion="V03.07.00"</code>
+     * Constant <code>projectVersion="V03.07.01"</code>
      */
-    public final static String projectVersion = "V03.07.00";
+    public final static String projectVersion = "V03.07.01";
     /**
      * Constant <code>projectName="CryptoGuard"</code>
      */
@@ -614,7 +628,7 @@ public class Utils {
             File in = new File(file);
 
             if (file.toLowerCase().endsWith(".java")) {
-                for (String line : Files.readAllLines(in.toPath(), Charset.forName("UTF-8"))) {
+                for (String line : Files.readAllLines(in.toPath(), StandardCharsets.UTF_8)) {
                     Matcher matches = packagePattern.matcher(line);
                     if (matches.find())
                         return Utils.fileSep + StringUtils.trimToNull(matches.group(1)) + Utils.fileSep + in.getName();
@@ -899,6 +913,11 @@ public class Utils {
         return System.getProperty("os.name") + "_" + System.getProperty("os.version");
     }
 
+    /**
+     * <p>getJVMInfo.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public static String getJVMInfo() {
         return System.getProperty("java.runtime.version");
     }
@@ -918,6 +937,13 @@ public class Utils {
         return "UNKNOWN";
     }
 
+    /**
+     * <p>verifyDir.</p>
+     *
+     * @param dir a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
     public static String verifyDir(String dir) throws ExceptionHandler {
         File dirChecking = new File(dir);
         if (!dirChecking.exists() || !dirChecking.isDirectory())
@@ -945,6 +971,14 @@ public class Utils {
         return dirs;
     }
 
+    /**
+     * <p>verifyFile.</p>
+     *
+     * @param file a {@link java.lang.String} object.
+     * @param overWrite a {@link java.lang.Boolean} object.
+     * @return a {@link java.lang.String} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
     public static String verifyFile(String file, Boolean overWrite) throws ExceptionHandler {
         File tempFile = new File(file);
 
@@ -958,6 +992,15 @@ public class Utils {
         }
     }
 
+    /**
+     * <p>verifyFileExt.</p>
+     *
+     * @param file a {@link java.lang.String} object.
+     * @param fileExt a {@link java.lang.String} object.
+     * @param overWrite a {@link java.lang.Boolean} object.
+     * @return a {@link java.lang.String} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
     public static String verifyFileExt(String file, String fileExt, Boolean overWrite) throws ExceptionHandler {
         if ("dir".equals(fileExt))
             return Utils.verifyDir(file);
@@ -969,6 +1012,15 @@ public class Utils {
         }
     }
 
+    /**
+     * <p>verifyFileExts.</p>
+     *
+     * @param file a {@link java.lang.String} object.
+     * @param fileExt an array of {@link java.lang.String} objects.
+     * @param overWrite a {@link java.lang.Boolean} object.
+     * @return a {@link java.lang.String} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
     public static String verifyFileExts(String file, String[] fileExt, Boolean overWrite) throws ExceptionHandler {
 
         Boolean matches = false;
@@ -990,6 +1042,13 @@ public class Utils {
             }
     }
 
+    /**
+     * <p>verifyXArgs.</p>
+     *
+     * @param xargFiles an array of {@link java.lang.String} objects.
+     * @return a {@link java.util.ArrayList} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
     public static ArrayList<String> verifyXArgs(String[] xargFiles) throws ExceptionHandler {
         ArrayList<String> output = new ArrayList<String>();
         Scanner input = new Scanner(System.in);
@@ -1000,6 +1059,13 @@ public class Utils {
         return output;
     }
 
+    /**
+     * <p>verifyClassPaths.</p>
+     *
+     * @param classPaths a {@link java.lang.String} object.
+     * @return a {@link java.util.ArrayList} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
     public static ArrayList<String> verifyClassPaths(String classPaths) throws ExceptionHandler {
         ArrayList<String> output = new ArrayList<String>();
         for (String path : classPaths.split(":"))
@@ -1086,6 +1152,8 @@ public class Utils {
      *
      * @param currInstruction a {@link soot.Unit} object.
      * @return a {@link analyzer.backward.UnitContainer} object.
+     * @param caller a {@link java.lang.String} object.
+     * @param depth a int.
      */
     public static UnitContainer createAssignInvokeUnitContainer(Unit currInstruction, String caller, int depth) {
 
@@ -1195,7 +1263,7 @@ public class Utils {
      * @param analysis a {@link analyzer.backward.Analysis} object.
      * @param index    a int.
      * @param outSet   a {@link java.util.List} object.
-     * @return a {@link UnitContainer} object.
+     * @return a {@link analyzer.backward.UnitContainer} object.
      */
     public static UnitContainer isArgumentOfInvoke(Analysis analysis, int index,
                                                    List<UnitContainer> outSet) {
@@ -1424,21 +1492,11 @@ public class Utils {
 
     }
 
-    //TODO - setup
-    /*
-    private static void printOutInfo() {
-        System.out.println("Total Heuristics: " + Utils.NUM_HEURISTIC);
-        System.out.println("Total Orthogonal: " + Utils.NUM_ORTHOGONAL);
-        System.out.println("Total Constants: " + Utils.NUM_CONSTS_TO_CHECK);
-        System.out.println("Total Slices: " + Utils.NUM_SLICES);
-        System.out.println("Average Length: " + calculateAverage(Utils.SLICE_LENGTH));
-
-        for (int i = 0; i < Utils.DEPTH_COUNT.length; i++) {
-            System.out.println(String.format("Depth: %d, Count %d", i + 1, Utils.DEPTH_COUNT[i]));
-        }
-    }
-    */
-
+    /**
+     * <p>calculateAverage.</p>
+     *
+     * @return a double.
+     */
     public static double calculateAverage() {
         Integer sum = 0;
         if (!Utils.SLICE_LENGTH.isEmpty()) {
@@ -1450,6 +1508,11 @@ public class Utils {
         return sum;
     }
 
+    /**
+     * <p>createDepthCountList.</p>
+     *
+     * @return a {@link java.util.ArrayList} object.
+     */
     public static ArrayList<String> createDepthCountList() {
         ArrayList<String> output = new ArrayList<String>();
 
@@ -1460,6 +1523,13 @@ public class Utils {
         return output;
     }
 
+    /**
+     * <p>isArgOfInvoke.</p>
+     *
+     * @param useBox a {@link soot.ValueBox} object.
+     * @param unit a {@link soot.Unit} object.
+     * @return a int.
+     */
     public static int isArgOfInvoke(ValueBox useBox, Unit unit) {
 
         if (unit instanceof JInvokeStmt) {
@@ -1482,6 +1552,15 @@ public class Utils {
                 && useBox.getType() instanceof ArrayType);
     }
 
+    /**
+     * <p>createInvokeUnitContainer.</p>
+     *
+     * @param currInstruction a {@link soot.Unit} object.
+     * @param caller a {@link java.lang.String} object.
+     * @param usedFields a {@link java.util.List} object.
+     * @param depth a int.
+     * @return a {@link analyzer.backward.UnitContainer} object.
+     */
     public static UnitContainer createInvokeUnitContainer(Unit currInstruction, String caller, List<String> usedFields, int depth) {
 
         for (String dontVisit : INVOKE_DONT_VISIT) {

@@ -16,9 +16,9 @@ import static frontEnd.MessagingSystem.routing.outputStructures.common.ScarfXML.
 /**
  * <p>ScarfXML class.</p>
  *
- * @author RigorityJTeam
+ * @author CryptoguardTeam
  * Created on 2/7/19.
- * @version $Id: $Id
+ * @version 03.07.01
  * @since 03.02.00
  *
  * <p>The ScarfXML stream writer.</p>
@@ -61,16 +61,14 @@ public class ScarfXML extends Structure {
 
         String xmlStream = JacksonSerializer.serialize(report, true, Listing.ScarfXML.getJacksonType());
 
-        String xml = StringUtils.trimToNull(xmlStream.toString().replace("/>", ">"));
+        String xml = StringUtils.trimToNull(xmlStream.replace("/>", ">"));
 
         this.write(xml);
 
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void addIssue(AnalysisIssue issue) throws ExceptionHandler {
         super.addIssue(issue);
@@ -86,9 +84,7 @@ public class ScarfXML extends Structure {
         //endregion
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void writeFooter() throws ExceptionHandler {
 
