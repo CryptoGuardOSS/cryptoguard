@@ -14,9 +14,9 @@ import java.util.List;
 /**
  * <p>UniqueRuleAnalyzer class.</p>
  *
- * @author RigorityJTeam
+ * @author CryptoguardTeam
  * Created on 2019-01-25.
- * @version $Id: $Id
+ * @version 03.07.01
  * @since 02.00.04
  *
  * <p>The funneling class to handle the various different implementations of setting up the SOOT environment</p>

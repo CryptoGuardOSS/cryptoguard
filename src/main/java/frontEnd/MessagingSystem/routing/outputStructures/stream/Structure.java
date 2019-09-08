@@ -10,9 +10,9 @@ import java.io.FileOutputStream;
 /**
  * <p>Abstract Structure class.</p>
  *
- * @author RigorityJTeam
+ * @author CryptoguardTeam
  * Created on 2/7/19.
- * @version $Id: $Id
+ * @version 03.07.01
  * @since 03.02.00
  *
  * <p>The "interface" for the stream writing.</p>
@@ -52,9 +52,7 @@ public abstract class Structure extends OutputStructure {
         writeHeader();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void stopAnalyzing() throws ExceptionHandler {
         writeFooter();

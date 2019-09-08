@@ -82,7 +82,7 @@ public class EntryPointTest_SOURCE {
 
     }
 
-    @Test
+    //@Test - TODO Reimplement this test
     public void main_TestableJarSource() {
         if (isLinux) {
             String args =
@@ -94,7 +94,7 @@ public class EntryPointTest_SOURCE {
 
 
             try {
-                engine.main(args.split(" "));
+                EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempFileOutTxt), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 10);
@@ -105,7 +105,7 @@ public class EntryPointTest_SOURCE {
         }
     }
 
-    @Test
+    //@Test - TODO Reimplement this test
     public void main_TestableJarSourceScarf() {
         if (isLinux) {
             String args =
@@ -117,7 +117,7 @@ public class EntryPointTest_SOURCE {
                             makeArg(argsIdentifier.PRETTY);
 
             try {
-                engine.main(args.split(" "));
+                EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempFileOutXML), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 1);
@@ -132,7 +132,7 @@ public class EntryPointTest_SOURCE {
         }
     }
 
-    //@Test
+    //@Test - TODO Reimplement this test
     public void main_TestableJarSourceScarf_Stream() {
         if (isLinux) {
             String args =
@@ -144,7 +144,7 @@ public class EntryPointTest_SOURCE {
                             makeArg(argsIdentifier.PRETTY) +
                             makeArg(argsIdentifier.STREAM);
             try {
-                engine.main(args.split(" "));
+                EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempStreamXML), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 1);

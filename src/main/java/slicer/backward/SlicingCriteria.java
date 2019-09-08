@@ -5,8 +5,8 @@ import java.util.List;
 /**
  * <p>SlicingCriteria class.</p>
  *
- * @author RigorityJTeam
- * @version $Id: $Id
+ * @author CryptoguardTeam
+ * @version 03.07.01
  * @since V01.00.00
  */
 public class SlicingCriteria {
@@ -76,9 +76,7 @@ public class SlicingCriteria {
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         int result = methodCallSiteInfo.hashCode();
@@ -86,9 +84,7 @@ public class SlicingCriteria {
         return result;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         return "SlicingCriteria{" +

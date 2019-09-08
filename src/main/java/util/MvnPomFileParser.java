@@ -23,8 +23,8 @@ import java.util.Map;
 /**
  * <p>MvnPomFileParser class.</p>
  *
- * @author RigorityJTeam
- * @version $Id: $Id
+ * @author CryptoguardTeam
+ * @version 03.07.01
  * @since V01.00.00
  */
 public class MvnPomFileParser implements BuildFileParser {
@@ -37,6 +37,11 @@ public class MvnPomFileParser implements BuildFileParser {
     @Setter
     String projectVersion;
 
+    /**
+     * <p>isGradle.</p>
+     *
+     * @return a {@link java.lang.Boolean} object.
+     */
     public Boolean isGradle() {
         return false;
     }
@@ -116,7 +121,7 @@ public class MvnPomFileParser implements BuildFileParser {
                 for (int i = 0; i < nodeList.getLength(); i++) {
                     String dependency = nodeList.item(i).getTextContent();
 
-                    if (moduleVsPath.keySet().contains(dependency)) {
+                    if (moduleVsPath.containsKey(dependency)) {
                         dependencies.add(dependency);
                     }
                 }

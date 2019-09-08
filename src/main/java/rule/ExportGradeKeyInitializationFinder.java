@@ -27,8 +27,8 @@ import java.util.Map;
 /**
  * Created by RigorityJTeam on 11/15/17.
  *
- * @author RigorityJTeam
- * @version $Id: $Id
+ * @author CryptoguardTeam
+ * @version 03.07.01
  * @since V01.00.00
  */
 public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
@@ -80,9 +80,7 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
         return CRITERIA_LIST;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void analyzeSlice(Analysis analysis) {
         if (analysis.getAnalysisResult().isEmpty()) {
@@ -253,42 +251,7 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
         this.initializationCallsites = initializationCallsites;
     }
 
-    //region LEGACY
-    /*
-    public void printAnalysisOutput(Map<String, String> xmlFileStr) {
-
-        List<String> predictableSources = new ArrayList<>();
-        List<UnitContainer> predictableSourceInsts = new ArrayList<>();
-
-        for (List<String> values : predictableSourcMap.values()) {
-            predictableSources.addAll(values);
-        }
-
-        predictableSourceInsts.addAll(predictableSourcMap.keySet());
-
-        if (!predictableSources.isEmpty()) {
-            System.out.println("=======================================");
-            String output = getPrintableMsg(predictableSources, rule, ruleDesc);
-            System.out.println(output);
-            System.out.println(predictableSourceInsts);
-            System.out.println("=======================================");
-        }
-    }
-
-
-    private String getPrintableMsg(Collection<String> constants, String rule, String ruleDesc) {
-        return "***Violated Rule " +
-                rule + ": " +
-                ruleDesc +
-                " ***Constants: " +
-                constants;
-    }
-    */
-    //endregion
-
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler {
 

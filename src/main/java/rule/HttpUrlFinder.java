@@ -9,8 +9,8 @@ import java.util.List;
 /**
  * <p>HttpUrlFinder class.</p>
  *
- * @author RigorityJTeam
- * @version $Id: $Id
+ * @author CryptoguardTeam
+ * @version 03.07.01
  * @since V01.00.00
  */
 public class HttpUrlFinder extends PatternMatcherRuleChecker {
@@ -63,17 +63,13 @@ public class HttpUrlFinder extends PatternMatcherRuleChecker {
         return CRITERIA_LIST;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public List<String> getPatternsToMatch() {
         return HTTP_URL_PATTERN;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public String getRuleId() {
         return "7";

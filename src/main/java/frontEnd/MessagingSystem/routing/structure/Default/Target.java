@@ -16,6 +16,9 @@ import java.util.Map;
 /**
  * TargetInfo
  * <p>
+ *
+ * @author franceme
+ * @version 03.07.01
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -92,17 +95,19 @@ public class Target implements Serializable {
     }
 
     /**
-     * @param projectVersion
-     * @param propertiesFilePath
-     * @param computerOS
-     * @param targetSources
-     * @param rawCommand
-     * @param projectType
-     * @param fullPath
-     * @param type
-     * @param timing
-     * @param projectName
-     * @param jVMVersion
+     * <p>Constructor for Target.</p>
+     *
+     * @param projectVersion a {@link java.lang.String} object.
+     * @param propertiesFilePath a {@link java.lang.String} object.
+     * @param computerOS a {@link java.lang.String} object.
+     * @param targetSources a {@link java.util.List} object.
+     * @param rawCommand a {@link java.lang.String} object.
+     * @param projectType a {@link frontEnd.MessagingSystem.routing.structure.Default.Target.ProjectType} object.
+     * @param fullPath a {@link java.lang.String} object.
+     * @param type a {@link frontEnd.MessagingSystem.routing.structure.Default.Target.Type} object.
+     * @param timing a {@link frontEnd.MessagingSystem.routing.structure.Default.Timing} object.
+     * @param projectName a {@link java.lang.String} object.
+     * @param jVMVersion a {@link java.lang.String} object.
      */
     public Target(String propertiesFilePath, String computerOS, String jVMVersion, String projectName, String projectVersion, String rawCommand, Timing timing, String fullPath, Type type, ProjectType projectType, List<String> targetSources) {
         super();
@@ -119,18 +124,34 @@ public class Target implements Serializable {
         this.targetSources = targetSources;
     }
 
+    /**
+     * <p>Getter for the field <code>propertiesFilePath</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     @JacksonXmlProperty(isAttribute = true, localName = "PropertiesFilePath")
     @JsonProperty("_PropertiesFilePath")
     public String getPropertiesFilePath() {
         return propertiesFilePath;
     }
 
+    /**
+     * <p>Setter for the field <code>propertiesFilePath</code>.</p>
+     *
+     * @param propertiesFilePath a {@link java.lang.String} object.
+     */
     @JacksonXmlProperty(isAttribute = true, localName = "PropertiesFilePath")
     @JsonProperty("_PropertiesFilePath")
     public void setPropertiesFilePath(String propertiesFilePath) {
         this.propertiesFilePath = propertiesFilePath;
     }
 
+    /**
+     * <p>withPropertiesFilePath.</p>
+     *
+     * @param propertiesFilePath a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Target} object.
+     */
     public Target withPropertiesFilePath(String propertiesFilePath) {
         this.propertiesFilePath = propertiesFilePath;
         return this;
@@ -138,6 +159,8 @@ public class Target implements Serializable {
 
     /**
      * (Required)
+     *
+     * @return a {@link java.lang.String} object.
      */
     @JacksonXmlProperty(isAttribute = true, localName = "ComputerOS")
     @JsonProperty("_ComputerOS")
@@ -147,6 +170,8 @@ public class Target implements Serializable {
 
     /**
      * (Required)
+     *
+     * @param computerOS a {@link java.lang.String} object.
      */
     @JacksonXmlProperty(isAttribute = true, localName = "ComputerOS")
     @JsonProperty("_ComputerOS")
@@ -154,6 +179,12 @@ public class Target implements Serializable {
         this.computerOS = computerOS;
     }
 
+    /**
+     * <p>withComputerOS.</p>
+     *
+     * @param computerOS a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Target} object.
+     */
     public Target withComputerOS(String computerOS) {
         this.computerOS = computerOS;
         return this;
@@ -161,6 +192,8 @@ public class Target implements Serializable {
 
     /**
      * (Required)
+     *
+     * @return a {@link java.lang.String} object.
      */
     @JacksonXmlProperty(isAttribute = true, localName = "JVMVersion")
     @JsonProperty("_JVMVersion")
@@ -170,6 +203,8 @@ public class Target implements Serializable {
 
     /**
      * (Required)
+     *
+     * @param jVMVersion a {@link java.lang.String} object.
      */
     @JacksonXmlProperty(isAttribute = true, localName = "JVMVersion")
     @JsonProperty("_JVMVersion")
@@ -177,40 +212,78 @@ public class Target implements Serializable {
         this.jVMVersion = jVMVersion;
     }
 
+    /**
+     * <p>withJVMVersion.</p>
+     *
+     * @param jVMVersion a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Target} object.
+     */
     public Target withJVMVersion(String jVMVersion) {
         this.jVMVersion = jVMVersion;
         return this;
     }
 
+    /**
+     * <p>Getter for the field <code>projectName</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     @JacksonXmlProperty(isAttribute = true, localName = "ProjectName")
     @JsonProperty("_ProjectName")
     public String getProjectName() {
         return projectName;
     }
 
+    /**
+     * <p>Setter for the field <code>projectName</code>.</p>
+     *
+     * @param projectName a {@link java.lang.String} object.
+     */
     @JacksonXmlProperty(isAttribute = true, localName = "ProjectName")
     @JsonProperty("_ProjectName")
     public void setProjectName(String projectName) {
         this.projectName = projectName;
     }
 
+    /**
+     * <p>withProjectName.</p>
+     *
+     * @param projectName a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Target} object.
+     */
     public Target withProjectName(String projectName) {
         this.projectName = projectName;
         return this;
     }
 
+    /**
+     * <p>Getter for the field <code>projectVersion</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     @JacksonXmlProperty(isAttribute = true, localName = "ProjectVersion")
     @JsonProperty("_ProjectVersion")
     public String getProjectVersion() {
         return projectVersion;
     }
 
+    /**
+     * <p>Setter for the field <code>projectVersion</code>.</p>
+     *
+     * @param projectVersion a {@link java.lang.String} object.
+     */
     @JacksonXmlProperty(isAttribute = true, localName = "ProjectVersion")
     @JsonProperty("_ProjectVersion")
     public void setProjectVersion(String projectVersion) {
         this.projectVersion = projectVersion;
     }
 
+    /**
+     * <p>withProjectVersion.</p>
+     *
+     * @param projectVersion a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Target} object.
+     */
     public Target withProjectVersion(String projectVersion) {
         this.projectVersion = projectVersion;
         return this;
@@ -218,6 +291,8 @@ public class Target implements Serializable {
 
     /**
      * (Required)
+     *
+     * @return a {@link java.lang.String} object.
      */
     @JsonProperty("RawCommand")
     public String getRawCommand() {
@@ -226,12 +301,20 @@ public class Target implements Serializable {
 
     /**
      * (Required)
+     *
+     * @param rawCommand a {@link java.lang.String} object.
      */
     @JsonProperty("RawCommand")
     public void setRawCommand(String rawCommand) {
         this.rawCommand = rawCommand;
     }
 
+    /**
+     * <p>withRawCommand.</p>
+     *
+     * @param rawCommand a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Target} object.
+     */
     public Target withRawCommand(String rawCommand) {
         this.rawCommand = rawCommand;
         return this;
@@ -240,6 +323,8 @@ public class Target implements Serializable {
     /**
      * Timing
      * <p>
+     *
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Timing} object.
      */
     @JsonProperty("Timing")
     public Timing getTiming() {
@@ -249,12 +334,20 @@ public class Target implements Serializable {
     /**
      * Timing
      * <p>
+     *
+     * @param timing a {@link frontEnd.MessagingSystem.routing.structure.Default.Timing} object.
      */
     @JsonProperty("Timing")
     public void setTiming(Timing timing) {
         this.timing = timing;
     }
 
+    /**
+     * <p>withTiming.</p>
+     *
+     * @param timing a {@link frontEnd.MessagingSystem.routing.structure.Default.Timing} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Target} object.
+     */
     public Target withTiming(Timing timing) {
         this.timing = timing;
         return this;
@@ -262,6 +355,8 @@ public class Target implements Serializable {
 
     /**
      * (Required)
+     *
+     * @return a {@link java.lang.String} object.
      */
     @JsonProperty("FullPath")
     public String getFullPath() {
@@ -270,12 +365,20 @@ public class Target implements Serializable {
 
     /**
      * (Required)
+     *
+     * @param fullPath a {@link java.lang.String} object.
      */
     @JsonProperty("FullPath")
     public void setFullPath(String fullPath) {
         this.fullPath = fullPath;
     }
 
+    /**
+     * <p>withFullPath.</p>
+     *
+     * @param fullPath a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Target} object.
+     */
     public Target withFullPath(String fullPath) {
         this.fullPath = fullPath;
         return this;
@@ -283,6 +386,8 @@ public class Target implements Serializable {
 
     /**
      * (Required)
+     *
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Target.Type} object.
      */
     @JsonProperty("Type")
     public Type getType() {
@@ -291,27 +396,51 @@ public class Target implements Serializable {
 
     /**
      * (Required)
+     *
+     * @param type a {@link frontEnd.MessagingSystem.routing.structure.Default.Target.Type} object.
      */
     @JsonProperty("Type")
     public void setType(Type type) {
         this.type = type;
     }
 
+    /**
+     * <p>withType.</p>
+     *
+     * @param type a {@link frontEnd.MessagingSystem.routing.structure.Default.Target.Type} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Target} object.
+     */
     public Target withType(Type type) {
         this.type = type;
         return this;
     }
 
+    /**
+     * <p>Getter for the field <code>projectType</code>.</p>
+     *
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Target.ProjectType} object.
+     */
     @JsonProperty("ProjectType")
     public ProjectType getProjectType() {
         return projectType;
     }
 
+    /**
+     * <p>Setter for the field <code>projectType</code>.</p>
+     *
+     * @param projectType a {@link frontEnd.MessagingSystem.routing.structure.Default.Target.ProjectType} object.
+     */
     @JsonProperty("ProjectType")
     public void setProjectType(ProjectType projectType) {
         this.projectType = projectType;
     }
 
+    /**
+     * <p>withProjectType.</p>
+     *
+     * @param projectType a {@link frontEnd.MessagingSystem.routing.structure.Default.Target.ProjectType} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Target} object.
+     */
     public Target withProjectType(ProjectType projectType) {
         this.projectType = projectType;
         return this;
@@ -320,6 +449,8 @@ public class Target implements Serializable {
     /**
      * The Sources of the Target
      * <p>
+     *
+     * @return a {@link java.util.List} object.
      */
     @JsonProperty("TargetSources")
     public List<String> getTargetSources() {
@@ -329,27 +460,40 @@ public class Target implements Serializable {
     /**
      * The Sources of the Target
      * <p>
+     *
+     * @param targetSources a {@link java.util.List} object.
      */
     @JsonProperty("TargetSources")
     public void setTargetSources(List<String> targetSources) {
         this.targetSources = targetSources;
     }
 
+    /**
+     * <p>withTargetSources.</p>
+     *
+     * @param targetSources a {@link java.util.List} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Target} object.
+     */
     public Target withTargetSources(List<String> targetSources) {
         this.targetSources = targetSources;
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("propertiesFilePath", propertiesFilePath).append("computerOS", computerOS).append("jVMVersion", jVMVersion).append("projectName", projectName).append("projectVersion", projectVersion).append("rawCommand", rawCommand).append("timing", timing).append("fullPath", fullPath).append("type", type).append("projectType", projectType).append("targetSources", targetSources).toString();
     }
 
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(projectVersion).append(propertiesFilePath).append(computerOS).append(targetSources).append(rawCommand).append(projectType).append(fullPath).append(type).append(timing).append(projectName).append(jVMVersion).toHashCode();
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -375,7 +519,7 @@ public class Target implements Serializable {
             }
         }
 
-        private ProjectType(String value) {
+        ProjectType(String value) {
             this.value = value;
         }
 
@@ -417,7 +561,7 @@ public class Target implements Serializable {
             }
         }
 
-        private Type(String value) {
+        Type(String value) {
             this.value = value;
         }
 

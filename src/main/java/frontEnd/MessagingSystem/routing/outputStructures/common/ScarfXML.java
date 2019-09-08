@@ -12,9 +12,9 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * <p>ScarfXML class.</p>
  *
- * @author RigorityJTeam
+ * @author CryptoguardTeam
  * Created on 3/2/19.
- * @version $Id: $Id
+ * @version 03.07.01
  * @since 03.03.00
  *
  * <p>The common utilities class for ScarfXML marshalling.</p>
@@ -26,7 +26,7 @@ public class ScarfXML {
      * <p>marshalling.</p>
      *
      * @param info a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
-     * @return a {@link AnalyzerReport} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport} object.
      */
     public static AnalyzerReport marshalling(EnvironmentInformation info) {
         AnalyzerReport report = new AnalyzerReport();
@@ -61,7 +61,7 @@ public class ScarfXML {
      * @param id       a {@link java.lang.Integer} object.
      * @param buildId  a {@link java.lang.Integer} object.
      * @param xPath    a {@link java.lang.String} object.
-     * @return a {@link BugInstance} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.BugInstance} object.
      */
     public static BugInstance marshalling(AnalysisIssue issue, CWEList cwes, String fileName, Integer id, Integer buildId, String xPath) {
         BugInstance instance = new BugInstance();
@@ -204,6 +204,13 @@ public class ScarfXML {
         return footer;
     }
 
+    /**
+     * <p>marshalling.</p>
+     *
+     * @param info                a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
+     * @param roundedSliceAverage a double.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.Heuristics} object.
+     */
     public static Heuristics marshalling(EnvironmentInformation info, double roundedSliceAverage) {
         return new Heuristics(
                 info.getNUM_ORTHOGONAL(),

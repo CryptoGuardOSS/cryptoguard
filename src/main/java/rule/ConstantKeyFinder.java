@@ -10,8 +10,8 @@ import java.util.List;
 /**
  * <p>ConstantKeyFinder class.</p>
  *
- * @author RigorityJTeam
- * @version $Id: $Id
+ * @author CryptoguardTeam
+ * @version 03.07.01
  * @since V01.00.00
  */
 public class ConstantKeyFinder extends PredictableSourceRuleChecker {
@@ -59,9 +59,7 @@ public class ConstantKeyFinder extends PredictableSourceRuleChecker {
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public String getRuleId() {
         return "3";

@@ -24,7 +24,7 @@ import java.util.List;
  * <p>
  *
  * @author franceme
- * @version $Id: $Id
+ * @version 03.07.01
  */
 @JsonPropertyOrder({
         "-assess_fw",
@@ -239,7 +239,7 @@ public class AnalyzerReport implements Serializable {
      * @param packageRootDir    a {@link java.lang.String} object.
      * @param parserFwVersion   a {@link java.lang.String} object.
      * @param assessFwVersion   a {@link java.lang.String} object.
-     * @param heuristics        a {@link Heuristics} object.
+     * @param heuristics        a {@link frontEnd.MessagingSystem.routing.structure.Scarf.Heuristics} object.
      */
     public AnalyzerReport(String assessFw, String assessFwVersion, String assessmentStartTs, String buildFw, String buildFwVersion, String packageName, String packageVersion, String buildRootDir, String packageRootDir, String parserFw, String parserFwVersion, String platformName, String toolName, String toolVersion, String uuid, List<BugInstance> bugInstance, List<BugCategory> bugCategory, List<Metric> metric, MetricSummaries metricSummaries, Heuristics heuristics) {
         super();
@@ -976,6 +976,8 @@ public class AnalyzerReport implements Serializable {
 
     /**
      * {@inheritDoc}
+     *
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.Heuristics} object.
      */
     @JsonProperty("Heuristics")
     public Heuristics getHeuristics() {
@@ -985,33 +987,40 @@ public class AnalyzerReport implements Serializable {
     /**
      * HeuristicsType
      * <p>
+     *
+     * @param heuristics a {@link frontEnd.MessagingSystem.routing.structure.Scarf.Heuristics} object.
      */
     @JsonProperty("Heuristics")
     public void setHeuristics(Heuristics heuristics) {
         this.heuristics = heuristics;
     }
 
+    /**
+     * <p>withHeuristics.</p>
+     *
+     * @param heuristics a {@link frontEnd.MessagingSystem.routing.structure.Scarf.Heuristics} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport} object.
+     */
     public AnalyzerReport withHeuristics(Heuristics heuristics) {
         this.heuristics = heuristics;
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("assessFw", assessFw).append("assessFwVersion", assessFwVersion).append("assessmentStartTs", assessmentStartTs).append("buildFw", buildFw).append("buildFwVersion", buildFwVersion).append("packageName", packageName).append("packageVersion", packageVersion).append("buildRootDir", buildRootDir).append("packageRootDir", packageRootDir).append("parserFw", parserFw).append("parserFwVersion", parserFwVersion).append("platformName", platformName).append("toolName", toolName).append("toolVersion", toolVersion).append("uuid", uuid).append("bugInstance", bugInstance).append("bugCategory", bugCategory).append("metric", metric).append("metricSummaries", metricSummaries).append("heuristics", heuristics).toString();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(buildFw).append(bugCategory).append(packageName).append(assessFw).append(toolVersion).append(buildFwVersion).append(parserFw).append(toolName).append(bugInstance).append(packageVersion).append(assessmentStartTs).append(metricSummaries).append(platformName).append(metric).append(heuristics).append(buildRootDir).append(uuid).append(parserFwVersion).append(packageRootDir).append(assessFwVersion).toHashCode();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public boolean equals(Object other) {
         if (other == this) {

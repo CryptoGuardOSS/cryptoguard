@@ -3,8 +3,8 @@ package rule.engine;
 /**
  * The criteria helper class. This is used for creating static rules to be enforced in various ways.
  *
- * @author RigorityJTeam
- * @version $Id: $Id
+ * @author CryptoguardTeam
+ * @version 03.07.01
  * @since V01.00.00
  */
 public class Criteria {

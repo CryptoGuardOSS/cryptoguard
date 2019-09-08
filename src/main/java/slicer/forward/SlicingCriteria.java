@@ -3,8 +3,8 @@ package slicer.forward;
 /**
  * Created by RigorityJTeam on 7/3/17.
  *
- * @author RigorityJTeam
- * @version $Id: $Id
+ * @author CryptoguardTeam
+ * @version 03.07.01
  * @since V01.00.00
  */
 public class SlicingCriteria {
@@ -51,9 +51,7 @@ public class SlicingCriteria {
         return methodName.equals(that.methodName);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         return methodName.hashCode();

@@ -16,11 +16,15 @@ import java.util.List;
  * @since 03.05.02
  *
  * <p>{Description Here}</p>
+ * @version 03.07.01
  */
 public class Issues implements Serializable {
 
     private final static long serialVersionUID = -2265209324602399901L;
 
+    /**
+     * <p>Constructor for Issues.</p>
+     */
     public Issues() {
 
     }
@@ -36,6 +40,8 @@ public class Issues implements Serializable {
      * <p>
      * <p>
      * (Required)
+     *
+     * @return a {@link java.util.List} object.
      */
     @JacksonXmlElementWrapper(useWrapping = false)
     @JacksonXmlProperty(localName = "Issue")
@@ -49,6 +55,8 @@ public class Issues implements Serializable {
      * <p>
      * <p>
      * (Required)
+     *
+     * @param issues a {@link java.util.List} object.
      */
     @JacksonXmlElementWrapper(useWrapping = false)
     @JacksonXmlProperty(localName = "Issue")
@@ -57,6 +65,12 @@ public class Issues implements Serializable {
         this.issues = issues;
     }
 
+    /**
+     * <p>withIssues.</p>
+     *
+     * @param issues a {@link java.util.List} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Issues} object.
+     */
     public Issues withIssues(List<Issue> issues) {
         this.issues = issues;
         return this;

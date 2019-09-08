@@ -22,6 +22,9 @@ import java.util.List;
 /**
  * Report
  * <p>
+ *
+ * @author franceme
+ * @version 03.07.01
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -108,14 +111,16 @@ public class Report implements Serializable {
     }
 
     /**
-     * @param projectVersion
-     * @param dateTime
-     * @param heuristics
-     * @param issues
-     * @param target
-     * @param uUID
-     * @param projectName
-     * @param schemaVersion
+     * <p>Constructor for Report.</p>
+     *
+     * @param projectVersion a {@link java.lang.String} object.
+     * @param dateTime a {@link java.lang.String} object.
+     * @param heuristics a {@link frontEnd.MessagingSystem.routing.structure.Default.Heuristics} object.
+     * @param issues a {@link java.util.List} object.
+     * @param target a {@link frontEnd.MessagingSystem.routing.structure.Default.Target} object.
+     * @param uUID a {@link java.lang.String} object.
+     * @param projectName a {@link java.lang.String} object.
+     * @param schemaVersion a int.
      */
     public Report(int schemaVersion, String dateTime, String uUID, String projectName, String projectVersion, Target target, List<Issue> issues, Heuristics heuristics) {
         super();
@@ -134,6 +139,8 @@ public class Report implements Serializable {
      * <p>
      * <p>
      * (Required)
+     *
+     * @return a int.
      */
     @JacksonXmlProperty(isAttribute = true, localName = "SchemaVersion")
     @JsonProperty("_SchemaVersion")
@@ -146,6 +153,8 @@ public class Report implements Serializable {
      * <p>
      * <p>
      * (Required)
+     *
+     * @param schemaVersion a int.
      */
     @JacksonXmlProperty(isAttribute = true, localName = "SchemaVersion")
     @JsonProperty("_SchemaVersion")
@@ -153,6 +162,12 @@ public class Report implements Serializable {
         this.schemaVersion = schemaVersion;
     }
 
+    /**
+     * <p>withSchemaVersion.</p>
+     *
+     * @param schemaVersion a int.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Report} object.
+     */
     public Report withSchemaVersion(int schemaVersion) {
         this.schemaVersion = schemaVersion;
         return this;
@@ -163,6 +178,8 @@ public class Report implements Serializable {
      * <p>
      * <p>
      * (Required)
+     *
+     * @return a {@link java.lang.String} object.
      */
     @JacksonXmlProperty(isAttribute = true, localName = "DateTime")
     @JsonProperty("_DateTime")
@@ -175,6 +192,8 @@ public class Report implements Serializable {
      * <p>
      * <p>
      * (Required)
+     *
+     * @param dateTime a {@link java.lang.String} object.
      */
     @JacksonXmlProperty(isAttribute = true, localName = "DateTime")
     @JsonProperty("_DateTime")
@@ -182,6 +201,12 @@ public class Report implements Serializable {
         this.dateTime = dateTime;
     }
 
+    /**
+     * <p>withDateTime.</p>
+     *
+     * @param dateTime a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Report} object.
+     */
     public Report withDateTime(String dateTime) {
         this.dateTime = dateTime;
         return this;
@@ -192,6 +217,8 @@ public class Report implements Serializable {
      * <p>
      * <p>
      * (Required)
+     *
+     * @return a {@link java.lang.String} object.
      */
     @JacksonXmlProperty(isAttribute = true, localName = "UUID")
     @JsonProperty("_UUID")
@@ -204,6 +231,8 @@ public class Report implements Serializable {
      * <p>
      * <p>
      * (Required)
+     *
+     * @param uUID a {@link java.lang.String} object.
      */
     @JacksonXmlProperty(isAttribute = true, localName = "UUID")
     @JsonProperty("_UUID")
@@ -211,6 +240,12 @@ public class Report implements Serializable {
         this.uUID = uUID;
     }
 
+    /**
+     * <p>withUUID.</p>
+     *
+     * @param uUID a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Report} object.
+     */
     public Report withUUID(String uUID) {
         this.uUID = uUID;
         return this;
@@ -221,6 +256,8 @@ public class Report implements Serializable {
      * <p>
      * <p>
      * (Required)
+     *
+     * @return a {@link java.lang.String} object.
      */
     @JsonProperty("ProjectName")
     public String getProjectName() {
@@ -232,12 +269,20 @@ public class Report implements Serializable {
      * <p>
      * <p>
      * (Required)
+     *
+     * @param projectName a {@link java.lang.String} object.
      */
     @JsonProperty("ProjectName")
     public void setProjectName(String projectName) {
         this.projectName = projectName;
     }
 
+    /**
+     * <p>withProjectName.</p>
+     *
+     * @param projectName a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Report} object.
+     */
     public Report withProjectName(String projectName) {
         this.projectName = projectName;
         return this;
@@ -248,6 +293,8 @@ public class Report implements Serializable {
      * <p>
      * <p>
      * (Required)
+     *
+     * @return a {@link java.lang.String} object.
      */
     @JsonProperty("ProjectVersion")
     public String getProjectVersion() {
@@ -259,12 +306,20 @@ public class Report implements Serializable {
      * <p>
      * <p>
      * (Required)
+     *
+     * @param projectVersion a {@link java.lang.String} object.
      */
     @JsonProperty("ProjectVersion")
     public void setProjectVersion(String projectVersion) {
         this.projectVersion = projectVersion;
     }
 
+    /**
+     * <p>withProjectVersion.</p>
+     *
+     * @param projectVersion a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Report} object.
+     */
     public Report withProjectVersion(String projectVersion) {
         this.projectVersion = projectVersion;
         return this;
@@ -273,6 +328,8 @@ public class Report implements Serializable {
     /**
      * TargetInfo
      * <p>
+     *
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Target} object.
      */
     @JsonProperty("Target")
     public Target getTarget() {
@@ -282,12 +339,20 @@ public class Report implements Serializable {
     /**
      * TargetInfo
      * <p>
+     *
+     * @param target a {@link frontEnd.MessagingSystem.routing.structure.Default.Target} object.
      */
     @JsonProperty("Target")
     public void setTarget(Target target) {
         this.target = target;
     }
 
+    /**
+     * <p>withTarget.</p>
+     *
+     * @param target a {@link frontEnd.MessagingSystem.routing.structure.Default.Target} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Report} object.
+     */
     public Report withTarget(Target target) {
         this.target = target;
         return this;
@@ -298,6 +363,8 @@ public class Report implements Serializable {
      * <p>
      * <p>
      * (Required)
+     *
+     * @return a {@link java.util.List} object.
      */
     @JsonProperty("Issues")
     public List<Issue> getIssues() {
@@ -309,12 +376,20 @@ public class Report implements Serializable {
      * <p>
      * <p>
      * (Required)
+     *
+     * @param issues a {@link java.util.List} object.
      */
     @JsonProperty("Issues")
     public void setIssues(List<Issue> issues) {
         this.issues = issues;
     }
 
+    /**
+     * <p>withIssues.</p>
+     *
+     * @param issues a {@link java.util.List} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Report} object.
+     */
     public Report withIssues(List<Issue> issues) {
         this.issues = issues;
         return this;
@@ -323,6 +398,8 @@ public class Report implements Serializable {
     /**
      * HeuristicsType
      * <p>
+     *
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Heuristics} object.
      */
     @JsonProperty("Heuristics")
     public Heuristics getHeuristics() {
@@ -332,22 +409,29 @@ public class Report implements Serializable {
     /**
      * HeuristicsType
      * <p>
+     *
+     * @param heuristics a {@link frontEnd.MessagingSystem.routing.structure.Default.Heuristics} object.
      */
     @JsonProperty("Heuristics")
     public void setHeuristics(Heuristics heuristics) {
         this.heuristics = heuristics;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("schemaVersion", schemaVersion).append("dateTime", dateTime).append("uUID", uUID).append("projectName", projectName).append("projectVersion", projectVersion).append("target", target).append("issues", issues).append("heuristics", heuristics).toString();
     }
 
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(projectVersion).append(dateTime).append(heuristics).append(issues).append(target).append(uUID).append(projectName).append(schemaVersion).toHashCode();
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean equals(Object other) {
         if (other == this) {

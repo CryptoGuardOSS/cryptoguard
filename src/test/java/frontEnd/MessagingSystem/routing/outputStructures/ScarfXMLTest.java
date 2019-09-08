@@ -18,7 +18,7 @@ import static test.TestUtilities.jarOne;
 /**
  * <p>MessageRepresentationTest class.</p>
  *
- * @author RigorityJTeam
+ * @author CryptoguardTeam
  * @version $Id: $Id
  * @since V01.00.03
  */
@@ -81,7 +81,7 @@ public class ScarfXMLTest {
     //endregion
 
     //region Tests
-    //@Test
+    //@Test - TODO Reimplement this test
 
     /**
      * <p>simpleFiveRuleTest.</p>

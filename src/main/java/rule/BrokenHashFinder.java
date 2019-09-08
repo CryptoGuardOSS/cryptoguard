@@ -9,8 +9,8 @@ import java.util.List;
 /**
  * <p>BrokenHashFinder class.</p>
  *
- * @author RigorityJTeam
- * @version $Id: $Id
+ * @author CryptoguardTeam
+ * @version 03.07.01
  * @since V01.00.00
  */
 public class BrokenHashFinder extends PatternMatcherRuleChecker {
@@ -53,17 +53,13 @@ public class BrokenHashFinder extends PatternMatcherRuleChecker {
         return CRITERIA_LIST;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public List<String> getPatternsToMatch() {
         return BROKEN_HASH;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public String getRuleId() {
         return "2";

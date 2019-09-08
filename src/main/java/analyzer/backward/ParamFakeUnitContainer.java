@@ -3,8 +3,8 @@ package analyzer.backward;
 /**
  * <p>ParamFakeUnitContainer class.</p>
  *
- * @author RigorityJTeam
- * @version $Id: $Id
+ * @author CryptoguardTeam
+ * @version 03.07.01
  * @since V01.00.00
  */
 public class ParamFakeUnitContainer extends UnitContainer {

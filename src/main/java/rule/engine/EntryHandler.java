@@ -6,9 +6,9 @@ import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 /**
  * <p>EntryHandler interface.</p>
  *
- * @author RigorityJTeam
+ * @author CryptoguardTeam
  * Created on 2019-01-20.
- * @version $Id: $Id
+ * @version 03.07.01
  * @since 02.02.00
  *
  * <p>The interface for how the the different use cases are called.</p>

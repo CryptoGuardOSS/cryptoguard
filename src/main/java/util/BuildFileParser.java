@@ -8,8 +8,8 @@ import java.util.Map;
 /**
  * <p>BuildFileParser interface.</p>
  *
- * @author RigorityJTeam
- * @version $Id: $Id
+ * @author CryptoguardTeam
+ * @version 03.07.01
  * @since V01.00.00
  */
 public interface BuildFileParser {
@@ -22,10 +22,25 @@ public interface BuildFileParser {
      */
     Map<String, List<String>> getDependencyList() throws ExceptionHandler;
 
+    /**
+     * <p>getProjectName.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     String getProjectName();
 
+    /**
+     * <p>getProjectVersion.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     String getProjectVersion();
 
+    /**
+     * <p>isGradle.</p>
+     *
+     * @return a {@link java.lang.Boolean} object.
+     */
     Boolean isGradle();
 
 }

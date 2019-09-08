@@ -13,6 +13,9 @@ import java.io.Serializable;
 /**
  * LocationType
  * <p>
+ *
+ * @author franceme
+ * @version 03.07.01
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -46,10 +49,12 @@ public class Location implements Serializable {
     }
 
     /**
-     * @param lineNumber
-     * @param className
-     * @param methodName
-     * @param columnNumber
+     * <p>Constructor for Location.</p>
+     *
+     * @param lineNumber a int.
+     * @param className a {@link java.lang.String} object.
+     * @param methodName a {@link java.lang.String} object.
+     * @param columnNumber a int.
      */
     public Location(String className, String methodName, int lineNumber, int columnNumber) {
         super();
@@ -61,6 +66,8 @@ public class Location implements Serializable {
 
     /**
      * (Required)
+     *
+     * @return a {@link java.lang.String} object.
      */
     @JsonProperty("ClassName")
     public String getClassName() {
@@ -69,12 +76,20 @@ public class Location implements Serializable {
 
     /**
      * (Required)
+     *
+     * @param className a {@link java.lang.String} object.
      */
     @JsonProperty("ClassName")
     public void setClassName(String className) {
         this.className = className;
     }
 
+    /**
+     * <p>withClassName.</p>
+     *
+     * @param className a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Location} object.
+     */
     public Location withClassName(String className) {
         this.className = className;
         return this;
@@ -82,6 +97,8 @@ public class Location implements Serializable {
 
     /**
      * (Required)
+     *
+     * @return a {@link java.lang.String} object.
      */
     @JsonProperty("MethodName")
     public String getMethodName() {
@@ -90,57 +107,102 @@ public class Location implements Serializable {
 
     /**
      * (Required)
+     *
+     * @param methodName a {@link java.lang.String} object.
      */
     @JsonProperty("MethodName")
     public void setMethodName(String methodName) {
         this.methodName = methodName;
     }
 
+    /**
+     * <p>withMethodName.</p>
+     *
+     * @param methodName a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Location} object.
+     */
     public Location withMethodName(String methodName) {
         this.methodName = methodName;
         return this;
     }
 
+    /**
+     * <p>Getter for the field <code>lineNumber</code>.</p>
+     *
+     * @return a int.
+     */
     @JsonProperty("LineNumber")
     public int getLineNumber() {
         return lineNumber;
     }
 
+    /**
+     * <p>Setter for the field <code>lineNumber</code>.</p>
+     *
+     * @param lineNumber a int.
+     */
     @JsonProperty("LineNumber")
     public void setLineNumber(int lineNumber) {
         this.lineNumber = lineNumber;
     }
 
+    /**
+     * <p>withLineNumber.</p>
+     *
+     * @param lineNumber a int.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Location} object.
+     */
     public Location withLineNumber(int lineNumber) {
         this.lineNumber = lineNumber;
         return this;
     }
 
+    /**
+     * <p>Getter for the field <code>columnNumber</code>.</p>
+     *
+     * @return a int.
+     */
     @JsonProperty("ColumnNumber")
     public int getColumnNumber() {
         return columnNumber;
     }
 
+    /**
+     * <p>Setter for the field <code>columnNumber</code>.</p>
+     *
+     * @param columnNumber a int.
+     */
     @JsonProperty("ColumnNumber")
     public void setColumnNumber(int columnNumber) {
         this.columnNumber = columnNumber;
     }
 
+    /**
+     * <p>withColumnNumber.</p>
+     *
+     * @param columnNumber a int.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Location} object.
+     */
     public Location withColumnNumber(int columnNumber) {
         this.columnNumber = columnNumber;
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("className", className).append("methodName", methodName).append("lineNumber", lineNumber).append("columnNumber", columnNumber).toString();
     }
 
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(lineNumber).append(className).append(methodName).append(columnNumber).toHashCode();
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean equals(Object other) {
         if (other == this) {

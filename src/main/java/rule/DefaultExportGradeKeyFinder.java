@@ -21,8 +21,8 @@ import java.util.Map;
 /**
  * <p>DefaultExportGradeKeyFinder class.</p>
  *
- * @author RigorityJTeam
- * @version $Id: $Id
+ * @author CryptoguardTeam
+ * @version 03.07.01
  * @since V01.00.00
  */
 public class DefaultExportGradeKeyFinder implements RuleChecker {
@@ -80,16 +80,6 @@ public class DefaultExportGradeKeyFinder implements RuleChecker {
 
                     if (isDefault && !defaultSecure) {
 
-
-                        //region LEGACY
-                        /*
-                            System.out.println("=======================================");
-                            String output = "***Violated Rule 5: Used export grade public Key ";
-                            output += "\n***Cause: Used default key size in method: " + method;
-                            System.out.println(output);
-                            System.out.println("=======================================");
-                        */
-                        //endregion
                         AnalysisIssue issue = new AnalysisIssue(method, 5,
                                 "Cause: Used default key size", sourcePaths);
 

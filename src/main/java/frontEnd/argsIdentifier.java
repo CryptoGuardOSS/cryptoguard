@@ -6,9 +6,9 @@ import rule.engine.EngineType;
 /**
  * <p>argsIdentifier class.</p>" -o " + tempFileOutApk_Scarf
  *
- * @author RigorityJTeam
+ * @author CryptoguardTeam
  * Created on 2/5/19.
- * @version $Id: $Id
+ * @version 03.07.01
  * @since 03.00.00
  *
  * <p>The central point for identifying the arguments and their description.</p>

@@ -1,5 +1,5 @@
 #################################
-CryptoGuard V03.07.00
+CryptoGuard V03.07.01
 #################################
 
 
@@ -16,7 +16,9 @@ Building From Source
 
 Prerequisites (Environment Variables)
 ==================================================
-1. JAVA7_HOME: Point to a valid Java 7 JDK Installation
+1. JAVA8_HOME: Point to a valid Java 8 JDK Installation
+    * Needed for all of the scans
+#. JAVA7_HOME: Point to a valid Java 7 JDK Installation
     * Needed for all of the scans
 #. ANDROID_SDK_HOME: Point to a valid Android JDK Installation
     * Needed for Android

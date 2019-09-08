@@ -14,9 +14,9 @@ import java.nio.file.Files;
 /**
  * <p>Abstract Structure class.</p>
  *
- * @author RigorityJTeam
+ * @author CryptoguardTeam
  * Created on 3/2/19.
- * @version $Id: $Id
+ * @version 03.07.01
  * @since 03.03.00
  *
  * <p>The overarching structure encompassing the block marshalling, extending from the output structure.</p>
@@ -48,17 +48,13 @@ public abstract class Structure extends OutputStructure {
     public void startAnalyzing() {
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void addIssue(AnalysisIssue issue) throws ExceptionHandler {
         super.addIssueToCollection(issue);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void stopAnalyzing() throws ExceptionHandler {
         WriteIntoFile(StringUtils.stripToNull(this.handleOutput()));

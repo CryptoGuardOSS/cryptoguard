@@ -15,7 +15,7 @@ import java.io.Serializable;
  * <p>
  *
  * @author franceme
- * @version $Id: $Id
+ * @version 03.07.01
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -219,17 +219,13 @@ public class BugCategory implements Serializable {
                 .append("]").toString();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(bytes).append(count).append(code).append(group).toHashCode();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public boolean equals(Object other) {
         if (other == this) {

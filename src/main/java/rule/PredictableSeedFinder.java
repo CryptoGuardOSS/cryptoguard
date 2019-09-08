@@ -9,8 +9,8 @@ import java.util.List;
 /**
  * Created by RigorityJTeam on 11/15/17.
  *
- * @author RigorityJTeam
- * @version $Id: $Id
+ * @author CryptoguardTeam
+ * @version 03.07.01
  * @since V01.00.00
  */
 public class PredictableSeedFinder extends PredictableSourceRuleChecker {
@@ -46,9 +46,7 @@ public class PredictableSeedFinder extends PredictableSourceRuleChecker {
         return CRITERIA_LIST;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public String getRuleId() {
         return "11";

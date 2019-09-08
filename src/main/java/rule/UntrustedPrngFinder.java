@@ -15,8 +15,8 @@ import java.util.*;
 /**
  * <p>UntrustedPrngFinder class.</p>
  *
- * @author RigorityJTeam
- * @version $Id: $Id
+ * @author CryptoguardTeam
+ * @version 03.07.01
  * @since V01.00.00
  */
 public class UntrustedPrngFinder implements RuleChecker {
@@ -42,14 +42,6 @@ public class UntrustedPrngFinder implements RuleChecker {
                 List<Unit> analysis = analysisLists.get(method);
 
                 if (!analysis.isEmpty()) {
-                    //region LEGACY
-                    /*
-                        System.out.println("=============================================");
-                        String output = "***Violated Rule 13: Untrused PRNG (java.util.Random) Found in " + method;
-                        System.out.println(output);
-                        System.out.println("=============================================");
-                    */
-                    //endregion
                     //TODO - Location not showing up
                     AnalysisIssue issue = new AnalysisIssue(method, 13,
                             "Found: Untrused PRNG (java.util.Random)", sourcePaths);

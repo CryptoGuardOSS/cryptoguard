@@ -10,8 +10,8 @@ import org.apache.commons.lang3.StringUtils;
  * <li>SOURCE - The source code of a Maven or a Gradle Project</li>
  * </ul>
  *
- * @author RigorityJTeam
- * @version $Id: $Id
+ * @author CryptoguardTeam
+ * @version 03.07.01
  * @since V01.00.00
  */
 //region Attributes

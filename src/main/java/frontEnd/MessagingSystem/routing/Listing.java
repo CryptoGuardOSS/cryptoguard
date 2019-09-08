@@ -11,7 +11,7 @@ import frontEnd.MessagingSystem.routing.outputStructures.stream.Legacy;
  * The enum containing all of the different messaging types available for the user.
  *
  * @author franceme
- * @version $Id: $Id
+ * @version 03.07.01
  * @since V01.00.00
  */
 public enum Listing {
@@ -165,6 +165,11 @@ public enum Listing {
             return outputFileExt;
     }
 
+    /**
+     * <p>Getter for the field <code>jacksonType</code>.</p>
+     *
+     * @return a {@link frontEnd.MessagingSystem.routing.outputStructures.common.JacksonSerializer.JacksonType} object.
+     */
     public JacksonSerializer.JacksonType getJacksonType() {
         return jacksonType;
     }

@@ -14,7 +14,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * <p>MessageRepresentationTest class.</p>
  *
- * @author RigorityJTeam
+ * @author CryptoguardTeam
  * @version $Id: $Id
  * @since V01.00.02
  */
@@ -83,7 +83,7 @@ public class ListingTest {
     //endregion
 
     //region Tests
-    //@Test
+    //@Test - TODO Reimplement this test
 
     /**
      * <p>toStringTest.</p>
@@ -93,7 +93,7 @@ public class ListingTest {
             assertEquals(this.ListingSet.get(sizeKounter).toString(), this.ListingStringValues.get(sizeKounter));
     }
 
-    //@Test
+    //@Test - TODO Reimplement this test
 
     /**
      * <p>getTypeOfMessagingTest.</p>

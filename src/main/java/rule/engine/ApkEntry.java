@@ -7,9 +7,9 @@ import lombok.extern.log4j.Log4j2;
 /**
  * <p>ApkEntry class.</p>
  *
- * @author RigorityJTeam
+ * @author CryptoguardTeam
  * Created on 2018-12-14.
- * @version $Id: $Id
+ * @version 03.07.01
  * @since 01.01.06
  *
  * <p>The method in the Engine handling Apk Scanning</p>

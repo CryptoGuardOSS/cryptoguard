@@ -12,15 +12,16 @@ import rule.engine.RuleList;
 
 import java.io.File;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
  * <p>Abstract OutputStructure class.</p>
  *
- * @author RigorityJTeam
+ * @author CryptoguardTeam
  * Created on 3/1/19.
- * @version $Id: $Id
+ * @version 03.07.01
  * @since 03.03.00
  *
  * <p>The general class encompassing the output structure (stream and blocked).</p>
@@ -34,7 +35,7 @@ public abstract class OutputStructure {
     private final File outfile;
     private final EngineType type;
     private final CWEList cwes = new CWEList();
-    private final Charset chars = Charset.forName("UTF-8");
+    private final Charset chars = StandardCharsets.UTF_8;
     private final HashMap<Integer, Integer> countOfBugs = new HashMap<>();
     //endregion
 

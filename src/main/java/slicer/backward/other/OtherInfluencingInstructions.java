@@ -17,8 +17,8 @@ import java.util.Map;
 /**
  * <p>OtherInfluencingInstructions class.</p>
  *
- * @author RigorityJTeam
- * @version $Id: $Id
+ * @author CryptoguardTeam
+ * @version 03.07.01
  * @since V01.00.00
  */
 public class OtherInfluencingInstructions {

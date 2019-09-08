@@ -23,8 +23,8 @@ import java.util.*;
 /**
  * <p>CustomTrustManagerFinder class.</p>
  *
- * @author RigorityJTeam
- * @version $Id: $Id
+ * @author CryptoguardTeam
+ * @version 03.07.01
  * @since V01.00.00
  */
 public class CustomTrustManagerFinder implements RuleChecker {
@@ -63,15 +63,6 @@ public class CustomTrustManagerFinder implements RuleChecker {
                         (!isThrowException(analysis.getMethod()) ||
                                 hasTryCatch(analysis.getMethod()))) {
 
-                    //region LEGACY
-                    /*
-                    System.out.println("=======================================");
-                    String output = "***Violated Rule 4: Uses untrusted TrustManager";
-                    output += " ***Should throw java.security.cert.CertificateException in check(Client|Server)Trusted method of " + className;
-                    System.out.println(output);
-                    System.out.println("=======================================");
-                    */
-                    //endregion
                     AnalysisIssue issue = new AnalysisIssue(className,
                             4,
                             "Should throw java.security.cert.CertificateException in check(Client|Server)Trusted method of " +
@@ -88,15 +79,6 @@ public class CustomTrustManagerFinder implements RuleChecker {
                         if (unit.getUnit() instanceof JAssignStmt &&
                                 unit.getUnit().toString().contains("[0]")) {
 
-                            //region LEGACY
-                    /*
-                                System.out.println("=======================================");
-                                String output = "***Violated Rule 4: Uses untrusted TrustManager";
-                                output += " ***Should not use unpinned self-signed certification in " + className;
-                                System.out.println(output);
-                                System.out.println("=======================================");
-                                */
-                            //endregion
                             AnalysisIssue issue = new AnalysisIssue(unit, 4, className, sourcePaths);
 
                             output.addIssue(issue);
@@ -116,15 +98,6 @@ public class CustomTrustManagerFinder implements RuleChecker {
 
                     if (!callsGetAcceptedIssuers) {
 
-                        //region LEGACY
-                        /*
-                        System.out.println("=======================================");
-                            String output = "***Violated Rule 4: Uses untrusted TrustManager";
-                            output += " ***Should at least get One accepted Issuer from Other Sources in getAcceptedIssuers method of " + className;
-                            System.out.println(output);
-                            System.out.println("=======================================");
-                         */
-                        //endregion
                         AnalysisIssue issue = new AnalysisIssue(className + " <getAcceptedIssuers>",
                                 4,
                                 "Should at least get One accepted Issuer from Other Sources in getAcceptedIssuers method of " +

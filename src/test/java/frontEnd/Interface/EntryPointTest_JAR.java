@@ -149,7 +149,7 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.OUT, tempJarFile_txt);
 
             try {
-                engine.main(args.split(" "));
+                EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempJarFile_txt), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 10);
@@ -178,7 +178,7 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.PRETTY);
 
             try {
-                engine.main(args.split(" "));
+                EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempJarFile_Scarf_0), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 1);
@@ -209,7 +209,7 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.PRETTY);
 
             try {
-                engine.main(args.split(" "));
+                EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempJarFile_Scarf_0), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 1);
@@ -244,7 +244,7 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.PRETTY);
 
             try {
-                engine.main(args.split(" "));
+                EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempJarFile_Default_0), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 1);
@@ -275,7 +275,7 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.PRETTY);
 
             try {
-                engine.main(args.split(" "));
+                EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempJarFile_Default_0), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 1);
@@ -306,10 +306,9 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.TIMEMEASURE) +
                             makeArg(argsIdentifier.PRETTY) +
                             " -Sconfig " + scarfArgs;
-            ;
 
             try {
-                engine.main(args.split(" "));
+                EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempJarFile_Scarf_1), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 1);
@@ -340,7 +339,7 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.PRETTY);
 
             try {
-                engine.main(args.split(" "));
+                EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempJarFile_Scarf_Steam_1), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 1);
@@ -371,7 +370,7 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.PRETTY);
 
             try {
-                engine.main(args.split(" "));
+                EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempJarFile_Default_Stream_0), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 1);
@@ -401,7 +400,7 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.PRETTY);
 
             try {
-                engine.main(args.split(" "));
+                EntryPoint.main(args.split(" "));
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -416,7 +415,7 @@ public class EntryPointTest_JAR {
     /**
      * <p>main_TestableJar_ScarfTimeStamp.</p>
      */
-    //@Test
+    //@Test - TODO Reimplement this test
     public void main_TestableJar_ScarfTimeStamp_UsingClassPaths() {
         if (isLinux) {
             String args = "-in " + EngineType.JAR.getFlag() + " -s " + jarOne + " -auxclasspath " + srcOneGrvDep + " -m " + Listing.ScarfXML.getFlag() + " -o " + tempJarFile_Scarf_2 + " " + argsIdentifier.TIMESTAMP.getArg() + " " + argsIdentifier.PRETTY.getArg();
@@ -433,7 +432,7 @@ public class EntryPointTest_JAR {
             assertEquals(args, new_args);
 
             try {
-                engine.main(args.split(" "));
+                EntryPoint.main(args.split(" "));
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -460,7 +459,7 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.HEURISTICS);
 
             try {
-                engine.main(args.split(" "));
+                EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempJarFile_Default_0), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 1);

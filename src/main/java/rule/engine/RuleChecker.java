@@ -8,8 +8,8 @@ import java.util.List;
 /**
  * The interface of the RuleChecker class. Used to generate the structure of the various rules being checked.
  *
- * @author RigorityJTeam
- * @version $Id: $Id
+ * @author CryptoguardTeam
+ * @version 03.07.01
  * @since V01.00.00
  */
 public interface RuleChecker {

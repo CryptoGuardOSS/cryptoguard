@@ -9,7 +9,7 @@ import java.util.Set;
  * <p>InvokeUnitContainer class.</p>
  *
  * @author franceme
- * @version $Id: $Id
+ * @version 03.07.01
  */
 public class InvokeUnitContainer extends UnitContainer {
 

@@ -9,9 +9,9 @@ import static frontEnd.MessagingSystem.routing.outputStructures.common.Legacy.*;
 /**
  * <p>Legacy class.</p>
  *
- * @author RigorityJTeam
+ * @author CryptoguardTeam
  * Created on 2/7/19.
- * @version $Id: $Id
+ * @version 03.07.01
  * @since 03.02.00
  *
  * <p>The Legacy stream writer.</p>
@@ -44,9 +44,7 @@ public class Legacy extends Structure {
         this.writeln(marshallingHeader(super.getType(), super.getSource().getSource()));
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void addIssue(AnalysisIssue issue) throws ExceptionHandler {
         super.addIssue(issue);
@@ -59,9 +57,7 @@ public class Legacy extends Structure {
         this.writeln("=======================================");
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void writeFooter() throws ExceptionHandler {
         this.writeln(marshallingSootErrors(super.getSource().getSootErrors()));
