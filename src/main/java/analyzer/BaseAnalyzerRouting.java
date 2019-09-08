@@ -15,9 +15,9 @@ import java.util.List;
 /**
  * <p>BaseAnalyzerRouting class.</p>
  *
- * @author RigorityJTeam
+ * @author CryptoguardTeam
  * Created on 2019-01-26.
- * @version $Id: $Id
+ * @version 03.07.01
  * @since 02.02.00
  *
  * <p>The class to handle the routing for the different use cases.</p>
@@ -166,9 +166,10 @@ public class BaseAnalyzerRouting {
         Options.v().set_output_format(Options.output_format_jimple);
         Options.v().set_src_prec(Options.src_prec_java);
 
-        Scene.v().setSootClassPath(Utils.getBaseSOOT() + ":"
-                + Utils.join(":", snippetPath)
-                + ":" + Utils.buildSootClassPath(projectDependency));
+        Scene.v().setSootClassPath(Utils.join(":",
+                Utils.getBaseSOOT(),
+                Utils.join(":", snippetPath),
+                Utils.buildSootClassPath(projectDependency)));
 
         List<String> classNames = Utils.getClassNamesFromSnippet(snippetPath);
 
@@ -177,7 +178,7 @@ public class BaseAnalyzerRouting {
 
     //endregion
     //region JavaFiles
-    //Like Dir
+    //Like Dir //TODO - Fix This
 
     /**
      * <p>setupBaseJava.</p>
@@ -200,16 +201,23 @@ public class BaseAnalyzerRouting {
         Options.v().set_output_format(Options.output_format_jimple);
         Options.v().set_src_prec(Options.src_prec_java);
 
-        Scene.v().setSootClassPath(Utils.getBaseSOOT() + ":" + Utils.retrievePackageFromJavaFiles(snippetPath) + ":" + Utils.buildSootClassPath(projectDependency));
+        String tempClassPath = Utils.join(":",
+                Utils.getBaseSOOT(),
+                Utils.retrievePackageFromJavaFiles(snippetPath),
+                Utils.buildSootClassPath(projectDependency));
 
-        List<String> classNames = Utils.retrieveFullyQualifiedName(snippetPath);
+        Scene.v().setSootClassPath(tempClassPath);
+
+        List<String> classNames = new ArrayList<String>();
+        classNames.add("java.lang.CharSequence");
+        classNames.addAll(Utils.retrieveFullyQualifiedName(snippetPath));
 
         loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
     }
 
     //endregion
     //region JavaClassFiles
-    //Like Jar
+    //Like Jar //TODO - Fix This
 
     /**
      * <p>setupBaseJavaClass.</p>
@@ -235,7 +243,20 @@ public class BaseAnalyzerRouting {
         Options.v().set_prepend_classpath(true);
         Options.v().set_whole_program(true);
 
-        List<String> classNames = Utils.retrieveFullyQualifiedName(sourceJavaClasses);
+        //TEMP Testing Purposes
+        // .~./cryptoguard/samples
+        String samplesPath = Utils.osPathJoin(System.getProperty("user.dir"), "samples");
+
+
+        //List<String> classNames = Utils.retrieveFullyQualifiedName(sourceJavaClasses);
+        List<String> classNames = new ArrayList<>();
+        classNames.add("tester.test");
+
+        //String tempPath = Utils.retrievePackageFromJavaFiles(sourceJavaClasses);
+        //tempPath = tempPath.substring(0, tempPath.lastIndexOf(System.getProperty("file.separator")));
+        // .~./cryptoguard/samples/temp
+        String tempPath = samplesPath + "/temp";
+
 
         if (projectDependencyPath != null) {
             for (String dependency : Utils.getJarsInDirectory(projectDependencyPath)) {
@@ -243,12 +264,9 @@ public class BaseAnalyzerRouting {
             }
         }
 
-        String tempTest = Utils.retrievePackageFromJavaFiles(sourceJavaClasses);
-        String tempPath = tempTest.substring(0, tempTest.lastIndexOf(System.getProperty("file.separator")));
+        String classPath = Utils.join(":", Utils.getBaseSOOT(), tempPath, projectDependencyPath);
 
-        String temp = Utils.join(":", Utils.getBaseSOOT(), tempPath, projectDependencyPath);
-        //String temp = Utils.join(":",Utils.getBaseSOOT(),Utils.join(":", sourceJavaClasses),projectDependencyPath);
-        Scene.v().setSootClassPath(temp);
+        Scene.v().setSootClassPath(classPath);
 
         for (String clazz : classNames) {
             Scene.v().extendSootClassPath(clazz);

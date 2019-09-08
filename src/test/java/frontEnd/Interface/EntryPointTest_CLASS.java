@@ -5,6 +5,7 @@ import frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport;
 import frontEnd.argsIdentifier;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 import rule.engine.EngineType;
 import soot.G;
 import util.Utils;
@@ -94,8 +95,7 @@ public class EntryPointTest_CLASS {
         }
     }
 
-    //@Test - TODO Reimplement this test
-
+    @Test
     /**
      * <p>main_TestableFiles_SingleTest.</p>
      */
@@ -104,8 +104,8 @@ public class EntryPointTest_CLASS {
             String args =
                     "-in class " +
                             "-m L " +
-                            "-s /home/maister/Downloads/temp/tester/test.class " +
-                            "-o /home/maister/Downloads/temp/report.txt";
+                            "-s " + testRec + "/temp/tester/test.class " +
+                            "-o " + testRec + "/temp/report.txt";
 
             try {
 
