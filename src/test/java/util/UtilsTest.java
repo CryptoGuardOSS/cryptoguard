@@ -30,16 +30,7 @@ public class UtilsTest {
     private String fullJavaClassFile;
     private String fullJavaFile;
     private String fileSep = System.getProperty("file.separator");
-
-    //region Version Specific Change
-    //Java 1.8.181 Implementation
-    //private String javaFile = String.join(fileSep, "rsc", "test", "main.java");
-    //Java 1.8.181 Implementation
-
-    //Java 1.7.80 Implementation
-    private String javaFile = Utils.join(fileSep, "rsc", "test", "main.java");
-    //Java 1.7.80 Implementation
-    //endregion
+    private String javaFile = String.join(fileSep, "rsc", "test", "main.java");
 
     //endregion
 
@@ -53,25 +44,8 @@ public class UtilsTest {
     @Before
     public void setUp() throws Exception {
 
-        //region Version Specific Change
-        //Java 1.8.181 Implementation
-        //fullJavaFile = String.join(fileSep, "src", "main", "java", "com", "full", "fun", "test", "main.java");
-        //Java 1.8.181 Implementation
-
-        //Java 1.7.80 Implementation
-        fullJavaFile = Utils.join(fileSep, "src", "main", "java", "com", "full", "fun", "test", "main.java");
-        //Java 1.7.80 Implementation
-        //endregion
-
-        //region Version Specific Change
-        //Java 1.8.181 Implementation
-        //fullJavaClassFile = String.join(fileSep, "target", "main", "java", "com", "full", "fun", "test", "main.class");
-        //Java 1.8.181 Implementation
-
-        //Java 1.7.80 Implementation
-        fullJavaClassFile = Utils.join(fileSep, "target", "main", "java", "com", "full", "fun", "test", "main.class");
-        //Java 1.7.80 Implementation
-        //endregion
+        fullJavaFile = String.join(fileSep, "src", "main", "java", "com", "full", "fun", "test", "main.java");
+        fullJavaClassFile = String.join(fileSep, "target", "main", "java", "com", "full", "fun", "test", "main.class");
 
     }
 

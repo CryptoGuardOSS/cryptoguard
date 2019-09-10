@@ -229,7 +229,7 @@ public class ArgumentsCheck {
         //endregion
 
         //Setting the raw command within info
-        info.setRawCommand(Utils.join(" ", preservedArguments));
+        info.setRawCommand(String.join(" ", preservedArguments));
 
         return info;
 

@@ -3,6 +3,7 @@ package analyzer;
 import analyzer.backward.Analysis;
 import analyzer.backward.MethodWrapper;
 import analyzer.backward.UnitContainer;
+import lombok.extern.log4j.Log4j2;
 import rule.base.BaseRuleChecker;
 import slicer.backward.MethodCallSiteInfo;
 import slicer.backward.SlicingCriteria;
@@ -31,6 +32,7 @@ import java.util.Map;
  * @version 03.07.01
  * @since V01.00.00
  */
+@Log4j2
 public class BaseAnalyzer {
 
     /**

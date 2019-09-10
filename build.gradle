@@ -10,8 +10,8 @@ plugins {
 }
 apply plugin: "java"
 
-sourceCompatibility = JavaVersion.VERSION_1_7
-targetCompatibility = JavaVersion.VERSION_1_7
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 group = groupName
 version = versionNumber
@@ -209,10 +209,8 @@ dependencies {
     compile 'commons-cli:commons-cli:1.4'
     implementation 'org.mockito:mockito-core:2.24.5'
     compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
-
     compileOnly 'org.projectlombok:lombok:1.18.8'
     annotationProcessor 'org.projectlombok:lombok:1.18.8'
-
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1'
     compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.9.8'
     compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.9.8'

@@ -37,6 +37,9 @@ public class TestUtilities {
      * Constant <code>srcOneGrv="Utils.osPathJoin(basePath, samples, tes"{trunked}</code>
      */
     public static final String testRec = Utils.osPathJoin(basePath, "samples");
+    public static final String testRec_tester_test = Utils.osPathJoin(testRec, "temp", "tester");
+    public static final String testRec_tester_test_Class = Utils.osPathJoin(testRec_tester_test, "test.class");
+    public static final String testRec_tester_test_Java = Utils.osPathJoin(testRec_tester_test, "test.java");
     public static final String srcOneGrv = Utils.osPathJoin(testRec, "testable-jar");
     public static final String javaSource = Utils.osPathJoin(srcOneGrv, "src", "main", "java", "tester");
     public static final String classSource = Utils.osPathJoin(srcOneGrv, "build", "classes", "java", "main", "tester");
@@ -71,6 +74,7 @@ public class TestUtilities {
     public static final String tempFileOutTxt_two = Utils.osPathJoin(testPath, "testable-jar_classFiles.txt");
     public static final String tempFileOutXML_two = Utils.osPathJoin(testPath, "testable-jar_classFiles.xml");
     public static final String tempFileOutTxt_Class = Utils.osPathJoin(testPath, "java-class-file.txt");
+    public static final String tempFileOutTxt_Class_tester_test = Utils.osPathJoin(testPath, "java-class-file_sample_tester-test.txt");
     public static final String tempFileOutXML_Class = Utils.osPathJoin(testPath, "java-class-file.xml");
     public static final String tempFileOutXML_Class_Stream = Utils.osPathJoin(testPath, "java-class-file-stream.xml");
 
@@ -92,10 +96,10 @@ public class TestUtilities {
 
 
     public static final ArrayList<String> sampleAuxClassPathOneList = new ArrayList<String>(Arrays.asList(testRec, jarOne, javaFiles[0], javaFiles[1], classFiles[0], classFiles[1]));
-    public static final String sampleAuxClassPathOne = Utils.join(":", sampleAuxClassPathOneList);
+    public static final String sampleAuxClassPathOne = String.join(":", sampleAuxClassPathOneList);
 
     public static final ArrayList<String> sampleAuxClassPathTwoList = new ArrayList<String>(Arrays.asList(testRec, jarOne, javaFiles[0], javaFiles[1], classFiles[0], classFiles[1], scarfArgs));
-    public static final String sampleAuxClassPathTwo = Utils.join(":", sampleAuxClassPathTwoList);
+    public static final String sampleAuxClassPathTwo = String.join(":", sampleAuxClassPathTwoList);
     //endregion
 
     /**

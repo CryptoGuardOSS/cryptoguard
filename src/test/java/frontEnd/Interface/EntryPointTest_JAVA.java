@@ -5,9 +5,9 @@ import frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport;
 import frontEnd.argsIdentifier;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 import rule.engine.EngineType;
 import soot.G;
-import util.Utils;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -66,7 +66,7 @@ public class EntryPointTest_JAVA {
     /**
      * <p>testEnvironmentVariables.</p>
      */
-    //@Test - TODO Reimplement this test
+    @Test
     public void testEnvironmentVariables() {
         String[] dirLists = new String[]{srcOneGrv, srcOneGrvDep};
 
@@ -87,7 +87,7 @@ public class EntryPointTest_JAVA {
 
     }
 
-    //@Test - TODO Reimplement this test
+    //@Test
     /**
      * <p>main_TestableFiles_SingleTest.</p>
      */
@@ -163,7 +163,7 @@ public class EntryPointTest_JAVA {
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES) +
-                            makeArg(argsIdentifier.SOURCE, Utils.join(" ", javaFiles)) +
+                            makeArg(argsIdentifier.SOURCE, String.join(" ", javaFiles)) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
                             makeArg(argsIdentifier.OUT, javaFileThree);
