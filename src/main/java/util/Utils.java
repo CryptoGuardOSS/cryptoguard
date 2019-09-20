@@ -96,9 +96,9 @@ public class Utils {
      */
     public final static String localPath = System.getProperty("user.dir");
     /**
-     * Constant <code>projectVersion="V03.07.01"</code>
+     * Constant <code>projectVersion="V03.07.03"</code>
      */
-    public final static String projectVersion = "V03.07.01";
+    public final static String projectVersion = "V03.07.03";
     /**
      * Constant <code>projectName="CryptoGuard"</code>
      */
@@ -303,6 +303,13 @@ public class Utils {
         }
 
         return classPath.toString();
+    }
+
+    public static List<String> getJarsInDirectories(List<String> dirs) {
+        ArrayList<String> list = new ArrayList<>();
+        for (String dir : dirs)
+            list.addAll(getJarsInDirectory(dir));
+        return list;
     }
 
     /**
@@ -546,6 +553,14 @@ public class Utils {
         return fullPath;
     }
 
+    public static String replaceLast(String text, String regexish, String replacement) {
+        int lastIdx = text.lastIndexOf(regexish);
+        if (lastIdx != -1)
+            return text.substring(0, lastIdx) + replacement + text.substring(lastIdx + regexish.length());
+        else
+            return text;
+    }
+
     /**
      * <p>retrieveFullyQualifiedName.</p>
      *
@@ -570,6 +585,7 @@ public class Utils {
                 }
 
             } catch (IOException e) {
+                //TODO - Add Catch Here
                 System.out.println("Issue Reading File: " + in);
             }
         } else if (in.toLowerCase().endsWith(".class")) {
@@ -636,6 +652,7 @@ public class Utils {
             } else
                 return in.getName();
         } catch (IOException e) {
+            //TODO - Add Catch Here
         }
         return file;
     }
@@ -656,6 +673,7 @@ public class Utils {
             try {
                 relativeFilePath = file.getCanonicalPath().replace(file.getName(), "");
             } catch (IOException e) {
+                //TODO - Add Catch Here
             }
 
             if (!filePaths.contains(relativeFilePath))
@@ -718,38 +736,7 @@ public class Utils {
      * @return a {@link java.lang.String} object.
      */
     public static String osPathJoin(String... elements) {
-        return Utils.join(Utils.fileSep, elements);
-    }
-
-    /**
-     * <p>join.</p>
-     *
-     * @param delimiter a {@link java.lang.String} object.
-     * @param elements  a {@link java.lang.String} object.
-     * @return a {@link java.lang.String} object.
-     */
-    public static String join(String delimiter, String... elements) {
-        return join(delimiter, Arrays.asList(elements));
-    }
-
-    /**
-     * <p>join.</p>
-     *
-     * @param delimiter a {@link java.lang.String} object.
-     * @param elements  a {@link java.util.List} object.
-     * @return a {@link java.lang.String} object.
-     */
-    public static String join(String delimiter, List<String> elements) {
-        StringBuilder tempString = new StringBuilder();
-        for (String in : elements) {
-            if (in != null) {
-                tempString.append(in);
-                if (!in.equals(elements.get(elements.size() - 1)))
-                    tempString.append(delimiter);
-            }
-        }
-
-        return tempString.toString();
+        return String.join(Utils.fileSep, elements);
     }
 
     /**
@@ -802,10 +789,10 @@ public class Utils {
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static String getBaseSOOT() throws ExceptionHandler {
-        String rt = Utils.join(Utils.fileSep, "jre", "lib", "rt.jar:");
-        String jce = Utils.join(Utils.fileSep, "jre", "lib", "jce.jar");
+        String rt = Utils.osPathJoin("jre", "lib", "rt.jar:");
+        String jce = Utils.osPathJoin("jre", "lib", "jce.jar");
 
-        return Utils.getJAVA_HOME() + Utils.fileSep + Utils.join(Utils.getJAVA_HOME() + Utils.fileSep, rt, jce);
+        return Utils.getJAVA_HOME() + Utils.fileSep + String.join(Utils.getJAVA_HOME() + Utils.fileSep, rt, jce);
     }
 
     /**
@@ -816,10 +803,10 @@ public class Utils {
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static String getBaseSOOT7() throws ExceptionHandler {
-        String rt = Utils.join(Utils.fileSep, "jre", "lib", "rt.jar:");
-        String jce = Utils.join(Utils.fileSep, "jre", "lib", "jce.jar");
+        String rt = Utils.osPathJoin(Utils.fileSep, "jre", "lib", "rt.jar:");
+        String jce = Utils.osPathJoin(Utils.fileSep, "jre", "lib", "jce.jar");
 
-        return Utils.getJAVA7_HOME() + Utils.fileSep + Utils.join(Utils.getJAVA7_HOME() + Utils.fileSep, rt, jce);
+        return Utils.getJAVA7_HOME() + Utils.fileSep + String.join(Utils.getJAVA7_HOME() + Utils.fileSep, rt, jce);
     }
 
     /**

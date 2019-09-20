@@ -2,6 +2,7 @@
 .gradle
 .idea
 /build/
+/bin/
 /target/
 /release/
 /.settings/
@@ -14,3 +15,6 @@ docs
 *.log
 *gradlew
 *gradlew.bat
+/.ipynb_checkpoints/
+*.ipynb
+/.classpath

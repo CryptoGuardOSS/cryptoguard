@@ -2,6 +2,7 @@ package analyzer;
 
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.Interface.outputRouting.ExceptionId;
+import lombok.extern.log4j.Log4j2;
 import rule.base.BaseRuleChecker;
 import rule.engine.EngineType;
 import soot.Scene;
@@ -15,13 +16,14 @@ import java.util.List;
 /**
  * <p>BaseAnalyzerRouting class.</p>
  *
- * @author RigorityJTeam
+ * @author CryptoguardTeam
  * Created on 2019-01-26.
- * @version $Id: $Id
+ * @version 03.07.01
  * @since 02.02.00
  *
  * <p>The class to handle the routing for the different use cases.</p>
  */
+@Log4j2
 public class BaseAnalyzerRouting {
 
     /**
@@ -166,18 +168,33 @@ public class BaseAnalyzerRouting {
         Options.v().set_output_format(Options.output_format_jimple);
         Options.v().set_src_prec(Options.src_prec_java);
 
-        Scene.v().setSootClassPath(Utils.getBaseSOOT() + ":"
-                + Utils.join(":", snippetPath)
-                + ":" + Utils.buildSootClassPath(projectDependency));
+        Scene.v().setSootClassPath(String.join(":",
+                Utils.getBaseSOOT(),
+                String.join(":", snippetPath),
+                Utils.buildSootClassPath(projectDependency)));
 
         List<String> classNames = Utils.getClassNamesFromSnippet(snippetPath);
+
+        /*
+        if (projectDependency != null && projectDependency.size() > 0) {
+            for (String dependency : Utils.getJarsInDirectories(projectDependency)) {
+                classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
+            }
+        }
+
+        */
+
+        for (String clazz : classNames) {
+            log.debug("Loading the class: " + clazz);
+            Scene.v().extendSootClassPath(clazz);//Utils.replaceLast(clazz,".",Utils.fileSep));
+        }
 
         loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
     }
 
     //endregion
     //region JavaFiles
-    //Like Dir
+    //Like Dir //TODO - Fix This
 
     /**
      * <p>setupBaseJava.</p>
@@ -200,9 +217,18 @@ public class BaseAnalyzerRouting {
         Options.v().set_output_format(Options.output_format_jimple);
         Options.v().set_src_prec(Options.src_prec_java);
 
-        Scene.v().setSootClassPath(Utils.getBaseSOOT() + ":" + Utils.retrievePackageFromJavaFiles(snippetPath) + ":" + Utils.buildSootClassPath(projectDependency));
+        Scene.v().setSootClassPath(String.join(":",
+                Utils.getBaseSOOT(),
+                String.join(":", snippetPath),
+                Utils.buildSootClassPath(projectDependency)));
 
         List<String> classNames = Utils.retrieveFullyQualifiedName(snippetPath);
+
+        if (projectDependency != null && projectDependency.size() > 0) {
+            for (String dependency : Utils.getJarsInDirectories(projectDependency)) {
+                classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
+            }
+        }
 
         loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
     }
@@ -243,14 +269,11 @@ public class BaseAnalyzerRouting {
             }
         }
 
-        String tempTest = Utils.retrievePackageFromJavaFiles(sourceJavaClasses);
-        String tempPath = tempTest.substring(0, tempTest.lastIndexOf(System.getProperty("file.separator")));
+        log.debug("Setting the soot class path as: " + String.join(":", Utils.getBaseSOOT(), projectDependencyPath == null ? "" : projectDependencyPath));
+        Scene.v().setSootClassPath(String.join(":", Utils.getBaseSOOT(), projectDependencyPath));
 
-        String temp = Utils.join(":", Utils.getBaseSOOT(), tempPath, projectDependencyPath);
-        //String temp = Utils.join(":",Utils.getBaseSOOT(),Utils.join(":", sourceJavaClasses),projectDependencyPath);
-        Scene.v().setSootClassPath(temp);
-
-        for (String clazz : classNames) {
+        for (String clazz : sourceJavaClasses) {
+            log.debug("Loading the class: " + clazz);
             Scene.v().extendSootClassPath(clazz);
         }
 
@@ -281,6 +304,7 @@ public class BaseAnalyzerRouting {
 
         for (String clazz : BaseAnalyzer.CRITERIA_CLASSES) {
             try {
+                log.debug("Attempting to load the Class: " + clazz);
                 Scene.v().loadClassAndSupport(clazz);
             } catch (Error e) {
                 throw new ExceptionHandler("Error loading Class: " + clazz, ExceptionId.LOADING);
@@ -289,6 +313,7 @@ public class BaseAnalyzerRouting {
 
         for (String clazz : classNames) {
             try {
+                log.debug("Attempting to load the class: " + clazz);
                 Scene.v().loadClassAndSupport(clazz);
             } catch (Error e) {
                 throw new ExceptionHandler("Error loading class: " + clazz, ExceptionId.LOADING);

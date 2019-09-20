@@ -126,8 +126,7 @@ public class ArgumentsCheck {
         }
         //endregion
 
-        //region Retrieving the dependencies via the class path TODO - AUXCLASSPATH
-        /*
+        //region Retrieving the dependencies via the class path
         if (cmd.hasOption(argsIdentifier.AUXCLASSPATH.getId())) {
             log.trace("Adding all of the auxiliary class paths from the Utils method");
             log.debug("Adding the auxiliary class paths + " + cmd.getOptionValue(argsIdentifier.AUXCLASSPATH.getId()));
@@ -136,7 +135,6 @@ public class ArgumentsCheck {
 
             log.info("Added the aux class path");
         }
-        */
         //endregion
 
         Listing messaging = Listing.retrieveListingType(cmd.getOptionValue(argsIdentifier.FORMATOUT.getId()));
@@ -229,7 +227,7 @@ public class ArgumentsCheck {
         //endregion
 
         //Setting the raw command within info
-        info.setRawCommand(Utils.join(" ", preservedArguments));
+        info.setRawCommand(String.join(" ", preservedArguments));
 
         return info;
 
@@ -254,14 +252,10 @@ public class ArgumentsCheck {
         dependency.setOptionalArg(false);
         cmdLineArgs.addOption(dependency);
 
-        //region AuxClassPath TODO - AUXCLASSPATH
-        /*
         Option auxClassPath = Option.builder(argsIdentifier.AUXCLASSPATH.getId()).hasArg().argName("auxclasspath").desc(argsIdentifier.AUXCLASSPATH.getDesc()).build();
         auxClassPath.setType(String.class);
         auxClassPath.setOptionalArg(true);
         cmdLineArgs.addOption(auxClassPath);
-        */
-        //endregion
 
         Option depth = Option.builder(argsIdentifier.DEPTH.getId()).hasArg().argName("depth").desc(argsIdentifier.DEPTH.getDesc()).build();
         depth.setType(String.class);

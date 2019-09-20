@@ -81,8 +81,8 @@ public class ScarfXMLTest {
     //endregion
 
     //region Tests
-    //@Test - TODO Reimplement this test
 
+    //@Test
     /**
      * <p>simpleFiveRuleTest.</p>
      */
