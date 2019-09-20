@@ -175,6 +175,20 @@ public class BaseAnalyzerRouting {
 
         List<String> classNames = Utils.getClassNamesFromSnippet(snippetPath);
 
+        /*
+        if (projectDependency != null && projectDependency.size() > 0) {
+            for (String dependency : Utils.getJarsInDirectories(projectDependency)) {
+                classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
+            }
+        }
+
+        */
+
+        for (String clazz : classNames) {
+            log.debug("Loading the class: " + clazz);
+            Scene.v().extendSootClassPath(clazz);//Utils.replaceLast(clazz,".",Utils.fileSep));
+        }
+
         loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
     }
 
@@ -203,25 +217,17 @@ public class BaseAnalyzerRouting {
         Options.v().set_output_format(Options.output_format_jimple);
         Options.v().set_src_prec(Options.src_prec_java);
 
-        String tempClassPath = String.join(":",
+        Scene.v().setSootClassPath(String.join(":",
                 Utils.getBaseSOOT(),
-                Utils.retrievePackageFromJavaFiles(snippetPath),
-                Utils.buildSootClassPath(projectDependency));
+                String.join(":", snippetPath),
+                Utils.buildSootClassPath(projectDependency)));
 
-        Scene.v().setSootClassPath(tempClassPath);
+        List<String> classNames = Utils.retrieveFullyQualifiedName(snippetPath);
 
-        List<String> classNames = new ArrayList<String>();
-        classNames.addAll(Utils.retrieveFullyQualifiedName(snippetPath));
-
-        if (projectDependency != null) {
-            for (String dependency : projectDependency) {
+        if (projectDependency != null && projectDependency.size() > 0) {
+            for (String dependency : Utils.getJarsInDirectories(projectDependency)) {
                 classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
             }
-        }
-
-        for (String clazz : snippetPath) {
-            log.debug("Loading the class: " + clazz);
-            Scene.v().extendSootClassPath(clazz);
         }
 
         loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);

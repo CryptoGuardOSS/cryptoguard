@@ -16,7 +16,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-import static junit.framework.TestCase.*;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertNull;
 import static test.TestUtilities.*;
 
@@ -410,26 +411,22 @@ public class EntryPointTest_JAR {
     }
 
 
-    //region TODO - AUXCLASSPATH
+    //region
 
     /**
      * <p>main_TestableJar_ScarfTimeStamp.</p>
      */
-    //@Test - TODO Reimplement this test
+    @Test
     public void main_TestableJar_ScarfTimeStamp_UsingClassPaths() {
         if (isLinux) {
-            String args = "-in " + EngineType.JAR.getFlag() + " -s " + jarOne + " -auxclasspath " + srcOneGrvDep + " -m " + Listing.ScarfXML.getFlag() + " -o " + tempJarFile_Scarf_2 + " " + argsIdentifier.TIMESTAMP.getArg() + " " + argsIdentifier.PRETTY.getArg();
-
-            String new_args =
+            String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.JAR) +
-                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.SOURCE, jarOne) +
                             makeArg(argsIdentifier.AUXCLASSPATH, srcOneGrvDep) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.OUT, tempJarFile_Scarf_2) +
-                            makeArg(argsIdentifier.PRETTY) +
-                            makeArg(argsIdentifier.TIMESTAMP);
-
-            assertEquals(args, new_args);
+                            makeArg(argsIdentifier.TIMESTAMP) +
+                            makeArg(argsIdentifier.PRETTY);
 
             try {
                 EntryPoint.main(args.split(" "));

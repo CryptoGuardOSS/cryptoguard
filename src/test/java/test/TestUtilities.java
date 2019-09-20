@@ -70,6 +70,7 @@ public class TestUtilities {
     public static final String pathToAPK = Utils.osPathJoin(testRec, "app-debug.apk");
     public static final String tempFileOutTxt = Utils.osPathJoin(testPath, "testable-jar.txt");
     public static final String tempFileOutXML = Utils.osPathJoin(testPath, "testable-jar.xml");
+    public static final String tempTestJJava_Txt = Utils.osPathJoin(testPath, "temp_java-jar.txt");
     public static final String tempStreamXML = Utils.osPathJoin(testPath, "testable-jar_Stream.xml");
     public static final String tempFileOutTxt_two = Utils.osPathJoin(testPath, "testable-jar_classFiles.txt");
     public static final String tempFileOutXML_two = Utils.osPathJoin(testPath, "testable-jar_classFiles.xml");

@@ -96,9 +96,9 @@ public class Utils {
      */
     public final static String localPath = System.getProperty("user.dir");
     /**
-     * Constant <code>projectVersion="V03.07.02"</code>
+     * Constant <code>projectVersion="V03.07.03"</code>
      */
-    public final static String projectVersion = "V03.07.02";
+    public final static String projectVersion = "V03.07.03";
     /**
      * Constant <code>projectName="CryptoGuard"</code>
      */
@@ -303,6 +303,13 @@ public class Utils {
         }
 
         return classPath.toString();
+    }
+
+    public static List<String> getJarsInDirectories(List<String> dirs) {
+        ArrayList<String> list = new ArrayList<>();
+        for (String dir : dirs)
+            list.addAll(getJarsInDirectory(dir));
+        return list;
     }
 
     /**
@@ -544,6 +551,14 @@ public class Utils {
             fullPath.add(Utils.retrieveFullyQualifiedName(in));
 
         return fullPath;
+    }
+
+    public static String replaceLast(String text, String regexish, String replacement) {
+        int lastIdx = text.lastIndexOf(regexish);
+        if (lastIdx != -1)
+            return text.substring(0, lastIdx) + replacement + text.substring(lastIdx + regexish.length());
+        else
+            return text;
     }
 
     /**

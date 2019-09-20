@@ -87,8 +87,7 @@ public class UtilsTest {
 
     }
 
-    //TODO - reimplement this
-    //@Test - TODO Reimplement this test
+    @Test
 
     /**
      * <p>retrieveFullyQualifiedNameTest.</p>
@@ -97,7 +96,7 @@ public class UtilsTest {
         String packageName = retrieveFullyQualifiedName(Arrays.asList(javaFile)).get(0);
 
         assertNotNull(packageName);
-        assertEquals("src.main.java.com.full.fun.test.main", packageName);
+        assertEquals("main", packageName);
     }
 
     @Test
