@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * <p>ArgumentsCheck class.</p>
@@ -44,6 +45,14 @@ public class ArgumentsCheck {
 
         Options cmdLineArgs = setOptions();
         CommandLine cmd = null;
+        ArrayList<String> cleanArgs = new ArrayList<String>(args);
+        cleanArgs.removeIf(new Predicate<String>() {
+            @Override
+            public boolean test(String s) {
+                return null == s || "".equals(s);
+            }
+        });
+        args = cleanArgs;
         List<String> preservedArguments = args;
 
         //region Printing Version
@@ -102,13 +111,24 @@ public class ArgumentsCheck {
         Boolean verify = !cmd.hasOption(argsIdentifier.SKIPINPUTVALIDATION.getId());
         log.debug("Verification flag: " + verify);
 
+        Boolean usingInputIn = cmd.getOptionValue(argsIdentifier.SOURCE.getId()).endsWith("input.in");
+        log.debug("Enhanced Input in file: " + usingInputIn);
+
+        //inputFiles
+
         //region Setting the source files
         log.trace("Retrieving the source files.");
-        List<String> source = verify ? Utils.retrieveFilesByType(
-                Arrays.asList(
-                        cmd.getOptionValues(argsIdentifier.SOURCE.getId())), type)
-                : Arrays.asList(
-                cmd.getOptionValues(argsIdentifier.SOURCE.getId()));
+
+        List<String> source;
+        if (!usingInputIn)
+            source = verify ? Utils.retrieveFilesByType(
+                    Arrays.asList(
+                            cmd.getOptionValues(argsIdentifier.SOURCE.getId())), type)
+                    : Arrays.asList(
+                    cmd.getOptionValues(argsIdentifier.SOURCE.getId()));
+        else
+            source = Utils.inputFiles(cmd.getOptionValue(argsIdentifier.SOURCE.getId()));
+
         log.info("Using the source file(s): " + source.toString());
         //endregion
 
@@ -241,7 +261,7 @@ public class ArgumentsCheck {
         format.setOptionalArg(false);
         cmdLineArgs.addOption(format);
 
-        Option sources = Option.builder(argsIdentifier.SOURCE.getId()).required().hasArgs().argName("file(s)/dir").desc(argsIdentifier.SOURCE.getDesc()).build();
+        Option sources = Option.builder(argsIdentifier.SOURCE.getId()).required().hasArgs().argName("file(s)/input.in/dir").desc(argsIdentifier.SOURCE.getDesc()).build();
         sources.setType(String.class);
         sources.setValueSeparator(' ');
         sources.setOptionalArg(false);

@@ -41,10 +41,23 @@ public class TestUtilities {
     public static final String testRec_tester_test_Class = Utils.osPathJoin(testRec_tester_test, "test.class");
     public static final String testRec_tester_test_Java = Utils.osPathJoin(testRec_tester_test, "test.java");
     public static final String srcOneGrv = Utils.osPathJoin(testRec, "testable-jar");
+    public static final String srcOneGrvInputFile = Utils.osPathJoin(srcOneGrv, "input.in");
     public static final String javaSource = Utils.osPathJoin(srcOneGrv, "src", "main", "java", "tester");
     public static final String classSource = Utils.osPathJoin(srcOneGrv, "build", "classes", "java", "main", "tester");
     public static final String[] classFiles = {Utils.osPathJoin(classSource, "PBEUsage.class"), Utils.osPathJoin(classSource, "UrlFrameWorks.class"), Utils.osPathJoin(classSource, "NewTestCase1.class"), Utils.osPathJoin(classSource, "NewTestCase2.class")};
     public static final String[] javaFiles = {Utils.osPathJoin(javaSource, "PBEUsage.java"), Utils.osPathJoin(javaSource, "UrlFrameWorks.java")};
+    public static final ArrayList<String> srcOneGrvInputArr = new ArrayList<>(Arrays.asList(
+            "./samples/testable-jar/src/main/java/tester/UrlFrameWorks.java",
+            "./samples/testable-jar/src/main/java/tester/PasswordUtils.java",
+            "./samples/testable-jar/src/main/java/tester/Crypto.java",
+            "./samples/testable-jar/src/main/java/tester/PBEUsage.java",
+            "./samples/testable-jar/src/main/java/tester/NewTestCase2.java",
+            "./samples/testable-jar/src/main/java/tester/VeryBusyClass.java",
+            "./samples/testable-jar/src/main/java/tester/SymCrypto.java",
+            "./samples/testable-jar/src/main/java/tester/NewTestCase1.java",
+            "./samples/testable-jar/src/main/java/tester/LiveVarsClass.java",
+            "./samples/testable-jar/src/main/java/tester/PassEncryptor.java"
+    ));
     /**
      * Constant <code>jarOne="Utils.osPathJoin(basePath, samples, tes"{trunked}</code>
      */

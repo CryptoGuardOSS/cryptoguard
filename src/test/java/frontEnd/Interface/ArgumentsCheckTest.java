@@ -2,13 +2,17 @@ package frontEnd.Interface;
 
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import frontEnd.MessagingSystem.routing.Listing;
+import frontEnd.argsIdentifier;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import rule.engine.EngineType;
 import util.Utils;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static junit.framework.TestCase.assertEquals;
@@ -76,6 +80,53 @@ public class ArgumentsCheckTest {
         }
 
 
+    }
+
+    /**
+     * <p>paramaterCheck_jar.</p>
+     */
+    @Test
+    public void paramaterCheck_jar_enhancedInputFile() {
+
+        String args =
+                makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES) +
+                        makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
+                        makeArg(argsIdentifier.SOURCE, srcOneGrvInputFile) +
+                        makeArg(argsIdentifier.PRETTY) +
+                        makeArg(argsIdentifier.OUT, tempTestJJava_Txt);
+
+        EnvironmentInformation info = null;
+
+        try {
+            info = ArgumentsCheck.paramaterCheck(Arrays.asList(args.split(" ")));
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertNull(e);
+        }
+
+        assertNotNull(info);
+        assertEquals(EngineType.JAVAFILES, info.getSourceType());
+        assertEquals(10, info.getSource().size());
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(srcOneGrvInputFile));
+            String curLine = null;
+
+            ArrayList<String> sourceFiles = new ArrayList<>();
+            for (String in : info.getSource())
+                sourceFiles.add(in.replace(basePath, "."));
+
+            while ((curLine = reader.readLine()) != null)
+                assertTrue(sourceFiles.remove(curLine));
+
+            assertTrue(sourceFiles.isEmpty());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertNull(e);
+        }
+        assertTrue(info.getPrettyPrint());
+        assertEquals(tempTestJJava_Txt, info.getFileOut());
+        assertEquals(Listing.Legacy, info.getMessagingType());
     }
 
     /**

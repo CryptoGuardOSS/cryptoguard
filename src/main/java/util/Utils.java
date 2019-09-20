@@ -96,9 +96,9 @@ public class Utils {
      */
     public final static String localPath = System.getProperty("user.dir");
     /**
-     * Constant <code>projectVersion="V03.07.03"</code>
+     * Constant <code>projectVersion="V03.07.04"</code>
      */
-    public final static String projectVersion = "V03.07.03";
+    public final static String projectVersion = "V03.07.04";
     /**
      * Constant <code>projectName="CryptoGuard"</code>
      */
@@ -699,6 +699,24 @@ public class Utils {
         return Utils.osPathJoin(tempDependencyPath, dependencyPath);
     }
 
+    public static ArrayList<String> inputFiles(String file) throws ExceptionHandler {
+        ArrayList<String> filePaths = new ArrayList<String>();
+        String curLine = null;
+
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            while ((curLine = reader.readLine()) != null && !curLine.isEmpty())
+                if ((curLine = verifyFile(curLine, false)) != null)
+                    filePaths.add(curLine);
+
+            return filePaths;
+        } catch (FileNotFoundException e) {
+            throw new ExceptionHandler("File " + file + " not found", ExceptionId.FILE_I);
+        } catch (IOException e) {
+            throw new ExceptionHandler("Error reading the file  " + file, ExceptionId.FILE_I);
+        }
+    }
+
     /**
      * <p>retrieveFullFilePath.</p>
      *
@@ -967,6 +985,10 @@ public class Utils {
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static String verifyFile(String file, Boolean overWrite) throws ExceptionHandler {
+        //Base line string check
+        if (null == file || "".equals(file))
+            return null;
+
         File tempFile = new File(file);
 
         if (overWrite && (tempFile.exists() || tempFile.isFile()))
