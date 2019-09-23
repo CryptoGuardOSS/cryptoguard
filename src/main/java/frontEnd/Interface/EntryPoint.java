@@ -1,6 +1,7 @@
 package frontEnd.Interface;
 
 import frontEnd.Interface.outputRouting.ExceptionHandler;
+import frontEnd.Interface.outputRouting.ExceptionId;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
@@ -37,9 +38,12 @@ public class EntryPoint {
 
         log.info("Removed the empty arguments.");
 
+        boolean exitingJVM = true;
+
         try {
             //Fail Fast on the input validation
             EnvironmentInformation generalInfo = ArgumentsCheck.paramaterCheck(strippedArgs);
+            exitingJVM = generalInfo.getKillJVM();
 
             EntryHandler handler = null;
             switch (generalInfo.getSourceType()) {
@@ -74,6 +78,11 @@ public class EntryPoint {
             log.info("Stopped the scanning process");
 
             generalInfo.stopScanning();
+            log.info("Writing the output to the file: " + generalInfo.getFileOut());
+
+            System.out.print(generalInfo.getFileOut());
+            if (exitingJVM)
+                System.exit(ExceptionId.SUCCESS.getId());
 
         } catch (ExceptionHandler e) {
             log.debug(e.getErrorCode().getMessage());
@@ -86,7 +95,8 @@ public class EntryPoint {
                 System.err.print(e.toString());
             }
 
-            System.exit(e.getErrorCode().getId());
+            if (exitingJVM)
+                System.exit(e.getErrorCode().getId());
         }
 
     }

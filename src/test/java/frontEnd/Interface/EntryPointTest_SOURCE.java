@@ -82,14 +82,16 @@ public class EntryPointTest_SOURCE {
 
     }
 
-    //@Test - TODO Reimplement this test
+    //@Test
     public void main_TestableJarSource() {
+
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.DIR) +
                             makeArg(argsIdentifier.SOURCE, srcOneGrv) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.OUT, tempFileOutTxt);
 
 
@@ -105,7 +107,7 @@ public class EntryPointTest_SOURCE {
         }
     }
 
-    //@Test - TODO Reimplement this test
+    //@Test
     public void main_TestableJarSourceScarf() {
         if (isLinux) {
             String args =
@@ -114,6 +116,7 @@ public class EntryPointTest_SOURCE {
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.OUT, tempFileOutXML) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY);
 
             try {
@@ -132,7 +135,7 @@ public class EntryPointTest_SOURCE {
         }
     }
 
-    //@Test - TODO Reimplement this test
+    //@Test
     public void main_TestableJarSourceScarf_Stream() {
         if (isLinux) {
             String args =
@@ -141,6 +144,7 @@ public class EntryPointTest_SOURCE {
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.OUT, tempStreamXML) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY) +
                             makeArg(argsIdentifier.STREAM);
             try {

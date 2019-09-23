@@ -98,6 +98,7 @@ public class EntryPointTest_JAVA {
                             makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
                             makeArg(argsIdentifier.SOURCE, testRec_tester_test_Java) +
                             makeArg(argsIdentifier.PRETTY) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.OUT, tempTestJJava_Txt);
 
             try {
@@ -105,6 +106,7 @@ public class EntryPointTest_JAVA {
                 EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempTestJJava_Txt), StandardCharsets.UTF_8);
+                assertTrue(results.size() >= 10);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -125,6 +127,7 @@ public class EntryPointTest_JAVA {
                             makeArg(argsIdentifier.SOURCE, javaFiles[1]) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.PRETTY) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.OUT, javaFileTwo);
 
             try {
@@ -132,12 +135,7 @@ public class EntryPointTest_JAVA {
                 EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(javaFileTwo), StandardCharsets.UTF_8);
-
-                int count = 0;
-                for (String line : results)
-                    if (line.contains("Violated"))
-                        count++;
-                assertTrue(count > 0);
+                assertTrue(results.size() >= 10);
 
 
             } catch (Exception e) {
@@ -159,6 +157,7 @@ public class EntryPointTest_JAVA {
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.OUT, javaFileOne) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY);
 
             try {
@@ -169,8 +168,8 @@ public class EntryPointTest_JAVA {
                 //endregion
 
                 List<String> results = Files.readAllLines(Paths.get(javaFileOne), StandardCharsets.UTF_8);
-
                 assertTrue(results.size() > 1);
+
             } catch (Exception e) {
                 assertNull(e);
                 e.printStackTrace();
@@ -192,6 +191,7 @@ public class EntryPointTest_JAVA {
                             makeArg(argsIdentifier.SOURCE, String.join(" ", javaFiles)) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.OUT, javaFileThree);
 
             try {

@@ -8,6 +8,8 @@ import frontEnd.MessagingSystem.routing.Listing;
 import frontEnd.argsIdentifier;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.cli.*;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.config.Configurator;
 import rule.engine.EngineType;
 import util.Utils;
 
@@ -16,7 +18,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Predicate;
 
 /**
  * <p>ArgumentsCheck class.</p>
@@ -45,15 +46,6 @@ public class ArgumentsCheck {
 
         Options cmdLineArgs = setOptions();
         CommandLine cmd = null;
-        ArrayList<String> cleanArgs = new ArrayList<String>(args);
-        cleanArgs.removeIf(new Predicate<String>() {
-            @Override
-            public boolean test(String s) {
-                return null == s || "".equals(s);
-            }
-        });
-        args = cleanArgs;
-        List<String> preservedArguments = args;
 
         //region Printing Version
         if (args.contains(argsIdentifier.HELP.getArg())) {
@@ -113,6 +105,21 @@ public class ArgumentsCheck {
 
         Boolean usingInputIn = cmd.getOptionValue(argsIdentifier.SOURCE.getId()).endsWith("input.in");
         log.debug("Enhanced Input in file: " + usingInputIn);
+
+        //region Logging Verbosity Check
+        if (cmd.hasOption(argsIdentifier.VERYVERBOSE.getId())) {
+            Configurator.setRootLevel(Level.TRACE);
+            log.info("Displaying debug level logs");
+        } else if (cmd.hasOption(argsIdentifier.VERBOSE.getId())) {
+            Configurator.setRootLevel(Level.DEBUG);
+            log.info("Displaying debug level logs");
+        } else {
+            Configurator.setRootLevel(Level.INFO);
+            log.info("Displaying info level logs");
+        }
+        //endregion
+
+
 
         //inputFiles
 
@@ -244,10 +251,15 @@ public class ArgumentsCheck {
 
         Utils.initDepth(Integer.parseInt(cmd.getOptionValue(argsIdentifier.DEPTH.getId(), String.valueOf(1))));
         log.debug("Scanning using a depth of " + Utils.DEPTH);
+
+        boolean noExitJVM = cmd.hasOption(argsIdentifier.NOEXIT.getId());
+        log.debug("Exiting the JVM: " + verify);
+        if (noExitJVM)
+            info.setKillJVM(false);
         //endregion
 
         //Setting the raw command within info
-        info.setRawCommand(String.join(" ", preservedArguments));
+        info.setRawCommand(Utils.join(" ", args));
 
         return info;
 
@@ -299,6 +311,10 @@ public class ArgumentsCheck {
         prettyPrint.setOptionalArg(true);
         cmdLineArgs.addOption(prettyPrint);
 
+        Option noExit = new Option(argsIdentifier.NOEXIT.getId(), false, argsIdentifier.NOEXIT.getDesc());
+        prettyPrint.setOptionalArg(true);
+        cmdLineArgs.addOption(noExit);
+
         Option help = new Option(argsIdentifier.HELP.getId(), false, argsIdentifier.HELP.getDesc());
         help.setOptionalArg(true);
         cmdLineArgs.addOption(help);
@@ -322,6 +338,14 @@ public class ArgumentsCheck {
         Option stream = new Option(argsIdentifier.STREAM.getId(), false, argsIdentifier.STREAM.getDesc());
         stream.setOptionalArg(true);
         cmdLineArgs.addOption(stream);
+
+        Option verbose = new Option(argsIdentifier.VERBOSE.getId(), false, argsIdentifier.VERBOSE.getDesc());
+        stream.setOptionalArg(true);
+        cmdLineArgs.addOption(verbose);
+
+        Option vverbose = new Option(argsIdentifier.VERYVERBOSE.getId(), false, argsIdentifier.VERYVERBOSE.getDesc());
+        stream.setOptionalArg(true);
+        cmdLineArgs.addOption(vverbose);
 
         log.trace("Set the command line options to be used for parsing.");
         return cmdLineArgs;

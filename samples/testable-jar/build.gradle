@@ -4,12 +4,19 @@ mainClassName = 'tester.Crypto'
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
-//jar {
-//
-//    from {
-//        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-//    }
-//}
+jar {
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+repositories {
+    mavenCentral()
+    flatDir {
+        dirs 'libs'
+    }
+}
 
 task copyDepJars(type: Copy) {
     from configurations.compile
@@ -19,8 +26,10 @@ task copyDepJars(type: Copy) {
 build.dependsOn copyDepJars
 
 dependencies {
-    compile 'com.squareup.okhttp3:okhttp:3.9.0'
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile name: 'converter-gson-2.1.0'
+    compile name: 'gson-2.7'
+    compile name: 'okhttp-3.9.0'
+    compile name: 'okio-1.13.0'
+    compile name: 'retrofit-2.1.0'
 }
 

@@ -1,13 +1,18 @@
 package test;
 
+import frontEnd.Interface.EntryPoint;
 import frontEnd.MessagingSystem.routing.Listing;
 import frontEnd.MessagingSystem.routing.inputStructures.ScarfXMLId;
 import frontEnd.argsIdentifier;
+import org.apache.commons.lang3.StringUtils;
 import rule.engine.EngineType;
 import util.Utils;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.function.Predicate;
 
 /**
  * <p>TestUtilities class.</p>
@@ -46,18 +51,6 @@ public class TestUtilities {
     public static final String classSource = Utils.osPathJoin(srcOneGrv, "build", "classes", "java", "main", "tester");
     public static final String[] classFiles = {Utils.osPathJoin(classSource, "PBEUsage.class"), Utils.osPathJoin(classSource, "UrlFrameWorks.class"), Utils.osPathJoin(classSource, "NewTestCase1.class"), Utils.osPathJoin(classSource, "NewTestCase2.class")};
     public static final String[] javaFiles = {Utils.osPathJoin(javaSource, "PBEUsage.java"), Utils.osPathJoin(javaSource, "UrlFrameWorks.java")};
-    public static final ArrayList<String> srcOneGrvInputArr = new ArrayList<>(Arrays.asList(
-            "./samples/testable-jar/src/main/java/tester/UrlFrameWorks.java",
-            "./samples/testable-jar/src/main/java/tester/PasswordUtils.java",
-            "./samples/testable-jar/src/main/java/tester/Crypto.java",
-            "./samples/testable-jar/src/main/java/tester/PBEUsage.java",
-            "./samples/testable-jar/src/main/java/tester/NewTestCase2.java",
-            "./samples/testable-jar/src/main/java/tester/VeryBusyClass.java",
-            "./samples/testable-jar/src/main/java/tester/SymCrypto.java",
-            "./samples/testable-jar/src/main/java/tester/NewTestCase1.java",
-            "./samples/testable-jar/src/main/java/tester/LiveVarsClass.java",
-            "./samples/testable-jar/src/main/java/tester/PassEncryptor.java"
-    ));
     /**
      * Constant <code>jarOne="Utils.osPathJoin(basePath, samples, tes"{trunked}</code>
      */
@@ -88,10 +81,10 @@ public class TestUtilities {
     public static final String tempFileOutTxt_two = Utils.osPathJoin(testPath, "testable-jar_classFiles.txt");
     public static final String tempFileOutXML_two = Utils.osPathJoin(testPath, "testable-jar_classFiles.xml");
     public static final String tempFileOutTxt_Class = Utils.osPathJoin(testPath, "java-class-file.txt");
+    public static final String tempFileOutTxt_Class_fullproj = Utils.osPathJoin(testPath, "java-class-proj-file.xml");
     public static final String tempFileOutTxt_Class_tester_test = Utils.osPathJoin(testPath, "java-class-file_sample_tester-test.txt");
     public static final String tempFileOutXML_Class = Utils.osPathJoin(testPath, "java-class-file.xml");
     public static final String tempFileOutXML_Class_Stream = Utils.osPathJoin(testPath, "java-class-file-stream.xml");
-
 
     public static final String tempFileOutApk = Utils.osPathJoin(testPath, "app-debug.txt");
     public static final String tempFileOutApk_Steam = Utils.osPathJoin(testPath, "app-debug_Stream.txt");
@@ -108,12 +101,39 @@ public class TestUtilities {
     public static final String tempJarFile_Default_0 = Utils.osPathJoin(testPath, "tempJarFile_Default_0.json");
     public static final String tempJarFile_Default_Stream_0 = Utils.osPathJoin(testPath, "tempJarFile_Default_Stream_0.json");
 
-
     public static final ArrayList<String> sampleAuxClassPathOneList = new ArrayList<String>(Arrays.asList(testRec, jarOne, javaFiles[0], javaFiles[1], classFiles[0], classFiles[1]));
     public static final String sampleAuxClassPathOne = String.join(":", sampleAuxClassPathOneList);
 
     public static final ArrayList<String> sampleAuxClassPathTwoList = new ArrayList<String>(Arrays.asList(testRec, jarOne, javaFiles[0], javaFiles[1], classFiles[0], classFiles[1], scarfArgs));
     public static final String sampleAuxClassPathTwo = String.join(":", sampleAuxClassPathTwoList);
+
+    public static final ArrayList<String> srcOneGrvInputArr = new ArrayList<>(Arrays.asList(
+            Utils.osPathJoin(javaSource, "UrlFrameWorks.java"),
+            Utils.osPathJoin(javaSource, "PasswordUtils.java"),
+            Utils.osPathJoin(javaSource, "Crypto.java"),
+            Utils.osPathJoin(javaSource, "PBEUsage.java"),
+            Utils.osPathJoin(javaSource, "NewTestCase2.java"),
+            Utils.osPathJoin(javaSource, "VeryBusyClass.java"),
+            Utils.osPathJoin(javaSource, "SymCrypto.java"),
+            Utils.osPathJoin(javaSource, "NewTestCase1.java"),
+            Utils.osPathJoin(javaSource, "LiveVarsClass.java"),
+            Utils.osPathJoin(javaSource, "PassEncryptor.java")
+    ));
+    public static final ArrayList<String> srcOneGrvInputArr_Class = new ArrayList<>(Arrays.asList(
+            Utils.osPathJoin(classSource, "UrlFrameWorks.class"),
+            Utils.osPathJoin(classSource, "PasswordUtils.class"),
+            Utils.osPathJoin(classSource, "Crypto.class"),
+            Utils.osPathJoin(classSource, "Crypto$1.class"),
+            Utils.osPathJoin(classSource, "Crypto$2.class"),
+            Utils.osPathJoin(classSource, "Crypto$3.class"),
+            Utils.osPathJoin(classSource, "PBEUsage.class"),
+            Utils.osPathJoin(classSource, "NewTestCase2.class"),
+            Utils.osPathJoin(classSource, "VeryBusyClass.class"),
+            Utils.osPathJoin(classSource, "SymCrypto.class"),
+            Utils.osPathJoin(classSource, "NewTestCase1.class"),
+            Utils.osPathJoin(classSource, "LiveVarsClass.class"),
+            Utils.osPathJoin(classSource, "PassEncryptor.class")
+    ));
     //endregion
 
     /**
@@ -172,5 +192,48 @@ public class TestUtilities {
      */
     public static String makeArg(argsIdentifier id, Listing value) {
         return makeArg(id, value.getFlag());
+    }
+
+    public static String[] cleaningArgs(String arg) {
+        ArrayList<String> cleanArgs = new ArrayList<>(Arrays.asList(arg.split(" ")));
+        cleanArgs.removeIf(new Predicate<String>() {
+            @Override
+            public boolean test(String s) {
+                return StringUtils.isEmpty(s);
+            }
+        });
+        return cleanArgs.toArray(new String[cleanArgs.size()]);
+    }
+
+    public static String captureNewFileOutViaStdOut(String[] args) throws Exception {
+        //region Redirecting the std out to capture the file out
+        //The new std out
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PrintStream ps = new PrintStream(baos);
+
+        //Old out
+        PrintStream old = System.out;
+
+        //Redirecting the std out to the capture
+        System.setOut(ps);
+
+        //region Critical Section
+        EntryPoint.main(args);
+        //endregion
+
+        //Resetting the std out
+        System.out.flush();
+        System.setOut(old);
+        //endregion
+
+        return baos.toString();
+    }
+
+    public static String[] arr(ArrayList<String> in) {
+        return in.toArray(new String[in.size()]);
+    }
+
+    public static ArrayList<String> arr(String[] in) {
+        return new ArrayList<String>(Arrays.asList(in));
     }
 }

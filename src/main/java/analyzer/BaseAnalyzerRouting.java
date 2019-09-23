@@ -168,12 +168,16 @@ public class BaseAnalyzerRouting {
         Options.v().set_output_format(Options.output_format_jimple);
         Options.v().set_src_prec(Options.src_prec_java);
 
-        Scene.v().setSootClassPath(String.join(":",
-                Utils.getBaseSOOT(),
-                String.join(":", snippetPath),
-                Utils.buildSootClassPath(projectDependency)));
-
         List<String> classNames = Utils.getClassNamesFromSnippet(snippetPath);
+        String sootClassPath = Utils.join(":",
+                Utils.getBaseSOOT7(),
+                Utils.join(":", snippetPath),
+                Utils.buildSootClassPath(projectDependency));
+
+        Scene.v().setSootClassPath(sootClassPath);
+
+        log.debug("Using the classNames: " + classNames.toString());
+        log.debug("Using the soot class path: " + sootClassPath);
 
         /*
         if (projectDependency != null && projectDependency.size() > 0) {
@@ -184,9 +188,9 @@ public class BaseAnalyzerRouting {
 
         */
 
-        for (String clazz : classNames) {
+        for (String clazz : Utils.retrieveJavaFilesFromDir(snippetPath.get(0))) {
             log.debug("Loading the class: " + clazz);
-            Scene.v().extendSootClassPath(clazz);//Utils.replaceLast(clazz,".",Utils.fileSep));
+            Scene.v().extendSootClassPath(clazz);
         }
 
         loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
@@ -217,9 +221,9 @@ public class BaseAnalyzerRouting {
         Options.v().set_output_format(Options.output_format_jimple);
         Options.v().set_src_prec(Options.src_prec_java);
 
-        Scene.v().setSootClassPath(String.join(":",
+        Scene.v().setSootClassPath(Utils.join(":",
                 Utils.getBaseSOOT(),
-                String.join(":", snippetPath),
+                Utils.join(":", snippetPath),
                 Utils.buildSootClassPath(projectDependency)));
 
         List<String> classNames = Utils.retrieveFullyQualifiedName(snippetPath);
@@ -269,8 +273,8 @@ public class BaseAnalyzerRouting {
             }
         }
 
-        log.debug("Setting the soot class path as: " + String.join(":", Utils.getBaseSOOT(), projectDependencyPath == null ? "" : projectDependencyPath));
-        Scene.v().setSootClassPath(String.join(":", Utils.getBaseSOOT(), projectDependencyPath));
+        log.debug("Setting the soot class path as: " + Utils.join(":", Utils.getBaseSOOT(), projectDependencyPath == null ? "" : projectDependencyPath));
+        Scene.v().setSootClassPath(Utils.join(":", Utils.getBaseSOOT(), projectDependencyPath));
 
         for (String clazz : sourceJavaClasses) {
             log.debug("Loading the class: " + clazz);

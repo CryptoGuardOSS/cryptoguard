@@ -27,10 +27,14 @@ import util.manifest.ProcessManifest;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
@@ -96,9 +100,9 @@ public class Utils {
      */
     public final static String localPath = System.getProperty("user.dir");
     /**
-     * Constant <code>projectVersion="V03.07.04"</code>
+     * Constant <code>projectVersion="V03.07.05"</code>
      */
-    public final static String projectVersion = "V03.07.04";
+    public final static String projectVersion = "V03.07.05";
     /**
      * Constant <code>projectName="CryptoGuard"</code>
      */
@@ -682,6 +686,21 @@ public class Utils {
         return filePaths;
     }
 
+    public static ArrayList<String> retrieveJavaFilesFromDir(String path) {
+        if (StringUtils.isEmpty(path))
+            return null;
+
+        try (Stream<Path> walk = Files.walk(Paths.get(path))) {
+            return walk
+                    .map(Path::toString)
+                    .filter(f -> f.endsWith(".java"))
+                    .collect(Collectors.toCollection(ArrayList::new));//.forEach(System.out::println);
+        } catch (IOException e) {
+            //TODO - add exception here
+            return null;
+        }
+    }
+
     /**
      * <p>retrieveBaseSourcePath.</p>
      *
@@ -754,7 +773,36 @@ public class Utils {
      * @return a {@link java.lang.String} object.
      */
     public static String osPathJoin(String... elements) {
-        return String.join(Utils.fileSep, elements);
+        return join(Utils.fileSep, elements);
+    }
+
+    /**
+     * <p>join.</p>
+     *
+     * @param delimiter a {@link java.lang.String} object.
+     * @param elements  a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String join(String delimiter, String... elements) {
+        return join(delimiter, Arrays.asList(elements));
+    }
+
+    /**
+     * <p>join.</p>
+     *
+     * @param delimiter a {@link java.lang.String} object.
+     * @param elements  a {@link java.util.List} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String join(String delimiter, List<String> elements) {
+        StringBuilder tempString = new StringBuilder();
+        for (String in : elements) {
+            tempString.append(in);
+            if (!in.equals(elements.get(elements.size() - 1)))
+                tempString.append(delimiter);
+        }
+
+        return tempString.toString();
     }
 
     /**
@@ -810,21 +858,21 @@ public class Utils {
         String rt = Utils.osPathJoin("jre", "lib", "rt.jar:");
         String jce = Utils.osPathJoin("jre", "lib", "jce.jar");
 
-        return Utils.getJAVA_HOME() + Utils.fileSep + String.join(Utils.getJAVA_HOME() + Utils.fileSep, rt, jce);
+        return Utils.getJAVA_HOME() + Utils.fileSep + join(Utils.getJAVA_HOME() + Utils.fileSep, rt, jce);
     }
 
     /**
-     * //TODO - Need to verify this is nessecary
+     * //TODO - Need to verify this is necessary
      * <p>getBaseSOOT7.</p>
      *
      * @return a {@link java.lang.String} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static String getBaseSOOT7() throws ExceptionHandler {
-        String rt = Utils.osPathJoin(Utils.fileSep, "jre", "lib", "rt.jar:");
-        String jce = Utils.osPathJoin(Utils.fileSep, "jre", "lib", "jce.jar");
+        String rt = Utils.osPathJoin("jre", "lib", "rt.jar:");
+        String jce = Utils.osPathJoin("jre", "lib", "jce.jar");
 
-        return Utils.getJAVA7_HOME() + Utils.fileSep + String.join(Utils.getJAVA7_HOME() + Utils.fileSep, rt, jce);
+        return Utils.getJAVA7_HOME() + Utils.fileSep + join(Utils.getJAVA7_HOME() + Utils.fileSep, rt, jce);
     }
 
     /**

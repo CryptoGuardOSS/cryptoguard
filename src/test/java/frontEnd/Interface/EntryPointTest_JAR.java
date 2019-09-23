@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import rule.engine.EngineType;
 import soot.G;
+import test.TestUtilities;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -147,6 +148,7 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
                             makeArg(argsIdentifier.SOURCE, jarOne) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.OUT, tempJarFile_txt);
 
             try {
@@ -176,6 +178,7 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.OUT, tempJarFile_Scarf_0) +
                             makeArg(argsIdentifier.TIMEMEASURE) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY);
 
             try {
@@ -206,6 +209,7 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.OUT, tempJarFile_Scarf_0) +
                             makeArg(argsIdentifier.TIMEMEASURE) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.HEURISTICS) +
                             makeArg(argsIdentifier.PRETTY);
 
@@ -242,6 +246,7 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.FORMATOUT, Listing.Default) +
                             makeArg(argsIdentifier.OUT, tempJarFile_Default_0) +
                             makeArg(argsIdentifier.TIMEMEASURE) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY);
 
             try {
@@ -272,6 +277,7 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.FORMATOUT, Listing.Default) +
                             makeArg(argsIdentifier.OUT, tempJarFile_Default_0) +
                             makeArg(argsIdentifier.HEURISTICS) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.TIMEMEASURE) +
                             makeArg(argsIdentifier.PRETTY);
 
@@ -305,6 +311,7 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.OUT, tempJarFile_Scarf_1) +
                             makeArg(argsIdentifier.TIMEMEASURE) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY) +
                             " -Sconfig " + scarfArgs;
 
@@ -337,6 +344,7 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.OUT, tempJarFile_Scarf_Steam_1) +
                             makeArg(argsIdentifier.STREAM) +
                             makeArg(argsIdentifier.TIMEMEASURE) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY);
 
             try {
@@ -368,6 +376,7 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.OUT, tempJarFile_Default_Stream_0) +
                             makeArg(argsIdentifier.STREAM) +
                             makeArg(argsIdentifier.TIMEMEASURE) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY);
 
             try {
@@ -398,10 +407,16 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.OUT, tempJarFile_Scarf_2) +
                             makeArg(argsIdentifier.TIMESTAMP) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY);
 
             try {
-                EntryPoint.main(args.split(" "));
+                String outputFile = TestUtilities.captureNewFileOutViaStdOut(args.split(" "));
+
+                List<String> results = Files.readAllLines(Paths.get(outputFile), StandardCharsets.UTF_8);
+                assertTrue(results.size() >= 10);
+
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -426,10 +441,17 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.OUT, tempJarFile_Scarf_2) +
                             makeArg(argsIdentifier.TIMESTAMP) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY);
 
             try {
-                EntryPoint.main(args.split(" "));
+
+                String outputFile = TestUtilities.captureNewFileOutViaStdOut(args.split(" "));
+
+                List<String> results = Files.readAllLines(Paths.get(outputFile), StandardCharsets.UTF_8);
+                assertTrue(results.size() >= 10);
+
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -452,6 +474,7 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.FORMATOUT, Listing.Default) +
                             makeArg(argsIdentifier.OUT, tempJarFile_Default_0) +
                             makeArg(argsIdentifier.TIMEMEASURE) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY) +
                             makeArg(argsIdentifier.HEURISTICS);
 

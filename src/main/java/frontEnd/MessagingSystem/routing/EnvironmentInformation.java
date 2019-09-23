@@ -60,6 +60,9 @@ public class EnvironmentInformation {
     private final List<String> Source;
     private final List<String> sourcePaths; //Could this be intertwined with source?
     private Boolean prettyPrint = false;
+    @Getter
+    @Setter
+    private Boolean killJVM = true;
     //endregion
     PrintStream old;
     private List<String> dependencies;

@@ -98,6 +98,7 @@ public class EntryPointTest_APK {
                     makeArg(argsIdentifier.FORMAT, EngineType.APK) +
                             makeArg(argsIdentifier.SOURCE, pathToAPK) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.OUT, tempFileOutApk);
 
             try {
@@ -125,6 +126,7 @@ public class EntryPointTest_APK {
                             makeArg(argsIdentifier.SOURCE, pathToAPK) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
                             makeArg(argsIdentifier.OUT, tempFileOutApk_Steam) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.STREAM);
 
             try {
@@ -151,6 +153,7 @@ public class EntryPointTest_APK {
                     makeArg(argsIdentifier.FORMAT, EngineType.APK) +
                             makeArg(argsIdentifier.SOURCE, pathToAPK) +
                             makeArg(argsIdentifier.OUT, tempFileOutApk_Scarf) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.PRETTY);
 
@@ -180,6 +183,7 @@ public class EntryPointTest_APK {
                     makeArg(argsIdentifier.FORMAT, EngineType.APK) +
                             makeArg(argsIdentifier.SOURCE, pathToAPK) +
                             makeArg(argsIdentifier.OUT, tempFileOutApk_Scarf_Steam) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.PRETTY) +
                             makeArg(argsIdentifier.STREAM);
@@ -211,6 +215,7 @@ public class EntryPointTest_APK {
                             makeArg(argsIdentifier.SOURCE, pathToAPK) +
                             makeArg(argsIdentifier.OUT, tempFileOutApk_Default) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.Default) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY);
 
             try {
@@ -241,6 +246,7 @@ public class EntryPointTest_APK {
                             makeArg(argsIdentifier.SOURCE, pathToAPK) +
                             makeArg(argsIdentifier.OUT, tempFileOutApk_Scarf_Steam) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY) +
                             makeArg(argsIdentifier.STREAM);
 

@@ -8,6 +8,8 @@ import org.junit.Before;
 import org.junit.Test;
 import rule.engine.EngineType;
 import soot.G;
+import test.TestUtilities;
+import util.Utils;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -70,6 +72,7 @@ public class EntryPointTest_CLASS {
                             makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
                             makeArg(argsIdentifier.SOURCE, classFiles[0]) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.OUT, tempFileOutTxt_Class);
 
             try {
@@ -77,17 +80,38 @@ public class EntryPointTest_CLASS {
                 EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempFileOutTxt_Class), StandardCharsets.UTF_8);
+                //assertTrue(results.size() >= 2);
 
-                //TODO - Check This
-                /*
-                int count = 0;
-                for (String line : results)
-                    if (line.contains("Violated"))
-                        count++;
 
-                assertTrue(count > 0);
-                 */
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
 
+    @Test
+    /**
+     * <p>main_TestableFiles_SingleTest.</p>
+     */
+    public void main_TestableFiles_FullProject() {
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                            makeArg(argsIdentifier.SOURCE, Utils.join(" ", TestUtilities.arr(srcOneGrvInputArr_Class))) +
+                            makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.OUT, tempFileOutTxt_Class_fullproj);
+
+            try {
+
+                EntryPoint.main(args.split(" "));
+
+                List<String> results = Files.readAllLines(Paths.get(tempFileOutTxt_Class_fullproj), StandardCharsets.UTF_8);
+                //assertTrue(results.size() >= 2);
+
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(tempFileOutTxt_Class_fullproj));
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -107,6 +131,7 @@ public class EntryPointTest_CLASS {
                             makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
                             makeArg(argsIdentifier.SOURCE, testRec_tester_test_Class) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.OUT, tempFileOutTxt_Class_tester_test);
 
             try {
@@ -114,16 +139,7 @@ public class EntryPointTest_CLASS {
                 EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempFileOutTxt_Class_tester_test), StandardCharsets.UTF_8);
-
-                //TODO - Check This
-                /*
-                int count = 0;
-                for (String line : results)
-                    if (line.contains("Violated"))
-                        count++;
-
-                assertTrue(count > 0);
-                 */
+                //assertTrue(results.size() >= 2);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -140,9 +156,10 @@ public class EntryPointTest_CLASS {
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES) +
-                            makeArg(argsIdentifier.SOURCE, String.join(" ", classFiles)) +
+                            makeArg(argsIdentifier.SOURCE, Utils.join(" ", classFiles)) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.OUT, tempFileOutTxt_two);
 
             try {
@@ -150,16 +167,7 @@ public class EntryPointTest_CLASS {
                 EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempFileOutTxt_two), StandardCharsets.UTF_8);
-
-                //TODO - Check This
-                /*
-                int count = 0;
-                for (String line : results)
-                    if (line.contains("Violated"))
-                        count++;
-
-                assertTrue(count > 0);
-                 */
+                //assertTrue(results.size() >= 2);
 
 
             } catch (Exception e) {
@@ -180,6 +188,7 @@ public class EntryPointTest_CLASS {
                             makeArg(argsIdentifier.SOURCE, String.join(" ", classFiles)) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.OUT, tempFileOutXML_Class);
 
             try {
@@ -187,16 +196,7 @@ public class EntryPointTest_CLASS {
                 EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempFileOutXML_Class), StandardCharsets.UTF_8);
-
-                //TODO - Check This
-                /*
-                int count = 0;
-                for (String line : results)
-                    if (line.contains("Violated"))
-                        count++;
-
-                assertTrue(count > 0);
-                 */
+                //assertTrue(results.size() >= 2);
 
 
                 AnalyzerReport report = AnalyzerReport.deserialize(new File(tempFileOutXML_Class));
@@ -220,6 +220,7 @@ public class EntryPointTest_CLASS {
                             makeArg(argsIdentifier.SOURCE, String.join(" ", classFiles)) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.OUT, tempFileOutXML_Class_Stream) +
                             makeArg(argsIdentifier.STREAM);
 
@@ -228,16 +229,7 @@ public class EntryPointTest_CLASS {
                 EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempFileOutXML_Class_Stream), StandardCharsets.UTF_8);
-
-                //TODO - Check This
-                /*
-                int count = 0;
-                for (String line : results)
-                    if (line.contains("Violated"))
-                        count++;
-
-                assertTrue(count > 0);
-                 */
+                //assertTrue(results.size() >= 2);
 
 
                 AnalyzerReport report = AnalyzerReport.deserialize(new File(tempFileOutXML_Class_Stream));
