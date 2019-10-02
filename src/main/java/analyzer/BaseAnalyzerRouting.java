@@ -168,6 +168,12 @@ public class BaseAnalyzerRouting {
         Options.v().set_output_format(Options.output_format_jimple);
         Options.v().set_src_prec(Options.src_prec_java);
 
+        Options.v().set_prepend_classpath(true);
+        Options.v().set_whole_program(true);
+
+        Options.v().set_app(true);
+        Options.v().set_process_dir(snippetPath);
+
         List<String> classNames = Utils.getClassNamesFromSnippet(snippetPath);
         String sootClassPath = Utils.join(":",
                 Utils.getBaseSOOT7(),
@@ -176,18 +182,6 @@ public class BaseAnalyzerRouting {
 
         Scene.v().setSootClassPath(sootClassPath);
 
-        log.debug("Using the classNames: " + classNames.toString());
-        log.debug("Using the soot class path: " + sootClassPath);
-
-        /*
-        if (projectDependency != null && projectDependency.size() > 0) {
-            for (String dependency : Utils.getJarsInDirectories(projectDependency)) {
-                classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
-            }
-        }
-
-        */
-
         /*
         for (String clazz : Utils.retrieveJavaFilesFromDir(snippetPath.get(0))) {
             log.debug("Loading the class: " + clazz);
@@ -195,14 +189,17 @@ public class BaseAnalyzerRouting {
         }
         */
 
-        Options.v().set_process_dir(snippetPath);
+        for (String dependency : Utils.getJarsInDirectories(projectDependency)) {
+            classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
+        }
+
 
         loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
     }
 
     //endregion
     //region JavaFiles
-    //Like Dir //TODO - Fix This
+    //Like Dir
 
     /**
      * <p>setupBaseJava.</p>
@@ -225,6 +222,11 @@ public class BaseAnalyzerRouting {
         Options.v().set_output_format(Options.output_format_jimple);
         Options.v().set_src_prec(Options.src_prec_java);
 
+        Options.v().set_prepend_classpath(true);
+        Options.v().set_whole_program(true);
+
+        Options.v().set_app(true);
+
         Scene.v().setSootClassPath(Utils.join(":",
                 Utils.getBaseSOOT(),
                 Utils.join(":", snippetPath),
@@ -232,10 +234,8 @@ public class BaseAnalyzerRouting {
 
         List<String> classNames = Utils.retrieveFullyQualifiedName(snippetPath);
 
-        if (projectDependency != null && projectDependency.size() > 0) {
-            for (String dependency : Utils.getJarsInDirectories(projectDependency)) {
+        for (String dependency : Utils.getJarsInDirectories(projectDependency)) {
                 classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
-            }
         }
 
         loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);

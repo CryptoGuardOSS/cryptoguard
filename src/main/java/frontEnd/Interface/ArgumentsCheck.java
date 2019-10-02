@@ -113,6 +113,9 @@ public class ArgumentsCheck {
         } else if (cmd.hasOption(argsIdentifier.VERBOSE.getId())) {
             Configurator.setRootLevel(Level.DEBUG);
             log.info("Displaying debug level logs");
+        } else if (cmd.hasOption(argsIdentifier.NOLOGS.getId())) {
+            Configurator.setRootLevel(Level.FATAL);
+            log.info("Setting the Logging to Fatal logs");
         } else {
             Configurator.setRootLevel(Level.INFO);
             log.info("Displaying info level logs");
@@ -338,6 +341,10 @@ public class ArgumentsCheck {
         Option stream = new Option(argsIdentifier.STREAM.getId(), false, argsIdentifier.STREAM.getDesc());
         stream.setOptionalArg(true);
         cmdLineArgs.addOption(stream);
+
+        Option nologs = new Option(argsIdentifier.NOLOGS.getId(), false, argsIdentifier.NOLOGS.getDesc());
+        stream.setOptionalArg(true);
+        cmdLineArgs.addOption(nologs);
 
         Option verbose = new Option(argsIdentifier.VERBOSE.getId(), false, argsIdentifier.VERBOSE.getDesc());
         stream.setOptionalArg(true);

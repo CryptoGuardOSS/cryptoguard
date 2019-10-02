@@ -68,6 +68,9 @@ public class EntryPointTest_CLASS {
      * <p>main_TestableFiles_SingleTest.</p>
      */
     public void main_TestableFiles_SingleTest() {
+        String fileOut = tempFileOutTxt_Class;
+        new File(fileOut).delete();
+
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES) +
@@ -75,14 +78,16 @@ public class EntryPointTest_CLASS {
                             makeArg(argsIdentifier.SOURCE, classFiles[0]) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.NOEXIT) +
-                            makeArg(argsIdentifier.OUT, tempFileOutTxt_Class);
+                            makeArg(argsIdentifier.OUT, fileOut);
 
             try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
-                EntryPoint.main(args.split(" "));
-
-                List<String> results = Files.readAllLines(Paths.get(tempFileOutTxt_Class), StandardCharsets.UTF_8);
+                List<String> results = Files.readAllLines(Paths.get(outputFile), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 2);
+
+                results.removeIf(bugInstance -> !bugInstance.contains(getFileNameFromString(fileOut)));
+                assertTrue(results.size() >= 1);
 
 
             } catch (Exception e) {
@@ -97,6 +102,9 @@ public class EntryPointTest_CLASS {
      * <p>main_TestableFiles_SingleTest.</p>
      */
     public void main_TestableFiles_FullProject() {
+        String fileOut = tempFileOutTxt_Class_fullproj;
+        new File(fileOut).delete();
+
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES) +
@@ -104,15 +112,15 @@ public class EntryPointTest_CLASS {
                             makeArg(argsIdentifier.SOURCE, Utils.join(" ", TestUtilities.arr(srcOneGrvInputArr_Class))) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.NOEXIT) +
-                            makeArg(argsIdentifier.OUT, tempFileOutTxt_Class_fullproj);
+                            makeArg(argsIdentifier.OUT, fileOut);
 
             try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
-                EntryPoint.main(args.split(" "));
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
+                assertFalse(report.getBugInstance().isEmpty());
 
-                List<String> results = Files.readAllLines(Paths.get(tempFileOutTxt_Class_fullproj), StandardCharsets.UTF_8);
-
-                AnalyzerReport report = AnalyzerReport.deserialize(new File(tempFileOutTxt_Class_fullproj));
+                report.getBugInstance().removeIf(bugInstance -> !bugInstance.getClassName().contains(getFileNameFromString(fileOut)));
                 assertFalse(report.getBugInstance().isEmpty());
 
             } catch (Exception e) {
@@ -127,6 +135,9 @@ public class EntryPointTest_CLASS {
      */
     @Test
     public void main_TestableFiles_SingleTest_ExtremelyBaseTest() {
+        String fileOut = tempFileOutTxt_Class_tester_test;
+        new File(fileOut).delete();
+
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES) +
@@ -134,14 +145,16 @@ public class EntryPointTest_CLASS {
                             makeArg(argsIdentifier.SOURCE, testRec_tester_test_Class) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.NOEXIT) +
-                            makeArg(argsIdentifier.OUT, tempFileOutTxt_Class_tester_test);
+                            makeArg(argsIdentifier.OUT, fileOut);
 
             try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
-                EntryPoint.main(args.split(" "));
-
-                List<String> results = Files.readAllLines(Paths.get(tempFileOutTxt_Class_tester_test), StandardCharsets.UTF_8);
+                List<String> results = Files.readAllLines(Paths.get(outputFile), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 2);
+
+                results.removeIf(bugInstance -> !bugInstance.contains(getFileNameFromString(fileOut)));
+                assertTrue(results.size() >= 1);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -155,6 +168,9 @@ public class EntryPointTest_CLASS {
      * <p>main_TestableFiles_MultiTest.</p>
      */
     public void main_TestableFiles_MultiTest() {
+        String fileOut = tempFileOutTxt_two;
+        new File(fileOut).delete();
+
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES) +
@@ -162,15 +178,16 @@ public class EntryPointTest_CLASS {
                             makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.NOEXIT) +
-                            makeArg(argsIdentifier.OUT, tempFileOutTxt_two);
+                            makeArg(argsIdentifier.OUT, fileOut);
 
             try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
-                EntryPoint.main(args.split(" "));
-
-                List<String> results = Files.readAllLines(Paths.get(tempFileOutTxt_two), StandardCharsets.UTF_8);
+                List<String> results = Files.readAllLines(Paths.get(outputFile), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 2);
 
+                results.removeIf(bugInstance -> !bugInstance.contains(getFileNameFromString(fileOut)));
+                assertTrue(results.size() >= 1);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -184,6 +201,9 @@ public class EntryPointTest_CLASS {
      * <p>main_TestableFiles_MultiTest_Scarf.</p>
      */
     public void main_TestableFiles_MultiTest_Scarf() {
+        String fileOut = tempFileOutXML_Class;
+        new File(fileOut).delete();
+
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES) +
@@ -191,17 +211,16 @@ public class EntryPointTest_CLASS {
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.NOEXIT) +
-                            makeArg(argsIdentifier.OUT, tempFileOutXML_Class);
+                            makeArg(argsIdentifier.OUT, fileOut);
 
             try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
-                EntryPoint.main(args.split(" "));
-
-                List<String> results = Files.readAllLines(Paths.get(tempFileOutXML_Class), StandardCharsets.UTF_8);
-
-                AnalyzerReport report = AnalyzerReport.deserialize(new File(tempFileOutXML_Class));
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
                 assertFalse(report.getBugInstance().isEmpty());
 
+                report.getBugInstance().removeIf(bugInstance -> !bugInstance.getClassName().contains(getFileNameFromString(fileOut)));
+                assertFalse(report.getBugInstance().isEmpty());
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -215,6 +234,9 @@ public class EntryPointTest_CLASS {
      * <p>main_TestableFiles_MultiTest_Scarf_Stream.</p>
      */
     public void main_TestableFiles_MultiTest_Scarf_Stream() {
+        String fileOut = tempFileOutXML_Class_Stream;
+        new File(fileOut).delete();
+
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES) +
@@ -222,16 +244,16 @@ public class EntryPointTest_CLASS {
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.NOEXIT) +
-                            makeArg(argsIdentifier.OUT, tempFileOutXML_Class_Stream) +
+                            makeArg(argsIdentifier.OUT, fileOut) +
                             makeArg(argsIdentifier.STREAM);
 
             try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
-                EntryPoint.main(args.split(" "));
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
+                assertFalse(report.getBugInstance().isEmpty());
 
-                List<String> results = Files.readAllLines(Paths.get(tempFileOutXML_Class_Stream), StandardCharsets.UTF_8);
-
-                AnalyzerReport report = AnalyzerReport.deserialize(new File(tempFileOutXML_Class_Stream));
+                report.getBugInstance().removeIf(bugInstance -> !bugInstance.getClassName().contains(getFileNameFromString(fileOut)));
                 assertFalse(report.getBugInstance().isEmpty());
 
             } catch (Exception e) {

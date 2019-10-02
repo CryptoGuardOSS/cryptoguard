@@ -19,6 +19,7 @@ import java.util.List;
 
 import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static test.TestUtilities.*;
 
@@ -63,6 +64,9 @@ public class EntryPointTest_JAR {
      */
     @Test
     public void main_TestableJar() {
+        String fileOut = tempJarFile_txt;
+        new File(fileOut).delete();
+
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.JAR) +
@@ -70,12 +74,12 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.SOURCE, jarOne) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.NOEXIT) +
-                            makeArg(argsIdentifier.OUT, tempJarFile_txt);
+                            makeArg(argsIdentifier.OUT, fileOut);
 
             try {
-                EntryPoint.main(args.split(" "));
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempJarFile_txt), StandardCharsets.UTF_8);
+                List<String> results = Files.readAllLines(Paths.get(outputFile), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 10);
 
 
@@ -91,24 +95,24 @@ public class EntryPointTest_JAR {
      */
     @Test
     public void main_TestableJar_Scarf() {
+        String fileOut = tempJarFile_Scarf_0;
+        new File(fileOut).delete();
+
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.JAR) +
                             makeArg(argsIdentifier.SOURCE, jarOne) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
-                            makeArg(argsIdentifier.OUT, tempJarFile_Scarf_0) +
+                            makeArg(argsIdentifier.OUT, fileOut) +
                             makeArg(argsIdentifier.TIMEMEASURE) +
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY);
 
             try {
-                EntryPoint.main(args.split(" "));
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempJarFile_Scarf_0), StandardCharsets.UTF_8);
-                assertTrue(results.size() >= 2);
-
-                AnalyzerReport report = AnalyzerReport.deserialize(new File(tempJarFile_Scarf_0));
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -122,26 +126,27 @@ public class EntryPointTest_JAR {
      */
     @Test
     public void main_TestableJar_Scarf_Heuristics() {
+        String fileOut = tempJarFile_Scarf_0;
+        new File(fileOut).delete();
+
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.JAR) +
                             makeArg(argsIdentifier.SOURCE, jarOne) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
-                            makeArg(argsIdentifier.OUT, tempJarFile_Scarf_0) +
+                            makeArg(argsIdentifier.OUT, fileOut) +
                             makeArg(argsIdentifier.TIMEMEASURE) +
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.HEURISTICS) +
                             makeArg(argsIdentifier.PRETTY);
 
             try {
-                EntryPoint.main(args.split(" "));
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempJarFile_Scarf_0), StandardCharsets.UTF_8);
-                assertTrue(results.size() >= 2);
-
-                AnalyzerReport report = AnalyzerReport.deserialize(new File(tempJarFile_Scarf_0));
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
                 assertNotNull(report.getHeuristics());
+                assertFalse(report.getBugInstance().isEmpty());
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -159,24 +164,25 @@ public class EntryPointTest_JAR {
      */
     @Test
     public void main_TestableJar_Default() {
+        String fileOut = tempJarFile_Default_0;
+        new File(fileOut).delete();
+
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.JAR) +
                             makeArg(argsIdentifier.SOURCE, jarOne) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.Default) +
-                            makeArg(argsIdentifier.OUT, tempJarFile_Default_0) +
+                            makeArg(argsIdentifier.OUT, fileOut) +
                             makeArg(argsIdentifier.TIMEMEASURE) +
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY);
 
             try {
-                EntryPoint.main(args.split(" "));
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempJarFile_Default_0), StandardCharsets.UTF_8);
-                assertTrue(results.size() >= 2);
-
-                Report report = Report.deserialize(new File(tempJarFile_Default_0));
+                Report report = Report.deserialize(new File(outputFile));
+                assertFalse(report.getIssues().isEmpty());
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -190,26 +196,27 @@ public class EntryPointTest_JAR {
      */
     @Test
     public void main_TestableJar_Default_Heuristics() {
+        String fileOut = tempJarFile_Default_0;
+        new File(fileOut).delete();
+
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.JAR) +
                             makeArg(argsIdentifier.SOURCE, jarOne) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.Default) +
-                            makeArg(argsIdentifier.OUT, tempJarFile_Default_0) +
+                            makeArg(argsIdentifier.OUT, fileOut) +
                             makeArg(argsIdentifier.HEURISTICS) +
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.TIMEMEASURE) +
                             makeArg(argsIdentifier.PRETTY);
 
             try {
-                EntryPoint.main(args.split(" "));
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempJarFile_Default_0), StandardCharsets.UTF_8);
-                assertTrue(results.size() >= 2);
-
-                Report report = Report.deserialize(new File(tempJarFile_Default_0));
+                Report report = Report.deserialize(new File(outputFile));
                 assertNotNull(report.getHeuristics());
+                assertFalse(report.getIssues().isEmpty());
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -223,6 +230,9 @@ public class EntryPointTest_JAR {
      */
     @Test
     public void main_TestableJar_Scarf_Args() {
+        String fileOut = tempJarFile_Scarf_1;
+        new File(fileOut).delete();
+
         if (isLinux) {
             //TODO - Check out Sconfig, missing from argsIdentifier
             String args =
@@ -230,20 +240,18 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.SOURCE, jarOne) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
-                            makeArg(argsIdentifier.OUT, tempJarFile_Scarf_1) +
+                            makeArg(argsIdentifier.OUT, fileOut) +
                             makeArg(argsIdentifier.TIMEMEASURE) +
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY) +
                             " -Sconfig " + scarfArgs;
 
             try {
-                EntryPoint.main(args.split(" "));
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempJarFile_Scarf_1), StandardCharsets.UTF_8);
-                assertTrue(results.size() >= 2);
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
+                assertFalse(report.getBugInstance().isEmpty());
 
-
-                AnalyzerReport report = AnalyzerReport.deserialize(new File(tempJarFile_Scarf_1));
             } catch (Exception e) {
                 e.printStackTrace();
                 assertNull(e);
@@ -256,26 +264,26 @@ public class EntryPointTest_JAR {
      */
     @Test
     public void main_TestableJar_Scarf_Stream() {
+        String fileOut = tempJarFile_Scarf_Steam_1;
+        new File(fileOut).delete();
+
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.JAR) +
                             makeArg(argsIdentifier.SOURCE, jarOne) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
-                            makeArg(argsIdentifier.OUT, tempJarFile_Scarf_Steam_1) +
+                            makeArg(argsIdentifier.OUT, fileOut) +
                             makeArg(argsIdentifier.STREAM) +
                             makeArg(argsIdentifier.TIMEMEASURE) +
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY);
 
             try {
-                EntryPoint.main(args.split(" "));
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempJarFile_Scarf_Steam_1), StandardCharsets.UTF_8);
-                assertTrue(results.size() >= 2);
-
-
-                AnalyzerReport report = AnalyzerReport.deserialize(new File(tempJarFile_Scarf_Steam_1));
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
+                assertFalse(report.getBugInstance().isEmpty());
             } catch (Exception e) {
                 e.printStackTrace();
                 assertNull(e);
@@ -288,25 +296,26 @@ public class EntryPointTest_JAR {
      */
     @Test
     public void main_TestableJar_Default_Stream() {
+        String fileOut = tempJarFile_Default_Stream_0;
+        new File(fileOut).delete();
+
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.JAR) +
                             makeArg(argsIdentifier.SOURCE, jarOne) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.Default) +
-                            makeArg(argsIdentifier.OUT, tempJarFile_Default_Stream_0) +
+                            makeArg(argsIdentifier.OUT, fileOut) +
                             makeArg(argsIdentifier.STREAM) +
                             makeArg(argsIdentifier.TIMEMEASURE) +
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY);
 
             try {
-                EntryPoint.main(args.split(" "));
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempJarFile_Default_Stream_0), StandardCharsets.UTF_8);
-                assertTrue(results.size() >= 2);
-
-                Report report = Report.deserialize(new File(tempJarFile_Default_Stream_0));
+                Report report = Report.deserialize(new File(outputFile));
+                assertFalse(report.getIssues().isEmpty());
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -320,13 +329,16 @@ public class EntryPointTest_JAR {
      */
     @Test
     public void main_TestableJar_ScarfTimeStamp() {
+        String fileOut = tempJarFile_Scarf_2;
+        new File(fileOut).delete();
+
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.JAR) +
                             makeArg(argsIdentifier.SOURCE, jarOne) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
-                            makeArg(argsIdentifier.OUT, tempJarFile_Scarf_2) +
+                            makeArg(argsIdentifier.OUT, fileOut) +
                             makeArg(argsIdentifier.TIMESTAMP) +
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY);
@@ -334,10 +346,8 @@ public class EntryPointTest_JAR {
             try {
                 String outputFile = TestUtilities.captureNewFileOutViaStdOut(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(outputFile), StandardCharsets.UTF_8);
-                assertTrue(results.size() >= 10);
-
                 AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
+                assertFalse(report.getBugInstance().isEmpty());
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -387,27 +397,27 @@ public class EntryPointTest_JAR {
      */
     @Test
     public void main_TestableJar_Default_WithHeuristics() {
+        String fileOut = tempJarFile_Default_0;
+        new File(fileOut).delete();
+
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.JAR) +
                             makeArg(argsIdentifier.SOURCE, jarOne) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.Default) +
-                            makeArg(argsIdentifier.OUT, tempJarFile_Default_0) +
+                            makeArg(argsIdentifier.OUT, fileOut) +
                             makeArg(argsIdentifier.TIMEMEASURE) +
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY) +
                             makeArg(argsIdentifier.HEURISTICS);
 
             try {
-                EntryPoint.main(args.split(" "));
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempJarFile_Default_0), StandardCharsets.UTF_8);
-                assertTrue(results.size() >= 2);
-
-                Report report = Report.deserialize(new File(tempJarFile_Default_0));
-
-                assertTrue(report.getHeuristics() != null);
+                Report report = Report.deserialize(new File(outputFile));
+                assertNotNull(report.getHeuristics());
+                assertFalse(report.getIssues().isEmpty());
 
             } catch (Exception e) {
                 e.printStackTrace();

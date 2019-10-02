@@ -16,6 +16,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static test.TestUtilities.*;
 
@@ -27,10 +28,6 @@ import static test.TestUtilities.*;
  * @since V03.03.10
  */
 public class EntryPointTest_JAVA {
-
-    //region Attributes
-    private EntryPoint engine;
-    //endregion
 
     //region Test Environment Setup
 
@@ -44,8 +41,6 @@ public class EntryPointTest_JAVA {
         //Cleaning the current scene since setup carries throughout the VM
         //tldr - one test setting up the scene will carry over to the next test, this'll stop that
         G.reset();
-
-        engine = new EntryPoint();
         //endregion
     }
 
@@ -56,70 +51,18 @@ public class EntryPointTest_JAVA {
      */
     @After
     public void tearDown() throws Exception {
-        engine = null;
-        //endregion
     }
     //endregion
 
     //region Tests
-
-    /**
-     * <p>testEnvironmentVariables.</p>
-     */
-    @Test
-    public void testEnvironmentVariables() {
-        String[] dirLists = new String[]{srcOneGrv, srcOneGrvDep};
-
-        for (String file : javaFiles) {
-            File tempFile = new File(file);
-
-            assertTrue(tempFile.exists());
-            assertTrue(tempFile.isFile());
-        }
-
-        for (String dir : dirLists) {
-            File tempDir = new File(dir);
-
-            assertTrue(tempDir.exists());
-            assertTrue(tempDir.isDirectory());
-        }
-
-
-    }
-
-    @Test
-    /**
-     * <p>main_TestableFiles_SingleTest.</p>
-     */
-    public void main_TestableFiles_SingleTest_Basic() {
-        if (isLinux) {
-            String args =
-                    makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES) +
-                            makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
-                            makeArg(argsIdentifier.SOURCE, testRec_tester_test_Java) +
-                            makeArg(argsIdentifier.PRETTY) +
-                            makeArg(argsIdentifier.NOEXIT) +
-                            makeArg(argsIdentifier.OUT, tempTestJJava_Txt);
-
-            try {
-
-                EntryPoint.main(args.split(" "));
-
-                List<String> results = Files.readAllLines(Paths.get(tempTestJJava_Txt), StandardCharsets.UTF_8);
-                assertTrue(results.size() >= 10);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                assertNull(e);
-            }
-        }
-    }
-
     @Test
     /**
      * <p>main_TestableFiles_SingleTest.</p>
      */
     public void main_TestableFiles_SingleTest() {
+        String fileOut = javaFileTwo;
+        new File(fileOut).delete();
+
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES) +
@@ -128,15 +71,16 @@ public class EntryPointTest_JAVA {
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.PRETTY) +
                             makeArg(argsIdentifier.NOEXIT) +
-                            makeArg(argsIdentifier.OUT, javaFileTwo);
+                            makeArg(argsIdentifier.OUT, fileOut);
 
             try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
-                EntryPoint.main(args.split(" "));
-
-                List<String> results = Files.readAllLines(Paths.get(javaFileTwo), StandardCharsets.UTF_8);
+                List<String> results = Files.readAllLines(Paths.get(outputFile), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 10);
 
+                results.removeIf(bugInstance -> !bugInstance.contains(getFileNameFromString(fileOut)));
+                assertTrue(results.size() >= 1);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -150,6 +94,9 @@ public class EntryPointTest_JAVA {
      * <p>main_TestableFiles_SingleTest_Scarf.</p>
      */
     public void main_TestableFiles_SingleTest_Scarf() {
+        String fileOut = javaFileOne;
+        new File(fileOut).delete();
+
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES) +
@@ -161,14 +108,13 @@ public class EntryPointTest_JAVA {
                             makeArg(argsIdentifier.PRETTY);
 
             try {
-                EntryPoint.main(args.split(" "));
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
-                //region Validating output
-                AnalyzerReport report = AnalyzerReport.deserialize(new File(javaFileOne));
-                //endregion
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
+                assertFalse(report.getBugInstance().isEmpty());
 
-                List<String> results = Files.readAllLines(Paths.get(javaFileOne), StandardCharsets.UTF_8);
-                assertTrue(results.size() > 1);
+                report.getBugInstance().removeIf(bugInstance -> !bugInstance.getClassName().contains(getFileNameFromString(fileOut)));
+                assertFalse(report.getBugInstance().isEmpty());
 
             } catch (Exception e) {
                 assertNull(e);
@@ -185,23 +131,26 @@ public class EntryPointTest_JAVA {
      * <p>main_TestableFiles_MultiTest.</p>
      */
     public void main_TestableFiles_MultiTest() {
+        String fileOut = javaFileThreeXML;
+        new File(fileOut).delete();
+
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES) +
                             makeArg(argsIdentifier.SOURCE, String.join(" ", javaFiles)) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
-                            makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.NOEXIT) +
-                            makeArg(argsIdentifier.OUT, javaFileThree);
+                            makeArg(argsIdentifier.OUT, javaFileThreeXML);
 
             try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
-                EntryPoint.main(args.split(" "));
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
+                assertFalse(report.getBugInstance().isEmpty());
 
-                List<String> results = Files.readAllLines(Paths.get(javaFileThree), StandardCharsets.UTF_8);
-
-                assertTrue(results.size() > 1);
-
+                report.getBugInstance().removeIf(bugInstance -> !bugInstance.getClassName().contains(getFileNameFromString(fileOut)));
+                assertFalse(report.getBugInstance().isEmpty());
 
             } catch (Exception e) {
                 e.printStackTrace();

@@ -31,6 +31,7 @@ public enum argsIdentifier {
     NOEXIT("X", null, "Upon completion of scanning, don't kill the JVM (by default the JVM is exited)"),
     EXPERIMENTRESULTS("exp", null, "View the experiment based results."),
     VERSION("V", null, "Output the version number."),
+    NOLOGS("vx", null, "Display logs only from the fatal logs"),
     VERBOSE("v", null, "Display logs from debug levels"),
     VERYVERBOSE("vv", null, "Display logs from trace levels"),
     TIMESTAMP("ts", null, "Add a timestamp to the file output."),

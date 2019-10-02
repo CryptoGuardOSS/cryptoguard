@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.function.Predicate;
 
+import static junit.framework.TestCase.assertTrue;
+
 /**
  * <p>TestUtilities class.</p>
  *
@@ -25,22 +27,9 @@ public class TestUtilities {
 
 
     //region String Statics
-    /**
-     * Constant <code>isLinux</code>
-     */
     public static final Boolean isLinux = !System.getProperty("os.name").contains("Windows");
-
-    /**
-     * Constant <code>basePath="System.getProperty(user.dir)"</code>
-     */
     public static final String basePath = System.getProperty("user.dir");
-    /**
-     * Constant <code>scarfArgs="Utils.osPathJoin(basePath, src, main, r"{trunked}</code>
-     */
     public static final String scarfArgs = Utils.osPathJoin(basePath, "src", "main", "resources", "Scarf", "sample.properties");
-    /**
-     * Constant <code>srcOneGrv="Utils.osPathJoin(basePath, samples, tes"{trunked}</code>
-     */
     public static final String testRec = Utils.osPathJoin(basePath, "samples");
     public static final String testRec_tester_test = Utils.osPathJoin(testRec, "temp", "tester");
     public static final String testRec_tester_test_Class = Utils.osPathJoin(testRec_tester_test, "test.class");
@@ -51,28 +40,14 @@ public class TestUtilities {
     public static final String classSource = Utils.osPathJoin(srcOneGrv, "build", "classes", "java", "main", "tester");
     public static final String[] classFiles = {Utils.osPathJoin(classSource, "PBEUsage.class"), Utils.osPathJoin(classSource, "UrlFrameWorks.class"), Utils.osPathJoin(classSource, "NewTestCase1.class"), Utils.osPathJoin(classSource, "NewTestCase2.class")};
     public static final String[] javaFiles = {Utils.osPathJoin(javaSource, "PBEUsage.java"), Utils.osPathJoin(javaSource, "UrlFrameWorks.java")};
-    /**
-     * Constant <code>jarOne="Utils.osPathJoin(basePath, samples, tes"{trunked}</code>
-     */
     public static final String jarOne = Utils.osPathJoin(testRec, "testable-jar", "build", "libs", "testable-jar.jar");
-    /**
-     * Constant <code>srcOneGrvDep="Utils.osPathJoin(basePath, samples, tes"{trunked}</code>
-     */
     public static final String srcOneGrvDep = Utils.osPathJoin(testRec, "testable-jar", "build", "dependencies");
-    /**
-     * Constant <code>testPath="Utils.osPathJoin(basePath, build, tmp)"</code>
-     */
     public static final String testPath = Utils.osPathJoin(basePath, "build", "tmp");
     public static final String javaFileOne = Utils.osPathJoin(basePath, "build", "tmp", "java-file_One.xml");
     public static final String javaFileTwo = Utils.osPathJoin(basePath, "build", "tmp", "java-file_Two.txt");
     public static final String javaFileThree = Utils.osPathJoin(basePath, "build", "tmp", "java-file_Three.txt");
-    /**
-     * Constant <code>pathToSchema="Utils.osPathJoin(basePath, src, main, r"{trunked}</code>
-     */
+    public static final String javaFileThreeXML = Utils.osPathJoin(basePath, "build", "tmp", "java-file_Three.xml");
     public static final String pathToSchema = Utils.osPathJoin(basePath, "src", "main", "resources", "Scarf", "scarf_v1.2.xsd");
-    /**
-     * Constant <code>pathToAPK="Utils.osPathJoin(basePath, samples, app"{trunked}</code>
-     */
     public static final String pathToAPK = Utils.osPathJoin(testRec, "app-debug.apk");
     public static final String tempFileOutTxt = Utils.osPathJoin(testPath, "testable-jar.txt");
     public static final String tempFileOutXML = Utils.osPathJoin(testPath, "testable-jar.xml");
@@ -85,14 +60,12 @@ public class TestUtilities {
     public static final String tempFileOutTxt_Class_tester_test = Utils.osPathJoin(testPath, "java-class-file_sample_tester-test.txt");
     public static final String tempFileOutXML_Class = Utils.osPathJoin(testPath, "java-class-file.xml");
     public static final String tempFileOutXML_Class_Stream = Utils.osPathJoin(testPath, "java-class-file-stream.xml");
-
     public static final String tempFileOutApk = Utils.osPathJoin(testPath, "app-debug.txt");
     public static final String tempFileOutApk_Steam = Utils.osPathJoin(testPath, "app-debug_Stream.txt");
     public static final String tempFileOutApk_Scarf = Utils.osPathJoin(testPath, "app-debug.xml");
     public static final String tempFileOutApk_Scarf_Steam = Utils.osPathJoin(testPath, "app-debug_Stream.xml");
     public static final String tempFileOutApk_Default = Utils.osPathJoin(testPath, "app-debug.json");
     public static final String tempFileOutApk_Default_Steam = Utils.osPathJoin(testPath, "app-debug_Stream.json");
-
     public static final String tempJarFile_txt = Utils.osPathJoin(testPath, "tempJarFile_txt.txt");
     public static final String tempJarFile_Scarf_0 = Utils.osPathJoin(testPath, "tempJarFile_Scarf_0.xml");
     public static final String tempJarFile_Scarf_1 = Utils.osPathJoin(testPath, "tempJarFile_Scarf_1.xml");
@@ -100,13 +73,10 @@ public class TestUtilities {
     public static final String tempJarFile_Scarf_Steam_1 = Utils.osPathJoin(testPath, "tempJarFile_Scarf_Steam_1.xml");
     public static final String tempJarFile_Default_0 = Utils.osPathJoin(testPath, "tempJarFile_Default_0.json");
     public static final String tempJarFile_Default_Stream_0 = Utils.osPathJoin(testPath, "tempJarFile_Default_Stream_0.json");
-
     public static final ArrayList<String> sampleAuxClassPathOneList = new ArrayList<String>(Arrays.asList(testRec, jarOne, javaFiles[0], javaFiles[1], classFiles[0], classFiles[1]));
     public static final String sampleAuxClassPathOne = String.join(":", sampleAuxClassPathOneList);
-
     public static final ArrayList<String> sampleAuxClassPathTwoList = new ArrayList<String>(Arrays.asList(testRec, jarOne, javaFiles[0], javaFiles[1], classFiles[0], classFiles[1], scarfArgs));
     public static final String sampleAuxClassPathTwo = String.join(":", sampleAuxClassPathTwoList);
-
     public static final ArrayList<String> srcOneGrvInputArr = new ArrayList<>(Arrays.asList(
             Utils.osPathJoin(javaSource, "UrlFrameWorks.java"),
             Utils.osPathJoin(javaSource, "PasswordUtils.java"),
@@ -226,7 +196,15 @@ public class TestUtilities {
         System.setOut(old);
         //endregion
 
-        return baos.toString();
+        //The output string
+        String outputString = StringUtils.trimToNull(baos.toString());
+        assertTrue(StringUtils.isNotBlank(outputString));
+
+        String[] lines = baos.toString().split(Utils.lineSep);
+        outputString = StringUtils.trimToNull(lines[lines.length - 1]);
+        assertTrue(StringUtils.isNotBlank(outputString));
+
+        return outputString;
     }
 
     public static String[] arr(ArrayList<String> in) {
@@ -235,5 +213,16 @@ public class TestUtilities {
 
     public static ArrayList<String> arr(String[] in) {
         return new ArrayList<String>(Arrays.asList(in));
+    }
+
+    public static String getFileNameFromString(String filePath) {
+        if (StringUtils.isBlank(filePath))
+            return null;
+
+        filePath = StringUtils.trimToNull(filePath);
+        String[] splits = filePath.split(Utils.fileSep);
+        String fileName = splits[splits.length - 1];
+
+        return StringUtils.trimToNull(fileName.substring(0, fileName.indexOf(".")));
     }
 }

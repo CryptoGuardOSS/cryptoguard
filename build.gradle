@@ -197,7 +197,6 @@ dependencies {
     compile 'com.google.guava:guava:20.0'
     //compile name: 'soot_j9_20190409'
     //compile name: 'soot_3.3.0'
-    //compile name: 'soot-V2.3.0'
     compile name: 'soot-V3.3.0-SNAPSHOT'
     compile name: 'axml-2.0'
     compile name: 'AXMLPrinter2'
