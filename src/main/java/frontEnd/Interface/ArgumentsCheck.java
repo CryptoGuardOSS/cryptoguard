@@ -103,7 +103,7 @@ public class ArgumentsCheck {
         Boolean verify = !cmd.hasOption(argsIdentifier.SKIPINPUTVALIDATION.getId());
         log.debug("Verification flag: " + verify);
 
-        Boolean usingInputIn = cmd.getOptionValue(argsIdentifier.SOURCE.getId()).endsWith("input.in");
+        Boolean usingInputIn = cmd.getOptionValue(argsIdentifier.SOURCE.getId()).endsWith(".in");
         log.debug("Enhanced Input in file: " + usingInputIn);
 
         //region Logging Verbosity Check
@@ -273,7 +273,7 @@ public class ArgumentsCheck {
         format.setOptionalArg(false);
         cmdLineArgs.addOption(format);
 
-        Option sources = Option.builder(argsIdentifier.SOURCE.getId()).required().hasArgs().argName("file(s)/input.in/dir").desc(argsIdentifier.SOURCE.getDesc()).build();
+        Option sources = Option.builder(argsIdentifier.SOURCE.getId()).required().hasArgs().argName("file(s)/*.in/dir").desc(argsIdentifier.SOURCE.getDesc()).build();
         sources.setType(String.class);
         sources.setValueSeparator(' ');
         sources.setOptionalArg(false);

@@ -17,6 +17,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static test.TestUtilities.*;
 
@@ -80,7 +82,7 @@ public class EntryPointTest_CLASS {
                 EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempFileOutTxt_Class), StandardCharsets.UTF_8);
-                //assertTrue(results.size() >= 2);
+                assertTrue(results.size() >= 2);
 
 
             } catch (Exception e) {
@@ -109,9 +111,9 @@ public class EntryPointTest_CLASS {
                 EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempFileOutTxt_Class_fullproj), StandardCharsets.UTF_8);
-                //assertTrue(results.size() >= 2);
 
                 AnalyzerReport report = AnalyzerReport.deserialize(new File(tempFileOutTxt_Class_fullproj));
+                assertFalse(report.getBugInstance().isEmpty());
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -139,7 +141,7 @@ public class EntryPointTest_CLASS {
                 EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempFileOutTxt_Class_tester_test), StandardCharsets.UTF_8);
-                //assertTrue(results.size() >= 2);
+                assertTrue(results.size() >= 2);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -167,7 +169,7 @@ public class EntryPointTest_CLASS {
                 EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempFileOutTxt_two), StandardCharsets.UTF_8);
-                //assertTrue(results.size() >= 2);
+                assertTrue(results.size() >= 2);
 
 
             } catch (Exception e) {
@@ -196,10 +198,9 @@ public class EntryPointTest_CLASS {
                 EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempFileOutXML_Class), StandardCharsets.UTF_8);
-                //assertTrue(results.size() >= 2);
-
 
                 AnalyzerReport report = AnalyzerReport.deserialize(new File(tempFileOutXML_Class));
+                assertFalse(report.getBugInstance().isEmpty());
 
 
             } catch (Exception e) {
@@ -229,11 +230,9 @@ public class EntryPointTest_CLASS {
                 EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempFileOutXML_Class_Stream), StandardCharsets.UTF_8);
-                //assertTrue(results.size() >= 2);
-
 
                 AnalyzerReport report = AnalyzerReport.deserialize(new File(tempFileOutXML_Class_Stream));
-
+                assertFalse(report.getBugInstance().isEmpty());
 
             } catch (Exception e) {
                 e.printStackTrace();

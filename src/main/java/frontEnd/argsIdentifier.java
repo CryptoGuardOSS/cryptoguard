@@ -20,7 +20,7 @@ public enum argsIdentifier {
      * TODO - xargs/file config
      * */
     FORMAT("in", "format", "(Req'd) The format of input you want to scan, available styles " + EngineType.retrieveEngineTypeValues() + "."),
-    SOURCE("s", "file(s)/input.in/dir", "(Req'd) The source(s) to be scanned, use the absolute path) or send all of the source files via the file input.in (ex. find -type f *.java >> input.in)."),
+    SOURCE("s", "file(s)/*.in/dir", "(Req'd) The source(s) to be scanned, use the absolute path) or send all of the source files via the file input.in (ex. find -type f *.java >> input.in)."),
     DEPENDENCY("d", "dir", "The dependency to be scanned, (use the relative path)."),
     OUT("o", "file", "The file to be created with the output (default will be the project name)."),
     NEW("new", null, "The file to be created with the output (if existing) will be overwritten."),

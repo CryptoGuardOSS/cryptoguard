@@ -31,27 +31,6 @@ import static test.TestUtilities.*;
  */
 public class EntryPointTest_JAR {
 
-
-    //region Attributes
-    private EntryPoint engine;
-
-    //region Scarf Properties
-    private String assessment_start_ts;
-    private String build_fw;
-    private String build_fw_version;
-    private String package_name;
-    private String package_version;
-    private String assess_fw;
-    private String assess_fw_version;
-    private String build_root_dir;
-    private String package_root_dir;
-    private String parser_fw;
-    private String parser_fw_version;
-    private String uuid;
-    //endregion
-
-    //endregion
-
     //region Test Environment Setup
 
     /**
@@ -64,22 +43,6 @@ public class EntryPointTest_JAR {
         //Cleaning the current scene since setup carries throughout the VM
         //tldr - one test setting up the scene will carry over to the next test, this'll stop that
         G.reset();
-
-        engine = new EntryPoint();
-
-        //region Properties Setup
-        assess_fw = "java-assess";
-        assess_fw_version = "1.0.0c";
-        assessment_start_ts = "1516116551.639144";
-        build_fw = "c-assess";
-        build_fw_version = "1.1.12";
-        build_root_dir = "/home";
-        package_name = "RigorityJ";
-        package_root_dir = "CryptoGuard";
-        package_version = "8675309";
-        parser_fw = "example_tool";
-        parser_fw_version = "x.y.z";
-        uuid = "fa109792-9234-4jk2-9f68-alp9woofbeef";
         //endregion
     }
 
@@ -90,52 +53,10 @@ public class EntryPointTest_JAR {
      */
     @After
     public void tearDown() throws Exception {
-        engine = null;
-
-        //region Properties
-        assess_fw = null;
-        assess_fw_version = null;
-        assessment_start_ts = null;
-        build_fw = null;
-        build_fw_version = null;
-        build_root_dir = null;
-        package_root_dir = null;
-        package_name = null;
-        package_root_dir = null;
-        package_version = null;
-        parser_fw = null;
-        parser_fw_version = null;
-        uuid = null;
-        //endregion
     }
     //endregion
 
     //region Tests
-
-    /**
-     * <p>testEnvironmentVariables.</p>
-     */
-    @Test
-    public void testEnvironmentVariables() {
-        String[] fileLists = new String[]{jarOne, pathToSchema};
-        String[] dirLists = new String[]{srcOneGrv, srcOneGrvDep};
-
-        for (String file : fileLists) {
-            File tempFile = new File(file);
-
-            assertTrue(tempFile.exists());
-            assertTrue(tempFile.isFile());
-        }
-
-        for (String dir : dirLists) {
-            File tempDir = new File(dir);
-
-            assertTrue(tempDir.exists());
-            assertTrue(tempDir.isDirectory());
-        }
-
-
-    }
 
     /**
      * <p>main_TestableJar.</p>
@@ -185,7 +106,7 @@ public class EntryPointTest_JAR {
                 EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempJarFile_Scarf_0), StandardCharsets.UTF_8);
-                assertTrue(results.size() >= 1);
+                assertTrue(results.size() >= 2);
 
                 AnalyzerReport report = AnalyzerReport.deserialize(new File(tempJarFile_Scarf_0));
 
@@ -217,7 +138,7 @@ public class EntryPointTest_JAR {
                 EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempJarFile_Scarf_0), StandardCharsets.UTF_8);
-                assertTrue(results.size() >= 1);
+                assertTrue(results.size() >= 2);
 
                 AnalyzerReport report = AnalyzerReport.deserialize(new File(tempJarFile_Scarf_0));
                 assertNotNull(report.getHeuristics());
@@ -253,7 +174,7 @@ public class EntryPointTest_JAR {
                 EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempJarFile_Default_0), StandardCharsets.UTF_8);
-                assertTrue(results.size() >= 1);
+                assertTrue(results.size() >= 2);
 
                 Report report = Report.deserialize(new File(tempJarFile_Default_0));
 
@@ -285,7 +206,7 @@ public class EntryPointTest_JAR {
                 EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempJarFile_Default_0), StandardCharsets.UTF_8);
-                assertTrue(results.size() >= 1);
+                assertTrue(results.size() >= 2);
 
                 Report report = Report.deserialize(new File(tempJarFile_Default_0));
                 assertNotNull(report.getHeuristics());
@@ -319,7 +240,7 @@ public class EntryPointTest_JAR {
                 EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempJarFile_Scarf_1), StandardCharsets.UTF_8);
-                assertTrue(results.size() >= 1);
+                assertTrue(results.size() >= 2);
 
 
                 AnalyzerReport report = AnalyzerReport.deserialize(new File(tempJarFile_Scarf_1));
@@ -351,7 +272,7 @@ public class EntryPointTest_JAR {
                 EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempJarFile_Scarf_Steam_1), StandardCharsets.UTF_8);
-                assertTrue(results.size() >= 1);
+                assertTrue(results.size() >= 2);
 
 
                 AnalyzerReport report = AnalyzerReport.deserialize(new File(tempJarFile_Scarf_Steam_1));
@@ -383,7 +304,7 @@ public class EntryPointTest_JAR {
                 EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempJarFile_Default_Stream_0), StandardCharsets.UTF_8);
-                assertTrue(results.size() >= 1);
+                assertTrue(results.size() >= 2);
 
                 Report report = Report.deserialize(new File(tempJarFile_Default_Stream_0));
 
@@ -482,7 +403,7 @@ public class EntryPointTest_JAR {
                 EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempJarFile_Default_0), StandardCharsets.UTF_8);
-                assertTrue(results.size() >= 1);
+                assertTrue(results.size() >= 2);
 
                 Report report = Report.deserialize(new File(tempJarFile_Default_0));
 

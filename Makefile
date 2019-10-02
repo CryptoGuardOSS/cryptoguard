@@ -1,3 +1,4 @@
+#region Variables
 #General Variables used throughout the Makefile
 dir=./
 testDir=$(dir)build/Makefile-tests/
@@ -34,6 +35,7 @@ javaFile2=$(srcJavaFolder)$(sampleFile2).java
 #Sample java class files
 classFile1=$(srcClassFolder)$(sampleFile1).class
 classFile2=$(srcClassFolder)$(sampleFile2).class
+#endregion
 
 default:: build
 
@@ -49,6 +51,7 @@ endif
 	@$(info $(testDir))
 	@mkdir -p $(testDir)
 
+#region Envrionment Handling
 #Sets the current environment variable if it's not set
 #Needed for gradle
 setHome:
@@ -77,6 +80,8 @@ endif
 checkEnv: checkjavaHome checkAndroidSDKHome
 	@$(info Envrionment Variables are set.)
 
+#endregion
+#region ScanJars
 #The grouping of Jar Scanning
 scanJar: scanJar_Legacy scanJar_Scarf scanJar_Default
 
@@ -99,6 +104,8 @@ scanJar_Default: checkjavaHome build
 	@$(info Scanning the sample jar ($(jarLoc)).)
 	$(scan) -in jar -s $(jarLoc) -d $(depLoc) -o $(testDir)results_Jar_Default.json -m D -n
 
+#endregion
+#region ScanAPKs
 #The grouping of Apk Scanning
 scanAPK: scanAPK_Legacy scanAPK_Scarf scanAPK_Default
 
@@ -122,29 +129,32 @@ scanAPK_Default: checkAndroidSDKHome build
 	$(scan) -in apk -s $(apkLoc) -m D -o $(testDir)results_Apk.json
 	@$(info View the output at $(testDir)results_Apk.json.)
 
+#endregion
+#region ScanDirs
 #The grouping of Project Scanning
-#scanDir: scanDir_Legacy scanDir_Scarf scanDir_Default
+scanDir: scanDir_Legacy scanDir_Scarf scanDir_Default
 
 #The command for a default directory scan output
-#scanDir_Legacy: checkjavaHome build
-#	@$(info Scanning the sample directory ($(dirLoc)))
-#	$(scan) -in source -s $(dirLoc) -d $(depLoc) -m L -o $(testDir)results_Dir.txt
-#	@$(info View the output at $(testDir)results_Dir.txt.)
+scanDir_Legacy: checkjavaHome build
+	@$(info Scanning the sample directory ($(dirLoc)))
+	$(scan) -in source -s $(dirLoc) -d $(depLoc) -m L -o $(testDir)results_Dir.txt
+	@$(info View the output at $(testDir)results_Dir.txt.)
 
 #The command for a SCARF directory scan output, that also verifies the output
-#scanDir_Scarf: checkjavaHome build
-#	@$(info Scanning the sample jar ($(dirLoc)).)
-#	$(scan) -in source -s $(dirLoc) -d $(depLoc) -o $(testDir)results_Dir_Scarf.xml -m SX -n
-#	@$(info Verifying the Scarf Output ($(testDir)results_Dir_Scarf.xml).)
-#	@xmllint --schema $(scarfXSD) $(testDir)results_Dir_Scarf.xml>$(testDir)lint_DIR.out 2>$(testDir)lint_DIR.err
-#	@$(info View the output at $(testDir)results_Dir_Scarf.xml.)
+scanDir_Scarf: checkjavaHome build
+	@$(info Scanning the sample jar ($(dirLoc)).)
+	$(scan) -in source -s $(dirLoc) -d $(depLoc) -o $(testDir)results_Dir_Scarf.xml -m SX -n
+	@$(info Verifying the Scarf Output ($(testDir)results_Dir_Scarf.xml).)
+	@xmllint --schema $(scarfXSD) $(testDir)results_Dir_Scarf.xml>$(testDir)lint_DIR.out 2>$(testDir)lint_DIR.err
+	@$(info View the output at $(testDir)results_Dir_Scarf.xml.)
 
 #The command for a default directory scan output
-#scanDir_Default: checkjavaHome build
-#	@$(info Scanning the sample directory ($(dirLoc)))
-#	$(scan) -in source -s $(dirLoc) -d $(depLoc) -m D -o $(testDir)results_Dir.json
-#	@$(info View the output at $(testDir)results_Dir.json.)
-
+scanDir_Default: checkjavaHome build
+	@$(info Scanning the sample directory ($(dirLoc)))
+	$(scan) -in source -s $(dirLoc) -d $(depLoc) -m D -o $(testDir)results_Dir.json
+	@$(info View the output at $(testDir)results_Dir.json.)
+#endregion
+#region ScanJavaFile
 #The grouping of Java File Scanning
 scanJavaFile: scanJavaFile_Legacy scanJavaFiles_Legacy scanJavaFile_Scarf scanJavaFiles_Scarf scanJavaFile_Default scanJavaFiles_Default scanJavaFiles_Default_Enhanced
 
@@ -193,7 +203,8 @@ scanJavaFiles_Default_Enhanced: checkjavaHome build
 	@$(info Scanning the sample java files (within the directory $(dirLoc)).)
 	$(scan) -in java -s $(enhancedInputFile) -d $(depLoc) -m D -o $(testDir)results_enhancedfile.json
 	@$(info View the output at $(testDir)results_enhancedfile.join.)
-
+#endregion
+#region ScanJavaClasses
 #The grouping of Java Class Scanning
 scanJavaClass: scanJavaClass_Legacy scanJavaClasses_Legacy scanJavaClass_Scarf scanJavaClasses_Scarf scanJavaClass_Default scanJavaClasses_Default
 
@@ -236,6 +247,7 @@ scanJavaClasses_Default: checkjavaHome build
 	@$(info Scanning the sample java class files ($(classFile1), $(classFile2)).)
 	$(scan) -in class -s $(classFile1) $(classFile2) -m D -d $(depLoc) -o $(testDir)results_javaClasses.json
 	@$(info View the output at $(testDir)results_javaClasses.json.)
+#endregion
 
 #This runs the help method
 help: build
@@ -248,9 +260,9 @@ build\
 setHome\
 scanJar\
 scanAPK\
-scanJavaClass
-#scanDir\
-#scanJavaFile
+scanJavaClass\
+scanJavaFile\
+scanDir
 
 #This build clears removes all of the scan results
 cleanScans:
@@ -263,3 +275,4 @@ clean: setHome cleanScans
 	@gradle --stop
 	@gradle -p $(dir) clean
 	@-rm $(dir)$(name).jar
+	@-rm $(dir)$(name).tar

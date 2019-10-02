@@ -188,10 +188,14 @@ public class BaseAnalyzerRouting {
 
         */
 
+        /*
         for (String clazz : Utils.retrieveJavaFilesFromDir(snippetPath.get(0))) {
             log.debug("Loading the class: " + clazz);
             Scene.v().extendSootClassPath(clazz);
         }
+        */
+
+        Options.v().set_process_dir(snippetPath);
 
         loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
     }
@@ -265,6 +269,8 @@ public class BaseAnalyzerRouting {
         Options.v().set_prepend_classpath(true);
         Options.v().set_whole_program(true);
 
+        Options.v().set_app(true);
+
         List<String> classNames = Utils.retrieveFullyQualifiedName(sourceJavaClasses);
 
         if (projectDependencyPath != null) {
@@ -305,6 +311,10 @@ public class BaseAnalyzerRouting {
 
         Options.v().set_keep_line_number(true);
         Options.v().set_allow_phantom_refs(true);
+
+        //Options.v().set_app(true);
+        //Options.v().set_validate(true);
+        Options.v().set_whole_program(true);
 
         for (String clazz : BaseAnalyzer.CRITERIA_CLASSES) {
             try {

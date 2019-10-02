@@ -16,6 +16,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static test.TestUtilities.*;
 
@@ -61,28 +62,6 @@ public class EntryPointTest_SOURCE {
 
     //region Tests
     @Test
-    public void testEnvironmentVariables() {
-        String[] fileLists = new String[]{jarOne, pathToSchema};
-        String[] dirLists = new String[]{srcOneGrv, srcOneGrvDep};
-
-        for (String file : fileLists) {
-            File tempFile = new File(file);
-
-            assertTrue(tempFile.exists());
-            assertTrue(tempFile.isFile());
-        }
-
-        for (String dir : dirLists) {
-            File tempDir = new File(dir);
-
-            assertTrue(tempDir.exists());
-            assertTrue(tempDir.isDirectory());
-        }
-
-
-    }
-
-    //@Test
     public void main_TestableJarSource() {
 
         if (isLinux) {
@@ -107,7 +86,7 @@ public class EntryPointTest_SOURCE {
         }
     }
 
-    //@Test
+    @Test
     public void main_TestableJarSourceScarf() {
         if (isLinux) {
             String args =
@@ -123,10 +102,9 @@ public class EntryPointTest_SOURCE {
                 EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempFileOutXML), StandardCharsets.UTF_8);
-                assertTrue(results.size() >= 1);
-
 
                 AnalyzerReport report = AnalyzerReport.deserialize(new File(tempFileOutXML));
+                assertFalse(report.getBugInstance().isEmpty());
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -135,7 +113,7 @@ public class EntryPointTest_SOURCE {
         }
     }
 
-    //@Test
+    @Test
     public void main_TestableJarSourceScarf_Stream() {
         if (isLinux) {
             String args =
@@ -151,10 +129,9 @@ public class EntryPointTest_SOURCE {
                 EntryPoint.main(args.split(" "));
 
                 List<String> results = Files.readAllLines(Paths.get(tempStreamXML), StandardCharsets.UTF_8);
-                assertTrue(results.size() >= 1);
-
 
                 AnalyzerReport report = AnalyzerReport.deserialize(new File(tempStreamXML));
+                assertFalse(report.getBugInstance().isEmpty());
 
             } catch (Exception e) {
                 e.printStackTrace();
