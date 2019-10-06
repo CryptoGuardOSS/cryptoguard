@@ -217,7 +217,7 @@ public class TestUtilities {
 
     public static String getFileNameFromString(String filePath) {
         if (StringUtils.isBlank(filePath))
-            return null;
+            return "";
 
         filePath = StringUtils.trimToNull(filePath);
         String[] splits = filePath.split(Utils.fileSep);

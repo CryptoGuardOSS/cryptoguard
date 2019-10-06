@@ -141,7 +141,7 @@ task release {
         mkdir './release'
     }
     //Waiting until all tests are cleared
-    def tasks = [clean, test, build, jibBuildTar]
+    def tasks = [clean, test, build]//, jibBuildTar]
     for (int itr = 0; itr < tasks.size() - 1; itr++) {
         tasks[itr + 1].mustRunAfter(tasks[itr])
     }
