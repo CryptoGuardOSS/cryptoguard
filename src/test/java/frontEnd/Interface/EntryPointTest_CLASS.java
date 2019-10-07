@@ -112,6 +112,7 @@ public class EntryPointTest_CLASS {
                             makeArg(argsIdentifier.SOURCE, Utils.join(" ", TestUtilities.arr(srcOneGrvInputArr_Class))) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.PRETTY) +
                             makeArg(argsIdentifier.OUT, fileOut);
 
             try {

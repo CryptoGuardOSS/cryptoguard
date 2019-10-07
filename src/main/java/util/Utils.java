@@ -543,6 +543,10 @@ public class Utils {
         return classNames;
     }
 
+    public static List<String> retrieveFullyQualifiedName(String... sourceJavaFile) {
+        return retrieveFullyQualifiedName(sourceJavaFile);
+    }
+
     /**
      * <p>retrieveFullyQualifiedName.</p>
      *

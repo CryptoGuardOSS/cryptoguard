@@ -6,6 +6,7 @@ import lombok.extern.log4j.Log4j2;
 import rule.base.BaseRuleChecker;
 import rule.engine.EngineType;
 import soot.Scene;
+import soot.SootClass;
 import soot.options.Options;
 import util.Utils;
 
@@ -95,30 +96,40 @@ public class BaseAnalyzerRouting {
 
         List<String> classNames = Utils.getClassNamesFromJarArchive(projectJarPath);
 
-        if (projectDependencyPath != null)
-            for (String dependency : Utils.getJarsInDirectory(projectDependencyPath)) {
-                classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
-            }
+        for (String dependency : Utils.getJarsInDirectory(projectDependencyPath))
+            classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
 
-        //region Old
-        /*
-        List<String> sootPaths = new ArrayList<>();
-        sootPaths.add(projectJarPath);
-        sootPaths.add(Utils.getBaseSOOT());
-
-        if (projectDependencyPath != null)
-            sootPaths.add(projectDependencyPath);
-
-        Scene.v().setSootClassPath(Utils.buildSootClassPath(sootPaths));
-        */
-        //endregion
-        //region New
         Scene.v().setSootClassPath(Utils.join(":",
                 projectJarPath,
                 Utils.getBaseSOOT(),
                 Utils.join(":", Utils.getJarsInDirectory(projectDependencyPath)))
         );
-        //endregion
+
+            /*
+            * Class Names
+                0 = "tester.Crypto$2"
+                1 = "tester.SymCrypto"
+                2 = "tester.Crypto$3"
+                3 = "tester.UrlFrameWorks"
+                4 = "tester.PasswordUtils"
+                5 = "tester.LiveVarsClass"
+                6 = "tester.NewTestCase1"
+                7 = "tester.PBEUsage"
+                8 = "tester.NewTestCase2"
+                9 = "tester.Crypto$1"
+                10 = "tester.PassEncryptor"
+                11 = "tester.Crypto"
+                12 = "tester.VeryBusyClass"
+            * Scene.v.classpath :
+                ./samples/testable-jar/build/libs/testable-jar.jar
+                :~/8/rt.jar
+                :~/8/jce.jar
+                :./samples/testable-jar/build/dependencies/converter-gson-2.1.0.jar
+                :./samples/testable-jar/build/dependencies/okio-1.13.0.jar
+                :./samples/testable-jar/build/dependencies/retrofit-2.1.0.jar
+                :./samples/testable-jar/build/dependencies/gson-2.7.jar
+                :./samples/testable-jar/build/dependencies/okhttp-3.9.0.jar
+            * */
 
         loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
     }
@@ -291,24 +302,134 @@ public class BaseAnalyzerRouting {
                                           String projectDependencyPath,
                                           BaseRuleChecker checker) throws ExceptionHandler {
 
+        //Options.v().set_process_dir(Arrays.asList(""));
+
         Options.v().set_src_prec(Options.src_prec_only_class);
         Options.v().set_output_format(Options.output_format_jimple);
 
         List<String> classNames = Utils.retrieveFullyQualifiedName(sourceJavaClasses);
 
-        if (projectDependencyPath != null) {
-            for (String dependency : Utils.getJarsInDirectory(projectDependencyPath)) {
+        for (String dependency : Utils.getJarsInDirectory(projectDependencyPath))
                 classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
-            }
-        }
 
-        log.debug("Setting the soot class path as: " + Utils.join(":", Utils.getBaseSOOT(), projectDependencyPath == null ? "" : projectDependencyPath));
-        Scene.v().setSootClassPath(Utils.join(":", Utils.getBaseSOOT(), projectDependencyPath));
+        log.debug("Setting the soot class path as: " + Utils.join(":", Utils.getBaseSOOT(), projectDependencyPath == null ? "" : Utils.join(":", Utils.getJarsInDirectory(projectDependencyPath))));
+        Scene.v().setSootClassPath(Utils.join(":",
+                Utils.join(":", sourceJavaClasses),
+                Utils.getBaseSOOT(),
+                Utils.join(":", Utils.getJarsInDirectory(projectDependencyPath))));
+
+        /*
+        SootResolver res = SootResolver.v();
+        ClassResolver cla = ClassResolver;
+        */
 
         for (String clazz : sourceJavaClasses) {
-            Scene.v().extendSootClassPath(clazz);
+            log.info("Working with the full class path: " + clazz);
+
+            /*
+                Scene.v().loadClass(clazz, SootClass.BODIES);
+                Scene.v().forceResolve(clazz, SootClass.BODIES);
+                Scene.v().extendSootClassPath(clazz);
+             */
+            /*
+            SootClass testClass = Scene.v().loadClass(clazz,SootClass.BODIES);
+
+            List<SootMethod> test = testClass.getMethods();
+            System.out.println("hello");
+            */
+        }
+        for (String clazz : Utils.retrieveFullyQualifiedName(sourceJavaClasses)) {
+            log.info("Working with the qualified class path: " + clazz);
+
+            /*
+            Scene.v().loadClassAndSupport(clazz);
+
+            SootClass curClass = new SootClass(clazz, SootClass.SIGNATURES);
+            Scene.v().addClass(curClass);
+            List<SootMethod> test = curClass.getMethods();
+
+            if (clazz.contains("VeryBusyClass"))
+                Scene.v().setMainClass(curClass);
+            */
+        }
+        for (String clazz : sourceJavaClasses) {
+            //region Translating Java Class to Soot Class - Don't Work
+            /*
+            try {
+                //SootClass curClass = new SootClass(clazz, Modifier.PUBLIC);
+                URLClassLoader cl = new URLClassLoader(new URL[]{new File(clazz).toURI().toURL()});
+                cl.loadClass(clazz);
+
+                for (Method m:cl.getClass().getMethods()) {
+                    String type = m.getReturnType().getTypeName();
+                    System.out.println("help");
+
+                    //Type ret = ;
+                    //switch (m.getReturnType().toString()) {
+                    //    ""
+                    //}
+
+                    //curClass.addMethod(new SootMethod(m.getName(), m.getParameterTypes(), m.getReturnType()));
+                }
+
+            } catch (MalformedURLException e) {
+                throw new ExceptionHandler(e.getMessage(), ExceptionId.FILE_READ);
+            } catch (Exception e) {
+                throw new ExceptionHandler(e.getMessage() + ":", ExceptionId.FILE_READ);
+            }
+            */
+            //endregion
+
+            log.info("Working with the full class path: " + clazz);
+            String fullyQualifiedName = Utils.retrieveFullyQualifiedName(clazz);
+
+            SootClass c = Scene.v().forceResolve(fullyQualifiedName, SootClass.BODIES);
+            c.setApplicationClass();
+
+            System.out.println("help");
+
         }
 
+        /* Full Jar
+            * Class Names
+                0 = "tester.Crypto$2"
+                1 = "tester.SymCrypto"
+                2 = "tester.Crypto$3"
+                3 = "tester.UrlFrameWorks"
+                4 = "tester.PasswordUtils"
+                5 = "tester.LiveVarsClass"
+                6 = "tester.NewTestCase1"
+                7 = "tester.PBEUsage"
+                8 = "tester.NewTestCase2"
+                9 = "tester.Crypto$1"
+                10 = "tester.PassEncryptor"
+                11 = "tester.Crypto"
+                12 = "tester.VeryBusyClass"
+            * Scene.v.classpath :
+                ./samples/testable-jar/build/libs/testable-jar.jar
+                :~/8/rt.jar
+                :~/8/jce.jar
+                :./samples/testable-jar/build/dependencies/converter-gson-2.1.0.jar
+                :./samples/testable-jar/build/dependencies/okio-1.13.0.jar
+                :./samples/testable-jar/build/dependencies/retrofit-2.1.0.jar
+                :./samples/testable-jar/build/dependencies/gson-2.7.jar
+                :./samples/testable-jar/build/dependencies/okhttp-3.9.0.jar
+            * */
+
+        /*
+            * Class Names
+                tester.PBEUsage
+            * Scene.v.classpath
+                :~/8/rt.jar
+                :~/8/jce.jar
+                :./samples/testable-jar/build/dependencies/converter-gson-2.1.0.jar
+                :./samples/testable-jar/build/dependencies/okio-1.13.0.jar
+                :./samples/testable-jar/build/dependencies/retrofit-2.1.0.jar
+                :./samples/testable-jar/build/dependencies/gson-2.7.jar
+                :./samples/testable-jar/build/dependencies/okhttp-3.9.0.jar
+                :./samples/testable-jar/build/classes/java/main/tester/PBEUsage.class
+            * */
+        String temp = Scene.v().getSootClassPath();
         loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
     }
 
@@ -331,7 +452,7 @@ public class BaseAnalyzerRouting {
                                         int criteriaParam, BaseRuleChecker checker) throws ExceptionHandler {
 
         Options.v().set_keep_line_number(true);
-        Options.v().set_allow_phantom_refs(true);
+        Options.v().set_allow_phantom_refs(false);
 
         //Options.v().set_app(true);
         //Options.v().set_validate(true);
@@ -358,6 +479,7 @@ public class BaseAnalyzerRouting {
         }
 
         Scene.v().loadNecessaryClasses();
+        Scene.v().setDoneResolving();
 
         String endPoint = "<" + criteriaClass + ": " + criteriaMethod + ">";
         ArrayList<Integer> slicingParameters = new ArrayList<>();
