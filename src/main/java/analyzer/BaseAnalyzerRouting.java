@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static util.Utils.loadJavaLang;
+
 /**
  * <p>BaseAnalyzerRouting class.</p>
  *
@@ -303,25 +305,78 @@ public class BaseAnalyzerRouting {
                                           String projectDependencyPath,
                                           BaseRuleChecker checker) throws ExceptionHandler {
 
+        if (sourceJavaClasses.get(0).contains("very.class"))
+            very(criteriaClass, criteriaMethod, criteriaParam, sourceJavaClasses, projectDependencyPath, checker);
+        else
+            pbeUsage(criteriaClass, criteriaMethod, criteriaParam, sourceJavaClasses, projectDependencyPath, checker);
+
+    }
+
+    //region VERY
+    public static void very(String criteriaClass,
+                            String criteriaMethod,
+                            int criteriaParam,
+                            List<String> sourceJavaClasses,
+                            String projectDependencyPath,
+                            BaseRuleChecker checker) throws ExceptionHandler {
+
         Options.v().set_src_prec(Options.src_prec_only_class);
         Options.v().set_output_format(Options.output_format_jimple);
         Options.v().set_verbose(true);
 
         List<String> classNames = new ArrayList<>();//Utils.retrieveFullyQualifiedName(sourceJavaClasses);
 
-        //classNames.addAll(Utils.getClassNamesFromJarArchive(getRT()));
-
         //classNames.addAll(loadJavaLang());
+        classNames.add("very");
 
         //classNames.addAll(Utils.getClassNamesFromJarArchive(getJCE()));
 
         //for (String dependency : Utils.getJarsInDirectory(projectDependencyPath))
         //        classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
 
-        if (sourceJavaClasses.contains("/home/maister/.projects/cryptoguard/samples/VerySimple/very.class"))
-            classNames.add("very");
-        else
-            classNames.addAll(Utils.retrieveFullyQualifiedName(sourceJavaClasses));
+        Scene.v().setSootClassPath(":" + Utils.join(":",
+                new File(sourceJavaClasses.get(0)).getParent(),
+                Utils.getBaseSOOT(),
+                //Utils.join(":", Utils.getJarsInDirectory(projectDependencyPath)),
+                sourceJavaClasses.get(0)) + ":");
+        log.debug("Setting the soot class path as: " + Scene.v().getSootClassPath());
+
+        for (String clazz : sourceJavaClasses) {
+            String fullyQualifiedName = Utils.retrieveFullyQualifiedName(clazz);
+            log.info("Working with the full class path: " + clazz + "@" + fullyQualifiedName);
+
+            Options.v().classes().add("very");
+            //log.info(SootResolver.v().resolveClass(fullyQualifiedName,2) != null);
+
+        }
+
+        loadBaseSootInfo_Class(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
+
+    }
+
+    //endregion
+    //region PBE
+    public static void pbeUsage(String criteriaClass,
+                                String criteriaMethod,
+                                int criteriaParam,
+                                List<String> sourceJavaClasses,
+                                String projectDependencyPath,
+                                BaseRuleChecker checker) throws ExceptionHandler {
+
+        Options.v().set_src_prec(Options.src_prec_only_class);
+        Options.v().set_output_format(Options.output_format_jimple);
+        Options.v().set_verbose(true);
+
+        List<String> classNames = new ArrayList<>();//Utils.retrieveFullyQualifiedName(sourceJavaClasses);
+
+        for (String dependency : Utils.getJarsInDirectory(projectDependencyPath))
+            classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
+
+        //classNames.removeIf(f -> f.startsWith("retrofit"));
+
+        classNames.addAll(loadJavaLang());
+        //classNames.addAll(Utils.getClassNamesFromJarArchive(getJCE()));
+        classNames.addAll(Utils.retrieveFullyQualifiedName(sourceJavaClasses));
 
         Scene.v().setSootClassPath(":" + Utils.join(":",
                 new File(sourceJavaClasses.get(0)).getParent(),
@@ -338,8 +393,10 @@ public class BaseAnalyzerRouting {
             //log.info(SootResolver.v().resolveClass(fullyQualifiedName,2) != null);
 
         }
+        //endregion
 
         loadBaseSootInfo_Class(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
+
     }
 
     //endregion
@@ -354,8 +411,8 @@ public class BaseAnalyzerRouting {
         Options.v().set_allow_phantom_refs(false);
 
         //Options.v().set_app(true);
-        //Options.v().set_validate(true);
-        //Options.v().set_whole_program(true);
+        Options.v().set_validate(true);
+        Options.v().set_whole_program(true);
 
         for (String clazz : BaseAnalyzer.CRITERIA_CLASSES) {
             try {
@@ -371,17 +428,19 @@ public class BaseAnalyzerRouting {
 
         for (String clazz : classNames) {
             try {
+                if (clazz.equals("very"))
+                    System.out.println("priont");
                 log.debug("Attempting to load the Class: " + clazz);
                 Scene.v().loadClassAndSupport(clazz);
                 //SootClass sC = Scene.v().forceResolve(clazz, SootClass.BODIES);
 
             } catch (Error e) {
-                //throw new ExceptionHandler("Error loading class: " + clazz + ": " + Utils.retireveJavaFileName(e.getStackTrace()[0].getClassName()) + ":" + e.getStackTrace()[0].getLineNumber(), ExceptionId.LOADING);
+                throw new ExceptionHandler("Error loading class: " + clazz + ": " + Utils.retireveJavaFileName(e.getStackTrace()[0].getClassName()) + ":" + e.getStackTrace()[0].getLineNumber(), ExceptionId.LOADING);
             }
         }
 
         Scene.v().loadNecessaryClasses();
-        //log.info(Scene.v().containsClass("very"));
+        log.info(Scene.v().containsClass("tester.PBEUsage"));
         Scene.v().setDoneResolving();
 
         Chain test = Scene.v().getClasses();

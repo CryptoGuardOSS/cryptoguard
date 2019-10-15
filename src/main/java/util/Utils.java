@@ -151,6 +151,9 @@ public class Utils {
         return full;
     }
 
+    //CRITERIA_CLASSES.add("okhttp3.Request$Builder");
+    //CRITERIA_CLASSES.add("retrofit2.Retrofit$Builder");
+
     /**
      * <p>getBasePackageNameFromApk.</p>
      *
@@ -330,7 +333,7 @@ public class Utils {
      */
     public static List<String> getJarsInDirectory(String path) {
 
-        if (path == null || path.trim().equals(""))
+        if (null == path || path.trim().equals(""))
             return new ArrayList<>();
 
         List<String> jarFiles = new ArrayList<>();

@@ -75,7 +75,7 @@ public class EntryPointTest_CLASS {
                             makeArg(argsIdentifier.SOURCE, verySimple_Klass) +
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY) +
-                            //makeArg(argsIdentifier.VERYVERBOSE) +
+                            makeArg(argsIdentifier.VERYVERBOSE) +
                             makeArg(argsIdentifier.OUT, fileOut);
 
             try {
