@@ -145,6 +145,12 @@ public class Utils {
         }
     }
 
+    public static List<String> loadJavaLang() throws ExceptionHandler {
+        List<String> full = getClassNamesFromJarArchive(getRT());
+        full.removeIf(klass -> !klass.startsWith("java.lang."));
+        return full;
+    }
+
     /**
      * <p>getBasePackageNameFromApk.</p>
      *
@@ -323,6 +329,9 @@ public class Utils {
      * @return a {@link java.util.List} object.
      */
     public static List<String> getJarsInDirectory(String path) {
+
+        if (path == null || path.trim().equals(""))
+            return new ArrayList<>();
 
         List<String> jarFiles = new ArrayList<>();
         File dir = new File(path);
@@ -809,6 +818,12 @@ public class Utils {
         return tempString.toString();
     }
 
+    public static String retireveJavaFileName(String qualifiedName) {
+        String[] split = qualifiedName.split("\\.");
+
+        return split[split.length - 1];
+    }
+
     /**
      * <p>getJAVA_HOME.</p>
      *
@@ -820,7 +835,7 @@ public class Utils {
         if (StringUtils.isEmpty(JAVA_HOME)) {
             throw new ExceptionHandler("Environment Variable: JAVA_HOME is not set.", ExceptionId.ENV_VAR);
         }
-        return JAVA_HOME;
+        return JAVA_HOME.replaceAll("//", "/");
     }
 
     /**
@@ -863,6 +878,18 @@ public class Utils {
         String jce = Utils.osPathJoin("jre", "lib", "jce.jar");
 
         return Utils.getJAVA_HOME() + Utils.fileSep + join(Utils.getJAVA_HOME() + Utils.fileSep, rt, jce);
+    }
+
+    public static String getRT() throws ExceptionHandler {
+        String rt = Utils.osPathJoin("jre", "lib", "rt.jar");
+
+        return osPathJoin(Utils.getJAVA_HOME(), rt);
+    }
+
+    public static String getJCE() throws ExceptionHandler {
+        String jce = Utils.osPathJoin("jre", "lib", "jce.jar");
+
+        return osPathJoin(Utils.getJAVA_HOME(), jce);
     }
 
     /**

@@ -6,10 +6,11 @@ import lombok.extern.log4j.Log4j2;
 import rule.base.BaseRuleChecker;
 import rule.engine.EngineType;
 import soot.Scene;
-import soot.SootClass;
 import soot.options.Options;
+import soot.util.Chain;
 import util.Utils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -302,140 +303,95 @@ public class BaseAnalyzerRouting {
                                           String projectDependencyPath,
                                           BaseRuleChecker checker) throws ExceptionHandler {
 
-        //Options.v().set_process_dir(Arrays.asList(""));
-
         Options.v().set_src_prec(Options.src_prec_only_class);
         Options.v().set_output_format(Options.output_format_jimple);
+        Options.v().set_verbose(true);
 
-        List<String> classNames = Utils.retrieveFullyQualifiedName(sourceJavaClasses);
+        List<String> classNames = new ArrayList<>();//Utils.retrieveFullyQualifiedName(sourceJavaClasses);
 
-        for (String dependency : Utils.getJarsInDirectory(projectDependencyPath))
-                classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
+        //classNames.addAll(Utils.getClassNamesFromJarArchive(getRT()));
 
-        log.debug("Setting the soot class path as: " + Utils.join(":", Utils.getBaseSOOT(), projectDependencyPath == null ? "" : Utils.join(":", Utils.getJarsInDirectory(projectDependencyPath))));
-        Scene.v().setSootClassPath(Utils.join(":",
-                Utils.join(":", sourceJavaClasses),
+        //classNames.addAll(loadJavaLang());
+
+        //classNames.addAll(Utils.getClassNamesFromJarArchive(getJCE()));
+
+        //for (String dependency : Utils.getJarsInDirectory(projectDependencyPath))
+        //        classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
+
+        if (sourceJavaClasses.contains("/home/maister/.projects/cryptoguard/samples/VerySimple/very.class"))
+            classNames.add("very");
+        else
+            classNames.addAll(Utils.retrieveFullyQualifiedName(sourceJavaClasses));
+
+        Scene.v().setSootClassPath(":" + Utils.join(":",
+                new File(sourceJavaClasses.get(0)).getParent(),
                 Utils.getBaseSOOT(),
-                Utils.join(":", Utils.getJarsInDirectory(projectDependencyPath))));
-
-        /*
-        SootResolver res = SootResolver.v();
-        ClassResolver cla = ClassResolver;
-        */
+                Utils.join(":", Utils.getJarsInDirectory(projectDependencyPath)),
+                Utils.join(":", sourceJavaClasses)) + ":");
+        log.debug("Setting the soot class path as: " + Scene.v().getSootClassPath());
 
         for (String clazz : sourceJavaClasses) {
-            log.info("Working with the full class path: " + clazz);
-
-            /*
-                Scene.v().loadClass(clazz, SootClass.BODIES);
-                Scene.v().forceResolve(clazz, SootClass.BODIES);
-                Scene.v().extendSootClassPath(clazz);
-             */
-            /*
-            SootClass testClass = Scene.v().loadClass(clazz,SootClass.BODIES);
-
-            List<SootMethod> test = testClass.getMethods();
-            System.out.println("hello");
-            */
-        }
-        for (String clazz : Utils.retrieveFullyQualifiedName(sourceJavaClasses)) {
-            log.info("Working with the qualified class path: " + clazz);
-
-            /*
-            Scene.v().loadClassAndSupport(clazz);
-
-            SootClass curClass = new SootClass(clazz, SootClass.SIGNATURES);
-            Scene.v().addClass(curClass);
-            List<SootMethod> test = curClass.getMethods();
-
-            if (clazz.contains("VeryBusyClass"))
-                Scene.v().setMainClass(curClass);
-            */
-        }
-        for (String clazz : sourceJavaClasses) {
-            //region Translating Java Class to Soot Class - Don't Work
-            /*
-            try {
-                //SootClass curClass = new SootClass(clazz, Modifier.PUBLIC);
-                URLClassLoader cl = new URLClassLoader(new URL[]{new File(clazz).toURI().toURL()});
-                cl.loadClass(clazz);
-
-                for (Method m:cl.getClass().getMethods()) {
-                    String type = m.getReturnType().getTypeName();
-                    System.out.println("help");
-
-                    //Type ret = ;
-                    //switch (m.getReturnType().toString()) {
-                    //    ""
-                    //}
-
-                    //curClass.addMethod(new SootMethod(m.getName(), m.getParameterTypes(), m.getReturnType()));
-                }
-
-            } catch (MalformedURLException e) {
-                throw new ExceptionHandler(e.getMessage(), ExceptionId.FILE_READ);
-            } catch (Exception e) {
-                throw new ExceptionHandler(e.getMessage() + ":", ExceptionId.FILE_READ);
-            }
-            */
-            //endregion
-
-            log.info("Working with the full class path: " + clazz);
             String fullyQualifiedName = Utils.retrieveFullyQualifiedName(clazz);
+            log.info("Working with the full class path: " + clazz + "@" + fullyQualifiedName);
 
-            SootClass c = Scene.v().forceResolve(fullyQualifiedName, SootClass.BODIES);
-            c.setApplicationClass();
-
-            System.out.println("help");
+            Options.v().classes().add(fullyQualifiedName);
+            //log.info(SootResolver.v().resolveClass(fullyQualifiedName,2) != null);
 
         }
 
-        /* Full Jar
-            * Class Names
-                0 = "tester.Crypto$2"
-                1 = "tester.SymCrypto"
-                2 = "tester.Crypto$3"
-                3 = "tester.UrlFrameWorks"
-                4 = "tester.PasswordUtils"
-                5 = "tester.LiveVarsClass"
-                6 = "tester.NewTestCase1"
-                7 = "tester.PBEUsage"
-                8 = "tester.NewTestCase2"
-                9 = "tester.Crypto$1"
-                10 = "tester.PassEncryptor"
-                11 = "tester.Crypto"
-                12 = "tester.VeryBusyClass"
-            * Scene.v.classpath :
-                ./samples/testable-jar/build/libs/testable-jar.jar
-                :~/8/rt.jar
-                :~/8/jce.jar
-                :./samples/testable-jar/build/dependencies/converter-gson-2.1.0.jar
-                :./samples/testable-jar/build/dependencies/okio-1.13.0.jar
-                :./samples/testable-jar/build/dependencies/retrofit-2.1.0.jar
-                :./samples/testable-jar/build/dependencies/gson-2.7.jar
-                :./samples/testable-jar/build/dependencies/okhttp-3.9.0.jar
-            * */
-
-        /*
-            * Class Names
-                tester.PBEUsage
-            * Scene.v.classpath
-                :~/8/rt.jar
-                :~/8/jce.jar
-                :./samples/testable-jar/build/dependencies/converter-gson-2.1.0.jar
-                :./samples/testable-jar/build/dependencies/okio-1.13.0.jar
-                :./samples/testable-jar/build/dependencies/retrofit-2.1.0.jar
-                :./samples/testable-jar/build/dependencies/gson-2.7.jar
-                :./samples/testable-jar/build/dependencies/okhttp-3.9.0.jar
-                :./samples/testable-jar/build/classes/java/main/tester/PBEUsage.class
-            * */
-        String temp = Scene.v().getSootClassPath();
-        loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
+        loadBaseSootInfo_Class(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
     }
 
     //endregion
 
     //endregion
+
+    public static void loadBaseSootInfo_Class(List<String> classNames, String criteriaClass,
+                                              String criteriaMethod,
+                                              int criteriaParam, BaseRuleChecker checker) throws ExceptionHandler {
+
+        Options.v().set_keep_line_number(true);
+        Options.v().set_allow_phantom_refs(false);
+
+        //Options.v().set_app(true);
+        //Options.v().set_validate(true);
+        //Options.v().set_whole_program(true);
+
+        for (String clazz : BaseAnalyzer.CRITERIA_CLASSES) {
+            try {
+                log.debug("Attempting to load the Class: " + clazz);
+                Scene.v().loadClassAndSupport(clazz);
+            } catch (Error e) {
+                //throw new ExceptionHandler("Error loading Class: " + clazz, ExceptionId.LOADING);
+            }
+        }
+
+        //long count = classNames.stream().filter(f -> f.equals("tester.PBEUsage")).count();
+        //log.info("Count: " + count);
+
+        for (String clazz : classNames) {
+            try {
+                log.debug("Attempting to load the Class: " + clazz);
+                Scene.v().loadClassAndSupport(clazz);
+                //SootClass sC = Scene.v().forceResolve(clazz, SootClass.BODIES);
+
+            } catch (Error e) {
+                //throw new ExceptionHandler("Error loading class: " + clazz + ": " + Utils.retireveJavaFileName(e.getStackTrace()[0].getClassName()) + ":" + e.getStackTrace()[0].getLineNumber(), ExceptionId.LOADING);
+            }
+        }
+
+        Scene.v().loadNecessaryClasses();
+        //log.info(Scene.v().containsClass("very"));
+        Scene.v().setDoneResolving();
+
+        Chain test = Scene.v().getClasses();
+
+        String endPoint = "<" + criteriaClass + ": " + criteriaMethod + ">";
+        ArrayList<Integer> slicingParameters = new ArrayList<>();
+        slicingParameters.add(criteriaParam);
+
+        BaseAnalyzer.analyzeSliceInternal(criteriaClass, classNames, endPoint, slicingParameters, checker);
+    }
 
     /**
      * <p>loadBaseSootInfo.</p>
@@ -452,15 +408,10 @@ public class BaseAnalyzerRouting {
                                         int criteriaParam, BaseRuleChecker checker) throws ExceptionHandler {
 
         Options.v().set_keep_line_number(true);
-        Options.v().set_allow_phantom_refs(false);
-
-        //Options.v().set_app(true);
-        //Options.v().set_validate(true);
-        //Options.v().set_whole_program(true);
+        Options.v().set_allow_phantom_refs(true);
 
         for (String clazz : BaseAnalyzer.CRITERIA_CLASSES) {
             try {
-                log.debug("Attempting to load the Class: " + clazz);
                 Scene.v().loadClassAndSupport(clazz);
             } catch (Error e) {
                 throw new ExceptionHandler("Error loading Class: " + clazz, ExceptionId.LOADING);
@@ -469,17 +420,13 @@ public class BaseAnalyzerRouting {
 
         for (String clazz : classNames) {
             try {
-                log.debug("Attempting to load the class: " + clazz);
                 Scene.v().loadClassAndSupport(clazz);
-                //SootClass sC = Scene.v().forceResolve(clazz, SootClass.BODIES);
-
             } catch (Error e) {
                 throw new ExceptionHandler("Error loading class: " + clazz, ExceptionId.LOADING);
             }
         }
 
         Scene.v().loadNecessaryClasses();
-        Scene.v().setDoneResolving();
 
         String endPoint = "<" + criteriaClass + ": " + criteriaMethod + ">";
         ArrayList<Integer> slicingParameters = new ArrayList<>();

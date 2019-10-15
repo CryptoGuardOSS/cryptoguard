@@ -77,6 +77,13 @@ public class TestUtilities {
     public static final String sampleAuxClassPathOne = String.join(":", sampleAuxClassPathOneList);
     public static final ArrayList<String> sampleAuxClassPathTwoList = new ArrayList<String>(Arrays.asList(testRec, jarOne, javaFiles[0], javaFiles[1], classFiles[0], classFiles[1], scarfArgs));
     public static final String sampleAuxClassPathTwo = String.join(":", sampleAuxClassPathTwoList);
+    public static final String verySimple_Path = Utils.osPathJoin(testRec, "VerySimple");
+    public static final String verySimple_Jar = Utils.osPathJoin(verySimple_Path, "very.jar");
+    public static final String verySimple_Jar_xml = Utils.osPathJoin(testPath, "verySimple_jar.xml");
+    public static final String verySimple_Java = Utils.osPathJoin(verySimple_Path, "very.java");
+    public static final String verySimple_Java_xml = Utils.osPathJoin(testPath, "verySimple_java.xml");
+    public static final String verySimple_Klass = Utils.osPathJoin(verySimple_Path, "very.class");
+    public static final String verySimple_Klass_xml = Utils.osPathJoin(testPath, "verySimple_klass.xml");
     public static final ArrayList<String> srcOneGrvInputArr = new ArrayList<>(Arrays.asList(
             Utils.osPathJoin(javaSource, "UrlFrameWorks.java"),
             Utils.osPathJoin(javaSource, "PasswordUtils.java"),

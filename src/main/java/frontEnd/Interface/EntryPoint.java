@@ -29,7 +29,6 @@ public class EntryPoint {
      * @param args an array of {@link java.lang.String} objects.
      */
     public static void main(String[] args) {
-
         //Removing all of the empty string values, i.e. " "
         ArrayList<String> strippedArgs = new ArrayList<>();
         for (String arg : args)

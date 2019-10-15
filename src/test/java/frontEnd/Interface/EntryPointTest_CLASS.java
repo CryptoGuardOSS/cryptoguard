@@ -64,6 +64,38 @@ public class EntryPointTest_CLASS {
 
     //region Tests
     @Test
+    public void main_TestableFile_VerySimple() {
+        String fileOut = verySimple_Klass_xml;
+        new File(fileOut).delete();
+
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                            makeArg(argsIdentifier.SOURCE, verySimple_Klass) +
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.PRETTY) +
+                            //makeArg(argsIdentifier.VERYVERBOSE) +
+                            makeArg(argsIdentifier.OUT, fileOut);
+
+            try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+                List<String> results = Files.readAllLines(Paths.get(outputFile), StandardCharsets.UTF_8);
+                assertTrue(results.size() >= 2);
+
+                results.removeIf(bugInstance -> !bugInstance.contains(getFileNameFromString(fileOut)));
+                assertTrue(results.size() >= 1);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    @Test
     /**
      * <p>main_TestableFiles_SingleTest.</p>
      */
@@ -78,6 +110,7 @@ public class EntryPointTest_CLASS {
                             makeArg(argsIdentifier.SOURCE, classFiles[0]) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.VERYVERBOSE) +
                             makeArg(argsIdentifier.OUT, fileOut);
 
             try {

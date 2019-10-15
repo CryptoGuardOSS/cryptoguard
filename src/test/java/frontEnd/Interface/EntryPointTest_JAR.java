@@ -58,6 +58,34 @@ public class EntryPointTest_JAR {
     //endregion
 
     //region Tests
+    @Test
+    public void main_VerySimple_Scarf() {
+        String fileOut = verySimple_Jar_xml;
+        new File(fileOut).delete();
+
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.JAR) +
+                            makeArg(argsIdentifier.SOURCE, verySimple_Jar) +
+                            //makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                            makeArg(argsIdentifier.OUT, fileOut) +
+                            makeArg(argsIdentifier.STREAM) +
+                            makeArg(argsIdentifier.TIMEMEASURE) +
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.PRETTY);
+
+            try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
+                assertFalse(report.getBugInstance().isEmpty());
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
 
     /**
      * <p>main_TestableJar.</p>
