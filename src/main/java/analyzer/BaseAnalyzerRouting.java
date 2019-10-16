@@ -7,7 +7,6 @@ import rule.base.BaseRuleChecker;
 import rule.engine.EngineType;
 import soot.Scene;
 import soot.options.Options;
-import soot.util.Chain;
 import util.Utils;
 
 import java.io.File;
@@ -322,35 +321,25 @@ public class BaseAnalyzerRouting {
 
         Options.v().set_src_prec(Options.src_prec_only_class);
         Options.v().set_output_format(Options.output_format_jimple);
-        Options.v().set_verbose(true);
 
-        List<String> classNames = new ArrayList<>();//Utils.retrieveFullyQualifiedName(sourceJavaClasses);
+        List<String> classNames = Utils.retrieveFullyQualifiedName(sourceJavaClasses);
 
-        //classNames.addAll(loadJavaLang());
-        classNames.add("very");
-
-        //classNames.addAll(Utils.getClassNamesFromJarArchive(getJCE()));
-
-        //for (String dependency : Utils.getJarsInDirectory(projectDependencyPath))
-        //        classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
-
-        Scene.v().setSootClassPath(":" + Utils.join(":",
-                new File(sourceJavaClasses.get(0)).getParent(),
+        Scene.v().setSootClassPath(Utils.surround(":",
+                Utils.retrieveBaseDirectory(sourceJavaClasses),
                 Utils.getBaseSOOT(),
-                //Utils.join(":", Utils.getJarsInDirectory(projectDependencyPath)),
-                sourceJavaClasses.get(0)) + ":");
+                Utils.join(":", Utils.getJarsInDirectory(projectDependencyPath)),
+                Utils.join(":", sourceJavaClasses)));
         log.debug("Setting the soot class path as: " + Scene.v().getSootClassPath());
 
-        for (String clazz : sourceJavaClasses) {
-            String fullyQualifiedName = Utils.retrieveFullyQualifiedName(clazz);
-            log.info("Working with the full class path: " + clazz + "@" + fullyQualifiedName);
-
-            Options.v().classes().add("very");
-            //log.info(SootResolver.v().resolveClass(fullyQualifiedName,2) != null);
-
+        for (String clazz : classNames) {
+            log.debug("Working with the full class path: " + clazz);
+            Options.v().classes().add(clazz);
         }
 
-        loadBaseSootInfo_Class(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
+        for (String dependency : Utils.getJarsInDirectory(projectDependencyPath))
+            classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
+
+        loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
 
     }
 
@@ -410,7 +399,6 @@ public class BaseAnalyzerRouting {
         Options.v().set_keep_line_number(true);
         Options.v().set_allow_phantom_refs(false);
 
-        //Options.v().set_app(true);
         Options.v().set_validate(true);
         Options.v().set_whole_program(true);
 
@@ -419,20 +407,14 @@ public class BaseAnalyzerRouting {
                 log.debug("Attempting to load the Class: " + clazz);
                 Scene.v().loadClassAndSupport(clazz);
             } catch (Error e) {
-                //throw new ExceptionHandler("Error loading Class: " + clazz, ExceptionId.LOADING);
+                throw new ExceptionHandler("Error loading Class: " + clazz, ExceptionId.LOADING);
             }
         }
 
-        //long count = classNames.stream().filter(f -> f.equals("tester.PBEUsage")).count();
-        //log.info("Count: " + count);
-
         for (String clazz : classNames) {
             try {
-                if (clazz.equals("very"))
-                    System.out.println("priont");
                 log.debug("Attempting to load the Class: " + clazz);
                 Scene.v().loadClassAndSupport(clazz);
-                //SootClass sC = Scene.v().forceResolve(clazz, SootClass.BODIES);
 
             } catch (Error e) {
                 throw new ExceptionHandler("Error loading class: " + clazz + ": " + Utils.retireveJavaFileName(e.getStackTrace()[0].getClassName()) + ":" + e.getStackTrace()[0].getLineNumber(), ExceptionId.LOADING);
@@ -440,10 +422,7 @@ public class BaseAnalyzerRouting {
         }
 
         Scene.v().loadNecessaryClasses();
-        log.info(Scene.v().containsClass("tester.PBEUsage"));
         Scene.v().setDoneResolving();
-
-        Chain test = Scene.v().getClasses();
 
         String endPoint = "<" + criteriaClass + ": " + criteriaMethod + ">";
         ArrayList<Integer> slicingParameters = new ArrayList<>();

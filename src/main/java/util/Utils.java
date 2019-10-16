@@ -64,17 +64,29 @@ public class Utils {
      * Constant <code>NUM_ORTHOGONAL=0</code>
      */
     public static int NUM_ORTHOGONAL = 0;
-    /** Constant <code>NUM_CONSTS_TO_CHECK=0</code> */
+    /**
+     * Constant <code>NUM_CONSTS_TO_CHECK=0</code>
+     */
     public static int NUM_CONSTS_TO_CHECK = 0;
-    /** Constant <code>NUM_SLICES=0</code> */
+    /**
+     * Constant <code>NUM_SLICES=0</code>
+     */
     public static int NUM_SLICES = 0;
-    /** Constant <code>NUM_HEURISTIC=0</code> */
+    /**
+     * Constant <code>NUM_HEURISTIC=0</code>
+     */
     public static int NUM_HEURISTIC = 0;
-    /** Constant <code>SLICE_LENGTH</code> */
+    /**
+     * Constant <code>SLICE_LENGTH</code>
+     */
     public static final ArrayList<Integer> SLICE_LENGTH = new ArrayList<>();
-    /** Constant <code>DEPTH_COUNT</code> */
+    /**
+     * Constant <code>DEPTH_COUNT</code>
+     */
     public static int[] DEPTH_COUNT;
-    /** Constant <code>DEPTH=0</code> */
+    /**
+     * Constant <code>DEPTH=0</code>
+     */
     public static int DEPTH = 0;
 
     /**
@@ -150,9 +162,6 @@ public class Utils {
         full.removeIf(klass -> !klass.startsWith("java.lang."));
         return full;
     }
-
-    //CRITERIA_CLASSES.add("okhttp3.Request$Builder");
-    //CRITERIA_CLASSES.add("retrofit2.Retrofit$Builder");
 
     /**
      * <p>getBasePackageNameFromApk.</p>
@@ -556,7 +565,7 @@ public class Utils {
     }
 
     public static List<String> retrieveFullyQualifiedName(String... sourceJavaFile) {
-        return retrieveFullyQualifiedName(sourceJavaFile);
+        return retrieveFullyQualifiedName(Arrays.asList(sourceJavaFile));
     }
 
     /**
@@ -611,9 +620,24 @@ public class Utils {
         } else if (in.toLowerCase().endsWith(".class")) {
             sourcePackage = sourcePackage.replace(".class", "");
 
-            String[] paths = Utils.retrieveFullFilePath(in).split(fileSep);
+            String pathBreak = "";
+            String fullPath = Utils.retrieveFullFilePath(in).replace(".class", "");
 
-            sourcePackage = paths[paths.length - 2] + "." + sourcePackage;
+            //Maven-Class
+            if (fullPath.contains(pathBreak = osSurround("target", "classes"))) {
+            }
+            //Gradle-Class
+            else if (fullPath.contains(pathBreak = osSurround("java", "main"))) {
+            }
+            //Gen-Classes
+            else if (fullPath.contains(pathBreak = osSurround("output"))) {
+            } else {
+                //Base Case
+                fullPath = sourcePackage;
+            }
+
+            sourcePackage = fullPath.substring(fullPath.indexOf(pathBreak) + 1).replaceAll(fileSep, ".");
+
         }
         return sourcePackage;
     }
@@ -677,6 +701,45 @@ public class Utils {
         return file;
     }
 
+    public static String retrieveBaseDirectory(List<String> file) throws ExceptionHandler {
+        String baseDir = "";
+        String[] baseSplit = new String[0];
+        for (String path : file) {
+            String fullPath = retrieveFileParentPath(path);
+
+            //Base Case
+            if (baseDir.equals("")) {
+                baseDir = fullPath;
+            } else if (!fullPath.equals(baseDir)) {
+                String[] tempSplit = fullPath.split(fileSep);
+                int smallerSize = Math.min(baseSplit.length, tempSplit.length);
+                ArrayList<String> common = new ArrayList<>();
+
+                loopCheck:
+                for (int itr = 0; itr < smallerSize; itr++) {
+
+                    //BaseDir
+                    if (itr == baseSplit.length || itr == tempSplit.length)
+                        break loopCheck;
+
+                    if (baseSplit[itr].equals(tempSplit[itr]))
+                        common.add(baseSplit[itr]);
+                    else
+                        break loopCheck;
+                }
+
+                baseDir = join(fileSep, common);
+            }
+
+            baseSplit = Arrays.stream(baseDir.split(fileSep)).filter(StringUtils::isNotBlank).toArray(String[]::new);
+        }
+
+        if (baseDir.equals(""))
+            throw new ExceptionHandler("Different file paths sent in.", ExceptionId.ARG_VALID);
+
+        return baseDir;
+    }
+
     /**
      * <p>retrieveTrimmedSourcePaths.</p>
      *
@@ -710,7 +773,7 @@ public class Utils {
             return walk
                     .map(Path::toString)
                     .filter(f -> f.endsWith(".java"))
-                    .collect(Collectors.toCollection(ArrayList::new));//.forEach(System.out::println);
+                    .collect(Collectors.toCollection(ArrayList::new));
         } catch (IOException e) {
             //TODO - add exception here
             return null;
@@ -752,6 +815,11 @@ public class Utils {
         }
     }
 
+    public static String retrieveFileParentPath(String filePath) {
+        String fullPaths = retrieveFullFilePath(filePath);
+        return fullPaths.substring(0, fullPaths.lastIndexOf(fileSep));
+    }
+
     /**
      * <p>retrieveFullFilePath.</p>
      *
@@ -782,6 +850,10 @@ public class Utils {
         return folderSplit[folderSplit.length - 1];
     }
 
+    public static String osSurround(String... elements) {
+        return surround(Utils.fileSep, elements);
+    }
+
     /**
      * <p>osPathJoin.</p>
      *
@@ -790,6 +862,14 @@ public class Utils {
      */
     public static String osPathJoin(String... elements) {
         return join(Utils.fileSep, elements);
+    }
+
+    public static String surround(String delimiter, String... elements) {
+        return surround(delimiter, Arrays.asList(elements));
+    }
+
+    public static String surround(String delimiter, List<String> elements) {
+        return delimiter + join(delimiter, elements) + delimiter;
     }
 
     /**
@@ -813,9 +893,11 @@ public class Utils {
     public static String join(String delimiter, List<String> elements) {
         StringBuilder tempString = new StringBuilder();
         for (String in : elements) {
-            tempString.append(in);
-            if (!in.equals(elements.get(elements.size() - 1)))
-                tempString.append(delimiter);
+            if (null != (in = StringUtils.trimToNull(in))) {
+                tempString.append(in);
+                if (!in.equals(elements.get(elements.size() - 1)))
+                    tempString.append(delimiter);
+            }
         }
 
         return tempString.toString();
@@ -1061,7 +1143,7 @@ public class Utils {
     /**
      * <p>verifyFile.</p>
      *
-     * @param file a {@link java.lang.String} object.
+     * @param file      a {@link java.lang.String} object.
      * @param overWrite a {@link java.lang.Boolean} object.
      * @return a {@link java.lang.String} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
@@ -1086,8 +1168,8 @@ public class Utils {
     /**
      * <p>verifyFileExt.</p>
      *
-     * @param file a {@link java.lang.String} object.
-     * @param fileExt a {@link java.lang.String} object.
+     * @param file      a {@link java.lang.String} object.
+     * @param fileExt   a {@link java.lang.String} object.
      * @param overWrite a {@link java.lang.Boolean} object.
      * @return a {@link java.lang.String} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
@@ -1106,8 +1188,8 @@ public class Utils {
     /**
      * <p>verifyFileExts.</p>
      *
-     * @param file a {@link java.lang.String} object.
-     * @param fileExt an array of {@link java.lang.String} objects.
+     * @param file      a {@link java.lang.String} object.
+     * @param fileExt   an array of {@link java.lang.String} objects.
      * @param overWrite a {@link java.lang.Boolean} object.
      * @return a {@link java.lang.String} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
@@ -1242,9 +1324,9 @@ public class Utils {
      * <p>createAssignInvokeUnitContainer.</p>
      *
      * @param currInstruction a {@link soot.Unit} object.
+     * @param caller          a {@link java.lang.String} object.
+     * @param depth           a int.
      * @return a {@link analyzer.backward.UnitContainer} object.
-     * @param caller a {@link java.lang.String} object.
-     * @param depth a int.
      */
     public static UnitContainer createAssignInvokeUnitContainer(Unit currInstruction, String caller, int depth) {
 
@@ -1618,7 +1700,7 @@ public class Utils {
      * <p>isArgOfInvoke.</p>
      *
      * @param useBox a {@link soot.ValueBox} object.
-     * @param unit a {@link soot.Unit} object.
+     * @param unit   a {@link soot.Unit} object.
      * @return a int.
      */
     public static int isArgOfInvoke(ValueBox useBox, Unit unit) {
@@ -1647,9 +1729,9 @@ public class Utils {
      * <p>createInvokeUnitContainer.</p>
      *
      * @param currInstruction a {@link soot.Unit} object.
-     * @param caller a {@link java.lang.String} object.
-     * @param usedFields a {@link java.util.List} object.
-     * @param depth a int.
+     * @param caller          a {@link java.lang.String} object.
+     * @param usedFields      a {@link java.util.List} object.
+     * @param depth           a int.
      * @return a {@link analyzer.backward.UnitContainer} object.
      */
     public static UnitContainer createInvokeUnitContainer(Unit currInstruction, String caller, List<String> usedFields, int depth) {
