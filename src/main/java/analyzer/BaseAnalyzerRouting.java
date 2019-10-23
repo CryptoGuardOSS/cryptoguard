@@ -5,16 +5,17 @@ import frontEnd.Interface.outputRouting.ExceptionId;
 import lombok.extern.log4j.Log4j2;
 import rule.base.BaseRuleChecker;
 import rule.engine.EngineType;
+import soot.RefType;
 import soot.Scene;
+import soot.SootClass;
 import soot.options.Options;
 import util.Utils;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import static util.Utils.loadJavaLang;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * <p>BaseAnalyzerRouting class.</p>
@@ -106,6 +107,8 @@ public class BaseAnalyzerRouting {
                 Utils.getBaseSOOT(),
                 Utils.join(":", Utils.getJarsInDirectory(projectDependencyPath)))
         );
+
+        String sootClassPath = Scene.v().getSootClassPath();
 
             /*
             * Class Names
@@ -322,6 +325,10 @@ public class BaseAnalyzerRouting {
         Options.v().set_src_prec(Options.src_prec_only_class);
         Options.v().set_output_format(Options.output_format_jimple);
 
+        Options.v().set_verbose(true);
+        Options.v().set_validate(true);
+        Options.v().set_whole_program(true);
+
         List<String> classNames = Utils.retrieveFullyQualifiedName(sourceJavaClasses);
 
         Scene.v().setSootClassPath(Utils.surround(":",
@@ -330,6 +337,8 @@ public class BaseAnalyzerRouting {
                 Utils.join(":", Utils.getJarsInDirectory(projectDependencyPath)),
                 Utils.join(":", sourceJavaClasses)));
         log.debug("Setting the soot class path as: " + Scene.v().getSootClassPath());
+
+        String suck = Scene.v().getSootClassPath();
 
         for (String clazz : classNames) {
             log.debug("Working with the full class path: " + clazz);
@@ -354,37 +363,42 @@ public class BaseAnalyzerRouting {
 
         Options.v().set_src_prec(Options.src_prec_only_class);
         Options.v().set_output_format(Options.output_format_jimple);
-        Options.v().set_verbose(true);
 
-        List<String> classNames = new ArrayList<>();//Utils.retrieveFullyQualifiedName(sourceJavaClasses);
+        Options.v().set_verbose(true);
+        Options.v().set_validate(true);
+        Options.v().set_whole_program(true);
+
+        projectDependencyPath = "";
+
+        List<String> classNames = Utils.retrieveFullyQualifiedName(sourceJavaClasses);
+
+        Scene.v().setSootClassPath(Utils.surround(":",
+                Utils.joinSpecialSootClassPath(sourceJavaClasses),
+                Utils.getBaseSOOT(),
+                Utils.join(":", Utils.getJarsInDirectory(projectDependencyPath))
+        ));
+        //region Old Attempt
+        /*
+        Scene.v().setSootClassPath(Utils.surround(":",
+                Utils.retrieveBaseDirectory(sourceJavaClasses),
+                Utils.getBaseSOOT(),
+                Utils.join(":", Utils.getJarsInDirectory(projectDependencyPath)),
+                Utils.join(":", sourceJavaClasses)));
+        * */
+        //endregion
+        log.debug("Setting the soot class path as: " + Scene.v().getSootClassPath());
+
+        //region Old Attempt
+        for (String clazz : classNames) {
+            log.debug("Working with the full class path: " + clazz);
+            Options.v().classes().add(clazz);
+        }
+        //endregion
 
         for (String dependency : Utils.getJarsInDirectory(projectDependencyPath))
             classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
 
-        //classNames.removeIf(f -> f.startsWith("retrofit"));
-
-        classNames.addAll(loadJavaLang());
-        //classNames.addAll(Utils.getClassNamesFromJarArchive(getJCE()));
-        classNames.addAll(Utils.retrieveFullyQualifiedName(sourceJavaClasses));
-
-        Scene.v().setSootClassPath(":" + Utils.join(":",
-                new File(sourceJavaClasses.get(0)).getParent(),
-                Utils.getBaseSOOT(),
-                Utils.join(":", Utils.getJarsInDirectory(projectDependencyPath)),
-                Utils.join(":", sourceJavaClasses)) + ":");
-        log.debug("Setting the soot class path as: " + Scene.v().getSootClassPath());
-
-        for (String clazz : sourceJavaClasses) {
-            String fullyQualifiedName = Utils.retrieveFullyQualifiedName(clazz);
-            log.info("Working with the full class path: " + clazz + "@" + fullyQualifiedName);
-
-            Options.v().classes().add(fullyQualifiedName);
-            //log.info(SootResolver.v().resolveClass(fullyQualifiedName,2) != null);
-
-        }
-        //endregion
-
-        loadBaseSootInfo_Class(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
+        loadBaseSootInfo_Class(classNames, classNames.get(0), criteriaClass, criteriaMethod, criteriaParam, checker);
 
     }
 
@@ -392,37 +406,42 @@ public class BaseAnalyzerRouting {
 
     //endregion
 
-    public static void loadBaseSootInfo_Class(List<String> classNames, String criteriaClass,
+    public static void loadBaseSootInfo_Class(List<String> classNames, String mainClass, String criteriaClass,
                                               String criteriaMethod,
                                               int criteriaParam, BaseRuleChecker checker) throws ExceptionHandler {
 
         Options.v().set_keep_line_number(true);
-        Options.v().set_allow_phantom_refs(false);
-
-        Options.v().set_validate(true);
-        Options.v().set_whole_program(true);
+        Options.v().set_allow_phantom_refs(true);
 
         for (String clazz : BaseAnalyzer.CRITERIA_CLASSES) {
             try {
-                log.debug("Attempting to load the Class: " + clazz);
                 Scene.v().loadClassAndSupport(clazz);
             } catch (Error e) {
                 throw new ExceptionHandler("Error loading Class: " + clazz, ExceptionId.LOADING);
             }
         }
 
+        //TODO Remove - Very Temp Step
+        SootClass main = null;
+
         for (String clazz : classNames) {
             try {
-                log.debug("Attempting to load the Class: " + clazz);
-                Scene.v().loadClassAndSupport(clazz);
-
+                if ((main = Scene.v().loadClassAndSupport(clazz)).isPhantom())
+                    throw new ExceptionHandler("Class " + clazz + " is not properly loaded", ExceptionId.LOADING);
             } catch (Error e) {
-                throw new ExceptionHandler("Error loading class: " + clazz + ": " + Utils.retireveJavaFileName(e.getStackTrace()[0].getClassName()) + ":" + e.getStackTrace()[0].getLineNumber(), ExceptionId.LOADING);
+                throw new ExceptionHandler("Error loading class: " + clazz, ExceptionId.LOADING);
             }
         }
+        if (!Scene.v().getMainClass().equals(main))
+            throw new ExceptionHandler("Class " + main.getJavaStyleName() + " is not properly loaded", ExceptionId.LOADING);
 
         Scene.v().loadNecessaryClasses();
         Scene.v().setDoneResolving();
+        Options.v().set_prepend_classpath(true);
+        Options.v().set_no_bodies_for_excluded(true);
+
+
+        //SootClass klass = Scene.v().getMainClass();
 
         String endPoint = "<" + criteriaClass + ": " + criteriaMethod + ">";
         ArrayList<Integer> slicingParameters = new ArrayList<>();
@@ -456,6 +475,8 @@ public class BaseAnalyzerRouting {
             }
         }
 
+        Set<String> newralph = Scene.v().nameToClass.keySet().stream().filter(classNames::contains).collect(Collectors.toSet());
+
         for (String clazz : classNames) {
             try {
                 Scene.v().loadClassAndSupport(clazz);
@@ -464,7 +485,16 @@ public class BaseAnalyzerRouting {
             }
         }
 
+        Set<String> ralph = Scene.v().nameToClass.keySet().stream().filter(classNames::contains).collect(Collectors.toSet());
+        for (String in : ralph)
+            if (classNames.contains(in)) {
+                RefType base = Scene.v().nameToClass.get(in);
+                if (base.getSootClass().isPhantom())
+                    throw new ExceptionHandler("Loaded Class is not fully loaded.", ExceptionId.UNKWN);
+            }
+
         Scene.v().loadNecessaryClasses();
+        Scene.v().setDoneResolving();
 
         String endPoint = "<" + criteriaClass + ": " + criteriaMethod + ">";
         ArrayList<Integer> slicingParameters = new ArrayList<>();

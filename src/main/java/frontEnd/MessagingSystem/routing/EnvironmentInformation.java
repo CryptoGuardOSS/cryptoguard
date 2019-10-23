@@ -149,6 +149,7 @@ public class EnvironmentInformation {
         //region Setting Required Attributes
 
         //Redirecting the Soot Output - might need to change this
+        //TODO - Reenable This
         G.v().out = System.out;//new PrintStream(this.sootErrors);
 
         this.Source = source;

@@ -5,7 +5,9 @@ import frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport;
 import frontEnd.argsIdentifier;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import rule.engine.EngineType;
 import soot.G;
 import test.TestUtilities;
@@ -29,6 +31,7 @@ import static test.TestUtilities.*;
  * @version $Id: $Id
  * @since V03.03.10
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class EntryPointTest_CLASS {
 
     //region Attributes
@@ -63,16 +66,16 @@ public class EntryPointTest_CLASS {
     //endregion
 
     //region Tests
-    @Test
-    public void main_TestableFile_VerySimple() {
-        String fileOut = verySimple_Klass_xml;
+    //@Test
+    public void main_TestableFile_PBEUsage() {
+        String fileOut = testablejar_PBEUsage_class_xml;
         new File(fileOut).delete();
 
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
-                            makeArg(argsIdentifier.SOURCE, verySimple_Klass) +
+                            makeArg(argsIdentifier.SOURCE, classFiles[0]) +
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY) +
                             makeArg(argsIdentifier.OUT, fileOut);
@@ -84,7 +87,39 @@ public class EntryPointTest_CLASS {
                 assertTrue(results.size() >= 2);
 
                 results.removeIf(bugInstance -> !bugInstance.contains(getFileNameFromString(fileOut)));
+                results.removeIf(bugInstance -> !bugInstance.contains("very.class"));
                 assertTrue(results.size() >= 1);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    @Test
+    public void a_main_TestableFile_VerySimple() {
+        soot.G.v().reset();
+        String source = verySimple_Klass;
+        String fileOut = verySimple_Klass_xml;
+        new File(fileOut).delete();
+
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                            makeArg(argsIdentifier.SOURCE, source) +
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.PRETTY) +
+                            makeArg(argsIdentifier.OUT, fileOut);
+
+            try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
+                assertFalse(report.getBugInstance().isEmpty());
+                assertTrue(report.getBugInstance().stream().allMatch(bugInstance -> bugInstance.getClassName().contains(Utils.retrieveFullyQualifiedName(source))));
 
 
             } catch (Exception e) {
@@ -98,28 +133,29 @@ public class EntryPointTest_CLASS {
     /**
      * <p>main_TestableFiles_SingleTest.</p>
      */
-    public void main_TestableFiles_SingleTest() {
-        String fileOut = tempFileOutTxt_Class;
+    public void b_main_TestableFiles_SingleTest() {
+        soot.G.v().reset();
+
+        String source = testablejar_Crypto_class;
+        String fileOut = testablejar_Crypto_class_xml;
         new File(fileOut).delete();
 
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES) +
-                            makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
-                            makeArg(argsIdentifier.SOURCE, classFiles[0]) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                            makeArg(argsIdentifier.SOURCE, source) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.NOEXIT) +
-                            makeArg(argsIdentifier.VERYVERBOSE) +
+                            makeArg(argsIdentifier.PRETTY) +
                             makeArg(argsIdentifier.OUT, fileOut);
 
             try {
                 String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(outputFile), StandardCharsets.UTF_8);
-                assertTrue(results.size() >= 2);
-
-                results.removeIf(bugInstance -> !bugInstance.contains(getFileNameFromString(fileOut)));
-                assertTrue(results.size() >= 1);
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
+                assertFalse(report.getBugInstance().isEmpty());
+                assertTrue(report.getBugInstance().stream().allMatch(bugInstance -> bugInstance.getClassName().contains(Utils.retrieveFullyQualifiedName(source))));
 
 
             } catch (Exception e) {
@@ -129,7 +165,7 @@ public class EntryPointTest_CLASS {
         }
     }
 
-    @Test
+    //@Test
     /**
      * <p>main_TestableFiles_SingleTest.</p>
      */
@@ -148,7 +184,8 @@ public class EntryPointTest_CLASS {
                             makeArg(argsIdentifier.OUT, fileOut);
 
             try {
-                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+                EntryPoint.main(args.split(" "));
+                String outputFile = fileOut;//captureNewFileOutViaStdOut(args.split(" "));
 
                 AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
                 assertFalse(report.getBugInstance().isEmpty());
@@ -166,7 +203,7 @@ public class EntryPointTest_CLASS {
     /**
      * <p>main_TestableFiles_SingleTest.</p>
      */
-    @Test
+    //@Test
     public void main_TestableFiles_SingleTest_ExtremelyBaseTest() {
         String fileOut = tempFileOutTxt_Class_tester_test;
         new File(fileOut).delete();
@@ -196,7 +233,7 @@ public class EntryPointTest_CLASS {
         }
     }
 
-    @Test
+    //@Test
     /**
      * <p>main_TestableFiles_MultiTest.</p>
      */
@@ -229,7 +266,7 @@ public class EntryPointTest_CLASS {
         }
     }
 
-    @Test
+    //@Test
     /**
      * <p>main_TestableFiles_MultiTest_Scarf.</p>
      */
@@ -262,7 +299,7 @@ public class EntryPointTest_CLASS {
         }
     }
 
-    @Test
+    //@Test
     /**
      * <p>main_TestableFiles_MultiTest_Scarf_Stream.</p>
      */

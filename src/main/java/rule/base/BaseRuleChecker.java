@@ -56,6 +56,11 @@ public abstract class BaseRuleChecker implements RuleChecker {
         Map<String, String> xmlFileStr = Utils.getXmlFiles(projectPaths.get(0), Arrays.asList(excludes));
 
         for (Criteria criteria : getCriteriaList()) {
+            if (
+                    sourcePaths.get(0).contains("Crypto.class")
+            ) {
+                System.out.println("Hello World");
+            }
             BaseAnalyzerRouting.environmentRouting(type, criteria.getClassName(),
                     criteria.getMethodName(),
                     criteria.getParam(),

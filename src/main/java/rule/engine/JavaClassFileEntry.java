@@ -26,8 +26,9 @@ public class JavaClassFileEntry implements EntryHandler {
         for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
             log.info("Checking the rule: " + ruleChecker.getClass().getSimpleName());
 
-            if (ruleChecker.getClass().getSimpleName().contains("ConstantKeyFinder"))
+            if (ruleChecker.getClass().getSimpleName().contains("ConstantKeyFinder") && generalInfo.getSource().get(0).contains("PBEUsage.class")) {//TODO - Exception
                 System.out.println("Heere");
+            }
 
             ruleChecker.checkRule(generalInfo.getSourceType(), generalInfo.getSource(), generalInfo.getDependencies(), generalInfo.getSourcePaths(), generalInfo.getOutput());
         }

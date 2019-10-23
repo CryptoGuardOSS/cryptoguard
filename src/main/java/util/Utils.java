@@ -163,6 +163,7 @@ public class Utils {
         return full;
     }
 
+    //region HotMethods
     /**
      * <p>getBasePackageNameFromApk.</p>
      *
@@ -179,6 +180,7 @@ public class Utils {
             processManifest.loadManifestFile(apkPath);
             basePackage = processManifest.getPackageName();
         } catch (Exception e) {
+            //TODO - Exception
             System.out.println("Couldn't load manifest file.");
         }
 
@@ -235,6 +237,7 @@ public class Utils {
             } else if (basePackages.size() > 1) {
 
                 if (isMain) {
+                    //TODO - Exception
                     System.out.println("***Multiple Base packages of " + jarPath + " : " + basePackages.toString());
                 }
 
@@ -252,6 +255,77 @@ public class Utils {
 
     }
 
+    public static String joinSpecialSootClassPath(List<String> fileIn) throws ExceptionHandler {
+        return join(":", retrieveClosePath(fileIn));
+    }
+
+    public static List<String> retrieveClosePath(List<String> fileIn) throws ExceptionHandler {
+        ArrayList<String> output = new ArrayList<>();
+
+        for (String path : fileIn) {
+            String temp = Utils.verifyFileExts(path, new String[]{".java", ".class"}, false);
+            if (StringUtils.isNotBlank(temp))
+                output.add(temp.replace(retrieveFullyQualifiedName(path).replace(".", fileSep), "").replace(".java", "").replace(".class", ""));
+        }
+        return output;
+
+    }
+
+    /**
+     * <p>retrieveFullyQualifiedName.</p>
+     *
+     * @param in a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String retrieveFullyQualifiedName(String in) {
+
+        String sourcePackage = trimFilePath(in);
+        if (in.toLowerCase().endsWith(".java")) {
+            sourcePackage = sourcePackage.replace(".java", "");
+            try (BufferedReader br = new BufferedReader(new FileReader(in))) {
+                String firstLine = br.readLine();
+
+                if (firstLine.startsWith("package ") && firstLine.toLowerCase().endsWith(";")) {
+                    sourcePackage = firstLine.substring("package ".length(), firstLine.length() - 1) + "." + sourcePackage;
+                } else //File has no package declaration, retrieving the last folder path
+                {
+                    String[] paths = Utils.retrieveFullFilePath(in).split(fileSep);
+
+                    sourcePackage = paths[paths.length - 2] + "." + sourcePackage;
+                }
+
+            } catch (IOException e) {
+                //TODO - Add Catch Here
+                System.out.println("Issue Reading File: " + in);
+            }
+        } else if (in.toLowerCase().endsWith(".class")) {
+            sourcePackage = sourcePackage.replace(".class", "");
+
+            String pathBreak = "";
+            String fullPath = Utils.retrieveFullFilePath(in).replace(".class", "");
+
+            //Maven-Class
+            if (fullPath.contains(pathBreak = osSurround("target", "classes"))) {
+            }
+            //Gradle-Class
+            else if (fullPath.contains(pathBreak = osSurround("java", "main"))) {
+            }
+            //Gen-Classes
+            else if (fullPath.contains(pathBreak = osSurround("output"))) {
+            } else {
+                //Base Case
+                fullPath = sourcePackage;
+            }
+
+            int indexOf = fullPath.indexOf(pathBreak);
+            sourcePackage = fullPath.substring(indexOf == -1 ? 0 : indexOf).replace(pathBreak, "").replaceAll(fileSep, ".");
+
+        }
+        return sourcePackage;
+    }
+    //endregion
+
+    //region NotHotMethods
     /**
      * <p>getClassNamesFromApkArchive.</p>
      *
@@ -582,64 +656,16 @@ public class Utils {
         return fullPath;
     }
 
+    public static String replaceLast(String text, String regexish) {
+        return replaceLast(text, regexish, "");
+    }
+
     public static String replaceLast(String text, String regexish, String replacement) {
         int lastIdx = text.lastIndexOf(regexish);
         if (lastIdx != -1)
             return text.substring(0, lastIdx) + replacement + text.substring(lastIdx + regexish.length());
         else
             return text;
-    }
-
-    /**
-     * <p>retrieveFullyQualifiedName.</p>
-     *
-     * @param in a {@link java.lang.String} object.
-     * @return a {@link java.lang.String} object.
-     */
-    public static String retrieveFullyQualifiedName(String in) {
-
-        String sourcePackage = trimFilePath(in);
-        if (in.toLowerCase().endsWith(".java")) {
-            sourcePackage = sourcePackage.replace(".java", "");
-            try (BufferedReader br = new BufferedReader(new FileReader(in))) {
-                String firstLine = br.readLine();
-
-                if (firstLine.startsWith("package ") && firstLine.toLowerCase().endsWith(";")) {
-                    sourcePackage = firstLine.substring("package ".length(), firstLine.length() - 1) + "." + sourcePackage;
-                } else //File has no package declaration, retrieving the last folder path
-                {
-                    String[] paths = Utils.retrieveFullFilePath(in).split(fileSep);
-
-                    sourcePackage = paths[paths.length - 2] + "." + sourcePackage;
-                }
-
-            } catch (IOException e) {
-                //TODO - Add Catch Here
-                System.out.println("Issue Reading File: " + in);
-            }
-        } else if (in.toLowerCase().endsWith(".class")) {
-            sourcePackage = sourcePackage.replace(".class", "");
-
-            String pathBreak = "";
-            String fullPath = Utils.retrieveFullFilePath(in).replace(".class", "");
-
-            //Maven-Class
-            if (fullPath.contains(pathBreak = osSurround("target", "classes"))) {
-            }
-            //Gradle-Class
-            else if (fullPath.contains(pathBreak = osSurround("java", "main"))) {
-            }
-            //Gen-Classes
-            else if (fullPath.contains(pathBreak = osSurround("output"))) {
-            } else {
-                //Base Case
-                fullPath = sourcePackage;
-            }
-
-            sourcePackage = fullPath.substring(fullPath.indexOf(pathBreak) + 1).replaceAll(fileSep, ".");
-
-        }
-        return sourcePackage;
     }
 
     /**
@@ -869,7 +895,11 @@ public class Utils {
     }
 
     public static String surround(String delimiter, List<String> elements) {
-        return delimiter + join(delimiter, elements) + delimiter;
+        String current = StringUtils.trimToNull(delimiter + join(delimiter, elements));
+        if (current.endsWith(delimiter))
+            return current;
+        else
+            return current + delimiter;
     }
 
     /**
@@ -959,10 +989,8 @@ public class Utils {
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static String getBaseSOOT() throws ExceptionHandler {
-        String rt = Utils.osPathJoin("jre", "lib", "rt.jar:");
-        String jce = Utils.osPathJoin("jre", "lib", "jce.jar");
-
-        return Utils.getJAVA_HOME() + Utils.fileSep + join(Utils.getJAVA_HOME() + Utils.fileSep, rt, jce);
+        String temp = join(":", getJCE(), getRT());
+        return join(":", getJCE(), getRT());
     }
 
     public static String getRT() throws ExceptionHandler {
@@ -1790,4 +1818,5 @@ public class Utils {
 
         return unitContainer;
     }
+    //endregion
 }
