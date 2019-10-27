@@ -1,5 +1,6 @@
 package frontEnd.Interface;
 
+import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.MessagingSystem.routing.Listing;
 import frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport;
 import frontEnd.argsIdentifier;
@@ -66,38 +67,7 @@ public class EntryPointTest_CLASS {
     //endregion
 
     //region Tests
-    //@Test
-    public void main_TestableFile_PBEUsage() {
-        String fileOut = testablejar_PBEUsage_class_xml;
-        new File(fileOut).delete();
-
-        if (isLinux) {
-            String args =
-                    makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES) +
-                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
-                            makeArg(argsIdentifier.SOURCE, classFiles[0]) +
-                            makeArg(argsIdentifier.NOEXIT) +
-                            makeArg(argsIdentifier.PRETTY) +
-                            makeArg(argsIdentifier.OUT, fileOut);
-
-            try {
-                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
-
-                List<String> results = Files.readAllLines(Paths.get(outputFile), StandardCharsets.UTF_8);
-                assertTrue(results.size() >= 2);
-
-                results.removeIf(bugInstance -> !bugInstance.contains(getFileNameFromString(fileOut)));
-                results.removeIf(bugInstance -> !bugInstance.contains("very.class"));
-                assertTrue(results.size() >= 1);
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                assertNull(e);
-            }
-        }
-    }
-
+    //region Successful
     @Test
     public void a_main_TestableFile_VerySimple() {
         soot.G.v().reset();
@@ -119,7 +89,14 @@ public class EntryPointTest_CLASS {
 
                 AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
                 assertFalse(report.getBugInstance().isEmpty());
-                assertTrue(report.getBugInstance().stream().allMatch(bugInstance -> bugInstance.getClassName().contains(Utils.retrieveFullyQualifiedName(source))));
+                assertTrue(report.getBugInstance().stream().allMatch(bugInstance -> {
+                    try {
+                        return bugInstance.getClassName().contains(Utils.retrieveFullyQualifiedName(source));
+                    } catch (ExceptionHandler exceptionHandler) {
+                        exceptionHandler.printStackTrace();
+                        return false;
+                    }
+                }));
 
 
             } catch (Exception e) {
@@ -145,7 +122,6 @@ public class EntryPointTest_CLASS {
                     makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.SOURCE, source) +
-                            makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY) +
                             makeArg(argsIdentifier.OUT, fileOut);
@@ -155,7 +131,14 @@ public class EntryPointTest_CLASS {
 
                 AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
                 assertFalse(report.getBugInstance().isEmpty());
-                assertTrue(report.getBugInstance().stream().allMatch(bugInstance -> bugInstance.getClassName().contains(Utils.retrieveFullyQualifiedName(source))));
+                assertTrue(report.getBugInstance().stream().allMatch(bugInstance -> {
+                    try {
+                        return bugInstance.getClassName().contains(Utils.retrieveFullyQualifiedName(source));
+                    } catch (ExceptionHandler exceptionHandler) {
+                        exceptionHandler.printStackTrace();
+                        return false;
+                    }
+                }));
 
 
             } catch (Exception e) {
@@ -165,33 +148,35 @@ public class EntryPointTest_CLASS {
         }
     }
 
-    //@Test
-    /**
-     * <p>main_TestableFiles_SingleTest.</p>
-     */
-    public void main_TestableFiles_FullProject() {
-        String fileOut = tempFileOutTxt_Class_fullproj;
+    @Test
+    public void main_TestableFile_NewTestCaseTwo() {
+        String fileOut = newTestCaseTwo_xml;
+        String source = newTestCaseTwo_Class;
         new File(fileOut).delete();
 
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
-                            makeArg(argsIdentifier.SOURCE, Utils.join(" ", TestUtilities.arr(srcOneGrvInputArr_Class))) +
-                            makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
+                            makeArg(argsIdentifier.SOURCE, source) +
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY) +
                             makeArg(argsIdentifier.OUT, fileOut);
 
             try {
-                EntryPoint.main(args.split(" "));
-                String outputFile = fileOut;//captureNewFileOutViaStdOut(args.split(" "));
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
                 AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
                 assertFalse(report.getBugInstance().isEmpty());
+                assertTrue(report.getBugInstance().stream().allMatch(bugInstance -> {
+                    try {
+                        return bugInstance.getClassName().contains(Utils.retrieveFullyQualifiedName(source));
+                    } catch (ExceptionHandler exceptionHandler) {
+                        exceptionHandler.printStackTrace();
+                        return false;
+                    }
+                }));
 
-                report.getBugInstance().removeIf(bugInstance -> !bugInstance.getClassName().contains(getFileNameFromString(fileOut)));
-                assertFalse(report.getBugInstance().isEmpty());
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -200,10 +185,170 @@ public class EntryPointTest_CLASS {
         }
     }
 
+    @Test
+    /**
+     * <p>main_TestableFiles_MultiTest.</p>
+     */
+    public void main_TestableFiles_MultiTest() {
+        String fileOut = tempFileOutTxt_two;
+        String source = Utils.join(" ", TestUtilities.arr(classFiles));
+        new File(fileOut).delete();
+
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES) +
+                            makeArg(argsIdentifier.SOURCE, Utils.join(" ", classFiles)) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
+                            makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.MAIN, classFiles[3]) +
+                            makeArg(argsIdentifier.OUT, fileOut);
+
+            try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+                List<String> results = Files.readAllLines(Paths.get(outputFile), StandardCharsets.UTF_8);
+                assertTrue(results.size() >= 2);
+
+                assertTrue(results.stream().anyMatch(line -> Utils.containsAny(line, source.split(" "))));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+
+    @Test
+    /**
+     * <p>main_TestableFiles_MultiTest_Scarf.</p>
+     */
+    public void main_TestableFiles_MultiTest_Scarf() {
+        String fileOut = tempFileOutXML_Class;
+        String source = String.join(" ", classFiles);
+        new File(fileOut).delete();
+
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES) +
+                            makeArg(argsIdentifier.SOURCE, source) +
+                            makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                            makeArg(argsIdentifier.MAIN, classFiles[3]) +
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.OUT, fileOut);
+
+            try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
+                assertFalse(report.getBugInstance().isEmpty());
+                assertTrue(report.getBugInstance().stream().anyMatch(bugInstance -> {
+                    try {
+                        return Utils.containsAny(bugInstance.getClassName(), Utils.retrieveFullyQualifiedName(source.split(" ")));
+                    } catch (ExceptionHandler exceptionHandler) {
+                        exceptionHandler.printStackTrace();
+                        return false;
+                    }
+                }));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    @Test
+    /**
+     * <p>main_TestableFiles_MultiTest_Scarf_Stream.</p>
+     */
+    public void main_TestableFiles_MultiTest_Scarf_Stream() {
+        String fileOut = tempFileOutXML_Class_Stream;
+        String source = String.join(" ", classFiles);
+        new File(fileOut).delete();
+
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES) +
+                            makeArg(argsIdentifier.SOURCE, source) +
+                            makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                            makeArg(argsIdentifier.MAIN, classFiles[3]) +
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.OUT, fileOut) +
+                            makeArg(argsIdentifier.STREAM);
+
+            try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
+                assertFalse(report.getBugInstance().isEmpty());
+                assertTrue(report.getBugInstance().stream().anyMatch(bugInstance -> {
+                    try {
+                        return Utils.containsAny(bugInstance.getClassName(), Utils.retrieveFullyQualifiedName(source.split(" ")));
+                    } catch (ExceptionHandler exceptionHandler) {
+                        exceptionHandler.printStackTrace();
+                        return false;
+                    }
+                }));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    @Test
+    //- specify main class?
     /**
      * <p>main_TestableFiles_SingleTest.</p>
      */
-    //@Test
+    public void main_TestableFiles_FullProject() {
+        String fileOut = tempFileOutTxt_Class_fullproj;
+        String source = Utils.join(" ", TestUtilities.arr(srcOneGrvInputArr_Class));
+        new File(fileOut).delete();
+
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                            makeArg(argsIdentifier.SOURCE, source) +
+                            makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.MAIN, srcOneGrvInputArr_Class.get(2)) +
+                            makeArg(argsIdentifier.PRETTY) +
+                            makeArg(argsIdentifier.OUT, fileOut);
+
+            try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
+                assertFalse(report.getBugInstance().isEmpty());
+                assertTrue(report.getBugInstance().stream().anyMatch(bugInstance -> {
+                    try {
+                        return Utils.containsAny(bugInstance.getClassName(), Utils.retrieveFullyQualifiedName(source.split(" ")));
+                    } catch (ExceptionHandler exceptionHandler) {
+                        exceptionHandler.printStackTrace();
+                        return false;
+                    }
+                }));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+    //endregion
+    //region Not Successful
+    /**
+     * <p>main_TestableFiles_SingleTest.</p>
+     */
+    @Test
+    //- Unknown
     public void main_TestableFiles_SingleTest_ExtremelyBaseTest() {
         String fileOut = tempFileOutTxt_Class_tester_test;
         new File(fileOut).delete();
@@ -232,106 +377,6 @@ public class EntryPointTest_CLASS {
             }
         }
     }
-
-    //@Test
-    /**
-     * <p>main_TestableFiles_MultiTest.</p>
-     */
-    public void main_TestableFiles_MultiTest() {
-        String fileOut = tempFileOutTxt_two;
-        new File(fileOut).delete();
-
-        if (isLinux) {
-            String args =
-                    makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES) +
-                            makeArg(argsIdentifier.SOURCE, Utils.join(" ", classFiles)) +
-                            makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
-                            makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
-                            makeArg(argsIdentifier.NOEXIT) +
-                            makeArg(argsIdentifier.OUT, fileOut);
-
-            try {
-                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
-
-                List<String> results = Files.readAllLines(Paths.get(outputFile), StandardCharsets.UTF_8);
-                assertTrue(results.size() >= 2);
-
-                results.removeIf(bugInstance -> !bugInstance.contains(getFileNameFromString(fileOut)));
-                assertTrue(results.size() >= 1);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                assertNull(e);
-            }
-        }
-    }
-
-    //@Test
-    /**
-     * <p>main_TestableFiles_MultiTest_Scarf.</p>
-     */
-    public void main_TestableFiles_MultiTest_Scarf() {
-        String fileOut = tempFileOutXML_Class;
-        new File(fileOut).delete();
-
-        if (isLinux) {
-            String args =
-                    makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES) +
-                            makeArg(argsIdentifier.SOURCE, String.join(" ", classFiles)) +
-                            makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
-                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
-                            makeArg(argsIdentifier.NOEXIT) +
-                            makeArg(argsIdentifier.OUT, fileOut);
-
-            try {
-                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
-
-                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
-                assertFalse(report.getBugInstance().isEmpty());
-
-                report.getBugInstance().removeIf(bugInstance -> !bugInstance.getClassName().contains(getFileNameFromString(fileOut)));
-                assertFalse(report.getBugInstance().isEmpty());
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                assertNull(e);
-            }
-        }
-    }
-
-    //@Test
-    /**
-     * <p>main_TestableFiles_MultiTest_Scarf_Stream.</p>
-     */
-    public void main_TestableFiles_MultiTest_Scarf_Stream() {
-        String fileOut = tempFileOutXML_Class_Stream;
-        new File(fileOut).delete();
-
-        if (isLinux) {
-            String args =
-                    makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES) +
-                            makeArg(argsIdentifier.SOURCE, String.join(" ", classFiles)) +
-                            makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
-                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
-                            makeArg(argsIdentifier.NOEXIT) +
-                            makeArg(argsIdentifier.OUT, fileOut) +
-                            makeArg(argsIdentifier.STREAM);
-
-            try {
-                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
-
-                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
-                assertFalse(report.getBugInstance().isEmpty());
-
-                report.getBugInstance().removeIf(bugInstance -> !bugInstance.getClassName().contains(getFileNameFromString(fileOut)));
-                assertFalse(report.getBugInstance().isEmpty());
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                assertNull(e);
-            }
-        }
-    }
-
+    //endregion
     //endregion
 }

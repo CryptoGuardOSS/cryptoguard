@@ -45,6 +45,9 @@ public class EnvironmentInformation {
     private String rawCommand;
     @Getter
     @Setter
+    private String main;
+    @Getter
+    @Setter
     private boolean overWriteOutput = false;
     @Getter
     @Setter
@@ -279,7 +282,6 @@ public class EnvironmentInformation {
         this.addExperimentalRules = addExperimentalRules;
     }
 
-
     /**
      * <p>getSLICE_AVERAGE_3SigFig.</p>
      *
@@ -377,7 +379,6 @@ public class EnvironmentInformation {
     public String getToolFrameworkVersion() {
         return ToolFrameworkVersion;
     }
-
 
     /**
      * <p>getBuildFramework.</p>
@@ -776,7 +777,6 @@ public class EnvironmentInformation {
         this.xPath = xPath;
     }
 
-
     /**
      * <p>Setter for the field <code>printOut</code>.</p>
      *
@@ -873,7 +873,6 @@ public class EnvironmentInformation {
     public void setUUID(String UUID) {
         this.UUID = UUID;
     }
-
     //endregion
     //region Helpful Methods
 

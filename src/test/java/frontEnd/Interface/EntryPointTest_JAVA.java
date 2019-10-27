@@ -1,5 +1,6 @@
 package frontEnd.Interface;
 
+import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.MessagingSystem.routing.Listing;
 import frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport;
 import frontEnd.argsIdentifier;
@@ -8,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import rule.engine.EngineType;
 import soot.G;
+import util.Utils;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -56,6 +58,45 @@ public class EntryPointTest_JAVA {
 
     //region Tests
     @Test
+    public void a_main_TestableFile_VerySimple() {
+        soot.G.v().reset();
+        String source = verySimple_Java;
+        String fileOut = verySimple_Java_xml;
+        new File(fileOut).delete();
+
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                            makeArg(argsIdentifier.SOURCE, source) +
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.PRETTY) +
+                            makeArg(argsIdentifier.VERYVERBOSE) +
+                            makeArg(argsIdentifier.OUT, fileOut);
+
+            try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
+                assertFalse(report.getBugInstance().isEmpty());
+                assertTrue(report.getBugInstance().stream().allMatch(bugInstance -> {
+                    try {
+                        return bugInstance.getClassName().contains(Utils.retrieveFullyQualifiedName(source));
+                    } catch (ExceptionHandler exceptionHandler) {
+                        exceptionHandler.printStackTrace();
+                        return false;
+                    }
+                }));
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    //@Test
     /**
      * <p>main_TestableFiles_SingleTest.</p>
      */
@@ -89,7 +130,7 @@ public class EntryPointTest_JAVA {
         }
     }
 
-    @Test
+    //@Test
     /**
      * <p>main_TestableFiles_SingleTest_Scarf.</p>
      */
@@ -126,7 +167,7 @@ public class EntryPointTest_JAVA {
 
     }
 
-    @Test
+    //@Test
     /**
      * <p>main_TestableFiles_MultiTest.</p>
      */

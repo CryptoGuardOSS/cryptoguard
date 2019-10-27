@@ -40,7 +40,8 @@ public enum argsIdentifier {
     AUXCLASSPATH("auxclasspath", null, "The auxiliary class path to be used (more enhanced dependencies with jars/class files/java files ie. full/path/to/class1:full/path/to/class2)."),
     HEURISTICS("H", null, "The flag determining whether or not to display heuristics."),
     STREAM("st", null, "Stream the analysis to the output file (still being tested)."),
-    HELP("h", null, "Print out the Help Information.");
+    HELP("h", null, "Print out the Help Information."),
+    MAIN("main", null, "Choose the main class if there are multiple main classes in the files given.");
 
     private String id;
     private String defaultArg;

@@ -40,6 +40,8 @@ public class TestUtilities {
     public static final String classSource = Utils.osPathJoin(srcOneGrv, "build", "classes", "java", "main", "tester");
     public static final String testPath = Utils.osPathJoin(basePath, "build", "tmp");
     public static final String[] classFiles = {Utils.osPathJoin(classSource, "PBEUsage.class"), Utils.osPathJoin(classSource, "UrlFrameWorks.class"), Utils.osPathJoin(classSource, "NewTestCase1.class"), Utils.osPathJoin(classSource, "NewTestCase2.class")};
+    public static final String newTestCaseTwo_Class = Utils.osPathJoin(classSource, "NewTestCase2.class");
+    public static final String newTestCaseTwo_xml = Utils.osPathJoin(testPath, "NewTestCase2-class.xml");
     public static final String testablejar_PBEUsage_class_xml = Utils.osPathJoin(testPath, "PBEUsage-class-file_One.xml");
     public static final String testablejar_Crypto_class = Utils.osPathJoin(classSource, "Crypto.class");
     public static final String testablejar_Crypto_class_xml = Utils.osPathJoin(testPath, "java-file_One.xml");

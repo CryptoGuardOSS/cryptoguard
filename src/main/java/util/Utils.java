@@ -264,8 +264,11 @@ public class Utils {
 
         for (String path : fileIn) {
             String temp = Utils.verifyFileExts(path, new String[]{".java", ".class"}, false);
-            if (StringUtils.isNotBlank(temp))
-                output.add(temp.replace(retrieveFullyQualifiedName(path).replace(".", fileSep), "").replace(".java", "").replace(".class", ""));
+            if (StringUtils.isNotBlank(temp)) {
+                temp = replaceLast(temp, retrieveFullyQualifiedName(path).replace(".", fileSep)).replace(".java", "").replace(".class", "");
+                if (!output.contains(temp))
+                    output.add(temp);
+            }
         }
         return output;
 
@@ -277,7 +280,7 @@ public class Utils {
      * @param in a {@link java.lang.String} object.
      * @return a {@link java.lang.String} object.
      */
-    public static String retrieveFullyQualifiedName(String in) {
+    public static String retrieveFullyQualifiedName(String in) throws ExceptionHandler {
 
         String sourcePackage = trimFilePath(in);
         if (in.toLowerCase().endsWith(".java")) {
@@ -287,16 +290,10 @@ public class Utils {
 
                 if (firstLine.startsWith("package ") && firstLine.toLowerCase().endsWith(";")) {
                     sourcePackage = firstLine.substring("package ".length(), firstLine.length() - 1) + "." + sourcePackage;
-                } else //File has no package declaration, retrieving the last folder path
-                {
-                    String[] paths = Utils.retrieveFullFilePath(in).split(fileSep);
-
-                    sourcePackage = paths[paths.length - 2] + "." + sourcePackage;
                 }
 
             } catch (IOException e) {
-                //TODO - Add Catch Here
-                System.out.println("Issue Reading File: " + in);
+                throw new ExceptionHandler("Error parsing file: " + in, ExceptionId.FILE_READ);
             }
         } else if (in.toLowerCase().endsWith(".class")) {
             sourcePackage = sourcePackage.replace(".class", "");
@@ -322,6 +319,14 @@ public class Utils {
 
         }
         return sourcePackage;
+    }
+
+    public static Boolean containsAny(String input, String[] stringsToCheck) {
+        return containsAny(input, Arrays.asList(stringsToCheck));
+    }
+
+    public static Boolean containsAny(String input, List<String> stringsToCheck) {
+        return stringsToCheck.stream().anyMatch(input::contains);
     }
     //endregion
 
@@ -638,7 +643,7 @@ public class Utils {
         return classNames;
     }
 
-    public static List<String> retrieveFullyQualifiedName(String... sourceJavaFile) {
+    public static List<String> retrieveFullyQualifiedName(String... sourceJavaFile) throws ExceptionHandler {
         return retrieveFullyQualifiedName(Arrays.asList(sourceJavaFile));
     }
 
@@ -648,7 +653,7 @@ public class Utils {
      * @param sourceJavaFile a {@link java.util.List} object.
      * @return a {@link java.util.List} object.
      */
-    public static List<String> retrieveFullyQualifiedName(List<String> sourceJavaFile) {
+    public static List<String> retrieveFullyQualifiedName(List<String> sourceJavaFile) throws ExceptionHandler {
         List<String> fullPath = new ArrayList<>();
         for (String in : sourceJavaFile)
             fullPath.add(Utils.retrieveFullyQualifiedName(in));

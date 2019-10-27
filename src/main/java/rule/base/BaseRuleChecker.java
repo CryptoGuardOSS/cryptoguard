@@ -49,23 +49,18 @@ public abstract class BaseRuleChecker implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public void checkRule(EngineType type, List<String> projectPaths, List<String> projectDependencyPath, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler {
+    public void checkRule(EngineType type, List<String> projectPaths, List<String> projectDependencyPath, List<String> sourcePaths, OutputStructure output, String mainKlass) throws ExceptionHandler {
 
         String[] excludes = {"web.xml", "pom.xml"};
 
         Map<String, String> xmlFileStr = Utils.getXmlFiles(projectPaths.get(0), Arrays.asList(excludes));
 
         for (Criteria criteria : getCriteriaList()) {
-            if (
-                    sourcePaths.get(0).contains("Crypto.class")
-            ) {
-                System.out.println("Hello World");
-            }
             BaseAnalyzerRouting.environmentRouting(type, criteria.getClassName(),
                     criteria.getMethodName(),
                     criteria.getParam(),
                     projectPaths,
-                    projectDependencyPath, this);
+                    projectDependencyPath, this, mainKlass);
         }
 
         createAnalysisOutput(xmlFileStr, sourcePaths, output);

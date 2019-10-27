@@ -47,7 +47,7 @@ public class SSLSocketFactoryFinder implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler {
+    public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, List<String> sourcePaths, OutputStructure output, String mainKlass) throws ExceptionHandler {
 
         for (String slicing_criterion : SLICING_CRITERIA) {
 

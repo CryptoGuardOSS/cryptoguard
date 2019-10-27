@@ -8,6 +8,7 @@ import frontEnd.MessagingSystem.routing.Listing;
 import frontEnd.argsIdentifier;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.cli.*;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.config.Configurator;
 import rule.engine.EngineType;
@@ -140,6 +141,20 @@ public class ArgumentsCheck {
             source = Utils.inputFiles(cmd.getOptionValue(argsIdentifier.SOURCE.getId()));
 
         log.info("Using the source file(s): " + source.toString());
+
+        String setMainClass = null;
+        if (cmd.hasOption(argsIdentifier.MAIN.getId())) {
+            setMainClass = StringUtils.trimToNull(cmd.getOptionValue(argsIdentifier.MAIN.getId()));
+            if (setMainClass == null)
+                throw new ExceptionHandler("Please Enter a valid main class path.", ExceptionId.ARG_VALID);
+
+            log.info("Attempting to validate the main method as " + setMainClass);
+
+            if (!source.contains(setMainClass))
+                throw new ExceptionHandler("The main class path is not included within the source file.", ExceptionId.ARG_VALID);
+
+            log.info("Using the main method from class " + setMainClass);
+        }
         //endregion
 
         //region Setting the dependency path
@@ -210,6 +225,9 @@ public class ArgumentsCheck {
         //endregion
 
         EnvironmentInformation info = new EnvironmentInformation(source, type, messaging, dependencies, basePath, pkg);
+
+        if (setMainClass != null)
+            info.setMain(setMainClass);
 
         //region Setting the file out
         log.trace("Determining the file out.");
@@ -291,6 +309,11 @@ public class ArgumentsCheck {
         auxClassPath.setType(String.class);
         auxClassPath.setOptionalArg(true);
         cmdLineArgs.addOption(auxClassPath);
+
+        Option mainFile = Option.builder(argsIdentifier.MAIN.getId()).hasArg().argName("main").desc(argsIdentifier.MAIN.getDesc()).build();
+        mainFile.setType(String.class);
+        mainFile.setOptionalArg(true);
+        cmdLineArgs.addOption(mainFile);
 
         Option depth = Option.builder(argsIdentifier.DEPTH.getId()).hasArg().argName("depth").desc(argsIdentifier.DEPTH.getDesc()).build();
         depth.setType(String.class);
