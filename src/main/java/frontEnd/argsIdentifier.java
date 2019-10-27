@@ -20,7 +20,7 @@ public enum argsIdentifier {
      * TODO - xargs/file config
      * */
     FORMAT("in", "format", "(Req'd) The format of input you want to scan, available styles " + EngineType.retrieveEngineTypeValues() + "."),
-    SOURCE("s", "file(s)/input.in/dir", "(Req'd) The source(s) to be scanned, use the absolute path) or send all of the source files via the file input.in (ex. find -type f *.java >> input.in)."),
+    SOURCE("s", "file(s)/*.in/dir", "(Req'd) The source(s) to be scanned, use the absolute path) or send all of the source files via the file input.in (ex. find -type f *.java >> input.in)."),
     DEPENDENCY("d", "dir", "The dependency to be scanned, (use the relative path)."),
     OUT("o", "file", "The file to be created with the output (default will be the project name)."),
     NEW("new", null, "The file to be created with the output (if existing) will be overwritten."),
@@ -28,15 +28,23 @@ public enum argsIdentifier {
     FORMATOUT("m", "formatType", "The output format you want to produce " + Listing.getShortHelp() + "."),
     PRETTY("n", null, "Output the analysis information in a 'pretty' format."),
     SKIPINPUTVALIDATION("x", null, "Skip input validation."),
+    NOEXIT("X", null, "Upon completion of scanning, don't kill the JVM (by default the JVM is exited)"),
     EXPERIMENTRESULTS("exp", null, "View the experiment based results."),
-    VERSION("v", null, "Output the version number."),
+    VERSION("V", null, "Output the version number."),
+    NOLOGS("vx", null, "Display logs only from the fatal logs"),
+    VERBOSE("v", null, "Display logs from debug levels"),
+    VERYVERBOSE("vv", null, "Display logs from trace levels"),
     TIMESTAMP("ts", null, "Add a timestamp to the file output."),
     DEPTH("depth", null, "The depth of slicing to go into"),
     LOG("L", null, "Enable logging to the console."),
     AUXCLASSPATH("auxclasspath", null, "The auxiliary class path to be used (more enhanced dependencies with jars/class files/java files ie. full/path/to/class1:full/path/to/class2)."),
     HEURISTICS("H", null, "The flag determining whether or not to display heuristics."),
     STREAM("st", null, "Stream the analysis to the output file (still being tested)."),
-    HELP("h", null, "Print out the Help Information.");
+    HELP("h", null, "Print out the Help Information."),
+    MAIN("main", null, "Choose the main class if there are multiple main classes in the files given."),
+    //TODO - Implement an option to specify the base package
+    //BASEPACKAGE("package", null, "Specify the base package path (src/main/java) if the project is not a generic Maven/Gradle project.")
+    ;
 
     private String id;
     private String defaultArg;

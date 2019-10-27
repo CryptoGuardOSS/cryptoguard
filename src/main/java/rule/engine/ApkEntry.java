@@ -24,7 +24,7 @@ public class ApkEntry implements EntryHandler {
         log.trace("Starting scanner looper");
         for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
             log.info("Checking the rule: " + ruleChecker.getClass().getSimpleName());
-            ruleChecker.checkRule(EngineType.APK, generalInfo.getSource(), null, generalInfo.getSourcePaths(), generalInfo.getOutput());
+            ruleChecker.checkRule(EngineType.APK, generalInfo.getSource(), null, generalInfo.getSourcePaths(), generalInfo.getOutput(), generalInfo.getMain());
         }
         log.trace("Scanner looper stopped");
     }

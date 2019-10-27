@@ -17,6 +17,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static test.TestUtilities.*;
 
@@ -62,48 +63,26 @@ public class EntryPointTest_APK {
     //endregion
 
     //region Tests
-
-    /**
-     * <p>testEnvironmentVariables.</p>
-     */
-    @Test
-    public void testEnvironmentVariables() {
-        String[] fileLists = new String[]{jarOne, pathToSchema};
-        String[] dirLists = new String[]{srcOneGrv, srcOneGrvDep};
-
-        for (String file : fileLists) {
-            File tempFile = new File(file);
-
-            assertTrue(tempFile.exists());
-            assertTrue(tempFile.isFile());
-        }
-
-        for (String dir : dirLists) {
-            File tempDir = new File(dir);
-
-            assertTrue(tempDir.exists());
-            assertTrue(tempDir.isDirectory());
-        }
-
-
-    }
-
     /**
      * <p>main_TestableApk.</p>
      */
     @Test
     public void main_TestableApk_Legacy() {
+        String fileOut = tempFileOutApk;
+        new File(fileOut).delete();
+
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.APK) +
                             makeArg(argsIdentifier.SOURCE, pathToAPK) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
-                            makeArg(argsIdentifier.OUT, tempFileOutApk);
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.OUT, fileOut);
 
             try {
-                EntryPoint.main(args.split(" "));
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempFileOutApk), StandardCharsets.UTF_8);
+                List<String> results = Files.readAllLines(Paths.get(outputFile), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 10);
 
 
@@ -119,18 +98,22 @@ public class EntryPointTest_APK {
      */
     @Test
     public void main_TestableApk_Legacy_Stream() {
+        String fileOut = tempFileOutApk_Steam;
+        new File(fileOut).delete();
+
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.APK) +
                             makeArg(argsIdentifier.SOURCE, pathToAPK) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
-                            makeArg(argsIdentifier.OUT, tempFileOutApk_Steam) +
+                            makeArg(argsIdentifier.OUT, fileOut) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.STREAM);
 
             try {
-                EntryPoint.main(args.split(" "));
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempFileOutApk_Steam), StandardCharsets.UTF_8);
+                List<String> results = Files.readAllLines(Paths.get(outputFile), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 10);
 
 
@@ -146,21 +129,23 @@ public class EntryPointTest_APK {
      */
     @Test
     public void main_TestableApk_Scarf() {
+        String fileOut = tempFileOutApk_Scarf;
+        new File(fileOut).delete();
+
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.APK) +
                             makeArg(argsIdentifier.SOURCE, pathToAPK) +
-                            makeArg(argsIdentifier.OUT, tempFileOutApk_Scarf) +
+                            makeArg(argsIdentifier.OUT, fileOut) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.PRETTY);
 
             try {
-                EntryPoint.main(args.split(" "));
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempFileOutApk_Scarf), StandardCharsets.UTF_8);
-                assertTrue(results.size() >= 10);
-
-                AnalyzerReport report = AnalyzerReport.deserialize(new File(tempFileOutApk_Scarf));
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
+                assertFalse(report.getBugInstance().isEmpty());
 
 
             } catch (Exception e) {
@@ -175,23 +160,24 @@ public class EntryPointTest_APK {
      */
     @Test
     public void main_TestableApk_Scarf_Stream() {
+        String fileOut = tempFileOutApk_Scarf_Steam;
+        new File(fileOut).delete();
+
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.APK) +
                             makeArg(argsIdentifier.SOURCE, pathToAPK) +
-                            makeArg(argsIdentifier.OUT, tempFileOutApk_Scarf_Steam) +
+                            makeArg(argsIdentifier.OUT, fileOut) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.PRETTY) +
                             makeArg(argsIdentifier.STREAM);
 
             try {
-                EntryPoint.main(args.split(" "));
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempFileOutApk_Scarf_Steam), StandardCharsets.UTF_8);
-                assertTrue(results.size() >= 10);
-
-                AnalyzerReport report = AnalyzerReport.deserialize(new File(tempFileOutApk_Scarf_Steam));
-
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
+                assertFalse(report.getBugInstance().isEmpty());
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -205,22 +191,23 @@ public class EntryPointTest_APK {
      */
     @Test
     public void main_TestableApk_Default() {
+        String fileOut = tempFileOutApk_Default;
+        new File(fileOut).delete();
+
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.APK) +
                             makeArg(argsIdentifier.SOURCE, pathToAPK) +
-                            makeArg(argsIdentifier.OUT, tempFileOutApk_Default) +
+                            makeArg(argsIdentifier.OUT, fileOut) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.Default) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY);
 
             try {
-                EntryPoint.main(args.split(" "));
-
-                List<String> results = Files.readAllLines(Paths.get(tempFileOutApk_Default), StandardCharsets.UTF_8);
-                assertTrue(results.size() >= 10);
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
                 Report report = Report.deserialize(new File(tempFileOutApk_Default));
-
+                assertFalse(report.getIssues().isEmpty());
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -232,25 +219,26 @@ public class EntryPointTest_APK {
     /**
      * <p>main_TestableApk_Scarf.</p>
      */
-    //TODO - Implment this test correctly
     @Test
     public void main_TestableApk_Default_Stream() {
+        String fileOut = tempFileOutApk_Scarf_Steam;
+        new File(fileOut).delete();
+
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.APK) +
                             makeArg(argsIdentifier.SOURCE, pathToAPK) +
-                            makeArg(argsIdentifier.OUT, tempFileOutApk_Scarf_Steam) +
+                            makeArg(argsIdentifier.OUT, fileOut) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY) +
                             makeArg(argsIdentifier.STREAM);
 
             try {
-                EntryPoint.main(args.split(" "));
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempFileOutApk_Scarf_Steam), StandardCharsets.UTF_8);
-                assertTrue(results.size() >= 10);
-
-                AnalyzerReport report = AnalyzerReport.deserialize(new File(tempFileOutApk_Scarf_Steam));
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
+                assertFalse(report.getBugInstance().isEmpty());
 
             } catch (Exception e) {
                 e.printStackTrace();

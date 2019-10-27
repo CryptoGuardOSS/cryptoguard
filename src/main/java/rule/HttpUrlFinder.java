@@ -34,6 +34,7 @@ public class HttpUrlFinder extends PatternMatcherRuleChecker {
         criteria3.setParam(0);
         CRITERIA_LIST.add(criteria3);
 
+        /*
         Criteria criteria4 = new Criteria();
         criteria4.setClassName("okhttp3.Request$Builder");
         criteria4.setMethodName("okhttp3.Request$Builder url(java.lang.String)");
@@ -45,6 +46,7 @@ public class HttpUrlFinder extends PatternMatcherRuleChecker {
         criteria5.setMethodName("retrofit2.Retrofit$Builder baseUrl(java.lang.String)");
         criteria5.setParam(0);
         CRITERIA_LIST.add(criteria5);
+        */
 
         Criteria criteria1 = new Criteria();
         criteria1.setClassName("java.net.URL");

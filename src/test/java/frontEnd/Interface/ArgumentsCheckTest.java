@@ -98,7 +98,7 @@ public class ArgumentsCheckTest {
         EnvironmentInformation info = null;
 
         try {
-            info = ArgumentsCheck.paramaterCheck(Arrays.asList(args.split(" ")));
+            info = ArgumentsCheck.paramaterCheck(Arrays.asList(cleaningArgs(args)));
         } catch (Exception e) {
             e.printStackTrace();
             assertNull(e);
@@ -134,20 +134,20 @@ public class ArgumentsCheckTest {
      */
     @Test
     public void paramaterCheck_jar_SkipValidation() {
-        StringBuilder args = new StringBuilder();
 
-        args.append("-in").append(" ").append(EngineType.JAR.getFlag()).append(" ");
-        args.append("-s ").append(jarOne).append(" ");
-        args.append("-d ").append(srcOneGrvDep).append(" ");
-        args.append("-o ").append(fileOutTxt).append(" ");
-        args.append("-t").append(" ");
-        args.append("-n").append(" ");
-        args.append("-x");
+        String args =
+                makeArg(argsIdentifier.FORMAT, EngineType.JAR) +
+                        makeArg(argsIdentifier.SOURCE, jarOne) +
+                        makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
+                        makeArg(argsIdentifier.OUT, fileOutTxt) +
+                        makeArg(argsIdentifier.TIMEMEASURE) +
+                        makeArg(argsIdentifier.PRETTY) +
+                        makeArg(argsIdentifier.SKIPINPUTVALIDATION);
 
         EnvironmentInformation info = null;
 
         try {
-            info = ArgumentsCheck.paramaterCheck(Arrays.asList(args.toString().split(" ")));
+            info = ArgumentsCheck.paramaterCheck(Arrays.asList(cleaningArgs(args)));
         } catch (Exception e) {
             e.printStackTrace();
             assertNull(e);
@@ -171,20 +171,19 @@ public class ArgumentsCheckTest {
     @Test
     public void paramaterCheck_jar() {
 
-        StringBuilder args = new StringBuilder();
-
-        args.append("-in").append(" ").append(EngineType.JAR.getFlag()).append(" ");
-        args.append("-s ").append(jarOne).append(" ");
-        args.append("-d ").append(srcOneGrvDep).append(" ");
-        args.append("-o ").append(fileOut).append(" ");
-        args.append("-m ").append(Listing.ScarfXML.getFlag()).append(" ");
-        args.append("-t").append(" ");
-        args.append("-n");
+        String args =
+                makeArg(argsIdentifier.FORMAT, EngineType.JAR) +
+                        makeArg(argsIdentifier.SOURCE, jarOne) +
+                        makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
+                        makeArg(argsIdentifier.OUT, fileOut) +
+                        makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                        makeArg(argsIdentifier.TIMEMEASURE) +
+                        makeArg(argsIdentifier.PRETTY);
 
         EnvironmentInformation info = null;
 
         try {
-            info = ArgumentsCheck.paramaterCheck(Arrays.asList(args.toString().split(" ")));
+            info = ArgumentsCheck.paramaterCheck(Arrays.asList(cleaningArgs(args)));
         } catch (Exception e) {
             e.printStackTrace();
             assertNull(e);
@@ -208,15 +207,14 @@ public class ArgumentsCheckTest {
     @Test
     public void paramaterCheck_Barejar() {
 
-        StringBuilder args = new StringBuilder();
-
-        args.append("-in").append(" ").append(EngineType.JAR.getFlag()).append(" ");
-        args.append("-s ").append(jarOne);
+        String args =
+                makeArg(argsIdentifier.FORMAT, EngineType.JAR) +
+                        makeArg(argsIdentifier.SOURCE, jarOne);
 
         EnvironmentInformation info = null;
 
         try {
-            info = ArgumentsCheck.paramaterCheck(Arrays.asList(args.toString().split(" ")));
+            info = ArgumentsCheck.paramaterCheck(Arrays.asList(cleaningArgs(args)));
         } catch (Exception e) {
             e.printStackTrace();
             assertNull(e);
@@ -236,20 +234,20 @@ public class ArgumentsCheckTest {
      */
     @Test
     public void parameterCheck_gdl() {
-        StringBuilder args = new StringBuilder();
 
-        args.append("-in").append(" ").append(EngineType.DIR.getFlag()).append(" ");
-        args.append("-s ").append(srcOneGrv).append(" ");
-        args.append("-d ").append(srcOneGrvDep).append(" ");
-        args.append("-o ").append(fileOut).append(" ");
-        args.append("-m ").append(Listing.ScarfXML.getFlag()).append(" ");
-        args.append("-t").append(" ");
-        args.append("-n");
+        String args =
+                makeArg(argsIdentifier.FORMAT, EngineType.DIR) +
+                        makeArg(argsIdentifier.SOURCE, srcOneGrv) +
+                        makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
+                        makeArg(argsIdentifier.OUT, fileOut) +
+                        makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                        makeArg(argsIdentifier.TIMEMEASURE) +
+                        makeArg(argsIdentifier.PRETTY);
 
         EnvironmentInformation info = null;
 
         try {
-            info = ArgumentsCheck.paramaterCheck(Arrays.asList(args.toString().split(" ")));
+            info = ArgumentsCheck.paramaterCheck(Arrays.asList(cleaningArgs(args)));
         } catch (Exception e) {
             e.printStackTrace();
             assertNull(e);

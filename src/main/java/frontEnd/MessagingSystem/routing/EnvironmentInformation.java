@@ -45,6 +45,9 @@ public class EnvironmentInformation {
     private String rawCommand;
     @Getter
     @Setter
+    private String main;
+    @Getter
+    @Setter
     private boolean overWriteOutput = false;
     @Getter
     @Setter
@@ -60,6 +63,9 @@ public class EnvironmentInformation {
     private final List<String> Source;
     private final List<String> sourcePaths; //Could this be intertwined with source?
     private Boolean prettyPrint = false;
+    @Getter
+    @Setter
+    private Boolean killJVM = true;
     //endregion
     PrintStream old;
     private List<String> dependencies;
@@ -85,6 +91,8 @@ public class EnvironmentInformation {
     private String xPath;
     private Boolean printOut = false;
     private OutputStructure output;
+    //TODO - Implement an option to specify the base package
+    //@Getter @Setter private String basePackage;
     //endregion
     private ByteArrayOutputStream sootErrors = new ByteArrayOutputStream();
     //region Heuristics from Utils
@@ -275,7 +283,6 @@ public class EnvironmentInformation {
         this.addExperimentalRules = addExperimentalRules;
     }
 
-
     /**
      * <p>getSLICE_AVERAGE_3SigFig.</p>
      *
@@ -373,7 +380,6 @@ public class EnvironmentInformation {
     public String getToolFrameworkVersion() {
         return ToolFrameworkVersion;
     }
-
 
     /**
      * <p>getBuildFramework.</p>
@@ -772,7 +778,6 @@ public class EnvironmentInformation {
         this.xPath = xPath;
     }
 
-
     /**
      * <p>Setter for the field <code>printOut</code>.</p>
      *
@@ -869,7 +874,6 @@ public class EnvironmentInformation {
     public void setUUID(String UUID) {
         this.UUID = UUID;
     }
-
     //endregion
     //region Helpful Methods
 

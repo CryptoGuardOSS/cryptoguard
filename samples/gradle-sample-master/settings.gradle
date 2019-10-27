@@ -1,0 +1,4 @@
+rootProject.name = 'gradle-sample'
+include 'sample-main'
+include 'sample-util'
+
