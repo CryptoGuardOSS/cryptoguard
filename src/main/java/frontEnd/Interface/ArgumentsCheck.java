@@ -226,6 +226,18 @@ public class ArgumentsCheck {
 
         EnvironmentInformation info = new EnvironmentInformation(source, type, messaging, dependencies, basePath, pkg);
 
+        //region - TODO - Implement an option to specify the base package
+        /*
+        if (cmd.hasOption(argsIdentifier.BASEPACKAGE.getId())) {
+            String basePackage = cmd.getOptionValue(argsIdentifier.BASEPACKAGE.getId());
+            log.debug("Going to set the Base Package : " + basePackage);
+
+            info.setBasePackage(Utils.verifyDir(basePackage));
+            log.info("Specifying the base package as " + basePackage);
+        }
+        */
+        //endregion
+
         if (setMainClass != null)
             info.setMain(setMainClass);
 
@@ -314,6 +326,15 @@ public class ArgumentsCheck {
         mainFile.setType(String.class);
         mainFile.setOptionalArg(true);
         cmdLineArgs.addOption(mainFile);
+
+        //region - TODO - Implement an option to specify the base package
+        /*
+        Option baseProject = Option.builder(argsIdentifier.BASEPACKAGE.getId()).hasArg().argName("package").desc(argsIdentifier.BASEPACKAGE.getDesc()).build();
+        baseProject.setType(String.class);
+        baseProject.setOptionalArg(true);
+        cmdLineArgs.addOption(baseProject);
+        */
+        //endregion
 
         Option depth = Option.builder(argsIdentifier.DEPTH.getId()).hasArg().argName("depth").desc(argsIdentifier.DEPTH.getDesc()).build();
         depth.setType(String.class);

@@ -41,7 +41,10 @@ public enum argsIdentifier {
     HEURISTICS("H", null, "The flag determining whether or not to display heuristics."),
     STREAM("st", null, "Stream the analysis to the output file (still being tested)."),
     HELP("h", null, "Print out the Help Information."),
-    MAIN("main", null, "Choose the main class if there are multiple main classes in the files given.");
+    MAIN("main", null, "Choose the main class if there are multiple main classes in the files given."),
+    //TODO - Implement an option to specify the base package
+    //BASEPACKAGE("package", null, "Specify the base package path (src/main/java) if the project is not a generic Maven/Gradle project.")
+    ;
 
     private String id;
     private String defaultArg;

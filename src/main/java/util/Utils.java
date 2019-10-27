@@ -1,6 +1,7 @@
 package util;
 
 import analyzer.backward.*;
+import frontEnd.Interface.Version;
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.Interface.outputRouting.ExceptionId;
 import frontEnd.MessagingSystem.AnalysisIssue;
@@ -88,6 +89,7 @@ public class Utils {
      * Constant <code>DEPTH=0</code>
      */
     public static int DEPTH = 0;
+    public static Version supportedVersion = Version.EIGHT;
 
     /**
      * <p>initDepth.</p>
@@ -112,9 +114,9 @@ public class Utils {
      */
     public final static String localPath = System.getProperty("user.dir");
     /**
-     * Constant <code>projectVersion="V03.07.05"</code>
+     * Constant <code>projectVersion="V03.07.06"</code>
      */
-    public final static String projectVersion = "V03.07.05";
+    public final static String projectVersion = "V03.07.06";
     /**
      * Constant <code>projectName="CryptoGuard"</code>
      */
@@ -1190,6 +1192,28 @@ public class Utils {
 
         if (overWrite && (tempFile.exists() || tempFile.isFile()))
             throw new ExceptionHandler(tempFile.getName() + " is already a valid file.", ExceptionId.FILE_O);
+
+        //Enhance Validation on the compiled java class file
+        if (tempFile.isFile() && tempFile.getName().endsWith(".class")) {
+            try (DataInputStream stream = new DataInputStream(new FileInputStream(file))) {
+                //Verifying if the class file has the Magic Java Number
+                if (stream.readInt() != 0xcafebabe) {
+                    throw new ExceptionHandler("The class file " + file + " is not a valid java.class file.", ExceptionId.ARG_VALID);
+                } else {
+
+                    //Moving the stream past the minor version
+                    stream.readUnsignedShort();
+
+                    //Checking the Major Version of the JDK that compiled the file against the supported version
+                    Version fileVersion = Version.retrieveByMajor(stream.readUnsignedShort());
+                    if (!fileVersion.supportedFile()) {
+                        throw new ExceptionHandler("The class file (compiled by a JDK Version " + fileVersion.getVersionNumber() + ") is not supported.", ExceptionId.ARG_VALID);
+                    }
+                }
+            } catch (IOException e) {
+                throw new ExceptionHandler("Error reading the file " + file + ".", ExceptionId.FILE_READ);
+            }
+        }
 
         try {
             return tempFile.getCanonicalPath();
