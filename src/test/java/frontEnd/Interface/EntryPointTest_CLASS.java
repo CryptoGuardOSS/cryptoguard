@@ -6,9 +6,7 @@ import frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport;
 import frontEnd.argsIdentifier;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.runners.MethodSorters;
 import rule.engine.EngineType;
 import soot.G;
 import test.TestUtilities;
@@ -32,7 +30,6 @@ import static test.TestUtilities.*;
  * @version $Id: $Id
  * @since V03.03.10
  */
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class EntryPointTest_CLASS {
 
     //region Attributes
@@ -67,9 +64,8 @@ public class EntryPointTest_CLASS {
     //endregion
 
     //region Tests
-    //region Successful
     @Test
-    public void a_main_TestableFile_VerySimple() {
+    public void main_TestableFile_VerySimple() {
         soot.G.v().reset();
         String source = verySimple_Klass;
         String fileOut = verySimple_Klass_xml;
@@ -110,7 +106,7 @@ public class EntryPointTest_CLASS {
     /**
      * <p>main_TestableFiles_SingleTest.</p>
      */
-    public void b_main_TestableFiles_SingleTest() {
+    public void main_TestableFiles_SingleTest() {
         soot.G.v().reset();
 
         String source = testablejar_Crypto_class;
@@ -342,13 +338,12 @@ public class EntryPointTest_CLASS {
             }
         }
     }
-    //endregion
-    //region Not Successful
+
     /**
      * <p>main_TestableFiles_SingleTest.</p>
      */
-    @Test
-    //- Unknown
+    //region TODO - Reimplement this after implementing argsIdentifier.BASEPACKAGE
+    //@Test
     public void main_TestableFiles_SingleTest_ExtremelyBaseTest() {
         String fileOut = tempFileOutTxt_Class_tester_test;
         new File(fileOut).delete();
@@ -360,6 +355,7 @@ public class EntryPointTest_CLASS {
                             makeArg(argsIdentifier.SOURCE, testRec_tester_test_Class) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.VERYVERBOSE) +
                             makeArg(argsIdentifier.OUT, fileOut);
 
             try {

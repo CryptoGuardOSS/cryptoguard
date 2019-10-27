@@ -55,10 +55,6 @@ task updateVersion {
                 includes: 'Makefile'
         )
         fileset(
-                dir: '.',
-                includes: 'pom.xml'
-        )
-        fileset(
                 dir: 'src/main/java/util',
                 includes: 'Utils.java'
         )
@@ -130,7 +126,8 @@ jar {
 
 //Ensuring all of the processors are being used for tests
 test {
-    maxParallelForks = Runtime.runtime.availableProcessors()
+    environment "ANDROID_HOME", "/home/maister/.langs/android"
+    environment "JAVA_HOME", "JAVA8SDK"
 }
 
 //A Task for specifying explicit release commands
@@ -199,6 +196,7 @@ dependencies {
     //compile name: 'soot_3.3.0'
     compile name: 'soot-V3.3.0-SNAPSHOT'
     //compile name: 'soot_raw1'
+    //compile 'ca.mcgill.sable:soot:3.2.0'
     compile name: 'axml-2.0'
     compile name: 'AXMLPrinter2'
     compile name: 'okhttp-3.9.0'

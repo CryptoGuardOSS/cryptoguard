@@ -91,6 +91,8 @@ public class EnvironmentInformation {
     private String xPath;
     private Boolean printOut = false;
     private OutputStructure output;
+    //TODO - Implement an option to specify the base package
+    //@Getter @Setter private String basePackage;
     //endregion
     private ByteArrayOutputStream sootErrors = new ByteArrayOutputStream();
     //region Heuristics from Utils
