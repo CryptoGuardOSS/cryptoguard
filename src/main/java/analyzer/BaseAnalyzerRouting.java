@@ -3,9 +3,11 @@ package analyzer;
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.Interface.outputRouting.ExceptionId;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.StringUtils;
 import rule.base.BaseRuleChecker;
 import rule.engine.EngineType;
 import soot.Scene;
+import soot.SootClass;
 import soot.options.Options;
 import util.Utils;
 
@@ -41,7 +43,7 @@ public class BaseAnalyzerRouting {
     public static void environmentRouting(EngineType routingType,
                                           String criteriaClass, String criteriaMethod,
                                           int criteriaParam, List<String> snippetPath,
-                                          List<String> projectDependency, BaseRuleChecker checker) throws ExceptionHandler {
+                                          List<String> projectDependency, BaseRuleChecker checker, String mainKlass) throws ExceptionHandler {
 
         switch (routingType) {
             case JAR:
@@ -49,23 +51,19 @@ public class BaseAnalyzerRouting {
                         projectDependency.size() >= 1
                                 ? projectDependency.get(0)
                                 : null,
-                        checker);
+                        checker, mainKlass);
                 break;
             case APK:
-                setupBaseAPK(criteriaClass, criteriaMethod, criteriaParam, snippetPath.get(0), checker);
+                setupBaseAPK(criteriaClass, criteriaMethod, criteriaParam, snippetPath.get(0), checker, mainKlass);
                 break;
             case DIR:
-                setupBaseDir(criteriaClass, criteriaMethod, criteriaParam, snippetPath, projectDependency, checker);
+                setupBaseDir(criteriaClass, criteriaMethod, criteriaParam, snippetPath, projectDependency, checker, mainKlass);
                 break;
             case JAVAFILES:
-                setupBaseJava(criteriaClass, criteriaMethod, criteriaParam, snippetPath, projectDependency, checker);
+                setupBaseJava(criteriaClass, criteriaMethod, criteriaParam, snippetPath, projectDependency, checker, mainKlass);
                 break;
             case CLASSFILES:
-                setupBaseJavaClass(criteriaClass, criteriaMethod, criteriaParam, snippetPath,
-                        projectDependency.size() >= 1
-                                ? projectDependency.get(0)
-                                : null,
-                        checker);
+                setupBaseJavaClass(criteriaClass, criteriaMethod, criteriaParam, snippetPath, projectDependency, checker, mainKlass);
                 break;
         }
 
@@ -91,26 +89,20 @@ public class BaseAnalyzerRouting {
                                     String criteriaMethod,
                                     int criteriaParam,
                                     String projectJarPath,
-                                    String projectDependencyPath, BaseRuleChecker checker) throws ExceptionHandler {
+                                    String projectDependencyPath, BaseRuleChecker checker, String mainKlass) throws ExceptionHandler {
 
         List<String> classNames = Utils.getClassNamesFromJarArchive(projectJarPath);
 
-        if (projectDependencyPath != null)
-            for (String dependency : Utils.getJarsInDirectory(projectDependencyPath)) {
-                classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
-            }
+        for (String dependency : Utils.getJarsInDirectory(projectDependencyPath))
+            classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
 
-        List<String> sootPaths = new ArrayList<>();
-        sootPaths.add(projectJarPath);
-        sootPaths.add(Utils.getBaseSOOT());
+        Scene.v().setSootClassPath(Utils.join(":",
+                projectJarPath,
+                Utils.getBaseSOOT(),
+                Utils.join(":", Utils.getJarsInDirectory(projectDependencyPath)))
+        );
 
-        if (projectDependencyPath != null)
-            sootPaths.add(projectDependencyPath);
-
-        Scene.v().setSootClassPath(Utils.buildSootClassPath(sootPaths));
-
-        loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
-
+        loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker, mainKlass);
     }
 
     //endregion
@@ -130,7 +122,7 @@ public class BaseAnalyzerRouting {
                                     String criteriaMethod,
                                     int criteriaParam,
                                     String projectJarPath,
-                                    BaseRuleChecker checker) throws ExceptionHandler {
+                                    BaseRuleChecker checker, String mainKlass) throws ExceptionHandler {
 
         List<String> classNames = Utils.getClassNamesFromApkArchive(projectJarPath);
 
@@ -141,7 +133,7 @@ public class BaseAnalyzerRouting {
         Options.v().set_process_dir(Collections.singletonList(projectJarPath));
         Options.v().set_whole_program(true);
 
-        loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
+        loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker, mainKlass);
     }
 
     //endregion
@@ -163,38 +155,61 @@ public class BaseAnalyzerRouting {
                                     int criteriaParam,
                                     List<String> snippetPath,
                                     List<String> projectDependency,
-                                    BaseRuleChecker checker) throws ExceptionHandler {
+                                    BaseRuleChecker checker, String mainKlass) throws ExceptionHandler {
+        //region Old Attempt
 
         Options.v().set_output_format(Options.output_format_jimple);
         Options.v().set_src_prec(Options.src_prec_java);
 
-        Scene.v().setSootClassPath(String.join(":",
-                Utils.getBaseSOOT(),
-                String.join(":", snippetPath),
-                Utils.buildSootClassPath(projectDependency)));
+        Scene.v().setSootClassPath(Utils.getBaseSOOT() + ":"
+                + Utils.join(":", snippetPath)
+                + ":" + Utils.buildSootClassPath(projectDependency));
 
         List<String> classNames = Utils.getClassNamesFromSnippet(snippetPath);
 
+        loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker, mainKlass);
+
+        //endregion
+        //region New Attempt
         /*
-        if (projectDependency != null && projectDependency.size() > 0) {
-            for (String dependency : Utils.getJarsInDirectories(projectDependency)) {
-                classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
-            }
+        Options.v().set_output_format(Options.output_format_jimple);
+        Options.v().set_src_prec(Options.src_prec_java);
+
+        Options.v().set_whole_program(true);
+        Options.v().set_prepend_classpath(true);
+        Options.v().set_app(true);
+        Options.v().set_process_dir(snippetPath);
+
+
+        List<String> classNames = Utils.getClassNamesFromSnippet(snippetPath);
+
+        Scene.v().setSootClassPath(Utils.getBaseSOOT() + ":"
+                + Utils.join(":", snippetPath)
+                + ":" + Utils.buildSootClassPath(projectDependency));
+        /*
+        for (String clazz : Utils.retrieveJavaFilesFromDir(snippetPath.get(0))) {
+            log.debug("Adding basic class: " + clazz);
+            //SootClass clazs = new SootClass(clazz);
+            //Scene.v().addClass(clazs);
+            //Scene.v().extendSootClassPath(clazz);
+            //Scene.v().loadClassAndSupport(clazz);
         }
 
-        */
-
-        for (String clazz : classNames) {
-            log.debug("Loading the class: " + clazz);
-            Scene.v().extendSootClassPath(clazz);//Utils.replaceLast(clazz,".",Utils.fileSep));
+        //Doesn't break it but doesn't display errors
+        for (String dependency : Utils.getJarsInDirectories(projectDependency)) {
+            classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
         }
+
+
 
         loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
+        */
+        //endregion
     }
 
     //endregion
     //region JavaFiles
-    //Like Dir //TODO - Fix This
+    //Like Dir
 
     /**
      * <p>setupBaseJava.</p>
@@ -212,25 +227,31 @@ public class BaseAnalyzerRouting {
                                      int criteriaParam,
                                      List<String> snippetPath,
                                      List<String> projectDependency,
-                                     BaseRuleChecker checker) throws ExceptionHandler {
+                                     BaseRuleChecker checker, String mainKlass) throws ExceptionHandler {
 
-        Options.v().set_output_format(Options.output_format_jimple);
         Options.v().set_src_prec(Options.src_prec_java);
+        Options.v().set_output_format(Options.output_format_jimple);
 
-        Scene.v().setSootClassPath(String.join(":",
-                Utils.getBaseSOOT(),
-                String.join(":", snippetPath),
-                Utils.buildSootClassPath(projectDependency)));
+        Options.v().set_verbose(true);
+        Options.v().set_validate(true);
+        Options.v().set_whole_program(true);
+        //Options.v().set_app(true);
 
         List<String> classNames = Utils.retrieveFullyQualifiedName(snippetPath);
 
-        if (projectDependency != null && projectDependency.size() > 0) {
-            for (String dependency : Utils.getJarsInDirectories(projectDependency)) {
-                classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
-            }
+        Scene.v().setSootClassPath(Utils.surround(":",
+                Utils.joinSpecialSootClassPath(snippetPath),
+                Utils.getBaseSOOT(),
+                Utils.buildSootClassPath(projectDependency))
+        );
+        log.debug("Setting the soot class path as: " + Scene.v().getSootClassPath());
+
+    
+        for (String dependency : Utils.getJarsInDirectories(projectDependency)) {
+            classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
         }
 
-        loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
+        loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker, mainKlass);
     }
 
     //endregion
@@ -252,37 +273,36 @@ public class BaseAnalyzerRouting {
                                           String criteriaMethod,
                                           int criteriaParam,
                                           List<String> sourceJavaClasses,
-                                          String projectDependencyPath,
-                                          BaseRuleChecker checker) throws ExceptionHandler {
+                                          List<String> projectDependencyPath,
+                                          BaseRuleChecker checker, String mainKlass) throws ExceptionHandler {
 
         Options.v().set_src_prec(Options.src_prec_only_class);
         Options.v().set_output_format(Options.output_format_jimple);
 
-        Options.v().set_prepend_classpath(true);
+        Options.v().set_verbose(true);
+        Options.v().set_validate(true);
         Options.v().set_whole_program(true);
 
         List<String> classNames = Utils.retrieveFullyQualifiedName(sourceJavaClasses);
 
-        if (projectDependencyPath != null) {
-            for (String dependency : Utils.getJarsInDirectory(projectDependencyPath)) {
-                classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
-            }
+        Scene.v().setSootClassPath(Utils.surround(":",
+                Utils.joinSpecialSootClassPath(sourceJavaClasses),
+                Utils.getBaseSOOT(),
+                Utils.join(":", Utils.getJarsInDirectories(projectDependencyPath))
+        ));
+        log.debug("Setting the soot class path as: " + Scene.v().getSootClassPath());
+
+        for (String clazz : classNames) {
+            log.debug("Working with the full class path: " + clazz);
+            Options.v().classes().add(clazz);
         }
 
-        log.debug("Setting the soot class path as: " + String.join(":", Utils.getBaseSOOT(), projectDependencyPath == null ? "" : projectDependencyPath));
-        Scene.v().setSootClassPath(String.join(":", Utils.getBaseSOOT(), projectDependencyPath));
+        for (String dependency : Utils.getJarsInDirectories(projectDependencyPath))
+            classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
 
-        for (String clazz : sourceJavaClasses) {
-            log.debug("Loading the class: " + clazz);
-            Scene.v().extendSootClassPath(clazz);
-        }
-
-        loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
+        loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker, mainKlass);
 
     }
-
-    //endregion
-
     //endregion
 
     /**
@@ -297,30 +317,60 @@ public class BaseAnalyzerRouting {
      */
     public static void loadBaseSootInfo(List<String> classNames, String criteriaClass,
                                         String criteriaMethod,
-                                        int criteriaParam, BaseRuleChecker checker) throws ExceptionHandler {
+                                        int criteriaParam, BaseRuleChecker checker, String mainKlass) throws ExceptionHandler {
 
         Options.v().set_keep_line_number(true);
         Options.v().set_allow_phantom_refs(true);
 
         for (String clazz : BaseAnalyzer.CRITERIA_CLASSES) {
+            log.debug("Loading with the class: " + clazz);
             try {
-                log.debug("Attempting to load the Class: " + clazz);
-                Scene.v().loadClassAndSupport(clazz);
+                if (Scene.v().loadClassAndSupport(clazz).isPhantom())
+                    throw new ExceptionHandler("Class " + clazz + " is not properly loaded", ExceptionId.LOADING);
             } catch (Error e) {
                 throw new ExceptionHandler("Error loading Class: " + clazz, ExceptionId.LOADING);
             }
         }
-
+        Boolean mainMethodFound = false;
         for (String clazz : classNames) {
+            log.debug("Working with the internal class path: " + clazz);
             try {
-                log.debug("Attempting to load the class: " + clazz);
-                Scene.v().loadClassAndSupport(clazz);
+                SootClass runningClass;
+                if ((runningClass = Scene.v().loadClassAndSupport(clazz)).isPhantom())
+                    throw new ExceptionHandler("Class " + clazz + " is not properly loaded", ExceptionId.LOADING);
+
+                Boolean containsMain = runningClass.getMethods().stream().anyMatch(m -> m.getName().equals("main"));
+                if (!mainMethodFound)
+                    mainMethodFound = containsMain;
+                else if (containsMain && StringUtils.isEmpty(mainKlass))
+                    throw new ExceptionHandler("Multiple Entry-points (main) found within the files included.", ExceptionId.FILE_READ);
+
             } catch (Error e) {
-                throw new ExceptionHandler("Error loading class: " + clazz, ExceptionId.LOADING);
+                throw new ExceptionHandler("Error loading class " + clazz + " :> " + e.getMessage().replace("Error: ", ""), ExceptionId.LOADING);
             }
         }
 
         Scene.v().loadNecessaryClasses();
+        Scene.v().setDoneResolving();
+        Options.v().set_prepend_classpath(true);
+        Options.v().set_no_bodies_for_excluded(true);
+
+        if (!Scene.v().hasMainClass() || classNames.stream().noneMatch(str -> str.equals(Scene.v().getMainClass().getName())))
+            throw new ExceptionHandler("Could not detected an entry-point (main method) within any of the files provided.", ExceptionId.FILE_READ);
+
+        if (StringUtils.isNotEmpty(mainKlass) && !Scene.v().getMainClass().getName().equals(mainKlass)) {
+            SootClass mainClass = null;
+            try {
+                mainClass = Scene.v().getSootClass(Utils.retrieveFullyQualifiedName(mainKlass));
+            } catch (RuntimeException e) {
+                throw new ExceptionHandler("The class " + mainKlass + " was not loaded correctly.", ExceptionId.LOADING);
+            }
+            try {
+                Scene.v().setMainClass(mainClass);
+            } catch (RuntimeException e) {
+                throw new ExceptionHandler("The class " + mainKlass + " does not have a main method.", ExceptionId.LOADING);
+            }
+        }
 
         String endPoint = "<" + criteriaClass + ": " + criteriaMethod + ">";
         ArrayList<Integer> slicingParameters = new ArrayList<>();

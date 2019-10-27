@@ -8,6 +8,9 @@ import frontEnd.MessagingSystem.routing.Listing;
 import frontEnd.argsIdentifier;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.cli.*;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.config.Configurator;
 import rule.engine.EngineType;
 import util.Utils;
 
@@ -16,7 +19,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Predicate;
 
 /**
  * <p>ArgumentsCheck class.</p>
@@ -45,15 +47,6 @@ public class ArgumentsCheck {
 
         Options cmdLineArgs = setOptions();
         CommandLine cmd = null;
-        ArrayList<String> cleanArgs = new ArrayList<String>(args);
-        cleanArgs.removeIf(new Predicate<String>() {
-            @Override
-            public boolean test(String s) {
-                return null == s || "".equals(s);
-            }
-        });
-        args = cleanArgs;
-        List<String> preservedArguments = args;
 
         //region Printing Version
         if (args.contains(argsIdentifier.HELP.getArg())) {
@@ -111,8 +104,26 @@ public class ArgumentsCheck {
         Boolean verify = !cmd.hasOption(argsIdentifier.SKIPINPUTVALIDATION.getId());
         log.debug("Verification flag: " + verify);
 
-        Boolean usingInputIn = cmd.getOptionValue(argsIdentifier.SOURCE.getId()).endsWith("input.in");
+        Boolean usingInputIn = cmd.getOptionValue(argsIdentifier.SOURCE.getId()).endsWith(".in");
         log.debug("Enhanced Input in file: " + usingInputIn);
+
+        //region Logging Verbosity Check
+        if (cmd.hasOption(argsIdentifier.VERYVERBOSE.getId())) {
+            Configurator.setRootLevel(Level.TRACE);
+            log.info("Displaying debug level logs");
+        } else if (cmd.hasOption(argsIdentifier.VERBOSE.getId())) {
+            Configurator.setRootLevel(Level.DEBUG);
+            log.info("Displaying debug level logs");
+        } else if (cmd.hasOption(argsIdentifier.NOLOGS.getId())) {
+            Configurator.setRootLevel(Level.FATAL);
+            log.info("Setting the Logging to Fatal logs");
+        } else {
+            Configurator.setRootLevel(Level.INFO);
+            log.info("Displaying info level logs");
+        }
+        //endregion
+
+
 
         //inputFiles
 
@@ -130,6 +141,20 @@ public class ArgumentsCheck {
             source = Utils.inputFiles(cmd.getOptionValue(argsIdentifier.SOURCE.getId()));
 
         log.info("Using the source file(s): " + source.toString());
+
+        String setMainClass = null;
+        if (cmd.hasOption(argsIdentifier.MAIN.getId())) {
+            setMainClass = StringUtils.trimToNull(cmd.getOptionValue(argsIdentifier.MAIN.getId()));
+            if (setMainClass == null)
+                throw new ExceptionHandler("Please Enter a valid main class path.", ExceptionId.ARG_VALID);
+
+            log.info("Attempting to validate the main method as " + setMainClass);
+
+            if (!source.contains(setMainClass))
+                throw new ExceptionHandler("The main class path is not included within the source file.", ExceptionId.ARG_VALID);
+
+            log.info("Using the main method from class " + setMainClass);
+        }
         //endregion
 
         //region Setting the dependency path
@@ -201,6 +226,21 @@ public class ArgumentsCheck {
 
         EnvironmentInformation info = new EnvironmentInformation(source, type, messaging, dependencies, basePath, pkg);
 
+        //region - TODO - Implement an option to specify the base package
+        /*
+        if (cmd.hasOption(argsIdentifier.BASEPACKAGE.getId())) {
+            String basePackage = cmd.getOptionValue(argsIdentifier.BASEPACKAGE.getId());
+            log.debug("Going to set the Base Package : " + basePackage);
+
+            info.setBasePackage(Utils.verifyDir(basePackage));
+            log.info("Specifying the base package as " + basePackage);
+        }
+        */
+        //endregion
+
+        if (setMainClass != null)
+            info.setMain(setMainClass);
+
         //region Setting the file out
         log.trace("Determining the file out.");
         String fileOutPath = "";
@@ -244,10 +284,15 @@ public class ArgumentsCheck {
 
         Utils.initDepth(Integer.parseInt(cmd.getOptionValue(argsIdentifier.DEPTH.getId(), String.valueOf(1))));
         log.debug("Scanning using a depth of " + Utils.DEPTH);
+
+        boolean noExitJVM = cmd.hasOption(argsIdentifier.NOEXIT.getId());
+        log.debug("Exiting the JVM: " + verify);
+        if (noExitJVM)
+            info.setKillJVM(false);
         //endregion
 
         //Setting the raw command within info
-        info.setRawCommand(String.join(" ", preservedArguments));
+        info.setRawCommand(Utils.join(" ", args));
 
         return info;
 
@@ -261,7 +306,7 @@ public class ArgumentsCheck {
         format.setOptionalArg(false);
         cmdLineArgs.addOption(format);
 
-        Option sources = Option.builder(argsIdentifier.SOURCE.getId()).required().hasArgs().argName("file(s)/input.in/dir").desc(argsIdentifier.SOURCE.getDesc()).build();
+        Option sources = Option.builder(argsIdentifier.SOURCE.getId()).required().hasArgs().argName("file(s)/*.in/dir").desc(argsIdentifier.SOURCE.getDesc()).build();
         sources.setType(String.class);
         sources.setValueSeparator(' ');
         sources.setOptionalArg(false);
@@ -276,6 +321,20 @@ public class ArgumentsCheck {
         auxClassPath.setType(String.class);
         auxClassPath.setOptionalArg(true);
         cmdLineArgs.addOption(auxClassPath);
+
+        Option mainFile = Option.builder(argsIdentifier.MAIN.getId()).hasArg().argName("main").desc(argsIdentifier.MAIN.getDesc()).build();
+        mainFile.setType(String.class);
+        mainFile.setOptionalArg(true);
+        cmdLineArgs.addOption(mainFile);
+
+        //region - TODO - Implement an option to specify the base package
+        /*
+        Option baseProject = Option.builder(argsIdentifier.BASEPACKAGE.getId()).hasArg().argName("package").desc(argsIdentifier.BASEPACKAGE.getDesc()).build();
+        baseProject.setType(String.class);
+        baseProject.setOptionalArg(true);
+        cmdLineArgs.addOption(baseProject);
+        */
+        //endregion
 
         Option depth = Option.builder(argsIdentifier.DEPTH.getId()).hasArg().argName("depth").desc(argsIdentifier.DEPTH.getDesc()).build();
         depth.setType(String.class);
@@ -298,6 +357,10 @@ public class ArgumentsCheck {
         Option prettyPrint = new Option(argsIdentifier.PRETTY.getId(), false, argsIdentifier.PRETTY.getDesc());
         prettyPrint.setOptionalArg(true);
         cmdLineArgs.addOption(prettyPrint);
+
+        Option noExit = new Option(argsIdentifier.NOEXIT.getId(), false, argsIdentifier.NOEXIT.getDesc());
+        prettyPrint.setOptionalArg(true);
+        cmdLineArgs.addOption(noExit);
 
         Option help = new Option(argsIdentifier.HELP.getId(), false, argsIdentifier.HELP.getDesc());
         help.setOptionalArg(true);
@@ -322,6 +385,18 @@ public class ArgumentsCheck {
         Option stream = new Option(argsIdentifier.STREAM.getId(), false, argsIdentifier.STREAM.getDesc());
         stream.setOptionalArg(true);
         cmdLineArgs.addOption(stream);
+
+        Option nologs = new Option(argsIdentifier.NOLOGS.getId(), false, argsIdentifier.NOLOGS.getDesc());
+        stream.setOptionalArg(true);
+        cmdLineArgs.addOption(nologs);
+
+        Option verbose = new Option(argsIdentifier.VERBOSE.getId(), false, argsIdentifier.VERBOSE.getDesc());
+        stream.setOptionalArg(true);
+        cmdLineArgs.addOption(verbose);
+
+        Option vverbose = new Option(argsIdentifier.VERYVERBOSE.getId(), false, argsIdentifier.VERYVERBOSE.getDesc());
+        stream.setOptionalArg(true);
+        cmdLineArgs.addOption(vverbose);
 
         log.trace("Set the command line options to be used for parsing.");
         return cmdLineArgs;

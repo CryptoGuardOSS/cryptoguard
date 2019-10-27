@@ -35,7 +35,7 @@ public class HostNameVerifierFinder implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler {
+    public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, List<String> sourcePaths, OutputStructure output, String mainKlass) throws ExceptionHandler {
 
         Map<String, List<UnitContainer>> analysisLists = getHostNameVerifiers(
                 UniqueRuleAnalyzer.environmentRouting(projectJarPath, projectDependencyPath, type)

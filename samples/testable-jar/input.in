@@ -1,0 +1,10 @@
+./samples/testable-jar/src/main/java/tester/UrlFrameWorks.java
+./samples/testable-jar/src/main/java/tester/PasswordUtils.java
+./samples/testable-jar/src/main/java/tester/Crypto.java
+./samples/testable-jar/src/main/java/tester/PBEUsage.java
+./samples/testable-jar/src/main/java/tester/NewTestCase2.java
+./samples/testable-jar/src/main/java/tester/VeryBusyClass.java
+./samples/testable-jar/src/main/java/tester/SymCrypto.java
+./samples/testable-jar/src/main/java/tester/NewTestCase1.java
+./samples/testable-jar/src/main/java/tester/LiveVarsClass.java
+./samples/testable-jar/src/main/java/tester/PassEncryptor.java

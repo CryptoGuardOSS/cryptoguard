@@ -18,3 +18,4 @@ docs
 /.ipynb_checkpoints/
 *.ipynb
 /.classpath
+/.vscode/
