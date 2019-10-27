@@ -47,8 +47,8 @@ public class BaseAnalyzer {
         CRITERIA_CLASSES.add("javax.crypto.spec.PBEKeySpec");
         CRITERIA_CLASSES.add("java.security.KeyPairGenerator");
         CRITERIA_CLASSES.add("java.net.URL");
-        //CRITERIA_CLASSES.add("okhttp3.Request$Builder");
-        //CRITERIA_CLASSES.add("retrofit2.Retrofit$Builder");
+        CRITERIA_CLASSES.add("okhttp3.Request$Builder");
+        CRITERIA_CLASSES.add("retrofit2.Retrofit$Builder");
         CRITERIA_CLASSES.add("javax.crypto.spec.PBEParameterSpec");
         CRITERIA_CLASSES.add("javax.crypto.spec.IvParameterSpec");
         CRITERIA_CLASSES.add("java.security.KeyStore");
