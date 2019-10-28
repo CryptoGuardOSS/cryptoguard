@@ -88,11 +88,10 @@ public class UtilsTest {
 
     }
 
-    @Test
-
     /**
      * <p>retrieveFullyQualifiedNameTest.</p>
      */
+    @Test
     public void retrieveFullyQualifiedNameTest() {
         try {
             String packageName = retrieveFullyQualifiedName(Arrays.asList(javaFile)).get(0);
