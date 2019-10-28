@@ -1,6 +1,7 @@
 #region Variables
 #General Variables used throughout the Makefile
 dir=./
+gradleTest=$(dir)make.py
 testDir=$(dir)build/Makefile-tests/
 testSrc=$(dir)samples/
 java=${JAVA8_HOME}/bin/java
@@ -252,6 +253,10 @@ scanJavaClasses_Default: checkjavaHome build
 #This runs the help method
 help: build
 	$(scan) -h
+
+tests: $(gradleTest)
+	@$(info Running the Gradle Tests with the python wrapper)
+	@$(gradleTest) tests
 
 #This build calls all of the scan operations within this Makefile
 scans:\

@@ -96,10 +96,10 @@ public class EntryPointTest_JAVA {
         }
     }
 
-    //@Test
     /**
      * <p>main_TestableFiles_SingleTest.</p>
      */
+    //@Test
     public void main_TestableFiles_SingleTest() {
         String fileOut = javaFileTwo;
         new File(fileOut).delete();
@@ -130,10 +130,10 @@ public class EntryPointTest_JAVA {
         }
     }
 
-    //@Test
     /**
      * <p>main_TestableFiles_SingleTest_Scarf.</p>
      */
+    //@Test
     public void main_TestableFiles_SingleTest_Scarf() {
         String fileOut = javaFileOne;
         new File(fileOut).delete();
@@ -167,10 +167,11 @@ public class EntryPointTest_JAVA {
 
     }
 
-    //@Test
+
     /**
      * <p>main_TestableFiles_MultiTest.</p>
      */
+    //@Test
     public void main_TestableFiles_MultiTest() {
         String fileOut = javaFileThreeXML;
         new File(fileOut).delete();

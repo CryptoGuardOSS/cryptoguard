@@ -102,10 +102,10 @@ public class EntryPointTest_CLASS {
         }
     }
 
-    @Test
     /**
      * <p>main_TestableFiles_SingleTest.</p>
      */
+    @Test
     public void main_TestableFiles_SingleTest() {
         soot.G.v().reset();
 
@@ -181,10 +181,10 @@ public class EntryPointTest_CLASS {
         }
     }
 
-    @Test
     /**
      * <p>main_TestableFiles_MultiTest.</p>
      */
+    @Test
     public void main_TestableFiles_MultiTest() {
         String fileOut = tempFileOutTxt_two;
         String source = Utils.join(" ", TestUtilities.arr(classFiles));
@@ -216,10 +216,10 @@ public class EntryPointTest_CLASS {
     }
 
 
-    @Test
     /**
      * <p>main_TestableFiles_MultiTest_Scarf.</p>
      */
+    @Test
     public void main_TestableFiles_MultiTest_Scarf() {
         String fileOut = tempFileOutXML_Class;
         String source = String.join(" ", classFiles);
@@ -256,10 +256,10 @@ public class EntryPointTest_CLASS {
         }
     }
 
-    @Test
     /**
      * <p>main_TestableFiles_MultiTest_Scarf_Stream.</p>
      */
+    @Test
     public void main_TestableFiles_MultiTest_Scarf_Stream() {
         String fileOut = tempFileOutXML_Class_Stream;
         String source = String.join(" ", classFiles);
@@ -297,11 +297,11 @@ public class EntryPointTest_CLASS {
         }
     }
 
-    @Test
     //- specify main class?
     /**
      * <p>main_TestableFiles_SingleTest.</p>
      */
+    @Test
     public void main_TestableFiles_FullProject() {
         String fileOut = tempFileOutTxt_Class_fullproj;
         String source = Utils.join(" ", TestUtilities.arr(srcOneGrvInputArr_Class));
