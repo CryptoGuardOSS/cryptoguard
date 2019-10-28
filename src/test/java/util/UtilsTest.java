@@ -88,22 +88,6 @@ public class UtilsTest {
 
     }
 
-    /**
-     * <p>retrieveFullyQualifiedNameTest.</p>
-     */
-    @Test
-    public void retrieveFullyQualifiedNameTest() {
-        try {
-            String packageName = retrieveFullyQualifiedName(Arrays.asList(javaFile)).get(0);
-
-            assertNotNull(packageName);
-            assertEquals("main", packageName);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            assertNull(e);
-        }
-    }
-
     @Test
     public void testVerifyClassPathsOne() {
         try {
