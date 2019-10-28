@@ -7,6 +7,7 @@ import argparse
 import shutil
 import shlex
 import subprocess
+import time
 
 '''####################################
 #A utility class that contains the rest of the main common files
@@ -79,11 +80,13 @@ class Utils(object):
             return False
 
     def percent(x, y):
+        if (x == 0):
+            return 0
         return round((x/(x+y))*100,2)
 
     def tests(dyct):
         passed, failed, skipped = 0,0,0
-        failedTests, verbose = [], False
+        start, failedTests, verbose = time.time(), [], False
         print('==============================')
         for key, value in dyct.items():
             subpassed, subfailed, subskipped = 0,0,0
@@ -108,6 +111,7 @@ class Utils(object):
             if verbose:
                 print(str(key) + ' Skipped/Passed/Fail/(% passed): ' + str(subskipped) + '/' + str(subpassed) + '/' +str(subfailed) + '/% ' + str(Utils.percent(subpassed,subfailed)))
         print('==============================')
+        print('Time Taken (s): ' + str(int(time.time()-start)))
         print('Skipped Tests: ' + str(skipped))
         print('Passed Tests: ' + str(passed))
         print('Failed Tests: ' + str(failed))

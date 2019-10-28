@@ -61,7 +61,7 @@ public class EntryPointTest_SOURCE {
     //endregion
 
     //region Tests
-    @Test
+    //@Test
     public void main_TestableJarSource() {
         String fileOut = tempFileOutTxt;
         new File(fileOut).delete();
@@ -88,7 +88,7 @@ public class EntryPointTest_SOURCE {
         }
     }
 
-    @Test
+    //@Test
     public void main_TestableJarSourceScarf() {
         String fileOut = tempFileOutXML;
         new File(fileOut).delete();
@@ -116,7 +116,7 @@ public class EntryPointTest_SOURCE {
         }
     }
 
-    @Test
+    //@Test
     public void main_TestableJarSourceScarf_Stream() {
         String fileOut = tempStreamXML;
         new File(fileOut).delete();

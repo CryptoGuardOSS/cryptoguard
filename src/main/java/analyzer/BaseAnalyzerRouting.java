@@ -12,6 +12,7 @@ import soot.options.Options;
 import util.Utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -102,7 +103,7 @@ public class BaseAnalyzerRouting {
                 Utils.join(":", Utils.getJarsInDirectory(projectDependencyPath)))
         );
 
-        loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker, mainKlass);
+        loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker, "_JAR_");
     }
 
     //endregion
@@ -133,7 +134,7 @@ public class BaseAnalyzerRouting {
         Options.v().set_process_dir(Collections.singletonList(projectJarPath));
         Options.v().set_whole_program(true);
 
-        loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker, mainKlass);
+        loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker, "_APK_");
     }
 
     //endregion
@@ -321,11 +322,13 @@ public class BaseAnalyzerRouting {
 
         Options.v().set_keep_line_number(true);
         Options.v().set_allow_phantom_refs(true);
+        List<String> ignoreLibs = Arrays.asList("okhttp3.Request$Builder", "retrofit2.Retrofit$Builder");
 
         for (String clazz : BaseAnalyzer.CRITERIA_CLASSES) {
             log.debug("Loading with the class: " + clazz);
             try {
-                if (Scene.v().loadClassAndSupport(clazz).isPhantom())
+                SootClass runningClass;
+                if ((runningClass = Scene.v().loadClassAndSupport(clazz)).isPhantom() && !ignoreLibs.contains(runningClass.getName()))
                     throw new ExceptionHandler("Class " + clazz + " is not properly loaded", ExceptionId.LOADING);
             } catch (Error e) {
                 throw new ExceptionHandler("Error loading Class: " + clazz, ExceptionId.LOADING);
@@ -342,7 +345,7 @@ public class BaseAnalyzerRouting {
                 Boolean containsMain = runningClass.getMethods().stream().anyMatch(m -> m.getName().equals("main"));
                 if (!mainMethodFound)
                     mainMethodFound = containsMain;
-                else if (containsMain && StringUtils.isEmpty(mainKlass))
+                else if ((!mainKlass.equals("_JAR_")&&!mainKlass.equals("_APK_")) && containsMain && StringUtils.isEmpty(mainKlass))
                     throw new ExceptionHandler("Multiple Entry-points (main) found within the files included.", ExceptionId.FILE_READ);
 
             } catch (Error e) {
@@ -355,10 +358,10 @@ public class BaseAnalyzerRouting {
         Options.v().set_prepend_classpath(true);
         Options.v().set_no_bodies_for_excluded(true);
 
-        if (!Scene.v().hasMainClass() || classNames.stream().noneMatch(str -> str.equals(Scene.v().getMainClass().getName())))
+        if ((StringUtils.isNotEmpty(mainKlass) && !mainKlass.equals("_JAR_") && !mainKlass.equals("_APK_")) && (!Scene.v().hasMainClass() || classNames.stream().noneMatch(str -> str.equals(Scene.v().getMainClass().getName()))))
             throw new ExceptionHandler("Could not detected an entry-point (main method) within any of the files provided.", ExceptionId.FILE_READ);
 
-        if (StringUtils.isNotEmpty(mainKlass) && !Scene.v().getMainClass().getName().equals(mainKlass)) {
+        if (StringUtils.isNotEmpty(mainKlass) && (!mainKlass.equals("_JAR_")&&!mainKlass.equals("_APK_")) && !Scene.v().getMainClass().getName().equals(mainKlass)) {
             SootClass mainClass = null;
             try {
                 mainClass = Scene.v().getSootClass(Utils.retrieveFullyQualifiedName(mainKlass));

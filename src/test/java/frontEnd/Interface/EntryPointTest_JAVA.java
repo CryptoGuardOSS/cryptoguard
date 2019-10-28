@@ -57,7 +57,7 @@ public class EntryPointTest_JAVA {
     //endregion
 
     //region Tests
-    @Test
+    //@Test
     public void a_main_TestableFile_VerySimple() {
         soot.G.v().reset();
         String source = verySimple_Java;
