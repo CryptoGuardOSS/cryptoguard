@@ -14,8 +14,9 @@ import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static util.Utils.retrieveFullyQualifiedName;
-import static util.Utils.trimFilePath;
+import static test.TestUtilities.classFiles;
+import static test.TestUtilities.classSource;
+import static util.Utils.*;
 
 /**
  * <p>UtilsTest class.</p>
@@ -88,18 +89,6 @@ public class UtilsTest {
     }
 
     @Test
-
-    /**
-     * <p>retrieveFullyQualifiedNameTest.</p>
-     */
-    public void retrieveFullyQualifiedNameTest() {
-        String packageName = retrieveFullyQualifiedName(Arrays.asList(javaFile)).get(0);
-
-        assertNotNull(packageName);
-        assertEquals("main", packageName);
-    }
-
-    @Test
     public void testVerifyClassPathsOne() {
         try {
             ArrayList<String> returnedOutput = Utils.verifyClassPaths(TestUtilities.sampleAuxClassPathOne);
@@ -119,6 +108,20 @@ public class UtilsTest {
         } catch (ExceptionHandler e) {
             assertEquals(e.getErrorCode(), ExceptionId.ARG_VALID);
             assertTrue(e.getLongDesciption().contains(TestUtilities.scarfArgs));
+        }
+    }
+
+    @Test
+    public void test_retrieveFullyQualifiedPath_Single() {
+        String testFile = classFiles[0];
+        String base = join(".", "tester", classFiles[0].replace(classSource + "/", "").replace(".class", ""));
+
+        try {
+            String fullyQualifiedName = Utils.retrieveFullyQualifiedName(testFile);
+            assertEquals(base, fullyQualifiedName);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            assertNull(e);
         }
     }
     //endregion

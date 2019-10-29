@@ -2,13 +2,17 @@ package frontEnd.Interface;
 
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import frontEnd.MessagingSystem.routing.Listing;
+import frontEnd.argsIdentifier;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import rule.engine.EngineType;
 import util.Utils;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static junit.framework.TestCase.assertEquals;
@@ -79,24 +83,71 @@ public class ArgumentsCheckTest {
     }
 
     /**
-     * <p>paramaterCheck_jar_SkipValidation.</p>
+     * <p>paramaterCheck_jar.</p>
      */
     @Test
-    public void paramaterCheck_jar_SkipValidation() {
-        StringBuilder args = new StringBuilder();
+    public void paramaterCheck_jar_enhancedInputFile() {
 
-        args.append("-in").append(" ").append(EngineType.JAR.getFlag()).append(" ");
-        args.append("-s ").append(jarOne).append(" ");
-        args.append("-d ").append(srcOneGrvDep).append(" ");
-        args.append("-o ").append(fileOutTxt).append(" ");
-        args.append("-t").append(" ");
-        args.append("-n").append(" ");
-        args.append("-x");
+        String args =
+                makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES) +
+                        makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
+                        makeArg(argsIdentifier.SOURCE, srcOneGrvInputFile) +
+                        makeArg(argsIdentifier.PRETTY) +
+                        makeArg(argsIdentifier.OUT, tempTestJJava_Txt);
 
         EnvironmentInformation info = null;
 
         try {
-            info = ArgumentsCheck.paramaterCheck(Arrays.asList(args.toString().split(" ")));
+            info = ArgumentsCheck.paramaterCheck(Arrays.asList(cleaningArgs(args)));
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertNull(e);
+        }
+
+        assertNotNull(info);
+        assertEquals(EngineType.JAVAFILES, info.getSourceType());
+        assertEquals(10, info.getSource().size());
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(srcOneGrvInputFile));
+            String curLine = null;
+
+            ArrayList<String> sourceFiles = new ArrayList<>();
+            for (String in : info.getSource())
+                sourceFiles.add(in.replace(basePath, "."));
+
+            while ((curLine = reader.readLine()) != null)
+                assertTrue(sourceFiles.remove(curLine));
+
+            assertTrue(sourceFiles.isEmpty());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertNull(e);
+        }
+        assertTrue(info.getPrettyPrint());
+        assertEquals(tempTestJJava_Txt, info.getFileOut());
+        assertEquals(Listing.Legacy, info.getMessagingType());
+    }
+
+    /**
+     * <p>paramaterCheck_jar_SkipValidation.</p>
+     */
+    @Test
+    public void paramaterCheck_jar_SkipValidation() {
+
+        String args =
+                makeArg(argsIdentifier.FORMAT, EngineType.JAR) +
+                        makeArg(argsIdentifier.SOURCE, jarOne) +
+                        makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
+                        makeArg(argsIdentifier.OUT, fileOutTxt) +
+                        makeArg(argsIdentifier.TIMEMEASURE) +
+                        makeArg(argsIdentifier.PRETTY) +
+                        makeArg(argsIdentifier.SKIPINPUTVALIDATION);
+
+        EnvironmentInformation info = null;
+
+        try {
+            info = ArgumentsCheck.paramaterCheck(Arrays.asList(cleaningArgs(args)));
         } catch (Exception e) {
             e.printStackTrace();
             assertNull(e);
@@ -120,20 +171,19 @@ public class ArgumentsCheckTest {
     @Test
     public void paramaterCheck_jar() {
 
-        StringBuilder args = new StringBuilder();
-
-        args.append("-in").append(" ").append(EngineType.JAR.getFlag()).append(" ");
-        args.append("-s ").append(jarOne).append(" ");
-        args.append("-d ").append(srcOneGrvDep).append(" ");
-        args.append("-o ").append(fileOut).append(" ");
-        args.append("-m ").append(Listing.ScarfXML.getFlag()).append(" ");
-        args.append("-t").append(" ");
-        args.append("-n");
+        String args =
+                makeArg(argsIdentifier.FORMAT, EngineType.JAR) +
+                        makeArg(argsIdentifier.SOURCE, jarOne) +
+                        makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
+                        makeArg(argsIdentifier.OUT, fileOut) +
+                        makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                        makeArg(argsIdentifier.TIMEMEASURE) +
+                        makeArg(argsIdentifier.PRETTY);
 
         EnvironmentInformation info = null;
 
         try {
-            info = ArgumentsCheck.paramaterCheck(Arrays.asList(args.toString().split(" ")));
+            info = ArgumentsCheck.paramaterCheck(Arrays.asList(cleaningArgs(args)));
         } catch (Exception e) {
             e.printStackTrace();
             assertNull(e);
@@ -157,15 +207,14 @@ public class ArgumentsCheckTest {
     @Test
     public void paramaterCheck_Barejar() {
 
-        StringBuilder args = new StringBuilder();
-
-        args.append("-in").append(" ").append(EngineType.JAR.getFlag()).append(" ");
-        args.append("-s ").append(jarOne);
+        String args =
+                makeArg(argsIdentifier.FORMAT, EngineType.JAR) +
+                        makeArg(argsIdentifier.SOURCE, jarOne);
 
         EnvironmentInformation info = null;
 
         try {
-            info = ArgumentsCheck.paramaterCheck(Arrays.asList(args.toString().split(" ")));
+            info = ArgumentsCheck.paramaterCheck(Arrays.asList(cleaningArgs(args)));
         } catch (Exception e) {
             e.printStackTrace();
             assertNull(e);
@@ -185,20 +234,20 @@ public class ArgumentsCheckTest {
      */
     @Test
     public void parameterCheck_gdl() {
-        StringBuilder args = new StringBuilder();
 
-        args.append("-in").append(" ").append(EngineType.DIR.getFlag()).append(" ");
-        args.append("-s ").append(srcOneGrv).append(" ");
-        args.append("-d ").append(srcOneGrvDep).append(" ");
-        args.append("-o ").append(fileOut).append(" ");
-        args.append("-m ").append(Listing.ScarfXML.getFlag()).append(" ");
-        args.append("-t").append(" ");
-        args.append("-n");
+        String args =
+                makeArg(argsIdentifier.FORMAT, EngineType.DIR) +
+                        makeArg(argsIdentifier.SOURCE, srcOneGrv) +
+                        makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
+                        makeArg(argsIdentifier.OUT, fileOut) +
+                        makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                        makeArg(argsIdentifier.TIMEMEASURE) +
+                        makeArg(argsIdentifier.PRETTY);
 
         EnvironmentInformation info = null;
 
         try {
-            info = ArgumentsCheck.paramaterCheck(Arrays.asList(args.toString().split(" ")));
+            info = ArgumentsCheck.paramaterCheck(Arrays.asList(cleaningArgs(args)));
         } catch (Exception e) {
             e.printStackTrace();
             assertNull(e);

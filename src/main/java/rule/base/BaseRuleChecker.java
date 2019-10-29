@@ -49,7 +49,7 @@ public abstract class BaseRuleChecker implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public void checkRule(EngineType type, List<String> projectPaths, List<String> projectDependencyPath, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler {
+    public void checkRule(EngineType type, List<String> projectPaths, List<String> projectDependencyPath, List<String> sourcePaths, OutputStructure output, String mainKlass) throws ExceptionHandler {
 
         String[] excludes = {"web.xml", "pom.xml"};
 
@@ -60,7 +60,7 @@ public abstract class BaseRuleChecker implements RuleChecker {
                     criteria.getMethodName(),
                     criteria.getParam(),
                     projectPaths,
-                    projectDependencyPath, this);
+                    projectDependencyPath, this, mainKlass);
         }
 
         createAnalysisOutput(xmlFileStr, sourcePaths, output);

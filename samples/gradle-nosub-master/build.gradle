@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+}
+
+group 'org.rigorityj'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+jar {
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+
+
+task copyDepJars(type: Copy) {
+    from configurations.compile
+    into 'build/dependencies'
+    into 'libs'
+}
+repositories {
+    mavenCentral()
+    flatDir {
+    	dirs 'libs'
+    }
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}

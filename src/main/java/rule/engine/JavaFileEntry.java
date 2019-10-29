@@ -25,7 +25,7 @@ public class JavaFileEntry implements EntryHandler {
         log.trace("Starting scanner looper");
         for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
             log.info("Checking the rule: " + ruleChecker.getClass().getSimpleName());
-            ruleChecker.checkRule(generalInfo.getSourceType(), generalInfo.getSource(), generalInfo.getDependencies(), generalInfo.getSourcePaths(), generalInfo.getOutput());
+            ruleChecker.checkRule(generalInfo.getSourceType(), generalInfo.getSource(), generalInfo.getDependencies(), generalInfo.getSourcePaths(), generalInfo.getOutput(), generalInfo.getMain());
         }
         log.trace("Scanner looper stopped");
     }

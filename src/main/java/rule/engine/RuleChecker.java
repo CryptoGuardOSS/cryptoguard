@@ -24,5 +24,5 @@ public interface RuleChecker {
      * @param output                a {@link frontEnd.MessagingSystem.routing.outputStructures.OutputStructure} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
-    void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler;
+    void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, List<String> sourcePaths, OutputStructure output, String mainKlass) throws ExceptionHandler;
 }

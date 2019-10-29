@@ -16,6 +16,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static test.TestUtilities.*;
 
@@ -60,43 +61,25 @@ public class EntryPointTest_SOURCE {
     //endregion
 
     //region Tests
-    @Test
-    public void testEnvironmentVariables() {
-        String[] fileLists = new String[]{jarOne, pathToSchema};
-        String[] dirLists = new String[]{srcOneGrv, srcOneGrvDep};
-
-        for (String file : fileLists) {
-            File tempFile = new File(file);
-
-            assertTrue(tempFile.exists());
-            assertTrue(tempFile.isFile());
-        }
-
-        for (String dir : dirLists) {
-            File tempDir = new File(dir);
-
-            assertTrue(tempDir.exists());
-            assertTrue(tempDir.isDirectory());
-        }
-
-
-    }
-
-    //@Test - TODO Reimplement this test
+    //@Test
     public void main_TestableJarSource() {
+        String fileOut = tempFileOutTxt;
+        new File(fileOut).delete();
+
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.DIR) +
                             makeArg(argsIdentifier.SOURCE, srcOneGrv) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
-                            makeArg(argsIdentifier.OUT, tempFileOutTxt);
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.OUT, fileOut);
 
 
             try {
-                EntryPoint.main(args.split(" "));
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempFileOutTxt), StandardCharsets.UTF_8);
+                List<String> results = Files.readAllLines(Paths.get(outputFile), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 10);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -105,25 +88,26 @@ public class EntryPointTest_SOURCE {
         }
     }
 
-    //@Test - TODO Reimplement this test
+    //@Test
     public void main_TestableJarSourceScarf() {
+        String fileOut = tempFileOutXML;
+        new File(fileOut).delete();
+
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.DIR) +
                             makeArg(argsIdentifier.SOURCE, srcOneGrv) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
-                            makeArg(argsIdentifier.OUT, tempFileOutXML) +
+                            makeArg(argsIdentifier.OUT, fileOut) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY);
 
             try {
-                EntryPoint.main(args.split(" "));
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempFileOutXML), StandardCharsets.UTF_8);
-                assertTrue(results.size() >= 1);
-
-
-                AnalyzerReport report = AnalyzerReport.deserialize(new File(tempFileOutXML));
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
+                assertFalse(report.getBugInstance().isEmpty());
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -132,25 +116,26 @@ public class EntryPointTest_SOURCE {
         }
     }
 
-    //@Test - TODO Reimplement this test
+    //@Test
     public void main_TestableJarSourceScarf_Stream() {
+        String fileOut = tempStreamXML;
+        new File(fileOut).delete();
+
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.DIR) +
                             makeArg(argsIdentifier.SOURCE, srcOneGrv) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
-                            makeArg(argsIdentifier.OUT, tempStreamXML) +
+                            makeArg(argsIdentifier.OUT, fileOut) +
+                            makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY) +
                             makeArg(argsIdentifier.STREAM);
             try {
-                EntryPoint.main(args.split(" "));
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(tempStreamXML), StandardCharsets.UTF_8);
-                assertTrue(results.size() >= 1);
-
-
-                AnalyzerReport report = AnalyzerReport.deserialize(new File(tempStreamXML));
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
+                assertFalse(report.getBugInstance().isEmpty());
 
             } catch (Exception e) {
                 e.printStackTrace();
