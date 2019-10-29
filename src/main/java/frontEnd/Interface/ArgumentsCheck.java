@@ -161,24 +161,13 @@ public class ArgumentsCheck {
         List<String> dependencies = new ArrayList<String>();
         if (cmd.hasOption(argsIdentifier.DEPENDENCY.getId())) {
             log.trace("Retrieving the dependency files.");
-            dependencies = verify ? Utils.retrieveDirs(
+            dependencies = verify ? Utils.verifyClassPaths(
                     Arrays.asList(
                             cmd.getOptionValues(argsIdentifier.DEPENDENCY.getId())))
                     : Arrays.asList(
                     cmd.getOptionValues(argsIdentifier.DEPENDENCY.getId()))
             ;
             log.info("Using the dependency file(s): " + source.toString());
-        }
-        //endregion
-
-        //region Retrieving the dependencies via the class path
-        if (cmd.hasOption(argsIdentifier.AUXCLASSPATH.getId())) {
-            log.trace("Adding all of the auxiliary class paths from the Utils method");
-            log.debug("Adding the auxiliary class paths + " + cmd.getOptionValue(argsIdentifier.AUXCLASSPATH.getId()));
-
-            dependencies.addAll(Utils.verifyClassPaths(cmd.getOptionValue(argsIdentifier.AUXCLASSPATH.getId())));
-
-            log.info("Added the aux class path");
         }
         //endregion
 
@@ -316,11 +305,6 @@ public class ArgumentsCheck {
         dependency.setType(String.class);
         dependency.setOptionalArg(false);
         cmdLineArgs.addOption(dependency);
-
-        Option auxClassPath = Option.builder(argsIdentifier.AUXCLASSPATH.getId()).hasArg().argName("auxclasspath").desc(argsIdentifier.AUXCLASSPATH.getDesc()).build();
-        auxClassPath.setType(String.class);
-        auxClassPath.setOptionalArg(true);
-        cmdLineArgs.addOption(auxClassPath);
 
         Option mainFile = Option.builder(argsIdentifier.MAIN.getId()).hasArg().argName("main").desc(argsIdentifier.MAIN.getDesc()).build();
         mainFile.setType(String.class);

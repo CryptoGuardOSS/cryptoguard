@@ -114,9 +114,9 @@ public class Utils {
      */
     public final static String localPath = System.getProperty("user.dir");
     /**
-     * Constant <code>projectVersion="V03.07.06"</code>
+     * Constant <code>projectVersion="V03.08.00"</code>
      */
-    public final static String projectVersion = "V03.07.06";
+    public final static String projectVersion = "V03.08.00";
     /**
      * Constant <code>projectName="CryptoGuard"</code>
      */
@@ -1289,6 +1289,17 @@ public class Utils {
         return output;
     }
 
+    public static ArrayList<String> verifyClassPaths(String... classPaths) throws ExceptionHandler {
+        return verifyClassPaths(Arrays.asList(classPaths));
+    }
+
+    public static ArrayList<String> verifyClassPaths(List<String> classPaths) throws ExceptionHandler {
+        ArrayList<String> output = new ArrayList<>();
+            for (String klazz : classPaths)
+                output.addAll(verifyClassPaths(klazz));
+        return output;
+    }
+
     /**
      * <p>verifyClassPaths.</p>
      *
@@ -1345,7 +1356,8 @@ public class Utils {
         List<String> filePaths = new ArrayList<>();
 
         for (String in : arguments)
-            filePaths.add(retrieveFilePath(in, type));
+            for (String foil: in.split(":"))
+                filePaths.add(retrieveFilePath(foil, type));
 
         return filePaths;
     }

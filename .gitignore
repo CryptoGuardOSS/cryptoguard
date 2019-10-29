@@ -19,5 +19,4 @@ docs
 *.ipynb
 /.classpath
 /.vscode/
-/scratchSpace/
-/scratchSpace/
+/scratchSpace
