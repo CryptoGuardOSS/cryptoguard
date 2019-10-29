@@ -1,5 +1,5 @@
 #################################
-CryptoGuard V03.07.06
+CryptoGuard V03.08.00
 #################################
 
 
@@ -74,6 +74,13 @@ Java Class Files (Currently limited to Java JDK 8)
 
 Different Scanning Options
 ==================================================
+
+Source/Dependencies options
+----------------------------------
+* By default, both source and dependencies are expecting a list of files
+    * or for source the *.in file
+* The source and dependencies can also handle a class path based string
+    * ex: :code:`-s ~/tester/PBEUsage.class:~/tester/UrlFrameWorks.class:~/tester/NewTestCase1.class:~/tester/NewTestCase2.class`
 
 Ouput options
 -----------------

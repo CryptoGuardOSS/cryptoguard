@@ -396,7 +396,7 @@ public class EntryPointTest_JAR {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.JAR) +
                             makeArg(argsIdentifier.SOURCE, jarOne) +
-                            makeArg(argsIdentifier.AUXCLASSPATH, srcOneGrvDep) +
+                            makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.OUT, tempJarFile_Scarf_2) +
                             makeArg(argsIdentifier.TIMESTAMP) +

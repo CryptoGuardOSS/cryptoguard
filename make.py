@@ -1,18 +1,17 @@
 #!/usr/bin/env python3
 
+import argparse
 # Imports
 import os
-import sys
-import argparse
-import shutil
 import shlex
 import subprocess
+import sys
 import time
 
 '''####################################
 #A utility class that contains the rest of the main common files
 '''  ####################################
-
+numTests = 0
 
 class Utils(object):
     # Setting the arguments to be handled by the parser
@@ -52,6 +51,8 @@ class Utils(object):
                                 if (start != -1 and end != -1):
                                     testName = method[(start+len("public void ")):end]
                                     dyct[className].append({'testName':testName,'live':liveTest})
+                                    global numTests
+                                    numTests = numTests + 1
 
                             line = foil.readline()
         return dyct
@@ -85,38 +86,41 @@ class Utils(object):
         return round((x/(x+y))*100,2)
 
     def tests(dyct):
-        passed, failed, skipped = 0,0,0
+        global numTests
+        passed, failed, skipped, testNum = 0,0,0,1
         start, failedTests, verbose = time.time(), [], False
         print('==============================')
         for key, value in dyct.items():
             subpassed, subfailed, subskipped = 0,0,0
             for test in value:
-                testName = str(key) + '.' + str(test['testName'])
-                print(str(testName) + ' | ', end='', flush=True)
+                testName, startTest = str(key) + '.' + str(test['testName']), time.time()
+                print(str(testNum)+'/'+str(numTests) + ': ' + str(testName) + ' | ', end='', flush=True)
                 if not test['live']:
                     skipped = skipped + 1
                     subskipped = subskipped + 1
-                    print('Skip')
+                    print('Skip | ', end='', flush=True)
                 else:
                     testResult = Utils.runTest(testName)
                     if (testResult):
                         passed = passed + 1
                         subpassed = subpassed + 1
-                        print('Pass')
+                        print('Pass | ', end='', flush=True)
                     else:
                         failed = failed + 1
                         subfailed = subfailed + 1
-                        print('Fail')
+                        print('Fail | ', end='', flush=True)
                         failedTests += [testName]
+                testNum = testNum + 1
+                print(str(int(time.time()-startTest)) + ' (s)')
             if verbose:
                 print(str(key) + ' Skipped/Passed/Fail/(% passed): ' + str(subskipped) + '/' + str(subpassed) + '/' +str(subfailed) + '/% ' + str(Utils.percent(subpassed,subfailed)))
         print('==============================')
-        print('Time Taken (s): ' + str(int(time.time()-start)))
+        print('Time Taken : ' + str(int(time.time()-start)) + 's')
         print('Skipped Tests: ' + str(skipped))
         print('Passed Tests: ' + str(passed))
         print('Failed Tests: ' + str(failed))
         print('Total Tests: ' + str(skipped + passed + failed))
-        print('% Tests Passed: ' + str(Utils.percent(passed,failed)))
+        print('Total Tests Passed: %' + str(Utils.percent(passed,failed)))
         print('==============================')
         if len(failedTests) > 0:
             print('Failed Tests')
