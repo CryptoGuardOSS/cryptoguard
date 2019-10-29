@@ -37,7 +37,7 @@ Different Scanning Options
 ==================================================
 
 Source (Maven or Gradle Project Directory **only** *Currently Unstable*)
-----------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------
 * sample Makefile command :code:`make scanDir`
 * raw command (without dependencies) :code:`java7 -jar cryptoguard.jar -in source -s /rootPath`
 * raw command (with dependencies) :code:`java7 -jar cryptoguard.jar -in source -s /rootPath -d /dependencies`
@@ -59,7 +59,7 @@ APK Files
 * raw command :code:`java7 -jar cryptoguard.jar -in apk -s /path/to/apk/my-apk.apk`
 
 Java Files (*Currently Unstable*, currently limited to Java JDK 8 by library constraint)
-----------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------
 * sample Makefile command :code:`make scanJava`
 * raw command :code:`java7 -jar cryptoguard.jar -in java -s /path/to/java/file.java`
 * raw command (for files) :code:`java7 -jar cryptoguard.jar -in java -s /path/to/java/file1.java /path/to/java/file2.java`
@@ -78,7 +78,8 @@ Different Scanning Options
 Source/Dependencies options
 ----------------------------------
 * By default, both source and dependencies are expecting a list of files
-    * or for source the *.in file
+    * or for source the .in file
+
 * The source and dependencies can also handle a class path based string
     * ex: :code:`-s ~/tester/PBEUsage.class:~/tester/UrlFrameWorks.class:~/tester/NewTestCase1.class:~/tester/NewTestCase2.class`
 
@@ -114,6 +115,7 @@ Input a single file (list of files)
 * example
     * command to generate a file like this `find -type f -name *.java >> input.in`
     * generated [input.in]() file
+
 .. code-block:: bash
     ./samples/testable-jar/src/main/java/tester/UrlFrameWorks.java
     ./samples/testable-jar/src/main/java/tester/PasswordUtils.java
@@ -128,6 +130,7 @@ Input a single file (list of files)
 
   * command to be used with cryptoguard :code:`java7 -jar -s input.in`
     * this is similar to :code:`java7 -jar -s ./samples/testable-jar/src/main/java/tester/UrlFrameWorks.java ... ./samples/testable-jar/src/main/java/tester/PassEncryptor.java`
+
 * **NOTE**: This can be used with any type of input/output marshalling
 
 Help
@@ -144,7 +147,7 @@ Disclaimer
 ===============
 
 CryptoGuard is a research prototype under GNU General Public License 3.0
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------------------------------------------------------
 
  Copyright © 2019 CryptoGuard
 
