@@ -14,6 +14,7 @@ public enum ExceptionId {
     //region Values
 
     //region Range 0: Success
+    SUCCESS(0, "Successful"),
     HELP(0, "Asking For Help"),
     VERSION(0, "Asking For Version"),
     //endregion

@@ -82,10 +82,10 @@ public class ScarfXMLTest {
 
     //region Tests
 
-    //@Test
     /**
      * <p>simpleFiveRuleTest.</p>
      */
+    //@Test
     public void simpleFiveRuleTest() {
         //String xmlStream = this.messagingSystem.getOutput(this.env, this.brokenRules);
         //TODO - Fix this
