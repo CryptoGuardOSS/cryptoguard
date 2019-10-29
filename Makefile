@@ -1,12 +1,13 @@
 #region Variables
 #General Variables used throughout the Makefile
 dir=./
+gradleTest=$(dir)make.py
 testDir=$(dir)build/Makefile-tests/
 testSrc=$(dir)samples/
 java=${JAVA8_HOME}/bin/java
 
 #Variables dynamically set when the program is being built from the source
-ver=V03.07.06
+ver=V03.08.00
 name=cryptoguard
 
 #The short hand paths to execute the compiled jar and the scarf xsd for valiation
@@ -252,6 +253,10 @@ scanJavaClasses_Default: checkjavaHome build
 #This runs the help method
 help: build
 	$(scan) -h
+
+tests: $(gradleTest)
+	@$(info Running the Gradle Tests with the python wrapper)
+	@$(gradleTest) tests
 
 #This build calls all of the scan operations within this Makefile
 scans:\
