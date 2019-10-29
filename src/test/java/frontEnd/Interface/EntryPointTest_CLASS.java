@@ -102,10 +102,10 @@ public class EntryPointTest_CLASS {
         }
     }
 
-    @Test
     /**
      * <p>main_TestableFiles_SingleTest.</p>
      */
+    @Test
     public void main_TestableFiles_SingleTest() {
         soot.G.v().reset();
 
@@ -181,10 +181,10 @@ public class EntryPointTest_CLASS {
         }
     }
 
-    @Test
     /**
      * <p>main_TestableFiles_MultiTest.</p>
      */
+    @Test
     public void main_TestableFiles_MultiTest() {
         String fileOut = tempFileOutTxt_two;
         String source = Utils.join(" ", TestUtilities.arr(classFiles));
@@ -216,10 +216,10 @@ public class EntryPointTest_CLASS {
     }
 
 
-    @Test
     /**
      * <p>main_TestableFiles_MultiTest_Scarf.</p>
      */
+    @Test
     public void main_TestableFiles_MultiTest_Scarf() {
         String fileOut = tempFileOutXML_Class;
         String source = String.join(" ", classFiles);
@@ -256,10 +256,51 @@ public class EntryPointTest_CLASS {
         }
     }
 
+
+    /**
+     * <p>main_TestableFiles_MultiTest_Scarf.</p>
+     */
     @Test
+    public void main_TestableFiles_MultiTest_Scarf_ClassPath() {
+        String fileOut = tempFileOutXML_Class;
+        String source = String.join(":", classFiles);
+        new File(fileOut).delete();
+
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES) +
+                            makeArg(argsIdentifier.SOURCE, source) +
+                            makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                            makeArg(argsIdentifier.MAIN, classFiles[3]) +
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.OUT, fileOut);
+
+            try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
+                assertFalse(report.getBugInstance().isEmpty());
+                assertTrue(report.getBugInstance().stream().anyMatch(bugInstance -> {
+                    try {
+                        return Utils.containsAny(bugInstance.getClassName(), Utils.retrieveFullyQualifiedName(source.split(":")));
+                    } catch (ExceptionHandler exceptionHandler) {
+                        exceptionHandler.printStackTrace();
+                        return false;
+                    }
+                }));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
     /**
      * <p>main_TestableFiles_MultiTest_Scarf_Stream.</p>
      */
+    @Test
     public void main_TestableFiles_MultiTest_Scarf_Stream() {
         String fileOut = tempFileOutXML_Class_Stream;
         String source = String.join(" ", classFiles);
@@ -297,11 +338,11 @@ public class EntryPointTest_CLASS {
         }
     }
 
-    @Test
     //- specify main class?
     /**
      * <p>main_TestableFiles_SingleTest.</p>
      */
+    @Test
     public void main_TestableFiles_FullProject() {
         String fileOut = tempFileOutTxt_Class_fullproj;
         String source = Utils.join(" ", TestUtilities.arr(srcOneGrvInputArr_Class));
