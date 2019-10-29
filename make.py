@@ -94,7 +94,7 @@ class Utils(object):
             subpassed, subfailed, subskipped = 0,0,0
             for test in value:
                 testName, startTest = str(key) + '.' + str(test['testName']), time.time()
-                print(str(testNum)+'/'+str(numTests) + ': ' + str(testName) + ' | ', end='', flush=True)
+                print(str(testNum)+'/'+str(numTests) + ' | ' + str(testName) + ' | ', end='', flush=True)
                 if not test['live']:
                     skipped = skipped + 1
                     subskipped = subskipped + 1
