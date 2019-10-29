@@ -961,20 +961,6 @@ public class Utils {
     }
 
     /**
-     * <p>getJAVA7_HOME.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static String getJAVA7_HOME() throws ExceptionHandler {
-        String JAVA7_HOME = System.getenv("JAVA7_HOME");
-        if (StringUtils.isEmpty(JAVA7_HOME)) {
-            throw new ExceptionHandler("Environment Variable: JAVA7_HOME is not set.", ExceptionId.ENV_VAR);
-        }
-        return JAVA7_HOME;
-    }
-
-    /**
      * <p>getANDROID.</p>
      *
      * @return a {@link java.lang.String} object.
@@ -1010,20 +996,6 @@ public class Utils {
         String jce = Utils.osPathJoin("jre", "lib", "jce.jar");
 
         return osPathJoin(Utils.getJAVA_HOME(), jce);
-    }
-
-    /**
-     * //TODO - Need to verify this is necessary
-     * <p>getBaseSOOT7.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static String getBaseSOOT7() throws ExceptionHandler {
-        String rt = Utils.osPathJoin("jre", "lib", "rt.jar:");
-        String jce = Utils.osPathJoin("jre", "lib", "jce.jar");
-
-        return Utils.getJAVA7_HOME() + Utils.fileSep + join(Utils.getJAVA7_HOME() + Utils.fileSep, rt, jce);
     }
 
     /**

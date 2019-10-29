@@ -61,11 +61,11 @@ setHome:
 
 #Checking if the java_Home variable is set 
 checkjavaHome: setHome
-	@$(info Verifying the JAVA7_HOME environment variable is set.)
-ifeq ($(strip ${JAVA7_HOME}),)
-	@$(error Please set the JAVA7_HOME environment variable.)
+	@$(info Verifying the JAVA_HOME environment variable is set.)
+ifeq ($(strip ${JAVA_HOME}),)
+	@$(error Please set the JAVA_HOME environment variable.)
 else
-	@$(info JAVA7_HOME is set.)
+	@$(info JAVA_HOME is set.)
 endif
 
 #Checking if the ANDROID_HOME variable is set 
