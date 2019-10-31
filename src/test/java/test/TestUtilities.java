@@ -31,14 +31,15 @@ public class TestUtilities {
     public static final String basePath = System.getProperty("user.dir");
     public static final String scarfArgs = Utils.osPathJoin(basePath, "src", "main", "resources", "Scarf", "sample.properties");
     public static final String testRec = Utils.osPathJoin(basePath, "samples");
+    public static final String testPath = Utils.osPathJoin(basePath, "build", "tmp");
     public static final String testRec_tester_test = Utils.osPathJoin(testRec, "temp", "tester");
     public static final String testRec_tester_test_Class = Utils.osPathJoin(testRec_tester_test, "test.class");
     public static final String testRec_tester_test_Java = Utils.osPathJoin(testRec_tester_test, "test.java");
+    public static final String testRec_tester_test_Java_xml = Utils.osPathJoin(testPath, "test_java.xml");
     public static final String srcOneGrv = Utils.osPathJoin(testRec, "testable-jar");
     public static final String srcOneGrvInputFile = Utils.osPathJoin(srcOneGrv, "input.in");
     public static final String javaSource = Utils.osPathJoin(srcOneGrv, "src", "main", "java", "tester");
     public static final String classSource = Utils.osPathJoin(srcOneGrv, "build", "classes", "java", "main", "tester");
-    public static final String testPath = Utils.osPathJoin(basePath, "build", "tmp");
     public static final String[] classFiles = {Utils.osPathJoin(classSource, "PBEUsage.class"), Utils.osPathJoin(classSource, "UrlFrameWorks.class"), Utils.osPathJoin(classSource, "NewTestCase1.class"), Utils.osPathJoin(classSource, "NewTestCase2.class")};
     public static final String newTestCaseTwo_Class = Utils.osPathJoin(classSource, "NewTestCase2.class");
     public static final String newTestCaseTwo_xml = Utils.osPathJoin(testPath, "NewTestCase2-class.xml");
