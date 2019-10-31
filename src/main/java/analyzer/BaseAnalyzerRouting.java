@@ -157,7 +157,6 @@ public class BaseAnalyzerRouting {
                                     List<String> snippetPath,
                                     List<String> projectDependency,
                                     BaseRuleChecker checker, String mainKlass) throws ExceptionHandler {
-        //region Old Attempt
 
         Options.v().set_output_format(Options.output_format_jimple);
         Options.v().set_src_prec(Options.src_prec_java);
@@ -170,42 +169,6 @@ public class BaseAnalyzerRouting {
 
         loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker, "_DIR_");
 
-        //endregion
-        //region New Attempt
-        /*
-        Options.v().set_output_format(Options.output_format_jimple);
-        Options.v().set_src_prec(Options.src_prec_java);
-
-        Options.v().set_whole_program(true);
-        Options.v().set_prepend_classpath(true);
-        Options.v().set_app(true);
-        Options.v().set_process_dir(snippetPath);
-
-
-        List<String> classNames = Utils.getClassNamesFromSnippet(snippetPath);
-
-        Scene.v().setSootClassPath(Utils.getBaseSOOT() + ":"
-                + Utils.join(":", snippetPath)
-                + ":" + Utils.buildSootClassPath(projectDependency));
-        /*
-        for (String clazz : Utils.retrieveJavaFilesFromDir(snippetPath.get(0))) {
-            log.debug("Adding basic class: " + clazz);
-            //SootClass clazs = new SootClass(clazz);
-            //Scene.v().addClass(clazs);
-            //Scene.v().extendSootClassPath(clazz);
-            //Scene.v().loadClassAndSupport(clazz);
-        }
-
-        //Doesn't break it but doesn't display errors
-        for (String dependency : Utils.getJarsInDirectories(projectDependency)) {
-            classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
-        }
-
-
-
-        loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker);
-        */
-        //endregion
     }
 
     //endregion
