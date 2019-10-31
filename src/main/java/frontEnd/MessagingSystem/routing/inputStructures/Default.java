@@ -7,10 +7,10 @@ import frontEnd.MessagingSystem.routing.EnvironmentInformation;
  *
  * @author franceme
  * Created on 04/30/2019.
+ * @version 03.07.01
  * @since 03.05.01
  *
  * <p>{Description Here}</p>
- * @version 03.07.01
  */
 public class Default implements Structure {
     /**

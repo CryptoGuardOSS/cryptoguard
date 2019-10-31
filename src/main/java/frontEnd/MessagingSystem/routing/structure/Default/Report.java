@@ -39,6 +39,7 @@ import java.util.List;
 })
 public class Report implements Serializable {
 
+    private final static long serialVersionUID = 1588567781296372468L;
     /**
      * The Schema Version
      * <p>
@@ -95,14 +96,13 @@ public class Report implements Serializable {
      * (Required)
      */
     @JsonProperty("Issues")
-    private List<Issue> issues = new ArrayList<Issue>();
+    private List<Issue> issues = new ArrayList<>();
     /**
      * HeuristicsType
      * <p>
      */
     @JsonProperty("Heuristics")
     private Heuristics heuristics;
-    private final static long serialVersionUID = 1588567781296372468L;
 
     /**
      * No args constructor for use in serialization
@@ -114,13 +114,13 @@ public class Report implements Serializable {
      * <p>Constructor for Report.</p>
      *
      * @param projectVersion a {@link java.lang.String} object.
-     * @param dateTime a {@link java.lang.String} object.
-     * @param heuristics a {@link frontEnd.MessagingSystem.routing.structure.Default.Heuristics} object.
-     * @param issues a {@link java.util.List} object.
-     * @param target a {@link frontEnd.MessagingSystem.routing.structure.Default.Target} object.
-     * @param uUID a {@link java.lang.String} object.
-     * @param projectName a {@link java.lang.String} object.
-     * @param schemaVersion a int.
+     * @param dateTime       a {@link java.lang.String} object.
+     * @param heuristics     a {@link frontEnd.MessagingSystem.routing.structure.Default.Heuristics} object.
+     * @param issues         a {@link java.util.List} object.
+     * @param target         a {@link frontEnd.MessagingSystem.routing.structure.Default.Target} object.
+     * @param uUID           a {@link java.lang.String} object.
+     * @param projectName    a {@link java.lang.String} object.
+     * @param schemaVersion  a int.
      */
     public Report(int schemaVersion, String dateTime, String uUID, String projectName, String projectVersion, Target target, List<Issue> issues, Heuristics heuristics) {
         super();
@@ -132,6 +132,26 @@ public class Report implements Serializable {
         this.target = target;
         this.issues = issues;
         this.heuristics = heuristics;
+    }
+
+    /**
+     * <p>deserialize.</p>
+     *
+     * @param file a {@link java.io.File} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
+    public static Report deserialize(File file) throws ExceptionHandler {
+        try {
+
+            ObjectMapper deserializer = Listing.Default.getJacksonType().getOutputMapper();
+
+            return deserializer.readValue(file, Report.class);
+
+        } catch (IOException e) {
+            throw new ExceptionHandler("Issue de-serializing file: " + file.getName(), ExceptionId.FILE_READ);
+        }
+
     }
 
     /**
@@ -425,13 +445,17 @@ public class Report implements Serializable {
         return new ToStringBuilder(this).append("schemaVersion", schemaVersion).append("dateTime", dateTime).append("uUID", uUID).append("projectName", projectName).append("projectVersion", projectVersion).append("target", target).append("issues", issues).append("heuristics", heuristics).toString();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(projectVersion).append(dateTime).append(heuristics).append(issues).append(target).append(uUID).append(projectName).append(schemaVersion).toHashCode();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -442,26 +466,6 @@ public class Report implements Serializable {
         }
         Report rhs = ((Report) other);
         return new EqualsBuilder().append(projectVersion, rhs.projectVersion).append(dateTime, rhs.dateTime).append(heuristics, rhs.heuristics).append(issues, rhs.issues).append(target, rhs.target).append(uUID, rhs.uUID).append(projectName, rhs.projectName).append(schemaVersion, rhs.schemaVersion).isEquals();
-    }
-
-    /**
-     * <p>deserialize.</p>
-     *
-     * @param file a {@link java.io.File} object.
-     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static Report deserialize(File file) throws ExceptionHandler {
-        try {
-
-            ObjectMapper deserializer = Listing.Default.getJacksonType().getOutputMapper();
-
-            return deserializer.readValue(file, Report.class);
-
-        } catch (IOException e) {
-            throw new ExceptionHandler("Issue de-serializing file: " + file.getName(), ExceptionId.FILE_READ);
-        }
-
     }
 
 }

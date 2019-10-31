@@ -40,17 +40,14 @@ import java.util.zip.ZipFile;
  */
 public class ProcessManifest {
 
-    private final Set<String> entryPointsClasses = new HashSet<String>();
+    private final Set<String> entryPointsClasses = new HashSet<>();
+    private final Set<String> permissions = new HashSet<>();
     private String applicationName = "";
-
     private int versionCode = -1;
     private String versionName = "";
-
     private String packageName = "";
     private int minSdkVersion = -1;
     private int targetSdkVersion = -1;
-
-    private final Set<String> permissions = new HashSet<String>();
 
     /**
      * Opens the given apk file and provides the given handler with a stream for
@@ -305,24 +302,6 @@ public class ProcessManifest {
     }
 
     /**
-     * <p>Setter for the field <code>applicationName</code>.</p>
-     *
-     * @param name a {@link java.lang.String} object.
-     */
-    public void setApplicationName(String name) {
-        this.applicationName = name;
-    }
-
-    /**
-     * <p>Setter for the field <code>packageName</code>.</p>
-     *
-     * @param name a {@link java.lang.String} object.
-     */
-    public void setPackageName(String name) {
-        this.packageName = name;
-    }
-
-    /**
      * <p>getEntryPointClasses.</p>
      *
      * @return a {@link java.util.Set} object.
@@ -338,6 +317,15 @@ public class ProcessManifest {
      */
     public String getApplicationName() {
         return this.applicationName;
+    }
+
+    /**
+     * <p>Setter for the field <code>applicationName</code>.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     */
+    public void setApplicationName(String name) {
+        this.applicationName = name;
     }
 
     /**
@@ -374,6 +362,15 @@ public class ProcessManifest {
      */
     public String getPackageName() {
         return this.packageName;
+    }
+
+    /**
+     * <p>Setter for the field <code>packageName</code>.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     */
+    public void setPackageName(String name) {
+        this.packageName = name;
     }
 
     /**

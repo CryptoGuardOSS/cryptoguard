@@ -30,7 +30,7 @@ public class Legacy {
     public static String marshallingHeader(EngineType sourceType, List<String> sources) {
         StringBuilder out = new StringBuilder();
 
-        out.append("Analyzing " + sourceType.getName() + ": ");
+        out.append("Analyzing ").append(sourceType.getName()).append(": ");
         for (int sourceKtr = 0; sourceKtr < sources.size(); sourceKtr++) {
             out.append(sources.get(sourceKtr));
 
@@ -52,13 +52,10 @@ public class Legacy {
         if (StringUtils.isBlank(soot))
             return "";
 
-        StringBuilder sootOut = new StringBuilder();
-
-        sootOut.append("=======================================\n");
-        sootOut.append("Internal Warnings: \n" + soot + "\n");
-        sootOut.append("=======================================\n");
-
-        return sootOut.toString();
+        String sootOut = "=======================================\n" +
+                "Internal Warnings: \n" + soot + "\n" +
+                "=======================================\n";
+        return sootOut;
     }
 
     /**
@@ -79,7 +76,7 @@ public class Legacy {
                 out.append(issue.getRule().getDesc());
         } else {
             out.append("***Found: ");
-            out.append("[\"" + issue.getInfo() + "\"] ");
+            out.append("[\"").append(issue.getInfo()).append("\"] ");
         }
 
         //region Location Setting
@@ -124,13 +121,11 @@ public class Legacy {
      * @return a {@link java.lang.String} object.
      */
     public static String marshalling(Long analysisTime) {
-        StringBuilder out = new StringBuilder();
 
-        out.append("=======================================\n");
-        out.append("Analysis Timing (ms): ").append(analysisTime).append(".\n");
-        out.append("=======================================\n");
-
-        return out.toString();
+        String out = "=======================================\n" +
+                "Analysis Timing (ms): " + analysisTime + ".\n" +
+                "=======================================\n";
+        return out;
     }
 
     /**

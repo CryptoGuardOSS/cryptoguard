@@ -35,9 +35,7 @@ public class LegacyTest {
         this.source = "testable-jar/build/libs/testable-jar.jar";
         this.type = EngineType.JAR;
 
-        StringBuilder sampleOne = new StringBuilder();
-
-        this.result = sampleOne.toString();
+        this.result = "";
 
 
         this.brokenRules = new ArrayList<>();

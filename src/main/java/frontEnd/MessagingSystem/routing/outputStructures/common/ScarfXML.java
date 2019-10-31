@@ -162,20 +162,6 @@ public class ScarfXML {
     }
 
     /**
-     * The method for this output to create error messages
-     *
-     * @param message -  the string of the message to be sent to the output
-     * @return string - the xml format of the error message
-     */
-    private String creatingErrorMessage(String message) {
-        StringBuilder output = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-        output.append("<ERROR>");
-        output.append(message);
-        output.append("</ERROR>");
-        return output.toString();
-    }
-
-    /**
      * The method to write the Footer for the ScarfXML output.
      *
      * @param info a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object
@@ -183,8 +169,8 @@ public class ScarfXML {
      */
     public static String writeFooter(EnvironmentInformation info) {
         String footer = "";
-        String prettyTab = info.prettyPrint() ? "\t" : "";
-        String prettyLine = info.prettyPrint() ? "\n" : " ";
+        String prettyTab = info.getPrettyPrint() ? "\t" : "";
+        String prettyLine = info.getPrettyPrint() ? "\n" : " ";
 
         StringBuilder commentedFooter = new StringBuilder();
 
@@ -195,7 +181,7 @@ public class ScarfXML {
 
         if (info.isShowTimes()) {
             log.trace("Adding the time measurements");
-            commentedFooter.append("Analysis Timing (ms): ").append(info.getAnalyisisTime()).append(".").append(prettyLine);
+            commentedFooter.append("Analysis Timing (ms): ").append(info.getAnalysisMilliSeconds()).append(".").append(prettyLine);
         }
 
         if (StringUtils.isNotBlank(commentedFooter.toString()))
@@ -220,5 +206,18 @@ public class ScarfXML {
                 roundedSliceAverage,
                 info.getDEPTH_COUNT()
         );
+    }
+
+    /**
+     * The method for this output to create error messages
+     *
+     * @param message -  the string of the message to be sent to the output
+     * @return string - the xml format of the error message
+     */
+    private String creatingErrorMessage(String message) {
+        String output = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "<ERROR>" +
+                message +
+                "</ERROR>";
+        return output;
     }
 }

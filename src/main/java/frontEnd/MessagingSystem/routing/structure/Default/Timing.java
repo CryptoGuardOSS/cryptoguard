@@ -25,6 +25,7 @@ import java.io.Serializable;
 })
 public class Timing implements Serializable {
 
+    private final static long serialVersionUID = -7831748094033719806L;
     /**
      * (Required)
      */
@@ -40,7 +41,6 @@ public class Timing implements Serializable {
      */
     @JsonProperty("TimeScale")
     private String timeScale;
-    private final static long serialVersionUID = -7831748094033719806L;
 
     /**
      * No args constructor for use in serialization
@@ -51,9 +51,9 @@ public class Timing implements Serializable {
     /**
      * <p>Constructor for Timing.</p>
      *
-     * @param total a {@link java.lang.String} object.
+     * @param total     a {@link java.lang.String} object.
      * @param timeScale a {@link java.lang.String} object.
-     * @param scan a {@link java.lang.String} object.
+     * @param scan      a {@link java.lang.String} object.
      */
     public Timing(String total, String scan, String timeScale) {
         super();
@@ -163,13 +163,17 @@ public class Timing implements Serializable {
         return new ToStringBuilder(this).append("total", total).append("scan", scan).append("timeScale", timeScale).toString();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(total).append(timeScale).append(scan).toHashCode();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object other) {
         if (other == this) {

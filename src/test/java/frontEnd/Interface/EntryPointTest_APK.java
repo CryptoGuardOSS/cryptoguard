@@ -63,6 +63,7 @@ public class EntryPointTest_APK {
     //endregion
 
     //region Tests
+
     /**
      * <p>main_TestableApk.</p>
      */
