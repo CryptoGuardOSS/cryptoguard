@@ -162,13 +162,13 @@ public class BaseAnalyzerRouting {
         Options.v().set_output_format(Options.output_format_jimple);
         Options.v().set_src_prec(Options.src_prec_java);
 
-        Scene.v().setSootClassPath(Utils.getBaseSOOT() + ":"
+        Scene.v().setSootClassPath(Utils.getBaseSOOT7() + ":"
                 + Utils.join(":", snippetPath)
                 + ":" + Utils.buildSootClassPath(projectDependency));
 
         List<String> classNames = Utils.getClassNamesFromSnippet(snippetPath);
 
-        loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker, mainKlass);
+        loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker, "_DIR_");
 
         //endregion
         //region New Attempt
@@ -236,13 +236,12 @@ public class BaseAnalyzerRouting {
         Options.v().set_verbose(true);
         Options.v().set_validate(true);
         Options.v().set_whole_program(true);
-        //Options.v().set_app(true);
 
         List<String> classNames = Utils.retrieveFullyQualifiedName(snippetPath);
 
         Scene.v().setSootClassPath(Utils.surround(":",
                 Utils.joinSpecialSootClassPath(snippetPath),
-                Utils.getBaseSOOT(),
+                Utils.getBaseSOOT7(),
                 Utils.buildSootClassPath(projectDependency))
         );
         log.debug("Setting the soot class path as: " + Scene.v().getSootClassPath());
@@ -323,7 +322,6 @@ public class BaseAnalyzerRouting {
         Options.v().set_keep_line_number(true);
         Options.v().set_allow_phantom_refs(true);
         List<String> ignoreLibs = Arrays.asList("okhttp3.Request$Builder", "retrofit2.Retrofit$Builder");
-
         for (String clazz : BaseAnalyzer.CRITERIA_CLASSES) {
             log.debug("Loading with the class: " + clazz);
             try {
@@ -334,7 +332,10 @@ public class BaseAnalyzerRouting {
                 throw new ExceptionHandler("Error loading Class: " + clazz, ExceptionId.LOADING);
             }
         }
+
         Boolean mainMethodFound = false;
+        boolean avoidMainKlass = StringUtils.isNotEmpty(mainKlass) && !mainKlass.equals("_JAR_") && !mainKlass.equals("_APK_") && !mainKlass.equals("_DIR_");
+
         for (String clazz : classNames) {
             log.debug("Working with the internal class path: " + clazz);
             try {
@@ -345,7 +346,7 @@ public class BaseAnalyzerRouting {
                 Boolean containsMain = runningClass.getMethods().stream().anyMatch(m -> m.getName().equals("main"));
                 if (!mainMethodFound)
                     mainMethodFound = containsMain;
-                else if ((!mainKlass.equals("_JAR_")&&!mainKlass.equals("_APK_")) && containsMain && StringUtils.isEmpty(mainKlass))
+                else if (avoidMainKlass && containsMain && StringUtils.isEmpty(mainKlass))
                     throw new ExceptionHandler("Multiple Entry-points (main) found within the files included.", ExceptionId.FILE_READ);
 
             } catch (Error e) {
@@ -358,10 +359,10 @@ public class BaseAnalyzerRouting {
         Options.v().set_prepend_classpath(true);
         Options.v().set_no_bodies_for_excluded(true);
 
-        if ((StringUtils.isNotEmpty(mainKlass) && !mainKlass.equals("_JAR_") && !mainKlass.equals("_APK_")) && (!Scene.v().hasMainClass() || classNames.stream().noneMatch(str -> str.equals(Scene.v().getMainClass().getName()))))
+        if ((StringUtils.isNotEmpty(mainKlass) && avoidMainKlass) && (!Scene.v().hasMainClass() || classNames.stream().noneMatch(str -> str.equals(Scene.v().getMainClass().getName()))))
             throw new ExceptionHandler("Could not detected an entry-point (main method) within any of the files provided.", ExceptionId.FILE_READ);
 
-        if (StringUtils.isNotEmpty(mainKlass) && (!mainKlass.equals("_JAR_")&&!mainKlass.equals("_APK_")) && !Scene.v().getMainClass().getName().equals(mainKlass)) {
+        if (StringUtils.isNotEmpty(mainKlass) && avoidMainKlass && !Scene.v().getMainClass().getName().equals(mainKlass)) {
             SootClass mainClass = null;
             try {
                 mainClass = Scene.v().getSootClass(Utils.retrieveFullyQualifiedName(mainKlass));
