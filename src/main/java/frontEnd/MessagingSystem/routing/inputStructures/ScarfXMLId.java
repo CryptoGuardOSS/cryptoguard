@@ -19,6 +19,19 @@ public enum ScarfXMLId {
     }
 
     /**
+     * <p>lookup.</p>
+     *
+     * @param id a {@link java.lang.String} object.
+     * @return a {@link frontEnd.argsIdentifier} object.
+     */
+    public static ScarfXMLId lookup(String id) {
+        for (ScarfXMLId in : ScarfXMLId.values())
+            if (in.getId().equals(id))
+                return in;
+        return null;
+    }
+
+    /**
      * <p>Getter for the field <code>id</code>.</p>
      *
      * @return a {@link java.lang.String} object.
@@ -43,19 +56,6 @@ public enum ScarfXMLId {
      */
     public String getDesc() {
         return this.name() + ": " + this.desc;
-    }
-
-    /**
-     * <p>lookup.</p>
-     *
-     * @param id a {@link java.lang.String} object.
-     * @return a {@link frontEnd.argsIdentifier} object.
-     */
-    public static ScarfXMLId lookup(String id) {
-        for (ScarfXMLId in : ScarfXMLId.values())
-            if (in.getId().equals(id))
-                return in;
-        return null;
     }
 
 }

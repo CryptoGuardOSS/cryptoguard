@@ -40,7 +40,9 @@ public class PredictableIVFinder extends PredictableSourceRuleChecker {
         return CRITERIA_LIST;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getRuleId() {
         return "10";

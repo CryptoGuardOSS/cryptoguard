@@ -19,11 +19,6 @@ import java.util.Map;
  */
 public class InsecureAssymCryptoFinder implements RuleChecker {
 
-    private enum AssymType {
-        RSA,
-        EC
-    }
-
     private static final Map<AssymType, Integer> SIZE_MAP = new HashMap<>();
     private static final Map<AssymType, Boolean> IS_DEFAULT_SECURE_MAP = new HashMap<>();
 
@@ -73,5 +68,10 @@ public class InsecureAssymCryptoFinder implements RuleChecker {
         insecureInitializationFinder.setMinSize(SIZE_MAP.get(assymType));
         insecureInitializationFinder.checkRule(type, projectJarPath, projectDependencyPath, sourcePaths, output, mainKlass);
 
+    }
+
+    private enum AssymType {
+        RSA,
+        EC
     }
 }

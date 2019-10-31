@@ -26,6 +26,7 @@ import java.io.Serializable;
 })
 public class BugCategory implements Serializable {
 
+    private final static long serialVersionUID = -6063334270290646651L;
     /**
      * (Required)
      */
@@ -50,7 +51,6 @@ public class BugCategory implements Serializable {
     @JacksonXmlProperty(isAttribute = true, localName = "bytes")
     @JsonProperty("-bytes")
     private int bytes;
-    private final static long serialVersionUID = -6063334270290646651L;
 
     /**
      * No args constructor for use in serialization
@@ -211,21 +211,25 @@ public class BugCategory implements Serializable {
      */
     @Override
     public String toString() {
-        return new StringBuilder("BugCategory[")
-                .append("group:").append(group)
-                .append(", code: ").append(code)
-                .append(", count: ").append(count)
-                .append(", bytes: ").append(bytes)
-                .append("]").toString();
+        return "BugCategory[" +
+                "group:" + group +
+                ", code: " + code +
+                ", count: " + count +
+                ", bytes: " + bytes +
+                "]";
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(bytes).append(count).append(code).append(group).toHashCode();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object other) {
         if (other == this) {

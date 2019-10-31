@@ -28,6 +28,7 @@ import java.util.Map;
 public class DefaultExportGradeKeyFinder implements RuleChecker {
 
     private static final List<String> SLICING_CRITERIA = new ArrayList<>();
+    private static final String METHOD_TO_FIND = "<java.security.KeyPairGenerator: void initialize(";
 
     static {
         SLICING_CRITERIA.add("<java.security.KeyPairGenerator: java.security.KeyPairGenerator getInstance(java.lang.String)>");
@@ -35,13 +36,53 @@ public class DefaultExportGradeKeyFinder implements RuleChecker {
         SLICING_CRITERIA.add("<java.security.KeyPairGenerator: java.security.KeyPairGenerator getInstance(java.lang.String,java.security.Provider)>");
     }
 
-    private static final String METHOD_TO_FIND = "<java.security.KeyPairGenerator: void initialize(";
-
     private boolean defaultSecure;
 
     private ArrayList<String> methodsToLook;
 
     private ArrayList<String> initializeCallsites = new ArrayList<>();
+
+    private static Map<String, List<Unit>> getForwardSlice(List<String> classNames, SlicingCriteria slicingCriteria) {
+
+        Map<String, List<Unit>> analysisListMap = new HashMap<>();
+
+        for (String className : classNames) {
+
+            SootClass sClass = Scene.v().loadClassAndSupport(className);
+
+            sClass.setApplicationClass();
+
+            for (SootMethod method : sClass.getMethods()) {
+                SlicingResult slicingResult = getInfluencingInstructions(slicingCriteria, method);
+
+                if (slicingResult != null) {
+                    analysisListMap.put(method.toString() + "[" + slicingResult.getCallSiteInfo().getLineNumber() + "]", slicingResult.getAnalysisResult());
+                }
+            }
+        }
+
+        return analysisListMap;
+    }
+
+    /**
+     * <p>getInfluencingInstructions.</p>
+     *
+     * @param slicingCriteria a {@link slicer.forward.SlicingCriteria} object.
+     * @param m               a {@link soot.SootMethod} object.
+     * @return a {@link slicer.forward.SlicingResult} object.
+     */
+    public static SlicingResult getInfluencingInstructions(SlicingCriteria slicingCriteria,
+                                                           SootMethod m) {
+        if (m.isConcrete()) {
+
+            Body b = m.retrieveActiveBody();
+
+            UnitGraph graph = new ExceptionalUnitGraph(b);
+            ForwardInfluenceInstructions vbe = new ForwardInfluenceInstructions(graph, slicingCriteria);
+            return vbe.getSlicingResult();
+        }
+        return null;
+    }
 
     /**
      * {@inheritDoc}
@@ -117,47 +158,5 @@ public class DefaultExportGradeKeyFinder implements RuleChecker {
      */
     public void setDefaultSecure(boolean defaultSecure) {
         this.defaultSecure = defaultSecure;
-    }
-
-    private static Map<String, List<Unit>> getForwardSlice(List<String> classNames, SlicingCriteria slicingCriteria) {
-
-        Map<String, List<Unit>> analysisListMap = new HashMap<>();
-
-        for (String className : classNames) {
-
-            SootClass sClass = Scene.v().loadClassAndSupport(className);
-
-            sClass.setApplicationClass();
-
-            for (SootMethod method : sClass.getMethods()) {
-                SlicingResult slicingResult = getInfluencingInstructions(slicingCriteria, method);
-
-                if (slicingResult != null) {
-                    analysisListMap.put(method.toString() + "[" + slicingResult.getCallSiteInfo().getLineNumber() + "]", slicingResult.getAnalysisResult());
-                }
-            }
-        }
-
-        return analysisListMap;
-    }
-
-    /**
-     * <p>getInfluencingInstructions.</p>
-     *
-     * @param slicingCriteria a {@link slicer.forward.SlicingCriteria} object.
-     * @param m               a {@link soot.SootMethod} object.
-     * @return a {@link slicer.forward.SlicingResult} object.
-     */
-    public static SlicingResult getInfluencingInstructions(SlicingCriteria slicingCriteria,
-                                                           SootMethod m) {
-        if (m.isConcrete()) {
-
-            Body b = m.retrieveActiveBody();
-
-            UnitGraph graph = new ExceptionalUnitGraph(b);
-            ForwardInfluenceInstructions vbe = new ForwardInfluenceInstructions(graph, slicingCriteria);
-            return vbe.getSlicingResult();
-        }
-        return null;
     }
 }

@@ -53,6 +53,14 @@ public enum Version {
     //endregion
 
     //region Methods
+
+    /**
+     * <p>retrieveByMajor.</p>
+     *
+     * @param majorVersion a int.
+     * @return a {@link frontEnd.Interface.Version} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
     public static Version retrieveByMajor(int majorVersion) throws ExceptionHandler {
         return Arrays.stream(Version.values())
                 .filter(v -> v.getMajorVersion() == majorVersion)
@@ -62,12 +70,24 @@ public enum Version {
                                 new ExceptionHandler("Major Version: " + majorVersion + " not valid.", ExceptionId.FILE_AFK));
     }
 
-    public boolean supportedFile() {
-        return this.getVersionNumber() <= Utils.supportedVersion.getVersionNumber();
-    }
-
+    /**
+     * <p>supportedByMajor.</p>
+     *
+     * @param majorVersion a int.
+     * @return a boolean.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
     public static boolean supportedByMajor(int majorVersion) throws ExceptionHandler {
         return retrieveByMajor(majorVersion).getVersionNumber() <= Utils.supportedVersion.getVersionNumber();
+    }
+
+    /**
+     * <p>supportedFile.</p>
+     *
+     * @return a boolean.
+     */
+    public boolean supportedFile() {
+        return this.getVersionNumber() <= Utils.supportedVersion.getVersionNumber();
     }
     //endregion
 }

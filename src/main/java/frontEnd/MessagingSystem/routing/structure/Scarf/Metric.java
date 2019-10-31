@@ -29,6 +29,7 @@ import java.io.Serializable;
 })
 public class Metric implements Serializable {
 
+    private final static long serialVersionUID = 8542989459224252190L;
     /**
      * id
      * <p>
@@ -57,7 +58,6 @@ public class Metric implements Serializable {
      */
     @JsonProperty("Value")
     private String value;
-    private final static long serialVersionUID = 8542989459224252190L;
 
     /**
      * No args constructor for use in serialization
@@ -287,13 +287,17 @@ public class Metric implements Serializable {
         return new ToStringBuilder(this).append("id", id).append("location", location).append("_class", _class).append("method", method).append("type", type).append("value", value).toString();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(id).append(_class).append(location).append(value).append(method).append(type).toHashCode();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object other) {
         if (other == this) {

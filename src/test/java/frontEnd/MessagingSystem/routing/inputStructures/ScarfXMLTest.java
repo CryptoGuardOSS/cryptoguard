@@ -14,7 +14,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import rule.engine.EngineType;
 import test.TestUtilities;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Properties;
 
 import static junit.framework.TestCase.assertEquals;
@@ -34,12 +34,12 @@ import static org.mockito.Mockito.spy;
 @RunWith(MockitoJUnitRunner.class)
 public class ScarfXMLTest {
 
+    private final EngineType type = EngineType.APK;
+    private final String dependencies = null;
     //region Attributes
     private EnvironmentInformation testInfo;
     private String[] args;
     private ScarfXML inputTest;
-    private final EngineType type = EngineType.APK;
-    private final String dependencies = null;
     private String assessment_start_ts;
     private String build_fw;
     private String build_fw_version;
@@ -154,7 +154,7 @@ public class ScarfXMLTest {
         //endregion
 
         try {
-            testInfo = new EnvironmentInformation(Arrays.asList("test"), EngineType.JAR, Listing.ScarfXML, null, Arrays.asList("test"), "");
+            testInfo = new EnvironmentInformation(Collections.singletonList("test"), EngineType.JAR, Listing.ScarfXML, null, Collections.singletonList("test"), "");
 
             doReturn(sampleProp).when(inputTest).loadProperties(Mockito.anyString());
 

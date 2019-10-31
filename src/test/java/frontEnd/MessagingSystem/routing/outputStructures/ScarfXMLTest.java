@@ -9,7 +9,7 @@ import org.junit.Before;
 import rule.engine.EngineType;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
@@ -48,7 +48,7 @@ public class ScarfXMLTest {
 
         this.type = EngineType.JAR;
 
-        this.env = new EnvironmentInformation(Arrays.asList(jarOne), this.type, Listing.ScarfXML, null, null, null);
+        this.env = new EnvironmentInformation(Collections.singletonList(jarOne), this.type, Listing.ScarfXML, null, null, null);
         //region Setting Scarf XML Required Fields
         this.env.setAssessmentFramework("STUBBED");
         this.env.setAssessmentFrameworkVersion("STUBBED");

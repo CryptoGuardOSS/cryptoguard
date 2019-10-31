@@ -39,6 +39,7 @@ public class BaseAnalyzerRouting {
      * @param snippetPath       a {@link java.util.List} object.
      * @param projectDependency a {@link java.util.List} object.
      * @param checker           a {@link rule.base.BaseRuleChecker} object.
+     * @param mainKlass         a {@link java.lang.String} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static void environmentRouting(EngineType routingType,
@@ -84,6 +85,7 @@ public class BaseAnalyzerRouting {
      * @param projectJarPath        a {@link java.lang.String} object.
      * @param projectDependencyPath a {@link java.lang.String} object.
      * @param checker               a {@link rule.base.BaseRuleChecker} object.
+     * @param mainKlass             a {@link java.lang.String} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static void setupBaseJar(String criteriaClass,
@@ -117,6 +119,7 @@ public class BaseAnalyzerRouting {
      * @param criteriaParam  a int.
      * @param projectJarPath a {@link java.lang.String} object.
      * @param checker        a {@link rule.base.BaseRuleChecker} object.
+     * @param mainKlass      a {@link java.lang.String} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static void setupBaseAPK(String criteriaClass,
@@ -149,6 +152,7 @@ public class BaseAnalyzerRouting {
      * @param snippetPath       a {@link java.util.List} object.
      * @param projectDependency a {@link java.util.List} object.
      * @param checker           a {@link rule.base.BaseRuleChecker} object.
+     * @param mainKlass         a {@link java.lang.String} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static void setupBaseDir(String criteriaClass,
@@ -184,6 +188,7 @@ public class BaseAnalyzerRouting {
      * @param snippetPath       a {@link java.util.List} object.
      * @param projectDependency a {@link java.util.List} object.
      * @param checker           a {@link rule.base.BaseRuleChecker} object.
+     * @param mainKlass         a {@link java.lang.String} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static void setupBaseJava(String criteriaClass,
@@ -209,7 +214,7 @@ public class BaseAnalyzerRouting {
         );
         log.debug("Setting the soot class path as: " + Scene.v().getSootClassPath());
 
-    
+
         for (String dependency : Utils.getJarsInDirectories(projectDependency)) {
             classNames.addAll(Utils.getClassNamesFromJarArchive(dependency));
         }
@@ -230,6 +235,7 @@ public class BaseAnalyzerRouting {
      * @param sourceJavaClasses     a {@link java.util.List} object.
      * @param projectDependencyPath a {@link java.util.List} object.
      * @param checker               a {@link rule.base.BaseRuleChecker} object.
+     * @param mainKlass             a {@link java.lang.String} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static void setupBaseJavaClass(String criteriaClass,
@@ -276,6 +282,7 @@ public class BaseAnalyzerRouting {
      * @param criteriaMethod a {@link java.lang.String} object.
      * @param criteriaParam  a int.
      * @param checker        a {@link rule.base.BaseRuleChecker} object.
+     * @param mainKlass      a {@link java.lang.String} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static void loadBaseSootInfo(List<String> classNames, String criteriaClass,

@@ -57,7 +57,7 @@ public class ScarfXML extends Structure {
         log.trace("Adding all of the collected issues");
         for (AnalysisIssue in : super.getCollection()) {
             log.debug("Marshalling and adding the issue: " + in.getInfo());
-            BugInstance marshalled = marshalling(in, super.getCwes(), super.getSource().getFileOutName(), numOfBugs++, super.getSource().getBuildId(), super.getSource().getxPath());
+            BugInstance marshalled = marshalling(in, super.getCwes(), super.getSource().getFileOutName(), numOfBugs++, super.getSource().getBuildId(), super.getSource().getXPath());
             report.getBugInstance().add(marshalled);
         }
         //endregion
@@ -76,7 +76,7 @@ public class ScarfXML extends Structure {
 
         //region Marshalling
         log.trace("Creating the marshaller");
-        String xmlStream = JacksonSerializer.serialize(report, super.getSource().prettyPrint(), Listing.ScarfXML.getJacksonType());
+        String xmlStream = JacksonSerializer.serialize(report, super.getSource().getPrettyPrint(), Listing.ScarfXML.getJacksonType());
         //endregion
 
         String footer = frontEnd.MessagingSystem.routing.outputStructures.common.ScarfXML.writeFooter(super.getSource());

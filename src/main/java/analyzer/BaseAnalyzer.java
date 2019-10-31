@@ -196,19 +196,14 @@ public class BaseAnalyzer {
             for (Analysis analysis : calleeAnalysisList) {
                 Analysis newAnalysis = new Analysis();
 
-                StringBuilder newChain = new StringBuilder(callSiteInfo.getCaller().toString().length()
-                        + callSiteInfo.getCallee().toString().length()
-                        + analysis.getMethodChain().length() + 10);
-
-                newChain.append(callSiteInfo.getCaller())
-                        .append("[")
-                        .append(callSiteInfo.getLineNumber()).append("]")
-                        .append("--->")
-                        .append(callSiteInfo.getCallee())
-                        .append("--->")
-                        .append(analysis.getMethodChain());
-
-                newAnalysis.setMethodChain(newChain.toString());
+                String newChain = callSiteInfo.getCaller() +
+                        "[" +
+                        callSiteInfo.getLineNumber() + "]" +
+                        "--->" +
+                        callSiteInfo.getCallee() +
+                        "--->" +
+                        analysis.getMethodChain();
+                newAnalysis.setMethodChain(newChain);
                 newAnalysis.setAnalysisResult(analysis.getAnalysisResult());
                 newAnalysis.getAnalysisResult().addAll(methodSlicingResult);
                 newAnalysis.getAnalysisResult().addAll(slicingResult.getSlicingResult());
@@ -223,16 +218,13 @@ public class BaseAnalyzer {
         } else {
             Analysis newAnalysis = new Analysis();
 
-            StringBuilder newChain = new StringBuilder();
-
-            newChain.append(callSiteInfo.getCaller())
-                    .append("[")
-                    .append(callSiteInfo.getLineNumber()).append("]")
-                    .append("--->")
-                    .append(callSiteInfo.getCallee());
-
-            newAnalysis.setMethodChain(newChain.toString());
-            newAnalysis.setAnalysisResult(new ArrayList<UnitContainer>());
+            String newChain = callSiteInfo.getCaller() +
+                    "[" +
+                    callSiteInfo.getLineNumber() + "]" +
+                    "--->" +
+                    callSiteInfo.getCallee();
+            newAnalysis.setMethodChain(newChain);
+            newAnalysis.setAnalysisResult(new ArrayList<>());
             newAnalysis.getAnalysisResult().addAll(methodSlicingResult);
             newAnalysis.getAnalysisResult().addAll(slicingResult.getSlicingResult());
 
@@ -255,15 +247,13 @@ public class BaseAnalyzer {
         if (calleeAnalysisList != null && !calleeAnalysisList.isEmpty()) {
             for (Analysis analysis : calleeAnalysisList) {
                 Analysis newAnalysis = new Analysis();
-                StringBuilder newChain = new StringBuilder();
 
-                newChain.append(callSiteInfo.getCaller())
-                        .append("[")
-                        .append(callSiteInfo.getLineNumber()).append("]")
-                        .append("--->")
-                        .append(analysis.getMethodChain());
-
-                newAnalysis.setMethodChain(newChain.toString());
+                String newChain = callSiteInfo.getCaller() +
+                        "[" +
+                        callSiteInfo.getLineNumber() + "]" +
+                        "--->" +
+                        analysis.getMethodChain();
+                newAnalysis.setMethodChain(newChain);
 
                 newAnalysis.setAnalysisResult(analysis.getAnalysisResult());
                 newAnalysis.getAnalysisResult().addAll(slicingResult);
@@ -272,16 +262,13 @@ public class BaseAnalyzer {
         } else {
             Analysis newAnalysis = new Analysis();
 
-            StringBuilder newChain = new StringBuilder();
-
-            newChain.append(callSiteInfo.getCaller())
-                    .append("[")
-                    .append(callSiteInfo.getLineNumber()).append("]")
-                    .append("--->")
-                    .append(callSiteInfo.getCallee());
-
-            newAnalysis.setMethodChain(newChain.toString());
-            newAnalysis.setAnalysisResult(new ArrayList<UnitContainer>());
+            String newChain = callSiteInfo.getCaller() +
+                    "[" +
+                    callSiteInfo.getLineNumber() + "]" +
+                    "--->" +
+                    callSiteInfo.getCallee();
+            newAnalysis.setMethodChain(newChain);
+            newAnalysis.setAnalysisResult(new ArrayList<>());
             newAnalysis.getAnalysisResult().addAll(slicingResult);
             newAnalysisList.add(newAnalysis);
         }

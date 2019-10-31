@@ -28,30 +28,6 @@ public class UntrustedPrngFinder implements RuleChecker {
         UNTRUSTED_PRNGS.add("java.lang.Math: double random");
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, List<String> sourcePaths, OutputStructure output, String mainKlass) throws ExceptionHandler {
-
-        Map<String, List<Unit>> analysisLists = getUntrustedPrngInstructions(
-                UniqueRuleAnalyzer.environmentRouting(projectJarPath, projectDependencyPath, type));
-
-        if (!analysisLists.isEmpty()) {
-            for (String method : analysisLists.keySet()) {
-                List<Unit> analysis = analysisLists.get(method);
-
-                if (!analysis.isEmpty()) {
-                    //TODO - Location not showing up
-                    AnalysisIssue issue = new AnalysisIssue(method, 13,
-                            "Found: Untrused PRNG (java.util.Random)", sourcePaths);
-
-                    output.addIssue(issue);
-                }
-            }
-        }
-    }
-
     private static Map<String, List<Unit>> getUntrustedPrngInstructions(List<String> classNames) {
 
         Map<String, List<Unit>> analysisList = new HashMap<>();
@@ -85,5 +61,29 @@ public class UntrustedPrngFinder implements RuleChecker {
         }
 
         return analysisList;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, List<String> sourcePaths, OutputStructure output, String mainKlass) throws ExceptionHandler {
+
+        Map<String, List<Unit>> analysisLists = getUntrustedPrngInstructions(
+                UniqueRuleAnalyzer.environmentRouting(projectJarPath, projectDependencyPath, type));
+
+        if (!analysisLists.isEmpty()) {
+            for (String method : analysisLists.keySet()) {
+                List<Unit> analysis = analysisLists.get(method);
+
+                if (!analysis.isEmpty()) {
+                    //TODO - Location not showing up
+                    AnalysisIssue issue = new AnalysisIssue(method, 13,
+                            "Found: Untrused PRNG (java.util.Random)", sourcePaths);
+
+                    output.addIssue(issue);
+                }
+            }
+        }
     }
 }
