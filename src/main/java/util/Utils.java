@@ -31,6 +31,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -63,9 +65,9 @@ public class Utils {
      */
     public final static String lineSep = System.getProperty("line.separator");
     /**
-     * Constant <code>projectVersion="V03.08.00"</code>
+     * Constant <code>projectVersion="V03.08.01"</code>
      */
-    public final static String projectVersion = "V03.08.00";
+    public final static String projectVersion = "V03.08.01";
     /**
      * Constant <code>projectName="CryptoGuard"</code>
      */
@@ -258,6 +260,31 @@ public class Utils {
      */
     public static Boolean containsAny(String input, List<String> stringsToCheck) {
         return stringsToCheck.stream().anyMatch(input::contains);
+    }
+
+    /**
+     * <p>listf.</p>
+     *
+     * @param directoryName a {@link java.lang.String} object.
+     * @return a {@link java.util.List} object.
+     */
+    public static List<String> retrieveFilesPredicate(String path, Predicate<String> fileCheck, Function<File, String> functor) throws ExceptionHandler {
+
+        List<String> output = new ArrayList<>();
+        for (File file : Objects.requireNonNull(new File(verifyDir(path)).listFiles()))
+        {
+            if (file.isFile() && fileCheck.test(file.getName()))
+            {
+                if (functor == null)
+                    output.add(file.getAbsolutePath());
+                else
+                    output.add(functor.apply(file));
+            }
+            else if (file.isDirectory())
+                output.addAll(retrieveFilesPredicate(file.getAbsolutePath(), fileCheck, functor));
+        }
+
+        return output;
     }
     //endregion
 

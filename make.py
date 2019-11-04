@@ -4,6 +4,7 @@ import argparse
 # Imports
 import os
 import shlex
+import signal
 import subprocess
 import sys
 import time
@@ -88,7 +89,7 @@ class Utils(object):
     def tests(dyct):
         global numTests
         passed, failed, skipped, testNum = 0,0,0,1
-        start, failedTests, verbose = time.time(), [], False
+        start, failedTests, verbose, skippedTests = time.time(), [], False, []
         print('==============================')
         for key, value in dyct.items():
             subpassed, subfailed, subskipped = 0,0,0
@@ -99,6 +100,7 @@ class Utils(object):
                     skipped = skipped + 1
                     subskipped = subskipped + 1
                     print('Skip | ', end='', flush=True)
+                    skippedTests += [testName]
                 else:
                     testResult = Utils.runTest(testName)
                     if (testResult):
@@ -127,6 +129,11 @@ class Utils(object):
             for test in failedTests:
                 print(test)
             print('==============================')
+        if len(skippedTests) > 0:
+            print('Skipped Tests')
+            for test in skippedTests:
+                print(test)
+            print('==============================')
 
     def start():
         curChoices = list(routers.keys())
@@ -148,9 +155,13 @@ routers = {
     }
 }
 
+def signal_handler(sig, frame):
+        print('\nExiting...')
+        sys.exit(0)
 
 '''####################################
 #The main runner of this file, intended to be ran from
 '''  ####################################
 if __name__ == '__main__':
+    signal.signal(signal.SIGINT, signal_handler)
     Utils.start()
