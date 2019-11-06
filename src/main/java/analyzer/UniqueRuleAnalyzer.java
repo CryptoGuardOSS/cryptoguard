@@ -125,7 +125,7 @@ public class UniqueRuleAnalyzer {
 
         String srcPaths = String.join(":", snippetPath);
 
-        Options.v().set_soot_classpath(Utils.getBaseSOOT7() +
+        Options.v().set_soot_classpath(Utils.getBaseSOOT() +
                 ":" + srcPaths + Utils.buildSootClassPath(projectDependencyPath));
 
         Options.v().set_output_format(Options.output_format_jimple);
@@ -152,7 +152,7 @@ public class UniqueRuleAnalyzer {
         List<String> classNames = Utils.retrieveFullyQualifiedName(snippetPath);
 
         StringBuilder sootPath = new StringBuilder();
-        sootPath.append(Utils.getBaseSOOT7())
+        sootPath.append(Utils.getBaseSOOT())
                 .append(":")
                 .append(String.join(":", snippetPath));
 

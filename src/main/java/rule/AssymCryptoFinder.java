@@ -24,14 +24,7 @@ import java.util.Map;
  */
 public class AssymCryptoFinder extends BaseRuleChecker {
 
-    //region TODO Check this
-    String rule = "00";
-    private Map<UnitContainer, List<String>> predictableSourcMap = new HashMap<>();
-    //endregion
-
     private static final List<Criteria> CRITERIA_LIST = new ArrayList<>();
-
-    private List<String> crypto;
 
     static {
 
@@ -53,7 +46,12 @@ public class AssymCryptoFinder extends BaseRuleChecker {
         criteria3.setParam(0);
         CRITERIA_LIST.add(criteria3);
     }
+    //endregion
 
+    //region TODO Check this
+    String rule = "00";
+    private Map<UnitContainer, List<String>> predictableSourcMap = new HashMap<>();
+    private List<String> crypto;
     private ArrayList<String> occurrences = new ArrayList<>();
 
     /**
@@ -91,7 +89,9 @@ public class AssymCryptoFinder extends BaseRuleChecker {
         return occurrences;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Criteria> getCriteriaList() {
         return CRITERIA_LIST;
@@ -106,7 +106,9 @@ public class AssymCryptoFinder extends BaseRuleChecker {
         this.crypto = crypto;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler {
         //region New Analysis TODO - Verify this

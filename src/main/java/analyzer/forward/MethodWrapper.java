@@ -44,6 +44,15 @@ public class MethodWrapper {
     }
 
     /**
+     * <p>Setter for the field <code>method</code>.</p>
+     *
+     * @param method a {@link soot.SootMethod} object.
+     */
+    public void setMethod(SootMethod method) {
+        this.method = method;
+    }
+
+    /**
      * <p>Getter for the field <code>calleeList</code>.</p>
      *
      * @return a {@link java.util.List} object.
@@ -59,15 +68,6 @@ public class MethodWrapper {
      */
     public void setCalleeList(List<MethodWrapper> calleeList) {
         this.calleeList = calleeList;
-    }
-
-    /**
-     * <p>Setter for the field <code>method</code>.</p>
-     *
-     * @param method a {@link soot.SootMethod} object.
-     */
-    public void setMethod(SootMethod method) {
-        this.method = method;
     }
 
     /**
@@ -102,13 +102,17 @@ public class MethodWrapper {
 
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return method.toString().hashCode();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return method.toString();

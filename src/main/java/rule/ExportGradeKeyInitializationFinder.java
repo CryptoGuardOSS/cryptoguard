@@ -63,13 +63,11 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
 
     }
 
-    private Map<UnitContainer, List<String>> predictableSourcMap = new HashMap<>();
-    private Map<UnitContainer, List<String>> othersSourceMap = new HashMap<>();
-
-    private int minSize;
     private final String rule = "5";
     private final String ruleDesc = RULE_VS_DESCRIPTION.get(rule);
-
+    private Map<UnitContainer, List<String>> predictableSourcMap = new HashMap<>();
+    private Map<UnitContainer, List<String>> othersSourceMap = new HashMap<>();
+    private int minSize;
     private ArrayList<String> initializationCallsites;
 
     /**
@@ -80,7 +78,9 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
         return CRITERIA_LIST;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void analyzeSlice(Analysis analysis) {
         if (analysis.getAnalysisResult().isEmpty()) {
@@ -142,7 +142,7 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
                 continue;
             }
 
-            UnitContainer invokeResult = Utils.isArgumentOfInvoke(analysis, index, new ArrayList<UnitContainer>());
+            UnitContainer invokeResult = Utils.isArgumentOfInvoke(analysis, index, new ArrayList<>());
 
             if (invokeResult != null && invokeResult instanceof InvokeUnitContainer) {
 
@@ -251,7 +251,9 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
         this.initializationCallsites = initializationCallsites;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler {
 

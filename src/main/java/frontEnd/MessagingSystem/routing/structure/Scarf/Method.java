@@ -27,6 +27,7 @@ import java.io.Serializable;
 })
 public class Method implements Serializable {
 
+    private final static long serialVersionUID = -3356334068209554081L;
     /**
      * id
      * <p>
@@ -42,11 +43,9 @@ public class Method implements Serializable {
     @JsonProperty("-primary")
     @JacksonXmlProperty(isAttribute = true, localName = "primary")
     private boolean primary;
-
     @JacksonXmlText
     @JsonProperty("-self")
     private String self;
-    private final static long serialVersionUID = -3356334068209554081L;
 
     /**
      * No args constructor for use in serialization
@@ -181,13 +180,17 @@ public class Method implements Serializable {
         return new ToStringBuilder(this).append("id", id).append("primary", primary).append("self", self).toString();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(id).append(primary).append(self).toHashCode();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object other) {
         if (other == this) {

@@ -26,6 +26,7 @@ import java.io.Serializable;
 })
 public class Location implements Serializable {
 
+    private final static long serialVersionUID = 1728740023126089054L;
     /**
      * (Required)
      */
@@ -40,7 +41,6 @@ public class Location implements Serializable {
     private int lineNumber;
     @JsonProperty("ColumnNumber")
     private int columnNumber;
-    private final static long serialVersionUID = 1728740023126089054L;
 
     /**
      * No args constructor for use in serialization
@@ -51,9 +51,9 @@ public class Location implements Serializable {
     /**
      * <p>Constructor for Location.</p>
      *
-     * @param lineNumber a int.
-     * @param className a {@link java.lang.String} object.
-     * @param methodName a {@link java.lang.String} object.
+     * @param lineNumber   a int.
+     * @param className    a {@link java.lang.String} object.
+     * @param methodName   a {@link java.lang.String} object.
      * @param columnNumber a int.
      */
     public Location(String className, String methodName, int lineNumber, int columnNumber) {
@@ -196,13 +196,17 @@ public class Location implements Serializable {
         return new ToStringBuilder(this).append("className", className).append("methodName", methodName).append("lineNumber", lineNumber).append("columnNumber", columnNumber).toString();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(lineNumber).append(className).append(methodName).append(columnNumber).toHashCode();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object other) {
         if (other == this) {

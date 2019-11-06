@@ -28,6 +28,7 @@ import java.io.Serializable;
 })
 public class Location implements Serializable {
 
+    private final static long serialVersionUID = 1200285316537190850L;
     /**
      * (Required)
      */
@@ -43,7 +44,6 @@ public class Location implements Serializable {
     private int endColumn;
     @JsonProperty("Explanation")
     private String explanation;
-    private final static long serialVersionUID = 1200285316537190850L;
 
     /**
      * No args constructor for use in serialization
@@ -265,13 +265,17 @@ public class Location implements Serializable {
         return new ToStringBuilder(this).append("sourceFile", sourceFile).append("startLine", startLine).append("endLine", endLine).append("startColumn", startColumn).append("endColumn", endColumn).append("explanation", explanation).toString();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(startLine).append(sourceFile).append(explanation).append(endLine).append(startColumn).append(endColumn).toHashCode();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object other) {
         if (other == this) {

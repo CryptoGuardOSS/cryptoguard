@@ -24,6 +24,7 @@ import java.io.Serializable;
 })
 public class LineNum implements Serializable {
 
+    private final static long serialVersionUID = 1255562489400430665L;
     /**
      * (Required)
      */
@@ -34,7 +35,6 @@ public class LineNum implements Serializable {
      */
     @JsonProperty("End")
     private int end;
-    private final static long serialVersionUID = 1255562489400430665L;
 
     /**
      * No args constructor for use in serialization
@@ -124,13 +124,17 @@ public class LineNum implements Serializable {
         return new ToStringBuilder(this).append("start", start).append("end", end).toString();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(start).append(end).toHashCode();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object other) {
         if (other == this) {

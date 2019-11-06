@@ -34,6 +34,10 @@ public class EntryPointTest_JAR {
 
     //region Test Environment Setup
 
+    public static String replace(String temp) {
+        return temp.replace(".xml", ".yaml");
+    }
+
     /**
      * <p>setUp.</p>
      *
@@ -46,6 +50,7 @@ public class EntryPointTest_JAR {
         G.reset();
         //endregion
     }
+    //endregion
 
     /**
      * <p>tearDown.</p>
@@ -55,7 +60,6 @@ public class EntryPointTest_JAR {
     @After
     public void tearDown() throws Exception {
     }
-    //endregion
 
     //region Tests
     @Test
@@ -181,10 +185,6 @@ public class EntryPointTest_JAR {
                 assertNull(e);
             }
         }
-    }
-
-    public static String replace(String temp) {
-        return temp.replace(".xml", ".yaml");
     }
 
     /**

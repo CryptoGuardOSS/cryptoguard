@@ -173,21 +173,12 @@ public class AnalysisIssue {
     //region Getters/Setters
 
     /**
-     * <p>Setter for the field <code>className</code>.</p>
+     * <p>Getter for the field <code>fullPathName</code>.</p>
      *
-     * @param className a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
      */
-    public void setClassName(String className) {
-        this.className = className;
-    }
-
-    /**
-     * <p>Setter for the field <code>info</code>.</p>
-     *
-     * @param info a {@link java.lang.String} object.
-     */
-    public void setInfo(String info) {
-        this.info = info;
+    public String getFullPathName() {
+        return fullPathName;
     }
 
     /**
@@ -199,16 +190,6 @@ public class AnalysisIssue {
         this.fullPathName = fullPathName;
     }
 
-
-    /**
-     * <p>Getter for the field <code>fullPathName</code>.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    public String getFullPathName() {
-        return fullPathName;
-    }
-
     /**
      * <p>Getter for the field <code>className</code>.</p>
      *
@@ -216,6 +197,15 @@ public class AnalysisIssue {
      */
     public String getClassName() {
         return className;
+    }
+
+    /**
+     * <p>Setter for the field <code>className</code>.</p>
+     *
+     * @param className a {@link java.lang.String} object.
+     */
+    public void setClassName(String className) {
+        this.className = className;
     }
 
     /**
@@ -258,7 +248,7 @@ public class AnalysisIssue {
     public ArrayList<AnalysisLocation> getLocations() {
 
         if (this.locations == null) {
-            this.locations = new ArrayList<AnalysisLocation>();
+            this.locations = new ArrayList<>();
         }
 
         return locations;
@@ -302,6 +292,15 @@ public class AnalysisIssue {
      */
     public String getInfo() {
         return info;
+    }
+
+    /**
+     * <p>Setter for the field <code>info</code>.</p>
+     *
+     * @param info a {@link java.lang.String} object.
+     */
+    public void setInfo(String info) {
+        this.info = info;
     }
     //endregion
 }

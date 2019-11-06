@@ -19,14 +19,14 @@ public enum Listing {
     Legacy("Legacy", "L", ".txt", true, null),
     ScarfXML("ScarfXML", "SX", null, true, JacksonSerializer.JacksonType.XML),
     Default("Default", "D", null, true, JacksonSerializer.JacksonType.JSON);
+    private final String blockPath = "frontEnd.MessagingSystem.routing.outputStructures.block.";
+    private final String inputPath = "frontEnd.MessagingSystem.routing.inputStructures";
+    private final String streamPath = "frontEnd.MessagingSystem.routing.outputStructures.stream.";
     //endregion
     //region Attributes
     private String type;
     private String flag;
     private String outputFileExt;
-    private final String blockPath = "frontEnd.MessagingSystem.routing.outputStructures.block.";
-    private final String inputPath = "frontEnd.MessagingSystem.routing.inputStructures";
-    private final String streamPath = "frontEnd.MessagingSystem.routing.outputStructures.stream.";
     private Boolean streamEnabled;
     private JacksonSerializer.JacksonType jacksonType;
     //endregion
@@ -83,6 +83,22 @@ public enum Listing {
     }
 
     /**
+     * <p>getShortHelp.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public static String getShortHelp() {
+        StringBuilder helpString = new StringBuilder("{");
+
+        for (Listing in : Listing.values())
+            helpString.append(in.getType()).append(": ").append(in.getFlag()).append(", ");
+
+        helpString.append("}");
+
+        return helpString.toString();
+    }
+
+    /**
      * Getter for flag
      *
      * <p>getFlag()</p>
@@ -92,6 +108,11 @@ public enum Listing {
     public String getFlag() {
         return flag;
     }
+    //endregion
+
+    //region Helpers Based on the enum type
+
+    //region Output Helpers
 
     /**
      * Getter for type
@@ -103,11 +124,6 @@ public enum Listing {
     public String getType() {
         return type;
     }
-    //endregion
-
-    //region Helpers Based on the enum type
-
-    //region Output Helpers
 
     /**
      * {@inheritDoc}
@@ -116,6 +132,10 @@ public enum Listing {
     public String toString() {
         return "{ \"type\": \"" + this.type + "\", \"flag\": \"" + this.flag + "\"}";
     }
+
+    //endregion
+
+    //region InputHelpers
 
     /**
      * <p>getTypeOfMessagingOutput.</p>
@@ -147,10 +167,6 @@ public enum Listing {
         }
 
     }
-
-    //endregion
-
-    //region InputHelpers
 
     /**
      * <p>Getter for the field <code>outputFileExt</code>.</p>
@@ -204,22 +220,6 @@ public enum Listing {
         } catch (Exception e) {
             return new frontEnd.MessagingSystem.routing.inputStructures.Legacy().helpInfo();
         }
-    }
-
-    /**
-     * <p>getShortHelp.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    public static String getShortHelp() {
-        StringBuilder helpString = new StringBuilder("{");
-
-        for (Listing in : Listing.values())
-            helpString.append(in.getType()).append(": ").append(in.getFlag()).append(", ");
-
-        helpString.append("}");
-
-        return helpString.toString();
     }
     //endregion
 

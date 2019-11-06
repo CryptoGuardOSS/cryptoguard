@@ -31,92 +31,115 @@ public class EnvironmentInformation {
 
     //region Attributes
     //region Self Generated
+    @Getter
     private final Properties Properties = new Properties();
+    @Getter
     private final String PropertiesFile = "gradle.properties";
+    @Getter
     private final String ToolFramework;
+    @Getter
     private final String ToolFrameworkVersion;
-    private String BuildFramework;
-    private String BuildFrameworkVersion;
+    @Getter
     private final String platformName = Utils.getPlatform();
-    private String packageName = "UNKNOWN";
-    private String packageVersion = "UNKNOWN";
-    private boolean showTimes = false;
-    private boolean addExperimentalRules = false;
-    private String rawCommand;
-    @Getter
-    @Setter
-    private String main;
-    @Getter
-    @Setter
-    private boolean overWriteOutput = false;
-    @Getter
-    @Setter
-    private String targetProjectName;
-    @Getter
-    @Setter
-    private String targetProjectVersion;
-    @Getter
-    @Setter
-    private Boolean isGradle;
     //endregion
     //region Required Elements Set From the Start
-    private final List<String> Source;
-    private final List<String> sourcePaths; //Could this be intertwined with source?
-    private Boolean prettyPrint = false;
     @Getter
-    @Setter
-    private Boolean killJVM = true;
+    private final List<String> Source;
+    @Getter
+    private final List<String> sourcePaths; //Could this be intertwined with source?
     //endregion
     PrintStream old;
+    @Getter @Setter
+    private String BuildFramework;
+    @Getter @Setter
+    private String BuildFrameworkVersion;
+    @Getter @Setter
+    private String packageName = "UNKNOWN";
+    @Getter @Setter
+    private String packageVersion = "UNKNOWN";
+    @Getter @Setter
+    private boolean showTimes = false;
+    @Getter @Setter
+    private boolean addExperimentalRules = false;
+    @Getter @Setter
+    private String rawCommand;
+    @Getter @Setter
+    private String main;
+    @Getter @Setter
+    private boolean overWriteOutput = false;
+    @Getter @Setter
+    private String targetProjectName;
+    @Getter @Setter
+    private String targetProjectVersion;
+    @Getter @Setter
+    private Boolean isGradle;
+    @Getter @Setter
+    private Boolean prettyPrint = false;
+    @Getter @Setter
+    private Boolean killJVM = true;
+    @Setter
     private List<String> dependencies;
+    @Getter @Setter
     private EngineType sourceType;
+    @Getter @Setter
     private Listing messagingType;
+    @Setter
     private String UUID;
+    @Getter @Setter
     private Long startAnalyisisTime;
+    @Getter @Setter
     private Long analysisMilliSeconds;
+    @Getter @Setter
     private String fileOut;
+    @Getter @Setter
     private Boolean streaming = false;
     //endregion
     //region From Outside and defaulted unless set
+    @Getter @Setter
     private String AssessmentFramework;
+    @Getter @Setter
     private String AssessmentFrameworkVersion;
+    @Getter @Setter
     private DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd_HH:mm:ss");
     private DateTime startTime = new DateTime();
+    @Getter @Setter
     private String AssessmentStartTime = formatter.print(startTime);
+    @Getter @Setter
     private String ParserName = "UNKNOWN";
+    @Getter @Setter
     private String ParserVersion = "UNKNOWN";
+    @Getter @Setter
     private String packageRootDir = "UNKNOWN";
+    @Getter @Setter
     private String buildRootDir = "UNKNOWN";
+    @Setter
     private Integer buildId;
+    @Getter @Setter
     private String xPath;
+    @Getter @Setter
     private Boolean printOut = false;
+    @Setter
     private OutputStructure output;
     //TODO - Implement an option to specify the base package
     //@Getter @Setter private String basePackage;
     //endregion
+    @Setter
     private ByteArrayOutputStream sootErrors = new ByteArrayOutputStream();
     //region Heuristics from Utils
-    @Getter
-    @Setter
+    @Getter @Setter
     private Boolean displayHeuristics = false;
-    @Getter
-    @Setter
+    @Getter @Setter
     private int NUM_ORTHOGONAL = 0;
-    @Getter
-    @Setter
+    @Getter @Setter
     private int NUM_CONSTS_TO_CHECK = 0;
-    @Getter
-    @Setter
+    @Getter @Setter
     private int NUM_SLICES = 0;
-    @Getter
-    @Setter
+    @Getter @Setter
     private int NUM_HEURISTIC = 0;
-    @Getter
-    @Setter
+    @Getter @Setter
     private double SLICE_AVERAGE = 0;
-    @Getter
-    @Setter
-    private ArrayList<String> DEPTH_COUNT = new ArrayList<String>();
+    @Getter @Setter
+    private ArrayList<String> DEPTH_COUNT = new ArrayList<>();
     //endregion
     //region Constructor
 
@@ -176,34 +199,6 @@ public class EnvironmentInformation {
     //endregion
 
     //region Getters and Setters
-
-    /**
-     * <p>Getter for the field <code>rawCommand</code>.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    public String getRawCommand() {
-        return rawCommand;
-    }
-
-    /**
-     * <p>Setter for the field <code>rawCommand</code>.</p>
-     *
-     * @param rawCommand a {@link java.lang.String} object.
-     */
-    public void setRawCommand(String rawCommand) {
-        this.rawCommand = rawCommand;
-    }
-
-    /**
-     * <p>getAssessmentStartTime.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    public String getAssessmentStartTime() {
-        return AssessmentStartTime;
-    }
-
     /**
      * <p>addToDepth_Count.</p>
      *
@@ -211,6 +206,31 @@ public class EnvironmentInformation {
      */
     public void addToDepth_Count(String item) {
         this.DEPTH_COUNT.add(item);
+    }
+
+    /**
+     * <p>startAnalysis.</p>
+     */
+    public void startAnalysis() {
+        this.startAnalyisisTime = System.currentTimeMillis();
+    }
+
+    /**
+     * <p>stopAnalysis.</p>
+     */
+    public void stopAnalysis() {
+        this.analysisMilliSeconds = System.currentTimeMillis() - this.startAnalyisisTime;
+    }
+
+    /**
+     * Getter for sootErrors
+     *
+     * <p>getSootErrors()</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getSootErrors() {
+        return StringUtils.trimToEmpty(sootErrors.toString());
     }
 
     /**
@@ -248,201 +268,12 @@ public class EnvironmentInformation {
     }
 
     /**
-     * <p>setBuildFramework.</p>
-     *
-     * @param buildFramework a {@link java.lang.String} object.
-     */
-    public void setBuildFramework(String buildFramework) {
-        BuildFramework = buildFramework;
-    }
-
-    /**
-     * <p>setBuildFrameworkVersion.</p>
-     *
-     * @param buildFrameworkVersion a {@link java.lang.String} object.
-     */
-    public void setBuildFrameworkVersion(String buildFrameworkVersion) {
-        BuildFrameworkVersion = buildFrameworkVersion;
-    }
-
-    /**
-     * <p>Getter for the field <code>addExperimentalRules</code>.</p>
-     *
-     * @return a {@link java.lang.Boolean} object.
-     */
-    public boolean isAddExperimentalRules() {
-        return addExperimentalRules;
-    }
-
-    /**
-     * <p>Setter for the field <code>addExperimentalRules</code>.</p>
-     *
-     * @param addExperimentalRules a {@link java.lang.Boolean} object.
-     */
-    public void setAddExperimentalRules(boolean addExperimentalRules) {
-        this.addExperimentalRules = addExperimentalRules;
-    }
-
-    /**
      * <p>getSLICE_AVERAGE_3SigFig.</p>
      *
      * @return a double.
      */
     public double getSLICE_AVERAGE_3SigFig() {
         return Double.parseDouble(String.format("%.3f", this.SLICE_AVERAGE));
-    }
-
-    /**
-     * <p>Setter for the field <code>streaming</code>.</p>
-     *
-     * @param flag a {@link java.lang.Boolean} object.
-     */
-    public void setStreaming(Boolean flag) {
-        this.streaming = flag;
-    }
-
-    /**
-     * <p>Getter for the field <code>streaming</code>.</p>
-     *
-     * @return a {@link java.lang.Boolean} object.
-     */
-    public Boolean getStreaming() {
-        return streaming;
-    }
-
-    /**
-     * Getter for sootErrors
-     *
-     * <p>getSootErrors()</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    public String getSootErrors() {
-        return StringUtils.trimToEmpty(sootErrors.toString());
-    }
-
-    /**
-     * The getter for Source
-     *
-     * <p>getSource()</p>
-     *
-     * @return {@link java.util.List<java.lang.String>} - Returns the Source field
-     */
-    public List<String> getSource() {
-        return Source;
-    }
-
-    /**
-     * Setter for prettyPrint
-     *
-     * <p>setPrettyPrint(java.lang.Boolean prettyPrint)</p>
-     *
-     * @param prettyPrint {@link java.lang.Boolean} - The value to set as prettyPrint
-     */
-    public void setPrettyPrint(Boolean prettyPrint) {
-        this.prettyPrint = prettyPrint;
-    }
-
-    /**
-     * Getter for printOut
-     *
-     * <p>getPrintOut()</p>
-     *
-     * @return {@link java.lang.Boolean} - The printOut.
-     */
-    public Boolean getPrintOut() {
-        return printOut;
-    }
-
-    /**
-     * <p>Getter for the field <code>packageRootDir</code>.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    public String getPackageRootDir() {
-        return packageRootDir;
-    }
-
-    /**
-     * <p>getToolFramework.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    public String getToolFramework() {
-        return ToolFramework;
-    }
-
-    /**
-     * <p>getToolFrameworkVersion.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    public String getToolFrameworkVersion() {
-        return ToolFrameworkVersion;
-    }
-
-    /**
-     * <p>getBuildFramework.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    public String getBuildFramework() {
-        return BuildFramework;
-    }
-
-    /**
-     * <p>getBuildFrameworkVersion.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    public String getBuildFrameworkVersion() {
-        return BuildFrameworkVersion;
-    }
-
-    /**
-     * <p>Getter for the field <code>platformName</code>.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    public String getPlatformName() {
-        return platformName;
-    }
-
-    /**
-     * <p>getAssessmentFramework.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    public String getAssessmentFramework() {
-        return AssessmentFramework;
-    }
-
-    /**
-     * <p>getAssessmentFrameworkVersion.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    public String getAssessmentFrameworkVersion() {
-        return AssessmentFrameworkVersion;
-    }
-
-
-    /**
-     * <p>getParserName.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    public String getParserName() {
-        return ParserName;
-    }
-
-    /**
-     * <p>getParserVersion.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    public String getParserVersion() {
-        return ParserVersion;
     }
 
     /**
@@ -460,42 +291,6 @@ public class EnvironmentInformation {
     }
 
     /**
-     * <p>Getter for the field <code>packageName</code>.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    public String getPackageName() {
-        return packageName;
-    }
-
-    /**
-     * <p>Setter for the field <code>packageName</code>.</p>
-     *
-     * @param packageName a {@link java.lang.String} object.
-     */
-    public void setPackageName(String packageName) {
-        this.packageName = packageName;
-    }
-
-    /**
-     * <p>Getter for the field <code>packageVersion</code>.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    public String getPackageVersion() {
-        return packageVersion;
-    }
-
-    /**
-     * <p>Setter for the field <code>packageVersion</code>.</p>
-     *
-     * @param packageVersion a {@link java.lang.String} object.
-     */
-    public void setPackageVersion(String packageVersion) {
-        this.packageVersion = packageVersion;
-    }
-
-    /**
      * <p>Getter for the field <code>buildId</code>.</p>
      *
      * @return a {@link java.lang.Integer} object.
@@ -505,66 +300,6 @@ public class EnvironmentInformation {
             this.buildId = 0;
 
         return buildId;
-    }
-
-    /**
-     * <p>Getter for the field <code>xPath</code>.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    public String getxPath() {
-        return xPath;
-    }
-
-    /**
-     * <p>prettyPrint.</p>
-     *
-     * @return a {@link java.lang.Boolean} object.
-     */
-    public Boolean prettyPrint() {
-        return prettyPrint;
-    }
-
-    /**
-     * <p>Getter for the field <code>buildRootDir</code>.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    public String getBuildRootDir() {
-        return buildRootDir;
-    }
-
-    /**
-     * Getter for properties
-     *
-     * <p>getProperties()</p>
-     *
-     * @return a {@link java.util.Properties} object.
-     */
-    public java.util.Properties getProperties() {
-        return Properties;
-    }
-
-    /**
-     * Getter for propertiesFile
-     *
-     * <p>getPropertiesFile()</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    public String getPropertiesFile() {
-        return PropertiesFile;
-    }
-
-    /**
-     * Getter for prettyPrint
-     *
-     * <p>getPrettyPrint()</p>
-     *
-     * @return a {@link java.lang.Boolean} object.
-     */
-    public Boolean getPrettyPrint() {
-        return prettyPrint;
     }
 
     /**
@@ -584,29 +319,6 @@ public class EnvironmentInformation {
     }
 
     /**
-     * Getter for sourceType
-     *
-     * <p>getSourceType()</p>
-     *
-     * @return a {@link rule.engine.EngineType} object.
-     */
-    public EngineType getSourceType() {
-        return sourceType;
-    }
-
-    /**
-     * Getter for messagingType
-     *
-     * <p>getMessagingType()</p>
-     *
-     * @return a {@link frontEnd.MessagingSystem.routing.Listing} object.
-     */
-    public Listing getMessagingType() {
-        return messagingType;
-    }
-
-
-    /**
      * <p>getMessagingOutput.</p>
      *
      * @return a {@link frontEnd.MessagingSystem.routing.outputStructures.OutputStructure} object.
@@ -617,61 +329,6 @@ public class EnvironmentInformation {
             this.output = messagingType.getTypeOfMessagingOutput(this.streaming, this);
 
         return this.output;
-    }
-
-    /**
-     * Setter for assessmentFramework
-     *
-     * <p>setAssessmentFramework(java.lang.String assessmentFramework)</p>
-     *
-     * @param assessmentFramework {@link java.lang.String} - The value to set as assessmentFramework
-     */
-    public void setAssessmentFramework(String assessmentFramework) {
-        AssessmentFramework = assessmentFramework;
-    }
-
-    /**
-     * Setter for assessmentFrameworkVersion
-     *
-     * <p>setAssessmentFrameworkVersion(java.lang.String assessmentFrameworkVersion)</p>
-     *
-     * @param assessmentFrameworkVersion {@link java.lang.String} - The value to set as assessmentFrameworkVersion
-     */
-    public void setAssessmentFrameworkVersion(String assessmentFrameworkVersion) {
-        AssessmentFrameworkVersion = assessmentFrameworkVersion;
-    }
-
-    /**
-     * Setter for assessmentStartTime
-     *
-     * <p>setAssessmentStartTime(java.lang.String assessmentStartTime)</p>
-     *
-     * @param assessmentStartTime {@link java.lang.String} - The value to set as assessmentStartTime
-     */
-    public void setAssessmentStartTime(String assessmentStartTime) {
-        AssessmentStartTime = assessmentStartTime;
-    }
-
-    /**
-     * Setter for parserName
-     *
-     * <p>setParserName(java.lang.String parserName)</p>
-     *
-     * @param parserName {@link java.lang.String} - The value to set as parserName
-     */
-    public void setParserName(String parserName) {
-        ParserName = parserName;
-    }
-
-    /**
-     * Setter for parserVersion
-     *
-     * <p>setParserVersion(java.lang.String parserVersion)</p>
-     *
-     * @param parserVersion {@link java.lang.String} - The value to set as parserVersion
-     */
-    public void setParserVersion(String parserVersion) {
-        ParserVersion = parserVersion;
     }
 
     /**
@@ -708,18 +365,6 @@ public class EnvironmentInformation {
     }
 
     /**
-     * Setter for packageRootDir
-     *
-     * <p>setPackageRootDir(java.lang.String packageRootDir)</p>
-     *
-     * @param packageRootDir {@link java.lang.String} - The value to set as packageRootDir
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public void setPackageRootDir(String packageRootDir) throws ExceptionHandler {
-        this.packageRootDir = packageRootDir;
-    }
-
-    /**
      * Setter for buildRootDir
      *
      * <p>setBuildRootDir(java.lang.String buildRootDir)</p>
@@ -745,90 +390,6 @@ public class EnvironmentInformation {
     }
 
     /**
-     * Setter for buildRootDir
-     *
-     * <p>setBuildRootDir(java.lang.String buildRootDir)</p>
-     *
-     * @param buildRootDir {@link java.lang.String} - The value to set as buildRootDir
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public void setBuildRootDir(String buildRootDir) throws ExceptionHandler {
-        this.buildRootDir = buildRootDir;
-    }
-
-    /**
-     * Setter for buildId
-     *
-     * <p>setBuildId(java.lang.Integer buildId)</p>
-     *
-     * @param buildId {@link java.lang.Integer} - The value to set as buildId
-     */
-    public void setBuildId(Integer buildId) {
-        this.buildId = buildId;
-    }
-
-    /**
-     * Setter for xPath
-     *
-     * <p>setxPath(java.lang.String xPath)</p>
-     *
-     * @param xPath {@link java.lang.String} - The value to set as xPath
-     */
-    public void setxPath(String xPath) {
-        this.xPath = xPath;
-    }
-
-    /**
-     * <p>Setter for the field <code>printOut</code>.</p>
-     *
-     * @param printOut a {@link java.lang.Boolean} object.
-     */
-    public void setPrintOut(Boolean printOut) {
-        this.printOut = printOut;
-    }
-
-    /**
-     * <p>Getter for the field <code>sourcePaths</code>.</p>
-     *
-     * @return a {@link java.util.List} object.
-     */
-    public List<String> getSourcePaths() {
-        return sourcePaths;
-    }
-
-    /**
-     * <p>startAnalysis.</p>
-     */
-    public void startAnalysis() {
-        this.startAnalyisisTime = System.currentTimeMillis();
-    }
-
-    /**
-     * <p>stopAnalysis.</p>
-     */
-    public void stopAnalysis() {
-        this.analysisMilliSeconds = System.currentTimeMillis() - this.startAnalyisisTime;
-    }
-
-    /**
-     * <p>getAnalyisisTime.</p>
-     *
-     * @return a {@link java.lang.Long} object.
-     */
-    public Long getAnalyisisTime() {
-        return this.analysisMilliSeconds;
-    }
-
-    /**
-     * <p>Getter for the field <code>fileOut</code>.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    public String getFileOut() {
-        return fileOut;
-    }
-
-    /**
      * <p>getFileOutName.</p>
      *
      * @return a {@link java.lang.String} object.
@@ -837,42 +398,6 @@ public class EnvironmentInformation {
         String[] split = this.fileOut.split(System.getProperty("file.separator"));
 
         return split[split.length - 1];
-    }
-
-    /**
-     * <p>Setter for the field <code>fileOut</code>.</p>
-     *
-     * @param fileOut a {@link java.lang.String} object.
-     */
-    public void setFileOut(String fileOut) {
-        this.fileOut = fileOut;
-    }
-
-    /**
-     * <p>isShowTimes.</p>
-     *
-     * @return a boolean.
-     */
-    public boolean isShowTimes() {
-        return showTimes;
-    }
-
-    /**
-     * <p>Setter for the field <code>showTimes</code>.</p>
-     *
-     * @param showTimes a boolean.
-     */
-    public void setShowTimes(boolean showTimes) {
-        this.showTimes = showTimes;
-    }
-
-    /**
-     * <p>Setter for the field <code>UUID</code>.</p>
-     *
-     * @param UUID a String.
-     */
-    public void setUUID(String UUID) {
-        this.UUID = UUID;
     }
     //endregion
     //region Helpful Methods

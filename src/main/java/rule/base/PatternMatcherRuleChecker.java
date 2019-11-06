@@ -25,11 +25,10 @@ public abstract class PatternMatcherRuleChecker extends BaseRuleChecker {
 
     //Todo: Add a field to keep track of all the found patterns ...
 
-    private Map<UnitContainer, List<String>> predictableSourcMap = new HashMap<>();
-    private Map<UnitContainer, List<String>> othersSourceMap = new HashMap<>();
     private final String rule = getRuleId();
     private final String ruleDesc = RULE_VS_DESCRIPTION.get(rule);
-
+    private Map<UnitContainer, List<String>> predictableSourcMap = new HashMap<>();
+    private Map<UnitContainer, List<String>> othersSourceMap = new HashMap<>();
 
     /**
      * {@inheritDoc}
@@ -103,7 +102,9 @@ public abstract class PatternMatcherRuleChecker extends BaseRuleChecker {
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler {
         Utils.createAnalysisOutput(xmlFileStr, sourcePaths, predictableSourcMap, rule, output);
