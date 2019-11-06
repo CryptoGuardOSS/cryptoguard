@@ -26,13 +26,29 @@ import java.util.*;
  */
 public class OrthogonalInstructionSlicer extends BackwardFlowAnalysis {
 
+    private static final List<String> ASSIGN_WHITE_LISTED_METHODS = new ArrayList<>();
+    private static final List<String> INVOKE_WHITE_LISTED_METHODS = new ArrayList<>();
+    private static final List<String> BLACK_LISTED_METHODS = new ArrayList<>();
+
+    static {
+        ASSIGN_WHITE_LISTED_METHODS.add("<javax.xml.bind.DatatypeConverterInterface: byte[] parseBase64Binary(java.lang.String)>");
+        ASSIGN_WHITE_LISTED_METHODS.add("<javax.xml.bind.DatatypeConverterInterface: byte[] parseHexBinary(java.lang.String)>");
+        ASSIGN_WHITE_LISTED_METHODS.add("<java.util.Arrays: byte[] copyOf(byte[],int)>");
+
+
+        INVOKE_WHITE_LISTED_METHODS.add("<java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>");
+        INVOKE_WHITE_LISTED_METHODS.add("<java.lang.String: void <init>");
+
+        BLACK_LISTED_METHODS.add("<javax.crypto.KeyGenerator: void <init>");
+        BLACK_LISTED_METHODS.add("<javax.crypto.Cipher: void <init>");
+    }
+
     private FlowSet emptySet;
     private String slicingCriteria;
     private String method;
     private List<String> usedFields;
     private Map<String, List<PropertyAnalysisResult>> propertyUseMap;
     private int depth;
-
     /**
      * <p>Constructor for OrthogonalInstructionSlicer.</p>
      *
@@ -52,7 +68,9 @@ public class OrthogonalInstructionSlicer extends BackwardFlowAnalysis {
         doAnalysis();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void flowThrough(Object in, Object node, Object out) {
         FlowSet inSet = (FlowSet) in,
@@ -143,23 +161,6 @@ public class OrthogonalInstructionSlicer extends BackwardFlowAnalysis {
         }
     }
 
-    private static final List<String> ASSIGN_WHITE_LISTED_METHODS = new ArrayList<>();
-    private static final List<String> INVOKE_WHITE_LISTED_METHODS = new ArrayList<>();
-    private static final List<String> BLACK_LISTED_METHODS = new ArrayList<>();
-
-    static {
-        ASSIGN_WHITE_LISTED_METHODS.add("<javax.xml.bind.DatatypeConverterInterface: byte[] parseBase64Binary(java.lang.String)>");
-        ASSIGN_WHITE_LISTED_METHODS.add("<javax.xml.bind.DatatypeConverterInterface: byte[] parseHexBinary(java.lang.String)>");
-        ASSIGN_WHITE_LISTED_METHODS.add("<java.util.Arrays: byte[] copyOf(byte[],int)>");
-
-
-        INVOKE_WHITE_LISTED_METHODS.add("<java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>");
-        INVOKE_WHITE_LISTED_METHODS.add("<java.lang.String: void <init>");
-
-        BLACK_LISTED_METHODS.add("<javax.crypto.KeyGenerator: void <init>");
-        BLACK_LISTED_METHODS.add("<javax.crypto.Cipher: void <init>");
-    }
-
     private void addCurrInstInOutSet(FlowSet outSet, Unit currInstruction) {
 
         for (String blacklisted : BLACK_LISTED_METHODS) {
@@ -234,19 +235,25 @@ public class OrthogonalInstructionSlicer extends BackwardFlowAnalysis {
         return isInvoke;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected Object newInitialFlow() {
         return emptySet.clone();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected Object entryInitialFlow() {
         return emptySet.clone();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void merge(Object in1, Object in2, Object out) {
         FlowSet inSet1 = (FlowSet) in1,
@@ -256,7 +263,9 @@ public class OrthogonalInstructionSlicer extends BackwardFlowAnalysis {
         inSet1.union(inSet2, outSet);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void copy(Object source, Object dest) {
         FlowSet srcSet = (FlowSet) source,

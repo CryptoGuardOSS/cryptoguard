@@ -36,6 +36,7 @@ import java.util.Map;
 })
 public class Target implements Serializable {
 
+    private final static long serialVersionUID = 8557085304013589L;
     @JacksonXmlProperty(isAttribute = true, localName = "PropertiesFilePath")
     @JsonProperty("_PropertiesFilePath")
     private String propertiesFilePath;
@@ -85,8 +86,7 @@ public class Target implements Serializable {
      * <p>
      */
     @JsonProperty("TargetSources")
-    private List<String> targetSources = new ArrayList<String>();
-    private final static long serialVersionUID = 8557085304013589L;
+    private List<String> targetSources = new ArrayList<>();
 
     /**
      * No args constructor for use in serialization
@@ -97,17 +97,17 @@ public class Target implements Serializable {
     /**
      * <p>Constructor for Target.</p>
      *
-     * @param projectVersion a {@link java.lang.String} object.
+     * @param projectVersion     a {@link java.lang.String} object.
      * @param propertiesFilePath a {@link java.lang.String} object.
-     * @param computerOS a {@link java.lang.String} object.
-     * @param targetSources a {@link java.util.List} object.
-     * @param rawCommand a {@link java.lang.String} object.
-     * @param projectType a {@link frontEnd.MessagingSystem.routing.structure.Default.Target.ProjectType} object.
-     * @param fullPath a {@link java.lang.String} object.
-     * @param type a {@link frontEnd.MessagingSystem.routing.structure.Default.Target.Type} object.
-     * @param timing a {@link frontEnd.MessagingSystem.routing.structure.Default.Timing} object.
-     * @param projectName a {@link java.lang.String} object.
-     * @param jVMVersion a {@link java.lang.String} object.
+     * @param computerOS         a {@link java.lang.String} object.
+     * @param targetSources      a {@link java.util.List} object.
+     * @param rawCommand         a {@link java.lang.String} object.
+     * @param projectType        a {@link frontEnd.MessagingSystem.routing.structure.Default.Target.ProjectType} object.
+     * @param fullPath           a {@link java.lang.String} object.
+     * @param type               a {@link frontEnd.MessagingSystem.routing.structure.Default.Target.Type} object.
+     * @param timing             a {@link frontEnd.MessagingSystem.routing.structure.Default.Timing} object.
+     * @param projectName        a {@link java.lang.String} object.
+     * @param jVMVersion         a {@link java.lang.String} object.
      */
     public Target(String propertiesFilePath, String computerOS, String jVMVersion, String projectName, String projectVersion, String rawCommand, Timing timing, String fullPath, Type type, ProjectType projectType, List<String> targetSources) {
         super();
@@ -487,13 +487,17 @@ public class Target implements Serializable {
         return new ToStringBuilder(this).append("propertiesFilePath", propertiesFilePath).append("computerOS", computerOS).append("jVMVersion", jVMVersion).append("projectName", projectName).append("projectVersion", projectVersion).append("rawCommand", rawCommand).append("timing", timing).append("fullPath", fullPath).append("type", type).append("projectType", projectType).append("targetSources", targetSources).toString();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(projectVersion).append(propertiesFilePath).append(computerOS).append(targetSources).append(rawCommand).append(projectType).append(fullPath).append(type).append(timing).append(projectName).append(jVMVersion).toHashCode();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -510,8 +514,7 @@ public class Target implements Serializable {
 
         GRADLE("Gradle"),
         MAVEN("Maven");
-        private final String value;
-        private final static Map<String, ProjectType> CONSTANTS = new HashMap<String, ProjectType>();
+        private final static Map<String, ProjectType> CONSTANTS = new HashMap<>();
 
         static {
             for (ProjectType c : values()) {
@@ -519,18 +522,10 @@ public class Target implements Serializable {
             }
         }
 
+        private final String value;
+
         ProjectType(String value) {
             this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return this.value;
-        }
-
-        @JsonValue
-        public String value() {
-            return this.value;
         }
 
         @JsonCreator
@@ -543,28 +538,6 @@ public class Target implements Serializable {
             }
         }
 
-    }
-
-    public enum Type {
-
-        APK("APK"),
-        JAR("JAR"),
-        SOURCE("Source"),
-        JAVA("Java"),
-        CLASS("Class");
-        private final String value;
-        private final static Map<String, Type> CONSTANTS = new HashMap<String, Type>();
-
-        static {
-            for (Type c : values()) {
-                CONSTANTS.put(c.value, c);
-            }
-        }
-
-        Type(String value) {
-            this.value = value;
-        }
-
         @Override
         public String toString() {
             return this.value;
@@ -575,6 +548,29 @@ public class Target implements Serializable {
             return this.value;
         }
 
+    }
+
+    public enum Type {
+
+        APK("APK"),
+        JAR("JAR"),
+        SOURCE("Source"),
+        JAVA("Java"),
+        CLASS("Class");
+        private final static Map<String, Type> CONSTANTS = new HashMap<>();
+
+        static {
+            for (Type c : values()) {
+                CONSTANTS.put(c.value, c);
+            }
+        }
+
+        private final String value;
+
+        Type(String value) {
+            this.value = value;
+        }
+
         @JsonCreator
         public static Type fromValue(String value) {
             Type constant = CONSTANTS.get(value);
@@ -583,6 +579,16 @@ public class Target implements Serializable {
             } else {
                 return constant;
             }
+        }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
+
+        @JsonValue
+        public String value() {
+            return this.value;
         }
 
     }

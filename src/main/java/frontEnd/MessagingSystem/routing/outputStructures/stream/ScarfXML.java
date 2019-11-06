@@ -44,7 +44,7 @@ public class ScarfXML extends Structure {
     public ScarfXML(EnvironmentInformation info) throws ExceptionHandler {
         super(info);
         this.buildId = info.getBuildId();
-        this.xPath = info.getxPath();
+        this.xPath = info.getXPath();
     }
     //endregion
 
@@ -68,7 +68,9 @@ public class ScarfXML extends Structure {
 
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addIssue(AnalysisIssue issue) throws ExceptionHandler {
         super.addIssue(issue);
@@ -84,7 +86,9 @@ public class ScarfXML extends Structure {
         //endregion
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void writeFooter() throws ExceptionHandler {
 
@@ -92,7 +96,7 @@ public class ScarfXML extends Structure {
         BugSummary summary = super.createBugCategoryList();
 
         log.info("Marshalling the bug category summary.");
-        String xml = JacksonSerializer.serialize(summary, super.getSource().prettyPrint(), Listing.ScarfXML.getJacksonType());
+        String xml = JacksonSerializer.serialize(summary, super.getSource().getPrettyPrint(), Listing.ScarfXML.getJacksonType());
 
         if (!xml.endsWith("/>"))
             this.write(xml);
@@ -104,7 +108,7 @@ public class ScarfXML extends Structure {
             log.trace("Writing the heuristics");
             String heuristicsXML = JacksonSerializer.serialize(
                     marshalling(super.getSource(), super.getSource().getSLICE_AVERAGE_3SigFig()),
-                    super.getSource().prettyPrint(),
+                    super.getSource().getPrettyPrint(),
                     Listing.ScarfXML.getJacksonType()
             );
 

@@ -65,22 +65,22 @@ public class ArgumentsCheck {
             cmd = new DefaultParser().parse(cmdLineArgs, args.toArray(new String[0]), true);
         } catch (ParseException e) {
             log.debug("Issue with parsing the arguments: " + e.getMessage());
-            String arg = null;
+            StringBuilder arg = null;
 
             if (e.getMessage().startsWith("Missing required option: "))
-                arg = argsIdentifier.lookup(e.getMessage().replace("Missing required option: ", "")).getArg();
+                arg = new StringBuilder(argsIdentifier.lookup(e.getMessage().replace("Missing required option: ", "")).getArg());
             else if (e.getMessage().startsWith("Missing required options: ")) {
                 String[] argIds = e.getMessage().replace("Missing required options: ", "").replace(" ", "").split(",");
-                arg = "Issue with the following argument(s) ";
+                arg = new StringBuilder("Issue with the following argument(s) ");
 
                 for (String argId : argIds)
-                    arg += argsIdentifier.lookup(argId) + ", ";
+                    arg.append(argsIdentifier.lookup(argId)).append(", ");
 
-                arg = arg.substring(0, arg.length() - ", ".length());
+                arg = new StringBuilder(arg.substring(0, arg.length() - ", ".length()));
 
             }
 
-            throw new ExceptionHandler(parcelHandling.retrieveHelpFromOptions(cmdLineArgs, arg), ExceptionId.ARG_VALID);
+            throw new ExceptionHandler(parcelHandling.retrieveHelpFromOptions(cmdLineArgs, arg.toString()), ExceptionId.ARG_VALID);
         }
 
         //endregion
@@ -124,7 +124,6 @@ public class ArgumentsCheck {
         //endregion
 
 
-
         //inputFiles
 
         //region Setting the source files
@@ -158,7 +157,7 @@ public class ArgumentsCheck {
         //endregion
 
         //region Setting the dependency path
-        List<String> dependencies = new ArrayList<String>();
+        List<String> dependencies = new ArrayList<>();
         if (cmd.hasOption(argsIdentifier.DEPENDENCY.getId())) {
             log.trace("Retrieving the dependency files.");
             dependencies = verify ? Utils.verifyClassPaths(
@@ -176,7 +175,7 @@ public class ArgumentsCheck {
 
         //region Retrieving the package path
         log.trace("Retrieving the package path, may/may not be able to be replaced.");
-        List<String> basePath = new ArrayList<String>();
+        List<String> basePath = new ArrayList<>();
         File sourceFile;
         String pkg = "";
         switch (type) {

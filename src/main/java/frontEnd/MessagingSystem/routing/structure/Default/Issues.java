@@ -13,14 +13,19 @@ import java.util.List;
  *
  * @author franceme
  * Created on 05/01/2019.
+ * @version 03.07.01
  * @since 03.05.02
  *
  * <p>{Description Here}</p>
- * @version 03.07.01
  */
 public class Issues implements Serializable {
 
     private final static long serialVersionUID = -2265209324602399901L;
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "Issue")
+    @JsonProperty("Issues")
+    private List<Issue> issues = new ArrayList<>();
+
 
     /**
      * <p>Constructor for Issues.</p>
@@ -28,12 +33,6 @@ public class Issues implements Serializable {
     public Issues() {
 
     }
-
-
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "Issue")
-    @JsonProperty("Issues")
-    private List<Issue> issues = new ArrayList<Issue>();
 
     /**
      * Issues

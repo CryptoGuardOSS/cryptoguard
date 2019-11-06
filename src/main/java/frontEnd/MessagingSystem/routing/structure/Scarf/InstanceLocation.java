@@ -22,6 +22,7 @@ import java.io.Serializable;
 })
 public class InstanceLocation implements Serializable {
 
+    private final static long serialVersionUID = -2084587122423583152L;
     @JsonProperty("Xpath")
     private String xpath;
     /**
@@ -30,7 +31,6 @@ public class InstanceLocation implements Serializable {
      */
     @JsonProperty("LineNum")
     private LineNum lineNum;
-    private final static long serialVersionUID = -2084587122423583152L;
 
     /**
      * No args constructor for use in serialization
@@ -122,13 +122,17 @@ public class InstanceLocation implements Serializable {
         return new ToStringBuilder(this).append("xpath", xpath).append("lineNum", lineNum).toString();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(lineNum).append(xpath).toHashCode();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object other) {
         if (other == this) {

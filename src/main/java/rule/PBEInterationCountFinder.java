@@ -34,13 +34,6 @@ public class PBEInterationCountFinder extends BaseRuleChecker {
 
     private static final List<Criteria> CRITERIA_LIST = new ArrayList<>();
 
-
-    String rule = "8";
-    String ruleDesc = RULE_VS_DESCRIPTION.get(rule);
-
-    private Map<UnitContainer, List<String>> predictableSourcMap = new HashMap<>();
-    private Map<UnitContainer, List<String>> othersSourceMap = new HashMap<>();
-
     static {
 
         Criteria criteria2 = new Criteria();
@@ -69,6 +62,11 @@ public class PBEInterationCountFinder extends BaseRuleChecker {
 
     }
 
+    String rule = "8";
+    String ruleDesc = RULE_VS_DESCRIPTION.get(rule);
+    private Map<UnitContainer, List<String>> predictableSourcMap = new HashMap<>();
+    private Map<UnitContainer, List<String>> othersSourceMap = new HashMap<>();
+
     /**
      * {@inheritDoc}
      */
@@ -77,7 +75,9 @@ public class PBEInterationCountFinder extends BaseRuleChecker {
         return CRITERIA_LIST;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void analyzeSlice(Analysis analysis) {
         if (analysis.getAnalysisResult().isEmpty()) {
@@ -132,7 +132,7 @@ public class PBEInterationCountFinder extends BaseRuleChecker {
                 continue;
             }
 
-            UnitContainer invokeResult = Utils.isArgumentOfInvoke(analysis, index, new ArrayList<UnitContainer>());
+            UnitContainer invokeResult = Utils.isArgumentOfInvoke(analysis, index, new ArrayList<>());
 
             if (invokeResult != null && invokeResult instanceof InvokeUnitContainer) {
 
@@ -218,7 +218,9 @@ public class PBEInterationCountFinder extends BaseRuleChecker {
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler {
 

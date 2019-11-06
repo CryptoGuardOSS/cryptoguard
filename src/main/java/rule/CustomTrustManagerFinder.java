@@ -40,6 +40,49 @@ public class CustomTrustManagerFinder implements RuleChecker {
         METHOD_VS_SLICING_CRITERIA.put("java.security.cert.X509Certificate[] getAcceptedIssuers()", "return");
     }
 
+    private static Map<String, List<OtherAnalysisResult>> getAnalysisForTrustManager(List<String> classNames) {
+
+        Map<String, List<OtherAnalysisResult>> analysisList = new HashMap<>();
+
+        NamedMethodMap.build(classNames);
+        FieldInitializationInstructionMap.build(classNames);
+
+        for (String className : classNames) {
+            SootClass sClass = Scene.v().loadClassAndSupport(className);
+
+            if (sClass.getInterfaces().toString().contains(TRUST_MANAGER)) {
+
+                List<OtherAnalysisResult> otherAnalysisResults = new ArrayList<>();
+
+                for (String methodName : METHOD_VS_SLICING_CRITERIA.keySet()) {
+
+                    SootMethod method;
+                    try {
+
+                        method = sClass.getMethod(methodName);
+                    } catch (RuntimeException e) {
+                        continue;
+                    }
+
+                    if (method.isConcrete()) {
+
+                        String slicingInstruction = METHOD_VS_SLICING_CRITERIA.get(methodName);
+
+                        OtherInfluencingInstructions returnInfluencingInstructions =
+                                new OtherInfluencingInstructions(method, slicingInstruction);
+
+                        OtherAnalysisResult analysis = returnInfluencingInstructions.getAnalysisResult();
+                        otherAnalysisResults.add(analysis);
+                    }
+                }
+
+                analysisList.put(sClass.getName(), otherAnalysisResults);
+            }
+        }
+
+        return analysisList;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -133,48 +176,5 @@ public class CustomTrustManagerFinder implements RuleChecker {
     private boolean hasTryCatch(SootMethod method) {
         Body b = method.retrieveActiveBody();
         return b.getTraps().size() > 0;
-    }
-
-    private static Map<String, List<OtherAnalysisResult>> getAnalysisForTrustManager(List<String> classNames) {
-
-        Map<String, List<OtherAnalysisResult>> analysisList = new HashMap<>();
-
-        NamedMethodMap.build(classNames);
-        FieldInitializationInstructionMap.build(classNames);
-
-        for (String className : classNames) {
-            SootClass sClass = Scene.v().loadClassAndSupport(className);
-
-            if (sClass.getInterfaces().toString().contains(TRUST_MANAGER)) {
-
-                List<OtherAnalysisResult> otherAnalysisResults = new ArrayList<>();
-
-                for (String methodName : METHOD_VS_SLICING_CRITERIA.keySet()) {
-
-                    SootMethod method;
-                    try {
-
-                        method = sClass.getMethod(methodName);
-                    } catch (RuntimeException e) {
-                        continue;
-                    }
-
-                    if (method.isConcrete()) {
-
-                        String slicingInstruction = METHOD_VS_SLICING_CRITERIA.get(methodName);
-
-                        OtherInfluencingInstructions returnInfluencingInstructions =
-                                new OtherInfluencingInstructions(method, slicingInstruction);
-
-                        OtherAnalysisResult analysis = returnInfluencingInstructions.getAnalysisResult();
-                        otherAnalysisResults.add(analysis);
-                    }
-                }
-
-                analysisList.put(sClass.getName(), otherAnalysisResults);
-            }
-        }
-
-        return analysisList;
     }
 }

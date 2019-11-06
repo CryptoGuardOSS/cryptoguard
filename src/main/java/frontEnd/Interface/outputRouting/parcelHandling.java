@@ -29,10 +29,9 @@ public class parcelHandling {
      * @return a {@link java.lang.String} object.
      */
     public static String retrieveHeaderInfo() {
-        StringBuilder output = new StringBuilder();
-        output.append(Utils.projectName).append(": ").append(Utils.projectVersion);
-        output.append("\n");
-        return output.toString();
+        String output = Utils.projectName + ": " + Utils.projectVersion +
+                "\n";
+        return output;
     }
 
     /**
@@ -83,7 +82,7 @@ public class parcelHandling {
 
 
         if (argIssue != null) {
-            headerInfo.append(", please run java -jar " + Utils.projectName.toLowerCase() + ".jar -h for help.").append("\n").append(StringUtils.repeat("-", headerInfo.length()));
+            headerInfo.append(", please run java -jar ").append(Utils.projectName.toLowerCase()).append(".jar -h for help.").append("\n").append(StringUtils.repeat("-", headerInfo.length()));
             message.append(headerInfo);
         } else {
             helper.printHelp(redirect, Width, getUsage(), headerInfo.toString(), args, 0, 0, null);

@@ -1,5 +1,6 @@
 package frontEnd.Interface;
 
+import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.MessagingSystem.routing.Listing;
 import frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport;
 import frontEnd.argsIdentifier;
@@ -8,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import rule.engine.EngineType;
 import soot.G;
+import util.Utils;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -61,7 +63,7 @@ public class EntryPointTest_SOURCE {
     //endregion
 
     //region Tests
-    //@Test
+    @Test
     public void main_TestableJarSource() {
         String fileOut = tempFileOutTxt;
         new File(fileOut).delete();
@@ -81,6 +83,18 @@ public class EntryPointTest_SOURCE {
 
                 List<String> results = Files.readAllLines(Paths.get(outputFile), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 10);
+
+                List<String> filesFound = Utils.retrieveFilesPredicate(srcOneGrv, s -> s.endsWith(".java"), file -> {
+                    try {
+                        return Utils.retrieveFullyQualifiedName(file.getAbsolutePath()) + ".java";
+                    } catch (ExceptionHandler exceptionHandler) {
+                        exceptionHandler.printStackTrace();
+                        return null;
+                    }
+                });
+
+                assertTrue(results.stream().anyMatch(str -> filesFound.stream().anyMatch(str::contains)));
+
             } catch (Exception e) {
                 e.printStackTrace();
                 assertNull(e);
@@ -88,7 +102,7 @@ public class EntryPointTest_SOURCE {
         }
     }
 
-    //@Test
+    @Test
     public void main_TestableJarSourceScarf() {
         String fileOut = tempFileOutXML;
         new File(fileOut).delete();
@@ -108,6 +122,7 @@ public class EntryPointTest_SOURCE {
 
                 AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
                 assertFalse(report.getBugInstance().isEmpty());
+                assertTrue(report.getBugInstance().stream().anyMatch(bugInstance -> bugInstance.getClassName().startsWith(srcOneGrv_base)));
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -116,7 +131,7 @@ public class EntryPointTest_SOURCE {
         }
     }
 
-    //@Test
+    @Test
     public void main_TestableJarSourceScarf_Stream() {
         String fileOut = tempStreamXML;
         new File(fileOut).delete();
@@ -136,6 +151,7 @@ public class EntryPointTest_SOURCE {
 
                 AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
                 assertFalse(report.getBugInstance().isEmpty());
+                assertTrue(report.getBugInstance().stream().anyMatch(bugInstance -> bugInstance.getClassName().startsWith(srcOneGrv_base)));
 
             } catch (Exception e) {
                 e.printStackTrace();

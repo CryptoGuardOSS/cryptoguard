@@ -46,15 +46,6 @@ public class GradleBuildFileParser implements BuildFileParser {
 
 
     /**
-     * <p>isGradle.</p>
-     *
-     * @return a {@link java.lang.Boolean} object.
-     */
-    public Boolean isGradle() {
-        return true;
-    }
-
-    /**
      * <p>Constructor for GradleBuildFileParser.</p>
      *
      * @param fileName a {@link java.lang.String} object.
@@ -111,6 +102,15 @@ public class GradleBuildFileParser implements BuildFileParser {
         } catch (IOException e) {
             throw new ExceptionHandler("Error reading file " + fileName, ExceptionId.FILE_I);
         }
+    }
+
+    /**
+     * <p>isGradle.</p>
+     *
+     * @return a {@link java.lang.Boolean} object.
+     */
+    public Boolean isGradle() {
+        return true;
     }
 
     /**

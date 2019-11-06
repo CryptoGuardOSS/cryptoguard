@@ -56,6 +56,19 @@ public enum argsIdentifier {
     }
 
     /**
+     * <p>lookup.</p>
+     *
+     * @param id a {@link java.lang.String} object.
+     * @return a {@link frontEnd.argsIdentifier} object.
+     */
+    public static argsIdentifier lookup(String id) {
+        for (argsIdentifier in : argsIdentifier.values())
+            if (in.getId().equals(id))
+                return in;
+        return null;
+    }
+
+    /**
      * <p>Getter for the field <code>id</code>.</p>
      *
      * @return a {@link java.lang.String} object.
@@ -107,19 +120,6 @@ public enum argsIdentifier {
      */
     public void setDefaultArg(String defaultArg) {
         this.defaultArg = defaultArg;
-    }
-
-    /**
-     * <p>lookup.</p>
-     *
-     * @param id a {@link java.lang.String} object.
-     * @return a {@link frontEnd.argsIdentifier} object.
-     */
-    public static argsIdentifier lookup(String id) {
-        for (argsIdentifier in : argsIdentifier.values())
-            if (in.getId().equals(id))
-                return in;
-        return null;
     }
 
 }
