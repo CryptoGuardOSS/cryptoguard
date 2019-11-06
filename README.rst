@@ -1,5 +1,5 @@
 #################################
-CryptoGuard V03.08.01
+CryptoGuard V03.09.00
 #################################
 
 
@@ -23,6 +23,8 @@ Prerequisites (Environment Variables)
 ==================================================
 1. JAVA8_HOME: Point to a valid Java 8 JDK Installation
     * Needed for all of the scans
+#. JAVA7_HOME: Point to a valid Java 7 JDK Installation
+    * Needed for project scans and java file scans
 #. ANDROID_SDK_HOME: Point to a valid Android JDK Installation
     * Needed for Android
 
@@ -33,7 +35,7 @@ Note
 Different Scanning Options
 ==================================================
 
-Source (Maven or Gradle Project Directory **only** *Currently Unstable*)
+Source (Maven or Gradle Project Directory **only**)
 --------------------------------------------------------------------------------------------------------------------
 * sample Makefile command :code:`make scanDir`
 * raw command (without dependencies) :code:`java -jar cryptoguard.jar -in source -s /rootPath`

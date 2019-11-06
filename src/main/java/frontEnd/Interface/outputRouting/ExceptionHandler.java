@@ -2,6 +2,8 @@ package frontEnd.Interface.outputRouting;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.function.Supplier;
+
 /**
  * <p>ExceptionHandler class.</p>
  *
@@ -12,7 +14,7 @@ import org.apache.commons.lang3.StringUtils;
  *
  * <p>The Main Exception Handling for the whole project</p>
  */
-public class ExceptionHandler extends Exception {
+public class ExceptionHandler extends Exception implements Supplier<String> {
 
     //region Attributes
     private ExceptionId errorCode;
@@ -77,6 +79,11 @@ public class ExceptionHandler extends Exception {
      */
     public String getLongDesciption() {
         return longDesciption;
+    }
+
+    @Override
+    public String get() {
+        return null;
     }
     //endregion
 }
