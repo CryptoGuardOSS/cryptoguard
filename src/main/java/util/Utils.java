@@ -65,9 +65,9 @@ public class Utils {
      */
     public final static String lineSep = System.getProperty("line.separator");
     /**
-     * Constant <code>projectVersion="V03.09.00"</code>
+     * Constant <code>projectVersion="V03.09.01"</code>
      */
-    public final static String projectVersion = "V03.09.00";
+    public final static String projectVersion = "V03.09.01";
     /**
      * Constant <code>projectName="CryptoGuard"</code>
      */
@@ -286,7 +286,6 @@ public class Utils {
         return output;
     }
 
-
     public static Set<String> retrieveJavaFileImports(String... paths) throws ExceptionHandler {
         return retrieveJavaFileImports(Arrays.asList(paths));
     }
@@ -319,6 +318,11 @@ public class Utils {
         }
 
         return results;
+    }
+
+    public static void setSunBootPath(String basePath, String rt) {
+        System.setProperty("sun.boot.class.path", rt);
+        System.setProperty("java.ext.dirs", osSurround(basePath, "lib"));
     }
     //endregion
 
@@ -956,11 +960,15 @@ public class Utils {
      * @return a {@link java.lang.String} object.
      */
     public static String surround(String delimiter, List<String> elements) {
-        String current = StringUtils.trimToNull(delimiter + join(delimiter, elements));
-        if (current.endsWith(delimiter))
-            return current;
-        else
-            return current + delimiter;
+        String current = StringUtils.trimToNull(join(delimiter, elements));
+
+        if (!current.startsWith(delimiter))
+            current = delimiter + current;
+
+        if (!current.endsWith(delimiter))
+            current += delimiter;
+
+        return current;
     }
 
     /**
@@ -1044,8 +1052,10 @@ public class Utils {
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static String getBaseSOOT() throws ExceptionHandler {
-        String temp = join(":", getJCE(), getRT());
-        return join(":", getJCE(), getRT());
+        String rt =  getRT();
+        setSunBootPath(Utils.getJAVA_HOME(), rt);
+
+        return join(":", getJCE(), rt);
     }
 
     /**
@@ -1082,8 +1092,9 @@ public class Utils {
         String rt = Utils.osPathJoin(Utils.getJAVA7_HOME(), "jre", "lib", "rt.jar");
         String jce = Utils.osPathJoin(Utils.getJAVA7_HOME(), "jre", "lib", "jce.jar");
 
-        String base = Utils.join(":", Utils.getJAVA7_HOME(), jce, rt);//Utils.getJAVA7_HOME() + Utils.fileSep + join(Utils.getJAVA7_HOME() + Utils.fileSep, rt, jce);
-        return base;
+        setSunBootPath(Utils.getJAVA7_HOME(), rt);
+
+        return Utils.join(":", Utils.getJAVA7_HOME(), rt, jce);
     }
 
     /**
