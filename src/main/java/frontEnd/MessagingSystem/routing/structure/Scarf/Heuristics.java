@@ -30,6 +30,7 @@ import java.util.List;
 })
 public class Heuristics implements Serializable {
 
+    private final static long serialVersionUID = -3706836582924786234L;
     /**
      * (Required)
      */
@@ -64,7 +65,6 @@ public class Heuristics implements Serializable {
     @JsonProperty("DepthCount")
     @JacksonXmlElementWrapper(useWrapping = false)
     private List<String> depthCount = null;
-    private final static long serialVersionUID = -3706836582924786234L;
 
     /**
      * No args constructor for use in serialization
@@ -75,11 +75,11 @@ public class Heuristics implements Serializable {
     /**
      * <p>Constructor for Heuristics.</p>
      *
-     * @param averageSlice a double.
-     * @param numberOfHeuristics a int.
-     * @param numberOfOrthogonal a int.
-     * @param numberOfSlices a int.
-     * @param depthCount a {@link java.util.List} object.
+     * @param averageSlice             a double.
+     * @param numberOfHeuristics       a int.
+     * @param numberOfOrthogonal       a int.
+     * @param numberOfSlices           a int.
+     * @param depthCount               a {@link java.util.List} object.
      * @param numberOfConstantsToCheck a int.
      */
     public Heuristics(int numberOfOrthogonal, int numberOfConstantsToCheck, int numberOfSlices, int numberOfHeuristics, double averageSlice, List<String> depthCount) {
@@ -294,13 +294,17 @@ public class Heuristics implements Serializable {
         return new ToStringBuilder(this).append("numberOfOrthogonal", numberOfOrthogonal).append("numberOfConstantsToCheck", numberOfConstantsToCheck).append("numberOfSlices", numberOfSlices).append("numberOfHeuristics", numberOfHeuristics).append("averageSlice", averageSlice).append("depthCount", depthCount).toString();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(averageSlice).append(numberOfHeuristics).append(numberOfOrthogonal).append(numberOfSlices).append(depthCount).append(numberOfConstantsToCheck).toHashCode();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object other) {
         if (other == this) {

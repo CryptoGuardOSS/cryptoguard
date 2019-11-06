@@ -23,7 +23,6 @@ import soot.jimple.internal.JAssignStmt;
 import soot.jimple.internal.JInvokeStmt;
 import soot.options.Options;
 import soot.util.Chain;
-import util.manifest.ProcessManifest;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -32,6 +31,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -51,16 +52,42 @@ import static soot.SootClass.BODIES;
  */
 public class Utils {
 
+    /**
+     * Constant <code>SLICE_LENGTH</code>
+     */
+    public static final ArrayList<Integer> SLICE_LENGTH = new ArrayList<>();
+    /**
+     * Constant <code>lineSep="System.getProperty(file.separator)"</code>
+     */
+    public final static String fileSep = System.getProperty("file.separator");
+    /**
+     * Constant <code>lineSep="System.getProperty(line.separator)"</code>
+     */
+    public final static String lineSep = System.getProperty("line.separator");
+    /**
+     * Constant <code>projectVersion="V03.09.01"</code>
+     */
+    public final static String projectVersion = "V03.09.01";
+    /**
+     * Constant <code>projectName="CryptoGuard"</code>
+     */
+    public final static String projectName = "CryptoGuard";
+    /**
+     * Constant <code>userPath="System.getProperty(user.home)"</code>
+     */
+    public final static String userPath = System.getProperty("user.home");
     //region Static Variables
     private static final List<String> ASSIGN_DONT_VISIT = new ArrayList<>();
     private static final List<String> INVOKE_DONT_VISIT = new ArrayList<>();
-
-    static {
-        ASSIGN_DONT_VISIT.add("<java.util.Map: java.lang.Object get(java.lang.Object)>");
-        INVOKE_DONT_VISIT.add("<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>");
-        INVOKE_DONT_VISIT.add("java.lang.String: void <init>");
-    }
-
+    private final static Pattern sootClassPattern = Pattern.compile("[<](.+)[:]");
+    private final static Pattern sootClassPatternTwo = Pattern.compile("([a-zA-Z0-9]+[.][a-zA-Z0-9]+)\\$[0-9]+");
+    private final static Pattern sootFoundPattern = Pattern.compile("\\[(.+)\\]");
+    private final static Pattern sootLineNumPattern = Pattern.compile("\\(\\)\\>\\[(\\d+)\\]");
+    private final static Pattern sootMthdPattern = Pattern.compile("<((?:[a-zA-Z0-9]+))>");
+    private final static Pattern sootMthdPatternTwo = Pattern.compile("((?:[a-zA-Z0-9_]+))\\(");
+    private final static Pattern sootFoundMatchPattern = Pattern.compile("\"{1}(.+)\"{1}");
+    private final static Pattern packagePattern = Pattern.compile("package ([[a-zA-Z]+?.]+);");
+    private final static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");
     /**
      * Constant <code>NUM_ORTHOGONAL=0</code>
      */
@@ -78,10 +105,6 @@ public class Utils {
      */
     public static int NUM_HEURISTIC = 0;
     /**
-     * Constant <code>SLICE_LENGTH</code>
-     */
-    public static final ArrayList<Integer> SLICE_LENGTH = new ArrayList<>();
-    /**
      * Constant <code>DEPTH_COUNT</code>
      */
     public static int[] DEPTH_COUNT;
@@ -89,7 +112,16 @@ public class Utils {
      * Constant <code>DEPTH=0</code>
      */
     public static int DEPTH = 0;
+    /**
+     * Constant <code>supportedVersion</code>
+     */
     public static Version supportedVersion = Version.EIGHT;
+
+    static {
+        ASSIGN_DONT_VISIT.add("<java.util.Map: java.lang.Object get(java.lang.Object)>");
+        INVOKE_DONT_VISIT.add("<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>");
+        INVOKE_DONT_VISIT.add("java.lang.String: void <init>");
+    }
 
     /**
      * <p>initDepth.</p>
@@ -100,40 +132,6 @@ public class Utils {
         DEPTH = depth;
         DEPTH_COUNT = new int[depth];
     }
-
-    /**
-     * Constant <code>lineSep="System.getProperty(file.separator)"</code>
-     */
-    public final static String fileSep = System.getProperty("file.separator");
-    /**
-     * Constant <code>lineSep="System.getProperty(line.separator)"</code>
-     */
-    public final static String lineSep = System.getProperty("line.separator");
-    /**
-     * Constant <code>localPath="System.getProperty(user.dir)"</code>
-     */
-    public final static String localPath = System.getProperty("user.dir");
-    /**
-     * Constant <code>projectVersion="V03.08.00"</code>
-     */
-    public final static String projectVersion = "V03.08.00";
-    /**
-     * Constant <code>projectName="CryptoGuard"</code>
-     */
-    public final static String projectName = "CryptoGuard";
-    /**
-     * Constant <code>userPath="System.getProperty(user.home)"</code>
-     */
-    public final static String userPath = System.getProperty("user.home");
-    private final static Pattern sootClassPattern = Pattern.compile("[<](.+)[:]");
-    private final static Pattern sootClassPatternTwo = Pattern.compile("([a-zA-Z0-9]+[.][a-zA-Z0-9]+)\\$[0-9]+");
-    private final static Pattern sootFoundPattern = Pattern.compile("\\[(.+)\\]");
-    private final static Pattern sootLineNumPattern = Pattern.compile("\\(\\)\\>\\[(\\d+)\\]");
-    private final static Pattern sootMthdPattern = Pattern.compile("<((?:[a-zA-Z0-9]+))>");
-    private final static Pattern sootMthdPatternTwo = Pattern.compile("((?:[a-zA-Z0-9_]+))\\(");
-    private final static Pattern sootFoundMatchPattern = Pattern.compile("\"{1}(.+)\"{1}");
-    private final static Pattern packagePattern = Pattern.compile("package ([[a-zA-Z]+?.]+);");
-    private final static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");
     //endregion
 
     /**
@@ -159,108 +157,26 @@ public class Utils {
         }
     }
 
-    public static List<String> loadJavaLang() throws ExceptionHandler {
-        List<String> full = getClassNamesFromJarArchive(getRT());
-        full.removeIf(klass -> !klass.startsWith("java.lang."));
-        return full;
-    }
-
     //region HotMethods
-    /**
-     * <p>getBasePackageNameFromApk.</p>
-     *
-     * @param apkPath a {@link java.lang.String} object.
-     * @return a {@link java.lang.String} object.
-     */
-    public static String getBasePackageNameFromApk(String apkPath) {
-
-        String basePackage = null;
-
-        ProcessManifest processManifest = new ProcessManifest();
-
-        try {
-            processManifest.loadManifestFile(apkPath);
-            basePackage = processManifest.getPackageName();
-        } catch (Exception e) {
-            //TODO - Exception
-            System.out.println("Couldn't load manifest file.");
-        }
-
-        return basePackage;
-    }
 
     /**
-     * <p>getBasePackageNameFromJar.</p>
+     * <p>joinSpecialSootClassPath.</p>
      *
-     * @param jarPath a {@link java.lang.String} object.
-     * @param isMain  a boolean.
+     * @param fileIn a {@link java.util.List} object.
      * @return a {@link java.lang.String} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
-    public static String getBasePackageNameFromJar(String jarPath, boolean isMain) throws ExceptionHandler {
-
-        try {
-            ZipInputStream zip = new ZipInputStream(new FileInputStream(jarPath));
-
-            List<String> basePackages = new ArrayList<>();
-
-            for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
-                if (!entry.isDirectory() && entry.getName().endsWith(".class")) {
-                    String className = entry.getName().replace('/', '.');
-                    className = className.substring(0, className.length() - ".class".length());
-
-                    String[] splits = className.split("\\.");
-                    StringBuilder basePackage = new StringBuilder();
-
-                    if (splits.length > 3) { // assumption package structure is org.apache.xyz.main
-                        basePackage.append(splits[0])
-                                .append(".")
-                                .append(splits[1])
-                                .append(".")
-                                .append(splits[2]);
-                    } else if (splits.length == 3) {
-                        basePackage.append(splits[0])
-                                .append(".")
-                                .append(splits[1]);
-                    } else {
-                        basePackage.append(splits[0]);
-                    }
-
-                    String basePackageStr = basePackage.toString();
-
-                    if (!basePackages.toString().contains(basePackageStr)) {
-                        basePackages.add(basePackageStr);
-                    }
-                }
-            }
-
-            if (basePackages.size() == 1) {
-                return basePackages.get(0);
-            } else if (basePackages.size() > 1) {
-
-                if (isMain) {
-                    //TODO - Exception
-                    System.out.println("***Multiple Base packages of " + jarPath + " : " + basePackages.toString());
-                }
-
-                for (String basePackage : basePackages) {
-                    if (basePackage.split("\\.").length > 2 && jarPath.contains(basePackage.split("\\.")[2])) {
-                        return basePackage;
-                    }
-                }
-            }
-
-            return null;
-        } catch (IOException e) {
-            throw new ExceptionHandler("Error with file " + jarPath, ExceptionId.FILE_I);
-        }
-
-    }
-
     public static String joinSpecialSootClassPath(List<String> fileIn) throws ExceptionHandler {
         return join(":", retrieveClosePath(fileIn));
     }
 
+    /**
+     * <p>retrieveClosePath.</p>
+     *
+     * @param fileIn a {@link java.util.List} object.
+     * @return a {@link java.util.List} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
     public static List<String> retrieveClosePath(List<String> fileIn) throws ExceptionHandler {
         ArrayList<String> output = new ArrayList<>();
 
@@ -281,6 +197,7 @@ public class Utils {
      *
      * @param in a {@link java.lang.String} object.
      * @return a {@link java.lang.String} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static String retrieveFullyQualifiedName(String in) throws ExceptionHandler {
 
@@ -323,16 +240,94 @@ public class Utils {
         return sourcePackage;
     }
 
+    /**
+     * <p>containsAny.</p>
+     *
+     * @param input          a {@link java.lang.String} object.
+     * @param stringsToCheck an array of {@link java.lang.String} objects.
+     * @return a {@link java.lang.Boolean} object.
+     */
     public static Boolean containsAny(String input, String[] stringsToCheck) {
         return containsAny(input, Arrays.asList(stringsToCheck));
     }
 
+    /**
+     * <p>containsAny.</p>
+     *
+     * @param input          a {@link java.lang.String} object.
+     * @param stringsToCheck a {@link java.util.List} object.
+     * @return a {@link java.lang.Boolean} object.
+     */
     public static Boolean containsAny(String input, List<String> stringsToCheck) {
         return stringsToCheck.stream().anyMatch(input::contains);
+    }
+
+    /**
+     * <p>listf.</p>EntryPointTest_CLASS
+     *
+     * @return a {@link java.util.List} object.
+     */
+    public static List<String> retrieveFilesPredicate(String path, Predicate<String> fileCheck, Function<File, String> functor) throws ExceptionHandler {
+
+        List<String> output = new ArrayList<>();
+        for (File file : Objects.requireNonNull(new File(verifyDir(path)).listFiles()))
+        {
+            if (file.isFile() && fileCheck.test(file.getName()))
+            {
+                if (functor == null)
+                    output.add(file.getAbsolutePath());
+                else
+                    output.add(functor.apply(file));
+            }
+            else if (file.isDirectory())
+                output.addAll(retrieveFilesPredicate(file.getAbsolutePath(), fileCheck, functor));
+        }
+
+        return output;
+    }
+
+    public static Set<String> retrieveJavaFileImports(String... paths) throws ExceptionHandler {
+        return retrieveJavaFileImports(Arrays.asList(paths));
+    }
+
+    public static Set<String> retrieveJavaFileImports(List<String> paths) throws ExceptionHandler {
+        Set<String> results = new HashSet<>();
+        for (String path: paths)
+            results.addAll(retrieveJavaFileImports(path));
+        return results;
+    }
+
+    public static Set<String> retrieveJavaFileImports(String path) throws ExceptionHandler {
+        Set<String> results = new HashSet<>();
+        String javaFile = verifyFileExt(path, ".java", false);
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(javaFile))) {
+            String curLine;
+
+            leave:
+            while ((curLine = reader.readLine()) != null && !curLine.isEmpty() ){
+                if (!curLine.startsWith("package") && !curLine.startsWith("import") && StringUtils.isNotEmpty(curLine))
+                    break leave;
+                else if (curLine.startsWith("import"))
+                    results.add(curLine.replace("import ", "").replace(";",""));
+            }
+        } catch (FileNotFoundException e) {
+            //TODO - Add exception here
+        } catch (IOException e) {
+            //TODO - Add Exception here
+        }
+
+        return results;
+    }
+
+    public static void setSunBootPath(String basePath, String rt) {
+        System.setProperty("sun.boot.class.path", rt);
+        System.setProperty("java.ext.dirs", osSurround(basePath, "lib"));
     }
     //endregion
 
     //region NotHotMethods
+
     /**
      * <p>getClassNamesFromApkArchive.</p>
      *
@@ -408,6 +403,12 @@ public class Utils {
         return classPath.toString();
     }
 
+    /**
+     * <p>getJarsInDirectories.</p>
+     *
+     * @param dirs a {@link java.util.List} object.
+     * @return a {@link java.util.List} object.
+     */
     public static List<String> getJarsInDirectories(List<String> dirs) {
         ArrayList<String> list = new ArrayList<>();
         for (String dir : dirs)
@@ -464,12 +465,7 @@ public class Utils {
             if (sClass.hasSuperclass()) {
                 SootClass superClass = sClass.getSuperclass();
 
-                List<SootClass> childList = classHierarchyMap.get(superClass.getName());
-
-                if (childList == null) {
-                    childList = new ArrayList<>();
-                    classHierarchyMap.put(superClass.getName(), childList);
-                }
+                List<SootClass> childList = classHierarchyMap.computeIfAbsent(superClass.getName(), k -> new ArrayList<>());
 
                 if (childList.isEmpty()) {
                     childList.add(superClass);
@@ -478,12 +474,7 @@ public class Utils {
             }
 
             for (SootClass parent : parents) {
-                List<SootClass> childList = classHierarchyMap.get(parent.getName());
-
-                if (childList == null) {
-                    childList = new ArrayList<>();
-                    classHierarchyMap.put(parent.getName(), childList);
-                }
+                List<SootClass> childList = classHierarchyMap.computeIfAbsent(parent.getName(), k -> new ArrayList<>());
 
                 if (childList.isEmpty()) {
                     childList.add(parent);
@@ -601,10 +592,8 @@ public class Utils {
     public static List<File> listf(String directoryName) {
         File directory = new File(directoryName);
 
-        List<File> resultList = new ArrayList<File>();
-
         File[] fList = directory.listFiles();
-        resultList.addAll(Arrays.asList(fList));
+        List<File> resultList = new ArrayList<>(Arrays.asList(fList));
         for (File file : fList) {
             if (file.isFile()) {
             } else if (file.isDirectory()) {
@@ -645,6 +634,13 @@ public class Utils {
         return classNames;
     }
 
+    /**
+     * <p>retrieveFullyQualifiedName.</p>
+     *
+     * @param sourceJavaFile a {@link java.lang.String} object.
+     * @return a {@link java.util.List} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
     public static List<String> retrieveFullyQualifiedName(String... sourceJavaFile) throws ExceptionHandler {
         return retrieveFullyQualifiedName(Arrays.asList(sourceJavaFile));
     }
@@ -654,6 +650,7 @@ public class Utils {
      *
      * @param sourceJavaFile a {@link java.util.List} object.
      * @return a {@link java.util.List} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static List<String> retrieveFullyQualifiedName(List<String> sourceJavaFile) throws ExceptionHandler {
         List<String> fullPath = new ArrayList<>();
@@ -663,10 +660,25 @@ public class Utils {
         return fullPath;
     }
 
+    /**
+     * <p>replaceLast.</p>
+     *
+     * @param text     a {@link java.lang.String} object.
+     * @param regexish a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String replaceLast(String text, String regexish) {
         return replaceLast(text, regexish, "");
     }
 
+    /**
+     * <p>replaceLast.</p>
+     *
+     * @param text        a {@link java.lang.String} object.
+     * @param regexish    a {@link java.lang.String} object.
+     * @param replacement a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String replaceLast(String text, String regexish, String replacement) {
         int lastIdx = text.lastIndexOf(regexish);
         if (lastIdx != -1)
@@ -734,6 +746,13 @@ public class Utils {
         return file;
     }
 
+    /**
+     * <p>retrieveBaseDirectory.</p>
+     *
+     * @param file a {@link java.util.List} object.
+     * @return a {@link java.lang.String} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
     public static String retrieveBaseDirectory(List<String> file) throws ExceptionHandler {
         String baseDir = "";
         String[] baseSplit = new String[0];
@@ -798,6 +817,12 @@ public class Utils {
         return filePaths;
     }
 
+    /**
+     * <p>retrieveJavaFilesFromDir.</p>
+     *
+     * @param path a {@link java.lang.String} object.
+     * @return a {@link java.util.ArrayList} object.
+     */
     public static ArrayList<String> retrieveJavaFilesFromDir(String path) {
         if (StringUtils.isEmpty(path))
             return null;
@@ -830,8 +855,15 @@ public class Utils {
         return Utils.osPathJoin(tempDependencyPath, dependencyPath);
     }
 
+    /**
+     * <p>inputFiles.</p>
+     *
+     * @param file a {@link java.lang.String} object.
+     * @return a {@link java.util.ArrayList} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
     public static ArrayList<String> inputFiles(String file) throws ExceptionHandler {
-        ArrayList<String> filePaths = new ArrayList<String>();
+        ArrayList<String> filePaths = new ArrayList<>();
         String curLine = null;
 
         try {
@@ -848,6 +880,12 @@ public class Utils {
         }
     }
 
+    /**
+     * <p>retrieveFileParentPath.</p>
+     *
+     * @param filePath a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String retrieveFileParentPath(String filePath) {
         String fullPaths = retrieveFullFilePath(filePath);
         return fullPaths.substring(0, fullPaths.lastIndexOf(fileSep));
@@ -883,6 +921,12 @@ public class Utils {
         return folderSplit[folderSplit.length - 1];
     }
 
+    /**
+     * <p>osSurround.</p>
+     *
+     * @param elements a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String osSurround(String... elements) {
         return surround(Utils.fileSep, elements);
     }
@@ -897,16 +941,34 @@ public class Utils {
         return join(Utils.fileSep, elements);
     }
 
+    /**
+     * <p>surround.</p>
+     *
+     * @param delimiter a {@link java.lang.String} object.
+     * @param elements  a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String surround(String delimiter, String... elements) {
         return surround(delimiter, Arrays.asList(elements));
     }
 
+    /**
+     * <p>surround.</p>
+     *
+     * @param delimiter a {@link java.lang.String} object.
+     * @param elements  a {@link java.util.List} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String surround(String delimiter, List<String> elements) {
-        String current = StringUtils.trimToNull(delimiter + join(delimiter, elements));
-        if (current.endsWith(delimiter))
-            return current;
-        else
-            return current + delimiter;
+        String current = StringUtils.trimToNull(join(delimiter, elements));
+
+        if (!current.startsWith(delimiter))
+            current = delimiter + current;
+
+        if (!current.endsWith(delimiter))
+            current += delimiter;
+
+        return current;
     }
 
     /**
@@ -940,12 +1002,6 @@ public class Utils {
         return tempString.toString();
     }
 
-    public static String retireveJavaFileName(String qualifiedName) {
-        String[] split = qualifiedName.split("\\.");
-
-        return split[split.length - 1];
-    }
-
     /**
      * <p>getJAVA_HOME.</p>
      *
@@ -971,7 +1027,7 @@ public class Utils {
         if (StringUtils.isEmpty(JAVA7_HOME)) {
             throw new ExceptionHandler("Environment Variable: JAVA7_HOME is not set.", ExceptionId.ENV_VAR);
         }
-        return JAVA7_HOME;
+        return JAVA7_HOME.replaceAll("//", "/");
     }
 
     /**
@@ -996,16 +1052,30 @@ public class Utils {
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static String getBaseSOOT() throws ExceptionHandler {
-        String temp = join(":", getJCE(), getRT());
-        return join(":", getJCE(), getRT());
+        String rt =  getRT();
+        setSunBootPath(Utils.getJAVA_HOME(), rt);
+
+        return join(":", getJCE(), rt);
     }
 
+    /**
+     * <p>getRT.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
     public static String getRT() throws ExceptionHandler {
         String rt = Utils.osPathJoin("jre", "lib", "rt.jar");
 
         return osPathJoin(Utils.getJAVA_HOME(), rt);
     }
 
+    /**
+     * <p>getJCE.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
     public static String getJCE() throws ExceptionHandler {
         String jce = Utils.osPathJoin("jre", "lib", "jce.jar");
 
@@ -1013,17 +1083,18 @@ public class Utils {
     }
 
     /**
-     * //TODO - Need to verify this is necessary
      * <p>getBaseSOOT7.</p>
      *
      * @return a {@link java.lang.String} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static String getBaseSOOT7() throws ExceptionHandler {
-        String rt = Utils.osPathJoin("jre", "lib", "rt.jar:");
-        String jce = Utils.osPathJoin("jre", "lib", "jce.jar");
+        String rt = Utils.osPathJoin(Utils.getJAVA7_HOME(), "jre", "lib", "rt.jar");
+        String jce = Utils.osPathJoin(Utils.getJAVA7_HOME(), "jre", "lib", "jce.jar");
 
-        return Utils.getJAVA7_HOME() + Utils.fileSep + join(Utils.getJAVA7_HOME() + Utils.fileSep, rt, jce);
+        setSunBootPath(Utils.getJAVA7_HOME(), rt);
+
+        return Utils.join(":", Utils.getJAVA7_HOME(), rt, jce);
     }
 
     /**
@@ -1273,30 +1344,27 @@ public class Utils {
     }
 
     /**
-     * <p>verifyXArgs.</p>
+     * <p>verifyClassPaths.</p>
      *
-     * @param xargFiles an array of {@link java.lang.String} objects.
+     * @param classPaths a {@link java.lang.String} object.
      * @return a {@link java.util.ArrayList} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
-    public static ArrayList<String> verifyXArgs(String[] xargFiles) throws ExceptionHandler {
-        ArrayList<String> output = new ArrayList<String>();
-        Scanner input = new Scanner(System.in);
-
-        while (input.hasNextLine())
-            output.add(Utils.verifyFileExts(input.nextLine(), new String[]{".java", ".class"}, false));
-
-        return output;
-    }
-
     public static ArrayList<String> verifyClassPaths(String... classPaths) throws ExceptionHandler {
         return verifyClassPaths(Arrays.asList(classPaths));
     }
 
+    /**
+     * <p>verifyClassPaths.</p>
+     *
+     * @param classPaths a {@link java.util.List} object.
+     * @return a {@link java.util.ArrayList} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
     public static ArrayList<String> verifyClassPaths(List<String> classPaths) throws ExceptionHandler {
         ArrayList<String> output = new ArrayList<>();
-            for (String klazz : classPaths)
-                output.addAll(verifyClassPaths(klazz));
+        for (String klazz : classPaths)
+            output.addAll(verifyClassPaths(klazz));
         return output;
     }
 
@@ -1308,7 +1376,7 @@ public class Utils {
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static ArrayList<String> verifyClassPaths(String classPaths) throws ExceptionHandler {
-        ArrayList<String> output = new ArrayList<String>();
+        ArrayList<String> output = new ArrayList<>();
         for (String path : classPaths.split(":"))
             output.add(Utils.verifyFileExts(path, new String[]{".java", ".class", ".jar", "dir"}, false));
 
@@ -1356,7 +1424,7 @@ public class Utils {
         List<String> filePaths = new ArrayList<>();
 
         for (String in : arguments)
-            for (String foil: in.split(":"))
+            for (String foil : in.split(":"))
                 filePaths.add(retrieveFilePath(foil, type));
 
         return filePaths;
@@ -1519,8 +1587,8 @@ public class Utils {
 
             List<Value> args = invokeExpr.getArgs();
 
-            for (int x = 0; x < args.size(); x++) {
-                if (args.get(x) instanceof Constant) {
+            for (Value arg : args) {
+                if (arg instanceof Constant) {
                     return baseUnit;
                 }
             }
@@ -1533,8 +1601,7 @@ public class Utils {
 
             UnitContainer curUnit = analysis.getAnalysisResult().get(i);
 
-            List<UnitContainer> inset = new ArrayList<>();
-            inset.addAll(outSet);
+            List<UnitContainer> inset = new ArrayList<>(outSet);
 
             for (UnitContainer insetIns : inset) {
                 boolean outSetContainsCurUnit = !outSet.toString().contains(curUnit.toString());
@@ -1552,8 +1619,8 @@ public class Utils {
 
                             List<Value> args = invokeExpr.getArgs();
 
-                            for (int x = 0; x < args.size(); x++) {
-                                if (args.get(x).toString().contains(property)) {
+                            for (Value arg : args) {
+                                if (arg.toString().contains(property)) {
                                     return curUnit;
                                 }
                             }
@@ -1594,9 +1661,9 @@ public class Utils {
                                 InvokeExpr invokeExpr = ((JInvokeStmt) curUnit.getUnit()).getInvokeExpr();
                                 List<Value> args = invokeExpr.getArgs();
 
-                                for (int x = 0; x < args.size(); x++) {
-                                    if (args.get(x).equivTo(defBox.getValue()) ||
-                                            isArrayUseBox(curUnit, insetIns, defBox, args.get(x))) {
+                                for (Value arg : args) {
+                                    if (arg.equivTo(defBox.getValue()) ||
+                                            isArrayUseBox(curUnit, insetIns, defBox, arg)) {
                                         return curUnit;
                                     }
                                 }
@@ -1641,9 +1708,9 @@ public class Utils {
 
                                 List<Value> args = invokeExpr.getArgs();
 
-                                for (int x = 0; x < args.size(); x++) {
-                                    if (args.get(x).equivTo(defBox.getValue()) ||
-                                            isArrayUseBox(curUnit, insetIns, defBox, args.get(x))) {
+                                for (Value arg : args) {
+                                    if (arg.equivTo(defBox.getValue()) ||
+                                            isArrayUseBox(curUnit, insetIns, defBox, arg)) {
                                         return curUnit;
                                     }
                                 }
@@ -1711,7 +1778,6 @@ public class Utils {
         return unitContainer;
     }
 
-
     /**
      * <p>createAnalysisOutput.</p>
      *
@@ -1756,7 +1822,7 @@ public class Utils {
      * @return a {@link java.util.ArrayList} object.
      */
     public static ArrayList<String> createDepthCountList() {
-        ArrayList<String> output = new ArrayList<String>();
+        ArrayList<String> output = new ArrayList<>();
 
         for (int i = 0; i < Utils.DEPTH_COUNT.length; i++) {
             output.add(String.format("Depth: %d, Count %d", i + 1, Utils.DEPTH_COUNT[i]));

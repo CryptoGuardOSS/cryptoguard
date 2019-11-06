@@ -15,13 +15,13 @@ import rule.engine.EngineType;
  */
 public class LegacyTest {
 
+    private final EngineType type = EngineType.APK;
+    private final String dependencies = null;
+    private final String helpString = "No extra inputs are needed for this output type\nThis is the default output type";
     //region Attributes
     private EnvironmentInformation testInfo;
     private String[] args;
     private Legacy inputTest;
-    private final EngineType type = EngineType.APK;
-    private final String dependencies = null;
-    private final String helpString = "No extra inputs are needed for this output type\nThis is the default output type";
     //endregion
 
     //region Test Environment Management

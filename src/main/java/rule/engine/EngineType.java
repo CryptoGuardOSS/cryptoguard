@@ -51,44 +51,6 @@ public enum EngineType {
     //region Getters
 
     /**
-     * The getter for the flag
-     *
-     * @return string - the flag of the engine type
-     */
-    public String getFlag() {
-        return this.flag;
-    }
-
-    /**
-     * The getter for the human readable name of the engine type
-     *
-     * @return string - the name of the engine type
-     */
-    public String getName() {
-        return this.name;
-    }
-
-    /**
-     * The getter for the extension
-     *
-     * @return {@link java.lang.String} - The extension for the engine Type
-     */
-    public String getInputExtension() {
-        return this.inputExtension;
-    }
-
-    /**
-     * The getter for helpInfo
-     *
-     * <p>getHelpInfo()</p>
-     *
-     * @return {@link java.lang.String} - Returns the HelpInfo field
-     */
-    public String getHelpInfo() {
-        return helpInfo;
-    }
-
-    /**
      * The method to retrieve the engine type from the flag
      *
      * @param flag - the flag used to look for the specified engine type
@@ -125,12 +87,50 @@ public enum EngineType {
         StringBuilder out = new StringBuilder("[");
 
         for (EngineType type : EngineType.values())
-            if (type == EngineType.CLASSFILES)
+            if (type == EngineType.JAVAFILES)
                 out.append(type.getFlag()).append("(experimental) ");
             else
                 out.append(type.getFlag()).append(" ");
 
         return StringUtils.trimToNull(out.toString()) + "]";
+    }
+
+    /**
+     * The getter for the flag
+     *
+     * @return string - the flag of the engine type
+     */
+    public String getFlag() {
+        return this.flag;
+    }
+
+    /**
+     * The getter for the human readable name of the engine type
+     *
+     * @return string - the name of the engine type
+     */
+    public String getName() {
+        return this.name;
+    }
+
+    /**
+     * The getter for the extension
+     *
+     * @return {@link java.lang.String} - The extension for the engine Type
+     */
+    public String getInputExtension() {
+        return this.inputExtension;
+    }
+
+    /**
+     * The getter for helpInfo
+     *
+     * <p>getHelpInfo()</p>
+     *
+     * @return {@link java.lang.String} - Returns the HelpInfo field
+     */
+    public String getHelpInfo() {
+        return helpInfo;
     }
 
     //endregion

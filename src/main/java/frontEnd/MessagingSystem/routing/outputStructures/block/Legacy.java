@@ -82,7 +82,7 @@ public class Legacy extends Structure {
         for (Integer ruleNumber : ruleOrdering) {
             log.trace("Working through the rule group " + ruleNumber);
             output.append("=======================================\n");
-            output.append("***Violated Rule " + RuleList.getRuleByRuleNumber(ruleNumber).getRuleId() + ": " + RuleList.getRuleByRuleNumber(ruleNumber).getDesc() + "\n");
+            output.append("***Violated Rule ").append(RuleList.getRuleByRuleNumber(ruleNumber).getRuleId()).append(": ").append(RuleList.getRuleByRuleNumber(ruleNumber).getDesc()).append("\n");
 
             for (AnalysisIssue issue : groupedRules.get(ruleNumber)) {
                 log.debug("Working through the broken rule " + issue.getInfo());
@@ -103,7 +103,7 @@ public class Legacy extends Structure {
         //region Timing Section
         if (super.getSource().isShowTimes()) {
             log.trace("Writing the time measurements.");
-            output.append(frontEnd.MessagingSystem.routing.outputStructures.common.Legacy.marshalling(super.getSource().getAnalyisisTime()));
+            output.append(frontEnd.MessagingSystem.routing.outputStructures.common.Legacy.marshalling(super.getSource().getAnalysisMilliSeconds()));
         }
         //endregion
 

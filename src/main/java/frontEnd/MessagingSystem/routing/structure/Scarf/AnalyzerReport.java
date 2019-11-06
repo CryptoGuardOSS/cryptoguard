@@ -50,6 +50,7 @@ import java.util.List;
 })
 public class AnalyzerReport implements Serializable {
 
+    private final static long serialVersionUID = 4656075134214578571L;
     /**
      * The -assess_fw Schema
      * <p>
@@ -209,7 +210,6 @@ public class AnalyzerReport implements Serializable {
      */
     @JsonProperty("Heuristics")
     private Heuristics heuristics;
-    private final static long serialVersionUID = 4656075134214578571L;
 
     /**
      * No args constructor for use in serialization
@@ -263,6 +263,26 @@ public class AnalyzerReport implements Serializable {
         this.metric = metric;
         this.metricSummaries = metricSummaries;
         this.heuristics = heuristics;
+    }
+
+    /**
+     * <p>deserialize.</p>
+     *
+     * @param file a {@link java.io.File} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
+    public static AnalyzerReport deserialize(File file) throws ExceptionHandler {
+        try {
+
+            ObjectMapper deserializer = Listing.ScarfXML.getJacksonType().getOutputMapper();
+
+            return deserializer.readValue(file, AnalyzerReport.class);
+
+        } catch (IOException e) {
+            throw new ExceptionHandler("Issue de-serializing file: " + file.getName(), ExceptionId.FILE_READ);
+        }
+
     }
 
     /**
@@ -1014,13 +1034,17 @@ public class AnalyzerReport implements Serializable {
         return new ToStringBuilder(this).append("assessFw", assessFw).append("assessFwVersion", assessFwVersion).append("assessmentStartTs", assessmentStartTs).append("buildFw", buildFw).append("buildFwVersion", buildFwVersion).append("packageName", packageName).append("packageVersion", packageVersion).append("buildRootDir", buildRootDir).append("packageRootDir", packageRootDir).append("parserFw", parserFw).append("parserFwVersion", parserFwVersion).append("platformName", platformName).append("toolName", toolName).append("toolVersion", toolVersion).append("uuid", uuid).append("bugInstance", bugInstance).append("bugCategory", bugCategory).append("metric", metric).append("metricSummaries", metricSummaries).append("heuristics", heuristics).toString();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(buildFw).append(bugCategory).append(packageName).append(assessFw).append(toolVersion).append(buildFwVersion).append(parserFw).append(toolName).append(bugInstance).append(packageVersion).append(assessmentStartTs).append(metricSummaries).append(platformName).append(metric).append(heuristics).append(buildRootDir).append(uuid).append(parserFwVersion).append(packageRootDir).append(assessFwVersion).toHashCode();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -1031,27 +1055,6 @@ public class AnalyzerReport implements Serializable {
         }
         AnalyzerReport rhs = ((AnalyzerReport) other);
         return new EqualsBuilder().append(buildFw, rhs.buildFw).append(bugCategory, rhs.bugCategory).append(packageName, rhs.packageName).append(assessFw, rhs.assessFw).append(toolVersion, rhs.toolVersion).append(buildFwVersion, rhs.buildFwVersion).append(parserFw, rhs.parserFw).append(toolName, rhs.toolName).append(bugInstance, rhs.bugInstance).append(packageVersion, rhs.packageVersion).append(assessmentStartTs, rhs.assessmentStartTs).append(metricSummaries, rhs.metricSummaries).append(platformName, rhs.platformName).append(metric, rhs.metric).append(heuristics, rhs.heuristics).append(buildRootDir, rhs.buildRootDir).append(uuid, rhs.uuid).append(parserFwVersion, rhs.parserFwVersion).append(packageRootDir, rhs.packageRootDir).append(assessFwVersion, rhs.assessFwVersion).isEquals();
-    }
-
-
-    /**
-     * <p>deserialize.</p>
-     *
-     * @param file a {@link java.io.File} object.
-     * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static AnalyzerReport deserialize(File file) throws ExceptionHandler {
-        try {
-
-            ObjectMapper deserializer = Listing.ScarfXML.getJacksonType().getOutputMapper();
-
-            return deserializer.readValue(file, AnalyzerReport.class);
-
-        } catch (IOException e) {
-            throw new ExceptionHandler("Issue de-serializing file: " + file.getName(), ExceptionId.FILE_READ);
-        }
-
     }
 
 }

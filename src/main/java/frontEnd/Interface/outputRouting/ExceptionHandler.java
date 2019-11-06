@@ -2,6 +2,8 @@ package frontEnd.Interface.outputRouting;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.function.Supplier;
+
 /**
  * <p>ExceptionHandler class.</p>
  *
@@ -12,7 +14,7 @@ import org.apache.commons.lang3.StringUtils;
  *
  * <p>The Main Exception Handling for the whole project</p>
  */
-public class ExceptionHandler extends Exception {
+public class ExceptionHandler extends Exception implements Supplier<String> {
 
     //region Attributes
     private ExceptionId errorCode;
@@ -41,18 +43,18 @@ public class ExceptionHandler extends Exception {
      */
     @Override
     public String toString() {
-        StringBuilder resp = new StringBuilder();
 
-        resp.append("==================================\n");
-        resp.append("Error ID: ").append(this.errorCode.getId()).append("\n");
-        resp.append("Error Type: ").append(this.errorCode.getMessage()).append("\n");
-        resp.append("Error Message: \n").append(this.longDesciption).append("\n");
-        resp.append("==================================");
-
-        return StringUtils.trimToNull(resp.toString()).concat("\n\n\n");
+        String resp = "==================================\n" +
+                "Error ID: " + this.errorCode.getId() + "\n" +
+                "Error Type: " + this.errorCode.getMessage() + "\n" +
+                "Error Message: \n" + this.longDesciption + "\n" +
+                "==================================";
+        return StringUtils.trimToNull(resp).concat("\n\n\n");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void printStackTrace() {
         System.err.println(this.toString());
@@ -77,6 +79,11 @@ public class ExceptionHandler extends Exception {
      */
     public String getLongDesciption() {
         return longDesciption;
+    }
+
+    @Override
+    public String get() {
+        return null;
     }
     //endregion
 }

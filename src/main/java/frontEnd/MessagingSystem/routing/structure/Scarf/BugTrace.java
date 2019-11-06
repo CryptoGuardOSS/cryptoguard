@@ -25,13 +25,13 @@ import java.io.Serializable;
 })
 public class BugTrace implements Serializable {
 
+    private final static long serialVersionUID = 3446050256881658399L;
     @JsonProperty("BuildId")
     private int buildId;
     @JsonProperty("AssessmentReportFile")
     private String assessmentReportFile;
     @JsonProperty("InstanceLocation")
     private InstanceLocation instanceLocation;
-    private final static long serialVersionUID = 3446050256881658399L;
 
     /**
      * No args constructor for use in serialization
@@ -154,13 +154,17 @@ public class BugTrace implements Serializable {
         return new ToStringBuilder(this).append("buildId", buildId).append("assessmentReportFile", assessmentReportFile).append("instanceLocation", instanceLocation).toString();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(assessmentReportFile).append(buildId).append(instanceLocation).toHashCode();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object other) {
         if (other == this) {

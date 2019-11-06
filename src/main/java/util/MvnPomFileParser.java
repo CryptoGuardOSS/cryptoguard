@@ -38,15 +38,6 @@ public class MvnPomFileParser implements BuildFileParser {
     String projectVersion;
 
     /**
-     * <p>isGradle.</p>
-     *
-     * @return a {@link java.lang.Boolean} object.
-     */
-    public Boolean isGradle() {
-        return false;
-    }
-
-    /**
      * <p>Constructor for MvnPomFileParser.</p>
      *
      * @param fileName a {@link java.lang.String} object.
@@ -91,6 +82,15 @@ public class MvnPomFileParser implements BuildFileParser {
         } catch (org.xml.sax.SAXException | java.io.IOException e) {
             throw new ExceptionHandler("Error parsing " + fileName, ExceptionId.FILE_O);
         }
+    }
+
+    /**
+     * <p>isGradle.</p>
+     *
+     * @return a {@link java.lang.Boolean} object.
+     */
+    public Boolean isGradle() {
+        return false;
     }
 
     /**

@@ -1,5 +1,5 @@
-<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
-           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified"
+           elementFormDefault="qualified">
     <xs:element name="AnalyzerReport">
         <xs:complexType>
             <xs:sequence>

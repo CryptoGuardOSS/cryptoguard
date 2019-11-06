@@ -32,6 +32,7 @@ import java.io.Serializable;
 })
 public class Issue implements Serializable {
 
+    private final static long serialVersionUID = -2265209324602378101L;
     /**
      * (Required)
      */
@@ -74,7 +75,6 @@ public class Issue implements Serializable {
      */
     @JsonProperty("Location")
     private Location location;
-    private final static long serialVersionUID = -2265209324602378101L;
 
     /**
      * No args constructor for use in serialization
@@ -85,15 +85,15 @@ public class Issue implements Serializable {
     /**
      * <p>Constructor for Issue.</p>
      *
-     * @param message a {@link java.lang.String} object.
-     * @param id a {@link java.lang.String} object.
-     * @param location a {@link frontEnd.MessagingSystem.routing.structure.Default.Location} object.
-     * @param ruleNumber a int.
+     * @param message     a {@link java.lang.String} object.
+     * @param id          a {@link java.lang.String} object.
+     * @param location    a {@link frontEnd.MessagingSystem.routing.structure.Default.Location} object.
+     * @param ruleNumber  a int.
      * @param description a {@link java.lang.String} object.
-     * @param ruleDesc a {@link java.lang.String} object.
-     * @param severity a {@link java.lang.String} object.
-     * @param cWEId a int.
-     * @param fullPath a {@link java.lang.String} object.
+     * @param ruleDesc    a {@link java.lang.String} object.
+     * @param severity    a {@link java.lang.String} object.
+     * @param cWEId       a int.
+     * @param fullPath    a {@link java.lang.String} object.
      */
     public Issue(String fullPath, String id, String message, String description, int ruleNumber, String ruleDesc, int cWEId, String severity, Location location) {
         super();
@@ -402,13 +402,17 @@ public class Issue implements Serializable {
         return new ToStringBuilder(this).append("fullPath", fullPath).append("id", id).append("message", message).append("description", description).append("ruleNumber", ruleNumber).append("ruleDesc", ruleDesc).append("cWEId", cWEId).append("severity", severity).append("location", location).toString();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(message).append(id).append(location).append(ruleNumber).append(description).append(ruleDesc).append(severity).append(cWEId).append(fullPath).toHashCode();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object other) {
         if (other == this) {

@@ -4,9 +4,11 @@ import argparse
 # Imports
 import os
 import shlex
+import signal
 import subprocess
 import sys
 import time
+from collections import OrderedDict
 
 '''####################################
 #A utility class that contains the rest of the main common files
@@ -86,19 +88,24 @@ class Utils(object):
         return round((x/(x+y))*100,2)
 
     def tests(dyct):
+        dyct = OrderedDict(sorted(dyct.items()))
         global numTests
-        passed, failed, skipped, testNum = 0,0,0,1
-        start, failedTests, verbose = time.time(), [], False
+        passed, failed, skipped, testNum, rerun,rerunLim = 0,0,0,1,0,1
+        start, failedTests, verbose, skippedTests = time.time(), [], False, []
         print('==============================')
         for key, value in dyct.items():
             subpassed, subfailed, subskipped = 0,0,0
             for test in value:
                 testName, startTest = str(key) + '.' + str(test['testName']), time.time()
-                print(str(testNum)+'/'+str(numTests) + ': ' + str(testName) + ' | ', end='', flush=True)
+                strTest = str(testNum)
+                if testNum < 10:
+                    strTest = '0'+str(strTest)
+                print(str(strTest)+'/'+str(numTests) + ' | ' + str(testName) + ' | ', end='', flush=True)
                 if not test['live']:
                     skipped = skipped + 1
                     subskipped = subskipped + 1
                     print('Skip | ', end='', flush=True)
+                    skippedTests += [testName]
                 else:
                     testResult = Utils.runTest(testName)
                     if (testResult):
@@ -114,6 +121,20 @@ class Utils(object):
                 print(str(int(time.time()-startTest)) + ' (s)')
             if verbose:
                 print(str(key) + ' Skipped/Passed/Fail/(% passed): ' + str(subskipped) + '/' + str(subpassed) + '/' +str(subfailed) + '/% ' + str(Utils.percent(subpassed,subfailed)))
+        while rerun < rerunLim:
+            print('Rerunning the failed tests')
+            for test in failedTests:
+                print(test, end=' | ', flush=True)
+                start = time.time()
+                result = Utils.runTest(test)
+                end = time.time()
+                if result:
+                    result = 'Pass'
+                    failedTests.remove(test)
+                else:
+                    result = 'Fail'
+                print(str(result) + ' | ' + str(int(end-start)) + ' (s)') 
+            rerun = rerun + 1
         print('==============================')
         print('Time Taken : ' + str(int(time.time()-start)) + 's')
         print('Skipped Tests: ' + str(skipped))
@@ -127,6 +148,36 @@ class Utils(object):
             for test in failedTests:
                 print(test)
             print('==============================')
+        if len(skippedTests) > 0:
+            print('Skipped Tests')
+            for test in skippedTests:
+                print(test)
+            print('==============================')
+
+    def build():
+        argz = ' clean build -x test '
+        print('Building the project using | ./gradlew'+str(argz), end='| ', flush=True)
+        start = time.time()
+        cmd = str(os.path.join(os.path.abspath(os.curdir), 'gradlew')) + str(argz)
+        try:
+            proc = subprocess.Popen(
+                shlex.split(cmd),
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE
+            )
+            stdout, stderr = proc.communicate()
+        except Exception as e:
+            print('Unknown Error ' + str(e))
+            sys.exit(0)
+        
+        stdout, stderr = stdout.decode('utf-8'), stderr.decode('utf-8')
+
+        if 'BUILD SUCCESSFUL' not in stdout:
+            print('The build broke, exiting now')
+            sys.exit(0)
+
+        print('Successful | ' + str(int(time.time()-start)) + ' (s)')
+
 
     def start():
         curChoices = list(routers.keys())
@@ -135,6 +186,7 @@ class Utils(object):
             Utils.routingInfo()
             sys.exit()
 
+        Utils.build()
         Utils.routing(args.switch)["func"](Utils.pullTests())
 
 
@@ -148,9 +200,13 @@ routers = {
     }
 }
 
+def signal_handler(sig, frame):
+        print('\nExiting...')
+        sys.exit(0)
 
 '''####################################
 #The main runner of this file, intended to be ran from
 '''  ####################################
 if __name__ == '__main__':
+    signal.signal(signal.SIGINT, signal_handler)
     Utils.start()

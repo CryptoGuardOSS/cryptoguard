@@ -8,7 +8,6 @@ import org.junit.Test;
 import test.TestUtilities;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
@@ -16,7 +15,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static test.TestUtilities.classFiles;
 import static test.TestUtilities.classSource;
-import static util.Utils.*;
+import static util.Utils.join;
+import static util.Utils.trimFilePath;
 
 /**
  * <p>UtilsTest class.</p>

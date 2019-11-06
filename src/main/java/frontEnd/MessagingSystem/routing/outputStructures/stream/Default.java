@@ -19,10 +19,10 @@ import static frontEnd.MessagingSystem.routing.outputStructures.common.Default.m
  *
  * @author franceme
  * Created on 04/30/2019.
+ * @version 03.07.01
  * @since 03.05.01
  *
  * <p>{Description Here}</p>
- * @version 03.07.01
  */
 @Log4j2
 public class Default extends Structure {
@@ -63,7 +63,7 @@ public class Default extends Structure {
         report.setIssues(null);
 
         log.debug("Marshalling the header");
-        String output = StringUtils.trimToNull(JacksonSerializer.serialize(report, super.getSource().prettyPrint(), Listing.Default.getJacksonType()));
+        String output = StringUtils.trimToNull(JacksonSerializer.serialize(report, super.getSource().getPrettyPrint(), Listing.Default.getJacksonType()));
 
         log.debug("Replacing the header based on the type");
         switch (super.getSource().getMessagingType().getJacksonType()) {
@@ -84,7 +84,9 @@ public class Default extends Structure {
 
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addIssue(AnalysisIssue issue) throws ExceptionHandler {
 
@@ -103,7 +105,7 @@ public class Default extends Structure {
             issueWrapper.getIssues().add(instance);
 
             log.debug("Marshalling the issue wrapper");
-            output = JacksonSerializer.serialize(issueWrapper, super.getSource().prettyPrint(), Listing.Default.getJacksonType());
+            output = JacksonSerializer.serialize(issueWrapper, super.getSource().getPrettyPrint(), Listing.Default.getJacksonType());
 
             log.trace("Manipulating the output based on the type");
             switch (super.getSource().getMessagingType().getJacksonType()) {
@@ -130,7 +132,7 @@ public class Default extends Structure {
         } else {
 
             log.debug("Marshalling the issue");
-            output = JacksonSerializer.serialize(instance, super.getSource().prettyPrint(), Listing.Default.getJacksonType());
+            output = JacksonSerializer.serialize(instance, super.getSource().getPrettyPrint(), Listing.Default.getJacksonType());
 
             switch (super.getSource().getMessagingType().getJacksonType()) {
                 case JSON:
@@ -150,7 +152,9 @@ public class Default extends Structure {
 
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void writeFooter() throws ExceptionHandler {
 
