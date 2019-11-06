@@ -31,6 +31,34 @@ public class HostNameVerifierFinder implements RuleChecker {
     private static final String METHOD_TO_SLICE = "boolean verify(java.lang.String,javax.net.ssl.SSLSession)";
     private static final String SLICING_INSTRUCTION = "return";
 
+    private static Map<String, List<UnitContainer>> getHostNameVerifiers(List<String> classNames) {
+
+        Map<String, List<UnitContainer>> analysisList = new HashMap<>();
+
+        NamedMethodMap.build(classNames);
+        FieldInitializationInstructionMap.build(classNames);
+
+        for (String className : classNames) {
+            SootClass sClass = Scene.v().loadClassAndSupport(className);
+
+            if (sClass.getInterfaces().toString().contains(HOST_NAME_VERIFIER)) {
+
+                List<SootMethod> methodList = sClass.getMethods();
+
+                for (SootMethod method : methodList) {
+                    if (method.toString().contains(METHOD_TO_SLICE) && method.isConcrete()) {
+                        OtherInfluencingInstructions returnInfluencingInstructions = new OtherInfluencingInstructions(method,
+                                SLICING_INSTRUCTION);
+                        List<UnitContainer> analysis = returnInfluencingInstructions.getAnalysisResult().getAnalysis();
+                        analysisList.put(className, analysis);
+                    }
+                }
+            }
+        }
+
+        return analysisList;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -72,33 +100,5 @@ public class HostNameVerifierFinder implements RuleChecker {
                 }
             }
         }
-    }
-
-    private static Map<String, List<UnitContainer>> getHostNameVerifiers(List<String> classNames) {
-
-        Map<String, List<UnitContainer>> analysisList = new HashMap<>();
-
-        NamedMethodMap.build(classNames);
-        FieldInitializationInstructionMap.build(classNames);
-
-        for (String className : classNames) {
-            SootClass sClass = Scene.v().loadClassAndSupport(className);
-
-            if (sClass.getInterfaces().toString().contains(HOST_NAME_VERIFIER)) {
-
-                List<SootMethod> methodList = sClass.getMethods();
-
-                for (SootMethod method : methodList) {
-                    if (method.toString().contains(METHOD_TO_SLICE) && method.isConcrete()) {
-                        OtherInfluencingInstructions returnInfluencingInstructions = new OtherInfluencingInstructions(method,
-                                SLICING_INSTRUCTION);
-                        List<UnitContainer> analysis = returnInfluencingInstructions.getAnalysisResult().getAnalysis();
-                        analysisList.put(className, analysis);
-                    }
-                }
-            }
-        }
-
-        return analysisList;
     }
 }

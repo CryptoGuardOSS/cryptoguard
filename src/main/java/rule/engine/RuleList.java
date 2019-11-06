@@ -49,6 +49,20 @@ public enum RuleList {
     //region Getters
 
     /**
+     * <p>getRuleByRuleNumber.</p>
+     *
+     * @param ruleNumber a {@link java.lang.Integer} object.
+     * @return a {@link rule.engine.RuleList} object.
+     */
+    public static RuleList getRuleByRuleNumber(Integer ruleNumber) {
+        for (RuleList rule : RuleList.values())
+            if (rule.getRuleId().equals(ruleNumber)) {
+                return rule;
+            }
+        return RuleList.UNCREATEDRULE;
+    }
+
+    /**
      * <p>Getter for the field <code>ruleId</code>.</p>
      *
      * @return a {@link java.lang.Integer} object.
@@ -65,6 +79,9 @@ public enum RuleList {
     public String getDesc() {
         return desc;
     }
+    //endregion
+
+    //region Accessors
 
     /**
      * Getter for cweId
@@ -75,23 +92,6 @@ public enum RuleList {
      */
     public Integer[] getCweId() {
         return cweId;
-    }
-    //endregion
-
-    //region Accessors
-
-    /**
-     * <p>getRuleByRuleNumber.</p>
-     *
-     * @param ruleNumber a {@link java.lang.Integer} object.
-     * @return a {@link rule.engine.RuleList} object.
-     */
-    public static RuleList getRuleByRuleNumber(Integer ruleNumber) {
-        for (RuleList rule : RuleList.values())
-            if (rule.getRuleId().equals(ruleNumber)) {
-                return rule;
-            }
-        return RuleList.UNCREATEDRULE;
     }
 
     /**

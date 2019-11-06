@@ -16,10 +16,10 @@ import static frontEnd.MessagingSystem.routing.outputStructures.common.Default.m
  *
  * @author franceme
  * Created on 04/30/2019.
+ * @version 03.07.01
  * @since 03.05.01
  *
  * <p>{Description Here}</p>
- * @version 03.07.01
  */
 @Log4j2
 public class Default extends Structure {
@@ -77,7 +77,7 @@ public class Default extends Structure {
 
         //region Marshalling
         log.trace("Creating the marshaller");
-        String xmlStream = JacksonSerializer.serialize(report, super.getSource().prettyPrint(), Listing.Default.getJacksonType());
+        String xmlStream = JacksonSerializer.serialize(report, super.getSource().getPrettyPrint(), Listing.Default.getJacksonType());
         //endregion
 
         return xmlStream;

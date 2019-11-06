@@ -3,8 +3,6 @@ package frontEnd.Interface;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import frontEnd.MessagingSystem.routing.Listing;
 import frontEnd.argsIdentifier;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import rule.engine.EngineType;
 import util.Utils;
@@ -36,23 +34,6 @@ public class ArgumentsCheckTest {
 
     //region Test Environment Setup
 
-    /**
-     * <p>setUp.</p>
-     *
-     * @throws java.lang.Exception if any.
-     */
-    @Before
-    public void setUp() throws Exception {
-    }
-
-    /**
-     * <p>tearDown.</p>
-     *
-     * @throws java.lang.Exception if any.
-     */
-    @After
-    public void tearDown() throws Exception {
-    }
     //endregion
 
     //region Tests

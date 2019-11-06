@@ -12,7 +12,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.function.Predicate;
 
 import static junit.framework.TestCase.assertTrue;
 
@@ -31,14 +30,16 @@ public class TestUtilities {
     public static final String basePath = System.getProperty("user.dir");
     public static final String scarfArgs = Utils.osPathJoin(basePath, "src", "main", "resources", "Scarf", "sample.properties");
     public static final String testRec = Utils.osPathJoin(basePath, "samples");
+    public static final String testPath = Utils.osPathJoin(basePath, "build", "tmp");
     public static final String testRec_tester_test = Utils.osPathJoin(testRec, "temp", "tester");
     public static final String testRec_tester_test_Class = Utils.osPathJoin(testRec_tester_test, "test.class");
     public static final String testRec_tester_test_Java = Utils.osPathJoin(testRec_tester_test, "test.java");
+    public static final String testRec_tester_test_Java_xml = Utils.osPathJoin(testPath, "test_java.xml");
     public static final String srcOneGrv = Utils.osPathJoin(testRec, "testable-jar");
+    public static final String srcOneGrv_base = "tester";
     public static final String srcOneGrvInputFile = Utils.osPathJoin(srcOneGrv, "input.in");
     public static final String javaSource = Utils.osPathJoin(srcOneGrv, "src", "main", "java", "tester");
     public static final String classSource = Utils.osPathJoin(srcOneGrv, "build", "classes", "java", "main", "tester");
-    public static final String testPath = Utils.osPathJoin(basePath, "build", "tmp");
     public static final String[] classFiles = {Utils.osPathJoin(classSource, "PBEUsage.class"), Utils.osPathJoin(classSource, "UrlFrameWorks.class"), Utils.osPathJoin(classSource, "NewTestCase1.class"), Utils.osPathJoin(classSource, "NewTestCase2.class")};
     public static final String newTestCaseTwo_Class = Utils.osPathJoin(classSource, "NewTestCase2.class");
     public static final String newTestCaseTwo_xml = Utils.osPathJoin(testPath, "NewTestCase2-class.xml");
@@ -78,9 +79,9 @@ public class TestUtilities {
     public static final String tempJarFile_Scarf_Steam_1 = Utils.osPathJoin(testPath, "tempJarFile_Scarf_Steam_1.xml");
     public static final String tempJarFile_Default_0 = Utils.osPathJoin(testPath, "tempJarFile_Default_0.json");
     public static final String tempJarFile_Default_Stream_0 = Utils.osPathJoin(testPath, "tempJarFile_Default_Stream_0.json");
-    public static final ArrayList<String> sampleAuxClassPathOneList = new ArrayList<String>(Arrays.asList(testRec, jarOne, javaFiles[0], javaFiles[1], classFiles[0], classFiles[1]));
+    public static final ArrayList<String> sampleAuxClassPathOneList = new ArrayList<>(Arrays.asList(testRec, jarOne, javaFiles[0], javaFiles[1], classFiles[0], classFiles[1]));
     public static final String sampleAuxClassPathOne = String.join(":", sampleAuxClassPathOneList);
-    public static final ArrayList<String> sampleAuxClassPathTwoList = new ArrayList<String>(Arrays.asList(testRec, jarOne, javaFiles[0], javaFiles[1], classFiles[0], classFiles[1], scarfArgs));
+    public static final ArrayList<String> sampleAuxClassPathTwoList = new ArrayList<>(Arrays.asList(testRec, jarOne, javaFiles[0], javaFiles[1], classFiles[0], classFiles[1], scarfArgs));
     public static final String sampleAuxClassPathTwo = String.join(":", sampleAuxClassPathTwoList);
     public static final String verySimple_Path = Utils.osPathJoin(testRec, "VerySimple");
     public static final String verySimple_Jar = Utils.osPathJoin(verySimple_Path, "very.jar");
@@ -178,12 +179,7 @@ public class TestUtilities {
 
     public static String[] cleaningArgs(String arg) {
         ArrayList<String> cleanArgs = new ArrayList<>(Arrays.asList(arg.split(" ")));
-        cleanArgs.removeIf(new Predicate<String>() {
-            @Override
-            public boolean test(String s) {
-                return StringUtils.isEmpty(s);
-            }
-        });
+        cleanArgs.removeIf(s -> StringUtils.isEmpty(s));
         return cleanArgs.toArray(new String[cleanArgs.size()]);
     }
 
@@ -224,7 +220,7 @@ public class TestUtilities {
     }
 
     public static ArrayList<String> arr(String[] in) {
-        return new ArrayList<String>(Arrays.asList(in));
+        return new ArrayList<>(Arrays.asList(in));
     }
 
     public static String getFileNameFromString(String filePath) {

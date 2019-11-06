@@ -12,10 +12,10 @@ import util.Utils;
  *
  * @author franceme
  * Created on 4/23/19.
+ * @version 03.07.01
  * @since 03.04.08
  *
  * <p>{Description Here}</p>
- * @version 03.07.01
  */
 public class Default {
 
@@ -49,9 +49,9 @@ public class Default {
     /**
      * <p>mapper.</p>
      *
-     * @param info a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
+     * @param info       a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
      * @param computerOS a {@link java.lang.String} object.
-     * @param jvmInfo a {@link java.lang.String} object.
+     * @param jvmInfo    a {@link java.lang.String} object.
      * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Target} object.
      */
     public static Target mapper(EnvironmentInformation info, String computerOS, String jvmInfo) {
@@ -114,7 +114,7 @@ public class Default {
      * <p>mapper.</p>
      *
      * @param oldIssue a {@link frontEnd.MessagingSystem.AnalysisIssue} object.
-     * @param id a {@link java.lang.Integer} object.
+     * @param id       a {@link java.lang.Integer} object.
      * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Issue} object.
      */
     public static Issue mapper(AnalysisIssue oldIssue, Integer id) {
@@ -162,7 +162,7 @@ public class Default {
     /**
      * <p>mapper.</p>
      *
-     * @param info a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
+     * @param info                a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
      * @param sliceAverageRounded a double.
      * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Heuristics} object.
      */

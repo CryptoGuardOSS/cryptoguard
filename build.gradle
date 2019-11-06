@@ -128,6 +128,7 @@ jar {
 test {
     environment "ANDROID_HOME", "ANDROIDSDK"
     environment "JAVA_HOME", "JAVA8SDK"
+    environment "JAVA7_HOME", "JAVA7SDK"
 }
 
 //A Task for specifying explicit release commands
@@ -174,13 +175,13 @@ task release {
         def hashDictionary = [:]
         new File('./release').eachFileRecurse(FileType.FILES) {
             file ->
-                Hasher hasher = Hashing.sha512().newHasher();
+                Hasher hasher = Hashing.sha512().newHasher()
                 hasher.putBytes(Files.readAllBytes(Paths.get(file.getPath())))
                 hashDictionary[file.name] = hasher.hash().toString()
 
         }
 
-        File hash = new File('./release/sha512.sums');
+        File hash = new File('./release/sha512.sums')
         hashDictionary.each {
             k, v ->
                 hash.append(v + '  ' + k + '\n')
@@ -193,18 +194,12 @@ task release {
 dependencies {
     compile 'com.google.guava:guava:20.0'
     //compile name: 'soot_j9_20190409'
-    //compile name: 'soot_3.3.0'
     compile name: 'soot-V3.3.0-SNAPSHOT'
     //compile name: 'soot_raw1'
-    //compile 'ca.mcgill.sable:soot:3.2.0'
     compile name: 'axml-2.0'
     compile name: 'AXMLPrinter2'
     compile name: 'okhttp-3.9.0'
     compile name: 'retrofit-2.1.0'
-    //compile name: 'polyglot-2006'
-    //compile name: 'jasmin-3.0.1'
-    //compile 'ca.mcgill.sable:polyglot:2006'
-    //compile 'ca.mcgill.sable:jasmin:3.0.1'
     compile "org.codehaus.groovy:groovy:2.5.2"
     compile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'junit', name: 'junit', version: '4.12'

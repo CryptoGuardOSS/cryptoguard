@@ -6,7 +6,6 @@ import frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport;
 import frontEnd.argsIdentifier;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 import rule.engine.EngineType;
 import soot.G;
 import util.Utils;
@@ -58,7 +57,38 @@ public class EntryPointTest_JAVA {
 
     //region Tests
     //@Test
-    public void a_main_TestableFile_VerySimple() {
+    public void main_TestableFile_test_nobreak() {
+        soot.G.v().reset();
+        String source = testRec_tester_test_Java;
+        String fileOut = testRec_tester_test_Java_xml;
+        new File(fileOut).delete();
+
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                            makeArg(argsIdentifier.SOURCE, source) +
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.PRETTY) +
+                            makeArg(argsIdentifier.VERYVERBOSE) +
+                            makeArg(argsIdentifier.OUT, fileOut);
+
+            try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
+                assertTrue(report.getBugInstance().isEmpty());
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    //@Test
+    public void main_TestableFile_VerySimple() {
         soot.G.v().reset();
         String source = verySimple_Java;
         String fileOut = verySimple_Java_xml;
@@ -78,6 +108,7 @@ public class EntryPointTest_JAVA {
                 String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
                 AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
+
                 assertFalse(report.getBugInstance().isEmpty());
                 assertTrue(report.getBugInstance().stream().allMatch(bugInstance -> {
                     try {
@@ -87,7 +118,6 @@ public class EntryPointTest_JAVA {
                         return false;
                     }
                 }));
-
 
             } catch (Exception e) {
                 e.printStackTrace();
