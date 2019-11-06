@@ -87,7 +87,7 @@ public enum EngineType {
         StringBuilder out = new StringBuilder("[");
 
         for (EngineType type : EngineType.values())
-            if (type == EngineType.CLASSFILES)
+            if (type == EngineType.JAVAFILES)
                 out.append(type.getFlag()).append("(experimental) ");
             else
                 out.append(type.getFlag()).append(" ");

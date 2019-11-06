@@ -65,9 +65,9 @@ public class Utils {
      */
     public final static String lineSep = System.getProperty("line.separator");
     /**
-     * Constant <code>projectVersion="V03.08.01"</code>
+     * Constant <code>projectVersion="V03.09.00"</code>
      */
-    public final static String projectVersion = "V03.08.01";
+    public final static String projectVersion = "V03.09.00";
     /**
      * Constant <code>projectName="CryptoGuard"</code>
      */
@@ -263,9 +263,8 @@ public class Utils {
     }
 
     /**
-     * <p>listf.</p>
+     * <p>listf.</p>EntryPointTest_CLASS
      *
-     * @param directoryName a {@link java.lang.String} object.
      * @return a {@link java.util.List} object.
      */
     public static List<String> retrieveFilesPredicate(String path, Predicate<String> fileCheck, Function<File, String> functor) throws ExceptionHandler {
@@ -285,6 +284,41 @@ public class Utils {
         }
 
         return output;
+    }
+
+
+    public static Set<String> retrieveJavaFileImports(String... paths) throws ExceptionHandler {
+        return retrieveJavaFileImports(Arrays.asList(paths));
+    }
+
+    public static Set<String> retrieveJavaFileImports(List<String> paths) throws ExceptionHandler {
+        Set<String> results = new HashSet<>();
+        for (String path: paths)
+            results.addAll(retrieveJavaFileImports(path));
+        return results;
+    }
+
+    public static Set<String> retrieveJavaFileImports(String path) throws ExceptionHandler {
+        Set<String> results = new HashSet<>();
+        String javaFile = verifyFileExt(path, ".java", false);
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(javaFile))) {
+            String curLine;
+
+            leave:
+            while ((curLine = reader.readLine()) != null && !curLine.isEmpty() ){
+                if (!curLine.startsWith("package") && !curLine.startsWith("import") && StringUtils.isNotEmpty(curLine))
+                    break leave;
+                else if (curLine.startsWith("import"))
+                    results.add(curLine.replace("import ", "").replace(";",""));
+            }
+        } catch (FileNotFoundException e) {
+            //TODO - Add exception here
+        } catch (IOException e) {
+            //TODO - Add Exception here
+        }
+
+        return results;
     }
     //endregion
 
@@ -1048,7 +1082,7 @@ public class Utils {
         String rt = Utils.osPathJoin(Utils.getJAVA7_HOME(), "jre", "lib", "rt.jar");
         String jce = Utils.osPathJoin(Utils.getJAVA7_HOME(), "jre", "lib", "jce.jar");
 
-        String base = Utils.join(":", Utils.getJAVA7_HOME(), rt, jce);//Utils.getJAVA7_HOME() + Utils.fileSep + join(Utils.getJAVA7_HOME() + Utils.fileSep, rt, jce);
+        String base = Utils.join(":", Utils.getJAVA7_HOME(), jce, rt);//Utils.getJAVA7_HOME() + Utils.fileSep + join(Utils.getJAVA7_HOME() + Utils.fileSep, rt, jce);
         return base;
     }
 

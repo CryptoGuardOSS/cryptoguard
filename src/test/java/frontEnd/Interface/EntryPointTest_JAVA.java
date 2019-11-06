@@ -57,7 +57,7 @@ public class EntryPointTest_JAVA {
 
     //region Tests
     //@Test
-    public void a_main_TestableFile_test() {
+    public void main_TestableFile_test_nobreak() {
         soot.G.v().reset();
         String source = testRec_tester_test_Java;
         String fileOut = testRec_tester_test_Java_xml;
@@ -77,15 +77,7 @@ public class EntryPointTest_JAVA {
                 String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
                 AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
-                assertFalse(report.getBugInstance().isEmpty());
-                assertTrue(report.getBugInstance().stream().allMatch(bugInstance -> {
-                    try {
-                        return bugInstance.getClassName().contains(Utils.retrieveFullyQualifiedName(source));
-                    } catch (ExceptionHandler exceptionHandler) {
-                        exceptionHandler.printStackTrace();
-                        return false;
-                    }
-                }));
+                assertTrue(report.getBugInstance().isEmpty());
 
 
             } catch (Exception e) {
@@ -96,7 +88,7 @@ public class EntryPointTest_JAVA {
     }
 
     //@Test
-    public void a_main_TestableFile_VerySimple() {
+    public void main_TestableFile_VerySimple() {
         soot.G.v().reset();
         String source = verySimple_Java;
         String fileOut = verySimple_Java_xml;
