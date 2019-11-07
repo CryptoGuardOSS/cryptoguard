@@ -60,4 +60,6 @@ If you have any questions or suggestions, please email to cryptoguardorg@gmail.c
  
  You should have received a copy of the GNU General Public License 3.0 along with this program.  If not, see <https://www.gnu.org/licenses/gpl-3.0.html>.
 
+## Reference
 
+If you find this project useful, please cite our CCS'19 [CryptoGuard](https://dl.acm.org/citation.cfm?doid=3319535.3345659) paper.
