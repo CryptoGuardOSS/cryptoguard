@@ -13,7 +13,7 @@ from collections import OrderedDict
 '''####################################
 #A utility class that contains the rest of the main common files
 '''  ####################################
-numTests = 0
+numTests, failFast = 0, False
 
 class Utils(object):
     # Setting the arguments to be handled by the parser
@@ -73,13 +73,18 @@ class Utils(object):
             sys.exit(0)
         
         stdout, stderr = stdout.decode('utf-8'), stderr.decode('utf-8')
+        global failFast
 
         if 'BUILD SUCCESSFUL' in stdout:
             return True
         elif 'BUILD FAILED' in stderr:
+            if failFast:
+                print('Failing on '+str(test));sys.exit(0)
             return False
         else:
             print('Unknown Error: ')
+            if failFast:
+                print('Failing on '+str(test));sys.exit(0)
             return False
 
     def percent(x, y):
@@ -130,6 +135,7 @@ class Utils(object):
                 end = time.time()
                 if result:
                     result = 'Pass'
+                    failed = failed - 1
                     failedTests.remove(test)
                 else:
                     result = 'Fail'
@@ -143,7 +149,7 @@ class Utils(object):
         print('Total Tests: ' + str(skipped + passed + failed))
         print('Total Tests Passed: %' + str(Utils.percent(passed,failed)))
         print('==============================')
-        if len(failedTests) > 0:
+        if failed > 0:
             print('Failed Tests')
             for test in failedTests:
                 print(test)
@@ -153,6 +159,13 @@ class Utils(object):
             for test in skippedTests:
                 print(test)
             print('==============================')
+
+        if failed > 0:
+            if failed > 255:
+                failed = 255
+            sys.exit(failed)
+        else:
+            sys.exit(0)
 
     def build():
         argz = ' clean build -x test '
