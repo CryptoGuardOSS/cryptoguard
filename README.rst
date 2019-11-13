@@ -159,4 +159,4 @@ CryptoGuard is a research prototype under GNU General Public License 3.0
 Reference
 ===============
 
-If you find this project useful, please cite our CCS'19 `CryptoGuard <https://dl.acm.org/citation.cfm?doid=3319535.3345659`_ paper.
+If you find this project useful, please cite our CCS'19 `CryptoGuard <https://dl.acm.org/citation.cfm?doid=3319535.3345659`__ paper.
