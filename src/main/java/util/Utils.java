@@ -5,7 +5,10 @@ import frontEnd.Interface.Version;
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.Interface.outputRouting.ExceptionId;
 import frontEnd.MessagingSystem.AnalysisIssue;
+import frontEnd.MessagingSystem.routing.Listing;
+import frontEnd.MessagingSystem.routing.inputStructures.ScarfXMLId;
 import frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
+import frontEnd.argsIdentifier;
 import org.apache.commons.lang3.StringUtils;
 import org.jf.dexlib2.DexFileFactory;
 import org.jf.dexlib2.Opcodes;
@@ -65,9 +68,9 @@ public class Utils {
      */
     public final static String lineSep = System.getProperty("line.separator");
     /**
-     * Constant <code>projectVersion="V03.09.01"</code>
+     * Constant <code>projectVersion="V03.09.02"</code>
      */
-    public final static String projectVersion = "V03.09.01";
+    public final static String projectVersion = "V03.09.02";
     /**
      * Constant <code>projectName="CryptoGuard"</code>
      */
@@ -323,6 +326,85 @@ public class Utils {
     public static void setSunBootPath(String basePath, String rt) {
         System.setProperty("sun.boot.class.path", rt);
         System.setProperty("java.ext.dirs", osSurround(basePath, "lib"));
+    }
+    //endregion
+
+    //region ArgMethods
+    public static String makeArg(argsIdentifier id, Object value) {
+        return makeArg(id.getId(), value.toString());
+    }
+
+    /**
+     * <p>makeArg.</p>
+     *
+     * @param id    a {@link frontEnd.argsIdentifier} object.
+     * @param value a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String makeArg(argsIdentifier id, String value) {
+        return makeArg(id.getId(), value);
+    }
+
+    public static String makeArg(argsIdentifier id, List<String> value) {
+        return makeArg(id.getId(), value);
+    }
+
+    public static String makeArg(argsIdentifier id, EngineType value) {
+        return makeArg(id.getId(), value.getFlag());
+    }
+
+    /**
+     * <p>makeArg.</p>
+     *
+     * @param id a {@link frontEnd.argsIdentifier} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String makeArg(argsIdentifier id) {
+        return " " + id.getArg() + " ";
+    }
+
+    /**
+     * <p>makeArg.</p>
+     *
+     * @param id    a {@link frontEnd.MessagingSystem.routing.inputStructures.ScarfXMLId} object.
+     * @param value a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String makeArg(ScarfXMLId id, String value) {
+        return makeArg(id.getId(), value);
+    }
+
+    /**
+     * <p>makeArg.</p>
+     *
+     * @param id    a {@link java.lang.String} object.
+     * @param value a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String makeArg(String id, String value) {
+        return " -" + id + " " + value + " ";
+    }
+
+    public static String makeArg(String id, String... value) {
+        return makeArg(id, Arrays.asList(value));
+    }
+
+    public static String makeArg(String id, List<String> value) {
+        if (value.size() <= 0)
+            return makeArg(id, value.get(0));
+        else
+            return makeArg(id, value.get(0)) + String.join(" ", value.subList(1, value.size()));
+    }
+
+    /**
+     * <p>makeArg.</p>
+     *
+     * @param id    a {@link frontEnd.argsIdentifier} object.
+     * @param value a {@link frontEnd.MessagingSystem.routing.Listing} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String makeArg(argsIdentifier id, Listing value) {
+        return makeArg(id, value.getFlag());
     }
     //endregion
 

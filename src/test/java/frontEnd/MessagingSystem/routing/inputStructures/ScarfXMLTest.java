@@ -12,7 +12,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import rule.engine.EngineType;
-import test.TestUtilities;
 
 import java.util.Collections;
 import java.util.Properties;
@@ -23,6 +22,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
+import static util.Utils.makeArg;
 
 /**
  * <p>ScarfXMLTest class.</p>
@@ -150,7 +150,7 @@ public class ScarfXMLTest {
         StringBuilder args = new StringBuilder();
 
         //region Setting the arguments string
-        args.append(TestUtilities.makeArg(ScarfXMLId.ConfigFile.getId(), assess_fw));
+        args.append(makeArg(ScarfXMLId.ConfigFile.getId(), assess_fw));
         //endregion
 
         try {

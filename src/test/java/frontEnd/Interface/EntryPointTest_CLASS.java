@@ -22,6 +22,7 @@ import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static test.TestUtilities.*;
+import static util.Utils.makeArg;
 
 /**
  * <p>EntryPointTest_CLASS class.</p>
@@ -273,6 +274,7 @@ public class EntryPointTest_CLASS {
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.MAIN, classFiles[3]) +
+                            makeArg(argsIdentifier.VERYVERBOSE) +
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.OUT, fileOut);
 
