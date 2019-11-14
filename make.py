@@ -78,8 +78,8 @@ class Utils(object):
         if 'BUILD SUCCESSFUL' in stdout:
             return True
         elif 'BUILD FAILED' in stderr:
-            print(stderr)
             if failFast:
+                print(stderr)
                 print('Failing on '+str(test));sys.exit(0)
             return False
         else:

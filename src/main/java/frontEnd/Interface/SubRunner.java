@@ -38,8 +38,6 @@ public class SubRunner {
         log.trace("Initializing the scanning process");
         info.startScanning();
 
-        log.debug(info.getRawCommand());
-
         log.info("Starting the scanning process");
         handler.Scan(info);
         log.info("Stopped the scanning process");
