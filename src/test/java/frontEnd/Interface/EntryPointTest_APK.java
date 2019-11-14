@@ -79,6 +79,7 @@ public class EntryPointTest_APK {
                             makeArg(argsIdentifier.SOURCE, pathToAPK) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
                             makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.VERYVERBOSE) +
                             makeArg(argsIdentifier.OUT, fileOut);
 
             try {
