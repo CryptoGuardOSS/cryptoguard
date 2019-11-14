@@ -126,9 +126,9 @@ jar {
 
 //Ensuring all of the processors are being used for tests
 test {
-    environment "ANDROID_HOME", "ANDROIDSDK"
-    environment "JAVA_HOME", "JAVA8SDK"
-    environment "JAVA7_HOME", "JAVA7SDK"
+    environment "ANDROID_HOME", System.getenv("ANDROID_HOME") ?: "ANDROIDSDK"
+    environment "JAVA_HOME", System.getenv("JAVA_HOME") ?: "JAVA8SDK"
+    environment "JAVA7_HOME", System.getenv("JAVA7_HOME") ?: "JAVA7SDK"
 }
 
 //A Task for specifying explicit release commands
