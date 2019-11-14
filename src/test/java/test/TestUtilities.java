@@ -39,6 +39,7 @@ public class TestUtilities {
     public static final String[] classFiles = {Utils.osPathJoin(classSource, "PBEUsage.class"), Utils.osPathJoin(classSource, "UrlFrameWorks.class"), Utils.osPathJoin(classSource, "NewTestCase1.class"), Utils.osPathJoin(classSource, "NewTestCase2.class")};
     public static final String newTestCaseTwo_Class = Utils.osPathJoin(classSource, "NewTestCase2.class");
     public static final String newTestCaseTwo_xml = Utils.osPathJoin(testPath, "NewTestCase2-class.xml");
+    public static final String testablejar_Crypto_plugin_class_json = Utils.osPathJoin(testPath, "java-plugin-file_One.json");
     public static final String testablejar_PBEUsage_class_xml = Utils.osPathJoin(testPath, "PBEUsage-class-file_One.xml");
     public static final String testablejar_Crypto_class = Utils.osPathJoin(classSource, "Crypto.class");
     public static final String testablejar_Crypto_class_xml = Utils.osPathJoin(testPath, "java-file_One.xml");
@@ -56,6 +57,7 @@ public class TestUtilities {
     public static final String tempTestJJava_Txt = Utils.osPathJoin(testPath, "temp_java-jar.txt");
     public static final String tempStreamXML = Utils.osPathJoin(testPath, "testable-jar_Stream.xml");
     public static final String tempFileOutTxt_two = Utils.osPathJoin(testPath, "testable-jar_classFiles.txt");
+    public static final String tempFileOutTxt_default = Utils.osPathJoin(testPath, "testable-jar_classFiles.json");
     public static final String tempFileOutXML_two = Utils.osPathJoin(testPath, "testable-jar_classFiles.xml");
     public static final String tempFileOutTxt_Class = Utils.osPathJoin(testPath, "java-class-file.txt");
     public static final String tempFileOutTxt_Class_fullproj = Utils.osPathJoin(testPath, "java-class-proj-file.xml");

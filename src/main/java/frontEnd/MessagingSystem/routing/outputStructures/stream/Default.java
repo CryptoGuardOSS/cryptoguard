@@ -158,7 +158,9 @@ public class Default extends Structure {
     @Override
     public void writeFooter() throws ExceptionHandler {
 
+        this.write("\n]\n");
         if (super.getSource().getDisplayHeuristics()) {
+            this.write(", \"Heuristics\" : ");
             log.debug("Writing the Heuristics");
             this.write(JacksonSerializer.serialize(
                     mapper(
@@ -173,7 +175,7 @@ public class Default extends Structure {
         log.debug("Adding the footer to the output");
         switch (super.getSource().getMessagingType().getJacksonType()) {
             case JSON:
-                ending = "\n]\n}";
+                ending = "\n}";
                 break;
             case XML:
                 ending = "\n</" + Issues.class.getSimpleName() + ">\n";
