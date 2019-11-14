@@ -173,6 +173,7 @@ public class EntryPointTest_APK {
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.PRETTY) +
+                            makeArg(argsIdentifier.VERYVERBOSE) +
                             makeArg(argsIdentifier.STREAM);
 
             try {
