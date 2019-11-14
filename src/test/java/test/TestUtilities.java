@@ -1,11 +1,7 @@
 package test;
 
 import frontEnd.Interface.EntryPoint;
-import frontEnd.MessagingSystem.routing.Listing;
-import frontEnd.MessagingSystem.routing.inputStructures.ScarfXMLId;
-import frontEnd.argsIdentifier;
 import org.apache.commons.lang3.StringUtils;
-import rule.engine.EngineType;
 import util.Utils;
 
 import java.io.ByteArrayOutputStream;
@@ -119,67 +115,9 @@ public class TestUtilities {
     ));
     //endregion
 
-    /**
-     * <p>makeArg.</p>
-     *
-     * @param id    a {@link frontEnd.argsIdentifier} object.
-     * @param value a {@link java.lang.String} object.
-     * @return a {@link java.lang.String} object.
-     */
-    public static String makeArg(argsIdentifier id, String value) {
-        return makeArg(id.getId(), value);
-    }
-
-    public static String makeArg(argsIdentifier id, EngineType value) {
-        return makeArg(id.getId(), value.getFlag());
-    }
-
-    /**
-     * <p>makeArg.</p>
-     *
-     * @param id a {@link frontEnd.argsIdentifier} object.
-     * @return a {@link java.lang.String} object.
-     */
-    public static String makeArg(argsIdentifier id) {
-        return " " + id.getArg() + " ";
-    }
-
-    /**
-     * <p>makeArg.</p>
-     *
-     * @param id    a {@link frontEnd.MessagingSystem.routing.inputStructures.ScarfXMLId} object.
-     * @param value a {@link java.lang.String} object.
-     * @return a {@link java.lang.String} object.
-     */
-    public static String makeArg(ScarfXMLId id, String value) {
-        return makeArg(id.getId(), value);
-    }
-
-    /**
-     * <p>makeArg.</p>
-     *
-     * @param id    a {@link java.lang.String} object.
-     * @param value a {@link java.lang.String} object.
-     * @return a {@link java.lang.String} object.
-     */
-    public static String makeArg(String id, String value) {
-        return " -" + id + " " + value + " ";
-    }
-
-    /**
-     * <p>makeArg.</p>
-     *
-     * @param id    a {@link frontEnd.argsIdentifier} object.
-     * @param value a {@link frontEnd.MessagingSystem.routing.Listing} object.
-     * @return a {@link java.lang.String} object.
-     */
-    public static String makeArg(argsIdentifier id, Listing value) {
-        return makeArg(id, value.getFlag());
-    }
-
     public static String[] cleaningArgs(String arg) {
         ArrayList<String> cleanArgs = new ArrayList<>(Arrays.asList(arg.split(" ")));
-        cleanArgs.removeIf(s -> StringUtils.isEmpty(s));
+        cleanArgs.removeIf(StringUtils::isEmpty);
         return cleanArgs.toArray(new String[cleanArgs.size()]);
     }
 

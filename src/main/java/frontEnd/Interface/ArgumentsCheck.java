@@ -101,7 +101,9 @@ public class ArgumentsCheck {
         EngineType type = EngineType.getFromFlag(cmd.getOptionValue(argsIdentifier.FORMAT.getId()));
         log.debug("Chose the enginetype: " + type.getName());
 
-        Boolean verify = !cmd.hasOption(argsIdentifier.SKIPINPUTVALIDATION.getId());
+        //Boolean verify = !cmd.hasOption(argsIdentifier.SKIPINPUTVALIDATION.getId());
+        //TODO - Need to remove this
+        Boolean verify = true;
         log.debug("Verification flag: " + verify);
 
         Boolean usingInputIn = cmd.getOptionValue(argsIdentifier.SOURCE.getId()).endsWith(".in");
@@ -127,92 +129,22 @@ public class ArgumentsCheck {
         //inputFiles
 
         //region Setting the source files
-        log.trace("Retrieving the source files.");
-
-        List<String> source;
-        if (!usingInputIn)
-            source = verify ? Utils.retrieveFilesByType(
-                    Arrays.asList(
-                            cmd.getOptionValues(argsIdentifier.SOURCE.getId())), type)
-                    : Arrays.asList(
-                    cmd.getOptionValues(argsIdentifier.SOURCE.getId()));
-        else
-            source = Utils.inputFiles(cmd.getOptionValue(argsIdentifier.SOURCE.getId()));
-
-        log.info("Using the source file(s): " + source.toString());
+        List<String> source = Arrays.asList(cmd.getOptionValues(argsIdentifier.SOURCE.getId()));
 
         String setMainClass = null;
         if (cmd.hasOption(argsIdentifier.MAIN.getId())) {
             setMainClass = StringUtils.trimToNull(cmd.getOptionValue(argsIdentifier.MAIN.getId()));
             if (setMainClass == null)
                 throw new ExceptionHandler("Please Enter a valid main class path.", ExceptionId.ARG_VALID);
-
-            log.info("Attempting to validate the main method as " + setMainClass);
-
-            if (!source.contains(setMainClass))
-                throw new ExceptionHandler("The main class path is not included within the source file.", ExceptionId.ARG_VALID);
-
-            log.info("Using the main method from class " + setMainClass);
         }
         //endregion
 
         //region Setting the dependency path
-        List<String> dependencies = new ArrayList<>();
-        if (cmd.hasOption(argsIdentifier.DEPENDENCY.getId())) {
-            log.trace("Retrieving the dependency files.");
-            dependencies = verify ? Utils.verifyClassPaths(
-                    Arrays.asList(
-                            cmd.getOptionValues(argsIdentifier.DEPENDENCY.getId())))
-                    : Arrays.asList(
-                    cmd.getOptionValues(argsIdentifier.DEPENDENCY.getId()))
-            ;
-            log.info("Using the dependency file(s): " + source.toString());
-        }
+        List<String> dependencies = cmd.hasOption(argsIdentifier.DEPENDENCY.getId()) ? Arrays.asList(cmd.getOptionValues(argsIdentifier.DEPENDENCY.getId())) : new ArrayList<>();
         //endregion
 
         Listing messaging = Listing.retrieveListingType(cmd.getOptionValue(argsIdentifier.FORMATOUT.getId()));
         log.info("Using the output: " + messaging.getType());
-
-        //region Retrieving the package path
-        log.trace("Retrieving the package path, may/may not be able to be replaced.");
-        List<String> basePath = new ArrayList<>();
-        File sourceFile;
-        String pkg = "";
-        switch (type) {
-            case APK:
-            case JAR:
-                sourceFile = new File(source.get(0));
-                basePath.add(sourceFile.getName());
-                pkg = sourceFile.getName();
-                break;
-            case DIR:
-                sourceFile = new File(source.get(0));
-                try {
-                    basePath.add(sourceFile.getCanonicalPath() + ":dir");
-                } catch (IOException e) {
-                }
-                pkg = sourceFile.getName();
-                break;
-            case JAVAFILES:
-            case CLASSFILES:
-                for (String file : source) {
-                    try {
-                        sourceFile = new File(file);
-                        basePath.add(sourceFile.getCanonicalPath());
-
-                        if (pkg == null) {
-                            pkg = sourceFile.getCanonicalPath();
-                        }
-
-                    } catch (IOException e) {
-                    }
-                }
-                break;
-        }
-        log.debug("Package path: " + pkg);
-        //endregion
-
-        EnvironmentInformation info = new EnvironmentInformation(source, type, messaging, dependencies, basePath, pkg);
 
         //region - TODO - Implement an option to specify the base package
         /*
@@ -226,30 +158,14 @@ public class ArgumentsCheck {
         */
         //endregion
 
-        if (setMainClass != null)
-            info.setMain(setMainClass);
-
         //region Setting the file out
         log.trace("Determining the file out.");
-        String fileOutPath = "";
+        String fileOutPath = null;
         if (cmd.hasOption(argsIdentifier.OUT.getId()))
-            if (verify)
-                fileOutPath = Utils.verifyFileExt(cmd.getOptionValue(argsIdentifier.OUT.getId()), messaging.getOutputFileExt(), cmd.hasOption(argsIdentifier.NEW.getId()));
-            else
-                fileOutPath = cmd.getOptionValue(argsIdentifier.OUT.getId());
-        else
-            fileOutPath = Utils.osPathJoin(System.getProperty("user.dir"),
-                    info.getPackageName() /*+ "_" + fileName*/ + info.getMessagingType().getOutputFileExt());
-
-        if (cmd.hasOption(argsIdentifier.TIMESTAMP.getId())) {
-            String[] tempSplit = fileOutPath.split("\\.\\w+$");
-            fileOutPath = tempSplit[0] + "_" + Utils.getCurrentTimeStamp() + info.getMessagingType().getOutputFileExt();
-        }
-        log.debug("File out: " + fileOutPath);
-        info.setFileOut(fileOutPath);
-
-
+            fileOutPath = cmd.getOptionValue(argsIdentifier.OUT.getId());
         //endregion
+
+        EnvironmentInformation info = paramaterCheck(source, dependencies, type, messaging, fileOutPath, cmd.hasOption(argsIdentifier.NEW.getId()),  usingInputIn, setMainClass, cmd.hasOption(argsIdentifier.TIMESTAMP.getId()));
 
         if (!messaging.getTypeOfMessagingInput().inputValidation(info, args.toArray(new String[0]))) {
             log.error("Issue Validating Output Specific Arguments.");
@@ -284,6 +200,126 @@ public class ArgumentsCheck {
 
         return info;
 
+    }
+
+    public static EnvironmentInformation paramaterCheck(List<String> sourceFiles, List<String> dependencies, EngineType eType, Listing oType, String fileOutPath, String mainFile) throws ExceptionHandler {
+        EnvironmentInformation info =  paramaterCheck(sourceFiles, dependencies, eType, oType, fileOutPath, true, false, StringUtils.trimToNull(mainFile), false);
+
+        //Setting base arguments, some might turn into defaults
+        info.setShowTimes(true);
+        info.setStreaming(true);
+        info.setDisplayHeuristics(true);
+        Utils.initDepth(1);
+
+        info.setRawCommand(
+            Utils.makeArg(argsIdentifier.SOURCE, info.getSource()) +
+            Utils.makeArg(argsIdentifier.DEPENDENCY, info.getDependencies()) +
+            Utils.makeArg(argsIdentifier.FORMAT, eType) +
+            Utils.makeArg(argsIdentifier.FORMATOUT, oType) +
+            Utils.makeArg(argsIdentifier.OUT, info.getFileOut()) +
+            Utils.makeArg(argsIdentifier.NEW, true) +
+            (StringUtils.isNotEmpty(mainFile) ? Utils.makeArg(argsIdentifier.MAIN, info.getMain()) : "")  +
+            Utils.makeArg(argsIdentifier.TIMESTAMP, false) +
+            Utils.makeArg(argsIdentifier.TIMEMEASURE, true) +
+            Utils.makeArg(argsIdentifier.STREAM, true) +
+            Utils.makeArg(argsIdentifier.HEURISTICS, true) +
+            Utils.makeArg(argsIdentifier.DEPTH, 1)
+        );
+
+        return info;
+    }
+
+    public static EnvironmentInformation paramaterCheck(List<String> sourceFiles, List<String> dependencies, EngineType eType, Listing oType, String fileOutPath, Boolean overWriteFileOut, Boolean usingEnhancedFileIn, String mainFile, Boolean timeStamp) throws ExceptionHandler {
+
+        //region verifying filePaths
+        //region Setting the source files
+        log.trace("Retrieving the source files.");
+
+        List<String> vSources;
+        if (!usingEnhancedFileIn)
+            vSources = Utils.retrieveFilesByType(sourceFiles, eType);
+        else
+            vSources = Utils.retrieveFilesByType(Utils.inputFiles(sourceFiles.get(0)), eType);
+
+        log.info("Using the source file(s): " + vSources.toString());
+        //endregion
+
+        //region Setting the dependency path
+        List<String> vDeps = new ArrayList<>();
+        if (dependencies.size() > 0) {
+            log.trace("Retrieving the dependency files.");
+            vDeps = Utils.verifyClassPaths(dependencies);
+            log.info("Using the dependency file(s): " + vDeps.toString());
+        }
+        //endregion
+        //endregion
+
+        //region Retrieving the package path
+        log.trace("Retrieving the package path, may/may not be able to be replaced.");
+        List<String> basePath = new ArrayList<>();
+        File sourceFile;
+        String pkg = "";
+        switch (eType) {
+            case APK:
+            case JAR:
+                sourceFile = new File(sourceFiles.get(0));
+                basePath.add(sourceFile.getName());
+                pkg = sourceFile.getName();
+                break;
+            case DIR:
+                sourceFile = new File(sourceFiles.get(0));
+                try {
+                    basePath.add(sourceFile.getCanonicalPath() + ":dir");
+                } catch (IOException e) {
+                }
+                pkg = sourceFile.getName();
+                break;
+            case JAVAFILES:
+            case CLASSFILES:
+                for (String file : sourceFiles) {
+                    try {
+                        sourceFile = new File(file);
+                        basePath.add(sourceFile.getCanonicalPath());
+
+                        if (pkg == null) {
+                            pkg = sourceFile.getCanonicalPath();
+                        }
+
+                    } catch (IOException e) {
+                    }
+                }
+                break;
+        }
+        log.debug("Package path: " + pkg);
+        //endregion
+
+        EnvironmentInformation info = new EnvironmentInformation(vSources, eType, oType, vDeps, basePath, pkg);
+
+        if (StringUtils.isNotEmpty(mainFile))
+        {
+            log.info("Attempting to validate the main method as " + mainFile);
+
+            if (!info.getSource().contains(mainFile))
+                throw new ExceptionHandler("The main class path is not included within the source file.", ExceptionId.ARG_VALID);
+
+            log.info("Using the main method from class " + mainFile);
+            info.setMain(mainFile);
+        }
+
+        //region Setting the file out
+        if (fileOutPath == null) {
+            fileOutPath = Utils.osPathJoin(System.getProperty("user.dir"),
+                    info.getPackageName() + info.getMessagingType().getOutputFileExt());
+
+            String[] tempSplit = fileOutPath.split("\\.\\w+$");
+            fileOutPath = tempSplit[0] + "_" + Utils.getCurrentTimeStamp() + info.getMessagingType().getOutputFileExt();
+        } else {
+            fileOutPath = Utils.verifyFileExt(fileOutPath, oType.getOutputFileExt(), overWriteFileOut);
+        }
+        info.setFileOut(fileOutPath);
+        //endregion
+
+        return info;
     }
 
     private static Options setOptions() {
