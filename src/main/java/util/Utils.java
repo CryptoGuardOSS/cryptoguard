@@ -1118,6 +1118,7 @@ public class Utils {
         if (StringUtils.isEmpty(JAVA_HOME)) {
             throw new ExceptionHandler("Environment Variable: JAVA_HOME is not set.", ExceptionId.ENV_VAR);
         }
+        log.debug("JAVA_HOME set at: " + JAVA_HOME);
         return JAVA_HOME.replaceAll("//", "/");
     }
 
