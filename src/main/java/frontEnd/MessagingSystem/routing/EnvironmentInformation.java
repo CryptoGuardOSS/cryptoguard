@@ -2,7 +2,9 @@ package frontEnd.MessagingSystem.routing;
 
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.Interface.outputRouting.ExceptionId;
+import frontEnd.MessagingSystem.AnalysisIssue;
 import frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
+import frontEnd.MessagingSystem.routing.structure.Scarf.BugSummary;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
@@ -18,6 +20,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.function.Function;
 
 /**
  * The class containing the analysis rule information.
@@ -140,6 +143,10 @@ public class EnvironmentInformation {
     private double SLICE_AVERAGE = 0;
     @Getter @Setter
     private ArrayList<String> DEPTH_COUNT = new ArrayList<>();
+    @Getter @Setter
+    private Function<AnalysisIssue, String> errorAddition;
+    @Getter @Setter
+    private Function<BugSummary, String> bugSummaryHandler;
     //endregion
     //region Constructor
 

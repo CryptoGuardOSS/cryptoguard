@@ -15,6 +15,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.function.Function;
 
 /**
  * <p>Abstract OutputStructure class.</p>
@@ -37,6 +38,8 @@ public abstract class OutputStructure {
     private final CWEList cwes = new CWEList();
     private final Charset chars = StandardCharsets.UTF_8;
     private final HashMap<Integer, Integer> countOfBugs = new HashMap<>();
+    private final Function<AnalysisIssue, String> errorAddition;
+    private final Function<BugSummary, String> bugSummaryHandler;
     //endregion
 
     //region Constructors
@@ -51,6 +54,8 @@ public abstract class OutputStructure {
         this.outfile = new File(info.getFileOut());
         this.type = info.getSourceType();
         this.collection = new ArrayList<>();
+        this.errorAddition = info.getErrorAddition();
+        this.bugSummaryHandler = info.getBugSummaryHandler();
     }
     //endregion
 
@@ -63,13 +68,10 @@ public abstract class OutputStructure {
      */
     public abstract void startAnalyzing() throws ExceptionHandler;
 
-    /**
-     * <p>addIssue.</p>
-     *
-     * @param issue a {@link frontEnd.MessagingSystem.AnalysisIssue} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public void addIssue(AnalysisIssue issue) throws ExceptionHandler {
+    private void addIssueCore(AnalysisIssue issue) throws ExceptionHandler {
+        if (this.errorAddition != null)
+            log.info(this.errorAddition.apply(issue));
+
         log.debug("Adding Issue: " + issue.getInfo());
         //Keeping a rolling count of the different kinds of bugs occuring
         if (!countOfBugs.containsKey(issue.getRuleId())) {
@@ -77,6 +79,17 @@ public abstract class OutputStructure {
         } else {
             countOfBugs.put(issue.getRuleId(), countOfBugs.get(issue.getRuleId()) + 1);
         }
+
+    }
+
+    /**
+     * <p>addIssue.</p>
+     *
+     * @param issue a {@link frontEnd.MessagingSystem.AnalysisIssue} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
+    public void addIssue(AnalysisIssue issue) throws ExceptionHandler {
+        this.addIssueCore(issue);
     }
 
     /**
@@ -86,14 +99,7 @@ public abstract class OutputStructure {
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public void addIssueToCollection(AnalysisIssue issue) throws ExceptionHandler {
-        log.debug("Adding Issue: " + issue.getInfo());
-        //Keeping a rolling count of the different kinds of bugs occuring
-        if (!countOfBugs.containsKey(issue.getRuleId())) {
-            countOfBugs.put(issue.getRuleId(), 1);
-        } else {
-            countOfBugs.put(issue.getRuleId(), countOfBugs.get(issue.getRuleId()) + 1);
-        }
-
+        this.addIssueCore(issue);
         this.collection.add(issue);
     }
 
@@ -128,6 +134,9 @@ public abstract class OutputStructure {
             log.debug("Added ruleType: " + ruleType.toString());
         }
         //endregion
+
+        if (this.bugSummaryHandler != null)
+            log.info(this.bugSummaryHandler.apply(bugDict));
 
         return bugDict;
     }

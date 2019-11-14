@@ -895,7 +895,7 @@ public class AnalyzerReport implements Serializable {
      * BugCategory
      * <p>
      *
-     * @return a {@link java.util.List} object.
+     * @return a {@link java.util.List} object.Target
      */
     @JacksonXmlElementWrapper(localName = "BugSummary")
     @JsonProperty("BugCategory")

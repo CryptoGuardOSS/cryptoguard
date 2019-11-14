@@ -9,6 +9,7 @@ import frontEnd.MessagingSystem.routing.Listing;
 import frontEnd.MessagingSystem.routing.inputStructures.ScarfXMLId;
 import frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import frontEnd.argsIdentifier;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.jf.dexlib2.DexFileFactory;
 import org.jf.dexlib2.Opcodes;
@@ -53,6 +54,7 @@ import static soot.SootClass.BODIES;
  * @version 03.07.01
  * @since 01.00.00
  */
+@Log4j2
 public class Utils {
 
     /**
@@ -68,9 +70,9 @@ public class Utils {
      */
     public final static String lineSep = System.getProperty("line.separator");
     /**
-     * Constant <code>projectVersion="V03.09.02"</code>
+     * Constant <code>projectVersion="V03.10.00"</code>
      */
-    public final static String projectVersion = "V03.09.02";
+    public final static String projectVersion = "V03.10.00";
     /**
      * Constant <code>projectName="CryptoGuard"</code>
      */
@@ -161,6 +163,26 @@ public class Utils {
     }
 
     //region HotMethods
+
+    public static List<String> retrieveFullyQualifiedNameFileSep(List<String> sourceJavaFile) throws ExceptionHandler {
+        List<String> fullPath = new ArrayList<>();
+        for (String in : sourceJavaFile)
+            fullPath.add(Utils.retrieveFullyQualifiedName(in).replace(".", fileSep));
+
+        return fullPath;
+    }
+
+    public static void handleErrorMessage(ExceptionHandler e) {
+        log.debug(e.getErrorCode().getMessage());
+
+        if (e.getErrorCode().getId().equals(0)) {
+            log.info(e.getErrorCode().getMessage());
+            System.out.print(e.getLongDesciption());
+        } else {
+            log.fatal(e.getErrorCode().getMessage());
+            System.err.print(e.toString());
+        }
+    }
 
     /**
      * <p>joinSpecialSootClassPath.</p>
@@ -382,6 +404,8 @@ public class Utils {
      * @return a {@link java.lang.String} object.
      */
     public static String makeArg(String id, String value) {
+        if (StringUtils.isEmpty(value))
+            return "";
         return " -" + id + " " + value + " ";
     }
 
@@ -390,10 +414,9 @@ public class Utils {
     }
 
     public static String makeArg(String id, List<String> value) {
-        if (value.size() <= 0)
-            return makeArg(id, value.get(0));
-        else
-            return makeArg(id, value.get(0)) + String.join(" ", value.subList(1, value.size()));
+        if (value.size() >= 1)
+            return makeArg(id, value.get(0)) + String.join(" ", value);
+        return "";
     }
 
     /**
