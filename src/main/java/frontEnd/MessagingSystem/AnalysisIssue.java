@@ -137,6 +137,10 @@ public class AnalysisIssue {
     //endregion
 
     //region Helper Methods
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         StringBuilder out = new StringBuilder();
@@ -151,6 +155,7 @@ public class AnalysisIssue {
 
         return out.toString();
     }
+
     /**
      * <p>getPathFromSource.</p>
      *

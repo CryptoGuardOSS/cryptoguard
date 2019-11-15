@@ -5,9 +5,22 @@ import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import lombok.extern.log4j.Log4j2;
 import rule.engine.*;
 
+/**
+ * <p>SubRunner class.</p>
+ *
+ * @author maister
+ * @version 03.10.00
+ */
 @Log4j2
 public class SubRunner {
 
+    /**
+     * <p>run.</p>
+     *
+     * @param info a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
+     * @return a {@link java.lang.String} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
     public static String run(EnvironmentInformation info) throws ExceptionHandler {
 
         EntryHandler handler = null;

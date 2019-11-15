@@ -49,6 +49,7 @@ public class OrthogonalInstructionSlicer extends BackwardFlowAnalysis {
     private List<String> usedFields;
     private Map<String, List<PropertyAnalysisResult>> propertyUseMap;
     private int depth;
+
     /**
      * <p>Constructor for OrthogonalInstructionSlicer.</p>
      *
