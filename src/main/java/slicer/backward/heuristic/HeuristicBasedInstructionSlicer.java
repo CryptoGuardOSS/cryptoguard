@@ -47,6 +47,7 @@ public class HeuristicBasedInstructionSlicer extends BackwardFlowAnalysis {
     private String slicingCriteria;
     private String method;
     private Map<String, List<PropertyAnalysisResult>> propertyUseMap;
+
     /**
      * <p>Constructor for HeuristicBasedInstructionSlicer.</p>
      *

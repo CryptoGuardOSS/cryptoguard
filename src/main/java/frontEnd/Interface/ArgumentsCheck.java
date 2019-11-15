@@ -165,7 +165,7 @@ public class ArgumentsCheck {
             fileOutPath = cmd.getOptionValue(argsIdentifier.OUT.getId());
         //endregion
 
-        EnvironmentInformation info = paramaterCheck(source, dependencies, type, messaging, fileOutPath, cmd.hasOption(argsIdentifier.NEW.getId()),  usingInputIn, setMainClass, cmd.hasOption(argsIdentifier.TIMESTAMP.getId()));
+        EnvironmentInformation info = paramaterCheck(source, dependencies, type, messaging, fileOutPath, cmd.hasOption(argsIdentifier.NEW.getId()), usingInputIn, setMainClass, cmd.hasOption(argsIdentifier.TIMESTAMP.getId()));
 
         if (!messaging.getTypeOfMessagingInput().inputValidation(info, args.toArray(new String[0]))) {
             log.error("Issue Validating Output Specific Arguments.");
@@ -202,8 +202,20 @@ public class ArgumentsCheck {
 
     }
 
+    /**
+     * <p>paramaterCheck.</p>
+     *
+     * @param sourceFiles  a {@link java.util.List} object.
+     * @param dependencies a {@link java.util.List} object.
+     * @param eType        a {@link rule.engine.EngineType} object.
+     * @param oType        a {@link frontEnd.MessagingSystem.routing.Listing} object.
+     * @param fileOutPath  a {@link java.lang.String} object.
+     * @param mainFile     a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
     public static EnvironmentInformation paramaterCheck(List<String> sourceFiles, List<String> dependencies, EngineType eType, Listing oType, String fileOutPath, String mainFile) throws ExceptionHandler {
-        EnvironmentInformation info =  paramaterCheck(sourceFiles, dependencies, eType, oType, fileOutPath, true, false, StringUtils.trimToNull(mainFile), false);
+        EnvironmentInformation info = paramaterCheck(sourceFiles, dependencies, eType, oType, fileOutPath, true, false, StringUtils.trimToNull(mainFile), false);
 
         //Setting base arguments, some might turn into defaults
         info.setShowTimes(true);
@@ -212,23 +224,38 @@ public class ArgumentsCheck {
         Utils.initDepth(1);
 
         info.setRawCommand(
-            Utils.makeArg(argsIdentifier.SOURCE, info.getSource()) +
-            Utils.makeArg(argsIdentifier.DEPENDENCY, info.getDependencies()) +
-            Utils.makeArg(argsIdentifier.FORMAT, eType) +
-            Utils.makeArg(argsIdentifier.FORMATOUT, oType) +
-            Utils.makeArg(argsIdentifier.OUT, info.getFileOut()) +
-            Utils.makeArg(argsIdentifier.NEW, true) +
-            (StringUtils.isNotEmpty(mainFile) ? Utils.makeArg(argsIdentifier.MAIN, info.getMain()) : "")  +
-            Utils.makeArg(argsIdentifier.TIMESTAMP, false) +
-            Utils.makeArg(argsIdentifier.TIMEMEASURE, true) +
-            Utils.makeArg(argsIdentifier.STREAM, true) +
-            Utils.makeArg(argsIdentifier.HEURISTICS, true) +
-            Utils.makeArg(argsIdentifier.DEPTH, 1)
+                Utils.makeArg(argsIdentifier.SOURCE, info.getSource()) +
+                        Utils.makeArg(argsIdentifier.DEPENDENCY, info.getDependencies()) +
+                        Utils.makeArg(argsIdentifier.FORMAT, eType) +
+                        Utils.makeArg(argsIdentifier.FORMATOUT, oType) +
+                        Utils.makeArg(argsIdentifier.OUT, info.getFileOut()) +
+                        Utils.makeArg(argsIdentifier.NEW, true) +
+                        (StringUtils.isNotEmpty(mainFile) ? Utils.makeArg(argsIdentifier.MAIN, info.getMain()) : "") +
+                        Utils.makeArg(argsIdentifier.TIMESTAMP, false) +
+                        Utils.makeArg(argsIdentifier.TIMEMEASURE, true) +
+                        Utils.makeArg(argsIdentifier.STREAM, true) +
+                        Utils.makeArg(argsIdentifier.HEURISTICS, true) +
+                        Utils.makeArg(argsIdentifier.DEPTH, 1)
         );
 
         return info;
     }
 
+    /**
+     * <p>paramaterCheck.</p>
+     *
+     * @param sourceFiles         a {@link java.util.List} object.
+     * @param dependencies        a {@link java.util.List} object.
+     * @param eType               a {@link rule.engine.EngineType} object.
+     * @param oType               a {@link frontEnd.MessagingSystem.routing.Listing} object.
+     * @param fileOutPath         a {@link java.lang.String} object.
+     * @param overWriteFileOut    a {@link java.lang.Boolean} object.
+     * @param usingEnhancedFileIn a {@link java.lang.Boolean} object.
+     * @param mainFile            a {@link java.lang.String} object.
+     * @param timeStamp           a {@link java.lang.Boolean} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
     public static EnvironmentInformation paramaterCheck(List<String> sourceFiles, List<String> dependencies, EngineType eType, Listing oType, String fileOutPath, Boolean overWriteFileOut, Boolean usingEnhancedFileIn, String mainFile, Boolean timeStamp) throws ExceptionHandler {
 
         //region verifying filePaths
@@ -295,8 +322,7 @@ public class ArgumentsCheck {
 
         EnvironmentInformation info = new EnvironmentInformation(vSources, eType, oType, vDeps, basePath, pkg);
 
-        if (StringUtils.isNotEmpty(mainFile))
-        {
+        if (StringUtils.isNotEmpty(mainFile)) {
             log.info("Attempting to validate the main method as " + mainFile);
 
             if (!info.getSource().contains(mainFile))

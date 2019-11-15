@@ -52,74 +52,104 @@ public class EnvironmentInformation {
     private final List<String> sourcePaths; //Could this be intertwined with source?
     //endregion
     PrintStream old;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String BuildFramework;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String BuildFrameworkVersion;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String packageName = "UNKNOWN";
-    @Getter @Setter
+    @Getter
+    @Setter
     private String packageVersion = "UNKNOWN";
-    @Getter @Setter
+    @Getter
+    @Setter
     private boolean showTimes = false;
-    @Getter @Setter
+    @Getter
+    @Setter
     private boolean addExperimentalRules = false;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String rawCommand;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String main;
-    @Getter @Setter
+    @Getter
+    @Setter
     private boolean overWriteOutput = false;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String targetProjectName;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String targetProjectVersion;
-    @Getter @Setter
+    @Getter
+    @Setter
     private Boolean isGradle;
-    @Getter @Setter
+    @Getter
+    @Setter
     private Boolean prettyPrint = false;
-    @Getter @Setter
+    @Getter
+    @Setter
     private Boolean killJVM = true;
     @Setter
     private List<String> dependencies;
-    @Getter @Setter
+    @Getter
+    @Setter
     private EngineType sourceType;
-    @Getter @Setter
+    @Getter
+    @Setter
     private Listing messagingType;
     @Setter
     private String UUID;
-    @Getter @Setter
+    @Getter
+    @Setter
     private Long startAnalyisisTime;
-    @Getter @Setter
+    @Getter
+    @Setter
     private Long analysisMilliSeconds;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String fileOut;
-    @Getter @Setter
+    @Getter
+    @Setter
     private Boolean streaming = false;
     //endregion
     //region From Outside and defaulted unless set
-    @Getter @Setter
+    @Getter
+    @Setter
     private String AssessmentFramework;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String AssessmentFrameworkVersion;
-    @Getter @Setter
+    @Getter
+    @Setter
     private DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd_HH:mm:ss");
     private DateTime startTime = new DateTime();
-    @Getter @Setter
+    @Getter
+    @Setter
     private String AssessmentStartTime = formatter.print(startTime);
-    @Getter @Setter
+    @Getter
+    @Setter
     private String ParserName = "UNKNOWN";
-    @Getter @Setter
+    @Getter
+    @Setter
     private String ParserVersion = "UNKNOWN";
-    @Getter @Setter
+    @Getter
+    @Setter
     private String packageRootDir = "UNKNOWN";
-    @Getter @Setter
+    @Getter
+    @Setter
     private String buildRootDir = "UNKNOWN";
     @Setter
     private Integer buildId;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String xPath;
-    @Getter @Setter
+    @Getter
+    @Setter
     private Boolean printOut = false;
     @Setter
     private OutputStructure output;
@@ -129,23 +159,32 @@ public class EnvironmentInformation {
     @Setter
     private ByteArrayOutputStream sootErrors = new ByteArrayOutputStream();
     //region Heuristics from Utils
-    @Getter @Setter
+    @Getter
+    @Setter
     private Boolean displayHeuristics = false;
-    @Getter @Setter
+    @Getter
+    @Setter
     private int NUM_ORTHOGONAL = 0;
-    @Getter @Setter
+    @Getter
+    @Setter
     private int NUM_CONSTS_TO_CHECK = 0;
-    @Getter @Setter
+    @Getter
+    @Setter
     private int NUM_SLICES = 0;
-    @Getter @Setter
+    @Getter
+    @Setter
     private int NUM_HEURISTIC = 0;
-    @Getter @Setter
+    @Getter
+    @Setter
     private double SLICE_AVERAGE = 0;
-    @Getter @Setter
+    @Getter
+    @Setter
     private ArrayList<String> DEPTH_COUNT = new ArrayList<>();
-    @Getter @Setter
+    @Getter
+    @Setter
     private Function<AnalysisIssue, String> errorAddition;
-    @Getter @Setter
+    @Getter
+    @Setter
     private Function<BugSummary, String> bugSummaryHandler;
     //endregion
     //region Constructor
@@ -206,6 +245,7 @@ public class EnvironmentInformation {
     //endregion
 
     //region Getters and Setters
+
     /**
      * <p>addToDepth_Count.</p>
      *

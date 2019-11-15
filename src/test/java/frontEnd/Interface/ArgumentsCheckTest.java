@@ -121,7 +121,7 @@ public class ArgumentsCheckTest {
                 makeArg(argsIdentifier.FORMAT, EngineType.JAR) +
                         makeArg(argsIdentifier.SOURCE, jarOne) +
                         makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
-                        makeArg(argsIdentifier.OUT, fileOutTxt.replace(".txt",".json")) +
+                        makeArg(argsIdentifier.OUT, fileOutTxt.replace(".txt", ".json")) +
                         makeArg(argsIdentifier.TIMEMEASURE) +
                         makeArg(argsIdentifier.PRETTY) +
                         makeArg(argsIdentifier.SKIPINPUTVALIDATION);
@@ -143,7 +143,7 @@ public class ArgumentsCheckTest {
         assertEquals(srcOneGrvDep, info.getDependencies().get(0));
         assertTrue(info.isShowTimes());
         assertTrue(info.getPrettyPrint());
-        assertEquals(fileOutTxt.replace(".txt",".json"), info.getFileOut());
+        assertEquals(fileOutTxt.replace(".txt", ".json"), info.getFileOut());
         assertEquals(Listing.Default, info.getMessagingType());
     }
 

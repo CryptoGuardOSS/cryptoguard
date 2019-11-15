@@ -81,6 +81,9 @@ public class ExceptionHandler extends Exception implements Supplier<String> {
         return longDesciption;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String get() {
         return null;
