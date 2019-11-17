@@ -148,8 +148,11 @@ public class AnalysisIssue {
         out.append("ClassName: ").append(this.className).append(", ");
         out.append("Rule: ").append(this.rule).append(", ");
         out.append("Methods: ").append(this.methods.peek().toString()).append(", ");
-        out.append("Locations: ");
-        locations.stream().forEach(loc -> out.append(loc.toString()).append(" && "));
+        if (getLocations().size() > 0) {
+            out.append("Locations: ");
+            getLocations().stream().forEach(loc -> out.append(loc.toString()).append(" && "));
+        } else
+            out.append("No Locations");
         out.append(", ");
         out.append("Info: ").append(this.info);
 
