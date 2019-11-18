@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static util.Utils.retrieveFullyQualifiedName;
+
 /**
  * <p>ArgumentsCheck class.</p>
  *
@@ -268,7 +270,7 @@ public class ArgumentsCheck {
         else
             vSources = Utils.retrieveFilesByType(Utils.inputFiles(sourceFiles.get(0)), eType);
 
-        log.info("Using the source file(s): " + vSources.toString());
+        log.info("Using the source file(s): " + retrieveFullyQualifiedName(vSources).toString());
         //endregion
 
         //region Setting the dependency path
@@ -276,7 +278,7 @@ public class ArgumentsCheck {
         if (dependencies.size() > 0) {
             log.trace("Retrieving the dependency files.");
             vDeps = Utils.verifyClassPaths(dependencies);
-            log.info("Using the dependency file(s): " + vDeps.toString());
+            log.info("Using the dependency file(s): " + retrieveFullyQualifiedName(vDeps).toString());
         }
         //endregion
         //endregion

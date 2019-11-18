@@ -24,6 +24,31 @@ public class EntryPoint_Plugin {
 
     public static String main(List<String> sourceFiles, List<String> dependencies, String outFile, String mainFile, Function<AnalysisIssue, String> errorAddition, Function<HashMap<Integer, Integer>, String> bugSummaryHandler, Function<Heuristics, String> heuristicsHandler, int debuggingLevel) {
         String outputFile = null;
+
+        //region Setting the logging level
+        switch (debuggingLevel) {
+            case 5:
+                Configurator.setRootLevel(Level.ALL);
+                break;
+            case 4:
+                Configurator.setRootLevel(Level.TRACE);
+                break;
+            case 3:
+                Configurator.setRootLevel(Level.DEBUG);
+                break;
+            case 2:
+                Configurator.setRootLevel(Level.INFO);
+                break;
+            case 0:
+                Configurator.setRootLevel(Level.FATAL);
+                break;
+            //case 1
+            default:
+                Configurator.setRootLevel(Level.WARN);
+                break;
+        }
+        //endregion
+
         try {
             EnvironmentInformation info = ArgumentsCheck.paramaterCheck(
                     sourceFiles, dependencies,
@@ -36,31 +61,6 @@ public class EntryPoint_Plugin {
 
             info.setPrettyPrint(true);
             info.setKillJVM(false);
-
-            //region Setting the logging level
-            switch (debuggingLevel) {
-                case 6:
-                    Configurator.setRootLevel(Level.ALL);
-                    break;
-                case 5:
-                    Configurator.setRootLevel(Level.TRACE);
-                    break;
-                case 4:
-                    Configurator.setRootLevel(Level.DEBUG);
-                    break;
-                case 3:
-                    Configurator.setRootLevel(Level.INFO);
-                    break;
-                case 1:
-                    Configurator.setRootLevel(Level.FATAL);
-                    break;
-                //case 2
-                default:
-                    Configurator.setRootLevel(Level.WARN);
-                    break;
-            }
-            //endregion
-
 
             outputFile = SubRunner.run(info);
 
