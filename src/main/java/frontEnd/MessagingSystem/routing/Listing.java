@@ -168,6 +168,29 @@ public enum Listing {
 
     }
 
+    public OutputStructure unmarshall(boolean stream, String filePath) throws ExceptionHandler{
+        if (stream) {
+            if (!this.streamEnabled)
+                throw new ExceptionHandler("Streaming is not supported for the format: " + this.getType(), ExceptionId.GEN_VALID);
+            else {
+                try {
+                    return (frontEnd.MessagingSystem.routing.outputStructures.stream.Structure) Class.forName(this.streamPath + this.type).getConstructor(String.class).newInstance(filePath);
+                } catch (Exception e) {
+                    //TODO - Catch Here
+                    return null;
+                }
+            }
+        } else //non-streamed
+        {
+            try {
+                return (Structure) Class.forName(this.blockPath + this.type).getConstructor(String.class).newInstance(filePath);
+            } catch (Exception e) {
+                //TODO - Catch Here
+                return null;
+            }
+        }
+    }
+
     /**
      * <p>Getter for the field <code>outputFileExt</code>.</p>
      *

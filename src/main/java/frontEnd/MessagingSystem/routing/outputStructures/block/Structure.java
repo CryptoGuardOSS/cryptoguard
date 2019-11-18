@@ -37,6 +37,10 @@ public abstract class Structure extends OutputStructure {
     public Structure(EnvironmentInformation info) {
         super(info);
     }
+
+    public Structure() {
+
+    }
     //endregion
 
     //region Overridden Methods

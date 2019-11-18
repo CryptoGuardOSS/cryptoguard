@@ -3,6 +3,7 @@ package frontEnd.MessagingSystem.routing.outputStructures.stream;
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.MessagingSystem.AnalysisIssue;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
+import frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 
 import static frontEnd.MessagingSystem.routing.outputStructures.common.Legacy.*;
 
@@ -35,7 +36,9 @@ public class Legacy extends Structure {
     //endregion
 
     //region Overridden Methods
-
+    public OutputStructure deserialize(String filePath) throws ExceptionHandler {
+        return null;
+    }
     /**
      * {@inheritDoc}
      */

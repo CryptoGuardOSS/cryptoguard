@@ -12,6 +12,8 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import util.Utils;
 
+import java.io.File;
+
 import static frontEnd.MessagingSystem.routing.outputStructures.common.Default.mapper;
 
 /**
@@ -41,6 +43,24 @@ public class Default extends Structure {
      */
     public Default(EnvironmentInformation info) throws ExceptionHandler {
         super(info);
+    }
+
+    public Default(String filePath) throws ExceptionHandler {
+        Report struct = Report.deserialize(new File(filePath));
+
+        EnvironmentInformation info = mapper(struct);
+        super.setSource(info);
+        super.setOutfile(new File(info.getFileOut()));
+        super.setType(mapper(struct.getTarget().getType()));
+
+        struct.getIssues().stream().forEach(issue -> {
+            try {
+                super.addIssueToCollection(mapper(issue));
+            } catch (ExceptionHandler exceptionHandler) {
+                //TODO - Catch Here
+            }
+        });
+
     }
     //endregion
 
@@ -163,9 +183,7 @@ public class Default extends Structure {
             this.write(", \"Heuristics\" : ");
             log.debug("Writing the Heuristics");
             this.write(JacksonSerializer.serialize(
-                    mapper(
-                            super.getSource(), super.getSource().getSLICE_AVERAGE_3SigFig()
-                    ),
+                    super.getSource().getHeuristics().getDefaultHeuristics(),
                     super.getSource().getPrettyPrint(),
                     super.getSource().getMessagingType().getJacksonType())
             );

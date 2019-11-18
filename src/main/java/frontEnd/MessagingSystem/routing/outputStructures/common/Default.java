@@ -3,7 +3,10 @@ package frontEnd.MessagingSystem.routing.outputStructures.common;
 import frontEnd.MessagingSystem.AnalysisIssue;
 import frontEnd.MessagingSystem.AnalysisLocation;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
-import frontEnd.MessagingSystem.routing.structure.Default.*;
+import frontEnd.MessagingSystem.routing.structure.Default.Issue;
+import frontEnd.MessagingSystem.routing.structure.Default.Location;
+import frontEnd.MessagingSystem.routing.structure.Default.Report;
+import frontEnd.MessagingSystem.routing.structure.Default.Target;
 import rule.engine.EngineType;
 import util.Utils;
 
@@ -44,6 +47,26 @@ public class Default {
         report.setUUID(info.getUUID());
 
         return report;
+    }
+
+    public static EnvironmentInformation mapper(Report report) {
+        EnvironmentInformation info = new EnvironmentInformation();
+
+        info.setAssessmentStartTime(report.getDateTime());
+        info.setTargetProjectName(report.getProjectName());
+        info.setTargetProjectVersion(report.getProjectVersion());
+        info.setUUID(report.getUUID());
+
+        info.setPackageRootDir(report.getTarget().getFullPath());
+        info.setPackageName(report.getTarget().getProjectName());
+        info.setTargetProjectName(report.getTarget().getProjectName());
+        info.setSourceType(mapper(report.getTarget().getType()));
+
+        info.setIsGradle(mapper(report.getTarget()));
+        info.setRawCommand(report.getTarget().getRawCommand());
+        info.getSource().addAll(report.getTarget().getTargetSources());
+
+        return info;
     }
 
     /**
@@ -96,6 +119,22 @@ public class Default {
         return Target.Type.JAR;
     }
 
+    public static EngineType mapper(Target.Type type) {
+        switch (type) {
+            case APK:
+                return EngineType.APK;
+            case JAR:
+                return EngineType.JAR;
+            case JAVA:
+                return EngineType.JAVAFILES;
+            case CLASS:
+                return EngineType.CLASSFILES;
+            case SOURCE:
+                return EngineType.DIR;
+        }
+        return EngineType.JAR;
+    }
+
     /**
      * <p>mapper.</p>
      *
@@ -107,6 +146,10 @@ public class Default {
             return Target.ProjectType.GRADLE;
         else
             return Target.ProjectType.MAVEN;
+    }
+
+    public static Boolean mapper(Target target) {
+        return target.getProjectType().equals(Target.ProjectType.GRADLE);
     }
 
 
@@ -142,6 +185,18 @@ public class Default {
         return issue;
     }
 
+    public static AnalysisIssue mapper(Issue oldIssue) {
+        AnalysisIssue issue = new AnalysisIssue(oldIssue.getRuleNumber());
+
+        issue.setFullPathName(oldIssue.getFullPath());
+        issue.setClassName(oldIssue.getLocation().getClassName());
+        issue.addMethod(oldIssue.getLocation().getMethodName(), mapper(oldIssue.getLocation()));
+
+        issue.setInfo(oldIssue.getMessage());
+
+        return issue;
+    }
+
     /**
      * <p>mapper.</p>
      *
@@ -159,6 +214,15 @@ public class Default {
         return loc;
     }
 
+    public static AnalysisLocation mapper(Location oldLoc) {
+        AnalysisLocation loc = new AnalysisLocation(oldLoc.getLineNumber());
+
+        if (oldLoc.getColumnNumber() > 0)
+            loc.setColStart(oldLoc.getColumnNumber());
+
+        return loc;
+    }
+
     /**
      * <p>mapper.</p>
      *
@@ -166,6 +230,7 @@ public class Default {
      * @param sliceAverageRounded a double.
      * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Heuristics} object.
      */
+    /*
     public static Heuristics mapper(EnvironmentInformation info, double sliceAverageRounded) {
 
         return new Heuristics(
@@ -177,6 +242,19 @@ public class Default {
                 info.getDEPTH_COUNT()
         );
     }
+
+    public static Heuristics mapHeuristics(Report report) {
+
+        return new Heuristics(
+                report.getHeuristics().getNumberOfOrthogonal(),
+                report.getHeuristics().getNumberOfConstantsToCheck(),
+                report.getHeuristics().getNumberOfSlices(),
+                report.getHeuristics().getNumberOfHeuristics(),
+                report.getHeuristics().getAverageSlice(),
+                report.getHeuristics().getDepthCount()
+        );
+    }
+    */
 
 
 //endregion

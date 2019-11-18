@@ -6,6 +6,7 @@ import frontEnd.MessagingSystem.AnalysisIssue;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import frontEnd.MessagingSystem.routing.structure.Scarf.BugCategory;
 import frontEnd.MessagingSystem.routing.structure.Scarf.BugSummary;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import rule.engine.EngineType;
 import rule.engine.RuleList;
@@ -31,15 +32,18 @@ import java.util.function.Function;
 public abstract class OutputStructure {
 
     //region Attributes
-    private final EnvironmentInformation source;
+    @Setter
+    private EnvironmentInformation source;
     private final ArrayList<AnalysisIssue> collection;
-    private final File outfile;
-    private final EngineType type;
+    @Setter
+    private File outfile;
+    @Setter
+    private EngineType type;
     private final CWEList cwes = new CWEList();
     private final Charset chars = StandardCharsets.UTF_8;
     private final HashMap<Integer, Integer> countOfBugs = new HashMap<>();
     private final Function<AnalysisIssue, String> errorAddition;
-    private final Function<BugSummary, String> bugSummaryHandler;
+    private final Function<HashMap<Integer, Integer>, String> bugSummaryHandler;
     //endregion
 
     //region Constructors
@@ -56,6 +60,12 @@ public abstract class OutputStructure {
         this.collection = new ArrayList<>();
         this.errorAddition = info.getErrorAddition();
         this.bugSummaryHandler = info.getBugSummaryHandler();
+    }
+
+    public OutputStructure() {
+        this.collection = new ArrayList<>();
+        this.errorAddition = null;
+        this.bugSummaryHandler = null;
     }
     //endregion
 
@@ -136,7 +146,7 @@ public abstract class OutputStructure {
         //endregion
 
         if (this.bugSummaryHandler != null)
-            log.info(this.bugSummaryHandler.apply(bugDict));
+            log.info(this.bugSummaryHandler.apply(countOfBugs));
 
         return bugDict;
     }
