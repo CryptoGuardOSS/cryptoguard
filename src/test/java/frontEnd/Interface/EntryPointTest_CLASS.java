@@ -436,7 +436,7 @@ public class EntryPointTest_CLASS {
         if (isLinux) {
 
             try {
-                String outputFile = EntryPoint_Plugin.main(Arrays.asList(source), new ArrayList<>(), fileOut, null);
+                String outputFile = EntryPoint_Plugin.main(Arrays.asList(source), new ArrayList<>(), fileOut, null, null, null, null, 0);
 
                 Report report = Report.deserialize(new File(outputFile));
                 assertFalse(report.getIssues().isEmpty());
@@ -466,7 +466,7 @@ public class EntryPointTest_CLASS {
         if (isLinux) {
 
             try {
-                String outputFile = EntryPoint_Plugin.main(source, Utils.getJarsInDirectory(srcOneGrvDep), fileOut, classFiles[3]);
+                String outputFile = EntryPoint_Plugin.main(source, Utils.getJarsInDirectory(srcOneGrvDep), fileOut, classFiles[3], null, null, null, 0);
 
                 Report report = Report.deserialize(new File(outputFile));
                 assertFalse(report.getIssues().isEmpty());
