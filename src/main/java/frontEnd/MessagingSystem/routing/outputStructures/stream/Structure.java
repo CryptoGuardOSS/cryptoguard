@@ -39,6 +39,10 @@ public abstract class Structure extends OutputStructure {
             throw new ExceptionHandler("Error creating the output stream with " + info.getFileOutName(), ExceptionId.FILE_CON);
         }
     }
+
+    public Structure() {
+
+    }
     //endregion
 
     //region Overridden Methods

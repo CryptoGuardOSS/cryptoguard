@@ -138,13 +138,13 @@ public class Legacy {
 
         StringBuilder out = new StringBuilder();
 
-        out.append("Total Heuristics: ").append(info.getNUM_HEURISTIC()).append("\n");
-        out.append("Total Orthogonal: ").append(info.getNUM_ORTHOGONAL()).append("\n");
-        out.append("Total Constants: ").append(info.getNUM_CONSTS_TO_CHECK()).append("\n");
-        out.append("Total Slices: ").append(info.getNUM_SLICES()).append("\n");
+        out.append("Total Heuristics: ").append(info.getHeuristics().getNumberOfHeuristics()).append("\n");
+        out.append("Total Orthogonal: ").append(info.getHeuristics().getNumberOfOrthogonal()).append("\n");
+        out.append("Total Constants: ").append(info.getHeuristics().getNumberOfConstantsToCheck()).append("\n");
+        out.append("Total Slices: ").append(info.getHeuristics().getNumberOfSlices()).append("\n");
         out.append("Average Length: ").append(info.getSLICE_AVERAGE_3SigFig()).append("\n").append("\n");
 
-        for (String depth : info.getDEPTH_COUNT())
+        for (String depth : info.getHeuristics().getDepthCount())
             out.append(depth).append("\n");
 
         return out.toString();

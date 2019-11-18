@@ -4,12 +4,13 @@ import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.MessagingSystem.AnalysisIssue;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import frontEnd.MessagingSystem.routing.Listing;
-import frontEnd.MessagingSystem.routing.structure.Scarf.BugSummary;
+import frontEnd.MessagingSystem.routing.outputStructures.common.Heuristics;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.config.Configurator;
 import rule.engine.EngineType;
 import util.Utils;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.function.Function;
 
@@ -21,39 +22,17 @@ import java.util.function.Function;
  */
 public class EntryPoint_Plugin {
 
-    public static String main(List<String> sourceFiles, List<String> dependencies, String outFile, String mainFile) {
-        return main(sourceFiles, dependencies, outFile, mainFile, null, 0);
-    }
-
-    public static String main(List<String> sourceFiles, List<String> dependencies, String outFile, String mainFile, int debuggingLevel) {
-        return main(sourceFiles, dependencies, outFile, mainFile, null, debuggingLevel);
-    }
-
-    public static String main(List<String> sourceFiles, List<String> dependencies, String outFile, String mainFile, EnvironmentInformation info, int debuggingLevel) {
-
-        Function<AnalysisIssue, String> errorAddition = analysisIssue -> "Adding the issue: " + analysisIssue.toString();
-        Function<BugSummary, String> bugSummaryHandler = bugSummary -> {
-            StringBuilder out = new StringBuilder();
-            bugSummary.getSummaryContainer().forEach(out::append);
-            return out.toString();
-        };
-
-        return main(sourceFiles, dependencies, outFile, mainFile, errorAddition, bugSummaryHandler, info, debuggingLevel);
-    }
-
-    public static String main(List<String> sourceFiles, List<String> dependencies, String outFile, String mainFile, Function<AnalysisIssue, String> errorAddition, Function<BugSummary, String> bugSummaryHandler, int debuggingLevel) {
-        return main(sourceFiles, dependencies, outFile, mainFile, errorAddition, bugSummaryHandler, null, debuggingLevel);
-    }
-
-    public static String main(List<String> sourceFiles, List<String> dependencies, String outFile, String mainFile, Function<AnalysisIssue, String> errorAddition, Function<BugSummary, String> bugSummaryHandler, EnvironmentInformation info, int debuggingLevel) {
+    public static String main(List<String> sourceFiles, List<String> dependencies, String outFile, String mainFile, Function<AnalysisIssue, String> errorAddition, Function<HashMap<Integer, Integer>, String> bugSummaryHandler, Function<Heuristics, String> heuristicsHandler, int debuggingLevel) {
+        String outputFile = null;
         try {
-            info = ArgumentsCheck.paramaterCheck(
+            EnvironmentInformation info = ArgumentsCheck.paramaterCheck(
                     sourceFiles, dependencies,
                     EngineType.CLASSFILES, Listing.Default,
                     outFile, mainFile);
 
             info.setErrorAddition(errorAddition);
             info.setBugSummaryHandler(bugSummaryHandler);
+            info.setHeuristicsHandler(heuristicsHandler);
 
             info.setPrettyPrint(true);
             info.setKillJVM(false);
@@ -83,10 +62,12 @@ public class EntryPoint_Plugin {
             //endregion
 
 
-            return SubRunner.run(info);
+            outputFile = SubRunner.run(info);
+
         } catch (ExceptionHandler e) {
             Utils.handleErrorMessage(e);
+            outputFile = e.toString();
         }
-        return null;
+        return outputFile;
     }
 }

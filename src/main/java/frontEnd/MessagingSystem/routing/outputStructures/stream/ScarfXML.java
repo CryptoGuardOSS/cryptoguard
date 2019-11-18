@@ -11,6 +11,8 @@ import frontEnd.MessagingSystem.routing.structure.Scarf.BugSummary;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
+
 import static frontEnd.MessagingSystem.routing.outputStructures.common.ScarfXML.marshalling;
 
 /**
@@ -45,6 +47,23 @@ public class ScarfXML extends Structure {
         super(info);
         this.buildId = info.getBuildId();
         this.xPath = info.getXPath();
+    }
+
+    public ScarfXML(String filePath) throws ExceptionHandler {
+        AnalyzerReport report = AnalyzerReport.deserialize(new File(filePath));
+
+        EnvironmentInformation info = marshalling(report);
+        super.setSource(info);
+        super.setOutfile(new File(info.getFileOut()));
+
+        report.getBugInstance().stream().forEach(instance -> {
+            try {
+                super.addIssueToCollection(marshalling(instance));
+            } catch (ExceptionHandler e) {
+                //TODO - catch here
+            }
+        });
+
     }
     //endregion
 
@@ -107,7 +126,7 @@ public class ScarfXML extends Structure {
         if (super.getSource().getDisplayHeuristics()) {
             log.trace("Writing the heuristics");
             String heuristicsXML = JacksonSerializer.serialize(
-                    marshalling(super.getSource(), super.getSource().getSLICE_AVERAGE_3SigFig()),
+                    super.getSource().getHeuristics().getScarfXMLHeuristics(),
                     super.getSource().getPrettyPrint(),
                     Listing.ScarfXML.getJacksonType()
             );

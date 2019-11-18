@@ -4,7 +4,7 @@ import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.Interface.outputRouting.ExceptionId;
 import frontEnd.MessagingSystem.AnalysisIssue;
 import frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
-import frontEnd.MessagingSystem.routing.structure.Scarf.BugSummary;
+import frontEnd.MessagingSystem.routing.outputStructures.common.Heuristics;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
@@ -18,6 +18,7 @@ import util.Utils;
 import javax.annotation.Nonnull;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 import java.util.function.Function;
@@ -39,11 +40,14 @@ public class EnvironmentInformation {
     @Getter
     private final String PropertiesFile = "gradle.properties";
     @Getter
-    private final String ToolFramework;
+    @Setter
+    private String ToolFramework;
     @Getter
-    private final String ToolFrameworkVersion;
+    @Setter
+    private String ToolFrameworkVersion;
     @Getter
-    private final String platformName = Utils.getPlatform();
+    @Setter
+    private String platformName = Utils.getPlatform();
     //endregion
     //region Required Elements Set From the Start
     @Getter
@@ -162,6 +166,7 @@ public class EnvironmentInformation {
     @Getter
     @Setter
     private Boolean displayHeuristics = false;
+    /*
     @Getter
     @Setter
     private int NUM_ORTHOGONAL = 0;
@@ -180,14 +185,29 @@ public class EnvironmentInformation {
     @Getter
     @Setter
     private ArrayList<String> DEPTH_COUNT = new ArrayList<>();
+    */
     @Getter
     @Setter
+    private Heuristics heuristics = new Heuristics();
+    //endregion
+    //region Predicates used to help display streamed info
+    @Getter @Setter
     private Function<AnalysisIssue, String> errorAddition;
     @Getter
     @Setter
-    private Function<BugSummary, String> bugSummaryHandler;
+    private Function<HashMap<Integer, Integer>, String> bugSummaryHandler;
+    @Getter
+    @Setter
+    private Function<Heuristics, String> heuristicsHandler;
     //endregion
     //region Constructor
+
+    public EnvironmentInformation() {
+        this.ToolFramework = "";
+        this.ToolFrameworkVersion = "";
+        this.sourcePaths = new ArrayList<>();
+        this.Source = new ArrayList<>();
+    }
 
     /**
      * The main constructor for setting all of the environmental variables used  for the outputs.
@@ -252,7 +272,8 @@ public class EnvironmentInformation {
      * @param item a {@link java.lang.String} object.
      */
     public void addToDepth_Count(String item) {
-        this.DEPTH_COUNT.add(item);
+        this.getHeuristics().addDepthCount(item);
+        //this.DEPTH_COUNT.add(item);
     }
 
     /**
@@ -298,6 +319,8 @@ public class EnvironmentInformation {
     public void stopScanning() throws ExceptionHandler {
         this.stopAnalysis();
         this.setHuristicsInfo();
+        if (this.heuristicsHandler != null)
+            this.heuristicsHandler.apply(this.getHeuristics());
         this.getOutput().stopAnalyzing();
     }
 
@@ -320,7 +343,8 @@ public class EnvironmentInformation {
      * @return a double.
      */
     public double getSLICE_AVERAGE_3SigFig() {
-        return Double.parseDouble(String.format("%.3f", this.SLICE_AVERAGE));
+        return this.getHeuristics().getSliceAverage();
+        //return Double.parseDouble(String.format("%.3f", this.SLICE_AVERAGE));
     }
 
     /**
@@ -448,17 +472,25 @@ public class EnvironmentInformation {
     }
     //endregion
     //region Helpful Methods
-
     /**
      * <p>setHuristicsInfo.</p>
      */
     public void setHuristicsInfo() {
+        this.heuristics.setNumberOfOrthogonal(Utils.NUM_ORTHOGONAL);
+        this.heuristics.setNumberOfConstantsToCheck(Utils.NUM_CONSTS_TO_CHECK);
+        this.heuristics.setNumberOfSlices(Utils.NUM_SLICES);
+        this.heuristics.setNumberOfHeuristics(Utils.NUM_HEURISTIC);
+        this.heuristics.setSliceAverage(Utils.calculateAverage());
+        this.heuristics.setDepthCount(Utils.createDepthCountList());
+
+        /*
         this.NUM_ORTHOGONAL = Utils.NUM_ORTHOGONAL;
         this.NUM_CONSTS_TO_CHECK = Utils.NUM_CONSTS_TO_CHECK;
         this.NUM_SLICES = Utils.NUM_SLICES;
         this.NUM_HEURISTIC = Utils.NUM_HEURISTIC;
         this.SLICE_AVERAGE = Utils.calculateAverage();
         this.DEPTH_COUNT = Utils.createDepthCountList();
+        */
 
     }
     //endregion

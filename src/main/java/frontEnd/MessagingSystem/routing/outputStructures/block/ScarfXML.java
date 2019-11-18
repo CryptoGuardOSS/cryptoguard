@@ -9,6 +9,8 @@ import frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport;
 import frontEnd.MessagingSystem.routing.structure.Scarf.BugInstance;
 import lombok.extern.log4j.Log4j2;
 
+import java.io.File;
+
 import static frontEnd.MessagingSystem.routing.outputStructures.common.ScarfXML.marshalling;
 
 /**
@@ -33,13 +35,29 @@ public class ScarfXML extends Structure {
     public ScarfXML(EnvironmentInformation info) {
         super(info);
     }
+
+    public ScarfXML(String filePath) throws ExceptionHandler {
+        AnalyzerReport report = AnalyzerReport.deserialize(new File(filePath));
+
+        EnvironmentInformation info = marshalling(report);
+        super.setSource(info);
+        super.setOutfile(new File(info.getFileOut()));
+
+        report.getBugInstance().stream().forEach(instance -> {
+            try {
+                super.addIssueToCollection(marshalling(instance));
+            } catch (ExceptionHandler e) {
+                //TODO - catch here
+            }
+        });
+
+    }
     //endregion
 
     //region Constructor
     //endregion
 
     //region Overridden Methods
-
     /**
      * {@inheritDoc}
      */
@@ -68,7 +86,7 @@ public class ScarfXML extends Structure {
         //region Heuristics
         if (super.getSource().getDisplayHeuristics()) {
             log.trace("Writing the heuristics");
-            report.setHeuristics(marshalling(super.getSource(), super.getSource().getSLICE_AVERAGE_3SigFig()));
+            report.setHeuristics(super.getSource().getHeuristics().getScarfXMLHeuristics());
         }
         //endregion
 

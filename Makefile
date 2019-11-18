@@ -7,7 +7,7 @@ testSrc=$(dir)samples/
 java=${JAVA8_HOME}/bin/java
 
 #Variables dynamically set when the program is being built from the source
-ver=V03.10.01
+ver=V03.10.02
 name=cryptoguard
 
 #The short hand paths to execute the compiled jar and the scarf xsd for valiation
