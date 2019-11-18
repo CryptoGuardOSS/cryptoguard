@@ -7,6 +7,7 @@ import frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import frontEnd.MessagingSystem.routing.outputStructures.common.Heuristics;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -31,6 +32,7 @@ import java.util.function.Function;
  * @version 03.07.01
  * @since V01.00.04
  */
+@Log4j2
 public class EnvironmentInformation {
 
     //region Attributes
@@ -319,8 +321,10 @@ public class EnvironmentInformation {
     public void stopScanning() throws ExceptionHandler {
         this.stopAnalysis();
         this.setHuristicsInfo();
-        if (this.heuristicsHandler != null)
-            this.heuristicsHandler.apply(this.getHeuristics());
+
+        if (this.getHeuristicsHandler() != null)
+            log.info(this.getHeuristicsHandler().apply(this.getHeuristics()));
+
         this.getOutput().stopAnalyzing();
     }
 
@@ -344,7 +348,6 @@ public class EnvironmentInformation {
      */
     public double getSLICE_AVERAGE_3SigFig() {
         return this.getHeuristics().getSliceAverage();
-        //return Double.parseDouble(String.format("%.3f", this.SLICE_AVERAGE));
     }
 
     /**
@@ -482,15 +485,6 @@ public class EnvironmentInformation {
         this.heuristics.setNumberOfHeuristics(Utils.NUM_HEURISTIC);
         this.heuristics.setSliceAverage(Utils.calculateAverage());
         this.heuristics.setDepthCount(Utils.createDepthCountList());
-
-        /*
-        this.NUM_ORTHOGONAL = Utils.NUM_ORTHOGONAL;
-        this.NUM_CONSTS_TO_CHECK = Utils.NUM_CONSTS_TO_CHECK;
-        this.NUM_SLICES = Utils.NUM_SLICES;
-        this.NUM_HEURISTIC = Utils.NUM_HEURISTIC;
-        this.SLICE_AVERAGE = Utils.calculateAverage();
-        this.DEPTH_COUNT = Utils.createDepthCountList();
-        */
 
     }
     //endregion
