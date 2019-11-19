@@ -13,7 +13,7 @@ from collections import OrderedDict
 '''####################################
 #A utility class that contains the rest of the main common files
 '''  ####################################
-numTests = 0
+numTests, failFast = 0, False
 
 class Utils(object):
     # Setting the arguments to be handled by the parser
@@ -73,13 +73,19 @@ class Utils(object):
             sys.exit(0)
         
         stdout, stderr = stdout.decode('utf-8'), stderr.decode('utf-8')
+        global failFast
 
         if 'BUILD SUCCESSFUL' in stdout:
             return True
         elif 'BUILD FAILED' in stderr:
+            if failFast:
+                print(stderr)
+                print('Failing on '+str(test));sys.exit(0)
             return False
         else:
             print('Unknown Error: ')
+            if failFast:
+                print('Failing on '+str(test));sys.exit(0)
             return False
 
     def percent(x, y):
@@ -92,16 +98,33 @@ class Utils(object):
         global numTests
         passed, failed, skipped, testNum, rerun,rerunLim = 0,0,0,1,0,1
         start, failedTests, verbose, skippedTests = time.time(), [], False, []
+        
+        android, java7, java = os.environ.get('ANDROID_HOME') is not None, os.environ.get('JAVA7_HOME') is not None, os.environ.get('JAVA_HOME') is not None
+
+
+        if not java:
+            print('No JAVA_HOME environment found, please set this')
+            sys.exit(1)
+
+        if (not android or not java7):
+            print('==============================')
+            if not android:
+                print('Skipping All Android Tests, no ANDROID_HOME env found')
+            else:
+                print('Skipping All Project and Java file Tests, no JAVA7_HOME env found')
+
         print('==============================')
         for key, value in dyct.items():
             subpassed, subfailed, subskipped = 0,0,0
             for test in value:
+                envSkip = (not android and key.endswith('_APK')) or (not java7 and (key.endswith('SOURCE') or key.endswith('JAVA')))
+
                 testName, startTest = str(key) + '.' + str(test['testName']), time.time()
                 strTest = str(testNum)
                 if testNum < 10:
                     strTest = '0'+str(strTest)
                 print(str(strTest)+'/'+str(numTests) + ' | ' + str(testName) + ' | ', end='', flush=True)
-                if not test['live']:
+                if not test['live'] or envSkip:
                     skipped = skipped + 1
                     subskipped = subskipped + 1
                     print('Skip | ', end='', flush=True)
@@ -130,6 +153,7 @@ class Utils(object):
                 end = time.time()
                 if result:
                     result = 'Pass'
+                    failed = failed - 1
                     failedTests.remove(test)
                 else:
                     result = 'Fail'
@@ -143,7 +167,7 @@ class Utils(object):
         print('Total Tests: ' + str(skipped + passed + failed))
         print('Total Tests Passed: %' + str(Utils.percent(passed,failed)))
         print('==============================')
-        if len(failedTests) > 0:
+        if failed > 0:
             print('Failed Tests')
             for test in failedTests:
                 print(test)
@@ -153,6 +177,13 @@ class Utils(object):
             for test in skippedTests:
                 print(test)
             print('==============================')
+
+        if failed > 0:
+            if failed > 255:
+                failed = 255
+            sys.exit(failed)
+        else:
+            sys.exit(0)
 
     def build():
         argz = ' clean build -x test '

@@ -39,6 +39,13 @@ public abstract class Structure extends OutputStructure {
             throw new ExceptionHandler("Error creating the output stream with " + info.getFileOutName(), ExceptionId.FILE_CON);
         }
     }
+
+    /**
+     * <p>Constructor for Structure.</p>
+     */
+    public Structure() {
+
+    }
     //endregion
 
     //region Overridden Methods
@@ -52,9 +59,7 @@ public abstract class Structure extends OutputStructure {
         writeHeader();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void stopAnalyzing() throws ExceptionHandler {
         writeFooter();

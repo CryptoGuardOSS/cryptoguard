@@ -2,9 +2,12 @@ package frontEnd.MessagingSystem.routing;
 
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.Interface.outputRouting.ExceptionId;
+import frontEnd.MessagingSystem.AnalysisIssue;
 import frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
+import frontEnd.MessagingSystem.routing.outputStructures.common.Heuristics;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -16,8 +19,10 @@ import util.Utils;
 import javax.annotation.Nonnull;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
+import java.util.function.Function;
 
 /**
  * The class containing the analysis rule information.
@@ -27,6 +32,7 @@ import java.util.Properties;
  * @version 03.07.01
  * @since V01.00.04
  */
+@Log4j2
 public class EnvironmentInformation {
 
     //region Attributes
@@ -36,11 +42,14 @@ public class EnvironmentInformation {
     @Getter
     private final String PropertiesFile = "gradle.properties";
     @Getter
-    private final String ToolFramework;
+    @Setter
+    private String ToolFramework;
     @Getter
-    private final String ToolFrameworkVersion;
+    @Setter
+    private String ToolFrameworkVersion;
     @Getter
-    private final String platformName = Utils.getPlatform();
+    @Setter
+    private String platformName = Utils.getPlatform();
     //endregion
     //region Required Elements Set From the Start
     @Getter
@@ -49,74 +58,104 @@ public class EnvironmentInformation {
     private final List<String> sourcePaths; //Could this be intertwined with source?
     //endregion
     PrintStream old;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String BuildFramework;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String BuildFrameworkVersion;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String packageName = "UNKNOWN";
-    @Getter @Setter
+    @Getter
+    @Setter
     private String packageVersion = "UNKNOWN";
-    @Getter @Setter
+    @Getter
+    @Setter
     private boolean showTimes = false;
-    @Getter @Setter
+    @Getter
+    @Setter
     private boolean addExperimentalRules = false;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String rawCommand;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String main;
-    @Getter @Setter
+    @Getter
+    @Setter
     private boolean overWriteOutput = false;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String targetProjectName;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String targetProjectVersion;
-    @Getter @Setter
+    @Getter
+    @Setter
     private Boolean isGradle;
-    @Getter @Setter
+    @Getter
+    @Setter
     private Boolean prettyPrint = false;
-    @Getter @Setter
+    @Getter
+    @Setter
     private Boolean killJVM = true;
     @Setter
     private List<String> dependencies;
-    @Getter @Setter
+    @Getter
+    @Setter
     private EngineType sourceType;
-    @Getter @Setter
+    @Getter
+    @Setter
     private Listing messagingType;
     @Setter
     private String UUID;
-    @Getter @Setter
+    @Getter
+    @Setter
     private Long startAnalyisisTime;
-    @Getter @Setter
+    @Getter
+    @Setter
     private Long analysisMilliSeconds;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String fileOut;
-    @Getter @Setter
+    @Getter
+    @Setter
     private Boolean streaming = false;
     //endregion
     //region From Outside and defaulted unless set
-    @Getter @Setter
+    @Getter
+    @Setter
     private String AssessmentFramework;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String AssessmentFrameworkVersion;
-    @Getter @Setter
+    @Getter
+    @Setter
     private DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd_HH:mm:ss");
     private DateTime startTime = new DateTime();
-    @Getter @Setter
+    @Getter
+    @Setter
     private String AssessmentStartTime = formatter.print(startTime);
-    @Getter @Setter
+    @Getter
+    @Setter
     private String ParserName = "UNKNOWN";
-    @Getter @Setter
+    @Getter
+    @Setter
     private String ParserVersion = "UNKNOWN";
-    @Getter @Setter
+    @Getter
+    @Setter
     private String packageRootDir = "UNKNOWN";
-    @Getter @Setter
+    @Getter
+    @Setter
     private String buildRootDir = "UNKNOWN";
     @Setter
     private Integer buildId;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String xPath;
-    @Getter @Setter
+    @Getter
+    @Setter
     private Boolean printOut = false;
     @Setter
     private OutputStructure output;
@@ -126,22 +165,54 @@ public class EnvironmentInformation {
     @Setter
     private ByteArrayOutputStream sootErrors = new ByteArrayOutputStream();
     //region Heuristics from Utils
-    @Getter @Setter
+    @Getter
+    @Setter
     private Boolean displayHeuristics = false;
-    @Getter @Setter
+    /*
+    @Getter
+    @Setter
     private int NUM_ORTHOGONAL = 0;
-    @Getter @Setter
+    @Getter
+    @Setter
     private int NUM_CONSTS_TO_CHECK = 0;
-    @Getter @Setter
+    @Getter
+    @Setter
     private int NUM_SLICES = 0;
-    @Getter @Setter
+    @Getter
+    @Setter
     private int NUM_HEURISTIC = 0;
-    @Getter @Setter
+    @Getter
+    @Setter
     private double SLICE_AVERAGE = 0;
-    @Getter @Setter
+    @Getter
+    @Setter
     private ArrayList<String> DEPTH_COUNT = new ArrayList<>();
+    */
+    @Getter
+    @Setter
+    private Heuristics heuristics = new Heuristics();
+    //endregion
+    //region Predicates used to help display streamed info
+    @Getter @Setter
+    private Function<AnalysisIssue, String> errorAddition;
+    @Getter
+    @Setter
+    private Function<HashMap<Integer, Integer>, String> bugSummaryHandler;
+    @Getter
+    @Setter
+    private Function<Heuristics, String> heuristicsHandler;
     //endregion
     //region Constructor
+
+    /**
+     * <p>Constructor for EnvironmentInformation.</p>
+     */
+    public EnvironmentInformation() {
+        this.ToolFramework = "";
+        this.ToolFrameworkVersion = "";
+        this.sourcePaths = new ArrayList<>();
+        this.Source = new ArrayList<>();
+    }
 
     /**
      * The main constructor for setting all of the environmental variables used  for the outputs.
@@ -199,13 +270,15 @@ public class EnvironmentInformation {
     //endregion
 
     //region Getters and Setters
+
     /**
      * <p>addToDepth_Count.</p>
      *
      * @param item a {@link java.lang.String} object.
      */
     public void addToDepth_Count(String item) {
-        this.DEPTH_COUNT.add(item);
+        this.getHeuristics().addDepthCount(item);
+        //this.DEPTH_COUNT.add(item);
     }
 
     /**
@@ -251,6 +324,10 @@ public class EnvironmentInformation {
     public void stopScanning() throws ExceptionHandler {
         this.stopAnalysis();
         this.setHuristicsInfo();
+
+        if (this.getHeuristicsHandler() != null)
+            log.info(this.getHeuristicsHandler().apply(this.getHeuristics()));
+
         this.getOutput().stopAnalyzing();
     }
 
@@ -273,7 +350,7 @@ public class EnvironmentInformation {
      * @return a double.
      */
     public double getSLICE_AVERAGE_3SigFig() {
-        return Double.parseDouble(String.format("%.3f", this.SLICE_AVERAGE));
+        return this.getHeuristics().getSliceAverage();
     }
 
     /**
@@ -401,17 +478,16 @@ public class EnvironmentInformation {
     }
     //endregion
     //region Helpful Methods
-
     /**
      * <p>setHuristicsInfo.</p>
      */
     public void setHuristicsInfo() {
-        this.NUM_ORTHOGONAL = Utils.NUM_ORTHOGONAL;
-        this.NUM_CONSTS_TO_CHECK = Utils.NUM_CONSTS_TO_CHECK;
-        this.NUM_SLICES = Utils.NUM_SLICES;
-        this.NUM_HEURISTIC = Utils.NUM_HEURISTIC;
-        this.SLICE_AVERAGE = Utils.calculateAverage();
-        this.DEPTH_COUNT = Utils.createDepthCountList();
+        this.heuristics.setNumberOfOrthogonal(Utils.NUM_ORTHOGONAL);
+        this.heuristics.setNumberOfConstantsToCheck(Utils.NUM_CONSTS_TO_CHECK);
+        this.heuristics.setNumberOfSlices(Utils.NUM_SLICES);
+        this.heuristics.setNumberOfHeuristics(Utils.NUM_HEURISTIC);
+        this.heuristics.setSliceAverage(Utils.calculateAverage());
+        this.heuristics.setDepthCount(Utils.createDepthCountList());
 
     }
     //endregion

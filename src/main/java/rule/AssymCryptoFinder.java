@@ -89,9 +89,7 @@ public class AssymCryptoFinder extends BaseRuleChecker {
         return occurrences;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public List<Criteria> getCriteriaList() {
         return CRITERIA_LIST;
@@ -106,9 +104,7 @@ public class AssymCryptoFinder extends BaseRuleChecker {
         this.crypto = crypto;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler {
         //region New Analysis TODO - Verify this
