@@ -5,7 +5,11 @@ import frontEnd.Interface.Version;
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.Interface.outputRouting.ExceptionId;
 import frontEnd.MessagingSystem.AnalysisIssue;
+import frontEnd.MessagingSystem.routing.Listing;
+import frontEnd.MessagingSystem.routing.inputStructures.ScarfXMLId;
 import frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
+import frontEnd.argsIdentifier;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.jf.dexlib2.DexFileFactory;
 import org.jf.dexlib2.Opcodes;
@@ -50,6 +54,7 @@ import static soot.SootClass.BODIES;
  * @version 03.07.01
  * @since 01.00.00
  */
+@Log4j2
 public class Utils {
 
     /**
@@ -65,9 +70,9 @@ public class Utils {
      */
     public final static String lineSep = System.getProperty("line.separator");
     /**
-     * Constant <code>projectVersion="V03.09.01"</code>
+     * Constant <code>projectVersion="V03.10.04"</code>
      */
-    public final static String projectVersion = "V03.09.01";
+    public final static String projectVersion = "V03.10.04";
     /**
      * Constant <code>projectName="CryptoGuard"</code>
      */
@@ -158,6 +163,38 @@ public class Utils {
     }
 
     //region HotMethods
+
+    /**
+     * <p>retrieveFullyQualifiedNameFileSep.</p>
+     *
+     * @param sourceJavaFile a {@link java.util.List} object.
+     * @return a {@link java.util.List} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
+    public static List<String> retrieveFullyQualifiedNameFileSep(List<String> sourceJavaFile) throws ExceptionHandler {
+        List<String> fullPath = new ArrayList<>();
+        for (String in : sourceJavaFile)
+            fullPath.add(Utils.retrieveFullyQualifiedName(in).replace(".", fileSep));
+
+        return fullPath;
+    }
+
+    /**
+     * <p>handleErrorMessage.</p>
+     *
+     * @param e a {@link frontEnd.Interface.outputRouting.ExceptionHandler} object.
+     */
+    public static void handleErrorMessage(ExceptionHandler e) {
+        log.debug(e.getErrorCode().getMessage());
+
+        if (e.getErrorCode().getId().equals(0)) {
+            log.info(e.getErrorCode().getMessage());
+            System.out.print(e.getLongDesciption());
+        } else {
+            log.fatal(e.getErrorCode().getMessage());
+            System.err.print(e.toString());
+        }
+    }
 
     /**
      * <p>joinSpecialSootClassPath.</p>
@@ -265,38 +302,60 @@ public class Utils {
     /**
      * <p>listf.</p>EntryPointTest_CLASS
      *
+     * @param path      a {@link java.lang.String} object.
+     * @param fileCheck a {@link java.util.function.Predicate} object.
+     * @param functor   a {@link java.util.function.Function} object.
      * @return a {@link java.util.List} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static List<String> retrieveFilesPredicate(String path, Predicate<String> fileCheck, Function<File, String> functor) throws ExceptionHandler {
 
         List<String> output = new ArrayList<>();
-        for (File file : Objects.requireNonNull(new File(verifyDir(path)).listFiles()))
-        {
-            if (file.isFile() && fileCheck.test(file.getName()))
-            {
+        for (File file : Objects.requireNonNull(new File(verifyDir(path)).listFiles())) {
+            if (file.isFile() && fileCheck.test(file.getName())) {
                 if (functor == null)
                     output.add(file.getAbsolutePath());
                 else
                     output.add(functor.apply(file));
-            }
-            else if (file.isDirectory())
+            } else if (file.isDirectory())
                 output.addAll(retrieveFilesPredicate(file.getAbsolutePath(), fileCheck, functor));
         }
 
         return output;
     }
 
+    /**
+     * <p>retrieveJavaFileImports.</p>
+     *
+     * @param paths a {@link java.lang.String} object.
+     * @return a {@link java.util.Set} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
     public static Set<String> retrieveJavaFileImports(String... paths) throws ExceptionHandler {
         return retrieveJavaFileImports(Arrays.asList(paths));
     }
 
+    /**
+     * <p>retrieveJavaFileImports.</p>
+     *
+     * @param paths a {@link java.util.List} object.
+     * @return a {@link java.util.Set} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
     public static Set<String> retrieveJavaFileImports(List<String> paths) throws ExceptionHandler {
         Set<String> results = new HashSet<>();
-        for (String path: paths)
+        for (String path : paths)
             results.addAll(retrieveJavaFileImports(path));
         return results;
     }
 
+    /**
+     * <p>retrieveJavaFileImports.</p>
+     *
+     * @param path a {@link java.lang.String} object.
+     * @return a {@link java.util.Set} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
     public static Set<String> retrieveJavaFileImports(String path) throws ExceptionHandler {
         Set<String> results = new HashSet<>();
         String javaFile = verifyFileExt(path, ".java", false);
@@ -305,11 +364,11 @@ public class Utils {
             String curLine;
 
             leave:
-            while ((curLine = reader.readLine()) != null && !curLine.isEmpty() ){
+            while ((curLine = reader.readLine()) != null && !curLine.isEmpty()) {
                 if (!curLine.startsWith("package") && !curLine.startsWith("import") && StringUtils.isNotEmpty(curLine))
                     break leave;
                 else if (curLine.startsWith("import"))
-                    results.add(curLine.replace("import ", "").replace(";",""));
+                    results.add(curLine.replace("import ", "").replace(";", ""));
             }
         } catch (FileNotFoundException e) {
             //TODO - Add exception here
@@ -320,9 +379,131 @@ public class Utils {
         return results;
     }
 
+    /**
+     * <p>setSunBootPath.</p>
+     *
+     * @param basePath a {@link java.lang.String} object.
+     * @param rt       a {@link java.lang.String} object.
+     */
     public static void setSunBootPath(String basePath, String rt) {
         System.setProperty("sun.boot.class.path", rt);
         System.setProperty("java.ext.dirs", osSurround(basePath, "lib"));
+    }
+    //endregion
+
+    //region ArgMethods
+
+    /**
+     * <p>makeArg.</p>
+     *
+     * @param id    a {@link frontEnd.argsIdentifier} object.
+     * @param value a {@link java.lang.Object} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String makeArg(argsIdentifier id, Object value) {
+        return makeArg(id.getId(), value.toString());
+    }
+
+    /**
+     * <p>makeArg.</p>
+     *
+     * @param id    a {@link frontEnd.argsIdentifier} object.
+     * @param value a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String makeArg(argsIdentifier id, String value) {
+        return makeArg(id.getId(), value);
+    }
+
+    /**
+     * <p>makeArg.</p>
+     *
+     * @param id    a {@link frontEnd.argsIdentifier} object.
+     * @param value a {@link java.util.List} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String makeArg(argsIdentifier id, List<String> value) {
+        return makeArg(id.getId(), value);
+    }
+
+    /**
+     * <p>makeArg.</p>
+     *
+     * @param id    a {@link frontEnd.argsIdentifier} object.
+     * @param value a {@link rule.engine.EngineType} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String makeArg(argsIdentifier id, EngineType value) {
+        return makeArg(id.getId(), value.getFlag());
+    }
+
+    /**
+     * <p>makeArg.</p>
+     *
+     * @param id a {@link frontEnd.argsIdentifier} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String makeArg(argsIdentifier id) {
+        return " " + id.getArg() + " ";
+    }
+
+    /**
+     * <p>makeArg.</p>
+     *
+     * @param id    a {@link frontEnd.MessagingSystem.routing.inputStructures.ScarfXMLId} object.
+     * @param value a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String makeArg(ScarfXMLId id, String value) {
+        return makeArg(id.getId(), value);
+    }
+
+    /**
+     * <p>makeArg.</p>
+     *
+     * @param id    a {@link java.lang.String} object.
+     * @param value a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String makeArg(String id, String value) {
+        if (StringUtils.isEmpty(value))
+            return "";
+        return " -" + id + " " + value + " ";
+    }
+
+    /**
+     * <p>makeArg.</p>
+     *
+     * @param id    a {@link java.lang.String} object.
+     * @param value a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String makeArg(String id, String... value) {
+        return makeArg(id, Arrays.asList(value));
+    }
+
+    /**
+     * <p>makeArg.</p>
+     *
+     * @param id    a {@link java.lang.String} object.
+     * @param value a {@link java.util.List} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String makeArg(String id, List<String> value) {
+        if (value.size() >= 1)
+            return makeArg(id, value.get(0)) + String.join(" ", value);
+        return "";
+    }
+
+    /**
+     * <p>makeArg.</p>
+     *
+     * @param id    a {@link frontEnd.argsIdentifier} object.
+     * @param value a {@link frontEnd.MessagingSystem.routing.Listing} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String makeArg(argsIdentifier id, Listing value) {
+        return makeArg(id, value.getFlag());
     }
     //endregion
 
@@ -1052,7 +1233,7 @@ public class Utils {
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static String getBaseSOOT() throws ExceptionHandler {
-        String rt =  getRT();
+        String rt = getRT();
         setSunBootPath(Utils.getJAVA_HOME(), rt);
 
         return join(":", getJCE(), rt);

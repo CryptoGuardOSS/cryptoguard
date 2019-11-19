@@ -9,6 +9,8 @@ import frontEnd.MessagingSystem.routing.structure.Default.Report;
 import lombok.extern.log4j.Log4j2;
 import util.Utils;
 
+import java.io.File;
+
 import static frontEnd.MessagingSystem.routing.outputStructures.common.Default.mapper;
 
 /**
@@ -33,6 +35,30 @@ public class Default extends Structure {
      */
     public Default(EnvironmentInformation info) {
         super(info);
+    }
+
+    /**
+     * <p>Constructor for Default.</p>
+     *
+     * @param filePath a {@link java.lang.String} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
+    public Default(String filePath) throws ExceptionHandler {
+        Report struct = Report.deserialize(new File(filePath));
+
+        EnvironmentInformation info = mapper(struct);
+        super.setSource(info);
+        super.setOutfile(new File(info.getFileOut()));
+        super.setType(mapper(struct.getTarget().getType()));
+
+        struct.getIssues().stream().forEach(issue -> {
+            try {
+                super.addIssueToCollection(mapper(issue));
+            } catch (ExceptionHandler exceptionHandler) {
+                //TODO - Catch Here
+            }
+        });
+
     }
     //endregion
 
@@ -69,7 +95,7 @@ public class Default extends Structure {
         //region Heuristics
         if (super.getSource().getDisplayHeuristics()) {
             log.trace("Writing the heuristics");
-            report.setHeuristics(mapper(super.getSource(), super.getSource().getSLICE_AVERAGE_3SigFig()));
+            report.setHeuristics(super.getSource().getHeuristics().getDefaultHeuristics());
         }
         //endregion
 

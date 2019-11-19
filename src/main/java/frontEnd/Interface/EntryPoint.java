@@ -5,9 +5,10 @@ import frontEnd.Interface.outputRouting.ExceptionId;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
-import rule.engine.*;
 
 import java.util.ArrayList;
+
+import static util.Utils.handleErrorMessage;
 
 /**
  * <p>EntryPoint class.</p>
@@ -44,55 +45,13 @@ public class EntryPoint {
             EnvironmentInformation generalInfo = ArgumentsCheck.paramaterCheck(strippedArgs);
             exitingJVM = generalInfo.getKillJVM();
 
-            EntryHandler handler = null;
-            switch (generalInfo.getSourceType()) {
-                case APK:
-                    log.debug("Chosen APK Scanning");
-                    handler = new ApkEntry();
-                    break;
-                case JAR:
-                    log.debug("Chosen JAR Scanning");
-                    handler = new JarEntry();
-                    break;
-                case DIR:
-                    log.debug("Chosen DIR Scanning");
-                    handler = new SourceEntry();
-                    break;
-                case JAVAFILES:
-                    log.debug("Chosen JAVAFILES Scanning");
-                    log.warn("This is still experimental, this has not stabilized yet.");
-                    log.warn("Scanning Java Files is limited to Java 1.7 and lower, otherwise there may be issues.");
-                    handler = new JavaFileEntry();
-                    break;
-                case CLASSFILES:
-                    log.debug("Chosen CLASSFILES Scanning");
-                    handler = new JavaClassFileEntry();
-                    break;
-            }
-            log.trace("Initializing the scanning process");
-            generalInfo.startScanning();
+            System.out.println(SubRunner.run(generalInfo));
 
-            log.info("Starting the scanning process");
-            handler.Scan(generalInfo);
-            log.info("Stopped the scanning process");
-
-            generalInfo.stopScanning();
-            log.info("Writing the output to the file: " + generalInfo.getFileOut());
-
-            System.out.print(generalInfo.getFileOut());
             if (exitingJVM)
                 System.exit(ExceptionId.SUCCESS.getId());
 
         } catch (ExceptionHandler e) {
-            log.debug(e.getErrorCode().getMessage());
-
-            if (e.getErrorCode().getId().equals(0)) {
-                log.info(e.getErrorCode().getMessage());
-                System.out.print(e.getLongDesciption());
-            } else {
-                log.fatal(e.getErrorCode().getMessage());
-                System.err.print(e.toString());
-            }
+            handleErrorMessage(e);
 
             if (exitingJVM)
                 System.exit(e.getErrorCode().getId());

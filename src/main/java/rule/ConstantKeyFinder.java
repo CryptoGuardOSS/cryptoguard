@@ -59,9 +59,7 @@ public class ConstantKeyFinder extends PredictableSourceRuleChecker {
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public String getRuleId() {
         return "3";

@@ -8,6 +8,7 @@ import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import frontEnd.MessagingSystem.routing.structure.Scarf.*;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
+import rule.engine.RuleList;
 
 /**
  * <p>ScarfXML class.</p>
@@ -50,6 +51,34 @@ public class ScarfXML {
         //endregion
 
         return report;
+    }
+
+    /**
+     * <p>marshalling.</p>
+     *
+     * @param report a {@link frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
+     */
+    public static EnvironmentInformation marshalling(AnalyzerReport report) {
+        EnvironmentInformation info = new EnvironmentInformation();
+
+        info.setAssessmentFramework(report.getAssessFw());
+        info.setAssessmentFrameworkVersion(report.getAssessFwVersion());
+        info.setAssessmentStartTime(report.getAssessmentStartTs());
+        info.setBuildFramework(report.getBuildFw());
+        info.setBuildFrameworkVersion(report.getBuildFwVersion());
+        info.setPackageName(report.getPackageName());
+        info.setPackageVersion(report.getPackageVersion());
+        info.setPackageRootDir(report.getPackageRootDir());
+        info.setParserName(report.getParserFw());
+        info.setParserVersion(report.getParserFwVersion());
+        info.setPlatformName(report.getPlatformName());
+        info.setToolFramework(report.getToolName());
+        info.setToolFrameworkVersion(report.getToolVersion());
+        info.setUUID(report.getUuid());
+        info.setBuildRootDir(report.getBuildRootDir());
+
+        return info;
     }
 
     /**
@@ -162,6 +191,35 @@ public class ScarfXML {
     }
 
     /**
+     * <p>marshalling.</p>
+     *
+     * @param instance a {@link frontEnd.MessagingSystem.routing.structure.Scarf.BugInstance} object.
+     * @return a {@link frontEnd.MessagingSystem.AnalysisIssue} object.
+     */
+    public static AnalysisIssue marshalling(BugInstance instance) {
+        AnalysisIssue issue = new AnalysisIssue(RuleList.getRuleByRuleNumber(Integer.valueOf(instance.getBugCode())).getRuleId());
+
+        //issue.setFullPathName(instance.get);
+        issue.setClassName(instance.getClassName());
+        issue.setInfo(instance.getBugMessage());
+
+        for (Location old:instance.getlocation()) {
+            AnalysisLocation loc = new AnalysisLocation(old.getStartLine(), old.getEndLine());
+
+            //TODO - Fix this?
+            //loc.setMethodNumber(old.get);
+
+            issue.getLocations().add(loc);
+        }
+
+        for (Method old:instance.getMethod()) {
+            issue.getMethods().push(old.getSelf());
+        }
+
+        return issue;
+    }
+
+    /**
      * The method to write the Footer for the ScarfXML output.
      *
      * @param info a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object
@@ -197,6 +255,7 @@ public class ScarfXML {
      * @param roundedSliceAverage a double.
      * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.Heuristics} object.
      */
+    /*
     public static Heuristics marshalling(EnvironmentInformation info, double roundedSliceAverage) {
         return new Heuristics(
                 info.getNUM_ORTHOGONAL(),
@@ -207,6 +266,18 @@ public class ScarfXML {
                 info.getDEPTH_COUNT()
         );
     }
+
+    public static Heuristics marshalling(Heuristics report) {
+        return new Heuristics(
+                report.getNumberOfOrthogonal(),
+                report.getNumberOfConstantsToCheck(),
+                report.getNumberOfSlices(),
+                report.getNumberOfHeuristics(),
+                report.getAverageSlice(),
+                report.getDepthCount()
+        );
+    }
+    */
 
     /**
      * The method for this output to create error messages

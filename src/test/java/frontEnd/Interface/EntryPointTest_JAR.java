@@ -22,6 +22,7 @@ import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static test.TestUtilities.*;
+import static util.Utils.makeArg;
 
 /**
  * <p>EntryPointTest_JAR class.</p>
