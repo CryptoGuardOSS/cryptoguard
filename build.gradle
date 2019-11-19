@@ -9,6 +9,25 @@ plugins {
     id 'com.google.cloud.tools.jib' version '1.5.0'
 }
 apply plugin: "java"
+apply plugin: "maven-publish"
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/franceme/cryptoguard")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("GPR_USER")
+                password = project.findProperty("gpr.key") ?: System.getenv("GPR_API_KEY")
+            }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
+        }
+    }
+}
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
