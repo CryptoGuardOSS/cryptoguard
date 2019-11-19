@@ -22,12 +22,9 @@ publishing {
             }
         }
     }
-    afterEvaluate {
-        publications {
-            libJar(MavenPublication) {
-                from components["java"]
-                artifact(task["sourcesJar"])
-            }
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
         }
     }
 }
