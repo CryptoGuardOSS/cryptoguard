@@ -38,6 +38,9 @@ public abstract class Structure extends OutputStructure {
         super(info);
     }
 
+    /**
+     * <p>Constructor for Structure.</p>
+     */
     public Structure() {
 
     }
@@ -52,17 +55,13 @@ public abstract class Structure extends OutputStructure {
     public void startAnalyzing() {
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void addIssue(AnalysisIssue issue) throws ExceptionHandler {
         super.addIssueToCollection(issue);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void stopAnalyzing() throws ExceptionHandler {
         WriteIntoFile(StringUtils.stripToNull(this.handleOutput()));

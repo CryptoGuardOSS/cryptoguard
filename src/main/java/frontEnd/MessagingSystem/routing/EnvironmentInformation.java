@@ -204,6 +204,9 @@ public class EnvironmentInformation {
     //endregion
     //region Constructor
 
+    /**
+     * <p>Constructor for EnvironmentInformation.</p>
+     */
     public EnvironmentInformation() {
         this.ToolFramework = "";
         this.ToolFrameworkVersion = "";

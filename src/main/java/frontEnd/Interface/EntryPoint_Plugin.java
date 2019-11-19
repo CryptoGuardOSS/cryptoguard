@@ -22,6 +22,19 @@ import java.util.function.Function;
  */
 public class EntryPoint_Plugin {
 
+    /**
+     * <p>main.</p>
+     *
+     * @param sourceFiles       a {@link java.util.List} object.
+     * @param dependencies      a {@link java.util.List} object.
+     * @param outFile           a {@link java.lang.String} object.
+     * @param mainFile          a {@link java.lang.String} object.
+     * @param errorAddition     a {@link java.util.function.Function} object.
+     * @param bugSummaryHandler a {@link java.util.function.Function} object.
+     * @param heuristicsHandler a {@link java.util.function.Function} object.
+     * @param debuggingLevel    a int.
+     * @return a {@link java.lang.String} object.
+     */
     public static String main(List<String> sourceFiles, List<String> dependencies, String outFile, String mainFile, Function<AnalysisIssue, String> errorAddition, Function<HashMap<Integer, Integer>, String> bugSummaryHandler, Function<Heuristics, String> heuristicsHandler, int debuggingLevel) {
         String outputFile = null;
 

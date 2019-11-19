@@ -49,6 +49,12 @@ public class ScarfXML extends Structure {
         this.xPath = info.getXPath();
     }
 
+    /**
+     * <p>Constructor for ScarfXML.</p>
+     *
+     * @param filePath a {@link java.lang.String} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
     public ScarfXML(String filePath) throws ExceptionHandler {
         AnalyzerReport report = AnalyzerReport.deserialize(new File(filePath));
 
@@ -87,9 +93,7 @@ public class ScarfXML extends Structure {
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void addIssue(AnalysisIssue issue) throws ExceptionHandler {
         super.addIssue(issue);
@@ -105,9 +109,7 @@ public class ScarfXML extends Structure {
         //endregion
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void writeFooter() throws ExceptionHandler {
 

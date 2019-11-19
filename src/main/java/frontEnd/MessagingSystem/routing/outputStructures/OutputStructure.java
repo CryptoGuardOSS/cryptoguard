@@ -62,6 +62,9 @@ public abstract class OutputStructure {
         this.bugSummaryHandler = info.getBugSummaryHandler();
     }
 
+    /**
+     * <p>Constructor for OutputStructure.</p>
+     */
     public OutputStructure() {
         this.collection = new ArrayList<>();
         this.errorAddition = null;

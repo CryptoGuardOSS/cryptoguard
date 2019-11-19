@@ -36,9 +36,18 @@ public class Legacy extends Structure {
     //endregion
 
     //region Overridden Methods
+
+    /**
+     * <p>deserialize.</p>
+     *
+     * @param filePath a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.outputStructures.OutputStructure} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
     public OutputStructure deserialize(String filePath) throws ExceptionHandler {
         return null;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -47,9 +56,7 @@ public class Legacy extends Structure {
         this.writeln(marshallingHeader(super.getType(), super.getSource().getSource()));
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void addIssue(AnalysisIssue issue) throws ExceptionHandler {
         super.addIssue(issue);
@@ -62,9 +69,7 @@ public class Legacy extends Structure {
         this.writeln("=======================================");
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void writeFooter() throws ExceptionHandler {
         this.writeln(marshallingSootErrors(super.getSource().getSootErrors()));

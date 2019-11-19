@@ -37,6 +37,12 @@ public class Default extends Structure {
         super(info);
     }
 
+    /**
+     * <p>Constructor for Default.</p>
+     *
+     * @param filePath a {@link java.lang.String} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
     public Default(String filePath) throws ExceptionHandler {
         Report struct = Report.deserialize(new File(filePath));
 
