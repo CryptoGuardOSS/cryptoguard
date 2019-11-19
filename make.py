@@ -79,6 +79,7 @@ class Utils(object):
             return True
         elif 'BUILD FAILED' in stderr:
             if failFast:
+                print(stderr)
                 print('Failing on '+str(test));sys.exit(0)
             return False
         else:
@@ -97,16 +98,33 @@ class Utils(object):
         global numTests
         passed, failed, skipped, testNum, rerun,rerunLim = 0,0,0,1,0,1
         start, failedTests, verbose, skippedTests = time.time(), [], False, []
+        
+        android, java7, java = os.environ.get('ANDROID_HOME') is not None, os.environ.get('JAVA7_HOME') is not None, os.environ.get('JAVA_HOME') is not None
+
+
+        if not java:
+            print('No JAVA_HOME environment found, please set this')
+            sys.exit(1)
+
+        if (not android or not java7):
+            print('==============================')
+            if not android:
+                print('Skipping All Android Tests, no ANDROID_HOME env found')
+            else:
+                print('Skipping All Project and Java file Tests, no JAVA7_HOME env found')
+
         print('==============================')
         for key, value in dyct.items():
             subpassed, subfailed, subskipped = 0,0,0
             for test in value:
+                envSkip = (not android and key.endswith('_APK')) or (not java7 and (key.endswith('SOURCE') or key.endswith('JAVA')))
+
                 testName, startTest = str(key) + '.' + str(test['testName']), time.time()
                 strTest = str(testNum)
                 if testNum < 10:
                     strTest = '0'+str(strTest)
                 print(str(strTest)+'/'+str(numTests) + ' | ' + str(testName) + ' | ', end='', flush=True)
-                if not test['live']:
+                if not test['live'] or envSkip:
                     skipped = skipped + 1
                     subskipped = subskipped + 1
                     print('Skip | ', end='', flush=True)

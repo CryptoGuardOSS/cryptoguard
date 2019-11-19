@@ -11,6 +11,8 @@ import frontEnd.MessagingSystem.routing.structure.Scarf.BugSummary;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
+
 import static frontEnd.MessagingSystem.routing.outputStructures.common.ScarfXML.marshalling;
 
 /**
@@ -46,6 +48,29 @@ public class ScarfXML extends Structure {
         this.buildId = info.getBuildId();
         this.xPath = info.getXPath();
     }
+
+    /**
+     * <p>Constructor for ScarfXML.</p>
+     *
+     * @param filePath a {@link java.lang.String} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
+    public ScarfXML(String filePath) throws ExceptionHandler {
+        AnalyzerReport report = AnalyzerReport.deserialize(new File(filePath));
+
+        EnvironmentInformation info = marshalling(report);
+        super.setSource(info);
+        super.setOutfile(new File(info.getFileOut()));
+
+        report.getBugInstance().stream().forEach(instance -> {
+            try {
+                super.addIssueToCollection(marshalling(instance));
+            } catch (ExceptionHandler e) {
+                //TODO - catch here
+            }
+        });
+
+    }
     //endregion
 
     //region Overridden Methods
@@ -68,9 +93,7 @@ public class ScarfXML extends Structure {
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void addIssue(AnalysisIssue issue) throws ExceptionHandler {
         super.addIssue(issue);
@@ -86,9 +109,7 @@ public class ScarfXML extends Structure {
         //endregion
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void writeFooter() throws ExceptionHandler {
 
@@ -107,7 +128,7 @@ public class ScarfXML extends Structure {
         if (super.getSource().getDisplayHeuristics()) {
             log.trace("Writing the heuristics");
             String heuristicsXML = JacksonSerializer.serialize(
-                    marshalling(super.getSource(), super.getSource().getSLICE_AVERAGE_3SigFig()),
+                    super.getSource().getHeuristics().getScarfXMLHeuristics(),
                     super.getSource().getPrettyPrint(),
                     Listing.ScarfXML.getJacksonType()
             );

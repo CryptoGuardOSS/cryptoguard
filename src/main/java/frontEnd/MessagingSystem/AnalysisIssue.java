@@ -139,6 +139,27 @@ public class AnalysisIssue {
     //region Helper Methods
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        StringBuilder out = new StringBuilder();
+
+        out.append("ClassName: ").append(this.className).append(", ");
+        out.append("Rule: ").append(this.rule).append(", ");
+        out.append("Methods: ").append(this.methods.peek().toString()).append(", ");
+        if (getLocations().size() > 0) {
+            out.append("Locations: ");
+            getLocations().stream().forEach(loc -> out.append(loc.toString()).append(" && "));
+        } else
+            out.append("No Locations");
+        out.append(", ");
+        out.append("Info: ").append(this.info);
+
+        return out.toString();
+    }
+
+    /**
      * <p>getPathFromSource.</p>
      *
      * @param sources   a {@link java.util.List} object.
@@ -159,8 +180,13 @@ public class AnalysisIssue {
         } else {
             for (String in : sources)
                 if (in.contains(className)) {
-                    String[] split = in.split(Utils.fileSep);
-                    relativePath = split[split.length - 1];
+                    //String[] split = in.split(Utils.fileSep);
+                    //relativePath = split[split.length - 1];
+                    relativePath = in;
+                } else if (in.contains(className.replace(".", Utils.fileSep))) {
+                    //String[] split = in.split(Utils.fileSep);
+                    //relativePath = split[split.length - 1];
+                    relativePath = in;
                 }
         }
         if (relativePath == null)

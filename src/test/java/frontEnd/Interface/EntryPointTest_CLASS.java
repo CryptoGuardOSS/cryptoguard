@@ -2,6 +2,7 @@ package frontEnd.Interface;
 
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.MessagingSystem.routing.Listing;
+import frontEnd.MessagingSystem.routing.structure.Default.Report;
 import frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport;
 import frontEnd.argsIdentifier;
 import org.junit.After;
@@ -16,12 +17,15 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static test.TestUtilities.*;
+import static util.Utils.makeArg;
 
 /**
  * <p>EntryPointTest_CLASS class.</p>
@@ -273,6 +277,7 @@ public class EntryPointTest_CLASS {
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.MAIN, classFiles[3]) +
+                            makeArg(argsIdentifier.VERYVERBOSE) +
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.OUT, fileOut);
 
@@ -416,5 +421,71 @@ public class EntryPointTest_CLASS {
         }
     }
     //endregion
+
+    /**
+     * <p>main_TestableFiles_SingleTest.</p>
+     */
+    @Test
+    public void main_TestableFiles_SingleTest_PluginBase_ClassFileOnly() {
+        soot.G.v().reset();
+
+        String source = testablejar_Crypto_class;
+        String fileOut = testablejar_Crypto_plugin_class_json;
+        new File(fileOut).delete();
+
+        if (isLinux) {
+
+            try {
+                String outputFile = EntryPoint_Plugin.main(Arrays.asList(source), new ArrayList<>(), fileOut, null, null, null, null, 0);
+
+                Report report = Report.deserialize(new File(outputFile));
+                assertFalse(report.getIssues().isEmpty());
+                assertTrue(report.getIssues().stream().allMatch(bugInstance -> {
+                    try {
+                        return bugInstance.getFullPath().contains(Utils.retrieveFullyQualifiedName(source).replace(".", Utils.fileSep));
+                    } catch (ExceptionHandler exceptionHandler) {
+                        exceptionHandler.printStackTrace();
+                        return false;
+                    }
+                }));
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    @Test
+    public void main_TestableFiles_MultiTest_Plugin() {
+        String fileOut = tempFileOutTxt_default;
+        ArrayList<String> source = TestUtilities.arr(classFiles);
+        new File(fileOut).delete();
+
+        if (isLinux) {
+
+            try {
+                String outputFile = EntryPoint_Plugin.main(source, Utils.getJarsInDirectory(srcOneGrvDep), fileOut, classFiles[3], null, null, null, 0);
+
+                Report report = Report.deserialize(new File(outputFile));
+                assertFalse(report.getIssues().isEmpty());
+                assertTrue(report.getIssues().stream().anyMatch(bugInstance -> {
+                    try {
+                        return Utils.containsAny(bugInstance.getFullPath(), Utils.retrieveFullyQualifiedNameFileSep(source));
+                    } catch (ExceptionHandler e) {
+                        assertNull(e);
+                        e.printStackTrace();
+                    }
+                    return false;
+                }));
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
     //endregion
 }

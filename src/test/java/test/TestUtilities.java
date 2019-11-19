@@ -1,11 +1,7 @@
 package test;
 
 import frontEnd.Interface.EntryPoint;
-import frontEnd.MessagingSystem.routing.Listing;
-import frontEnd.MessagingSystem.routing.inputStructures.ScarfXMLId;
-import frontEnd.argsIdentifier;
 import org.apache.commons.lang3.StringUtils;
-import rule.engine.EngineType;
 import util.Utils;
 
 import java.io.ByteArrayOutputStream;
@@ -43,6 +39,7 @@ public class TestUtilities {
     public static final String[] classFiles = {Utils.osPathJoin(classSource, "PBEUsage.class"), Utils.osPathJoin(classSource, "UrlFrameWorks.class"), Utils.osPathJoin(classSource, "NewTestCase1.class"), Utils.osPathJoin(classSource, "NewTestCase2.class")};
     public static final String newTestCaseTwo_Class = Utils.osPathJoin(classSource, "NewTestCase2.class");
     public static final String newTestCaseTwo_xml = Utils.osPathJoin(testPath, "NewTestCase2-class.xml");
+    public static final String testablejar_Crypto_plugin_class_json = Utils.osPathJoin(testPath, "java-plugin-file_One.json");
     public static final String testablejar_PBEUsage_class_xml = Utils.osPathJoin(testPath, "PBEUsage-class-file_One.xml");
     public static final String testablejar_Crypto_class = Utils.osPathJoin(classSource, "Crypto.class");
     public static final String testablejar_Crypto_class_xml = Utils.osPathJoin(testPath, "java-file_One.xml");
@@ -60,6 +57,7 @@ public class TestUtilities {
     public static final String tempTestJJava_Txt = Utils.osPathJoin(testPath, "temp_java-jar.txt");
     public static final String tempStreamXML = Utils.osPathJoin(testPath, "testable-jar_Stream.xml");
     public static final String tempFileOutTxt_two = Utils.osPathJoin(testPath, "testable-jar_classFiles.txt");
+    public static final String tempFileOutTxt_default = Utils.osPathJoin(testPath, "testable-jar_classFiles.json");
     public static final String tempFileOutXML_two = Utils.osPathJoin(testPath, "testable-jar_classFiles.xml");
     public static final String tempFileOutTxt_Class = Utils.osPathJoin(testPath, "java-class-file.txt");
     public static final String tempFileOutTxt_Class_fullproj = Utils.osPathJoin(testPath, "java-class-proj-file.xml");
@@ -119,67 +117,9 @@ public class TestUtilities {
     ));
     //endregion
 
-    /**
-     * <p>makeArg.</p>
-     *
-     * @param id    a {@link frontEnd.argsIdentifier} object.
-     * @param value a {@link java.lang.String} object.
-     * @return a {@link java.lang.String} object.
-     */
-    public static String makeArg(argsIdentifier id, String value) {
-        return makeArg(id.getId(), value);
-    }
-
-    public static String makeArg(argsIdentifier id, EngineType value) {
-        return makeArg(id.getId(), value.getFlag());
-    }
-
-    /**
-     * <p>makeArg.</p>
-     *
-     * @param id a {@link frontEnd.argsIdentifier} object.
-     * @return a {@link java.lang.String} object.
-     */
-    public static String makeArg(argsIdentifier id) {
-        return " " + id.getArg() + " ";
-    }
-
-    /**
-     * <p>makeArg.</p>
-     *
-     * @param id    a {@link frontEnd.MessagingSystem.routing.inputStructures.ScarfXMLId} object.
-     * @param value a {@link java.lang.String} object.
-     * @return a {@link java.lang.String} object.
-     */
-    public static String makeArg(ScarfXMLId id, String value) {
-        return makeArg(id.getId(), value);
-    }
-
-    /**
-     * <p>makeArg.</p>
-     *
-     * @param id    a {@link java.lang.String} object.
-     * @param value a {@link java.lang.String} object.
-     * @return a {@link java.lang.String} object.
-     */
-    public static String makeArg(String id, String value) {
-        return " -" + id + " " + value + " ";
-    }
-
-    /**
-     * <p>makeArg.</p>
-     *
-     * @param id    a {@link frontEnd.argsIdentifier} object.
-     * @param value a {@link frontEnd.MessagingSystem.routing.Listing} object.
-     * @return a {@link java.lang.String} object.
-     */
-    public static String makeArg(argsIdentifier id, Listing value) {
-        return makeArg(id, value.getFlag());
-    }
-
     public static String[] cleaningArgs(String arg) {
         ArrayList<String> cleanArgs = new ArrayList<>(Arrays.asList(arg.split(" ")));
-        cleanArgs.removeIf(s -> StringUtils.isEmpty(s));
+        cleanArgs.removeIf(StringUtils::isEmpty);
         return cleanArgs.toArray(new String[cleanArgs.size()]);
     }
 

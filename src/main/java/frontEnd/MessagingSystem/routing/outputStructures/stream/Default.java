@@ -12,6 +12,8 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import util.Utils;
 
+import java.io.File;
+
 import static frontEnd.MessagingSystem.routing.outputStructures.common.Default.mapper;
 
 /**
@@ -41,6 +43,30 @@ public class Default extends Structure {
      */
     public Default(EnvironmentInformation info) throws ExceptionHandler {
         super(info);
+    }
+
+    /**
+     * <p>Constructor for Default.</p>
+     *
+     * @param filePath a {@link java.lang.String} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
+    public Default(String filePath) throws ExceptionHandler {
+        Report struct = Report.deserialize(new File(filePath));
+
+        EnvironmentInformation info = mapper(struct);
+        super.setSource(info);
+        super.setOutfile(new File(info.getFileOut()));
+        super.setType(mapper(struct.getTarget().getType()));
+
+        struct.getIssues().stream().forEach(issue -> {
+            try {
+                super.addIssueToCollection(mapper(issue));
+            } catch (ExceptionHandler exceptionHandler) {
+                //TODO - Catch Here
+            }
+        });
+
     }
     //endregion
 
@@ -84,9 +110,7 @@ public class Default extends Structure {
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void addIssue(AnalysisIssue issue) throws ExceptionHandler {
 
@@ -152,18 +176,16 @@ public class Default extends Structure {
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void writeFooter() throws ExceptionHandler {
 
+        this.write("\n]\n");
         if (super.getSource().getDisplayHeuristics()) {
+            this.write(", \"Heuristics\" : ");
             log.debug("Writing the Heuristics");
             this.write(JacksonSerializer.serialize(
-                    mapper(
-                            super.getSource(), super.getSource().getSLICE_AVERAGE_3SigFig()
-                    ),
+                    super.getSource().getHeuristics().getDefaultHeuristics(),
                     super.getSource().getPrettyPrint(),
                     super.getSource().getMessagingType().getJacksonType())
             );
@@ -173,7 +195,7 @@ public class Default extends Structure {
         log.debug("Adding the footer to the output");
         switch (super.getSource().getMessagingType().getJacksonType()) {
             case JSON:
-                ending = "\n]\n}";
+                ending = "\n}";
                 break;
             case XML:
                 ending = "\n</" + Issues.class.getSimpleName() + ">\n";
