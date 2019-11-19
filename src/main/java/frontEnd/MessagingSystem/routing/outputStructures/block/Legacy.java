@@ -36,9 +36,18 @@ public class Legacy extends Structure {
     //endregion
 
     //region Overridden Methods
+
+    /**
+     * <p>deserialize.</p>
+     *
+     * @param filePath a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.outputStructures.OutputStructure} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
     public OutputStructure deserialize(String filePath) throws ExceptionHandler {
         return null;
     }
+
     /**
      * {@inheritDoc}
      */

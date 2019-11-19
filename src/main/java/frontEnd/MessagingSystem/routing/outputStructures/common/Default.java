@@ -49,6 +49,12 @@ public class Default {
         return report;
     }
 
+    /**
+     * <p>mapper.</p>
+     *
+     * @param report a {@link frontEnd.MessagingSystem.routing.structure.Default.Report} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
+     */
     public static EnvironmentInformation mapper(Report report) {
         EnvironmentInformation info = new EnvironmentInformation();
 
@@ -119,6 +125,12 @@ public class Default {
         return Target.Type.JAR;
     }
 
+    /**
+     * <p>mapper.</p>
+     *
+     * @param type a {@link frontEnd.MessagingSystem.routing.structure.Default.Target.Type} object.
+     * @return a {@link rule.engine.EngineType} object.
+     */
     public static EngineType mapper(Target.Type type) {
         switch (type) {
             case APK:
@@ -148,6 +160,12 @@ public class Default {
             return Target.ProjectType.MAVEN;
     }
 
+    /**
+     * <p>mapper.</p>
+     *
+     * @param target a {@link frontEnd.MessagingSystem.routing.structure.Default.Target} object.
+     * @return a {@link java.lang.Boolean} object.
+     */
     public static Boolean mapper(Target target) {
         return target.getProjectType().equals(Target.ProjectType.GRADLE);
     }
@@ -185,6 +203,12 @@ public class Default {
         return issue;
     }
 
+    /**
+     * <p>mapper.</p>
+     *
+     * @param oldIssue a {@link frontEnd.MessagingSystem.routing.structure.Default.Issue} object.
+     * @return a {@link frontEnd.MessagingSystem.AnalysisIssue} object.
+     */
     public static AnalysisIssue mapper(Issue oldIssue) {
         AnalysisIssue issue = new AnalysisIssue(oldIssue.getRuleNumber());
 
@@ -214,6 +238,12 @@ public class Default {
         return loc;
     }
 
+    /**
+     * <p>mapper.</p>
+     *
+     * @param oldLoc a {@link frontEnd.MessagingSystem.routing.structure.Default.Location} object.
+     * @return a {@link frontEnd.MessagingSystem.AnalysisLocation} object.
+     */
     public static AnalysisLocation mapper(Location oldLoc) {
         AnalysisLocation loc = new AnalysisLocation(oldLoc.getLineNumber());
 

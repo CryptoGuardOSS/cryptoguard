@@ -53,6 +53,12 @@ public class ScarfXML {
         return report;
     }
 
+    /**
+     * <p>marshalling.</p>
+     *
+     * @param report a {@link frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
+     */
     public static EnvironmentInformation marshalling(AnalyzerReport report) {
         EnvironmentInformation info = new EnvironmentInformation();
 
@@ -184,6 +190,12 @@ public class ScarfXML {
         return instance;
     }
 
+    /**
+     * <p>marshalling.</p>
+     *
+     * @param instance a {@link frontEnd.MessagingSystem.routing.structure.Scarf.BugInstance} object.
+     * @return a {@link frontEnd.MessagingSystem.AnalysisIssue} object.
+     */
     public static AnalysisIssue marshalling(BugInstance instance) {
         AnalysisIssue issue = new AnalysisIssue(RuleList.getRuleByRuleNumber(Integer.valueOf(instance.getBugCode())).getRuleId());
 
@@ -191,8 +203,7 @@ public class ScarfXML {
         issue.setClassName(instance.getClassName());
         issue.setInfo(instance.getBugMessage());
 
-        for (Location old:instance.getlocation())
-        {
+        for (Location old:instance.getlocation()) {
             AnalysisLocation loc = new AnalysisLocation(old.getStartLine(), old.getEndLine());
 
             //TODO - Fix this?

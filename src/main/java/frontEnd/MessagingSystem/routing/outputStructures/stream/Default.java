@@ -45,6 +45,12 @@ public class Default extends Structure {
         super(info);
     }
 
+    /**
+     * <p>Constructor for Default.</p>
+     *
+     * @param filePath a {@link java.lang.String} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
     public Default(String filePath) throws ExceptionHandler {
         Report struct = Report.deserialize(new File(filePath));
 
@@ -104,9 +110,7 @@ public class Default extends Structure {
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void addIssue(AnalysisIssue issue) throws ExceptionHandler {
 
@@ -172,9 +176,7 @@ public class Default extends Structure {
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void writeFooter() throws ExceptionHandler {
 

@@ -168,6 +168,14 @@ public enum Listing {
 
     }
 
+    /**
+     * <p>unmarshall.</p>
+     *
+     * @param stream a boolean.
+     * @param filePath a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.outputStructures.OutputStructure} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
     public OutputStructure unmarshall(boolean stream, String filePath) throws ExceptionHandler{
         if (stream) {
             if (!this.streamEnabled)
