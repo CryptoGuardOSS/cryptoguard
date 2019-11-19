@@ -47,6 +47,7 @@ public class HeuristicBasedInstructionSlicer extends BackwardFlowAnalysis {
     private String slicingCriteria;
     private String method;
     private Map<String, List<PropertyAnalysisResult>> propertyUseMap;
+
     /**
      * <p>Constructor for HeuristicBasedInstructionSlicer.</p>
      *
@@ -196,25 +197,19 @@ public class HeuristicBasedInstructionSlicer extends BackwardFlowAnalysis {
         return specialinvoke;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     protected Object newInitialFlow() {
         return emptySet.clone();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     protected Object entryInitialFlow() {
         return emptySet.clone();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     protected void merge(Object in1, Object in2, Object out) {
         FlowSet inSet1 = (FlowSet) in1,
@@ -224,9 +219,7 @@ public class HeuristicBasedInstructionSlicer extends BackwardFlowAnalysis {
         inSet1.union(inSet2, outSet);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     protected void copy(Object source, Object dest) {
         FlowSet srcSet = (FlowSet) source,
