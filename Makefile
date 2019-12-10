@@ -11,6 +11,11 @@ runner=$(dir)$(name).py
 default:: build
 
 #region Commands
+#Builds the project without running the setup
+autobuild:
+	@$(info Building the project.)
+	@$(runner) build
+
 #Will build the project if there wasn't a full build
 build: env
 	@$(info Building the project.)
@@ -31,7 +36,7 @@ buildCmd:
 	@$(runner) buildCmd
 
 #This creates the Usage file
-buildCmd:
+usage:
 	@$(info Running the usage program.)
 	@$(runner) writeUsage
 
