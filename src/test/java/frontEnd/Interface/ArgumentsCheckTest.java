@@ -123,8 +123,7 @@ public class ArgumentsCheckTest {
                         makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                         makeArg(argsIdentifier.OUT, fileOutTxt.replace(".txt", ".json")) +
                         makeArg(argsIdentifier.TIMEMEASURE) +
-                        makeArg(argsIdentifier.PRETTY) +
-                        makeArg(argsIdentifier.SKIPINPUTVALIDATION);
+                        makeArg(argsIdentifier.PRETTY);
 
         EnvironmentInformation info = null;
 

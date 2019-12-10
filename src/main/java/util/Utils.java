@@ -70,9 +70,9 @@ public class Utils {
      */
     public final static String lineSep = System.getProperty("line.separator");
     /**
-     * Constant <code>projectVersion="V03.10.04"</code>
+     * Constant <code>projectVersion="V03.11.00"</code>
      */
-    public final static String projectVersion = "V03.10.04";
+    public final static String projectVersion = "V03.11.00";
     /**
      * Constant <code>projectName="CryptoGuard"</code>
      */
@@ -1184,98 +1184,18 @@ public class Utils {
     }
 
     /**
-     * <p>getJAVA_HOME.</p>
+     * The overridden Soot class path builder, used for Java JDK 7 or 8 paths.
      *
-     * @return a {@link java.lang.String} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     * @param javaPath {@link java.lang.String} - The path to either the JDK 7 or 8.
+     * @return {@link java.lang.String} - The built up path for the Soot String. ex. /jdk...:/jdk.../jre/lib/rt.jar:/jdk.../jre/lib/jce.jar
      */
-    public static String getJAVA_HOME() throws ExceptionHandler {
-        String JAVA_HOME = System.getenv("JAVA_HOME");
-        if (StringUtils.isEmpty(JAVA_HOME)) {
-            throw new ExceptionHandler("Environment Variable: JAVA_HOME is not set.", ExceptionId.ENV_VAR);
-        }
-        return JAVA_HOME.replaceAll("//", "/");
-    }
+    public static String getBaseSoot(String javaPath) {
+        String rt = Utils.osPathJoin(javaPath, "jre", "lib", "rt.jar");
+        String jce = Utils.osPathJoin(javaPath, "jre", "lib", "jce.jar");
 
-    /**
-     * <p>getJAVA7_HOME.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static String getJAVA7_HOME() throws ExceptionHandler {
-        String JAVA7_HOME = System.getenv("JAVA7_HOME");
-        if (StringUtils.isEmpty(JAVA7_HOME)) {
-            throw new ExceptionHandler("Environment Variable: JAVA7_HOME is not set.", ExceptionId.ENV_VAR);
-        }
-        return JAVA7_HOME.replaceAll("//", "/");
-    }
+        setSunBootPath(javaPath, rt);
 
-    /**
-     * <p>getANDROID.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static String getANDROID() throws ExceptionHandler {
-        String ANDROID_HOME = System.getenv("ANDROID_HOME");
-        if (StringUtils.isEmpty(ANDROID_HOME)) {
-            throw new ExceptionHandler("Environment Variable: ANDROID_HOME is not set.", ExceptionId.ENV_VAR);
-        }
-        return ANDROID_HOME;
-    }
-
-    /**
-     * //TODO - Need to verify this is nessecary
-     * <p>getBaseSOOT.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static String getBaseSOOT() throws ExceptionHandler {
-        String rt = getRT();
-        setSunBootPath(Utils.getJAVA_HOME(), rt);
-
-        return join(":", getJCE(), rt);
-    }
-
-    /**
-     * <p>getRT.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static String getRT() throws ExceptionHandler {
-        String rt = Utils.osPathJoin("jre", "lib", "rt.jar");
-
-        return osPathJoin(Utils.getJAVA_HOME(), rt);
-    }
-
-    /**
-     * <p>getJCE.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static String getJCE() throws ExceptionHandler {
-        String jce = Utils.osPathJoin("jre", "lib", "jce.jar");
-
-        return osPathJoin(Utils.getJAVA_HOME(), jce);
-    }
-
-    /**
-     * <p>getBaseSOOT7.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static String getBaseSOOT7() throws ExceptionHandler {
-        String rt = Utils.osPathJoin(Utils.getJAVA7_HOME(), "jre", "lib", "rt.jar");
-        String jce = Utils.osPathJoin(Utils.getJAVA7_HOME(), "jre", "lib", "jce.jar");
-
-        setSunBootPath(Utils.getJAVA7_HOME(), rt);
-
-        return Utils.join(":", Utils.getJAVA7_HOME(), rt, jce);
+        return Utils.join(":", javaPath, rt, jce);
     }
 
     /**

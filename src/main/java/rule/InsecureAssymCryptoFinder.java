@@ -34,17 +34,17 @@ public class InsecureAssymCryptoFinder implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, List<String> sourcePaths, OutputStructure output, String mainKlass) throws ExceptionHandler {
+    public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, List<String> sourcePaths, OutputStructure output, String mainKlass, String androidHome, String javaHome) throws ExceptionHandler {
 
-        checkAssym(type, projectJarPath, projectDependencyPath, AssymType.RSA, sourcePaths, output, mainKlass);
-        checkAssym(type, projectJarPath, projectDependencyPath, AssymType.EC, sourcePaths, output, mainKlass);
+        checkAssym(type, projectJarPath, projectDependencyPath, AssymType.RSA, sourcePaths, output, mainKlass, androidHome, javaHome);
+        checkAssym(type, projectJarPath, projectDependencyPath, AssymType.EC, sourcePaths, output, mainKlass, androidHome, javaHome);
 
     }
 
     private void checkAssym(EngineType type,
                             List<String> projectJarPath,
                             List<String> projectDependencyPath,
-                            AssymType assymType, List<String> sourcePaths, OutputStructure output, String mainKlass) throws ExceptionHandler {
+                            AssymType assymType, List<String> sourcePaths, OutputStructure output, String mainKlass, String androidHome, String javaHome) throws ExceptionHandler {
 
         List<String> cryptoType = new ArrayList<>();
         cryptoType.add("\"" + assymType.name() + "\"");
@@ -54,19 +54,19 @@ public class InsecureAssymCryptoFinder implements RuleChecker {
         ExportGradeKeyInitializationFinder insecureInitializationFinder = new ExportGradeKeyInitializationFinder();
 
         assymCryptoFinder.setCrypto(cryptoType);
-        assymCryptoFinder.checkRule(type, projectJarPath, projectDependencyPath, sourcePaths, output, mainKlass);
+        assymCryptoFinder.checkRule(type, projectJarPath, projectDependencyPath, sourcePaths, output, mainKlass, androidHome, javaHome);
 
         ArrayList<String> foundSites = assymCryptoFinder.getOccurrenceSites();
 
         initializationFinder.setMethodsToLook(foundSites);
         initializationFinder.setDefaultSecure(IS_DEFAULT_SECURE_MAP.get(assymType));
-        initializationFinder.checkRule(type, projectJarPath, projectDependencyPath, sourcePaths, output, mainKlass);
+        initializationFinder.checkRule(type, projectJarPath, projectDependencyPath, sourcePaths, output, mainKlass, androidHome, javaHome);
 
         ArrayList<String> initializationCallsites = initializationFinder.getInitializationCallsites();
 
         insecureInitializationFinder.setInitializationCallsites(initializationCallsites);
         insecureInitializationFinder.setMinSize(SIZE_MAP.get(assymType));
-        insecureInitializationFinder.checkRule(type, projectJarPath, projectDependencyPath, sourcePaths, output, mainKlass);
+        insecureInitializationFinder.checkRule(type, projectJarPath, projectDependencyPath, sourcePaths, output, mainKlass, androidHome, javaHome);
 
     }
 

@@ -15,15 +15,15 @@ import frontEnd.MessagingSystem.routing.outputStructures.stream.Legacy;
  * @since V01.00.00
  */
 public enum Listing {
-    //region Different Values
+    //region Values
     Legacy("Legacy", "L", ".txt", true, null),
     ScarfXML("ScarfXML", "SX", null, true, JacksonSerializer.JacksonType.XML),
     Default("Default", "D", null, true, JacksonSerializer.JacksonType.JSON);
+    //endregion
+    //region Attributes
     private final String blockPath = "frontEnd.MessagingSystem.routing.outputStructures.block.";
     private final String inputPath = "frontEnd.MessagingSystem.routing.inputStructures";
     private final String streamPath = "frontEnd.MessagingSystem.routing.outputStructures.stream.";
-    //endregion
-    //region Attributes
     private String type;
     private String flag;
     private String outputFileExt;
