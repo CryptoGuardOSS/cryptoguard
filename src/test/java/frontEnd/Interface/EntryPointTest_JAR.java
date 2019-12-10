@@ -224,6 +224,39 @@ public class EntryPointTest_JAR {
      * <p>main_TestableJar_Scarf.</p>
      */
     @Test
+    public void main_TestableJar_Default_SpecifyJavaHome() {
+        String fileOut = tempJarFile_Default_0;
+        new File(fileOut).delete();
+
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.JAR) +
+                            makeArg(argsIdentifier.SOURCE, jarOne) +
+                            makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.Default) +
+                            makeArg(argsIdentifier.JAVA, System.getenv("JAVA_HOME")) +
+                            makeArg(argsIdentifier.OUT, fileOut) +
+                            makeArg(argsIdentifier.TIMEMEASURE) +
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.PRETTY);
+
+            try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+                Report report = Report.deserialize(new File(outputFile));
+                assertFalse(report.getIssues().isEmpty());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    /**
+     * <p>main_TestableJar_Scarf.</p>
+     */
+    @Test
     public void main_TestableJar_Default_Heuristics() {
         String fileOut = tempJarFile_Default_0;
         new File(fileOut).delete();

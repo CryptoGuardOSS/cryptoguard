@@ -133,6 +133,36 @@ public class EntryPointTest_SOURCE {
     }
 
     @Test
+    public void main_TestableJarSourceScarf_SpecifyHome() {
+        String fileOut = tempFileOutXML;
+        new File(fileOut).delete();
+
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.DIR) +
+                            makeArg(argsIdentifier.SOURCE, srcOneGrv) +
+                            makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                            makeArg(argsIdentifier.JAVA, System.getenv("JAVA7_HOME")) +
+                            makeArg(argsIdentifier.OUT, fileOut) +
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.PRETTY);
+
+            try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
+                assertFalse(report.getBugInstance().isEmpty());
+                assertTrue(report.getBugInstance().stream().anyMatch(bugInstance -> bugInstance.getClassName().startsWith(srcOneGrv_base)));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    @Test
     public void main_TestableJarSourceScarf_Stream() {
         String fileOut = tempStreamXML;
         new File(fileOut).delete();

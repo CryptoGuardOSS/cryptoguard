@@ -36,7 +36,7 @@ public class EntryPoint {
             if (StringUtils.isNotEmpty(arg))
                 strippedArgs.add(arg);
 
-        log.info("Removed the empty arguments.");
+        log.debug("Removed the empty arguments.");
 
         boolean exitingJVM = true;
 

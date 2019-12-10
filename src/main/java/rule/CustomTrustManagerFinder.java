@@ -87,11 +87,11 @@ public class CustomTrustManagerFinder implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, List<String> sourcePaths, OutputStructure output, String mainKlass) throws ExceptionHandler {
+    public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, List<String> sourcePaths, OutputStructure output, String mainKlass, String androidHome, String javaHome) throws ExceptionHandler {
 
         Map<String, List<OtherAnalysisResult>> analysisLists =
                 getAnalysisForTrustManager(
-                        UniqueRuleAnalyzer.environmentRouting(projectJarPath, projectDependencyPath, type)
+                        UniqueRuleAnalyzer.environmentRouting(projectJarPath, projectDependencyPath, type, androidHome, javaHome)
                 );
 
 

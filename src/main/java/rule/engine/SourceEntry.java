@@ -74,7 +74,7 @@ public class SourceEntry implements EntryHandler {
                 log.trace("Starting scanner looper");
                 for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
                     log.info("Checking the rule: " + ruleChecker.getClass().getSimpleName());
-                    ruleChecker.checkRule(EngineType.DIR, dependencies, otherdependencies, generalInfo.getSourcePaths(), generalInfo.getOutput(), generalInfo.getMain());
+                    ruleChecker.checkRule(EngineType.DIR, dependencies, otherdependencies, generalInfo.getSourcePaths(), generalInfo.getOutput(), generalInfo.getMain(), generalInfo.getAndroidHome(), generalInfo.getJavaHome());
                 }
                 log.trace("Scanner looper stopped");
 
