@@ -50,7 +50,11 @@ class Utils(object):
         return Utils.stringMult(Utils.getWidthOfTerminal(), kar)
 
     def getWidthOfTerminal():
-        return int(os.popen('stty size', 'r').read().split()[1])
+        try:
+            value = int(os.popen('stty size', 'r').read().split()[1])
+        except:
+            value = 50
+        return value
 
     def printVersion():
         props = Utils.retrieveProperties()
@@ -901,6 +905,10 @@ routers = {
         "func": Utils.build,
         "def": "Builds the project."
     },
+    'build': {
+        "func": Utils.build,
+        "def": "Builds the project."
+    },
     'hash': {
         "func": Utils.hash,
         "def": "Determines the hash of a freshly built project."
@@ -928,7 +936,7 @@ routers = {
     'help': {
         "func": Utils.help,
         "def": "Displays helpful information to the user if it's the first time running."
-    },
+    }
 }
 
 
