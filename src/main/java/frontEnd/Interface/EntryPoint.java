@@ -3,8 +3,9 @@ package frontEnd.Interface;
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.Interface.outputRouting.ExceptionId;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
+import frontEnd.argsIdentifier;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.lang3.StringUtils;
+import util.Utils;
 
 import java.util.ArrayList;
 
@@ -31,14 +32,10 @@ public class EntryPoint {
      */
     public static void main(String[] args) {
         //Removing all of the empty string values, i.e. " "
-        ArrayList<String> strippedArgs = new ArrayList<>();
-        for (String arg : args)
-            if (StringUtils.isNotEmpty(arg))
-                strippedArgs.add(arg);
-
+        ArrayList<String> strippedArgs = Utils.stripEmpty(args);
         log.debug("Removed the empty arguments.");
 
-        boolean exitingJVM = true;
+        boolean exitingJVM = !strippedArgs.contains(argsIdentifier.NOEXIT.getArg());
 
         try {
             //Fail Fast on the input validation

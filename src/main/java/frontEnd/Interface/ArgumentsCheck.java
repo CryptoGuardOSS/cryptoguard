@@ -110,21 +110,16 @@ public class ArgumentsCheck {
         String androidHome = null;
 
         switch (type) {
+            //Only APK path needs an android specified path
             case APK:
                 if (cmd.hasOption(argsIdentifier.ANDROID.getArg()))
-                    androidHome = Utils.verifyDir(cmd.getOptionValue(argsIdentifier.ANDROID.getId()));
-            case DIR:
-            case JAVAFILES:
+                    androidHome = Utils.verifyDir(cmd.getOptionValue(argsIdentifier.ANDROID.getId()), true);
+            default:
                 if (cmd.hasOption(argsIdentifier.JAVA.getArg()))
-                    javaHome = Utils.verifyDir(cmd.getOptionValue(argsIdentifier.JAVA.getId()));
+                    javaHome = Utils.verifyDir(cmd.getOptionValue(argsIdentifier.JAVA.getId()), true);
                 break;
         }
         //endregion
-
-        //Boolean verify = !cmd.hasOption(argsIdentifier.SKIPINPUTVALIDATION.getId());
-        //TODO - Need to remove this
-        Boolean verify = true;
-        log.debug("Verification flag: " + verify);
 
         Boolean usingInputIn = cmd.getOptionValue(argsIdentifier.SOURCE.getId()).endsWith(".in");
         log.debug("Enhanced Input in file: " + usingInputIn);
@@ -211,7 +206,7 @@ public class ArgumentsCheck {
         log.debug("Scanning using a depth of " + Utils.DEPTH);
 
         boolean noExitJVM = cmd.hasOption(argsIdentifier.NOEXIT.getId());
-        log.debug("Exiting the JVM: " + verify);
+        log.debug("Exiting the JVM: " + noExitJVM);
         if (noExitJVM)
             info.setKillJVM(false);
         //endregion

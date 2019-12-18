@@ -74,6 +74,7 @@ public class EntryPointTest_SOURCE {
                     makeArg(argsIdentifier.FORMAT, EngineType.DIR) +
                             makeArg(argsIdentifier.SOURCE, srcOneGrv) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
+                            makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
                             makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.OUT, fileOut);
@@ -113,6 +114,7 @@ public class EntryPointTest_SOURCE {
                     makeArg(argsIdentifier.FORMAT, EngineType.DIR) +
                             makeArg(argsIdentifier.SOURCE, srcOneGrv) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
+                            makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.OUT, fileOut) +
                             makeArg(argsIdentifier.NOEXIT) +
@@ -143,6 +145,7 @@ public class EntryPointTest_SOURCE {
                             makeArg(argsIdentifier.SOURCE, srcOneGrv) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                            makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
                             makeArg(argsIdentifier.JAVA, System.getenv("JAVA7_HOME")) +
                             makeArg(argsIdentifier.OUT, fileOut) +
                             makeArg(argsIdentifier.NOEXIT) +
@@ -172,6 +175,7 @@ public class EntryPointTest_SOURCE {
                     makeArg(argsIdentifier.FORMAT, EngineType.DIR) +
                             makeArg(argsIdentifier.SOURCE, srcOneGrv) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
+                            makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.OUT, fileOut) +
                             makeArg(argsIdentifier.NOEXIT) +

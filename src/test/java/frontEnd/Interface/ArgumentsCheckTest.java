@@ -64,6 +64,82 @@ public class ArgumentsCheckTest {
 
     }
 
+    @Test
+    public void parameterCheck_verifyingJavaSevenHome() {
+        String fileOut = tempFileOutApk_Scarf;
+        String javaHome = System.getenv("JAVA7_HOME");
+
+        new File(fileOut).delete();
+
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.APK) +
+                            makeArg(argsIdentifier.SOURCE, pathToAPK) +
+                            makeArg(argsIdentifier.OUT, fileOut) +
+                            makeArg(argsIdentifier.JAVA, javaHome) +
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                            makeArg(argsIdentifier.PRETTY);
+
+            try {
+                EnvironmentInformation generalInfo = ArgumentsCheck.paramaterCheck(Utils.stripEmpty(args.split(" ")));
+
+                assertEquals(javaHome, generalInfo.getJavaHome());
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    @Test
+    public void parameterCheck_verifyingJavaAndroidHome() {
+        String fileOut = tempFileOutApk_Scarf;
+        String javaHome = System.getenv("JAVA_HOME");
+        String androidHome = System.getenv("ANDROID_HOME");
+
+        new File(fileOut).delete();
+
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.APK) +
+                            makeArg(argsIdentifier.SOURCE, pathToAPK) +
+                            makeArg(argsIdentifier.OUT, fileOut) +
+                            makeArg(argsIdentifier.ANDROID, androidHome) +
+                            makeArg(argsIdentifier.JAVA, javaHome) +
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                            makeArg(argsIdentifier.PRETTY);
+
+            try {
+                EnvironmentInformation generalInfo = ArgumentsCheck.paramaterCheck(Utils.stripEmpty(args.split(" ")));
+
+                assertEquals(javaHome, generalInfo.getJavaHome());
+                assertEquals(androidHome, generalInfo.getAndroidHome());
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    @Test
+    public void parameterCheck_VersionOut() {
+        String args =
+                makeArg(argsIdentifier.VERSION)
+                        + makeArg(argsIdentifier.NOEXIT);
+
+        try {
+            String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+
+            assertEquals(Utils.projectName + ": " + Utils.projectVersion, outputFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertNull(e);
+        }
+    }
+
     /**
      * <p>paramaterCheck_jar.</p>
      */

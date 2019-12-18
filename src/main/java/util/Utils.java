@@ -164,6 +164,21 @@ public class Utils {
 
     //region HotMethods
 
+    public static ArrayList<String> stripEmpty(String[] args) {
+
+        return Arrays.stream(args).filter(StringUtils::isNotEmpty).collect(Collectors.toCollection(ArrayList::new));
+
+        //region Old Method
+        /*
+        ArrayList<String> strippedArgs = new ArrayList<>();
+        for (String arg : args)
+            if (StringUtils.isNotEmpty(arg))
+                strippedArgs.add(arg);
+        return strippedArgs;
+         */
+        //endregion
+    }
+
     /**
      * <p>retrieveFullyQualifiedNameFileSep.</p>
      *
@@ -1311,6 +1326,15 @@ public class Utils {
             return StringUtils.trimToNull(matches.group(1));
 
         return "UNKNOWN";
+    }
+
+    public static String verifyDir(String dir, Boolean regularPath) throws ExceptionHandler {
+        String canonicalPath = verifyDir(dir);
+
+        if (regularPath)
+            return dir;
+        else
+            return canonicalPath;
     }
 
     /**
