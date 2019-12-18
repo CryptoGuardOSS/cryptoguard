@@ -7,9 +7,10 @@ import os
 import shlex
 import signal
 import subprocess
+from collections import OrderedDict
+
 import sys
 import time
-from collections import OrderedDict
 
 # TODO - Add xml/json results verification
 
@@ -390,8 +391,12 @@ class argsUtils(object):
         print()
 
         print(Utils.halfRows())
-        print('The build up command is:')
-        print(cmd)
+        print('The build up command is:' + cmd)
+
+        print(Utils.halfRows())
+        run = input('Would you like to run the command (y/n)?') == 'y'
+        if (run):
+            os.system(cmd)
 
     def parseArgs(file='src/main/java/frontEnd/argsIdentifier.java'):
         properties, starter, stopper = {}, False, False
@@ -731,7 +736,7 @@ class TestUtils(object):
             liveTests += sum([x['live'] for x in value])
         return liveTests, skippedTests
 
-    def helptests(dyct=pullTests()):
+    def getHelpTests(dyct=pullTests()):
         liveTests, skippedTests = TestUtils.activeSkipTests(dyct)
         grouping = {
             'APK': {},
@@ -745,6 +750,10 @@ class TestUtils(object):
                 testType = key.strip().strip().split('_')[1]
                 grouping[testType]['Skipped'] = sum([not x['live'] for x in value])
                 grouping[testType]['Active'] = sum([x['live'] for x in value])
+        return liveTests, skippedTests, grouping
+
+    def helptests(dyct=pullTests()):
+        liveTests, skippedTests, grouping = TestUtils.getHelpTests(dyct)
 
         totalTests = liveTests + skippedTests
         print("General Information")
@@ -762,9 +771,64 @@ class TestUtils(object):
                 "Deactivated Tests: " + str(value['Skipped']) + ' : ' + str(Utils.outOf(value['Skipped'], totalTests)))
             print()
 
+    # status = ['Pass','Fail','Skip']
+    def addTestResult(dyct, type, status, time, name, timeReRun):
+
+        dyct[type][status] += [{
+            'name': name,
+            'timeTaken': time,
+            'timesReRun': timeReRun
+        }]
+
+        return dyct
+
+    def reRunTestResult(dyct, type, fail, testName, timeReRun, newTime):
+        item = [item for item in dyct[type]['Fail'] if item['name'] == testName][0]
+
+        if (not fail):
+            item['timesReRun'] = timeReRun
+            item['timeTaken'] = newTime
+            dyct[type]['Pass'] += item
+            dyct[type]['Fail'].remove(item)
+
+        return item
+
     def tests(dyct=pullTests()):
         print("Running all of the available tests.")
         dyct = OrderedDict(sorted(dyct.items()))
+
+        results = {
+            'APK': {
+                'Pass': [],
+                'Fail': [],
+                'Skip': []
+            },
+            'JAR': {
+                'Pass': [],
+                'Fail': [],
+                'Skip': []
+            },
+            'JAVA': {
+                'Pass': [],
+                'Fail': [],
+                'Skip': []
+            },
+            'SOURCE': {
+                'Pass': [],
+                'Fail': [],
+                'Skip': []
+            },
+            'CLASS': {
+                'Pass': [],
+                'Fail': [],
+                'Skip': []
+            },
+            'OTHER': {
+                'Pass': [],
+                'Fail': [],
+                'Skip': []
+            }
+        }
 
         liveTests, skippedTests = TestUtils.activeSkipTests(dyct)
         numTests = liveTests + skippedTests
@@ -792,7 +856,15 @@ class TestUtils(object):
         print('==============================')
         for key, value in dyct.items():
             subpassed, subfailed, subskipped = 0, 0, 0
+
+            if ('_' in key):
+                testType = key.strip().strip().split('_')[1]
+            else:
+                testType = 'OTHER'
+
             for test in value:
+                status, testTime = 'Skip', 0
+
                 envSkip = (not android_set and key.endswith('_APK')) or (
                         not java7_set and (key.endswith('SOURCE') or key.endswith('JAVA')))
 
@@ -812,13 +884,18 @@ class TestUtils(object):
                         passed = passed + 1
                         subpassed = subpassed + 1
                         print('Pass | ', end='', flush=True)
+                        status = 'Pass'
                     else:
                         failed = failed + 1
                         subfailed = subfailed + 1
                         print('Fail | ', end='', flush=True)
                         failedTests += [testName]
+                        status = 'Fail'
                 testNum = testNum + 1
-                print(str(int(time.time() - startTest)) + ' (s)')
+                testTime = int(time.time()) - startTest
+                print(str(testTime) + ' (s)')
+
+                results = TestUtils.addTestResult(results, testType, status, testTime, testName, 0)
             if verbose:
                 print(
                     str(key) + ' Skipped/Passed/Fail/(% passed): ' + str(subskipped) + '/' + str(subpassed) + '/' + str(
@@ -830,13 +907,21 @@ class TestUtils(object):
                 start = time.time()
                 result = TestUtils.runTest(test)
                 end = time.time()
+                testTime = int(end - start)
                 if result:
                     result = 'Pass'
                     failed = failed - 1
                     failedTests.remove(test)
+
+                    if ('_' in key):
+                        testType = key.strip().strip().split('_')[1]
+                    else:
+                        testType = 'OTHER'
+
+                    results = TestUtils.reRunTestResult(results, testType, False, test, rerun, testTime)
                 else:
                     result = 'Fail'
-                print(str(result) + ' | ' + str(int(end - start)) + ' (s)')
+                print(str(result) + ' | ' + str(testTime) + ' (s)')
             rerun = rerun + 1
         print('==============================')
         print('Time Taken : ' + str(int(time.time() - start)) + 's')
@@ -857,12 +942,14 @@ class TestUtils(object):
                 print(test)
             print('==============================')
 
-        if failed > 0:
-            if failed > 255:
-                failed = 255
-            sys.exit(failed)
-        else:
-            sys.exit(0)
+        # if failed > 0:
+        #    if failed > 255:
+        #        failed = 255
+        #    sys.exit(failed)
+        # else:
+        #    sys.exit(0)
+
+        return results
 
 
 '''####################################
@@ -900,10 +987,6 @@ routers = {
     'clean': {
         "func": Utils.clean,
         "def": "Cleans the project."
-    },
-    'build': {
-        "func": Utils.build,
-        "def": "Builds the project."
     },
     'build': {
         "func": Utils.build,
