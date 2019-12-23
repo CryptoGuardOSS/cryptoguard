@@ -500,5 +500,39 @@ public class EntryPointTest_JAR {
             }
         }
     }
+
+    @Test
+    public void main_TestableJar_Default_WithClassPath() {
+        String fileOut = tempJarFile_Default_0;
+        String deps = srcOneGrvDep;
+        deps = ":" + deps + ":" + deps + ":";
+        new File(fileOut).delete();
+
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.JAR) +
+                            makeArg(argsIdentifier.SOURCE, jarOne) +
+                            makeArg(argsIdentifier.DEPENDENCY, deps) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.Default) +
+                            makeArg(argsIdentifier.OUT, fileOut) +
+                            makeArg(argsIdentifier.TIMEMEASURE) +
+                            makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.HEURISTICS) +
+                            makeArg(argsIdentifier.PRETTY);
+
+            try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+                Report report = Report.deserialize(new File(outputFile));
+                assertNotNull(report.getHeuristics());
+                assertFalse(report.getIssues().isEmpty());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
     //endregion
 }

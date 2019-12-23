@@ -22,6 +22,67 @@ android, java7, java = os.environ.get('ANDROID_HOME'), os.environ.get('JAVA7_HOM
 
 
 class Utils(object):
+    def prepareOffline():
+        # 'rawArgs': {
+        # !! Remove offline
+        # "func": argsUtils.readRawArgs,
+        # "def": "Prints the raw arguments of the program."
+        # },
+        # 'exampleArgs': {
+        #    "func": argsUtils.helpfulArgs,
+        #    "def": "Sample examples of running the program with arguments and explanations."
+        # },
+        # 'projectType': {
+        #    "func": argsUtils.displayProjectTypes,
+        #    "def": "Displays some information about the project types available to scan."
+        # },
+        # 'outputType': {
+        #    "func": argsUtils.displayOutputTypes,
+        #    "def": "Displays some information about the various output types available to write out as."
+        # },
+        # 'exceptionType': {
+        #    "func": argsUtils.displayExceptionTypes,
+        #    "def": "Displays information about the standardized exceptions."
+        #    information = {
+        #        '':
+        #    }
+        data = {
+            'retrieveProperties': {},
+            'rawArgs': {},
+            'exampleArgs': {},
+            'projectType': {},
+            'outputType': {},
+            'exceptionType': {}
+        }
+        # Utils.overWriting(str(data))
+
+    def overWriting(replaceWith=Utils.prepareOffline()):
+        foil = 'cryptoguard.py'
+        replace = "archivedInformation = []"
+
+        lines = []
+        with open(foil) as reading:
+            for line in reading.readlines():
+                if line == replace:
+                    line = line[:line.index('[')] + replaceWith
+                lines += [line]
+
+        with open(foil, 'w') as writing:
+            for line in lines:
+                writing.write(line)
+
+    def prettyTime(num):
+        string = ""
+        if num // 360 > 0:
+            string = string + str(num // 360) + " H "
+            num = num - ((num // 360) * 360)
+        if num // 60 > 0:
+            string = string + str(num // 60) + " m "
+            num = num - ((num // 60) * 60)
+        if num > 0:
+            string = string + str(num) + " s "
+        return string
+
     def hash():
         Utils.build()
         print(Utils.halfRows())
@@ -793,7 +854,28 @@ class TestUtils(object):
 
         return item
 
-    def tests(dyct=pullTests()):
+    def testType():
+        print("About to run a specific set of tests")
+        dyct = TestUtils.pullTests()
+
+        liveTests, skippedTests, grouping = TestUtils.getHelpTests(dyct)
+        runningTests = 0
+        for key, value in grouping.items():
+            print(str(key) + " : Active Tests " + str(value['Active']))
+            runningTests += value['Active']
+
+        print('OTHER : Active Tests ' + str(liveTests - runningTests))
+
+        options = list(grouping.keys())
+        options += ['OTHER']
+
+        option = input("Please enter what kind of test you would like to have run from " + str(options) + " : ")
+        if (option not in options):
+            print('Option is not valid')
+            sys.exit()
+        TestUtils.tests(dyct=dyct, filter=option)
+
+    def tests(dyct=pullTests(), filter=None):
         print("Running all of the available tests.")
         dyct = OrderedDict(sorted(dyct.items()))
 
@@ -869,13 +951,15 @@ class TestUtils(object):
                         not java7_set and (key.endswith('SOURCE') or key.endswith('JAVA')))
 
                 testName, startTest = str(key) + '.' + str(test['testName']), time.time()
+                skipTestTime = False
                 strTest = str(testNum)
                 if testNum < 10:
                     strTest = '0' + str(strTest)
                 print(str(strTest) + '/' + str(numTests) + ' | ' + str(testName) + ' | ', end='', flush=True)
-                if not test['live'] or envSkip:
+                if not test['live'] or envSkip or (filter is not None and filter != testType):
                     skipped = skipped + 1
                     subskipped = subskipped + 1
+                    skipTestTime = True
                     print('Skip | ', end='', flush=True)
                     skippedTests += [testName]
                 else:
@@ -892,8 +976,11 @@ class TestUtils(object):
                         failedTests += [testName]
                         status = 'Fail'
                 testNum = testNum + 1
-                testTime = int(time.time()) - startTest
-                print(str(testTime) + ' (s)')
+                if (not skipTestTime):
+                    testTime = int(time.time() - startTest)
+                else:
+                    testTime = 0
+                print(Utils.prettyTime(testTime))
 
                 results = TestUtils.addTestResult(results, testType, status, testTime, testName, 0)
             if verbose:
@@ -921,22 +1008,23 @@ class TestUtils(object):
                     results = TestUtils.reRunTestResult(results, testType, False, test, rerun, testTime)
                 else:
                     result = 'Fail'
-                print(str(result) + ' | ' + str(testTime) + ' (s)')
+                print(str(result) + ' | ' + Utils.prettyTime(testTime))
             rerun = rerun + 1
         print('==============================')
-        print('Time Taken : ' + str(int(time.time() - start)) + 's')
+        print('Time Taken : ' + Utils.prettyTime(int(time.time() - start)))
         print('Skipped Tests: ' + str(skipped))
         print('Passed Tests: ' + str(passed))
         print('Failed Tests: ' + str(failed))
         print('Total Tests: ' + str(numTests))
         print('Total Tests Passed: %' + str(Utils.percent(passed, failed)))
+        print('Total Tests Failed: %' + str(Utils.percent(failed, passed)))
         print('==============================')
         if failed > 0:
             print('Failed Tests')
             for test in failedTests:
                 print(test)
             print('==============================')
-        if len(skippedTests) > 0:
+        if len(skippedTests) > 0 and filter is None:
             print('Skipped Tests')
             for test in skippedTests:
                 print(test)
@@ -1008,6 +1096,10 @@ routers = {
         "func": TestUtils.tests,
         "def": "Runs all of the tests crawled."
     },
+    'testType': {
+        "func": TestUtils.testType,
+        "def": "Runs a specified set of tests."
+    },
     'testsHelp': {
         "func": TestUtils.helptests,
         "def": "Shows helpful information about the tests crawled."
@@ -1033,4 +1125,8 @@ def signal_handler(sig, frame):
 '''  ####################################
 if __name__ == '__main__':
     signal.signal(signal.SIGINT, signal_handler)
+
+    overWriting()
     Utils.start()
+
+archivedInformation = ['NEW']
