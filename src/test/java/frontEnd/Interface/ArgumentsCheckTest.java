@@ -3,6 +3,7 @@ package frontEnd.Interface;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import frontEnd.MessagingSystem.routing.Listing;
 import frontEnd.argsIdentifier;
+import org.junit.Before;
 import org.junit.Test;
 import rule.engine.EngineType;
 import util.Utils;
@@ -10,6 +11,7 @@ import util.Utils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -31,10 +33,23 @@ public class ArgumentsCheckTest {
     //region Attributes
     private final String fileOut = Utils.osPathJoin(testPath, "txt.xml");
     private final String fileOutTxt = Utils.osPathJoin(testPath, "txt.txt");
+    private final String fileOutJson = Utils.osPathJoin(testPath, "txt.json");
     //endregion
 
     //region Test Environment Setup
-
+    @Before
+    public void setup() {
+        File running = null;
+        try {
+            if (!(running = new File(fileOut)).exists())
+                running.createNewFile();
+            if (!(running = new File(fileOutTxt)).exists())
+                running.createNewFile();
+            if (!(running = new File(fileOutJson)).exists())
+                running.createNewFile();
+        } catch (IOException e) {
+        }
+    }
     //endregion
 
     //region Tests
@@ -197,7 +212,7 @@ public class ArgumentsCheckTest {
                 makeArg(argsIdentifier.FORMAT, EngineType.JAR) +
                         makeArg(argsIdentifier.SOURCE, jarOne) +
                         makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
-                        makeArg(argsIdentifier.OUT, fileOutTxt.replace(".txt", ".json")) +
+                        makeArg(argsIdentifier.OUT, fileOutJson) +
                         makeArg(argsIdentifier.TIMEMEASURE) +
                         makeArg(argsIdentifier.PRETTY);
 

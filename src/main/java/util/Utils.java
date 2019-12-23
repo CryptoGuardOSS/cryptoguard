@@ -70,9 +70,9 @@ public class Utils {
      */
     public final static String lineSep = System.getProperty("line.separator");
     /**
-     * Constant <code>projectVersion="V03.11.00"</code>
+     * Constant <code>projectVersion="V03.11.0"</code>
      */
-    public final static String projectVersion = "V03.11.00";
+    public final static String projectVersion = "V03.11.0";
     /**
      * Constant <code>projectName="CryptoGuard"</code>
      */
@@ -139,270 +139,187 @@ public class Utils {
     }
     //endregion
 
-    /**
-     * <p>getClassNamesFromJarArchive.</p>
-     *
-     * @param jarPath a {@link java.lang.String} object.
-     * @return a {@link java.util.List} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static List<String> getClassNamesFromJarArchive(String jarPath) throws ExceptionHandler {
-        List<String> classNames = new ArrayList<>();
-        try {
-            ZipInputStream zip = new ZipInputStream(new FileInputStream(jarPath));
-            for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
-                if (!entry.isDirectory() && entry.getName().endsWith(".class")) {
-                    String className = entry.getName().replace('/', '.');
-                    classNames.add(className.substring(0, className.length() - ".class".length()));
-                }
-            }
-            return classNames;
-        } catch (IOException e) {
-            throw new ExceptionHandler("Error with file " + jarPath, ExceptionId.FILE_I);
-        }
-    }
-
     //region HotMethods
-
-    public static ArrayList<String> stripEmpty(String[] args) {
-
-        return Arrays.stream(args).filter(StringUtils::isNotEmpty).collect(Collectors.toCollection(ArrayList::new));
-
-        //region Old Method
-        /*
-        ArrayList<String> strippedArgs = new ArrayList<>();
-        for (String arg : args)
-            if (StringUtils.isNotEmpty(arg))
-                strippedArgs.add(arg);
-        return strippedArgs;
-         */
-        //endregion
+    //region Wrappers
+    public static ArrayList<String> retrieveFilePathTypes(ArrayList<String> rawFileString, Boolean expandPath, Boolean overwrite) throws ExceptionHandler {
+        return retrieveFilePaths(rawFileString, new ArrayList<String>() {{
+            add(".java");
+            add(".class");
+            add(".jar");
+            add("dir");
+        }}, expandPath, overwrite);
     }
 
+    public static ArrayList<String> retrieveFilePathType(String rawFileString, Boolean expandPath, Boolean overwrite) throws ExceptionHandler {
+        return retrieveFilePaths(new ArrayList<String>() {{
+            add(rawFileString);
+        }}, new ArrayList<String>() {{
+            add(".java");
+            add(".class");
+            add(".jar");
+            add("dir");
+        }}, expandPath, overwrite);
+    }
+
+    public static ArrayList<String> retrieveFilePathTypes(String rawFileString, EngineType type, Boolean expandPath, Boolean overwrite) throws ExceptionHandler {
+        return retrieveFilePaths(new ArrayList<String>() {{
+            add(rawFileString);
+        }}, type == null ? new ArrayList<>() : new ArrayList<String>() {{
+            add(type.getInputExtension());
+        }}, expandPath, overwrite);
+    }
+
+    public static ArrayList<String> retrieveFilePathTypes(ArrayList<String> rawFileString, EngineType type, Boolean expandPath, Boolean overwrite) throws ExceptionHandler {
+        return retrieveFilePaths(rawFileString, type == null ? new ArrayList<>() : new ArrayList<String>() {{
+            add(type.getInputExtension());
+        }}, expandPath, overwrite);
+    }
+
+    public static String retrieveFilePathType(String rawFileString, EngineType type, Boolean expandPath, Boolean overwrite) throws ExceptionHandler {
+        return retrieveFilePath(rawFileString, type == null ? null : type.getInputExtension(), expandPath, overwrite);
+    }
+    //endregion
+
     /**
-     * <p>retrieveFullyQualifiedNameFileSep.</p>
+     * <p>inputFiles.</p>
      *
-     * @param sourceJavaFile a {@link java.util.List} object.
-     * @return a {@link java.util.List} object.
+     * @param file a {@link java.lang.String} object.
+     * @return a {@link java.util.ArrayList} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
-    public static List<String> retrieveFullyQualifiedNameFileSep(List<String> sourceJavaFile) throws ExceptionHandler {
-        List<String> fullPath = new ArrayList<>();
-        for (String in : sourceJavaFile)
-            fullPath.add(Utils.retrieveFullyQualifiedName(in).replace(".", fileSep));
+    static ArrayList<String> inputFiles(String file, ArrayList<String> type, Boolean expandPath, Boolean overwrite) throws ExceptionHandler {
+        ArrayList<String> filePaths = new ArrayList<>();
+        String curLine = null;
 
-        return fullPath;
-    }
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            while ((curLine = StringUtils.trimToNull(reader.readLine())) != null) {
+                for (String rawType : type)
+                    if (curLine.endsWith(rawType))
+                        if ((curLine = retrieveFilePath(curLine, rawType, expandPath, overwrite)) != null)
+                            filePaths.add(curLine);
 
-    /**
-     * <p>handleErrorMessage.</p>
-     *
-     * @param e a {@link frontEnd.Interface.outputRouting.ExceptionHandler} object.
-     */
-    public static void handleErrorMessage(ExceptionHandler e) {
-        log.debug(e.getErrorCode().getMessage());
+                if (type == null || type.size() == 0)
+                    if ((curLine = retrieveFilePath(curLine, null, expandPath, overwrite)) != null)
+                        filePaths.add(curLine);
+            }
 
-        if (e.getErrorCode().getId().equals(0)) {
-            log.info(e.getErrorCode().getMessage());
-            System.out.print(e.getLongDesciption());
-        } else {
-            log.fatal(e.getErrorCode().getMessage());
-            System.err.print(e.toString());
+            return filePaths;
+        } catch (FileNotFoundException e) {
+            throw new ExceptionHandler("File " + file + " not found", ExceptionId.FILE_I);
+        } catch (IOException e) {
+            throw new ExceptionHandler("Error reading the file  " + file, ExceptionId.FILE_I);
         }
     }
 
-    /**
-     * <p>joinSpecialSootClassPath.</p>
-     *
-     * @param fileIn a {@link java.util.List} object.
-     * @return a {@link java.lang.String} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static String joinSpecialSootClassPath(List<String> fileIn) throws ExceptionHandler {
-        return join(":", retrieveClosePath(fileIn));
-    }
-
-    /**
-     * <p>retrieveClosePath.</p>
-     *
-     * @param fileIn a {@link java.util.List} object.
-     * @return a {@link java.util.List} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static List<String> retrieveClosePath(List<String> fileIn) throws ExceptionHandler {
+    public static ArrayList<String> retrieveFilePaths(ArrayList<String> rawFileStrings, ArrayList<String> type, Boolean expandPath, Boolean overwrite) throws ExceptionHandler {
         ArrayList<String> output = new ArrayList<>();
 
-        for (String path : fileIn) {
-            String temp = Utils.verifyFileExts(path, new String[]{".java", ".class"}, false);
-            if (StringUtils.isNotBlank(temp)) {
-                temp = replaceLast(temp, retrieveFullyQualifiedName(path).replace(".", fileSep)).replace(".java", "").replace(".class", "");
-                if (!output.contains(temp))
-                    output.add(temp);
-            }
-        }
-        return output;
+        if (type != null && type.size() == 1 && type.get(0).equals("dir") && rawFileStrings.size() > 1)
+            throw new ExceptionHandler("Please enter one source argument for this use case.", ExceptionId.GEN_VALID);
+        else if (rawFileStrings.size() == 1 && rawFileStrings.get(0).endsWith(".in"))
+            output = inputFiles(rawFileStrings.get(0), type, expandPath, overwrite);
+        else
+            for (String rawString : rawFileStrings) {
+                String filePath = null;
+                for (String rawType : type) {
+                    //If the only string passed is a java class path and starts with a colon
+                    //Remove it
+                    if (rawString.startsWith(":"))
+                        rawString = rawString.replaceFirst(":", "");
 
+                    //Splitting the file just in case it is a java class path
+                    for (String fileString : rawString.split(":"))
+                        if (rawType.equals("dir"))
+                            filePath = retrieveFilePath(fileString, rawType, expandPath, false);
+                        else if (fileString.endsWith(rawType))
+                            filePath = retrieveFilePath(fileString, null, expandPath, false);
+
+                    if (StringUtils.isNotEmpty(filePath))
+                        break;
+                }
+                output.add(filePath);
+            }
+        return output;
     }
 
     /**
-     * <p>retrieveFullyQualifiedName.</p>
+     * <p>retrieveFilePath.</p>
      *
-     * @param in a {@link java.lang.String} object.
+     * @param file a {@link java.lang.String} object.
+     * @param type a {@link rule.engine.EngineType} object.
      * @return a {@link java.lang.String} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
-    public static String retrieveFullyQualifiedName(String in) throws ExceptionHandler {
+    public static String retrieveFilePath(String file, String type, Boolean expandPath, Boolean overwrite) throws ExceptionHandler {
+        //Base line string check
+        if (StringUtils.isEmpty(file))
+            return null;
 
-        String sourcePackage = trimFilePath(in);
-        if (in.toLowerCase().endsWith(".java")) {
-            sourcePackage = sourcePackage.replace(".java", "");
-            try (BufferedReader br = new BufferedReader(new FileReader(in))) {
-                String firstLine = br.readLine();
+        //Handling the file extension
+        if (null != type)
+            if (!type.equals("dir") && !file.toLowerCase().toLowerCase().endsWith(type))
+                throw new ExceptionHandler("File " + file + " doesn't have the right file type " + type, ExceptionId.ARG_VALID);
 
-                if (firstLine.startsWith("package ") && firstLine.toLowerCase().endsWith(";")) {
-                    sourcePackage = firstLine.substring("package ".length(), firstLine.length() - 1) + "." + sourcePackage;
-                }
+        File tempFile = new File(file);
 
-            } catch (IOException e) {
-                throw new ExceptionHandler("Error parsing file: " + in, ExceptionId.FILE_READ);
+        Boolean exists = tempFile.exists() || overwrite;
+
+        if (!exists)
+            throw new ExceptionHandler(tempFile.getName() + " does not exist.", ExceptionId.ARG_VALID);
+
+        Boolean isDir = tempFile.isDirectory() || overwrite;
+        Boolean isFile = tempFile.isFile() || overwrite;
+
+        if (type != null)
+            switch (type) {
+                case ".class":
+                    //region Verifying the file was compiled with a Java Version Lower than 8
+                    try (DataInputStream stream = new DataInputStream(new FileInputStream(file))) {
+                        //Verifying if the class file has the Magic Java Number
+                        if (stream.readInt() != 0xcafebabe) {
+                            throw new ExceptionHandler("The class file " + file + " is not a valid java.class file.", ExceptionId.ARG_VALID);
+                        } else {
+
+                            //Moving the stream past the minor version
+                            stream.readUnsignedShort();
+
+                            //Checking the Major Version of the JDK that compiled the file against the supported version
+                            Version fileVersion = Version.retrieveByMajor(stream.readUnsignedShort());
+                            if (!fileVersion.supportedFile()) {
+                                throw new ExceptionHandler("The class file (compiled by a JDK Version " + fileVersion.getVersionNumber() + ") is not supported.", ExceptionId.ARG_VALID);
+                            }
+                        }
+                    } catch (IOException e) {
+                        throw new ExceptionHandler("Error reading the file " + file + ".", ExceptionId.FILE_READ);
+                    }
+                    //endregion
+                case ".java":
+                case ".jar":
+                case ".apk":
+                    if (!isFile)
+                        throw new ExceptionHandler(tempFile.getName() + " is not a valid file.", ExceptionId.ARG_VALID);
+                    break;
+                case "dir":
+                    if (!isDir)
+                        throw new ExceptionHandler(tempFile.getName() + " is not a valid directory.", ExceptionId.ARG_VALID);
+                    break;
+                default:
+                    if (!isFile && !isDir)
+                        throw new ExceptionHandler(tempFile.getName() + " is not a valid file or directory.", ExceptionId.ARG_VALID);
+                    break;
             }
-        } else if (in.toLowerCase().endsWith(".class")) {
-            sourcePackage = sourcePackage.replace(".class", "");
+        else if (!isFile && !isDir)
+            throw new ExceptionHandler(tempFile.getName() + " is not a valid file or directory.", ExceptionId.ARG_VALID);
 
-            String pathBreak = "";
-            String fullPath = Utils.retrieveFullFilePath(in).replace(".class", "");
-
-            //Maven-Class
-            if (fullPath.contains(pathBreak = osSurround("target", "classes"))) {
-            }
-            //Gradle-Class
-            else if (fullPath.contains(pathBreak = osSurround("java", "main"))) {
-            }
-            //Gen-Classes
-            else if (fullPath.contains(pathBreak = osSurround("output"))) {
-            } else {
-                //Base Case
-                fullPath = sourcePackage;
-            }
-
-            int indexOf = fullPath.indexOf(pathBreak);
-            sourcePackage = fullPath.substring(indexOf == -1 ? 0 : indexOf).replace(pathBreak, "").replaceAll(fileSep, ".");
-
+        try {
+            if (expandPath)
+                return tempFile.getCanonicalPath();
+            else
+                return file;
+        } catch (Exception e) {
+            throw new ExceptionHandler("Error retrieving the path of the file " + tempFile.getName() + ".", ExceptionId.FILE_AFK);
         }
-        return sourcePackage;
-    }
-
-    /**
-     * <p>containsAny.</p>
-     *
-     * @param input          a {@link java.lang.String} object.
-     * @param stringsToCheck an array of {@link java.lang.String} objects.
-     * @return a {@link java.lang.Boolean} object.
-     */
-    public static Boolean containsAny(String input, String[] stringsToCheck) {
-        return containsAny(input, Arrays.asList(stringsToCheck));
-    }
-
-    /**
-     * <p>containsAny.</p>
-     *
-     * @param input          a {@link java.lang.String} object.
-     * @param stringsToCheck a {@link java.util.List} object.
-     * @return a {@link java.lang.Boolean} object.
-     */
-    public static Boolean containsAny(String input, List<String> stringsToCheck) {
-        return stringsToCheck.stream().anyMatch(input::contains);
-    }
-
-    /**
-     * <p>listf.</p>EntryPointTest_CLASS
-     *
-     * @param path      a {@link java.lang.String} object.
-     * @param fileCheck a {@link java.util.function.Predicate} object.
-     * @param functor   a {@link java.util.function.Function} object.
-     * @return a {@link java.util.List} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static List<String> retrieveFilesPredicate(String path, Predicate<String> fileCheck, Function<File, String> functor) throws ExceptionHandler {
-
-        List<String> output = new ArrayList<>();
-        for (File file : Objects.requireNonNull(new File(verifyDir(path)).listFiles())) {
-            if (file.isFile() && fileCheck.test(file.getName())) {
-                if (functor == null)
-                    output.add(file.getAbsolutePath());
-                else
-                    output.add(functor.apply(file));
-            } else if (file.isDirectory())
-                output.addAll(retrieveFilesPredicate(file.getAbsolutePath(), fileCheck, functor));
-        }
-
-        return output;
-    }
-
-    /**
-     * <p>retrieveJavaFileImports.</p>
-     *
-     * @param paths a {@link java.lang.String} object.
-     * @return a {@link java.util.Set} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static Set<String> retrieveJavaFileImports(String... paths) throws ExceptionHandler {
-        return retrieveJavaFileImports(Arrays.asList(paths));
-    }
-
-    /**
-     * <p>retrieveJavaFileImports.</p>
-     *
-     * @param paths a {@link java.util.List} object.
-     * @return a {@link java.util.Set} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static Set<String> retrieveJavaFileImports(List<String> paths) throws ExceptionHandler {
-        Set<String> results = new HashSet<>();
-        for (String path : paths)
-            results.addAll(retrieveJavaFileImports(path));
-        return results;
-    }
-
-    /**
-     * <p>retrieveJavaFileImports.</p>
-     *
-     * @param path a {@link java.lang.String} object.
-     * @return a {@link java.util.Set} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static Set<String> retrieveJavaFileImports(String path) throws ExceptionHandler {
-        Set<String> results = new HashSet<>();
-        String javaFile = verifyFileExt(path, ".java", false);
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(javaFile))) {
-            String curLine;
-
-            leave:
-            while ((curLine = reader.readLine()) != null && !curLine.isEmpty()) {
-                if (!curLine.startsWith("package") && !curLine.startsWith("import") && StringUtils.isNotEmpty(curLine))
-                    break leave;
-                else if (curLine.startsWith("import"))
-                    results.add(curLine.replace("import ", "").replace(";", ""));
-            }
-        } catch (FileNotFoundException e) {
-            //TODO - Add exception here
-        } catch (IOException e) {
-            //TODO - Add Exception here
-        }
-
-        return results;
-    }
-
-    /**
-     * <p>setSunBootPath.</p>
-     *
-     * @param basePath a {@link java.lang.String} object.
-     * @param rt       a {@link java.lang.String} object.
-     */
-    public static void setSunBootPath(String basePath, String rt) {
-        System.setProperty("sun.boot.class.path", rt);
-        System.setProperty("java.ext.dirs", osSurround(basePath, "lib"));
     }
     //endregion
 
@@ -523,6 +440,276 @@ public class Utils {
     //endregion
 
     //region NotHotMethods
+
+    /**
+     * <p>getClassNamesFromJarArchive.</p>
+     *
+     * @param jarPath a {@link java.lang.String} object.
+     * @return a {@link java.util.List} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
+    public static List<String> getClassNamesFromJarArchive(String jarPath) throws ExceptionHandler {
+        List<String> classNames = new ArrayList<>();
+        try {
+            ZipInputStream zip = new ZipInputStream(new FileInputStream(jarPath));
+            for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
+                if (!entry.isDirectory() && entry.getName().endsWith(".class")) {
+                    String className = entry.getName().replace('/', '.');
+                    classNames.add(className.substring(0, className.length() - ".class".length()));
+                }
+            }
+            return classNames;
+        } catch (IOException e) {
+            throw new ExceptionHandler("Error with file " + jarPath, ExceptionId.FILE_I);
+        }
+    }
+
+    public static ArrayList<String> stripEmpty(String[] args) {
+
+        return Arrays.stream(args).filter(StringUtils::isNotEmpty).collect(Collectors.toCollection(ArrayList::new));
+
+        //region Old Method
+        /*
+        ArrayList<String> strippedArgs = new ArrayList<>();
+        for (String arg : args)
+            if (StringUtils.isNotEmpty(arg))
+                strippedArgs.add(arg);
+        return strippedArgs;
+         */
+        //endregion
+    }
+
+    /**
+     * <p>retrieveFullyQualifiedNameFileSep.</p>
+     *
+     * @param sourceJavaFile a {@link java.util.List} object.
+     * @return a {@link java.util.List} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
+    public static List<String> retrieveFullyQualifiedNameFileSep(List<String> sourceJavaFile) throws ExceptionHandler {
+        List<String> fullPath = new ArrayList<>();
+        for (String in : sourceJavaFile)
+            fullPath.add(Utils.retrieveFullyQualifiedName(in).replace(".", fileSep));
+
+        return fullPath;
+    }
+
+    /**
+     * <p>handleErrorMessage.</p>
+     *
+     * @param e a {@link frontEnd.Interface.outputRouting.ExceptionHandler} object.
+     */
+    public static void handleErrorMessage(ExceptionHandler e) {
+        log.debug(e.getErrorCode().getMessage());
+
+        if (e.getErrorCode().getId().equals(0)) {
+            log.info(e.getErrorCode().getMessage());
+            System.out.print(e.getLongDesciption());
+        } else {
+            log.fatal(e.getErrorCode().getMessage());
+            System.err.print(e.toString());
+        }
+    }
+
+    /**
+     * <p>joinSpecialSootClassPath.</p>
+     *
+     * @param fileIn a {@link java.util.List} object.
+     * @return a {@link java.lang.String} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
+    public static String joinSpecialSootClassPath(List<String> fileIn) throws ExceptionHandler {
+        return join(":", retrieveClosePath(fileIn));
+    }
+
+    /**
+     * <p>retrieveClosePath.</p>
+     *
+     * @param fileIn a {@link java.util.List} object.
+     * @return a {@link java.util.List} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
+    public static List<String> retrieveClosePath(List<String> fileIn) throws ExceptionHandler {
+        ArrayList<String> output = new ArrayList<>();
+
+        for (String path : fileIn) {
+            String temp = null;
+            //TODO - Verify this change works
+            //Utils.verifyFileExts(path, new String[]{".java", ".class"}, false);
+
+            if ((temp = Utils.retrieveFilePath(temp, EngineType.JAVAFILES.getInputExtension(), true, false)) == null)
+                temp = Utils.retrieveFilePath(temp, EngineType.CLASSFILES.getInputExtension(), true, false);
+
+            if (StringUtils.isNotBlank(temp)) {
+                temp = replaceLast(temp, retrieveFullyQualifiedName(path).replace(".", fileSep)).replace(".java", "").replace(".class", "");
+                if (!output.contains(temp))
+                    output.add(temp);
+            }
+        }
+        return output;
+
+    }
+
+    /**
+     * <p>retrieveFullyQualifiedName.</p>
+     *
+     * @param in a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
+    public static String retrieveFullyQualifiedName(String in) throws ExceptionHandler {
+
+        String sourcePackage = trimFilePath(in);
+        if (in.toLowerCase().endsWith(".java")) {
+            sourcePackage = sourcePackage.replace(".java", "");
+            try (BufferedReader br = new BufferedReader(new FileReader(in))) {
+                String firstLine = br.readLine();
+
+                if (firstLine.startsWith("package ") && firstLine.toLowerCase().endsWith(";")) {
+                    sourcePackage = firstLine.substring("package ".length(), firstLine.length() - 1) + "." + sourcePackage;
+                }
+
+            } catch (IOException e) {
+                throw new ExceptionHandler("Error parsing file: " + in, ExceptionId.FILE_READ);
+            }
+        } else if (in.toLowerCase().endsWith(".class")) {
+            sourcePackage = sourcePackage.replace(".class", "");
+
+            String pathBreak = "";
+            String fullPath = Utils.retrieveFullFilePath(in).replace(".class", "");
+
+            //Maven-Class
+            if (fullPath.contains(pathBreak = osSurround("target", "classes"))) {
+            }
+            //Gradle-Class
+            else if (fullPath.contains(pathBreak = osSurround("java", "main"))) {
+            }
+            //Gen-Classes
+            else if (fullPath.contains(pathBreak = osSurround("output"))) {
+            } else {
+                //Base Case
+                fullPath = sourcePackage;
+            }
+
+            int indexOf = fullPath.indexOf(pathBreak);
+            sourcePackage = fullPath.substring(indexOf == -1 ? 0 : indexOf).replace(pathBreak, "").replaceAll(fileSep, ".");
+
+        }
+        return sourcePackage;
+    }
+
+    /**
+     * <p>containsAny.</p>
+     *
+     * @param input          a {@link java.lang.String} object.
+     * @param stringsToCheck an array of {@link java.lang.String} objects.
+     * @return a {@link java.lang.Boolean} object.
+     */
+    public static Boolean containsAny(String input, String[] stringsToCheck) {
+        return containsAny(input, Arrays.asList(stringsToCheck));
+    }
+
+    /**
+     * <p>containsAny.</p>
+     *
+     * @param input          a {@link java.lang.String} object.
+     * @param stringsToCheck a {@link java.util.List} object.
+     * @return a {@link java.lang.Boolean} object.
+     */
+    public static Boolean containsAny(String input, List<String> stringsToCheck) {
+        return stringsToCheck.stream().anyMatch(input::contains);
+    }
+
+    /**
+     * <p>listf.</p>EntryPointTest_CLASS
+     *
+     * @param path      a {@link java.lang.String} object.
+     * @param fileCheck a {@link java.util.function.Predicate} object.
+     * @param functor   a {@link java.util.function.Function} object.
+     * @return a {@link java.util.List} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
+    public static List<String> retrieveFilesPredicate(String path, Predicate<String> fileCheck, Function<File, String> functor) throws ExceptionHandler {
+
+        List<String> output = new ArrayList<>();
+        for (File file : Objects.requireNonNull(new File(retrieveFilePath(path, null, true, false)).listFiles())) {
+            if (file.isFile() && fileCheck.test(file.getName())) {
+                if (functor == null)
+                    output.add(file.getAbsolutePath());
+                else
+                    output.add(functor.apply(file));
+            } else if (file.isDirectory())
+                output.addAll(retrieveFilesPredicate(file.getAbsolutePath(), fileCheck, functor));
+        }
+
+        return output;
+    }
+
+    /**
+     * <p>retrieveJavaFileImports.</p>
+     *
+     * @param paths a {@link java.lang.String} object.
+     * @return a {@link java.util.Set} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
+    public static Set<String> retrieveJavaFileImports(String... paths) throws ExceptionHandler {
+        return retrieveJavaFileImports(Arrays.asList(paths));
+    }
+
+    /**
+     * <p>retrieveJavaFileImports.</p>
+     *
+     * @param paths a {@link java.util.List} object.
+     * @return a {@link java.util.Set} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
+    public static Set<String> retrieveJavaFileImports(List<String> paths) throws ExceptionHandler {
+        Set<String> results = new HashSet<>();
+        for (String path : paths)
+            results.addAll(retrieveJavaFileImports(path));
+        return results;
+    }
+
+    /**
+     * <p>retrieveJavaFileImports.</p>
+     *
+     * @param path a {@link java.lang.String} object.
+     * @return a {@link java.util.Set} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
+    public static Set<String> retrieveJavaFileImports(String path) throws ExceptionHandler {
+        Set<String> results = new HashSet<>();
+        String javaFile = retrieveFilePath(path, EngineType.JAVAFILES.getInputExtension(), false, false);
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(javaFile))) {
+            String curLine;
+
+            leave:
+            while ((curLine = reader.readLine()) != null && !curLine.isEmpty()) {
+                if (!curLine.startsWith("package") && !curLine.startsWith("import") && StringUtils.isNotEmpty(curLine))
+                    break leave;
+                else if (curLine.startsWith("import"))
+                    results.add(curLine.replace("import ", "").replace(";", ""));
+            }
+        } catch (FileNotFoundException e) {
+            //TODO - Add exception here
+        } catch (IOException e) {
+            //TODO - Add Exception here
+        }
+
+        return results;
+    }
+
+    /**
+     * <p>setSunBootPath.</p>
+     *
+     * @param basePath a {@link java.lang.String} object.
+     * @param rt       a {@link java.lang.String} object.
+     */
+    public static void setSunBootPath(String basePath, String rt) {
+        System.setProperty("sun.boot.class.path", rt);
+        System.setProperty("java.ext.dirs", osSurround(basePath, "lib"));
+    }
 
     /**
      * <p>getClassNamesFromApkArchive.</p>
@@ -1052,31 +1239,6 @@ public class Utils {
     }
 
     /**
-     * <p>inputFiles.</p>
-     *
-     * @param file a {@link java.lang.String} object.
-     * @return a {@link java.util.ArrayList} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static ArrayList<String> inputFiles(String file) throws ExceptionHandler {
-        ArrayList<String> filePaths = new ArrayList<>();
-        String curLine = null;
-
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            while ((curLine = reader.readLine()) != null && !curLine.isEmpty())
-                if ((curLine = verifyFile(curLine, false)) != null)
-                    filePaths.add(curLine);
-
-            return filePaths;
-        } catch (FileNotFoundException e) {
-            throw new ExceptionHandler("File " + file + " not found", ExceptionId.FILE_I);
-        } catch (IOException e) {
-            throw new ExceptionHandler("Error reading the file  " + file, ExceptionId.FILE_I);
-        }
-    }
-
-    /**
      * <p>retrieveFileParentPath.</p>
      *
      * @param filePath a {@link java.lang.String} object.
@@ -1326,233 +1488,6 @@ public class Utils {
             return StringUtils.trimToNull(matches.group(1));
 
         return "UNKNOWN";
-    }
-
-    public static String verifyDir(String dir, Boolean regularPath) throws ExceptionHandler {
-        String canonicalPath = verifyDir(dir);
-
-        if (regularPath)
-            return dir;
-        else
-            return canonicalPath;
-    }
-
-    /**
-     * <p>verifyDir.</p>
-     *
-     * @param dir a {@link java.lang.String} object.
-     * @return a {@link java.lang.String} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static String verifyDir(String dir) throws ExceptionHandler {
-        File dirChecking = new File(dir);
-        if (!dirChecking.exists() || !dirChecking.isDirectory())
-            throw new ExceptionHandler(dirChecking.getName() + " is not a valid directory.", ExceptionId.ARG_VALID);
-
-        try {
-            return dirChecking.getCanonicalPath();
-        } catch (Exception e) {
-            throw new ExceptionHandler("Error retrieving the full path of the " + dirChecking + ".", ExceptionId.FILE_AFK);
-        }
-    }
-
-    /**
-     * <p>retrieveDirs.</p>
-     *
-     * @param arguments a {@link java.util.List} object.
-     * @return a {@link java.util.List} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static List<String> retrieveDirs(List<String> arguments) throws ExceptionHandler {
-        List<String> dirs = new ArrayList<>();
-        for (String dir : arguments)
-            dirs.add(Utils.verifyDir(dir));
-
-        return dirs;
-    }
-
-    /**
-     * <p>verifyFile.</p>
-     *
-     * @param file      a {@link java.lang.String} object.
-     * @param overWrite a {@link java.lang.Boolean} object.
-     * @return a {@link java.lang.String} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static String verifyFile(String file, Boolean overWrite) throws ExceptionHandler {
-        //Base line string check
-        if (null == file || "".equals(file))
-            return null;
-
-        File tempFile = new File(file);
-
-        if (overWrite && (tempFile.exists() || tempFile.isFile()))
-            throw new ExceptionHandler(tempFile.getName() + " is already a valid file.", ExceptionId.FILE_O);
-
-        //Enhance Validation on the compiled java class file
-        if (tempFile.isFile() && tempFile.getName().endsWith(".class")) {
-            try (DataInputStream stream = new DataInputStream(new FileInputStream(file))) {
-                //Verifying if the class file has the Magic Java Number
-                if (stream.readInt() != 0xcafebabe) {
-                    throw new ExceptionHandler("The class file " + file + " is not a valid java.class file.", ExceptionId.ARG_VALID);
-                } else {
-
-                    //Moving the stream past the minor version
-                    stream.readUnsignedShort();
-
-                    //Checking the Major Version of the JDK that compiled the file against the supported version
-                    Version fileVersion = Version.retrieveByMajor(stream.readUnsignedShort());
-                    if (!fileVersion.supportedFile()) {
-                        throw new ExceptionHandler("The class file (compiled by a JDK Version " + fileVersion.getVersionNumber() + ") is not supported.", ExceptionId.ARG_VALID);
-                    }
-                }
-            } catch (IOException e) {
-                throw new ExceptionHandler("Error reading the file " + file + ".", ExceptionId.FILE_READ);
-            }
-        }
-
-        try {
-            return tempFile.getCanonicalPath();
-        } catch (Exception e) {
-            throw new ExceptionHandler("Error retrieving the path of the file " + tempFile.getName() + ".", ExceptionId.FILE_AFK);
-        }
-    }
-
-    /**
-     * <p>verifyFileExt.</p>
-     *
-     * @param file      a {@link java.lang.String} object.
-     * @param fileExt   a {@link java.lang.String} object.
-     * @param overWrite a {@link java.lang.Boolean} object.
-     * @return a {@link java.lang.String} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static String verifyFileExt(String file, String fileExt, Boolean overWrite) throws ExceptionHandler {
-        if ("dir".equals(fileExt))
-            return Utils.verifyDir(file);
-        else {
-            if (!file.toLowerCase().endsWith(fileExt))
-                throw new ExceptionHandler("File " + file + " doesn't have the right file type ", ExceptionId.ARG_VALID);
-
-            return Utils.verifyFile(file, overWrite);
-        }
-    }
-
-    /**
-     * <p>verifyFileExts.</p>
-     *
-     * @param file      a {@link java.lang.String} object.
-     * @param fileExt   an array of {@link java.lang.String} objects.
-     * @param overWrite a {@link java.lang.Boolean} object.
-     * @return a {@link java.lang.String} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static String verifyFileExts(String file, String[] fileExt, Boolean overWrite) throws ExceptionHandler {
-
-        Boolean matches = false;
-
-        for (String extensions : fileExt)
-            if (file.toLowerCase().endsWith(extensions)) {
-                matches = true;
-                break;
-            }
-
-        //Attempting to verify if the class path is a directory
-        if (matches)
-            return Utils.verifyFile(file, overWrite);
-        else
-            try {
-                return Utils.verifyDir(file);
-            } catch (ExceptionHandler e) {
-                throw new ExceptionHandler("File " + file + " doesn't have the right file type ", ExceptionId.ARG_VALID);
-            }
-    }
-
-    /**
-     * <p>verifyClassPaths.</p>
-     *
-     * @param classPaths a {@link java.lang.String} object.
-     * @return a {@link java.util.ArrayList} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static ArrayList<String> verifyClassPaths(String... classPaths) throws ExceptionHandler {
-        return verifyClassPaths(Arrays.asList(classPaths));
-    }
-
-    /**
-     * <p>verifyClassPaths.</p>
-     *
-     * @param classPaths a {@link java.util.List} object.
-     * @return a {@link java.util.ArrayList} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static ArrayList<String> verifyClassPaths(List<String> classPaths) throws ExceptionHandler {
-        ArrayList<String> output = new ArrayList<>();
-        for (String klazz : classPaths)
-            output.addAll(verifyClassPaths(klazz));
-        return output;
-    }
-
-    /**
-     * <p>verifyClassPaths.</p>
-     *
-     * @param classPaths a {@link java.lang.String} object.
-     * @return a {@link java.util.ArrayList} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static ArrayList<String> verifyClassPaths(String classPaths) throws ExceptionHandler {
-        ArrayList<String> output = new ArrayList<>();
-        for (String path : classPaths.split(":"))
-            output.add(Utils.verifyFileExts(path, new String[]{".java", ".class", ".jar", "dir"}, false));
-
-        return output;
-    }
-
-    /**
-     * <p>retrieveFilePath.</p>
-     *
-     * @param file a {@link java.lang.String} object.
-     * @param type a {@link rule.engine.EngineType} object.
-     * @return a {@link java.lang.String} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static String retrieveFilePath(String file, EngineType type) throws ExceptionHandler {
-        if (!file.toLowerCase().toLowerCase().endsWith(type.getInputExtension()))
-            throw new ExceptionHandler("File " + file + " doesn't have the right file type ", ExceptionId.ARG_VALID);
-
-        File tempFile = new File(file);
-        if (!tempFile.exists() || !tempFile.isFile())
-            throw new ExceptionHandler(tempFile.getName() + " is not a valid file.", ExceptionId.ARG_VALID);
-
-        try {
-            return tempFile.getCanonicalPath();
-        } catch (Exception e) {
-            throw new ExceptionHandler("Error retrieving the path of the file " + tempFile.getName() + ".", ExceptionId.FILE_AFK);
-        }
-    }
-
-    /**
-     * <p>retrieveFilesByType.</p>
-     *
-     * @param arguments a {@link java.util.List} object.
-     * @param type      a {@link rule.engine.EngineType} object.
-     * @return a {@link java.util.List} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static List<String> retrieveFilesByType(List<String> arguments, EngineType type) throws ExceptionHandler {
-        if (type == EngineType.DIR)
-            if (arguments.size() != 1)
-                throw new ExceptionHandler("Please enter one source argument for this use case.", ExceptionId.GEN_VALID);
-            else
-                return retrieveDirs(arguments);
-
-        List<String> filePaths = new ArrayList<>();
-
-        for (String in : arguments)
-            for (String foil : in.split(":"))
-                filePaths.add(retrieveFilePath(foil, type));
-
-        return filePaths;
     }
 
     /**

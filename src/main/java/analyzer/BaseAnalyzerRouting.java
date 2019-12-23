@@ -313,7 +313,7 @@ public class BaseAnalyzerRouting {
             try {
                 SootClass runningClass;
                 if ((runningClass = Scene.v().loadClassAndSupport(clazz)).isPhantom() && !ignoreLibs.contains(runningClass.getName()))
-                    throw new ExceptionHandler("Class " + clazz + " is not properly loaded", ExceptionId.LOADING);
+                    throw new ExceptionHandler("Class: " + clazz + " is not properly loaded", ExceptionId.LOADING);
             } catch (Error | Exception e) {
                 throw new ExceptionHandler("Error loading Class: " + clazz, ExceptionId.LOADING);
             }
@@ -336,7 +336,7 @@ public class BaseAnalyzerRouting {
                     throw new ExceptionHandler("Multiple Entry-points (main) found within the files included.", ExceptionId.FILE_READ);
 
             } catch (Error | Exception e) {
-                throw new ExceptionHandler("Error loading class " + clazz + " :> " + e.getMessage().replace("Error: ", ""), ExceptionId.LOADING);
+                throw new ExceptionHandler("Error loading class " + clazz, ExceptionId.LOADING);
             }
         }
 

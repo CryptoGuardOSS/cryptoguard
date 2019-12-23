@@ -113,10 +113,10 @@ public class ArgumentsCheck {
             //Only APK path needs an android specified path
             case APK:
                 if (cmd.hasOption(argsIdentifier.ANDROID.getArg()))
-                    androidHome = Utils.verifyDir(cmd.getOptionValue(argsIdentifier.ANDROID.getId()), true);
+                    androidHome = Utils.retrieveFilePath(cmd.getOptionValue(argsIdentifier.ANDROID.getId()), null, false, false);
             default:
                 if (cmd.hasOption(argsIdentifier.JAVA.getArg()))
-                    javaHome = Utils.verifyDir(cmd.getOptionValue(argsIdentifier.JAVA.getId()), true);
+                    javaHome = Utils.retrieveFilePath(cmd.getOptionValue(argsIdentifier.JAVA.getId()), null, false, false);
                 break;
         }
         //endregion
@@ -281,23 +281,14 @@ public class ArgumentsCheck {
         //region verifying filePaths
         //region Setting the source files
         log.trace("Retrieving the source files.");
-
-        List<String> vSources;
-        if (!usingEnhancedFileIn)
-            vSources = Utils.retrieveFilesByType(sourceFiles, eType);
-        else
-            vSources = Utils.retrieveFilesByType(Utils.inputFiles(sourceFiles.get(0)), eType);
-
+        ArrayList<String> vSources = Utils.retrieveFilePathTypes(new ArrayList<>(sourceFiles), eType, true, false);
         log.info("Using the source file(s): " + retrieveFullyQualifiedName(vSources).toString());
         //endregion
 
         //region Setting the dependency path
-        List<String> vDeps = new ArrayList<>();
-        if (dependencies.size() > 0) {
-            log.trace("Retrieving the dependency files.");
-            vDeps = Utils.verifyClassPaths(dependencies);
-            log.info("Using the dependency file(s): " + retrieveFullyQualifiedName(vDeps).toString());
-        }
+        log.trace("Retrieving the dependency files.");
+        List<String> vDeps = Utils.retrieveFilePathTypes(new ArrayList<>(dependencies), false, false);
+        log.debug("Using the source file(s) :" + retrieveFullyQualifiedName(vDeps).toString());
         //endregion
         //endregion
 
@@ -365,7 +356,7 @@ public class ArgumentsCheck {
             String[] tempSplit = fileOutPath.split("\\.\\w+$");
             fileOutPath = tempSplit[0] + "_" + Utils.getCurrentTimeStamp() + info.getMessagingType().getOutputFileExt();
         } else {
-            fileOutPath = Utils.verifyFileExt(fileOutPath, oType.getOutputFileExt(), overWriteFileOut);
+            fileOutPath = Utils.retrieveFilePath(fileOutPath, oType.getOutputFileExt(), overWriteFileOut, true);
         }
         info.setFileOut(fileOutPath);
         //endregion
