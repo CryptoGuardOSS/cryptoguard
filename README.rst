@@ -1,5 +1,5 @@
 #################################
-CryptoGuard V03.11.0
+CryptoGuard V03.11.03
 #################################
 
 
@@ -156,7 +156,7 @@ Disclaimer
 CryptoGuard is a research prototype under GNU General Public License 3.0
 --------------------------------------------------------------------------------
 
- Copyright © 2019 CryptoGuard
+ Copyright © 2020 CryptoGuard
 
  This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
 

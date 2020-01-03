@@ -21,3 +21,6 @@
 /scratchSpace
 /_cryptoguard.source
 /rsc/
+/__pycache__/
+/cfg/
+/docs/

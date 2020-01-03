@@ -70,9 +70,9 @@ public class Utils {
      */
     public final static String lineSep = System.getProperty("line.separator");
     /**
-     * Constant <code>projectVersion="V03.11.0"</code>
+     * Constant <code>projectVersion="V03.11.03"</code>
      */
-    public final static String projectVersion = "V03.11.0";
+    public final static String projectVersion = "V03.11.03";
     /**
      * Constant <code>projectName="CryptoGuard"</code>
      */
