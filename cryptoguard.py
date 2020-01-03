@@ -7,10 +7,9 @@ import os
 import shlex
 import signal
 import subprocess
-from collections import OrderedDict
-
 import sys
 import time
+from collections import OrderedDict
 
 # TODO - Add xml/json results verification
 
@@ -20,56 +19,361 @@ import time
 failFast = False
 android, java7, java = os.environ.get('ANDROID_HOME'), os.environ.get('JAVA7_HOME'), os.environ.get('JAVA_HOME')
 
+# region Offline information
+archivedInformation = {'properties': {'projectName': 'cryptoguard', 'groupName': 'vt.edu', 'versionNumber': 'V03.11.03',
+                                      'buildFrameWork': 'Java', 'buildVersion': '1.8.232', 'org.gradle.daemon': 'false',
+                                      'gradle.version': '4.10.3', 'surveyURL': 'TBD'}, 'rawArgs': {
+    '    FORMAT': {'id': 'in', 'defaultArg': 'format', 'desc': 'Required: The format of input you want to scan',
+                   'Required': True}, '    SOURCE': {'id': 's', 'defaultArg': 'file/files/*.in/dir/ClassPathString',
+                                                     'desc': 'Required: The source to be scanned use the absolute path or send all of the source files via the file input.in; ex. find -type f *.java >> input.in.',
+                                                     'Required': True},
+    '    DEPENDENCY': {'id': 'd', 'defaultArg': 'dir', 'desc': 'The dependency to be scanned use the relative path.',
+                       'Required': False}, '    OUT': {'id': 'o', 'defaultArg': 'file',
+                                                       'desc': 'The file to be created with the output default will be the project name.',
+                                                       'Required': False},
+    '    NEW': {'id': 'new', 'defaultArg': 'null',
+                'desc': 'The file to be created with the output if existing will be overwritten.', 'Required': False},
+    '    TIMEMEASURE': {'id': 't', 'defaultArg': 'null', 'desc': 'Output the time of the internal processes.',
+                        'Required': False},
+    '    FORMATOUT': {'id': 'm', 'defaultArg': 'formatType', 'desc': 'The output format you want to produce',
+                      'Required': False},
+    '    PRETTY': {'id': 'n', 'defaultArg': 'null', 'desc': "Output the analysis information in a 'pretty' format.",
+                   'Required': False},
+    '    NOEXIT': {'id': 'X', 'defaultArg': 'null', 'desc': 'Upon completion of scanning', 'Required': False},
+    '    EXPERIMENTRESULTS': {'id': 'exp', 'defaultArg': 'null', 'desc': 'View the experiment based results.',
+                              'Required': False},
+    '    VERSION': {'id': 'V', 'defaultArg': 'null', 'desc': 'Output the version number.', 'Required': False},
+    '    NOLOGS': {'id': 'vx', 'defaultArg': 'null', 'desc': 'Display logs only from the fatal logs',
+                   'Required': False},
+    '    VERBOSE': {'id': 'v', 'defaultArg': 'null', 'desc': 'Display logs from debug levels', 'Required': False},
+    '    VERYVERBOSE': {'id': 'vv', 'defaultArg': 'null', 'desc': 'Display logs from trace levels', 'Required': False},
+    '    TIMESTAMP': {'id': 'ts', 'defaultArg': 'null', 'desc': 'Add a timestamp to the file output.',
+                      'Required': False},
+    '    DEPTH': {'id': 'depth', 'defaultArg': 'null', 'desc': 'The depth of slicing to go into', 'Required': False},
+    '    LOG': {'id': 'L', 'defaultArg': 'null', 'desc': 'Enable logging to the console.', 'Required': False},
+    '    JAVA': {'id': 'java', 'defaultArg': 'envVariable',
+                 'desc': 'Directory of Java to be used JDK 7 for JavaFiles/Project and JDK 8 for ClassFiles/Jar',
+                 'Required': False},
+    '    ANDROID': {'id': 'android', 'defaultArg': 'envVariable', 'desc': 'Specify of Android SDK', 'Required': False},
+    '    HEURISTICS': {'id': 'H', 'defaultArg': 'null',
+                       'desc': 'The flag determining whether or not to display heuristics.', 'Required': False},
+    '    STREAM': {'id': 'st', 'defaultArg': 'null', 'desc': 'Stream the analysis to the output file.',
+                   'Required': False},
+    '    HELP': {'id': 'h', 'defaultArg': 'null', 'desc': 'Print out the Help Information.', 'Required': False},
+    '    MAIN': {'id': 'main', 'defaultArg': 'className',
+                 'desc': 'Choose the main class if there are multiple main classes in the files given.',
+                 'Required': False}}, 'engineType': {'    JAR': {'name': 'JAR File', 'flag': 'jar', 'extension': '.jar',
+                                                                 'helpInfo': 'To signal a Jar File to be scanned.)'},
+                                                     '    APK': {'name': 'APK File', 'flag': 'apk', 'extension': '.apk',
+                                                                 'helpInfo': 'To signal a APK File to be scanned.)'},
+                                                     '    DIR': {'name': 'Directory of Source Code', 'flag': 'source',
+                                                                 'extension': 'dir',
+                                                                 'helpInfo': 'To signal the source directory of a Maven/Gradle Project.)'},
+                                                     '    JAVAFILES': {'name': 'Java File or Files', 'flag': 'java',
+                                                                       'extension': '.java',
+                                                                       'helpInfo': 'To signal a Java File(s) to be scanned.)'},
+                                                     '    CLASSFILES': {'name': 'Class File or Files', 'flag': 'class',
+                                                                        'extension': '.class',
+                                                                        'helpInfo': 'To signal a Class File(s) to be scanned.);'}},
+                       'outputType': {'    Legacy': {'type': 'Legacy', 'flag': 'L', 'outputExtension': '.txt'},
+                                      '    ScarfXML': {'type': 'ScarfXML', 'flag': 'SX', 'outputExtension': '.xml'},
+                                      '    Default': {'type': 'Default', 'flag': 'D', 'outputExtension': '.json'}},
+                       'exceptionType': {'    SUCCESS': {'id': '0', 'messageType': 'Successful'},
+                                         '    HELP': {'id': '0', 'messageType': 'Asking For Help'},
+                                         '    VERSION': {'id': '0', 'messageType': 'Asking For Version'},
+                                         '    GEN_VALID': {'id': '1', 'messageType': 'General Argument Validation'},
+                                         '    ARG_VALID': {'id': '2', 'messageType': 'Argument Value Validation'},
+                                         '    FORMAT_VALID': {'id': '7',
+                                                              'messageType': 'Format Specific Argument Validation'},
+                                         '    FILE_I': {'id': '15', 'messageType': 'File Input Error'},
+                                         '    FILE_READ': {'id': '16', 'messageType': 'Reading File Error'},
+                                         '    FILE_AFK': {'id': '17', 'messageType': 'File Not Available'},
+                                         '    FILE_O': {'id': '30', 'messageType': 'File Output Error'},
+                                         '    FILE_CON': {'id': '31', 'messageType': 'Output File Creation Error'},
+                                         '    FILE_CUT': {'id': '32', 'messageType': 'Error Closing The File'},
+                                         '    ENV_VAR': {'id': '45', 'messageType': 'Environment Variable Not Set'},
+                                         '    MAR_VAR': {'id': '100', 'messageType': 'Error Marshalling The Output'},
+                                         '    SCAN_GEN': {'id': '120',
+                                                          'messageType': 'General Error Scanning The Program'},
+                                         '    LOADING': {'id': '121', 'messageType': 'Error Loading Class'},
+                                         '    UNKWN': {'id': '127', 'messageType': 'Unknown'}}, 'examples': {
+        'General Project Version': {'type': 'General', 'arg': '-V',
+                                    'explanation': 'The version argument (-V) returns the version of the project and exits.'},
+        'General Project No Logging': {'type': 'General', 'arg': '-vx',
+                                       'explanation': 'The argument (-vx) only displays the fatal logs.'},
+        'General Project Verbose Logging': {'type': 'General', 'arg': '-v',
+                                            'explanation': 'The argument (-v) displays debug logs.'},
+        'General Project Very Verbose Logging': {'type': 'General', 'arg': '-vv',
+                                                 'explanation': 'The argument (-vv) displays the all of the logs available.'},
+        'General Project Stream': {'type': 'General', 'arg': '-st',
+                                   'explanation': 'The argument (-st) enables streaming the results to whatever output file is specified.'},
+        'General Project Heuristics': {'type': 'General', 'arg': '-H',
+                                       'explanation': 'The argument (-H) writes the heuristics picked up in the output file.'},
+        'General Project Specifying the main file': {'type': 'General', 'arg': '-main',
+                                                     'explanation': 'The argument (-main) specifies the main class (containing public static void main) if there are multiple within the project.'},
+        'General Project Java Home': {'type': 'General', 'arg': '-java',
+                                      'explanation': "The argument (-java) sets the Java file path needed for an internal library. This is needed if the environment variable isn't set.\nJDK 7 needed for either a Project or Java File Scanning.\nJDK 8 needed for the other projects."},
+        'General Project Android Home': {'type': 'General', 'arg': '-android',
+                                         'explanation': "The argument (-android) sets the Android file path.needed for an internal library. This is needed if the environment variable isn't set.\nNeeded if an Android project is being scanned."},
+        'General Project PrettyPrint': {'type': 'General', 'arg': '-n',
+                                        'explanation': 'The prettyprint argument (-n) writes the result in the "pretty" format.'},
+        'General Project Time Measurement': {'type': 'General', 'arg': '-t',
+                                             'explanation': 'The time argument (-t) displays the time taken for the scanning.'},
+        'JAR Project Base': {'type': 'JAR', 'arg': '-in jar -s .../project.jar',
+                             'explanation': 'The format argument (-in) specifies the type of project (jar) and the source argument (-s) specifies the location of the project.'},
+        'JAR Project Dependency': {'type': 'JAR', 'arg': '-in jar -s .../project.jar -d .../lib/file(s).jar',
+                                   'explanation': 'The format argument (-d) specifies the directory of the dependencies to be used with the project and picks up the file.jar.'},
+        'JAR Project Fileout': {'type': 'JAR', 'arg': '-in jar -s .../project.jar -m D -o .../fileout.json',
+                                'explanation': 'The output format argument (-m) specifies the type of output to write amd the output argument (-o) specifies the file to write the results to.'},
+        'JAR Project Sample Test ': {'type': 'JAR',
+                                     'arg': '-in jar -s cryptoguard/samples/testable-jar/build/libs/testable-jar.jar  -d cryptoguard/samples/testable-jar/build/dependencies  -m SX  -o cryptoguard/build/tmp/tempJarFile_Scarf_0.xml  -t  -H  -n -java .../jdk8',
+                                     'explanation': 'The output format argument (-in) specifies the type of project (jar).\nThe source argument (-s) specifies the project to be scanned (.../testable-jar.jar).\nThe dependency argument (-d) specifies the directory of the dependencies (.../dependencies).\nThe output format argument (-m) specifies the type of result to write out (Scarf).\nThe output argument (-o) specifies the file to write out to (.../tempJarFile_Scarf_0.xml).\nThe time argument (-t) displays time taken via the project.\nThe heuristic argument (-H) writes various heuristics taken to the output.\nThe prettyprint argument (-n) formats and writes the output into a "pretty" format.\nThe java argument (-java) specifies the java home, either java 7 or 8 for the internal library.'},
+        'Project Scanner Base': {'type': 'Project', 'arg': '-in source -s .../project/',
+                                 'explanation': 'The format argument (-in) specifies the type of project (source) and the source argument (-s) specifies the location of the project.\nThis must either be a gradle or maven based project.'},
+        'Project Scanner Dependency': {'type': 'Project', 'arg': '-in source -s .../project/ -d .../lib/file(s).jar',
+                                       'explanation': 'The format argument (-d) specifies the directory of the dependencies to be used with the project and picks up the file.jar.'},
+        'Project Fileout': {'type': 'Project', 'arg': '-in source -s .../project/ -m D -o .../fileout.json',
+                            'explanation': 'The output format argument (-m) specifies the type of output to write amd the output argument (-o) specifies the file to write the results to.'},
+        'Project Sample Test ': {'type': 'Project',
+                                 'arg': '-in source -s cryptoguard/samples/testable-jar  -d cryptoguard/samples/testable-jar/build/dependencies  -m L  -o cryptoguard/build/tmp/testable-jar.txt  -t  -H  -n ',
+                                 'explanation': 'The output format argument (-in) specifies the type of project (source).\nThe source argument (-s) specifies the project to be scanned (.../testable-jar).\nThe dependency argument (-d) specifies the directory of the dependencies (.../dependencies).\nThe output format argument (-m) specifies the type of result to write out (Legacy).\nThe output argument (-o) specifies the file to write out to (.../testable-jar.txt).\nThe time argument (-t) displays time taken via the project.\nThe heuristic argument (-H) writes various heuristics taken to the output.\nThe prettyprint argument (-n) formats and writes the output into a "pretty" format.'},
+        'Java File(s) Project Base Single File': {'type': 'Java', 'arg': '-in java -s .../test.java',
+                                                  'explanation': 'The format argument (-in) specifies the type of project (java) and the source argument (-s) specifies the file to be used.'},
+        'Java File(s) Project Multiple Files (Split via space)': {'type': 'Java',
+                                                                  'arg': '-in java -s .../test.java .../testTwo.java',
+                                                                  'explanation': 'The argument (-s) specifies the file to be used, retrieving test.java and testTwo.java via the space between the arguments.'},
+        'Java File(s) Project Multiple Files (Split via classpath)': {'type': 'Java',
+                                                                      'arg': '-in java -s .../test.java:.../testTwo.java',
+                                                                      'explanation': 'The argument (-s) specifies the file to be used, retrieving test.java and testTwo.java via the split by classpath (delimited by :).'},
+        'Java File(s) Project Multiple Files (Split via input.in file)': {'type': 'Java',
+                                                                          'arg': '-in java -s .../input.in',
+                                                                          'explanation': 'The argument (-s) specifies the input.in file to be used. This file should contain a line delimited paths to the source file. This also works based on the \nex. \n.../test.java\n.../testTwo.java'},
+        'Java File Fileout': {'type': 'Java', 'arg': '-in java -s .../test.java -m D -o .../fileout.json',
+                              'explanation': 'The output format argument (-m) specifies the type of output to write amd the output argument (-o) specifies the file to write the results to.'},
+        'Java File Dependency': {'type': 'Java', 'arg': '-in java -s .../test.java -d .../lib/file(s).jar',
+                                 'explanation': 'The format argument (-d) specifies the directory of the dependencies to be used with the project and picks up the file.jar.'},
+        'Java File Test ': {'type': 'Java',
+                            'arg': '-in java -s cryptoguard/samples/temp/tester/test.java  -m SX  -o cryptoguard/build/tmp/test_java.xml  -t  -vv  -n ',
+                            'explanation': 'The output format argument (-in) specifies the type of project (java).\nThe source argument (-s) specifies the project to be scanned (.../test.java).\nThe output format argument (-m) specifies the type of result to write out (Scarf).\nThe output argument (-o) specifies the file to write out to (.../test_java.xml).\nThe very verbose argument (-vv) displays all of the logs available.\nThe prettyprint argument (-n) formats and writes the output into a "pretty" format.'},
+        'Java Class File(s) Project Base': {'type': 'Class', 'arg': '-in class -s .../test.class',
+                                            'explanation': 'The format argument (-in) specifies the type of project (class) and the source argument (-s) specifies the location of the project.'},
+        'Java Class File(s) Project Multiple Files (Split via space)': {'type': 'Class',
+                                                                        'arg': '-in class -s .../test.class .../testTwo.class',
+                                                                        'explanation': 'The argument (-s) specifies the file to be used, retrieving test.class and testTwo.class via the space between the arguments.'},
+        'Java Class File(s) Project Multiple Files (Split via classpath)': {'type': 'Class',
+                                                                            'arg': '-in class -s .../test.class:.../testTwo.class',
+                                                                            'explanation': 'The argument (-s) specifies the file to be used, retrieving test.class and testTwo.class via the split by classpath (delimited by :).'},
+        'Java Class File(s) Project Multiple Files (Split via input.in file)': {'type': 'Class',
+                                                                                'arg': '-in class -s .../input.in',
+                                                                                'explanation': 'The argument (-s) specifies the input.in file to be used. This file should contain a line delimited paths to the source file. This also works based on the \nex. \n.../test.class\n.../testTwo.class'},
+        'Java Class File(s) Project Dependency': {'type': 'Class',
+                                                  'arg': '-in class -s .../test.class -d .../lib/file(s).jar',
+                                                  'explanation': 'The format argument (-d) specifies the directory of the dependencies to be used with the project and picks up the file.jar.'},
+        'Java Class File Test ': {'type': 'Class',
+                                  'arg': '-in class -s cryptoguard/samples/VerySimple/very.class -m SX  -o cryptoguard/build/tmp/verySimple_klass.xml  -n ',
+                                  'explanation': 'The output format argument (-in) specifies the type of project (java).\nThe source argument (-s) specifies the project to be scanned (.../test.java).\nThe output format argument (-m) specifies the type of result to write out (Scarf).\nThe output argument (-o) specifies the file to write out to (.../verySimple_klass.xml).\nThe prettyprint argument (-n) formats and writes the output into a "pretty" format.'},
+        'APK Project Base': {'type': 'APK', 'arg': '-in apk -s .../app-debug.apk',
+                             'explanation': 'The format argument (-in) specifies the type of project (apk) and the source argument (-s) specifies the location of the project.'},
+        'APK Project Dependency': {'type': 'APK', 'arg': '-in apk -s  .../app-debug.apk -d .../lib/file(s).jar',
+                                   'explanation': 'The format argument (-d) specifies the directory of the dependencies to be used with the project and picks up the file.jar.'},
+        'APK Project Fileout': {'type': 'APK', 'arg': '-in apk -s .../app-debug.apk -m D -o .../fileout.json',
+                                'explanation': 'The output format argument (-m) specifies the type of output to write amd the output argument (-o) specifies the file to write the results to.'},
+        'APK Project File Test ': {'type': 'APK',
+                                   'arg': '-in apk -s cryptoguard/samples/app-debug.apk -m SX  -o cryptoguard/build/tmp/app-debug.xml  -n -android .../android_home',
+                                   'explanation': 'The output format argument (-in) specifies the type of project (java).\nThe source argument (-s) specifies the project to be scanned (.../test.java).\nThe output format argument (-m) specifies the type of result to write out (Scarf).\nThe output argument (-o) specifies the file to write out to (.../debug.xml).\nThe prettyprint argument (-n) formats and writes the output into a "pretty" format.\nThe android argument (-android) specifies the android home for the internal library.'}}}
 
-class Utils(object):
+
+# endregion
+
+# region Loading
+class Loading(object):
+    # region Online Reading
+    def retrieveProperties(file='gradle.properties'):
+        dyct = {}
+        with open(file, 'r') as props:
+            for line in props:
+                if '=' in line:
+                    key, value = line.split('=')
+                    dyct[str(key.strip())] = str(value.strip())
+        return dyct
+
+    def parseEngineType(file='src/main/java/rule/engine/EngineType.java'):
+        properties, starter, stopper = {}, False, False
+        with open(file, 'r') as java:
+            line = java.readline()
+            while line and not stopper:
+
+                if line.strip().startswith("//endregion"):
+                    stopper = True
+                elif (starter and not line.strip().startswith("//") and not line.strip().startswith(";")):
+                    name, rest = line.split("(\"")
+                    broken = rest.split(",")
+                    properties[name] = {
+                        'name': broken[0].replace("\"", "").strip(),
+                        'flag': broken[1].replace("\"", "").strip(),
+                        'extension': broken[2].replace("\"", "").strip(),
+                        'helpInfo': broken[3].replace("\"", "").strip()
+                    }
+                elif line.strip().startswith("//region Values"):
+                    starter = True
+
+                line = java.readline()
+        return properties
+
+    def parseExceptionType(file='src/main/java/frontEnd/Interface/outputRouting/ExceptionId.java'):
+        properties, starter, stopper = {}, False, False
+        with open(file, 'r') as java:
+            line = java.readline()
+            while line and not stopper:
+
+                if starter and line.strip().startswith(";"):
+                    stopper = True
+                elif (starter and line.strip() != '' and not line.strip().startswith(
+                        "//") and not line.strip().startswith(";")):
+                    name, rest = line.split("(")
+                    broken = rest.split(",")
+
+                    properties[name] = {
+                        'id': broken[0].replace("\"", "").strip(),
+                        'messageType': broken[1].replace("\"", "").replace(")", "").strip()
+                    }
+                elif line.strip().startswith("//region Values"):
+                    starter = True
+
+                line = java.readline()
+        return properties
+
+    def parseArgs(file='src/main/java/frontEnd/argsIdentifier.java'):
+        properties, starter, stopper = {}, False, False
+        with open(file, 'r') as java:
+            line = java.readline()
+            while line and not stopper:
+
+                if line.strip().startswith("//endregion"):
+                    stopper = True
+                elif (starter and not line.strip().startswith("//") and not line.strip().startswith(";")):
+                    name, rest = line.split("(\"")
+                    broken = rest.split(",")
+                    properties[name] = {
+                        'id': broken[0].replace("\"", "").strip(),
+                        'defaultArg': broken[1].replace("\"", "").strip(),
+                        'desc': broken[2].replace("\"", "").strip(),
+                        'Required': 'Required' in broken[2]
+                    }
+                elif line.strip().startswith("//region Values"):
+                    starter = True
+
+                line = java.readline()
+        return properties
+
+    def parseOutputType(file='src/main/java/frontEnd/MessagingSystem/routing/Listing.java'):
+        properties, starter, stopper = {}, False, False
+        with open(file, 'r') as java:
+            line = java.readline()
+            while line and not stopper:
+
+                if line.strip().startswith("//endregion"):
+                    stopper = True
+                elif (starter and not line.strip().startswith("//") and not line.strip().startswith(";")):
+                    name, rest = line.split("(\"")
+                    broken = rest.split(",")
+                    ext = broken[2].replace("\"", "").strip()
+                    if ext == 'null':
+                        ext = broken[4].split('.')
+                        ext = ext[-1]
+                        ext = "." + ext[:int(ext.index(')'))].lower()
+
+                    properties[name] = {
+                        'type': broken[0].replace("\"", "").strip(),
+                        'flag': broken[1].replace("\"", "").strip(),
+                        'outputExtension': ext
+                    }
+                elif line.strip().startswith("//region Values"):
+                    starter = True
+
+                line = java.readline()
+        return properties
+
+    def getExamplesRaw(file='exampleUsages.json'):
+        with open(file, 'r') as jsonFile:
+            data = jsonFile.read()
+        data = json.loads(data)
+        return data
+
+    # endregion
+    # region Online/Offline Reading
+    def getExampleArgs(offline=not os.path.exists('.git')):
+        if offline:
+            return archivedInformation['examples']
+        else:
+            return Loading.getExamplesRaw()
+
+    def getProperties(offline=not os.path.exists('.git')):
+        if offline:
+            return archivedInformation['properties']
+        else:
+            return Loading.retrieveProperties()
+
+    def getRawArgs(offline=not os.path.exists('.git')):
+        if offline:
+            return archivedInformation['rawArgs']
+        else:
+            return Loading.parseArgs()
+
+    def getEngineType(offline=not os.path.exists('.git')):
+        if offline:
+            return archivedInformation['exampleArgs']
+        else:
+            return Loading.parseEngineType()
+
+    def getDisplayOutputTypes(offline=not os.path.exists('.git')):
+        if offline:
+            return archivedInformation['outputType']
+        else:
+            return Loading.parseOutputType()
+
+    def getDisplayExceptionTypes(offline=not os.path.exists('.git')):
+        if offline:
+            return archivedInformation['exceptionType']
+        else:
+            return Loading.parseExceptionType()
+    # endregion
+
+
+# endregion
+# region Reading
+class Reading(object):
     def prepareOffline():
-        # 'rawArgs': {
-        # !! Remove offline
-        # "func": argsUtils.readRawArgs,
-        # "def": "Prints the raw arguments of the program."
-        # },
-        # 'exampleArgs': {
-        #    "func": argsUtils.helpfulArgs,
-        #    "def": "Sample examples of running the program with arguments and explanations."
-        # },
-        # 'projectType': {
-        #    "func": argsUtils.displayProjectTypes,
-        #    "def": "Displays some information about the project types available to scan."
-        # },
-        # 'outputType': {
-        #    "func": argsUtils.displayOutputTypes,
-        #    "def": "Displays some information about the various output types available to write out as."
-        # },
-        # 'exceptionType': {
-        #    "func": argsUtils.displayExceptionTypes,
-        #    "def": "Displays information about the standardized exceptions."
-        #    information = {
-        #        '':
-        #    }
+        print('Writing offline information internally')
         data = {
-            'retrieveProperties': {},
-            'rawArgs': {},
-            'exampleArgs': {},
-            'projectType': {},
-            'outputType': {},
-            'exceptionType': {}
+            'properties': Loading.getProperties(False),
+            'rawArgs': Loading.getRawArgs(False),
+            'engineType': Loading.getEngineType(False),
+            'outputType': Loading.getDisplayOutputTypes(False),
+            'exceptionType': Loading.getDisplayExceptionTypes(False),
+            'examples': Loading.getExampleArgs(False)
         }
-        # Utils.overWriting(str(data))
+        return data
 
-    def overWriting(replaceWith=Utils.prepareOffline()):
+    def overWriting(replaceWith=prepareOffline()):
         foil = 'cryptoguard.py'
-        replace = "archivedInformation = []"
+        replace = "archivedInformation = "
 
         lines = []
         with open(foil) as reading:
             for line in reading.readlines():
-                if line == replace:
-                    line = line[:line.index('[')] + replaceWith
+                if line.startswith(replace):
+                    line = line[:line.index('{')] + str(replaceWith) + '\n'
                 lines += [line]
 
         with open(foil, 'w') as writing:
             for line in lines:
                 writing.write(line)
+
+
+# endregion
+# region Utils
+class Utils(object):
 
     def prettyTime(num):
         string = ""
@@ -87,7 +391,7 @@ class Utils(object):
         Utils.build()
         print(Utils.halfRows())
 
-        foil = Utils.retrieveProperties()['projectName'] + '.jar'
+        foil = Loading.getProperties()['projectName'] + '.jar'
         print("Determing the sha512 for " + foil, end=' | ')
 
         print(Utils.retrieveSha(foil))
@@ -103,7 +407,7 @@ class Utils(object):
         return ''.join([string for x in range(int(num))])
 
     def printSurveyURL():
-        print(Utils.retrieveProperties()['surveyURL'])
+        print(Loading.getProperties()['surveyURL'])
 
     def halfRows(kar='='):
         return Utils.stringMult(Utils.getWidthOfTerminal() / 2, kar)
@@ -114,24 +418,16 @@ class Utils(object):
     def getWidthOfTerminal():
         try:
             value = int(os.popen('stty size', 'r').read().split()[1])
+            value = value*.75
         except:
             value = 50
         return value
 
     def printVersion():
-        props = Utils.retrieveProperties()
+        props = Loading.getProperties()
         print(props['projectName'] + ': ' + props['versionNumber'])
         print('Gradle Version: ' + props['gradle.version'])
         print('Java Build Version: ' + props['buildVersion'])
-
-    def retrieveProperties(file='gradle.properties'):
-        dyct = {}
-        with open(file, 'r') as props:
-            for line in props:
-                if '=' in line:
-                    key, value = line.split('=')
-                    dyct[str(key.strip())] = str(value.strip())
-        return dyct
 
     def percent(x, y):
         return Utils.outOf(x, x + y)
@@ -193,7 +489,7 @@ class Utils(object):
 
         print('Copying the jar file to the current directory ', end='| ', flush=True)
 
-        projectName = Utils.retrieveProperties()['projectName']
+        projectName = Loading.getProperties()['projectName']
         os.system('cp build/libs/' + projectName + '*.jar ./' + projectName + '.jar')
 
         if os.path.exists(projectName + '.jar'):
@@ -217,11 +513,17 @@ class Utils(object):
         sys.exit(0)
 
     def routing(switch):
-        return routers.get(switch, Utils.routingInfo)
+        offline = not os.path.exists('.git')
+        func = routers.get(switch, Utils.routingInfo)
+        if offline and not func['offline']:
+            print('Cannot run ' + switch + ' in Offline Mode')
+            sys.exit(0)
+        return func
 
     def routingInfo(useage=''):
         for val in routers:
-            print('\t' + str(useage) + ' ' + str(val) + ': ' + str(routers[val]['def']))
+            print('\t' + str(useage) + ' ' + str(val) + ' (offline-use - ' + str(routers[val]['offline']) + '): ' + str(
+                routers[val]['def']))
         return
 
     def start():
@@ -237,6 +539,8 @@ class Utils(object):
         Utils.routing(args.switch)["func"]()
 
 
+# endregion
+# region envVars
 class envVars(object):
     def checkVariables(outFile='_cryptoguard.source'):
         Utils.splitRows()
@@ -297,6 +601,8 @@ class envVars(object):
         return fail
 
 
+# endregion
+# region ArgUtils
 class argsUtils(object):
     def basicBuildCommand():
         print("Building a basic command")
@@ -306,10 +612,10 @@ class argsUtils(object):
         print("\ty = yes")
         print(Utils.halfRows())
 
-        projectName = Utils.retrieveProperties()['projectName']
+        projectName = Loading.getProperties()['projectName']
         cmd = 'java -jar ' + projectName + ' '
 
-        lookup = argsUtils.parseEngineType()
+        lookup = Loading.parseEngineType()
         for value in lookup.values():
             print(value['name'] + ' flag: ' + value['flag'])
         print()
@@ -374,7 +680,7 @@ class argsUtils(object):
 
         print(Utils.halfRows())
         print('Output formats')
-        lookup = argsUtils.parseOutputType()
+        lookup = Loading.parseOutputType()
         for value in lookup.values():
             print(value['type'] + " flag: " + value['flag'] + ' extension: ' + value['outputExtension'])
         print()
@@ -459,131 +765,32 @@ class argsUtils(object):
         if (run):
             os.system(cmd)
 
-    def parseArgs(file='src/main/java/frontEnd/argsIdentifier.java'):
-        properties, starter, stopper = {}, False, False
-        with open(file, 'r') as java:
-            line = java.readline()
-            while line and not stopper:
-
-                if line.strip().startswith("//endregion"):
-                    stopper = True
-                elif (starter and not line.strip().startswith("//") and not line.strip().startswith(";")):
-                    name, rest = line.split("(\"")
-                    broken = rest.split(",")
-                    properties[name] = {
-                        'id': broken[0].replace("\"", "").strip(),
-                        'defaultArg': broken[1].replace("\"", "").strip(),
-                        'desc': broken[2].replace("\"", "").strip(),
-                        'Required': 'Required' in broken[2]
-                    }
-                elif line.strip().startswith("//region Values"):
-                    starter = True
-
-                line = java.readline()
-        return properties
-
-    def parseEngineType(file='src/main/java/rule/engine/EngineType.java'):
-        properties, starter, stopper = {}, False, False
-        with open(file, 'r') as java:
-            line = java.readline()
-            while line and not stopper:
-
-                if line.strip().startswith("//endregion"):
-                    stopper = True
-                elif (starter and not line.strip().startswith("//") and not line.strip().startswith(";")):
-                    name, rest = line.split("(\"")
-                    broken = rest.split(",")
-                    properties[name] = {
-                        'name': broken[0].replace("\"", "").strip(),
-                        'flag': broken[1].replace("\"", "").strip(),
-                        'extension': broken[2].replace("\"", "").strip(),
-                        'helpInfo': broken[3].replace("\"", "").strip()
-                    }
-                elif line.strip().startswith("//region Values"):
-                    starter = True
-
-                line = java.readline()
-        return properties
-
     def displayProjectTypes():
         print("Can scan the following project types:")
         print(Utils.halfRows())
-        for key, value in argsUtils.parseEngineType().items():
+        for key, value in Loading.parseEngineType().items():
             print('\t' + value['name'] + " accepts a " + value['extension'])
-
-    def parseOutputType(file='src/main/java/frontEnd/MessagingSystem/routing/Listing.java'):
-        properties, starter, stopper = {}, False, False
-        with open(file, 'r') as java:
-            line = java.readline()
-            while line and not stopper:
-
-                if line.strip().startswith("//endregion"):
-                    stopper = True
-                elif (starter and not line.strip().startswith("//") and not line.strip().startswith(";")):
-                    name, rest = line.split("(\"")
-                    broken = rest.split(",")
-                    ext = broken[2].replace("\"", "").strip()
-                    if ext == 'null':
-                        ext = broken[4].split('.')
-                        ext = ext[-1]
-                        ext = "." + ext[:int(ext.index(')'))].lower()
-
-                    properties[name] = {
-                        'type': broken[0].replace("\"", "").strip(),
-                        'flag': broken[1].replace("\"", "").strip(),
-                        'outputExtension': ext
-                    }
-                elif line.strip().startswith("//region Values"):
-                    starter = True
-
-                line = java.readline()
-        return properties
 
     def displayOutputTypes():
         print("Can write the results as the following output types:")
         print(Utils.halfRows())
-        for key, value in argsUtils.parseOutputType().items():
+        for key, value in Loading.parseOutputType().items():
             print('\t' + value['type'] + " accepts a " + value['outputExtension'] + ' file output type.')
-
-    def parseExceptionType(file='src/main/java/frontEnd/Interface/outputRouting/ExceptionId.java'):
-        properties, starter, stopper = {}, False, False
-        with open(file, 'r') as java:
-            line = java.readline()
-            while line and not stopper:
-
-                if starter and line.strip().startswith(";"):
-                    stopper = True
-                elif (starter and line.strip() != '' and not line.strip().startswith(
-                        "//") and not line.strip().startswith(";")):
-                    name, rest = line.split("(")
-                    broken = rest.split(",")
-
-                    properties[name] = {
-                        'id': broken[0].replace("\"", "").strip(),
-                        'messageType': broken[1].replace("\"", "").replace(")", "").strip()
-                    }
-                elif line.strip().startswith("//region Values"):
-                    starter = True
-
-                line = java.readline()
-        return properties
 
     def displayExceptionTypes():
         print("Uses the following error codes:")
         print(Utils.halfRows())
-        for key, value in argsUtils.parseExceptionType().items():
+        for key, value in Loading.parseExceptionType().items():
             print('\t' + value['id'] + " is a " + value['messageType'] + ' Exception.')
 
     def writeUsage():
         argsUtils.helpfulArgs(writeOut=True)
 
-    def helpfulArgs(filter=None, file='exampleUsages.json', writeOut=False, writeOutFile='USAGE.md'):
-        projectName = Utils.retrieveProperties()['projectName']
-        projectVersion = Utils.retrieveProperties()['versionNumber']
+    def helpfulArgs(filter=None, writeOut=False, writeOutFile='USAGE.md'):
+        projectName = Loading.getProperties()['projectName']
+        projectVersion = Loading.getProperties()['versionNumber']
 
-        with open(file, 'r') as jsonFile:
-            data = jsonFile.read()
-        data = json.loads(data)
+        data = Loading.getExampleArgs()
 
         grouping = {
             'General': {},
@@ -688,8 +895,8 @@ class argsUtils(object):
             print('Written to ' + writeOutFile)
 
     def readRawArgs():
-        projectName = Utils.retrieveProperties()['projectName']
-        rawArgs = argsUtils.parseArgs()
+        projectName = Loading.getProperties()['projectName']
+        rawArgs = Loading.parseArgs()
 
         for key, value in rawArgs.items():
             if key.strip() != 'NOEXIT':
@@ -709,20 +916,22 @@ class argsUtils(object):
 
                 if key.strip() == 'FORMAT':
                     print('\nDifferent Options available for project types:')
-                    for key, value in argsUtils.parseEngineType().items():
+                    for key, value in Loading.parseEngineType().items():
                         print('\t' + value['flag'] + ": " + value['name'] + " " + value['helpInfo'])
                 elif key.strip() == 'FORMATOUT':
                     print('\nDifferent Options available for output format:')
-                    for key, value in argsUtils.parseOutputType().items():
-                        print('\t' + value['flag'] + ": " + value['name'])
+                    for key, value in Loading.parseOutputType().items():
+                        print('\t' + value['flag'] + ": " + value['type'])
 
                 print()
 
         print('Exceptions')
-        for key, value in argsUtils.parseExceptionType().items():
+        for key, value in Loading.parseExceptionType().items():
             print(value['id'] + ': ' + value['messageType'])
 
 
+# endregion
+# region TestUtils
 class TestUtils(object):
 
     def pullTests(dir=os.path.join(os.path.abspath(os.curdir), "src", "test")):
@@ -1040,80 +1249,104 @@ class TestUtils(object):
         return results
 
 
+# endregion
+# region Routers
 '''####################################
 #The dictionary containing the working functions and their respective definitions
 '''  ####################################
 routers = {
     'rawArgs': {
         "func": argsUtils.readRawArgs,
-        "def": "Prints the raw arguments of the program."
+        "def": "Prints the raw arguments of the program.",
+        'offline': True
     },
     'exampleArgs': {
         "func": argsUtils.helpfulArgs,
-        "def": "Sample examples of running the program with arguments and explanations."
+        "def": "Sample examples of running the program with arguments and explanations.",
+        'offline': True
     },
     'writeUsage': {
         "func": argsUtils.writeUsage,
-        "def": "Write the example args to a markdown file (USAGE.md)."
+        "def": "Write the example args to a markdown file (USAGE.md).",
+        'offline': True
     },
     'checkEnv': {
         "func": envVars.checkVariables,
-        "def": "Checks (suggestions to set them if missing) the environment variables."
+        "def": "Checks (suggestions to set them if missing) the environment variables.",
+        'offline': True
     },
     'projectType': {
         "func": argsUtils.displayProjectTypes,
-        "def": "Displays some information about the project types available to scan."
+        "def": "Displays some information about the project types available to scan.",
+        'offline': True
     },
     'outputType': {
         "func": argsUtils.displayOutputTypes,
-        "def": "Displays some information about the various output types available to write out as."
+        "def": "Displays some information about the various output types available to write out as.",
+        'offline': True
     },
     'exceptionType': {
         "func": argsUtils.displayExceptionTypes,
-        "def": "Displays information about the standardized exceptions."
+        "def": "Displays information about the standardized exceptions.",
+        'offline': True
     },
     'clean': {
         "func": Utils.clean,
-        "def": "Cleans the project."
+        "def": "Cleans the project.",
+        'offline': False
     },
     'build': {
         "func": Utils.build,
-        "def": "Builds the project."
+        "def": "Builds the project.",
+        'offline': False
     },
     'hash': {
         "func": Utils.hash,
-        "def": "Determines the hash of a freshly built project."
+        "def": "Determines the hash of a freshly built project.",
+        'offline': False
     },
     'buildCmd': {
         "func": argsUtils.basicBuildCommand,
-        "def": "Build the command to run, NOTE experimental!"
+        "def": "Build the command to run, NOTE experimental!",
+        'offline': True
     },
     'test': {
         "func": TestUtils.test,
-        "def": "Runs a specified test."
+        "def": "Runs a specified test.",
+        'offline': False
     },
     'tests': {
         "func": TestUtils.tests,
-        "def": "Runs all of the tests crawled."
+        "def": "Runs all of the tests crawled.",
+        'offline': False
     },
     'testType': {
         "func": TestUtils.testType,
-        "def": "Runs a specified set of tests."
+        "def": "Runs a specified set of tests.",
+        'offline': False
     },
     'testsHelp': {
         "func": TestUtils.helptests,
-        "def": "Shows helpful information about the tests crawled."
+        "def": "Shows helpful information about the tests crawled.",
+        'offline': False
     },
     'survey': {
         "func": Utils.printSurveyURL,
-        "def": "Displays the url to the survey if it is active."
+        "def": "Displays the url to the survey if it is active.",
+        'offline': True
     },
     'help': {
         "func": Utils.help,
-        "def": "Displays helpful information to the user if it's the first time running."
+        "def": "Displays helpful information to the user if it's the first time running.",
+        'offline': True
+    },
+    'offline': {
+        "func": Reading.overWriting,
+        "def": "Write enough of the information internally for this script to run stand-alone.",
+        'offline': False
     }
 }
-
+#endregion
 
 def signal_handler(sig, frame):
     print('\nExiting...')
@@ -1126,7 +1359,4 @@ def signal_handler(sig, frame):
 if __name__ == '__main__':
     signal.signal(signal.SIGINT, signal_handler)
 
-    overWriting()
     Utils.start()
-
-archivedInformation = ['NEW']
