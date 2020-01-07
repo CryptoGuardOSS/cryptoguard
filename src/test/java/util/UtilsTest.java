@@ -104,7 +104,8 @@ public class UtilsTest {
     public void testVerifyClassPathsTwo() {
         try {
             ArrayList<String> returnedOutput = Utils.retrieveFilePathTypes(TestUtilities.sampleAuxClassPathTwo, null, false, false);
-            assertNull(returnedOutput);
+            TestUtilities.sampleAuxClassPathTwoList.forEach(str -> assertTrue(returnedOutput.contains(str)));
+            assertEquals(TestUtilities.sampleAuxClassPathTwoList.size(), returnedOutput.size());
         } catch (ExceptionHandler e) {
             assertEquals(e.getErrorCode(), ExceptionId.ARG_VALID);
             assertTrue(e.getLongDesciption().contains(TestUtilities.scarfArgs));

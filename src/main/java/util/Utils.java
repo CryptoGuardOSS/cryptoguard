@@ -220,26 +220,32 @@ public class Utils {
         else if (rawFileStrings.size() == 1 && rawFileStrings.get(0).endsWith(".in"))
             output = inputFiles(rawFileStrings.get(0), type, expandPath, overwrite);
         else
-            for (String rawString : rawFileStrings) {
-                String filePath = null;
-                for (String rawType : type) {
-                    //If the only string passed is a java class path and starts with a colon
-                    //Remove it
-                    if (rawString.startsWith(":"))
-                        rawString = rawString.replaceFirst(":", "");
+            for (String rawString : rawFileStrings)
+                //Splitting the file just in case it is a java class path
+                for (String fileString : rawString.split(":")) {
+                    String filePath = null;
 
-                    //Splitting the file just in case it is a java class path
-                    for (String fileString : rawString.split(":"))
-                        if (rawType.equals("dir"))
-                            filePath = retrieveFilePath(fileString, rawType, expandPath, false);
-                        else if (fileString.endsWith(rawType))
+                    //Adding a null type to ensure it still loops through all of the strings
+                    if (type.size() == 0)
+                        type.add(null);
+
+                    for (String rawType : type) {
+                        //If the only string passed is a java class path and starts with a colon
+                        //Remove it
+                        if (rawString.startsWith(":"))
+                            rawString = rawString.replaceFirst(":", "");
+
+                        if (null == rawType || rawType.equals("dir"))
                             filePath = retrieveFilePath(fileString, null, expandPath, false);
+                        else if (fileString.endsWith(rawType))
+                            filePath = retrieveFilePath(fileString, rawType, expandPath, false);
 
-                    if (StringUtils.isNotEmpty(filePath))
-                        break;
+                        if (StringUtils.isNotEmpty(filePath)) {
+                            output.add(filePath);
+                            break;
+                        }
+                    }
                 }
-                output.add(filePath);
-            }
         return output;
     }
 
@@ -258,14 +264,17 @@ public class Utils {
 
         //Handling the file extension
         if (null != type)
-            if (!type.equals("dir") && !file.toLowerCase().toLowerCase().endsWith(type))
-                throw new ExceptionHandler("File " + file + " doesn't have the right file type " + type, ExceptionId.ARG_VALID);
+            if (!type.equals("dir") && !file.toLowerCase().toLowerCase().endsWith(type)) {
+                log.warn("File " + file + " doesn't have the right file type " + type);
+                return null;
+                //throw new ExceptionHandler("File " + file + " doesn't have the right file type " + type, ExceptionId.ARG_VALID);
+            }
 
         File tempFile = new File(file);
 
         Boolean exists = tempFile.exists() || overwrite;
 
-        if (!exists)
+        if (!exists)//TODO - Add soft kill ere
             throw new ExceptionHandler(tempFile.getName() + " does not exist.", ExceptionId.ARG_VALID);
 
         Boolean isDir = tempFile.isDirectory() || overwrite;
@@ -537,8 +546,8 @@ public class Utils {
             //TODO - Verify this change works
             //Utils.verifyFileExts(path, new String[]{".java", ".class"}, false);
 
-            if ((temp = Utils.retrieveFilePath(temp, EngineType.JAVAFILES.getInputExtension(), true, false)) == null)
-                temp = Utils.retrieveFilePath(temp, EngineType.CLASSFILES.getInputExtension(), true, false);
+            if ((temp = Utils.retrieveFilePath(path, EngineType.JAVAFILES.getInputExtension(), true, false)) == null)
+                temp = Utils.retrieveFilePath(path, EngineType.CLASSFILES.getInputExtension(), true, false);
 
             if (StringUtils.isNotBlank(temp)) {
                 temp = replaceLast(temp, retrieveFullyQualifiedName(path).replace(".", fileSep)).replace(".java", "").replace(".class", "");

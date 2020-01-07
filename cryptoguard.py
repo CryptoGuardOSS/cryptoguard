@@ -1078,7 +1078,7 @@ class TestUtils(object):
         options = list(grouping.keys())
         options += ['OTHER']
 
-        option = input("Please enter what kind of test you would like to have run from " + str(options) + " : ")
+        option = input("Please enter what kind of test you would like to have run from " + str(options) + " : ").upper()
         if (option not in options):
             print('Option is not valid')
             sys.exit()
