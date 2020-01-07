@@ -52,7 +52,9 @@ public class ExceptionHandler extends Exception implements Supplier<String> {
         return StringUtils.trimToNull(resp).concat("\n\n\n");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void printStackTrace() {
         System.err.println(this.toString());
@@ -79,7 +81,9 @@ public class ExceptionHandler extends Exception implements Supplier<String> {
         return longDesciption;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String get() {
         return null;

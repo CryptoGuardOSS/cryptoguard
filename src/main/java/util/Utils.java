@@ -6,7 +6,6 @@ import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.Interface.outputRouting.ExceptionId;
 import frontEnd.MessagingSystem.AnalysisIssue;
 import frontEnd.MessagingSystem.routing.Listing;
-import frontEnd.MessagingSystem.routing.inputStructures.ScarfXMLId;
 import frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import frontEnd.argsIdentifier;
 import lombok.extern.log4j.Log4j2;
@@ -31,8 +30,6 @@ import soot.util.Chain;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Function;
@@ -40,7 +37,6 @@ import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
@@ -70,9 +66,9 @@ public class Utils {
      */
     public final static String lineSep = System.getProperty("line.separator");
     /**
-     * Constant <code>projectVersion="V03.11.03"</code>
+     * Constant <code>projectVersion="V03.11.05"</code>
      */
-    public final static String projectVersion = "V03.11.03";
+    public final static String projectVersion = "V03.11.05";
     /**
      * Constant <code>projectName="CryptoGuard"</code>
      */
@@ -141,6 +137,16 @@ public class Utils {
 
     //region HotMethods
     //region Wrappers
+
+    /**
+     * <p>retrieveFilePathTypes.</p>
+     *
+     * @param rawFileString a {@link java.util.ArrayList} object.
+     * @param expandPath    a {@link java.lang.Boolean} object.
+     * @param overwrite     a {@link java.lang.Boolean} object.
+     * @return a {@link java.util.ArrayList} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
     public static ArrayList<String> retrieveFilePathTypes(ArrayList<String> rawFileString, Boolean expandPath, Boolean overwrite) throws ExceptionHandler {
         return retrieveFilePaths(rawFileString, new ArrayList<String>() {{
             add(".java");
@@ -150,17 +156,16 @@ public class Utils {
         }}, expandPath, overwrite);
     }
 
-    public static ArrayList<String> retrieveFilePathType(String rawFileString, Boolean expandPath, Boolean overwrite) throws ExceptionHandler {
-        return retrieveFilePaths(new ArrayList<String>() {{
-            add(rawFileString);
-        }}, new ArrayList<String>() {{
-            add(".java");
-            add(".class");
-            add(".jar");
-            add("dir");
-        }}, expandPath, overwrite);
-    }
-
+    /**
+     * <p>retrieveFilePathTypes.</p>
+     *
+     * @param rawFileString a {@link java.lang.String} object.
+     * @param type          a {@link rule.engine.EngineType} object.
+     * @param expandPath    a {@link java.lang.Boolean} object.
+     * @param overwrite     a {@link java.lang.Boolean} object.
+     * @return a {@link java.util.ArrayList} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
     public static ArrayList<String> retrieveFilePathTypes(String rawFileString, EngineType type, Boolean expandPath, Boolean overwrite) throws ExceptionHandler {
         return retrieveFilePaths(new ArrayList<String>() {{
             add(rawFileString);
@@ -169,14 +174,20 @@ public class Utils {
         }}, expandPath, overwrite);
     }
 
+    /**
+     * <p>retrieveFilePathTypes.</p>
+     *
+     * @param rawFileString a {@link java.util.ArrayList} object.
+     * @param type          a {@link rule.engine.EngineType} object.
+     * @param expandPath    a {@link java.lang.Boolean} object.
+     * @param overwrite     a {@link java.lang.Boolean} object.
+     * @return a {@link java.util.ArrayList} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
     public static ArrayList<String> retrieveFilePathTypes(ArrayList<String> rawFileString, EngineType type, Boolean expandPath, Boolean overwrite) throws ExceptionHandler {
         return retrieveFilePaths(rawFileString, type == null ? new ArrayList<>() : new ArrayList<String>() {{
             add(type.getInputExtension());
         }}, expandPath, overwrite);
-    }
-
-    public static String retrieveFilePathType(String rawFileString, EngineType type, Boolean expandPath, Boolean overwrite) throws ExceptionHandler {
-        return retrieveFilePath(rawFileString, type == null ? null : type.getInputExtension(), expandPath, overwrite);
     }
     //endregion
 
@@ -212,6 +223,16 @@ public class Utils {
         }
     }
 
+    /**
+     * <p>retrieveFilePaths.</p>
+     *
+     * @param rawFileStrings a {@link java.util.ArrayList} object.
+     * @param type           a {@link java.util.ArrayList} object.
+     * @param expandPath     a {@link java.lang.Boolean} object.
+     * @param overwrite      a {@link java.lang.Boolean} object.
+     * @return a {@link java.util.ArrayList} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
     public static ArrayList<String> retrieveFilePaths(ArrayList<String> rawFileStrings, ArrayList<String> type, Boolean expandPath, Boolean overwrite) throws ExceptionHandler {
         ArrayList<String> output = new ArrayList<>();
 
@@ -252,8 +273,10 @@ public class Utils {
     /**
      * <p>retrieveFilePath.</p>
      *
-     * @param file a {@link java.lang.String} object.
-     * @param type a {@link rule.engine.EngineType} object.
+     * @param file       a {@link java.lang.String} object.
+     * @param type       a {@link rule.engine.EngineType} object.
+     * @param expandPath a {@link java.lang.Boolean} object.
+     * @param overwrite  a {@link java.lang.Boolean} object.
      * @return a {@link java.lang.String} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
@@ -391,17 +414,6 @@ public class Utils {
     /**
      * <p>makeArg.</p>
      *
-     * @param id    a {@link frontEnd.MessagingSystem.routing.inputStructures.ScarfXMLId} object.
-     * @param value a {@link java.lang.String} object.
-     * @return a {@link java.lang.String} object.
-     */
-    public static String makeArg(ScarfXMLId id, String value) {
-        return makeArg(id.getId(), value);
-    }
-
-    /**
-     * <p>makeArg.</p>
-     *
      * @param id    a {@link java.lang.String} object.
      * @param value a {@link java.lang.String} object.
      * @return a {@link java.lang.String} object.
@@ -410,17 +422,6 @@ public class Utils {
         if (StringUtils.isEmpty(value))
             return "";
         return " -" + id + " " + value + " ";
-    }
-
-    /**
-     * <p>makeArg.</p>
-     *
-     * @param id    a {@link java.lang.String} object.
-     * @param value a {@link java.lang.String} object.
-     * @return a {@link java.lang.String} object.
-     */
-    public static String makeArg(String id, String... value) {
-        return makeArg(id, Arrays.asList(value));
     }
 
     /**
@@ -473,6 +474,12 @@ public class Utils {
         }
     }
 
+    /**
+     * <p>stripEmpty.</p>
+     *
+     * @param args an array of {@link java.lang.String} objects.
+     * @return a {@link java.util.ArrayList} object.
+     */
     public static ArrayList<String> stripEmpty(String[] args) {
 
         return Arrays.stream(args).filter(StringUtils::isNotEmpty).collect(Collectors.toCollection(ArrayList::new));
@@ -652,17 +659,6 @@ public class Utils {
         }
 
         return output;
-    }
-
-    /**
-     * <p>retrieveJavaFileImports.</p>
-     *
-     * @param paths a {@link java.lang.String} object.
-     * @return a {@link java.util.Set} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static Set<String> retrieveJavaFileImports(String... paths) throws ExceptionHandler {
-        return retrieveJavaFileImports(Arrays.asList(paths));
     }
 
     /**
@@ -1082,16 +1078,6 @@ public class Utils {
     /**
      * <p>retrievePackageFromJavaFiles.</p>
      *
-     * @param sourceFiles a {@link java.lang.String} object.
-     * @return a {@link java.lang.String} object.
-     */
-    public static String retrievePackageFromJavaFiles(String... sourceFiles) {
-        return retrievePackageFromJavaFiles(Arrays.asList(sourceFiles));
-    }
-
-    /**
-     * <p>retrievePackageFromJavaFiles.</p>
-     *
      * @param sourceFiles a {@link java.util.List} object.
      * @return a {@link java.lang.String} object.
      */
@@ -1207,27 +1193,6 @@ public class Utils {
                 filePaths.add(relativeFilePath);
         }
         return filePaths;
-    }
-
-    /**
-     * <p>retrieveJavaFilesFromDir.</p>
-     *
-     * @param path a {@link java.lang.String} object.
-     * @return a {@link java.util.ArrayList} object.
-     */
-    public static ArrayList<String> retrieveJavaFilesFromDir(String path) {
-        if (StringUtils.isEmpty(path))
-            return null;
-
-        try (Stream<Path> walk = Files.walk(Paths.get(path))) {
-            return walk
-                    .map(Path::toString)
-                    .filter(f -> f.endsWith(".java"))
-                    .collect(Collectors.toCollection(ArrayList::new));
-        } catch (IOException e) {
-            //TODO - add exception here
-            return null;
-        }
     }
 
     /**

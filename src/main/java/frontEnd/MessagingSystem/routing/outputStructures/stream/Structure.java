@@ -59,7 +59,9 @@ public abstract class Structure extends OutputStructure {
         writeHeader();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void stopAnalyzing() throws ExceptionHandler {
         writeFooter();

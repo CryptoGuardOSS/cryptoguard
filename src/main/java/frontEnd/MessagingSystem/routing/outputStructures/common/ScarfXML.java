@@ -203,7 +203,7 @@ public class ScarfXML {
         issue.setClassName(instance.getClassName());
         issue.setInfo(instance.getBugMessage());
 
-        for (Location old:instance.getlocation()) {
+        for (Location old : instance.getlocation()) {
             AnalysisLocation loc = new AnalysisLocation(old.getStartLine(), old.getEndLine());
 
             //TODO - Fix this?
@@ -212,7 +212,7 @@ public class ScarfXML {
             issue.getLocations().add(loc);
         }
 
-        for (Method old:instance.getMethod()) {
+        for (Method old : instance.getMethod()) {
             issue.getMethods().push(old.getSelf());
         }
 

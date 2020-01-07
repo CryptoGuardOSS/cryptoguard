@@ -565,13 +565,17 @@ public class BugInstance implements Serializable {
         return new ToStringBuilder(this).append("className", className).append("method", method).append("location", location).append("cweId", cweId).append("bugGroup", bugGroup).append("bugCode", bugCode).append("bugRank", bugRank).append("bugSeverity", bugSeverity).append("bugMessage", bugMessage).append("resolutionSuggestion", resolutionSuggestion).append("bugTrace", bugTrace).append("id", id).toString();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(bugCode).append(bugTrace).append(bugSeverity).append(location).append(bugRank).append(bugMessage).append(resolutionSuggestion).append(id).append(cweId).append(method).append(className).append(bugGroup).toHashCode();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object other) {
         if (other == this) {

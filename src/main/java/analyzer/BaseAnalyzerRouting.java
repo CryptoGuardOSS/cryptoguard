@@ -40,6 +40,8 @@ public class BaseAnalyzerRouting {
      * @param projectDependency a {@link java.util.List} object.
      * @param checker           a {@link rule.base.BaseRuleChecker} object.
      * @param mainKlass         a {@link java.lang.String} object.
+     * @param androidHome       a {@link java.lang.String} object.
+     * @param javaHome          a {@link java.lang.String} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static void environmentRouting(EngineType routingType,
@@ -87,6 +89,7 @@ public class BaseAnalyzerRouting {
      * @param projectDependencyPath a {@link java.lang.String} object.
      * @param checker               a {@link rule.base.BaseRuleChecker} object.
      * @param mainKlass             a {@link java.lang.String} object.
+     * @param javaHome              a {@link java.lang.String} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static void setupBaseJar(String criteriaClass,
@@ -123,6 +126,8 @@ public class BaseAnalyzerRouting {
      * @param projectJarPath a {@link java.lang.String} object.
      * @param checker        a {@link rule.base.BaseRuleChecker} object.
      * @param mainKlass      a {@link java.lang.String} object.
+     * @param androidHome    a {@link java.lang.String} object.
+     * @param javaHome       a {@link java.lang.String} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static void setupBaseAPK(String criteriaClass,
@@ -157,6 +162,7 @@ public class BaseAnalyzerRouting {
      * @param projectDependency a {@link java.util.List} object.
      * @param checker           a {@link rule.base.BaseRuleChecker} object.
      * @param mainKlass         a {@link java.lang.String} object.
+     * @param javaHome          a {@link java.lang.String} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static void setupBaseDir(String criteriaClass,
@@ -194,6 +200,7 @@ public class BaseAnalyzerRouting {
      * @param projectDependency a {@link java.util.List} object.
      * @param checker           a {@link rule.base.BaseRuleChecker} object.
      * @param mainKlass         a {@link java.lang.String} object.
+     * @param javaHome          a {@link java.lang.String} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static void setupBaseJava(String criteriaClass,
@@ -242,6 +249,7 @@ public class BaseAnalyzerRouting {
      * @param projectDependencyPath a {@link java.util.List} object.
      * @param checker               a {@link rule.base.BaseRuleChecker} object.
      * @param mainKlass             a {@link java.lang.String} object.
+     * @param javaHome              a {@link java.lang.String} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static void setupBaseJavaClass(String criteriaClass,

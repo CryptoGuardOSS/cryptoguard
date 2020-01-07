@@ -177,7 +177,8 @@ public class EnvironmentInformation {
     private Heuristics heuristics = new Heuristics();
     //endregion
     //region Predicates used to help display streamed info
-    @Getter @Setter
+    @Getter
+    @Setter
     private Function<AnalysisIssue, String> errorAddition;
     @Getter
     @Setter
@@ -254,6 +255,12 @@ public class EnvironmentInformation {
     //endregion
 
     //region Getters and Setters
+
+    /**
+     * <p>verifyBaseSettings.</p>
+     *
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
     public void verifyBaseSettings() throws ExceptionHandler {
         switch (this.sourceType) {
             case DIR:
@@ -272,6 +279,11 @@ public class EnvironmentInformation {
         }
     }
 
+    /**
+     * <p>Getter for the field <code>androidHome</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getAndroidHome() {
         if (StringUtils.isEmpty(this.androidHome))
             this.androidHome = System.getenv("ANDROID_HOME").replaceAll("//", "/");
@@ -279,6 +291,11 @@ public class EnvironmentInformation {
         return this.androidHome;
     }
 
+    /**
+     * <p>Getter for the field <code>javaHome</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getJavaHome() {
         if (StringUtils.isEmpty(this.javaHome))
             switch (this.sourceType) {
@@ -503,6 +520,7 @@ public class EnvironmentInformation {
     }
     //endregion
     //region Helpful Methods
+
     /**
      * <p>setHuristicsInfo.</p>
      */
