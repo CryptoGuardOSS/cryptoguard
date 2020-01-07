@@ -82,6 +82,7 @@ public class EntryPointTest_CLASS {
                             makeArg(argsIdentifier.SOURCE, source) +
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
+                            makeArg(argsIdentifier.VERYVERBOSE) +
                             makeArg(argsIdentifier.PRETTY) +
                             makeArg(argsIdentifier.OUT, fileOut);
 

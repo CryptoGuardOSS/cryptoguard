@@ -106,6 +106,7 @@ public class BaseAnalyzerRouting {
                 Utils.getBaseSoot(javaHome),
                 Utils.join(":", Utils.getJarsInDirectory(projectDependencyPath)))
         );
+        log.debug("Setting the soot class path as: " + Scene.v().getSootClassPath());
 
         loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker, "_JAR_");
     }
@@ -141,16 +142,6 @@ public class BaseAnalyzerRouting {
         Options.v().set_whole_program(true);
 
         loadBaseSootInfo(classNames, criteriaClass, criteriaMethod, criteriaParam, checker, "_APK_");
-    }
-
-    public static void setupBaseAPK_BREAK(String criteriaClass,
-                                          String criteriaMethod,
-                                          int criteriaParam,
-                                          String projectJarPath,
-                                          BaseRuleChecker checker, String mainKlass,
-                                          String androidHome, String javaHome) throws ExceptionHandler {
-
-        Scene.v().loadClassAndSupport("_uncalledMethod01-30");
     }
 
     //endregion
@@ -325,8 +316,8 @@ public class BaseAnalyzerRouting {
         for (String clazz : classNames) {
             log.debug("Working with the internal class path: " + clazz);
             try {
-                SootClass runningClass;
-                if ((runningClass = Scene.v().loadClassAndSupport(clazz)).isPhantom())
+                SootClass runningClass = Scene.v().loadClassAndSupport(clazz);
+                if (runningClass.isPhantom())
                     throw new ExceptionHandler("Class " + clazz + " is not properly loaded", ExceptionId.LOADING);
 
                 Boolean containsMain = runningClass.getMethods().stream().anyMatch(m -> m.getName().equals("main"));
