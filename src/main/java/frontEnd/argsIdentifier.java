@@ -116,13 +116,4 @@ public enum argsIdentifier {
         return defaultArg;
     }
 
-    /**
-     * <p>Setter for the field <code>defaultArg</code>.</p>
-     *
-     * @param defaultArg a {@link java.lang.String} object.
-     */
-    public void setDefaultArg(String defaultArg) {
-        this.defaultArg = defaultArg;
-    }
-
 }

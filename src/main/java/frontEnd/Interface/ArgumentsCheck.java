@@ -180,7 +180,7 @@ public class ArgumentsCheck {
 
         EnvironmentInformation info = paramaterCheck(source, dependencies, type,
                 messaging, fileOutPath, cmd.hasOption(argsIdentifier.NEW.getId()),
-                usingInputIn, setMainClass, cmd.hasOption(argsIdentifier.TIMESTAMP.getId()),
+                setMainClass, cmd.hasOption(argsIdentifier.TIMESTAMP.getId()),
                 javaHome, androidHome);
 
         if (!messaging.getTypeOfMessagingInput().inputValidation(info, args.toArray(new String[0]))) {
@@ -231,7 +231,7 @@ public class ArgumentsCheck {
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static EnvironmentInformation paramaterCheck(List<String> sourceFiles, List<String> dependencies, EngineType eType, Listing oType, String fileOutPath, String mainFile) throws ExceptionHandler {
-        EnvironmentInformation info = paramaterCheck(sourceFiles, dependencies, eType, oType, fileOutPath, true, false, StringUtils.trimToNull(mainFile), false, null, null);
+        EnvironmentInformation info = paramaterCheck(sourceFiles, dependencies, eType, oType, fileOutPath, true, StringUtils.trimToNull(mainFile), false, null, null);
 
         //Setting base arguments, some might turn into defaults
         info.setShowTimes(true);
@@ -260,23 +260,30 @@ public class ArgumentsCheck {
     /**
      * <p>paramaterCheck.</p>
      *
-     * @param sourceFiles         a {@link java.util.List} object.
-     * @param dependencies        a {@link java.util.List} object.
-     * @param eType               a {@link rule.engine.EngineType} object.
-     * @param oType               a {@link frontEnd.MessagingSystem.routing.Listing} object.
-     * @param fileOutPath         a {@link java.lang.String} object.
-     * @param overWriteFileOut    a {@link java.lang.Boolean} object.
-     * @param usingEnhancedFileIn a {@link java.lang.Boolean} object.
-     * @param mainFile            a {@link java.lang.String} object.
-     * @param timeStamp           a {@link java.lang.Boolean} object.
+     * @param sourceFiles      a {@link java.util.List} object.
+     * @param dependencies     a {@link java.util.List} object.
+     * @param eType            a {@link rule.engine.EngineType} object.
+     * @param oType            a {@link frontEnd.MessagingSystem.routing.Listing} object.
+     * @param fileOutPath      a {@link java.lang.String} object.
+     * @param overWriteFileOut a {@link java.lang.Boolean} object.
+     * @param mainFile         a {@link java.lang.String} object.
+     * @param timeStamp        a {@link java.lang.Boolean} object.
+     * @param java             a {@link java.lang.String} object.
+     * @param android          a {@link java.lang.String} object.
      * @return a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static EnvironmentInformation paramaterCheck(List<String> sourceFiles, List<String> dependencies,
                                                         EngineType eType, Listing oType, String fileOutPath,
-                                                        Boolean overWriteFileOut, Boolean usingEnhancedFileIn,
+                                                        Boolean overWriteFileOut,
                                                         String mainFile, Boolean timeStamp,
                                                         String java, String android) throws ExceptionHandler {
+
+        //region verifying current running version
+        Version currentVersion = Version.getRunningVersion();
+        if (!currentVersion.supported())
+            throw new ExceptionHandler("JRE Version: " + currentVersion + " is not compatible, please use JRE Version: " + Utils.supportedVersion, ExceptionId.GEN_VALID);
+        //endregion
 
         //region verifying filePaths
         //region Setting the source files

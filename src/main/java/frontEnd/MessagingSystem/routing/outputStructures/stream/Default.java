@@ -110,7 +110,9 @@ public class Default extends Structure {
 
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addIssue(AnalysisIssue issue) throws ExceptionHandler {
 
@@ -176,7 +178,9 @@ public class Default extends Structure {
 
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void writeFooter() throws ExceptionHandler {
 

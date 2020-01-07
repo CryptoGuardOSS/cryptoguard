@@ -16,11 +16,11 @@ from collections import OrderedDict
 '''####################################
 #A utility class that contains the rest of the main common files
 '''  ####################################
-failFast = False
+failFast, offline = False, not os.path.exists('.git')
 android, java7, java = os.environ.get('ANDROID_HOME'), os.environ.get('JAVA7_HOME'), os.environ.get('JAVA_HOME')
 
 # region Offline information
-archivedInformation = {'properties': {'projectName': 'cryptoguard', 'groupName': 'vt.edu', 'versionNumber': 'V03.11.03',
+archivedInformation = {'properties': {'projectName': 'cryptoguard', 'groupName': 'vt.edu', 'versionNumber': 'V03.11.05',
                                       'buildFrameWork': 'Java', 'buildVersion': '1.8.232', 'org.gradle.daemon': 'false',
                                       'gradle.version': '4.10.3', 'surveyURL': 'TBD'}, 'rawArgs': {
     '    FORMAT': {'id': 'in', 'defaultArg': 'format', 'desc': 'Required: The format of input you want to scan',
@@ -181,8 +181,6 @@ archivedInformation = {'properties': {'projectName': 'cryptoguard', 'groupName':
         'APK Project File Test ': {'type': 'APK',
                                    'arg': '-in apk -s cryptoguard/samples/app-debug.apk -m SX  -o cryptoguard/build/tmp/app-debug.xml  -n -android .../android_home',
                                    'explanation': 'The output format argument (-in) specifies the type of project (java).\nThe source argument (-s) specifies the project to be scanned (.../test.java).\nThe output format argument (-m) specifies the type of result to write out (Scarf).\nThe output argument (-o) specifies the file to write out to (.../debug.xml).\nThe prettyprint argument (-n) formats and writes the output into a "pretty" format.\nThe android argument (-android) specifies the android home for the internal library.'}}}
-
-
 # endregion
 
 # region Loading
@@ -363,7 +361,7 @@ class Reading(object):
         with open(foil) as reading:
             for line in reading.readlines():
                 if line.startswith(replace):
-                    line = line[:line.index('{')] + str(replaceWith) + '\n'
+                    line = replace + str(replaceWith) + '\n'
                 lines += [line]
 
         with open(foil, 'w') as writing:
@@ -521,13 +519,17 @@ class Utils(object):
         return func
 
     def routingInfo(useage=''):
+        global offline
         for val in routers:
-            print('\t' + str(useage) + ' ' + str(val) + ' (offline-use - ' + str(routers[val]['offline']) + '): ' + str(
-                routers[val]['def']))
+            if (not offline or (offline and str(routers[val]['offline']))):
+                print('\t' + str(useage) + ' ' + str(val) + str(routers[val]['def']))
         return
 
     def start():
         print("Running the cryptoguard helper program")
+        global offline
+        if offline:
+            print('This is running in an offline mode')
         curChoices = list(routers.keys())
         args = Utils.arguments(argparse.ArgumentParser(), curChoices).parse_args()
         if (args.v):

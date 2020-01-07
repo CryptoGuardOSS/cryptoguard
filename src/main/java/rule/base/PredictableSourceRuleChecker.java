@@ -267,7 +267,9 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler {
         Utils.createAnalysisOutput(xmlFileStr, sourcePaths, predictableSourcMap, rule, output);

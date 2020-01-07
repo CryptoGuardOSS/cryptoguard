@@ -40,6 +40,8 @@ public class UniqueRuleAnalyzer {
      * @param projectJarPath        a {@link java.util.List} object.
      * @param projectDependencyPath a {@link java.util.List} object.
      * @param routingType           a {@link rule.engine.EngineType} object.
+     * @param androidHome           a {@link java.lang.String} object.
+     * @param javaHome              a {@link java.lang.String} object.
      * @return a {@link java.util.List} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
@@ -65,6 +67,7 @@ public class UniqueRuleAnalyzer {
      *
      * @param projectJarPath        a {@link java.lang.String} object.
      * @param projectDependencyPath a {@link java.lang.String} object.
+     * @param javaHome              a {@link java.lang.String} object.
      * @return a {@link java.util.List} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
@@ -91,6 +94,8 @@ public class UniqueRuleAnalyzer {
      * <p>setupBaseAPKEnv.</p>
      *
      * @param projectJarPath a {@link java.lang.String} object.
+     * @param androidHome    a {@link java.lang.String} object.
+     * @param javaHome       a {@link java.lang.String} object.
      * @return a {@link java.util.List} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
@@ -114,6 +119,7 @@ public class UniqueRuleAnalyzer {
      *
      * @param snippetPath           a {@link java.util.List} object.
      * @param projectDependencyPath a {@link java.util.List} object.
+     * @param javaHome              a {@link java.lang.String} object.
      * @return a {@link java.util.List} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
@@ -142,6 +148,7 @@ public class UniqueRuleAnalyzer {
      *
      * @param snippetPath           a {@link java.util.List} object.
      * @param projectDependencyPath a {@link java.util.List} object.
+     * @param javaHome              a {@link java.lang.String} object.
      * @return a {@link java.util.List} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
@@ -178,6 +185,7 @@ public class UniqueRuleAnalyzer {
      *
      * @param javaClassFiles        a {@link java.util.List} object.
      * @param projectDependencyPath a {@link java.util.List} object.
+     * @param javaHome              a {@link java.lang.String} object.
      * @return a {@link java.util.List} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */

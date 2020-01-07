@@ -23,6 +23,8 @@ public interface RuleChecker {
      * @param sourcePaths           a {@link java.util.List} object.
      * @param output                a {@link frontEnd.MessagingSystem.routing.outputStructures.OutputStructure} object.
      * @param mainKlass             a {@link java.lang.String} object.
+     * @param androidHome           a {@link java.lang.String} object.
+     * @param javaHome              a {@link java.lang.String} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, List<String> sourcePaths, OutputStructure output, String mainKlass, String androidHome, String javaHome) throws ExceptionHandler;
