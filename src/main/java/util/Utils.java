@@ -66,9 +66,9 @@ public class Utils {
      */
     public final static String lineSep = System.getProperty("line.separator");
     /**
-     * Constant <code>projectVersion="V03.11.05"</code>
+     * Constant <code>projectVersion="V03.11.06"</code>
      */
-    public final static String projectVersion = "V03.11.05";
+    public final static String projectVersion = "V03.11.06";
     /**
      * Constant <code>projectName="CryptoGuard"</code>
      */
@@ -520,7 +520,7 @@ public class Utils {
 
         if (e.getErrorCode().getId().equals(0)) {
             log.info(e.getErrorCode().getMessage());
-            System.out.print(e.getLongDesciption());
+            System.out.print(e.getLongDescriptionString());
         } else {
             log.fatal(e.getErrorCode().getMessage());
             System.err.print(e.toString());
