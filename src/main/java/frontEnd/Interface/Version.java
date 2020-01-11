@@ -54,6 +54,26 @@ public enum Version {
 
     //region Methods
 
+    //region Overridden Methods
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return String.valueOf(this.versionNumber);
+    }
+    //endregion
+
+    /**
+     * <p>supported.</p>
+     *
+     * @return a {@link java.lang.Boolean} object.
+     */
+    public Boolean supported() {
+        return this.majorVersion == Utils.supportedVersion.majorVersion;
+    }
+
     /**
      * <p>retrieveByMajor.</p>
      *
@@ -68,6 +88,28 @@ public enum Version {
                 .orElseThrow(
                         () ->
                                 new ExceptionHandler("Major Version: " + majorVersion + " not valid.", ExceptionId.FILE_AFK));
+    }
+
+    /**
+     * <p>getRunningVersion.</p>
+     *
+     * @return a {@link frontEnd.Interface.Version} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
+    public static Version getRunningVersion() throws ExceptionHandler {
+        String version = System.getProperty("java.version");
+
+        //Used for Java JRE versions below 9
+        if (version.startsWith("1."))
+            version = version.replaceFirst("1.", "");
+
+        //Getting the major number
+        int versionNumber = Integer.parseInt(version.substring(0, 1));
+
+        return Arrays.stream(Version.values())
+                .filter(v -> v.getVersionNumber() == versionNumber)
+                .findFirst()
+                .orElse(Version.ONE);
     }
 
     /**

@@ -6,7 +6,6 @@ import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.Interface.outputRouting.ExceptionId;
 import frontEnd.MessagingSystem.AnalysisIssue;
 import frontEnd.MessagingSystem.routing.Listing;
-import frontEnd.MessagingSystem.routing.inputStructures.ScarfXMLId;
 import frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import frontEnd.argsIdentifier;
 import lombok.extern.log4j.Log4j2;
@@ -31,8 +30,6 @@ import soot.util.Chain;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Function;
@@ -40,7 +37,6 @@ import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
@@ -70,9 +66,9 @@ public class Utils {
      */
     public final static String lineSep = System.getProperty("line.separator");
     /**
-     * Constant <code>projectVersion="V03.10.04"</code>
+     * Constant <code>projectVersion="V03.11.06"</code>
      */
-    public final static String projectVersion = "V03.10.04";
+    public final static String projectVersion = "V03.11.06";
     /**
      * Constant <code>projectName="CryptoGuard"</code>
      */
@@ -139,6 +135,322 @@ public class Utils {
     }
     //endregion
 
+    //region HotMethods
+    //region Wrappers
+
+    /**
+     * <p>retrieveFilePathTypes.</p>
+     *
+     * @param rawFileString a {@link java.util.ArrayList} object.
+     * @param expandPath    a {@link java.lang.Boolean} object.
+     * @param overwrite     a {@link java.lang.Boolean} object.
+     * @return a {@link java.util.ArrayList} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
+    public static ArrayList<String> retrieveFilePathTypes(ArrayList<String> rawFileString, Boolean expandPath, Boolean overwrite) throws ExceptionHandler {
+        return retrieveFilePaths(rawFileString, new ArrayList<String>() {{
+            add(".java");
+            add(".class");
+            add(".jar");
+            add("dir");
+        }}, expandPath, overwrite);
+    }
+
+    /**
+     * <p>retrieveFilePathTypes.</p>
+     *
+     * @param rawFileString a {@link java.lang.String} object.
+     * @param type          a {@link rule.engine.EngineType} object.
+     * @param expandPath    a {@link java.lang.Boolean} object.
+     * @param overwrite     a {@link java.lang.Boolean} object.
+     * @return a {@link java.util.ArrayList} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
+    public static ArrayList<String> retrieveFilePathTypes(String rawFileString, EngineType type, Boolean expandPath, Boolean overwrite) throws ExceptionHandler {
+        return retrieveFilePaths(new ArrayList<String>() {{
+            add(rawFileString);
+        }}, type == null ? new ArrayList<>() : new ArrayList<String>() {{
+            add(type.getInputExtension());
+        }}, expandPath, overwrite);
+    }
+
+    /**
+     * <p>retrieveFilePathTypes.</p>
+     *
+     * @param rawFileString a {@link java.util.ArrayList} object.
+     * @param type          a {@link rule.engine.EngineType} object.
+     * @param expandPath    a {@link java.lang.Boolean} object.
+     * @param overwrite     a {@link java.lang.Boolean} object.
+     * @return a {@link java.util.ArrayList} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
+    public static ArrayList<String> retrieveFilePathTypes(ArrayList<String> rawFileString, EngineType type, Boolean expandPath, Boolean overwrite) throws ExceptionHandler {
+        return retrieveFilePaths(rawFileString, type == null ? new ArrayList<>() : new ArrayList<String>() {{
+            add(type.getInputExtension());
+        }}, expandPath, overwrite);
+    }
+    //endregion
+
+    /**
+     * <p>inputFiles.</p>
+     *
+     * @param file a {@link java.lang.String} object.
+     * @return a {@link java.util.ArrayList} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
+    static ArrayList<String> inputFiles(String file, ArrayList<String> type, Boolean expandPath, Boolean overwrite) throws ExceptionHandler {
+        ArrayList<String> filePaths = new ArrayList<>();
+        String curLine = null;
+
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            while ((curLine = StringUtils.trimToNull(reader.readLine())) != null) {
+                for (String rawType : type)
+                    if (curLine.endsWith(rawType))
+                        if ((curLine = retrieveFilePath(curLine, rawType, expandPath, overwrite)) != null)
+                            filePaths.add(curLine);
+
+                if (type == null || type.size() == 0)
+                    if ((curLine = retrieveFilePath(curLine, null, expandPath, overwrite)) != null)
+                        filePaths.add(curLine);
+            }
+
+            return filePaths;
+        } catch (FileNotFoundException e) {
+            throw new ExceptionHandler("File " + file + " not found", ExceptionId.FILE_I);
+        } catch (IOException e) {
+            throw new ExceptionHandler("Error reading the file  " + file, ExceptionId.FILE_I);
+        }
+    }
+
+    /**
+     * <p>retrieveFilePaths.</p>
+     *
+     * @param rawFileStrings a {@link java.util.ArrayList} object.
+     * @param type           a {@link java.util.ArrayList} object.
+     * @param expandPath     a {@link java.lang.Boolean} object.
+     * @param overwrite      a {@link java.lang.Boolean} object.
+     * @return a {@link java.util.ArrayList} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
+    public static ArrayList<String> retrieveFilePaths(ArrayList<String> rawFileStrings, ArrayList<String> type, Boolean expandPath, Boolean overwrite) throws ExceptionHandler {
+        ArrayList<String> output = new ArrayList<>();
+
+        if (type != null && type.size() == 1 && type.get(0).equals("dir") && rawFileStrings.size() > 1)
+            throw new ExceptionHandler("Please enter one source argument for this use case.", ExceptionId.GEN_VALID);
+        else if (rawFileStrings.size() == 1 && rawFileStrings.get(0).endsWith(".in"))
+            output = inputFiles(rawFileStrings.get(0), type, expandPath, overwrite);
+        else
+            for (String rawString : rawFileStrings)
+                //Splitting the file just in case it is a java class path
+                for (String fileString : rawString.split(":")) {
+                    String filePath = null;
+
+                    //Adding a null type to ensure it still loops through all of the strings
+                    if (type.size() == 0)
+                        type.add(null);
+
+                    for (String rawType : type) {
+                        //If the only string passed is a java class path and starts with a colon
+                        //Remove it
+                        if (rawString.startsWith(":"))
+                            rawString = rawString.replaceFirst(":", "");
+
+                        if (null == rawType || rawType.equals("dir"))
+                            filePath = retrieveFilePath(fileString, null, expandPath, false);
+                        else if (fileString.endsWith(rawType))
+                            filePath = retrieveFilePath(fileString, rawType, expandPath, false);
+
+                        if (StringUtils.isNotEmpty(filePath)) {
+                            output.add(filePath);
+                            break;
+                        }
+                    }
+                }
+        return output;
+    }
+
+    /**
+     * <p>retrieveFilePath.</p>
+     *
+     * @param file       a {@link java.lang.String} object.
+     * @param type       a {@link rule.engine.EngineType} object.
+     * @param expandPath a {@link java.lang.Boolean} object.
+     * @param overwrite  a {@link java.lang.Boolean} object.
+     * @return a {@link java.lang.String} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
+    public static String retrieveFilePath(String file, String type, Boolean expandPath, Boolean overwrite) throws ExceptionHandler {
+        //Base line string check
+        if (StringUtils.isEmpty(file))
+            return null;
+
+        //Handling the file extension
+        if (null != type)
+            if (!type.equals("dir") && !file.toLowerCase().toLowerCase().endsWith(type)) {
+                log.warn("File " + file + " doesn't have the right file type " + type);
+                return null;
+                //throw new ExceptionHandler("File " + file + " doesn't have the right file type " + type, ExceptionId.ARG_VALID);
+            }
+
+        File tempFile = new File(file);
+
+        Boolean exists = tempFile.exists() || overwrite;
+
+        if (!exists)//TODO - Add soft kill ere
+            throw new ExceptionHandler(tempFile.getName() + " does not exist.", ExceptionId.ARG_VALID);
+
+        Boolean isDir = tempFile.isDirectory() || overwrite;
+        Boolean isFile = tempFile.isFile() || overwrite;
+
+        if (type != null)
+            switch (type) {
+                case ".class":
+                    //region Verifying the file was compiled with a Java Version Lower than 8
+                    try (DataInputStream stream = new DataInputStream(new FileInputStream(file))) {
+                        //Verifying if the class file has the Magic Java Number
+                        if (stream.readInt() != 0xcafebabe) {
+                            throw new ExceptionHandler("The class file " + file + " is not a valid java.class file.", ExceptionId.ARG_VALID);
+                        } else {
+
+                            //Moving the stream past the minor version
+                            stream.readUnsignedShort();
+
+                            //Checking the Major Version of the JDK that compiled the file against the supported version
+                            Version fileVersion = Version.retrieveByMajor(stream.readUnsignedShort());
+                            if (!fileVersion.supportedFile()) {
+                                throw new ExceptionHandler("The class file (compiled by a JDK Version " + fileVersion.getVersionNumber() + ") is not supported.", ExceptionId.ARG_VALID);
+                            }
+                        }
+                    } catch (IOException e) {
+                        throw new ExceptionHandler("Error reading the file " + file + ".", ExceptionId.FILE_READ);
+                    }
+                    //endregion
+                case ".java":
+                case ".jar":
+                case ".apk":
+                    if (!isFile)
+                        throw new ExceptionHandler(tempFile.getName() + " is not a valid file.", ExceptionId.ARG_VALID);
+                    break;
+                case "dir":
+                    if (!isDir)
+                        throw new ExceptionHandler(tempFile.getName() + " is not a valid directory.", ExceptionId.ARG_VALID);
+                    break;
+                default:
+                    if (!isFile && !isDir)
+                        throw new ExceptionHandler(tempFile.getName() + " is not a valid file or directory.", ExceptionId.ARG_VALID);
+                    break;
+            }
+        else if (!isFile && !isDir)
+            throw new ExceptionHandler(tempFile.getName() + " is not a valid file or directory.", ExceptionId.ARG_VALID);
+
+        try {
+            if (expandPath)
+                return tempFile.getCanonicalPath();
+            else
+                return file;
+        } catch (Exception e) {
+            throw new ExceptionHandler("Error retrieving the path of the file " + tempFile.getName() + ".", ExceptionId.FILE_AFK);
+        }
+    }
+    //endregion
+
+    //region ArgMethods
+
+    /**
+     * <p>makeArg.</p>
+     *
+     * @param id    a {@link frontEnd.argsIdentifier} object.
+     * @param value a {@link java.lang.Object} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String makeArg(argsIdentifier id, Object value) {
+        return makeArg(id.getId(), value.toString());
+    }
+
+    /**
+     * <p>makeArg.</p>
+     *
+     * @param id    a {@link frontEnd.argsIdentifier} object.
+     * @param value a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String makeArg(argsIdentifier id, String value) {
+        return makeArg(id.getId(), value);
+    }
+
+    /**
+     * <p>makeArg.</p>
+     *
+     * @param id    a {@link frontEnd.argsIdentifier} object.
+     * @param value a {@link java.util.List} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String makeArg(argsIdentifier id, List<String> value) {
+        return makeArg(id.getId(), value);
+    }
+
+    /**
+     * <p>makeArg.</p>
+     *
+     * @param id    a {@link frontEnd.argsIdentifier} object.
+     * @param value a {@link rule.engine.EngineType} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String makeArg(argsIdentifier id, EngineType value) {
+        return makeArg(id.getId(), value.getFlag());
+    }
+
+    /**
+     * <p>makeArg.</p>
+     *
+     * @param id a {@link frontEnd.argsIdentifier} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String makeArg(argsIdentifier id) {
+        return " " + id.getArg() + " ";
+    }
+
+    /**
+     * <p>makeArg.</p>
+     *
+     * @param id    a {@link java.lang.String} object.
+     * @param value a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String makeArg(String id, String value) {
+        if (StringUtils.isEmpty(value))
+            return "";
+        return " -" + id + " " + value + " ";
+    }
+
+    /**
+     * <p>makeArg.</p>
+     *
+     * @param id    a {@link java.lang.String} object.
+     * @param value a {@link java.util.List} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String makeArg(String id, List<String> value) {
+        if (value.size() >= 1)
+            return makeArg(id, value.get(0)) + String.join(" ", value);
+        return "";
+    }
+
+    /**
+     * <p>makeArg.</p>
+     *
+     * @param id    a {@link frontEnd.argsIdentifier} object.
+     * @param value a {@link frontEnd.MessagingSystem.routing.Listing} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String makeArg(argsIdentifier id, Listing value) {
+        return makeArg(id, value.getFlag());
+    }
+    //endregion
+
+    //region NotHotMethods
+
     /**
      * <p>getClassNamesFromJarArchive.</p>
      *
@@ -162,7 +474,26 @@ public class Utils {
         }
     }
 
-    //region HotMethods
+    /**
+     * <p>stripEmpty.</p>
+     *
+     * @param args an array of {@link java.lang.String} objects.
+     * @return a {@link java.util.ArrayList} object.
+     */
+    public static ArrayList<String> stripEmpty(String[] args) {
+
+        return Arrays.stream(args).filter(StringUtils::isNotEmpty).collect(Collectors.toCollection(ArrayList::new));
+
+        //region Old Method
+        /*
+        ArrayList<String> strippedArgs = new ArrayList<>();
+        for (String arg : args)
+            if (StringUtils.isNotEmpty(arg))
+                strippedArgs.add(arg);
+        return strippedArgs;
+         */
+        //endregion
+    }
 
     /**
      * <p>retrieveFullyQualifiedNameFileSep.</p>
@@ -189,7 +520,7 @@ public class Utils {
 
         if (e.getErrorCode().getId().equals(0)) {
             log.info(e.getErrorCode().getMessage());
-            System.out.print(e.getLongDesciption());
+            System.out.print(e.getLongDescriptionString());
         } else {
             log.fatal(e.getErrorCode().getMessage());
             System.err.print(e.toString());
@@ -218,7 +549,13 @@ public class Utils {
         ArrayList<String> output = new ArrayList<>();
 
         for (String path : fileIn) {
-            String temp = Utils.verifyFileExts(path, new String[]{".java", ".class"}, false);
+            String temp = null;
+            //TODO - Verify this change works
+            //Utils.verifyFileExts(path, new String[]{".java", ".class"}, false);
+
+            if ((temp = Utils.retrieveFilePath(path, EngineType.JAVAFILES.getInputExtension(), true, false)) == null)
+                temp = Utils.retrieveFilePath(path, EngineType.CLASSFILES.getInputExtension(), true, false);
+
             if (StringUtils.isNotBlank(temp)) {
                 temp = replaceLast(temp, retrieveFullyQualifiedName(path).replace(".", fileSep)).replace(".java", "").replace(".class", "");
                 if (!output.contains(temp))
@@ -311,7 +648,7 @@ public class Utils {
     public static List<String> retrieveFilesPredicate(String path, Predicate<String> fileCheck, Function<File, String> functor) throws ExceptionHandler {
 
         List<String> output = new ArrayList<>();
-        for (File file : Objects.requireNonNull(new File(verifyDir(path)).listFiles())) {
+        for (File file : Objects.requireNonNull(new File(retrieveFilePath(path, null, true, false)).listFiles())) {
             if (file.isFile() && fileCheck.test(file.getName())) {
                 if (functor == null)
                     output.add(file.getAbsolutePath());
@@ -322,17 +659,6 @@ public class Utils {
         }
 
         return output;
-    }
-
-    /**
-     * <p>retrieveJavaFileImports.</p>
-     *
-     * @param paths a {@link java.lang.String} object.
-     * @return a {@link java.util.Set} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static Set<String> retrieveJavaFileImports(String... paths) throws ExceptionHandler {
-        return retrieveJavaFileImports(Arrays.asList(paths));
     }
 
     /**
@@ -358,7 +684,7 @@ public class Utils {
      */
     public static Set<String> retrieveJavaFileImports(String path) throws ExceptionHandler {
         Set<String> results = new HashSet<>();
-        String javaFile = verifyFileExt(path, ".java", false);
+        String javaFile = retrieveFilePath(path, EngineType.JAVAFILES.getInputExtension(), false, false);
 
         try (BufferedReader reader = new BufferedReader(new FileReader(javaFile))) {
             String curLine;
@@ -389,125 +715,6 @@ public class Utils {
         System.setProperty("sun.boot.class.path", rt);
         System.setProperty("java.ext.dirs", osSurround(basePath, "lib"));
     }
-    //endregion
-
-    //region ArgMethods
-
-    /**
-     * <p>makeArg.</p>
-     *
-     * @param id    a {@link frontEnd.argsIdentifier} object.
-     * @param value a {@link java.lang.Object} object.
-     * @return a {@link java.lang.String} object.
-     */
-    public static String makeArg(argsIdentifier id, Object value) {
-        return makeArg(id.getId(), value.toString());
-    }
-
-    /**
-     * <p>makeArg.</p>
-     *
-     * @param id    a {@link frontEnd.argsIdentifier} object.
-     * @param value a {@link java.lang.String} object.
-     * @return a {@link java.lang.String} object.
-     */
-    public static String makeArg(argsIdentifier id, String value) {
-        return makeArg(id.getId(), value);
-    }
-
-    /**
-     * <p>makeArg.</p>
-     *
-     * @param id    a {@link frontEnd.argsIdentifier} object.
-     * @param value a {@link java.util.List} object.
-     * @return a {@link java.lang.String} object.
-     */
-    public static String makeArg(argsIdentifier id, List<String> value) {
-        return makeArg(id.getId(), value);
-    }
-
-    /**
-     * <p>makeArg.</p>
-     *
-     * @param id    a {@link frontEnd.argsIdentifier} object.
-     * @param value a {@link rule.engine.EngineType} object.
-     * @return a {@link java.lang.String} object.
-     */
-    public static String makeArg(argsIdentifier id, EngineType value) {
-        return makeArg(id.getId(), value.getFlag());
-    }
-
-    /**
-     * <p>makeArg.</p>
-     *
-     * @param id a {@link frontEnd.argsIdentifier} object.
-     * @return a {@link java.lang.String} object.
-     */
-    public static String makeArg(argsIdentifier id) {
-        return " " + id.getArg() + " ";
-    }
-
-    /**
-     * <p>makeArg.</p>
-     *
-     * @param id    a {@link frontEnd.MessagingSystem.routing.inputStructures.ScarfXMLId} object.
-     * @param value a {@link java.lang.String} object.
-     * @return a {@link java.lang.String} object.
-     */
-    public static String makeArg(ScarfXMLId id, String value) {
-        return makeArg(id.getId(), value);
-    }
-
-    /**
-     * <p>makeArg.</p>
-     *
-     * @param id    a {@link java.lang.String} object.
-     * @param value a {@link java.lang.String} object.
-     * @return a {@link java.lang.String} object.
-     */
-    public static String makeArg(String id, String value) {
-        if (StringUtils.isEmpty(value))
-            return "";
-        return " -" + id + " " + value + " ";
-    }
-
-    /**
-     * <p>makeArg.</p>
-     *
-     * @param id    a {@link java.lang.String} object.
-     * @param value a {@link java.lang.String} object.
-     * @return a {@link java.lang.String} object.
-     */
-    public static String makeArg(String id, String... value) {
-        return makeArg(id, Arrays.asList(value));
-    }
-
-    /**
-     * <p>makeArg.</p>
-     *
-     * @param id    a {@link java.lang.String} object.
-     * @param value a {@link java.util.List} object.
-     * @return a {@link java.lang.String} object.
-     */
-    public static String makeArg(String id, List<String> value) {
-        if (value.size() >= 1)
-            return makeArg(id, value.get(0)) + String.join(" ", value);
-        return "";
-    }
-
-    /**
-     * <p>makeArg.</p>
-     *
-     * @param id    a {@link frontEnd.argsIdentifier} object.
-     * @param value a {@link frontEnd.MessagingSystem.routing.Listing} object.
-     * @return a {@link java.lang.String} object.
-     */
-    public static String makeArg(argsIdentifier id, Listing value) {
-        return makeArg(id, value.getFlag());
-    }
-    //endregion
-
-    //region NotHotMethods
 
     /**
      * <p>getClassNamesFromApkArchive.</p>
@@ -871,16 +1078,6 @@ public class Utils {
     /**
      * <p>retrievePackageFromJavaFiles.</p>
      *
-     * @param sourceFiles a {@link java.lang.String} object.
-     * @return a {@link java.lang.String} object.
-     */
-    public static String retrievePackageFromJavaFiles(String... sourceFiles) {
-        return retrievePackageFromJavaFiles(Arrays.asList(sourceFiles));
-    }
-
-    /**
-     * <p>retrievePackageFromJavaFiles.</p>
-     *
      * @param sourceFiles a {@link java.util.List} object.
      * @return a {@link java.lang.String} object.
      */
@@ -999,27 +1196,6 @@ public class Utils {
     }
 
     /**
-     * <p>retrieveJavaFilesFromDir.</p>
-     *
-     * @param path a {@link java.lang.String} object.
-     * @return a {@link java.util.ArrayList} object.
-     */
-    public static ArrayList<String> retrieveJavaFilesFromDir(String path) {
-        if (StringUtils.isEmpty(path))
-            return null;
-
-        try (Stream<Path> walk = Files.walk(Paths.get(path))) {
-            return walk
-                    .map(Path::toString)
-                    .filter(f -> f.endsWith(".java"))
-                    .collect(Collectors.toCollection(ArrayList::new));
-        } catch (IOException e) {
-            //TODO - add exception here
-            return null;
-        }
-    }
-
-    /**
      * <p>retrieveBaseSourcePath.</p>
      *
      * @param sourcePaths    a {@link java.util.List} object.
@@ -1034,31 +1210,6 @@ public class Utils {
                 break;
             }
         return Utils.osPathJoin(tempDependencyPath, dependencyPath);
-    }
-
-    /**
-     * <p>inputFiles.</p>
-     *
-     * @param file a {@link java.lang.String} object.
-     * @return a {@link java.util.ArrayList} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static ArrayList<String> inputFiles(String file) throws ExceptionHandler {
-        ArrayList<String> filePaths = new ArrayList<>();
-        String curLine = null;
-
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            while ((curLine = reader.readLine()) != null && !curLine.isEmpty())
-                if ((curLine = verifyFile(curLine, false)) != null)
-                    filePaths.add(curLine);
-
-            return filePaths;
-        } catch (FileNotFoundException e) {
-            throw new ExceptionHandler("File " + file + " not found", ExceptionId.FILE_I);
-        } catch (IOException e) {
-            throw new ExceptionHandler("Error reading the file  " + file, ExceptionId.FILE_I);
-        }
     }
 
     /**
@@ -1184,98 +1335,18 @@ public class Utils {
     }
 
     /**
-     * <p>getJAVA_HOME.</p>
+     * The overridden Soot class path builder, used for Java JDK 7 or 8 paths.
      *
-     * @return a {@link java.lang.String} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     * @param javaPath {@link java.lang.String} - The path to either the JDK 7 or 8.
+     * @return {@link java.lang.String} - The built up path for the Soot String. ex. /jdk...:/jdk.../jre/lib/rt.jar:/jdk.../jre/lib/jce.jar
      */
-    public static String getJAVA_HOME() throws ExceptionHandler {
-        String JAVA_HOME = System.getenv("JAVA_HOME");
-        if (StringUtils.isEmpty(JAVA_HOME)) {
-            throw new ExceptionHandler("Environment Variable: JAVA_HOME is not set.", ExceptionId.ENV_VAR);
-        }
-        return JAVA_HOME.replaceAll("//", "/");
-    }
+    public static String getBaseSoot(String javaPath) {
+        String rt = Utils.osPathJoin(javaPath, "jre", "lib", "rt.jar");
+        String jce = Utils.osPathJoin(javaPath, "jre", "lib", "jce.jar");
 
-    /**
-     * <p>getJAVA7_HOME.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static String getJAVA7_HOME() throws ExceptionHandler {
-        String JAVA7_HOME = System.getenv("JAVA7_HOME");
-        if (StringUtils.isEmpty(JAVA7_HOME)) {
-            throw new ExceptionHandler("Environment Variable: JAVA7_HOME is not set.", ExceptionId.ENV_VAR);
-        }
-        return JAVA7_HOME.replaceAll("//", "/");
-    }
+        setSunBootPath(javaPath, rt);
 
-    /**
-     * <p>getANDROID.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static String getANDROID() throws ExceptionHandler {
-        String ANDROID_HOME = System.getenv("ANDROID_HOME");
-        if (StringUtils.isEmpty(ANDROID_HOME)) {
-            throw new ExceptionHandler("Environment Variable: ANDROID_HOME is not set.", ExceptionId.ENV_VAR);
-        }
-        return ANDROID_HOME;
-    }
-
-    /**
-     * //TODO - Need to verify this is nessecary
-     * <p>getBaseSOOT.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static String getBaseSOOT() throws ExceptionHandler {
-        String rt = getRT();
-        setSunBootPath(Utils.getJAVA_HOME(), rt);
-
-        return join(":", getJCE(), rt);
-    }
-
-    /**
-     * <p>getRT.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static String getRT() throws ExceptionHandler {
-        String rt = Utils.osPathJoin("jre", "lib", "rt.jar");
-
-        return osPathJoin(Utils.getJAVA_HOME(), rt);
-    }
-
-    /**
-     * <p>getJCE.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static String getJCE() throws ExceptionHandler {
-        String jce = Utils.osPathJoin("jre", "lib", "jce.jar");
-
-        return osPathJoin(Utils.getJAVA_HOME(), jce);
-    }
-
-    /**
-     * <p>getBaseSOOT7.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static String getBaseSOOT7() throws ExceptionHandler {
-        String rt = Utils.osPathJoin(Utils.getJAVA7_HOME(), "jre", "lib", "rt.jar");
-        String jce = Utils.osPathJoin(Utils.getJAVA7_HOME(), "jre", "lib", "jce.jar");
-
-        setSunBootPath(Utils.getJAVA7_HOME(), rt);
-
-        return Utils.join(":", Utils.getJAVA7_HOME(), rt, jce);
+        return Utils.join(":", javaPath, rt, jce);
     }
 
     /**
@@ -1391,224 +1462,6 @@ public class Utils {
             return StringUtils.trimToNull(matches.group(1));
 
         return "UNKNOWN";
-    }
-
-    /**
-     * <p>verifyDir.</p>
-     *
-     * @param dir a {@link java.lang.String} object.
-     * @return a {@link java.lang.String} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static String verifyDir(String dir) throws ExceptionHandler {
-        File dirChecking = new File(dir);
-        if (!dirChecking.exists() || !dirChecking.isDirectory())
-            throw new ExceptionHandler(dirChecking.getName() + " is not a valid directory.", ExceptionId.ARG_VALID);
-
-        try {
-            return dirChecking.getCanonicalPath();
-        } catch (Exception e) {
-            throw new ExceptionHandler("Error retrieving the full path of the " + dirChecking + ".", ExceptionId.FILE_AFK);
-        }
-    }
-
-    /**
-     * <p>retrieveDirs.</p>
-     *
-     * @param arguments a {@link java.util.List} object.
-     * @return a {@link java.util.List} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static List<String> retrieveDirs(List<String> arguments) throws ExceptionHandler {
-        List<String> dirs = new ArrayList<>();
-        for (String dir : arguments)
-            dirs.add(Utils.verifyDir(dir));
-
-        return dirs;
-    }
-
-    /**
-     * <p>verifyFile.</p>
-     *
-     * @param file      a {@link java.lang.String} object.
-     * @param overWrite a {@link java.lang.Boolean} object.
-     * @return a {@link java.lang.String} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static String verifyFile(String file, Boolean overWrite) throws ExceptionHandler {
-        //Base line string check
-        if (null == file || "".equals(file))
-            return null;
-
-        File tempFile = new File(file);
-
-        if (overWrite && (tempFile.exists() || tempFile.isFile()))
-            throw new ExceptionHandler(tempFile.getName() + " is already a valid file.", ExceptionId.FILE_O);
-
-        //Enhance Validation on the compiled java class file
-        if (tempFile.isFile() && tempFile.getName().endsWith(".class")) {
-            try (DataInputStream stream = new DataInputStream(new FileInputStream(file))) {
-                //Verifying if the class file has the Magic Java Number
-                if (stream.readInt() != 0xcafebabe) {
-                    throw new ExceptionHandler("The class file " + file + " is not a valid java.class file.", ExceptionId.ARG_VALID);
-                } else {
-
-                    //Moving the stream past the minor version
-                    stream.readUnsignedShort();
-
-                    //Checking the Major Version of the JDK that compiled the file against the supported version
-                    Version fileVersion = Version.retrieveByMajor(stream.readUnsignedShort());
-                    if (!fileVersion.supportedFile()) {
-                        throw new ExceptionHandler("The class file (compiled by a JDK Version " + fileVersion.getVersionNumber() + ") is not supported.", ExceptionId.ARG_VALID);
-                    }
-                }
-            } catch (IOException e) {
-                throw new ExceptionHandler("Error reading the file " + file + ".", ExceptionId.FILE_READ);
-            }
-        }
-
-        try {
-            return tempFile.getCanonicalPath();
-        } catch (Exception e) {
-            throw new ExceptionHandler("Error retrieving the path of the file " + tempFile.getName() + ".", ExceptionId.FILE_AFK);
-        }
-    }
-
-    /**
-     * <p>verifyFileExt.</p>
-     *
-     * @param file      a {@link java.lang.String} object.
-     * @param fileExt   a {@link java.lang.String} object.
-     * @param overWrite a {@link java.lang.Boolean} object.
-     * @return a {@link java.lang.String} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static String verifyFileExt(String file, String fileExt, Boolean overWrite) throws ExceptionHandler {
-        if ("dir".equals(fileExt))
-            return Utils.verifyDir(file);
-        else {
-            if (!file.toLowerCase().endsWith(fileExt))
-                throw new ExceptionHandler("File " + file + " doesn't have the right file type ", ExceptionId.ARG_VALID);
-
-            return Utils.verifyFile(file, overWrite);
-        }
-    }
-
-    /**
-     * <p>verifyFileExts.</p>
-     *
-     * @param file      a {@link java.lang.String} object.
-     * @param fileExt   an array of {@link java.lang.String} objects.
-     * @param overWrite a {@link java.lang.Boolean} object.
-     * @return a {@link java.lang.String} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static String verifyFileExts(String file, String[] fileExt, Boolean overWrite) throws ExceptionHandler {
-
-        Boolean matches = false;
-
-        for (String extensions : fileExt)
-            if (file.toLowerCase().endsWith(extensions)) {
-                matches = true;
-                break;
-            }
-
-        //Attempting to verify if the class path is a directory
-        if (matches)
-            return Utils.verifyFile(file, overWrite);
-        else
-            try {
-                return Utils.verifyDir(file);
-            } catch (ExceptionHandler e) {
-                throw new ExceptionHandler("File " + file + " doesn't have the right file type ", ExceptionId.ARG_VALID);
-            }
-    }
-
-    /**
-     * <p>verifyClassPaths.</p>
-     *
-     * @param classPaths a {@link java.lang.String} object.
-     * @return a {@link java.util.ArrayList} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static ArrayList<String> verifyClassPaths(String... classPaths) throws ExceptionHandler {
-        return verifyClassPaths(Arrays.asList(classPaths));
-    }
-
-    /**
-     * <p>verifyClassPaths.</p>
-     *
-     * @param classPaths a {@link java.util.List} object.
-     * @return a {@link java.util.ArrayList} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static ArrayList<String> verifyClassPaths(List<String> classPaths) throws ExceptionHandler {
-        ArrayList<String> output = new ArrayList<>();
-        for (String klazz : classPaths)
-            output.addAll(verifyClassPaths(klazz));
-        return output;
-    }
-
-    /**
-     * <p>verifyClassPaths.</p>
-     *
-     * @param classPaths a {@link java.lang.String} object.
-     * @return a {@link java.util.ArrayList} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static ArrayList<String> verifyClassPaths(String classPaths) throws ExceptionHandler {
-        ArrayList<String> output = new ArrayList<>();
-        for (String path : classPaths.split(":"))
-            output.add(Utils.verifyFileExts(path, new String[]{".java", ".class", ".jar", "dir"}, false));
-
-        return output;
-    }
-
-    /**
-     * <p>retrieveFilePath.</p>
-     *
-     * @param file a {@link java.lang.String} object.
-     * @param type a {@link rule.engine.EngineType} object.
-     * @return a {@link java.lang.String} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static String retrieveFilePath(String file, EngineType type) throws ExceptionHandler {
-        if (!file.toLowerCase().toLowerCase().endsWith(type.getInputExtension()))
-            throw new ExceptionHandler("File " + file + " doesn't have the right file type ", ExceptionId.ARG_VALID);
-
-        File tempFile = new File(file);
-        if (!tempFile.exists() || !tempFile.isFile())
-            throw new ExceptionHandler(tempFile.getName() + " is not a valid file.", ExceptionId.ARG_VALID);
-
-        try {
-            return tempFile.getCanonicalPath();
-        } catch (Exception e) {
-            throw new ExceptionHandler("Error retrieving the path of the file " + tempFile.getName() + ".", ExceptionId.FILE_AFK);
-        }
-    }
-
-    /**
-     * <p>retrieveFilesByType.</p>
-     *
-     * @param arguments a {@link java.util.List} object.
-     * @param type      a {@link rule.engine.EngineType} object.
-     * @return a {@link java.util.List} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    public static List<String> retrieveFilesByType(List<String> arguments, EngineType type) throws ExceptionHandler {
-        if (type == EngineType.DIR)
-            if (arguments.size() != 1)
-                throw new ExceptionHandler("Please enter one source argument for this use case.", ExceptionId.GEN_VALID);
-            else
-                return retrieveDirs(arguments);
-
-        List<String> filePaths = new ArrayList<>();
-
-        for (String in : arguments)
-            for (String foil : in.split(":"))
-                filePaths.add(retrieveFilePath(foil, type));
-
-        return filePaths;
     }
 
     /**

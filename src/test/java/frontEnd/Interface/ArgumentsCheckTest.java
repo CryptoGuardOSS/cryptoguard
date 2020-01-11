@@ -3,6 +3,7 @@ package frontEnd.Interface;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import frontEnd.MessagingSystem.routing.Listing;
 import frontEnd.argsIdentifier;
+import org.junit.Before;
 import org.junit.Test;
 import rule.engine.EngineType;
 import util.Utils;
@@ -10,6 +11,7 @@ import util.Utils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -31,10 +33,23 @@ public class ArgumentsCheckTest {
     //region Attributes
     private final String fileOut = Utils.osPathJoin(testPath, "txt.xml");
     private final String fileOutTxt = Utils.osPathJoin(testPath, "txt.txt");
+    private final String fileOutJson = Utils.osPathJoin(testPath, "txt.json");
     //endregion
 
     //region Test Environment Setup
-
+    @Before
+    public void setup() {
+        File running = null;
+        try {
+            if (!(running = new File(fileOut)).exists())
+                running.createNewFile();
+            if (!(running = new File(fileOutTxt)).exists())
+                running.createNewFile();
+            if (!(running = new File(fileOutJson)).exists())
+                running.createNewFile();
+        } catch (IOException e) {
+        }
+    }
     //endregion
 
     //region Tests
@@ -62,6 +77,82 @@ public class ArgumentsCheckTest {
         }
 
 
+    }
+
+    @Test
+    public void parameterCheck_verifyingJavaSevenHome() {
+        String fileOut = tempFileOutApk_Scarf;
+        String javaHome = System.getenv("JAVA7_HOME");
+
+        new File(fileOut).delete();
+
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.APK) +
+                            makeArg(argsIdentifier.SOURCE, pathToAPK) +
+                            makeArg(argsIdentifier.OUT, fileOut) +
+                            makeArg(argsIdentifier.JAVA, javaHome) +
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                            makeArg(argsIdentifier.PRETTY);
+
+            try {
+                EnvironmentInformation generalInfo = ArgumentsCheck.paramaterCheck(Utils.stripEmpty(args.split(" ")));
+
+                assertEquals(javaHome, generalInfo.getJavaHome());
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    @Test
+    public void parameterCheck_verifyingJavaAndroidHome() {
+        String fileOut = tempFileOutApk_Scarf;
+        String javaHome = System.getenv("JAVA_HOME");
+        String androidHome = System.getenv("ANDROID_HOME");
+
+        new File(fileOut).delete();
+
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.APK) +
+                            makeArg(argsIdentifier.SOURCE, pathToAPK) +
+                            makeArg(argsIdentifier.OUT, fileOut) +
+                            makeArg(argsIdentifier.ANDROID, androidHome) +
+                            makeArg(argsIdentifier.JAVA, javaHome) +
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                            makeArg(argsIdentifier.PRETTY);
+
+            try {
+                EnvironmentInformation generalInfo = ArgumentsCheck.paramaterCheck(Utils.stripEmpty(args.split(" ")));
+
+                assertEquals(javaHome, generalInfo.getJavaHome());
+                assertEquals(androidHome, generalInfo.getAndroidHome());
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    @Test
+    public void parameterCheck_VersionOut() {
+        String args =
+                makeArg(argsIdentifier.VERSION)
+                        + makeArg(argsIdentifier.NOEXIT);
+
+        try {
+            String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+
+            assertEquals(Utils.projectName + ": " + Utils.projectVersion, outputFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertNull(e);
+        }
     }
 
     /**
@@ -121,10 +212,9 @@ public class ArgumentsCheckTest {
                 makeArg(argsIdentifier.FORMAT, EngineType.JAR) +
                         makeArg(argsIdentifier.SOURCE, jarOne) +
                         makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
-                        makeArg(argsIdentifier.OUT, fileOutTxt.replace(".txt", ".json")) +
+                        makeArg(argsIdentifier.OUT, fileOutJson) +
                         makeArg(argsIdentifier.TIMEMEASURE) +
-                        makeArg(argsIdentifier.PRETTY) +
-                        makeArg(argsIdentifier.SKIPINPUTVALIDATION);
+                        makeArg(argsIdentifier.PRETTY);
 
         EnvironmentInformation info = null;
 

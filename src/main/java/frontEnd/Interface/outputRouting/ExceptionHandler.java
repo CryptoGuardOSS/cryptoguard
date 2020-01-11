@@ -1,7 +1,10 @@
 package frontEnd.Interface.outputRouting;
 
 import org.apache.commons.lang3.StringUtils;
+import util.Utils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.function.Supplier;
 
 /**
@@ -18,7 +21,7 @@ public class ExceptionHandler extends Exception implements Supplier<String> {
 
     //region Attributes
     private ExceptionId errorCode;
-    private String longDesciption;
+    private ArrayList<String> longDesciption;
     //endregion
 
     //region Creations
@@ -30,9 +33,19 @@ public class ExceptionHandler extends Exception implements Supplier<String> {
      * @param id      a {@link frontEnd.Interface.outputRouting.ExceptionId} object.
      */
     public ExceptionHandler(String message, ExceptionId id) {
-        this.errorCode = id;
-        this.longDesciption = message;
+        this(id, message);
         //super(message);
+    }
+
+    /**
+     * <p>Constructor for ExceptionHandler with multiple strings.</p>
+     *
+     * @param id      a {@link frontEnd.Interface.outputRouting.ExceptionId} object.
+     * @param message a {@link java.lang.String}... object.
+     */
+    public ExceptionHandler(ExceptionId id, String... message) {
+        this.errorCode = id;
+        Arrays.stream(message).forEach(this.getLongDesciption()::add);
     }
     //endregion
 
@@ -46,13 +59,15 @@ public class ExceptionHandler extends Exception implements Supplier<String> {
 
         String resp = "==================================\n" +
                 "Error ID: " + this.errorCode.getId() + "\n" +
-                "Error Type: " + this.errorCode.getMessage() + "\n" +
+                "Error Type: " + this.getLongDescriptionString() + "\n" +
                 "Error Message: \n" + this.longDesciption + "\n" +
                 "==================================";
         return StringUtils.trimToNull(resp).concat("\n\n\n");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void printStackTrace() {
         System.err.println(this.toString());
@@ -75,11 +90,19 @@ public class ExceptionHandler extends Exception implements Supplier<String> {
      *
      * @return a {@link java.lang.String} object.
      */
-    public String getLongDesciption() {
+    public ArrayList<String> getLongDesciption() {
+        if (this.longDesciption == null)
+            this.longDesciption = new ArrayList<>();
         return longDesciption;
     }
 
-    /** {@inheritDoc} */
+    public String getLongDescriptionString() {
+        return Utils.join("\n", this.getLongDesciption());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String get() {
         return null;

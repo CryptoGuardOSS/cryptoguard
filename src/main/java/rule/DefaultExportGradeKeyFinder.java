@@ -88,12 +88,12 @@ public class DefaultExportGradeKeyFinder implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, List<String> sourcePaths, OutputStructure output, String mainKlass) throws ExceptionHandler {
+    public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, List<String> sourcePaths, OutputStructure output, String mainKlass, String androidHome, String javaHome) throws ExceptionHandler {
 
         for (String slicing_criterion : SLICING_CRITERIA) {
 
             Map<String, List<Unit>> analysisLists = getForwardSlice(
-                    UniqueRuleAnalyzer.environmentRouting(projectJarPath, projectDependencyPath, type),
+                    UniqueRuleAnalyzer.environmentRouting(projectJarPath, projectDependencyPath, type, androidHome, javaHome),
                     new SlicingCriteria(slicing_criterion));
 
             for (String method : analysisLists.keySet()) {
