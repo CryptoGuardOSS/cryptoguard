@@ -16,11 +16,13 @@ from collections import OrderedDict
 '''####################################
 #A utility class that contains the rest of the main common files
 '''  ####################################
-failFast, offline = False, not os.path.exists('.git')
+curdir = os.path.abspath(os.curdir)
+gitPath = os.path.join(curdir, '.git')
+failFast, offline = False, not os.path.exists(gitPath)
 android, java7, java = os.environ.get('ANDROID_HOME'), os.environ.get('JAVA7_HOME'), os.environ.get('JAVA_HOME')
 
 # region Offline information
-archivedInformation = {'properties': {'projectName': 'cryptoguard', 'groupName': 'vt.edu', 'versionNumber': 'V03.11.05',
+archivedInformation = {'properties': {'projectName': 'cryptoguard', 'groupName': 'vt.edu', 'versionNumber': 'V03.11.06',
                                       'buildFrameWork': 'Java', 'buildVersion': '1.8.232', 'org.gradle.daemon': 'false',
                                       'gradle.version': '4.10.3', 'surveyURL': 'TBD'}, 'rawArgs': {
     '    FORMAT': {'id': 'in', 'defaultArg': 'format', 'desc': 'Required: The format of input you want to scan',
@@ -181,8 +183,9 @@ archivedInformation = {'properties': {'projectName': 'cryptoguard', 'groupName':
         'APK Project File Test ': {'type': 'APK',
                                    'arg': '-in apk -s cryptoguard/samples/app-debug.apk -m SX  -o cryptoguard/build/tmp/app-debug.xml  -n -android .../android_home',
                                    'explanation': 'The output format argument (-in) specifies the type of project (java).\nThe source argument (-s) specifies the project to be scanned (.../test.java).\nThe output format argument (-m) specifies the type of result to write out (Scarf).\nThe output argument (-o) specifies the file to write out to (.../debug.xml).\nThe prettyprint argument (-n) formats and writes the output into a "pretty" format.\nThe android argument (-android) specifies the android home for the internal library.'}}}
-# endregion
 
+
+# endregion
 # region Loading
 class Loading(object):
     # region Online Reading
@@ -300,37 +303,37 @@ class Loading(object):
 
     # endregion
     # region Online/Offline Reading
-    def getExampleArgs(offline=not os.path.exists('.git')):
+    def getExampleArgs():
         if offline:
             return archivedInformation['examples']
         else:
             return Loading.getExamplesRaw()
 
-    def getProperties(offline=not os.path.exists('.git')):
+    def getProperties():
         if offline:
             return archivedInformation['properties']
         else:
             return Loading.retrieveProperties()
 
-    def getRawArgs(offline=not os.path.exists('.git')):
+    def getRawArgs():
         if offline:
             return archivedInformation['rawArgs']
         else:
             return Loading.parseArgs()
 
-    def getEngineType(offline=not os.path.exists('.git')):
+    def getEngineType():
         if offline:
-            return archivedInformation['exampleArgs']
+            return archivedInformation['engineType']
         else:
             return Loading.parseEngineType()
 
-    def getDisplayOutputTypes(offline=not os.path.exists('.git')):
+    def getDisplayOutputTypes():
         if offline:
             return archivedInformation['outputType']
         else:
             return Loading.parseOutputType()
 
-    def getDisplayExceptionTypes(offline=not os.path.exists('.git')):
+    def getDisplayExceptionTypes():
         if offline:
             return archivedInformation['exceptionType']
         else:
@@ -344,16 +347,18 @@ class Reading(object):
     def prepareOffline():
         print('Writing offline information internally')
         data = {
-            'properties': Loading.getProperties(False),
-            'rawArgs': Loading.getRawArgs(False),
-            'engineType': Loading.getEngineType(False),
-            'outputType': Loading.getDisplayOutputTypes(False),
-            'exceptionType': Loading.getDisplayExceptionTypes(False),
-            'examples': Loading.getExampleArgs(False)
+            'properties': Loading.getProperties(),
+            'rawArgs': Loading.getRawArgs(),
+            'engineType': Loading.getEngineType(),
+            'outputType': Loading.getDisplayOutputTypes(),
+            'exceptionType': Loading.getDisplayExceptionTypes(),
+            'examples': Loading.getExampleArgs()
         }
         return data
 
-    def overWriting(replaceWith=prepareOffline()):
+    def overWriting(replaceWith=None):
+        if replaceWith == None:
+            replaceWith = Reading.prepareOffline()
         foil = 'cryptoguard.py'
         replace = "archivedInformation = "
 
@@ -511,7 +516,7 @@ class Utils(object):
         sys.exit(0)
 
     def routing(switch):
-        offline = not os.path.exists('.git')
+        offline = not os.path.exists(gitPath)
         func = routers.get(switch, Utils.routingInfo)
         if offline and not func['offline']:
             print('Cannot run ' + switch + ' in Offline Mode')
@@ -521,8 +526,8 @@ class Utils(object):
     def routingInfo(useage=''):
         global offline
         for val in routers:
-            if (not offline or (offline and str(routers[val]['offline']))):
-                print('\t' + str(useage) + ' ' + str(val) + str(routers[val]['def']))
+            if (not offline or (offline and routers[val]['offline'])):
+                print('\t' + str(useage) + ' ' + str(val) + ' ' + str(routers[val]['def']))
         return
 
     def start():
@@ -1332,11 +1337,11 @@ routers = {
         "def": "Shows helpful information about the tests crawled.",
         'offline': False
     },
-    'survey': {
-        "func": Utils.printSurveyURL,
-        "def": "Displays the url to the survey if it is active.",
-        'offline': True
-    },
+    # 'survey': {
+    #    "func": Utils.printSurveyURL,
+    #    "def": "Displays the url to the survey if it is active.",
+    #    'offline': True
+    # },
     'help': {
         "func": Utils.help,
         "def": "Displays helpful information to the user if it's the first time running.",
