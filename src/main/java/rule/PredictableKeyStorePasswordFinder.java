@@ -51,7 +51,9 @@ public class PredictableKeyStorePasswordFinder extends PredictableSourceRuleChec
         return "14";
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Criteria> getCriteriaList() {
         return CRITERIA_LIST;

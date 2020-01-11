@@ -3,15 +3,15 @@
     <Appenders>
         <Console name="DEVOUT" target="SYSTEM_OUT">
             <PatternLayout
-                    pattern="%highlight{${LOG_LEVEL_PATTERN:-%5p}}{DEBUG=blue, TRACE=cyan} | %d{yyyy-MM-dd HH:mm:ss.SSS} | %C{2}.%t (%F:%L) | %m%n"/>
+                    pattern="${LOG_LEVEL_PATTERN:-%5p} | %d{yyyy-MM-dd HH:mm:ss.SSS} | %C{2}.%t (%F:%L) | %m%n"/>
         </Console>
         <Console name="STDOUT" target="SYSTEM_OUT">
             <PatternLayout
-                    pattern="%highlight{${LOG_LEVEL_PATTERN:-%5p}}{WARN=yellow, INFO=green} | %d{yyyy-MM-dd HH:mm:ss.SSS} | %C{2} (%F:%L) | %m%n"/>
+                    pattern="${LOG_LEVEL_PATTERN:-%5p} | %d{yyyy-MM-dd HH:mm:ss.SSS} | %C{2} (%F:%L) | %m%n"/>
         </Console>
         <Console name="STDERR" target="SYSTEM_ERR">
             <PatternLayout
-                    pattern="%highlight{${LOG_LEVEL_PATTERN:-%5p}}{FATAL=bg_red, ERROR=red} | %d{yyyy-MM-dd HH:mm:ss.SSS} | %C{2} (%F:%L) | %m%n"/>
+                    pattern="${LOG_LEVEL_PATTERN:-%5p} | %d{yyyy-MM-dd HH:mm:ss.SSS} | %C{2} (%F:%L) | %m%n"/>
         </Console>
         <Routing name="Sifter">
             <Routes>

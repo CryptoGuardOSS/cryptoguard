@@ -56,7 +56,9 @@ public class Legacy extends Structure {
         this.writeln(marshallingHeader(super.getType(), super.getSource().getSource()));
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addIssue(AnalysisIssue issue) throws ExceptionHandler {
         super.addIssue(issue);
@@ -69,7 +71,9 @@ public class Legacy extends Structure {
         this.writeln("=======================================");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void writeFooter() throws ExceptionHandler {
         this.writeln(marshallingSootErrors(super.getSource().getSootErrors()));

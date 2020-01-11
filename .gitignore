@@ -10,7 +10,6 @@
 /*.jar
 /*.tar
 .attach_pid*
-docs
 *.iml
 *.log
 *gradlew
@@ -20,3 +19,8 @@ docs
 /.classpath
 /.vscode/
 /scratchSpace
+/_cryptoguard.source
+/rsc/
+/__pycache__/
+/cfg/
+/docs/
