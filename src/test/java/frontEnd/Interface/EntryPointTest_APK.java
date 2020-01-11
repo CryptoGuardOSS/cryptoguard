@@ -17,8 +17,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 import static test.TestUtilities.*;
 import static util.Utils.makeArg;
 
@@ -157,6 +156,65 @@ public class EntryPointTest_APK {
         }
     }
 
+    @Test
+    public void main_TestableApk_Scarf_SpecifyAndroidHome() {
+        String fileOut = tempFileOutApk_Scarf;
+        new File(fileOut).delete();
+
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.APK) +
+                            makeArg(argsIdentifier.SOURCE, pathToAPK) +
+                            makeArg(argsIdentifier.OUT, fileOut) +
+                            makeArg(argsIdentifier.ANDROID, System.getenv("ANDROID_HOME")) +
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                            makeArg(argsIdentifier.PRETTY);
+
+            try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
+                assertFalse(report.getBugInstance().isEmpty());
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    @Test
+    public void main_TestableApk_Scarf_SpecifyHome() {
+        String fileOut = tempFileOutApk_Scarf;
+        new File(fileOut).delete();
+
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.APK) +
+                            makeArg(argsIdentifier.SOURCE, pathToAPK) +
+                            makeArg(argsIdentifier.OUT, fileOut) +
+                            makeArg(argsIdentifier.ANDROID, System.getenv("ANDROID_HOME")) +
+                            makeArg(argsIdentifier.JAVA, System.getenv("JAVA_HOME")) +
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                            makeArg(argsIdentifier.PRETTY);
+
+            try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
+                assertFalse(report.getBugInstance().isEmpty());
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
     /**
      * <p>main_TestableApk_Scarf.</p>
      */
@@ -203,6 +261,7 @@ public class EntryPointTest_APK {
                             makeArg(argsIdentifier.OUT, fileOut) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.Default) +
                             makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.VERYVERBOSE) +
                             makeArg(argsIdentifier.PRETTY);
 
             try {
@@ -246,6 +305,30 @@ public class EntryPointTest_APK {
                 e.printStackTrace();
                 assertNull(e);
             }
+        }
+    }
+
+    /**
+     * <p>main_TestableApk_Scarf.</p>
+     */
+    @Test
+    public void main_TestableApk_Default_Stream_Defensive_0() {
+
+        String fileOut = tempFileOutApk_Scarf_Steam;
+        new File(fileOut).delete();
+
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.APK) +
+                            makeArg(argsIdentifier.SOURCE, pathToAPK) +
+                            makeArg(argsIdentifier.OUT, fileOut) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.PRETTY) +
+                            makeArg(argsIdentifier.JAVA, System.getProperty("user.home")) +
+                            makeArg(argsIdentifier.STREAM);
+
+            assertEquals(null, captureNewFileOutViaStdOut(args.split(" "), true));
         }
     }
 

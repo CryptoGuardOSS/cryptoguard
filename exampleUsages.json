@@ -1,0 +1,182 @@
+{
+  "General Project Version": {
+    "type": "General",
+    "arg": "-V",
+    "explanation": "The version argument (-V) returns the version of the project and exits."
+  },
+  "General Project No Logging": {
+    "type": "General",
+    "arg": "-vx",
+    "explanation": "The argument (-vx) only displays the fatal logs."
+  },
+  "General Project Verbose Logging": {
+    "type": "General",
+    "arg": "-v",
+    "explanation": "The argument (-v) displays debug logs."
+  },
+  "General Project Very Verbose Logging": {
+    "type": "General",
+    "arg": "-vv",
+    "explanation": "The argument (-vv) displays the all of the logs available."
+  },
+  "General Project Stream": {
+    "type": "General",
+    "arg": "-st",
+    "explanation": "The argument (-st) enables streaming the results to whatever output file is specified."
+  },
+  "General Project Heuristics": {
+    "type": "General",
+    "arg": "-H",
+    "explanation": "The argument (-H) writes the heuristics picked up in the output file."
+  },
+  "General Project Specifying the main file": {
+    "type": "General",
+    "arg": "-main",
+    "explanation": "The argument (-main) specifies the main class (containing public static void main) if there are multiple within the project."
+  },
+  "General Project Java Home": {
+    "type": "General",
+    "arg": "-java",
+    "explanation": "The argument (-java) sets the Java file path needed for an internal library. This is needed if the environment variable isn't set.\nJDK 7 needed for either a Project or Java File Scanning.\nJDK 8 needed for the other projects."
+  },
+  "General Project Android Home": {
+    "type": "General",
+    "arg": "-android",
+    "explanation": "The argument (-android) sets the Android file path.needed for an internal library. This is needed if the environment variable isn't set.\nNeeded if an Android project is being scanned."
+  },
+  "General Project PrettyPrint": {
+    "type": "General",
+    "arg": "-n",
+    "explanation": "The prettyprint argument (-n) writes the result in the \"pretty\" format."
+  },
+  "General Project Time Measurement": {
+    "type": "General",
+    "arg": "-t",
+    "explanation": "The time argument (-t) displays the time taken for the scanning."
+  },
+  "JAR Project Base": {
+    "type": "JAR",
+    "arg": "-in jar -s .../project.jar",
+    "explanation": "The format argument (-in) specifies the type of project (jar) and the source argument (-s) specifies the location of the project."
+  },
+  "JAR Project Dependency": {
+    "type": "JAR",
+    "arg": "-in jar -s .../project.jar -d .../lib/file(s).jar",
+    "explanation": "The format argument (-d) specifies the directory of the dependencies to be used with the project and picks up the file.jar."
+  },
+  "JAR Project Fileout": {
+    "type": "JAR",
+    "arg": "-in jar -s .../project.jar -m D -o .../fileout.json",
+    "explanation": "The output format argument (-m) specifies the type of output to write amd the output argument (-o) specifies the file to write the results to."
+  },
+  "JAR Project Sample Test ": {
+    "type": "JAR",
+    "arg": "-in jar -s cryptoguard/samples/testable-jar/build/libs/testable-jar.jar  -d cryptoguard/samples/testable-jar/build/dependencies  -m SX  -o cryptoguard/build/tmp/tempJarFile_Scarf_0.xml  -t  -H  -n -java .../jdk8",
+    "explanation": "The output format argument (-in) specifies the type of project (jar).\nThe source argument (-s) specifies the project to be scanned (.../testable-jar.jar).\nThe dependency argument (-d) specifies the directory of the dependencies (.../dependencies).\nThe output format argument (-m) specifies the type of result to write out (Scarf).\nThe output argument (-o) specifies the file to write out to (.../tempJarFile_Scarf_0.xml).\nThe time argument (-t) displays time taken via the project.\nThe heuristic argument (-H) writes various heuristics taken to the output.\nThe prettyprint argument (-n) formats and writes the output into a \"pretty\" format.\nThe java argument (-java) specifies the java home, either java 7 or 8 for the internal library."
+  },
+  "Project Scanner Base": {
+    "type": "Project",
+    "arg": "-in source -s .../project/",
+    "explanation": "The format argument (-in) specifies the type of project (source) and the source argument (-s) specifies the location of the project.\nThis must either be a gradle or maven based project."
+  },
+  "Project Scanner Dependency": {
+    "type": "Project",
+    "arg": "-in source -s .../project/ -d .../lib/file(s).jar",
+    "explanation": "The format argument (-d) specifies the directory of the dependencies to be used with the project and picks up the file.jar."
+  },
+  "Project Fileout": {
+    "type": "Project",
+    "arg": "-in source -s .../project/ -m D -o .../fileout.json",
+    "explanation": "The output format argument (-m) specifies the type of output to write amd the output argument (-o) specifies the file to write the results to."
+  },
+  "Project Sample Test ": {
+    "type": "Project",
+    "arg": "-in source -s cryptoguard/samples/testable-jar  -d cryptoguard/samples/testable-jar/build/dependencies  -m L  -o cryptoguard/build/tmp/testable-jar.txt  -t  -H  -n ",
+    "explanation": "The output format argument (-in) specifies the type of project (source).\nThe source argument (-s) specifies the project to be scanned (.../testable-jar).\nThe dependency argument (-d) specifies the directory of the dependencies (.../dependencies).\nThe output format argument (-m) specifies the type of result to write out (Legacy).\nThe output argument (-o) specifies the file to write out to (.../testable-jar.txt).\nThe time argument (-t) displays time taken via the project.\nThe heuristic argument (-H) writes various heuristics taken to the output.\nThe prettyprint argument (-n) formats and writes the output into a \"pretty\" format."
+  },
+  "Java File(s) Project Base Single File": {
+    "type": "Java",
+    "arg": "-in java -s .../test.java",
+    "explanation": "The format argument (-in) specifies the type of project (java) and the source argument (-s) specifies the file to be used."
+  },
+  "Java File(s) Project Multiple Files (Split via space)": {
+    "type": "Java",
+    "arg": "-in java -s .../test.java .../testTwo.java",
+    "explanation": "The argument (-s) specifies the file to be used, retrieving test.java and testTwo.java via the space between the arguments."
+  },
+  "Java File(s) Project Multiple Files (Split via classpath)": {
+    "type": "Java",
+    "arg": "-in java -s .../test.java:.../testTwo.java",
+    "explanation": "The argument (-s) specifies the file to be used, retrieving test.java and testTwo.java via the split by classpath (delimited by :)."
+  },
+  "Java File(s) Project Multiple Files (Split via input.in file)": {
+    "type": "Java",
+    "arg": "-in java -s .../input.in",
+    "explanation": "The argument (-s) specifies the input.in file to be used. This file should contain a line delimited paths to the source file. This also works based on the \nex. \n.../test.java\n.../testTwo.java"
+  },
+  "Java File Fileout": {
+    "type": "Java",
+    "arg": "-in java -s .../test.java -m D -o .../fileout.json",
+    "explanation": "The output format argument (-m) specifies the type of output to write amd the output argument (-o) specifies the file to write the results to."
+  },
+  "Java File Dependency": {
+    "type": "Java",
+    "arg": "-in java -s .../test.java -d .../lib/file(s).jar",
+    "explanation": "The format argument (-d) specifies the directory of the dependencies to be used with the project and picks up the file.jar."
+  },
+  "Java File Test ": {
+    "type": "Java",
+    "arg": "-in java -s cryptoguard/samples/temp/tester/test.java  -m SX  -o cryptoguard/build/tmp/test_java.xml  -t  -vv  -n ",
+    "explanation": "The output format argument (-in) specifies the type of project (java).\nThe source argument (-s) specifies the project to be scanned (.../test.java).\nThe output format argument (-m) specifies the type of result to write out (Scarf).\nThe output argument (-o) specifies the file to write out to (.../test_java.xml).\nThe very verbose argument (-vv) displays all of the logs available.\nThe prettyprint argument (-n) formats and writes the output into a \"pretty\" format."
+  },
+  "Java Class File(s) Project Base": {
+    "type": "Class",
+    "arg": "-in class -s .../test.class",
+    "explanation": "The format argument (-in) specifies the type of project (class) and the source argument (-s) specifies the location of the project."
+  },
+  "Java Class File(s) Project Multiple Files (Split via space)": {
+    "type": "Class",
+    "arg": "-in class -s .../test.class .../testTwo.class",
+    "explanation": "The argument (-s) specifies the file to be used, retrieving test.class and testTwo.class via the space between the arguments."
+  },
+  "Java Class File(s) Project Multiple Files (Split via classpath)": {
+    "type": "Class",
+    "arg": "-in class -s .../test.class:.../testTwo.class",
+    "explanation": "The argument (-s) specifies the file to be used, retrieving test.class and testTwo.class via the split by classpath (delimited by :)."
+  },
+  "Java Class File(s) Project Multiple Files (Split via input.in file)": {
+    "type": "Class",
+    "arg": "-in class -s .../input.in",
+    "explanation": "The argument (-s) specifies the input.in file to be used. This file should contain a line delimited paths to the source file. This also works based on the \nex. \n.../test.class\n.../testTwo.class"
+  },
+  "Java Class File(s) Project Dependency": {
+    "type": "Class",
+    "arg": "-in class -s .../test.class -d .../lib/file(s).jar",
+    "explanation": "The format argument (-d) specifies the directory of the dependencies to be used with the project and picks up the file.jar."
+  },
+  "Java Class File Test ": {
+    "type": "Class",
+    "arg": "-in class -s cryptoguard/samples/VerySimple/very.class -m SX  -o cryptoguard/build/tmp/verySimple_klass.xml  -n ",
+    "explanation": "The output format argument (-in) specifies the type of project (java).\nThe source argument (-s) specifies the project to be scanned (.../test.java).\nThe output format argument (-m) specifies the type of result to write out (Scarf).\nThe output argument (-o) specifies the file to write out to (.../verySimple_klass.xml).\nThe prettyprint argument (-n) formats and writes the output into a \"pretty\" format."
+  },
+  "APK Project Base": {
+    "type": "APK",
+    "arg": "-in apk -s .../app-debug.apk",
+    "explanation": "The format argument (-in) specifies the type of project (apk) and the source argument (-s) specifies the location of the project."
+  },
+  "APK Project Dependency": {
+    "type": "APK",
+    "arg": "-in apk -s  .../app-debug.apk -d .../lib/file(s).jar",
+    "explanation": "The format argument (-d) specifies the directory of the dependencies to be used with the project and picks up the file.jar."
+  },
+  "APK Project Fileout": {
+    "type": "APK",
+    "arg": "-in apk -s .../app-debug.apk -m D -o .../fileout.json",
+    "explanation": "The output format argument (-m) specifies the type of output to write amd the output argument (-o) specifies the file to write the results to."
+  },
+  "APK Project File Test ": {
+    "type": "APK",
+    "arg": "-in apk -s cryptoguard/samples/app-debug.apk -m SX  -o cryptoguard/build/tmp/app-debug.xml  -n -android .../android_home",
+    "explanation": "The output format argument (-in) specifies the type of project (java).\nThe source argument (-s) specifies the project to be scanned (.../test.java).\nThe output format argument (-m) specifies the type of result to write out (Scarf).\nThe output argument (-o) specifies the file to write out to (.../debug.xml).\nThe prettyprint argument (-n) formats and writes the output into a \"pretty\" format.\nThe android argument (-android) specifies the android home for the internal library."
+  }
+}

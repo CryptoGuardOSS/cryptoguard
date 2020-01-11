@@ -70,6 +70,7 @@ public class EntryPointTest_JAVA {
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.SOURCE, source) +
                             makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
                             makeArg(argsIdentifier.PRETTY) +
                             makeArg(argsIdentifier.VERYVERBOSE) +
                             makeArg(argsIdentifier.OUT, fileOut);
@@ -101,6 +102,7 @@ public class EntryPointTest_JAVA {
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.SOURCE, source) +
                             makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
                             makeArg(argsIdentifier.PRETTY) +
                             makeArg(argsIdentifier.VERYVERBOSE) +
                             makeArg(argsIdentifier.OUT, fileOut);
@@ -142,6 +144,7 @@ public class EntryPointTest_JAVA {
                             makeArg(argsIdentifier.SOURCE, javaFiles[1]) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.PRETTY) +
+                            makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.OUT, fileOut);
 
@@ -176,6 +179,7 @@ public class EntryPointTest_JAVA {
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.OUT, javaFileOne) +
+                            makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY);
 
@@ -214,6 +218,7 @@ public class EntryPointTest_JAVA {
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
                             makeArg(argsIdentifier.OUT, javaFileThreeXML);
 
             try {

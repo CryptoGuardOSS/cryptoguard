@@ -122,6 +122,10 @@ public class EnvironmentInformation {
     @Getter
     @Setter
     private Boolean streaming = false;
+    @Setter
+    String javaHome;
+    @Setter
+    String androidHome;
     //endregion
     //region From Outside and defaulted unless set
     @Getter
@@ -168,32 +172,13 @@ public class EnvironmentInformation {
     @Getter
     @Setter
     private Boolean displayHeuristics = false;
-    /*
-    @Getter
-    @Setter
-    private int NUM_ORTHOGONAL = 0;
-    @Getter
-    @Setter
-    private int NUM_CONSTS_TO_CHECK = 0;
-    @Getter
-    @Setter
-    private int NUM_SLICES = 0;
-    @Getter
-    @Setter
-    private int NUM_HEURISTIC = 0;
-    @Getter
-    @Setter
-    private double SLICE_AVERAGE = 0;
-    @Getter
-    @Setter
-    private ArrayList<String> DEPTH_COUNT = new ArrayList<>();
-    */
     @Getter
     @Setter
     private Heuristics heuristics = new Heuristics();
     //endregion
     //region Predicates used to help display streamed info
-    @Getter @Setter
+    @Getter
+    @Setter
     private Function<AnalysisIssue, String> errorAddition;
     @Getter
     @Setter
@@ -270,6 +255,63 @@ public class EnvironmentInformation {
     //endregion
 
     //region Getters and Setters
+
+    /**
+     * <p>verifyBaseSettings.</p>
+     *
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
+    public void verifyBaseSettings() throws ExceptionHandler {
+        switch (this.sourceType) {
+            case DIR:
+            case JAVAFILES:
+                if (StringUtils.isEmpty(getJavaHome()))
+                    throw new ExceptionHandler("Please set JAVA7_HOME or specify via the arguments.", ExceptionId.ENV_VAR);
+                break;
+            case APK:
+                if (StringUtils.isEmpty(getAndroidHome()))
+                    throw new ExceptionHandler("Please set ANDROID_HOME or specify via the arguments.", ExceptionId.ENV_VAR);
+            case JAR:
+            case CLASSFILES:
+                if (StringUtils.isEmpty(getJavaHome()))
+                    throw new ExceptionHandler("Please set JAVA_HOME or specify via the arguments.", ExceptionId.ENV_VAR);
+                break;
+        }
+    }
+
+    /**
+     * <p>Getter for the field <code>androidHome</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getAndroidHome() {
+        if (StringUtils.isEmpty(this.androidHome))
+            this.androidHome = System.getenv("ANDROID_HOME").replaceAll("//", "/");
+
+        return this.androidHome;
+    }
+
+    /**
+     * <p>Getter for the field <code>javaHome</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getJavaHome() {
+        if (StringUtils.isEmpty(this.javaHome))
+            switch (this.sourceType) {
+                case CLASSFILES:
+                case JAR:
+                case APK:
+                    this.javaHome = System.getenv("JAVA_HOME").replaceAll("//", "/");
+                    break;
+                case JAVAFILES:
+                case DIR:
+                    this.javaHome = System.getenv("JAVA7_HOME").replaceAll("//", "/");
+                    break;
+            }
+
+        return this.javaHome;
+    }
 
     /**
      * <p>addToDepth_Count.</p>
@@ -478,6 +520,7 @@ public class EnvironmentInformation {
     }
     //endregion
     //region Helpful Methods
+
     /**
      * <p>setHuristicsInfo.</p>
      */

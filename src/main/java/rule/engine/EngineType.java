@@ -20,8 +20,8 @@ public enum EngineType {
     JAR("JAR File", "jar", ".jar", "To signal a Jar File to be scanned."),
     APK("APK File", "apk", ".apk", "To signal a APK File to be scanned."),
     DIR("Directory of Source Code", "source", "dir", "To signal the source directory of a Maven/Gradle Project."),
-    JAVAFILES("Java File(s)", "java", ".java", "To signal a Java File(s) to be scanned."),
-    CLASSFILES("Class File(s)", "class", ".class", "To signal a Class File(s) to be scanned.");
+    JAVAFILES("Java File or Files", "java", ".java", "To signal a Java File(s) to be scanned."),
+    CLASSFILES("Class File or Files", "class", ".class", "To signal a Class File(s) to be scanned.");
     //endregion
 
     //region Attributes

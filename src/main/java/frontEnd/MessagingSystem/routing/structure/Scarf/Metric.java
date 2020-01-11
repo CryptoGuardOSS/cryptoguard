@@ -287,13 +287,17 @@ public class Metric implements Serializable {
         return new ToStringBuilder(this).append("id", id).append("location", location).append("_class", _class).append("method", method).append("type", type).append("value", value).toString();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(id).append(_class).append(location).append(value).append(method).append(type).toHashCode();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object other) {
         if (other == this) {

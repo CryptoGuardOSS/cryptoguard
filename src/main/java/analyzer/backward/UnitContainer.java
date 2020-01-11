@@ -63,7 +63,9 @@ public class UnitContainer {
         return unit.toString().equals(that.unit.toString());
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return ("UnitContainer{" +
@@ -72,7 +74,9 @@ public class UnitContainer {
                 "}").hashCode();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return "UnitContainer{" +

@@ -76,6 +76,7 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.OUT, fileOut) +
                             makeArg(argsIdentifier.STREAM) +
+                            makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
                             makeArg(argsIdentifier.TIMEMEASURE) +
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY);
@@ -105,6 +106,7 @@ public class EntryPointTest_JAR {
                     makeArg(argsIdentifier.FORMAT, EngineType.JAR) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
                             makeArg(argsIdentifier.SOURCE, jarOne) +
+                            makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.OUT, fileOut);
@@ -138,6 +140,7 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.OUT, fileOut) +
+                            makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
                             makeArg(argsIdentifier.TIMEMEASURE) +
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY);
@@ -170,6 +173,7 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.OUT, fileOut) +
                             makeArg(argsIdentifier.TIMEMEASURE) +
+                            makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.HEURISTICS) +
                             makeArg(argsIdentifier.PRETTY);
@@ -202,6 +206,41 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.SOURCE, jarOne) +
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.Default) +
+                            makeArg(argsIdentifier.OUT, fileOut) +
+                            makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
+                            makeArg(argsIdentifier.TIMEMEASURE) +
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.PRETTY);
+
+            try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+                Report report = Report.deserialize(new File(outputFile));
+                assertFalse(report.getIssues().isEmpty());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    /**
+     * <p>main_TestableJar_Scarf.</p>
+     */
+    @Test
+    public void main_TestableJar_Default_SpecifyJavaHome() {
+        String fileOut = tempJarFile_Default_0;
+        new File(fileOut).delete();
+
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.JAR) +
+                            makeArg(argsIdentifier.SOURCE, jarOne) +
+                            makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.Default) +
+                            makeArg(argsIdentifier.JAVA, System.getenv("JAVA_HOME")) +
+                            makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
                             makeArg(argsIdentifier.OUT, fileOut) +
                             makeArg(argsIdentifier.TIMEMEASURE) +
                             makeArg(argsIdentifier.NOEXIT) +
@@ -236,6 +275,7 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.FORMATOUT, Listing.Default) +
                             makeArg(argsIdentifier.OUT, fileOut) +
                             makeArg(argsIdentifier.HEURISTICS) +
+                            makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.TIMEMEASURE) +
                             makeArg(argsIdentifier.PRETTY);
@@ -270,6 +310,7 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.OUT, fileOut) +
+                            makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
                             makeArg(argsIdentifier.TIMEMEASURE) +
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY) +
@@ -304,6 +345,7 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.OUT, fileOut) +
                             makeArg(argsIdentifier.STREAM) +
+                            makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
                             makeArg(argsIdentifier.TIMEMEASURE) +
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY);
@@ -336,6 +378,7 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.FORMATOUT, Listing.Default) +
                             makeArg(argsIdentifier.OUT, fileOut) +
                             makeArg(argsIdentifier.STREAM) +
+                            makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
                             makeArg(argsIdentifier.TIMEMEASURE) +
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY);
@@ -368,6 +411,7 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.OUT, fileOut) +
+                            makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
                             makeArg(argsIdentifier.TIMESTAMP) +
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY);
@@ -401,6 +445,7 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.OUT, tempJarFile_Scarf_2) +
                             makeArg(argsIdentifier.TIMESTAMP) +
+                            makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY);
 
@@ -437,9 +482,44 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.FORMATOUT, Listing.Default) +
                             makeArg(argsIdentifier.OUT, fileOut) +
                             makeArg(argsIdentifier.TIMEMEASURE) +
+                            makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY) +
                             makeArg(argsIdentifier.HEURISTICS);
+
+            try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+                Report report = Report.deserialize(new File(outputFile));
+                assertNotNull(report.getHeuristics());
+                assertFalse(report.getIssues().isEmpty());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    @Test
+    public void main_TestableJar_Default_WithClassPath() {
+        String fileOut = tempJarFile_Default_0;
+        String deps = srcOneGrvDep;
+        deps = ":" + deps + ":" + deps + ":";
+        new File(fileOut).delete();
+
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.JAR) +
+                            makeArg(argsIdentifier.SOURCE, jarOne) +
+                            makeArg(argsIdentifier.DEPENDENCY, deps) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.Default) +
+                            makeArg(argsIdentifier.OUT, fileOut) +
+                            makeArg(argsIdentifier.TIMEMEASURE) +
+                            makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.HEURISTICS) +
+                            makeArg(argsIdentifier.PRETTY);
 
             try {
                 String outputFile = captureNewFileOutViaStdOut(args.split(" "));

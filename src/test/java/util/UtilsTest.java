@@ -91,7 +91,7 @@ public class UtilsTest {
     @Test
     public void testVerifyClassPathsOne() {
         try {
-            ArrayList<String> returnedOutput = Utils.verifyClassPaths(TestUtilities.sampleAuxClassPathOne);
+            ArrayList<String> returnedOutput = Utils.retrieveFilePathTypes(TestUtilities.sampleAuxClassPathOne, null, false, false);
             for (String output : returnedOutput)
                 assertTrue(TestUtilities.sampleAuxClassPathOneList.contains(output));
         } catch (Exception e) {
@@ -103,8 +103,9 @@ public class UtilsTest {
     @Test
     public void testVerifyClassPathsTwo() {
         try {
-            ArrayList<String> returnedOutput = Utils.verifyClassPaths(TestUtilities.sampleAuxClassPathTwo);
-            assertNull(returnedOutput);
+            ArrayList<String> returnedOutput = Utils.retrieveFilePathTypes(TestUtilities.sampleAuxClassPathTwo, null, false, false);
+            TestUtilities.sampleAuxClassPathTwoList.forEach(str -> assertTrue(returnedOutput.contains(str)));
+            assertEquals(TestUtilities.sampleAuxClassPathTwoList.size(), returnedOutput.size());
         } catch (ExceptionHandler e) {
             assertEquals(e.getErrorCode(), ExceptionId.ARG_VALID);
             assertTrue(e.getLongDesciption().contains(TestUtilities.scarfArgs));
