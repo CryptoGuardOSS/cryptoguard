@@ -123,7 +123,7 @@ public class TestUtilities {
         return cleanArgs.toArray(new String[cleanArgs.size()]);
     }
 
-    public static String captureNewFileOutViaStdOut(String[] args) throws Exception {
+    public static String captureNewFileOutViaStdOut(String[] args, Boolean exceptionHandler) {
         //region Redirecting the std out to capture the file out
         //The new std out
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -146,13 +146,20 @@ public class TestUtilities {
 
         //The output string
         String outputString = StringUtils.trimToNull(baos.toString());
-        assertTrue(StringUtils.isNotBlank(outputString));
+        if (!exceptionHandler)
+            assertTrue(StringUtils.isNotBlank(outputString));
 
         String[] lines = baos.toString().split(Utils.lineSep);
         outputString = StringUtils.trimToNull(lines[lines.length - 1]);
-        assertTrue(StringUtils.isNotBlank(outputString));
+        if (!exceptionHandler)
+            assertTrue(StringUtils.isNotBlank(outputString));
 
         return outputString;
+    }
+
+    public static String captureNewFileOutViaStdOut(String[] args) throws Exception {
+
+        return captureNewFileOutViaStdOut(args, false);
     }
 
     public static String[] arr(ArrayList<String> in) {

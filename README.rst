@@ -1,15 +1,27 @@
 #################################
-CryptoGuard V03.10.04
+CryptoGuard V03.11.06
 #################################
 
 
 An program analysis tool to find cryptographic misuse in Java and Android.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+CryptoGuard.py
+=====================
+This python file is the wrapper created to assist with various portions of the project.
+You should use it for various commands including:
+* setting the environment
+* clean the project
+* building the project
+* running tests
+* building a simple command
+
+Please run the following command to get more information on how to use it :code:`./cryptoguard.py`
+
 IMPORTANT NOTICE
 ========================
 * Due to 'leaky tests' from the environment and persistent variables, a python test runner was made
-* Instead of running :code:`./gradlew test`, run make tests
+* Please run :code:`make tests`
     * this ensures isolated environments via gradle calls
 
 Building From Source
@@ -21,7 +33,7 @@ Building From Source
 
 Prerequisites (Environment Variables)
 ==================================================
-1. JAVA8_HOME: Point to a valid Java 8 JDK Installation
+1. JAVA_HOME: Point to a valid Java 8 JDK Installation
     * Needed for all of the scans
 #. JAVA7_HOME: Point to a valid Java 7 JDK Installation
     * Needed for project scans and java file scans
@@ -30,14 +42,13 @@ Prerequisites (Environment Variables)
 
 Note
 -----------
-* Run :code:`make checkEnv` to verify all of these variables are set.
+* Run :code:`make env` to verify (and set) all of these variables by following the instructions.
 
 Different Scanning Options
 ==================================================
 
 Source (Maven or Gradle Project Directory **only**)
 --------------------------------------------------------------------------------------------------------------------
-* sample Makefile command :code:`make scanDir`
 * raw command (without dependencies) :code:`java -jar cryptoguard.jar -in source -s /rootPath`
 * raw command (with dependencies) :code:`java -jar cryptoguard.jar -in source -s /rootPath -d /dependencies`
 
@@ -49,24 +60,20 @@ If you have multiple subprojects with external dependencies, then you have to ga
 
 JAR Files
 ----------------------------------------------------------
-* sample Makefile command :code:`make scanJar`
 * raw command :code:`java -jar cryptoguard.jar -in jar -s /path/to/jar/my-jar.jar`
 
 APK Files
 ----------------------------------------------------------
-* sample Makefile command :code:`make scanAPK`
 * raw command :code:`java -jar cryptoguard.jar -in apk -s /path/to/apk/my-apk.apk`
 
 Java Files (*Currently Unstable*, currently limited to Java JDK 8 by library constraint)
 --------------------------------------------------------------------------------------------------------------------
-* sample Makefile command :code:`make scanJava`
 * raw command :code:`java -jar cryptoguard.jar -in java -s /path/to/java/file.java`
 * raw command (for files) :code:`java -jar cryptoguard.jar -in java -s /path/to/java/file1.java /path/to/java/file2.java`
 
 
 Java Class Files (Currently limited to Java JDK 8)
 ----------------------------------------------------------
-* sample Makefile command :code:`make scanClass`
 * raw command :code:`java -jar cryptoguard.jar -in class -s /path/to/java/file.class`
 * raw command (for files) :code:`java -jar cryptoguard.jar -in java -s /path/to/java/file1.class /path/to/java/file2.class`
 
@@ -136,11 +143,12 @@ Help
 ======
 * If you have any questions or suggestions, please email to `cryptoguardorg@gmail.com <mailto:cryptoguardorg@gmail.com>`_.
 * Please also run :code:`make help` or :code:`java -jar cryptoguard.jar -h` for argument help.
+* You can also look at the auto-generated USAGE.md file.
 
 FAQ
 -----
 * There may be **silent failures** if any of the environment variables below are not set.
-    * This can be checked by running :code:`make checkEnv`
+    * This can be checked by running :code:`make env`
 
 Disclaimer
 ===============
@@ -148,7 +156,7 @@ Disclaimer
 CryptoGuard is a research prototype under GNU General Public License 3.0
 --------------------------------------------------------------------------------
 
- Copyright © 2019 CryptoGuard
+ Copyright © 2020 CryptoGuard
 
  This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
 

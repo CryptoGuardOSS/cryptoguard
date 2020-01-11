@@ -67,10 +67,10 @@ public class UntrustedPrngFinder implements RuleChecker {
      * {@inheritDoc}
      */
     @Override
-    public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, List<String> sourcePaths, OutputStructure output, String mainKlass) throws ExceptionHandler {
+    public void checkRule(EngineType type, List<String> projectJarPath, List<String> projectDependencyPath, List<String> sourcePaths, OutputStructure output, String mainKlass, String androidHome, String javaHome) throws ExceptionHandler {
 
         Map<String, List<Unit>> analysisLists = getUntrustedPrngInstructions(
-                UniqueRuleAnalyzer.environmentRouting(projectJarPath, projectDependencyPath, type));
+                UniqueRuleAnalyzer.environmentRouting(projectJarPath, projectDependencyPath, type, androidHome, javaHome));
 
         if (!analysisLists.isEmpty()) {
             for (String method : analysisLists.keySet()) {

@@ -15,15 +15,20 @@ import java.util.ArrayList;
 @ToString
 public class Heuristics {
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private int numberOfOrthogonal = 0;
-    @Getter @Setter
+    @Getter
+    @Setter
     private int numberOfConstantsToCheck = 0;
-    @Getter @Setter
+    @Getter
+    @Setter
     private int numberOfHeuristics = 0;
-    @Getter @Setter
+    @Getter
+    @Setter
     private int numberOfSlices = 0;
-    @Getter @Setter
+    @Getter
+    @Setter
     private double sliceAverage = 0;
     private ArrayList<String> depthCount;
 

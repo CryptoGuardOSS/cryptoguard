@@ -196,13 +196,17 @@ public class Location implements Serializable {
         return new ToStringBuilder(this).append("className", className).append("methodName", methodName).append("lineNumber", lineNumber).append("columnNumber", columnNumber).toString();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(lineNumber).append(className).append(methodName).append(columnNumber).toHashCode();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object other) {
         if (other == this) {
