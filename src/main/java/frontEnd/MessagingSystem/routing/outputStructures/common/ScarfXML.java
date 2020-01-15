@@ -278,17 +278,4 @@ public class ScarfXML {
         );
     }
     */
-
-    /**
-     * The method for this output to create error messages
-     *
-     * @param message -  the string of the message to be sent to the output
-     * @return string - the xml format of the error message
-     */
-    private String creatingErrorMessage(String message) {
-        String output = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "<ERROR>" +
-                message +
-                "</ERROR>";
-        return output;
-    }
 }

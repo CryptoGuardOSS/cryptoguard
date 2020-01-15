@@ -1,5 +1,7 @@
 package CWE_Reader;
 
+import lombok.Getter;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +18,7 @@ import java.util.Map;
 public class CWEList {
 
     //region Attributes
+    @Getter
     private final Double cweVersion = 3.1;
     private Map<Integer, CWE> cweList;
     //endregion

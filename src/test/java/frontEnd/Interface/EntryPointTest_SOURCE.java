@@ -33,7 +33,6 @@ import static util.Utils.makeArg;
 public class EntryPointTest_SOURCE {
 
     //region Attributes
-    private EntryPoint engine;
     //endregion
 
     //region Test Environment Setup
@@ -48,8 +47,6 @@ public class EntryPointTest_SOURCE {
         //Cleaning the current scene since setup carries throughout the VM
         //tldr - one test setting up the scene will carry over to the next test, this'll stop that
         G.reset();
-
-        engine = new EntryPoint();
     }
 
     /**
@@ -59,7 +56,6 @@ public class EntryPointTest_SOURCE {
      */
     @After
     public void tearDown() throws Exception {
-        engine = null;
     }
     //endregion
 
