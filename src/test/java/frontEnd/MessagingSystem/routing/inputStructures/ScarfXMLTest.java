@@ -38,7 +38,6 @@ public class ScarfXMLTest {
     private final String dependencies = null;
     //region Attributes
     private EnvironmentInformation testInfo;
-    private String[] args;
     private ScarfXML inputTest;
     private String assessment_start_ts;
     private String build_fw;
@@ -65,8 +64,6 @@ public class ScarfXMLTest {
     @Before
     public void setUp() throws Exception {
         inputTest = spy(ScarfXML.class);
-
-        args = new String[]{"TestSource", type.getName(), dependencies, Listing.ScarfXML.getFlag()};
 
         assess_fw = "java-assess";
         assess_fw_version = "1.0.0c";
@@ -105,7 +102,6 @@ public class ScarfXMLTest {
     @After
     public void tearDown() throws Exception {
         testInfo = null;
-        args = null;
         inputTest = null;
         assess_fw = null;
         assess_fw_version = null;

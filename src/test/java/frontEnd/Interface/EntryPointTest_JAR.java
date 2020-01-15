@@ -148,7 +148,7 @@ public class EntryPointTest_JAR {
             try {
                 String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
-                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
+                AnalyzerReport.deserialize(new File(outputFile));
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -456,7 +456,7 @@ public class EntryPointTest_JAR {
                 List<String> results = Files.readAllLines(Paths.get(outputFile), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 10);
 
-                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
+                AnalyzerReport.deserialize(new File(outputFile));
 
             } catch (Exception e) {
                 e.printStackTrace();

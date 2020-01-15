@@ -31,7 +31,6 @@ public class UtilsTest {
     private String fullJavaClassFile;
     private String fullJavaFile;
     private String fileSep = System.getProperty("file.separator");
-    private String javaFile = String.join(fileSep, "rsc", "test", "main.java");
 
     //endregion
 

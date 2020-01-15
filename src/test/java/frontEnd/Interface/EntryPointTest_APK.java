@@ -47,8 +47,6 @@ public class EntryPointTest_APK {
         //Cleaning the current scene since setup carries throughout the VM
         //tldr - one test setting up the scene will carry over to the next test, this'll stop that
         G.reset();
-
-        engine = new EntryPoint();
     }
 
     /**
@@ -267,7 +265,7 @@ public class EntryPointTest_APK {
             try {
                 String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
-                Report report = Report.deserialize(new File(tempFileOutApk_Default));
+                Report report = Report.deserialize(new File(outputFile));
                 assertFalse(report.getIssues().isEmpty());
 
             } catch (Exception e) {

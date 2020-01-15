@@ -1779,6 +1779,8 @@ public class Utils {
         return null;
     }
 
+    //TODO - Marked for Removal
+    /*
     private static InvokeUnitContainer getDefinedFieldsFromInvoke(SootMethod method, Set<String> usedFields) {
 
         Chain<SootField> fields = method.getDeclaringClass().getFields();
@@ -1811,6 +1813,7 @@ public class Utils {
 
         return unitContainer;
     }
+    */
 
     /**
      * <p>createAnalysisOutput.</p>
