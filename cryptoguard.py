@@ -1029,6 +1029,39 @@ class TestUtils(object):
                 grouping[testType]['Active'] = sum([x['live'] for x in value])
         return liveTests, skippedTests, grouping
 
+    def getDisplayTests(dyct=pullTests()):
+        print('Displaying available tests')
+        grouping = [
+            'APK',
+            'JAR',
+            'JAVA',
+            'SOURCE',
+            'CLASS',
+            'OTHER',
+            'ALL'
+        ]
+
+        option = input("Please enter what kind of test you would like to have run from " + str(grouping) + " : ").upper()
+        if (option not in grouping):
+            print('Option is not valid')
+            sys.exit()
+
+        for key, value in dyct.items():
+            testType = 'OTHER'
+            if ('_' in key):
+                testType = key.strip().strip().split('_')[1]
+            if option == 'ALL' or option == testType:
+                print('Test Type: ' + str(testType))
+
+                print(Utils.halfRows())
+                for test in value:
+                    active = 'Live'
+                    if not test['live']:
+                        active = 'Skip'
+
+                    print(str(active) + ' | ' + str(key) + ' | ' + str(test['testName']) + ' | ' + str(key) + '.' + test['testName'])
+                sys.exit(0)
+
     def helptests(dyct=pullTests()):
         liveTests, skippedTests, grouping = TestUtils.getHelpTests(dyct)
 
@@ -1145,13 +1178,13 @@ class TestUtils(object):
             sys.exit(1)
 
         if (not android_set or not java7_set):
-            print('==============================')
+            print(Utils.halfRows())
             if not android_set:
                 print('Skipping All Android Tests, no ANDROID_HOME env found')
             else:
                 print('Skipping All Project and Java file Tests, no JAVA7_HOME env found')
 
-        print('==============================')
+        print(Utils.halfRows())
         for key, value in dyct.items():
             subpassed, subfailed, subskipped = 0, 0, 0
 
@@ -1335,6 +1368,11 @@ routers = {
     'testsHelp': {
         "func": TestUtils.helptests,
         "def": "Shows helpful information about the tests crawled.",
+        'offline': False
+    },
+    'displayTests': {
+        "func": TestUtils.getDisplayTests,
+        "def": "Displays Tests available.",
         'offline': False
     },
     # 'survey': {
