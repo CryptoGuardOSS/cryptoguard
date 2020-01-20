@@ -221,8 +221,8 @@ public class BaseAnalyzerRouting {
         List<String> classNames = Utils.retrieveFullyQualifiedName(snippetPath);
 
         Scene.v().setSootClassPath(Utils.surround(":",
-                Utils.joinSpecialSootClassPath(snippetPath),
                 Utils.getBaseSoot(javaHome),
+                Utils.joinSpecialSootClassPath(snippetPath),
                 Utils.buildSootClassPath(projectDependency))
         );
         log.debug("Setting the soot class path as: " + Scene.v().getSootClassPath());
