@@ -79,6 +79,7 @@ public class EntryPointTest_CLASS {
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
                             makeArg(argsIdentifier.VERYVERBOSE) +
+                            makeArg(argsIdentifier.STREAM) +
                             makeArg(argsIdentifier.PRETTY) +
                             makeArg(argsIdentifier.OUT, fileOut);
 
@@ -390,43 +391,6 @@ public class EntryPointTest_CLASS {
             }
         }
     }
-
-    /**
-     * <p>main_TestableFiles_SingleTest.</p>
-     */
-    //region TODO - Reimplement this after implementing argsIdentifier.BASEPACKAGE
-    //@Test
-    public void main_TestableFiles_SingleTest_ExtremelyBaseTest() {
-        String fileOut = tempFileOutTxt_Class_tester_test;
-        new File(fileOut).delete();
-
-        if (isLinux) {
-            String args =
-                    makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES) +
-                            makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
-                            makeArg(argsIdentifier.SOURCE, testRec_tester_test_Class) +
-                            makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
-                            makeArg(argsIdentifier.NOEXIT) +
-                            makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
-                            makeArg(argsIdentifier.VERYVERBOSE) +
-                            makeArg(argsIdentifier.OUT, fileOut);
-
-            try {
-                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
-
-                List<String> results = Files.readAllLines(Paths.get(outputFile), StandardCharsets.UTF_8);
-                assertTrue(results.size() >= 2);
-
-                results.removeIf(bugInstance -> !bugInstance.contains(getFileNameFromString(fileOut)));
-                assertTrue(results.size() >= 1);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                assertNull(e);
-            }
-        }
-    }
-    //endregion
 
     /**
      * <p>main_TestableFiles_SingleTest.</p>

@@ -149,7 +149,6 @@ test {
     environment "JAVA_HOME", System.getenv("JAVA_HOME") ?: "JAVA8SDK"
     environment "JAVA7_HOME", System.getenv("JAVA7_HOME") ?: "JAVA7SDK"
 }
-
 //A Task for specifying explicit release commands
 task release {
 

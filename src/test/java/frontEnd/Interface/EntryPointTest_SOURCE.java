@@ -61,6 +61,48 @@ public class EntryPointTest_SOURCE {
 
     //region Tests
     @Test
+    public void main_VerySimpleGradleProject() {
+        String fileOut = tempFileOutJSON;
+        String source = verySimple_Gradle;
+
+        new File(fileOut).delete();
+
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.DIR) +
+                            makeArg(argsIdentifier.SOURCE, verySimple_Gradle) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.Default) +
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.PRETTY) +
+                            makeArg(argsIdentifier.VERYVERBOSE) +
+                            makeArg(argsIdentifier.OUT, fileOut);
+
+
+            try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+                List<String> results = Files.readAllLines(Paths.get(outputFile), StandardCharsets.UTF_8);
+                assertTrue(results.size() >= 10);
+
+                List<String> filesFound = Utils.retrieveFilesPredicate(verySimple_Gradle, s -> s.endsWith(".java"), file -> {
+                    try {
+                        return Utils.retrieveFullyQualifiedName(file.getAbsolutePath()) + ".java";
+                    } catch (ExceptionHandler exceptionHandler) {
+                        exceptionHandler.printStackTrace();
+                        return null;
+                    }
+                });
+
+                assertTrue(results.stream().anyMatch(str -> filesFound.stream().anyMatch(str::contains)));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    @Test
     public void main_TestableJarSource() {
         String fileOut = tempFileOutTxt;
         new File(fileOut).delete();

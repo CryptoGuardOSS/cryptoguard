@@ -6,4 +6,7 @@
 *.rst text eol=lf
 build.gradle text eol=lf
 settings.gradle text eol=lf
+gradlew text eol=lf
+gradlew.bat eol=crlf
 gradle.properties text eol=lf
+*.ipynb text eol=lf
