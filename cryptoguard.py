@@ -221,7 +221,13 @@ class Utils(object):
 
     def prettyTime(num):
         H, M, S = str(datetime.timedelta(seconds=num)).split(':')
-        string = "H:" + str(H) + " M:" + str(M) + " S:" + str(S)
+
+        string = "S:" + str(S)
+        if (int(M) > 0):
+            string = "M:" + str(M) + " " + string
+        if (int(H) > 0):
+            string = "H:" + str(H) + " " + string
+
         return string
 
     def hash():
@@ -333,6 +339,10 @@ class Utils(object):
             print("Successful")
         else:
             print("Failure")
+
+    def refresh():
+        Utils.clean()
+        Utils.build()
 
     # Setting the arguments to be handled by the parser
     def arguments(parser, curChoices):
@@ -1230,6 +1240,11 @@ routers = {
     'build': {
         "func": Utils.build,
         "def": "Builds the project.",
+        'offline': False
+    },
+    'refresh': {
+        "func": Utils.refresh,
+        "def": "A shortcut to clean and build the project.",
         'offline': False
     },
     'hash': {

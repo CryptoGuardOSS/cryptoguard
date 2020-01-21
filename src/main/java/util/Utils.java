@@ -66,9 +66,9 @@ public class Utils {
      */
     public final static String lineSep = System.getProperty("line.separator");
     /**
-     * Constant <code>projectVersion="V03.12.00"</code>
+     * Constant <code>projectVersion="V03.12.01"</code>
      */
-    public final static String projectVersion = "V03.12.00";
+    public final static String projectVersion = "V03.12.01";
     /**
      * Constant <code>projectName="CryptoGuard"</code>
      */
@@ -352,6 +352,12 @@ public class Utils {
         } catch (Exception e) {
             throw new ExceptionHandler("Error retrieving the path of the file " + tempFile.getName() + ".", ExceptionId.FILE_AFK);
         }
+    }
+
+    public static String getDefaultFileOut(String packageName, String fileExtension) {
+        return Utils.osPathJoin(System.getProperty("user.dir"),
+                "_Cryptoguard-" + projectVersion + "_" +
+                        (packageName == null ? packageName + "_" : null) + java.util.UUID.randomUUID().toString() + "_" + fileExtension);
     }
     //endregion
 

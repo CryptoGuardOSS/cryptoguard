@@ -295,7 +295,8 @@ public class ArgumentsCheck {
         //region Setting the dependency path
         log.trace("Retrieving the dependency files.");
         List<String> vDeps = Utils.retrieveFilePathTypes(new ArrayList<>(dependencies), false, false);
-        log.debug("Using the source file(s) :" + retrieveFullyQualifiedName(vDeps).toString());
+        if (vDeps.size() > 0)
+            log.debug("Using the source file(s) :" + retrieveFullyQualifiedName(vDeps).toString());
         //endregion
         //endregion
 
@@ -357,13 +358,15 @@ public class ArgumentsCheck {
 
         //region Setting the file out
         if (fileOutPath == null) {
-            fileOutPath = Utils.osPathJoin(System.getProperty("user.dir"),
-                    info.getPackageName() + info.getMessagingType().getOutputFileExt());
-
-            String[] tempSplit = fileOutPath.split("\\.\\w+$");
-            fileOutPath = tempSplit[0] + "_" + Utils.getCurrentTimeStamp() + info.getMessagingType().getOutputFileExt();
+            fileOutPath = Utils.getDefaultFileOut(info.getPackageName(), info.getMessagingType().getOutputFileExt());
         } else {
+            String ogFileOutPath = fileOutPath;
             fileOutPath = Utils.retrieveFilePath(fileOutPath, oType.getOutputFileExt(), overWriteFileOut, true);
+            if (fileOutPath == null) {
+                log.warn("Output file: " + ogFileOutPath + " is not available.");
+                fileOutPath = Utils.getDefaultFileOut(info.getPackageName(), info.getMessagingType().getOutputFileExt());
+                log.warn("Defaulting the output to file: " + fileOutPath);
+            }
         }
         info.setFileOut(fileOutPath);
         //endregion

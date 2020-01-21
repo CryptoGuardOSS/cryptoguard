@@ -3,6 +3,7 @@ package frontEnd.Interface;
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.MessagingSystem.routing.Listing;
 import frontEnd.MessagingSystem.routing.structure.Default.Report;
+import frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport;
 import frontEnd.argsIdentifier;
 import org.junit.After;
 import org.junit.Before;
@@ -301,7 +302,7 @@ public class EntryPointTest_JAVA {
         }
     }
 
-    //@Test
+    @Test
     public void main_SymCrypto_Example_File_Failure_Test() {
         soot.G.v().reset();
         String source = symCrypto_Example_File;
@@ -311,23 +312,22 @@ public class EntryPointTest_JAVA {
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES) +
-                            makeArg(argsIdentifier.FORMATOUT, Listing.Default) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
                             makeArg(argsIdentifier.SOURCE, source) +
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
                             makeArg(argsIdentifier.PRETTY) +
-                            makeArg(argsIdentifier.VERYVERBOSE) +
                             makeArg(argsIdentifier.OUT, fileOut);
 
             try {
                 String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
-                Report report = Report.deserialize(new File(outputFile));
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
 
-                assertFalse(report.getIssues().isEmpty());
-                assertTrue(report.getIssues().stream().allMatch(bugInstance -> {
+                assertFalse(report.getBugInstance().isEmpty());
+                assertTrue(report.getBugInstance().stream().allMatch(bugInstance -> {
                     try {
-                        return bugInstance.getFullPath().contains(Utils.retrieveFullyQualifiedName(source));
+                        return bugInstance.getClassName().contains(Utils.retrieveFullyQualifiedName(source));
                     } catch (ExceptionHandler exceptionHandler) {
                         exceptionHandler.printStackTrace();
                         return false;
