@@ -1,6 +1,6 @@
 #region Variables
 #Variables dynamically set when the program is being built from the source
-ver=V03.12.00
+ver=V03.12.01
 name=cryptoguard
 
 #General Variables used throughout the Makefile
