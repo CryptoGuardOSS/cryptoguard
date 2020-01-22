@@ -4,7 +4,6 @@
 /build/
 /bin/
 /target/
-/release/
 /.settings/
 .project
 /*.jar

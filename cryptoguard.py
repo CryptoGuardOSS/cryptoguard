@@ -353,11 +353,12 @@ class Utils(object):
 
         return parser
 
-    def help():
+    def help(exit=True):
         Utils.printVersion()
         print(Utils.halfRows())
         Utils.routingInfo('./cryptoguard.py')
-        sys.exit(0)
+        if exit:
+            sys.exit(0)
 
     def routing(switch):
         offline = not os.path.exists(gitPath)
@@ -371,7 +372,7 @@ class Utils(object):
         global offline
         for val in routers:
             if (not offline or (offline and routers[val]['offline'])):
-                print('\t' + str(useage) + ' ' + str(val) + ' ' + str(routers[val]['def']))
+                print('\t' + str(useage) + ': ' + str(val) + ' ' + str(routers[val]['def']))
         return
 
     def start():
@@ -874,7 +875,7 @@ class TestUtils(object):
                 grouping[testType]['Active'] = sum([x['live'] for x in value])
         return liveTests, skippedTests, grouping
 
-    def getDisplayTests(dyct=pullTests()):
+    def getDisplayTests(dyct=pullTests(), exit=True):
         print('Displaying available tests')
         grouping = [
             'APK',
@@ -908,7 +909,8 @@ class TestUtils(object):
                     print(
                         str(active) + ' | ' + str(key) + ' | ' + str(test['testName']) + ' | ' + str(key) + '.' + test[
                             'testName'])
-                sys.exit(0)
+                if exit:
+                    sys.exit(0)
 
     def helptests(dyct=pullTests()):
         liveTests, skippedTests, grouping = TestUtils.getHelpTests(dyct)
