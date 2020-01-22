@@ -16,6 +16,14 @@ You should use it for various commands including:
 * running tests
 * building a simple command
 
+MyBinder
+=====================
+This is a website hosting a Docker image that actively runs either Java or Python3 samples.
+This is still under progress as the following are not active yet:
+* Android SDK tests
+* Sample Java Tests
+
+
 Please run the following command to get more information on how to use it :code:`./cryptoguard.py`
 
 IMPORTANT NOTICE
