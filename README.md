@@ -46,7 +46,7 @@ Note that if you have multiple subprojects with external dependencies, then you 
 
 `cd /path/to/cryptoguard && java -jar main/build/libs/main.jar "apk" "/path/to/apk/my-apk.apk" `
 
-If you have any questions or suggestions, please email to cryptoguardorg@gmail.com.
+If you have any questions or suggestions, please email to sazzad114@gmail.com.
 
 ## Disclaimer
 
