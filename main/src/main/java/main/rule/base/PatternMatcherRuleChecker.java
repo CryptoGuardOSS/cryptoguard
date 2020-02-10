@@ -72,7 +72,8 @@ public abstract class PatternMatcherRuleChecker extends BaseRuleChecker {
                 boolean found = false;
 
                 for (String regex : getPatternsToMatch()) {
-                    if (usebox.getValue().toString().matches(regex)) {
+//                     if (usebox.getValue().toString().matches(regex)) {
+                    if(Pattern.compile(regex,Pattern.CASE_INSENSITIVE).matcher(usebox.getValue().toString()).matches()) {
                         putIntoMap(predictableSourcMap, e, usebox.getValue().toString());
                         found = true;
                         break;
