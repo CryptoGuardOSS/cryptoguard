@@ -154,7 +154,7 @@ Input a single file (list of files)
 
 Help
 ======
-* If you have any questions or suggestions, please email to `cryptoguardorg@gmail.com <mailto:cryptoguardorg@gmail.com>`_.
+* If you have any questions or suggestions, please email to `sazzad114@gmail.com <mailto:sazzad114@gmail.com>`_.
 * Please also run :code:`make help` or :code:`java -jar cryptoguard.jar -h` for argument help.
 * You can also look at the auto-generated USAGE.md file.
 
