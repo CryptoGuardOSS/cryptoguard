@@ -34,6 +34,8 @@ public class TestUtilities {
     public static final String srcOneGrv = Utils.osPathJoin(testRec, "testable-jar");
 
 
+    public static final String pracitceJavaPackage = Utils.osPathJoin(srcOneGrv, "src", "main", "java", "tester", "Crypto_VeryTemp.java");
+
     public static final String verySimple_Gradle = Utils.osPathJoin(testRec, "VerySimple_Gradle");
     public static final String verySimple_Gradle_File = Utils.osPathJoin(verySimple_Gradle, "src", "main", "java", "very.java");
 

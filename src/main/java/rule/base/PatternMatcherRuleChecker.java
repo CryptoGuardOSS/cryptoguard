@@ -13,6 +13,7 @@ import util.Utils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * <p>Abstract PatternMatcherRuleChecker class.</p>
@@ -88,7 +89,7 @@ public abstract class PatternMatcherRuleChecker extends BaseRuleChecker {
                 boolean found = false;
 
                 for (String regex : getPatternsToMatch()) {
-                    if (usebox.getValue().toString().matches(regex)) {
+                    if (Pattern.compile(regex, Pattern.CASE_INSENSITIVE).matcher(usebox.getValue().toString()).matches()) {
                         putIntoMap(predictableSourcMap, e, usebox.getValue().toString());
                         found = true;
                         break;

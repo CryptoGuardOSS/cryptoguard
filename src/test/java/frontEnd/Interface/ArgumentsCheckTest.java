@@ -21,6 +21,8 @@ import static org.junit.Assert.*;
 import static test.TestUtilities.*;
 import static util.Utils.makeArg;
 
+then
+
 /**
  * <p>ArgumentsCheckTest class.</p>
  *
