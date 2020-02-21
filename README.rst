@@ -1,7 +1,9 @@
 #################################
-CryptoGuard V03.12.01
+CryptoGuard V03.12.02
 #################################
 
+.. image:: https://mybinder.org/badge_logo.svg
+ :target: https://mybinder.org/v2/gh/franceme/cryptoguard/dev?filepath=Notebook%2F
 
 An program analysis tool to find cryptographic misuse in Java and Android.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -10,16 +12,19 @@ CryptoGuard.py
 =====================
 This python file is the wrapper created to assist with various portions of the project.
 You should use it for various commands including:
+
 * setting the environment
 * clean the project
 * building the project
 * running tests
 * building a simple command
 
-MyBinder
+`MyBinder <https://mybinder.org/>`_
 =====================
 This is a website hosting a Docker image that actively runs either Java or Python3 samples.
+The Java Notebook is only possible by utilitzing `IJava <https://github.com/SpencerPark/IJava>`_.
 This is still under progress as the following are not active yet:
+
 * Android SDK tests
 * Sample Java Tests
 

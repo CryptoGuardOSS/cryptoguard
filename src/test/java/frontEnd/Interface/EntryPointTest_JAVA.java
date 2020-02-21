@@ -56,6 +56,45 @@ public class EntryPointTest_JAVA {
 
     //region Tests
 
+    //@Test
+    public void main_TestableFile_VerySimple_BOLO_TEST() {
+        soot.G.v().reset();
+        String source = "/home/maister/.Projects/Bolo/wavsep/wavsep-v1.2-src-eclipse-archive/trunk/src/main/java/com/sectooladdict/constants/SystemConstants.java";
+        String fileOut = "/home/maister/.Projects/Bolo/wavsep/wavsep-v1.2-src-eclipse-archive/trunk/base.json";
+        new File(fileOut).delete();
+
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.Default) +
+                            makeArg(argsIdentifier.SOURCE, source) +
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.PRETTY) +
+                            makeArg(argsIdentifier.VERYVERBOSE) +
+                            makeArg(argsIdentifier.OUT, fileOut);
+
+            try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+                Report report = Report.deserialize(new File(outputFile));
+
+                assertFalse(report.getIssues().isEmpty());
+                assertTrue(report.getIssues().stream().allMatch(bugInstance -> {
+                    try {
+                        return bugInstance.getFullPath().contains(Utils.retrieveFullyQualifiedName(source));
+                    } catch (ExceptionHandler exceptionHandler) {
+                        exceptionHandler.printStackTrace();
+                        return false;
+                    }
+                }));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
     @Test
     public void main_TestableFile_VerySimple() {
         soot.G.v().reset();

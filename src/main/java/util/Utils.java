@@ -28,8 +28,6 @@ import soot.options.Options;
 import soot.util.Chain;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Function;
@@ -66,9 +64,9 @@ public class Utils {
      */
     public final static String lineSep = System.getProperty("line.separator");
     /**
-     * Constant <code>projectVersion="V03.12.01"</code>
+     * Constant <code>projectVersion="V03.12.02"</code>
      */
-    public final static String projectVersion = "V03.12.01";
+    public final static String projectVersion = "V03.12.02";
     /**
      * Constant <code>projectName="CryptoGuard"</code>
      */
@@ -88,6 +86,8 @@ public class Utils {
     private final static Pattern sootMthdPatternTwo = Pattern.compile("((?:[a-zA-Z0-9_]+))\\(");
     private final static Pattern sootFoundMatchPattern = Pattern.compile("\"{1}(.+)\"{1}");
     private final static Pattern packagePattern = Pattern.compile("package ([[a-zA-Z]+?.]+);");
+    private final static Pattern startComment = Pattern.compile("^\\s?\\/{1}\\*{1}");
+    private final static Pattern comment = Pattern.compile("^\\s?\\*{1}");
     private final static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");
     /**
      * Constant <code>NUM_ORTHOGONAL=0</code>
@@ -585,7 +585,11 @@ public class Utils {
         if (in.toLowerCase().endsWith(".java")) {
             sourcePackage = sourcePackage.replace(".java", "");
             try (BufferedReader br = new BufferedReader(new FileReader(in))) {
+
                 String firstLine = br.readLine();
+                Matcher match = null;
+                while (StringUtils.isBlank(firstLine) || (match = startComment.matcher(firstLine)).find() || (match = comment.matcher(firstLine)).find())
+                    firstLine = br.readLine();
 
                 if (firstLine.startsWith("package ") && firstLine.toLowerCase().endsWith(";")) {
                     sourcePackage = firstLine.substring("package ".length(), firstLine.length() - 1) + "." + sourcePackage;
@@ -1114,20 +1118,10 @@ public class Utils {
      */
     public static String retrievePackageFromJavaFiles(String file) {
         try {
-            File in = new File(file);
-
-            if (file.toLowerCase().endsWith(".java")) {
-                for (String line : Files.readAllLines(in.toPath(), StandardCharsets.UTF_8)) {
-                    Matcher matches = packagePattern.matcher(line);
-                    if (matches.find())
-                        return Utils.fileSep + StringUtils.trimToNull(matches.group(1)) + Utils.fileSep + in.getName();
-                }
-            } else
-                return in.getName();
-        } catch (IOException e) {
-            //TODO - Add Catch Here
+            return retrieveFullyQualifiedName(file).replaceAll("\\.", fileSep) + ".java";
+        } catch (Exception e) {
+            return null;
         }
-        return file;
     }
 
     /**
@@ -1255,7 +1249,7 @@ public class Utils {
      * @return {@link java.lang.String} - The file name with the extension attached
      */
     public static String trimFilePath(String fullFilePath) {
-        String[] folderSplit = fullFilePath.split(Pattern.quote(System.getProperty("file.separator")));
+        String[] folderSplit = fullFilePath.split(Pattern.quote(fileSep));
         return folderSplit[folderSplit.length - 1];
     }
 
@@ -1831,7 +1825,9 @@ public class Utils {
      * @param output              a {@link frontEnd.MessagingSystem.routing.outputStructures.OutputStructure} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
-    public static void createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, Map<UnitContainer, List<String>> predictableSourcMap, String rule, OutputStructure output) throws ExceptionHandler {
+    public static void createAnalysisOutput
+    (Map<String, String> xmlFileStr, List<String> sourcePaths, Map<UnitContainer, List<String>> predictableSourcMap, String
+            rule, OutputStructure output) throws ExceptionHandler {
         Integer ruleNumber = Integer.parseInt(rule);
 
         for (UnitContainer unit : predictableSourcMap.keySet())
@@ -1897,7 +1893,8 @@ public class Utils {
         return -1;
     }
 
-    private static boolean isArrayUseBox(UnitContainer curUnit, UnitContainer insetIns, ValueBox defBox, Value useBox) {
+    private static boolean isArrayUseBox(UnitContainer curUnit, UnitContainer insetIns, ValueBox defBox, Value
+            useBox) {
         return (defBox.getValue().toString().contains(useBox.toString())
                 && curUnit.getMethod().equals(insetIns.getMethod())
                 && useBox.getType() instanceof ArrayType);
@@ -1912,7 +1909,8 @@ public class Utils {
      * @param depth           a int.
      * @return a {@link analyzer.backward.UnitContainer} object.
      */
-    public static UnitContainer createInvokeUnitContainer(Unit currInstruction, String caller, List<String> usedFields, int depth) {
+    public static UnitContainer createInvokeUnitContainer(Unit currInstruction, String
+            caller, List<String> usedFields, int depth) {
 
         for (String dontVisit : INVOKE_DONT_VISIT) {
             if (currInstruction.toString().contains(dontVisit)) {
