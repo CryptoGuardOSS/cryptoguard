@@ -40,8 +40,6 @@ public enum argsIdentifier {
     STREAM("st", null, "Stream the analysis to the output file.", null),
     HELP("h", null, "Print out the Help Information.", null),
     MAIN("main", "className", "Choose the main class if there are multiple main classes in the files given.", "main")
-    //TODO - Implement an option to specify the base package
-    //BASEPACKAGE("package", null, "Specify the base package path (src/main/java) if the project is not a generic Maven/Gradle project.")
     ;
     //endregion
 

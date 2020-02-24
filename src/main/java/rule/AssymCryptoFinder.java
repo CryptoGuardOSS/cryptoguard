@@ -48,7 +48,7 @@ public class AssymCryptoFinder extends BaseRuleChecker {
     }
     //endregion
 
-    //region TODO Check this
+    //region
     String rule = "00";
     private Map<UnitContainer, List<String>> predictableSourcMap = new HashMap<>();
     private List<String> crypto;
@@ -111,7 +111,7 @@ public class AssymCryptoFinder extends BaseRuleChecker {
      */
     @Override
     public void createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler {
-        //region New Analysis TODO - Verify this
+        //region New Analysis
         //region PBEInterationCountFinder
         Utils.createAnalysisOutput(xmlFileStr, sourcePaths, predictableSourcMap, rule, output);
         //endregion

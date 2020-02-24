@@ -4,6 +4,7 @@ import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.Interface.outputRouting.ExceptionId;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import frontEnd.argsIdentifier;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.cli.*;
 
 import java.io.*;
@@ -19,6 +20,7 @@ import java.util.Properties;
  *
  * <p>The Scarf Input check implementation.</p>
  */
+@Log4j2
 public class ScarfXML implements Structure {
 
     /**
@@ -42,10 +44,13 @@ public class ScarfXML implements Structure {
             if (e.getMessage().startsWith("Missing required option: "))
                 arg = argsIdentifier.lookup(e.getMessage().replace("Missing required option: ", "")).getArg();
 
-            if (arg == null)
+            if (arg == null) {
+                log.info("Retrieving help info");
                 throw new ExceptionHandler(this.helpInfo(), ExceptionId.GEN_VALID);
-            else
+            } else {
+                log.fatal("Issue with the argument: " + arg);
                 throw new ExceptionHandler("Issue with the argument: " + arg, ExceptionId.GEN_VALID);
+            }
         }
 
         if (cmd.hasOption(ScarfXMLId.ConfigFile.getId())) {
@@ -111,8 +116,10 @@ public class ScarfXML implements Structure {
 
             return SWAMPProperties;
         } catch (FileNotFoundException e) {
+            log.fatal("Config File: " + path + " not found");
             throw new ExceptionHandler("Config File: " + path + " not found", ExceptionId.FILE_AFK);
         } catch (IOException e) {
+            log.fatal("Error Loading: " + path);
             throw new ExceptionHandler("Error Loading: " + path, ExceptionId.FILE_READ);
         }
     }

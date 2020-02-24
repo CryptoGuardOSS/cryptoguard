@@ -97,9 +97,15 @@ public class GradleBuildFileParser implements BuildFileParser {
 
 
             } catch (Exception e) {
-
+                log.warn("Error reading file " + fileName);
+                //throw new ExceptionHandler("Error reading file " + fileName, ExceptionId.FILE_I);
             }
-        } catch (IOException e) {
+        }
+        //catch (ExceptionHandler e) {
+        //    throw e;
+        //}
+        catch (IOException e) {
+            log.fatal("Error reading file " + fileName);
             throw new ExceptionHandler("Error reading file " + fileName, ExceptionId.FILE_I);
         }
     }
@@ -171,6 +177,7 @@ public class GradleBuildFileParser implements BuildFileParser {
 
             return moduleVsDependencyPaths;
         } catch (IOException e) {
+            log.fatal("Error reading file " + buildFile);
             throw new ExceptionHandler("Error reading file " + buildFile, ExceptionId.FILE_I);
         }
     }

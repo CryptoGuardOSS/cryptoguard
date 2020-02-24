@@ -1,5 +1,6 @@
 package frontEnd.Interface.outputRouting;
 
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import util.Utils;
 
@@ -17,6 +18,7 @@ import java.util.function.Supplier;
  *
  * <p>The Main Exception Handling for the whole project</p>
  */
+@Log4j2
 public class ExceptionHandler extends Exception implements Supplier<String> {
 
     //region Attributes

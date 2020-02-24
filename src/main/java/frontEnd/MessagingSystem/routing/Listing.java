@@ -6,6 +6,7 @@ import frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import frontEnd.MessagingSystem.routing.outputStructures.block.Structure;
 import frontEnd.MessagingSystem.routing.outputStructures.common.JacksonSerializer;
 import frontEnd.MessagingSystem.routing.outputStructures.stream.Legacy;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * The enum containing all of the different messaging types available for the user.
@@ -14,6 +15,7 @@ import frontEnd.MessagingSystem.routing.outputStructures.stream.Legacy;
  * @version 03.07.01
  * @since V01.00.00
  */
+@Log4j2
 public enum Listing {
     //region Values
     Legacy("Legacy", "L", ".txt", true, null),
@@ -148,9 +150,11 @@ public enum Listing {
     public OutputStructure getTypeOfMessagingOutput(boolean stream, EnvironmentInformation info) throws ExceptionHandler {
 
         if (stream) {
-            if (!this.streamEnabled)
-                throw new ExceptionHandler("Streaming is not supported for the format: " + this.getType(), ExceptionId.GEN_VALID);
-            else {
+            if (!this.streamEnabled) {
+                log.info("Streaming is not supported for the format: " + this.getType());
+                log.info("Defaulting back to block based output.");
+                return getTypeOfMessagingOutput(false, info);
+            } else {
                 try {
                     return (frontEnd.MessagingSystem.routing.outputStructures.stream.Structure) Class.forName(this.streamPath + this.type).getConstructor(EnvironmentInformation.class).newInstance(info);
                 } catch (Exception e) {
@@ -178,14 +182,16 @@ public enum Listing {
      */
     public OutputStructure unmarshall(boolean stream, String filePath) throws ExceptionHandler {
         if (stream) {
-            if (!this.streamEnabled)
-                throw new ExceptionHandler("Streaming is not supported for the format: " + this.getType(), ExceptionId.GEN_VALID);
-            else {
+            if (!this.streamEnabled) {
+                log.info("Streaming is not supported for the format: " + this.getType());
+                log.info("Defaulting to block based output.");
+                return unmarshall(false, filePath);
+            } else {
                 try {
                     return (frontEnd.MessagingSystem.routing.outputStructures.stream.Structure) Class.forName(this.streamPath + this.type).getConstructor(String.class).newInstance(filePath);
                 } catch (Exception e) {
-                    //TODO - Catch Here
-                    return null;
+                    log.fatal("Issue dynamically calling the stream Structure with the filepath: " + filePath);
+                    throw new ExceptionHandler(ExceptionId.ARG_VALID, "Issue dynamically calling the Structure with the filepath: " + filePath);
                 }
             }
         } else //non-streamed
@@ -193,8 +199,8 @@ public enum Listing {
             try {
                 return (Structure) Class.forName(this.blockPath + this.type).getConstructor(String.class).newInstance(filePath);
             } catch (Exception e) {
-                //TODO - Catch Here
-                return null;
+                log.fatal("Issue dynamically calling the blocked Structure with the filepath: " + filePath);
+                throw new ExceptionHandler(ExceptionId.ARG_VALID, "Issue dynamically calling the Structure with the filepath: " + filePath);
             }
         }
     }

@@ -64,9 +64,9 @@ public class Utils {
      */
     public final static String lineSep = System.getProperty("line.separator");
     /**
-     * Constant <code>projectVersion="V03.12.02"</code>
+     * Constant <code>projectVersion="V03.13.00"</code>
      */
-    public final static String projectVersion = "V03.12.02";
+    public final static String projectVersion = "V03.13.00";
     /**
      * Constant <code>projectName="CryptoGuard"</code>
      */
@@ -217,8 +217,10 @@ public class Utils {
 
             return filePaths;
         } catch (FileNotFoundException e) {
+            log.fatal("File " + file + " not found");
             throw new ExceptionHandler("File " + file + " not found", ExceptionId.FILE_I);
         } catch (IOException e) {
+            log.fatal("Error reading the file  " + file);
             throw new ExceptionHandler("Error reading the file  " + file, ExceptionId.FILE_I);
         }
     }
@@ -236,9 +238,10 @@ public class Utils {
     public static ArrayList<String> retrieveFilePaths(ArrayList<String> rawFileStrings, ArrayList<String> type, Boolean expandPath, Boolean overwrite) throws ExceptionHandler {
         ArrayList<String> output = new ArrayList<>();
 
-        if (type != null && type.size() == 1 && type.get(0).equals("dir") && rawFileStrings.size() > 1)
+        if (type != null && type.size() == 1 && type.get(0).equals("dir") && rawFileStrings.size() > 1) {
+            log.fatal("Please enter one source argument for this use case.");
             throw new ExceptionHandler("Please enter one source argument for this use case.", ExceptionId.GEN_VALID);
-        else if (rawFileStrings.size() == 1 && rawFileStrings.get(0).endsWith(".in"))
+        } else if (rawFileStrings.size() == 1 && rawFileStrings.get(0).endsWith(".in"))
             output = inputFiles(rawFileStrings.get(0), type, expandPath, overwrite);
         else
             for (String rawString : rawFileStrings)
@@ -297,8 +300,10 @@ public class Utils {
 
         Boolean exists = tempFile.exists() || overwrite;
 
-        if (!exists)//TODO - Add soft kill ere
+        if (!exists) {
+            log.fatal(tempFile.getName() + " does not exist.");
             throw new ExceptionHandler(tempFile.getName() + " does not exist.", ExceptionId.ARG_VALID);
+        }
 
         Boolean isDir = tempFile.isDirectory() || overwrite;
         Boolean isFile = tempFile.isFile() || overwrite;
@@ -310,6 +315,7 @@ public class Utils {
                     try (DataInputStream stream = new DataInputStream(new FileInputStream(file))) {
                         //Verifying if the class file has the Magic Java Number
                         if (stream.readInt() != 0xcafebabe) {
+                            log.fatal("The class file " + file + " is not a valid java.class file.");
                             throw new ExceptionHandler("The class file " + file + " is not a valid java.class file.", ExceptionId.ARG_VALID);
                         } else {
 
@@ -319,30 +325,40 @@ public class Utils {
                             //Checking the Major Version of the JDK that compiled the file against the supported version
                             Version fileVersion = Version.retrieveByMajor(stream.readUnsignedShort());
                             if (!fileVersion.supportedFile()) {
+                                log.fatal("The class file (compiled by a JDK Version " + fileVersion.getVersionNumber() + ") is not supported.");
                                 throw new ExceptionHandler("The class file (compiled by a JDK Version " + fileVersion.getVersionNumber() + ") is not supported.", ExceptionId.ARG_VALID);
                             }
                         }
                     } catch (IOException e) {
+                        log.fatal("Error reading the file " + file + ".");
                         throw new ExceptionHandler("Error reading the file " + file + ".", ExceptionId.FILE_READ);
                     }
                     //endregion
                 case ".java":
                 case ".jar":
                 case ".apk":
-                    if (!isFile)
+                    if (!isFile) {
+                        log.fatal(tempFile.getName() + " is not a valid file.");
                         throw new ExceptionHandler(tempFile.getName() + " is not a valid file.", ExceptionId.ARG_VALID);
+                    }
                     break;
                 case "dir":
-                    if (!isDir)
+                    if (!isDir) {
+                        log.fatal(tempFile.getName() + " is not a valid directory.");
                         throw new ExceptionHandler(tempFile.getName() + " is not a valid directory.", ExceptionId.ARG_VALID);
+                    }
                     break;
                 default:
-                    if (!isFile && !isDir)
+                    if (!isFile && !isDir) {
+                        log.fatal(tempFile.getName() + " is not a valid file or directory.");
                         throw new ExceptionHandler(tempFile.getName() + " is not a valid file or directory.", ExceptionId.ARG_VALID);
+                    }
                     break;
             }
-        else if (!isFile && !isDir)
+        else if (!isFile && !isDir) {
+            log.fatal(tempFile.getName() + " is not a valid file or directory.");
             throw new ExceptionHandler(tempFile.getName() + " is not a valid file or directory.", ExceptionId.ARG_VALID);
+        }
 
         try {
             if (expandPath)
@@ -350,14 +366,19 @@ public class Utils {
             else
                 return file;
         } catch (Exception e) {
+            log.fatal("Error retrieving the path of the file " + tempFile.getName() + ".");
             throw new ExceptionHandler("Error retrieving the path of the file " + tempFile.getName() + ".", ExceptionId.FILE_AFK);
         }
     }
 
     public static String getDefaultFileOut(String packageName, String fileExtension) {
+        String _tempPackage = (packageName == null ? packageName + "_" : null);
+        if (_tempPackage != null && StringUtils.trimToNull(_tempPackage).equalsIgnoreCase("null"))
+            _tempPackage = null;
+
         return Utils.osPathJoin(System.getProperty("user.dir"),
                 "_Cryptoguard-" + projectVersion + "_" +
-                        (packageName == null ? packageName + "_" : null) + java.util.UUID.randomUUID().toString() + "_" + fileExtension);
+                        _tempPackage + java.util.UUID.randomUUID().toString() + "_" + fileExtension);
     }
     //endregion
 
@@ -476,6 +497,7 @@ public class Utils {
             }
             return classNames;
         } catch (IOException e) {
+            log.fatal("Error with file " + jarPath);
             throw new ExceptionHandler("Error with file " + jarPath, ExceptionId.FILE_I);
         }
     }
@@ -522,13 +544,9 @@ public class Utils {
      * @param e a {@link frontEnd.Interface.outputRouting.ExceptionHandler} object.
      */
     public static void handleErrorMessage(ExceptionHandler e) {
-        log.debug(e.getErrorCode().getMessage());
-
         if (e.getErrorCode().getId().equals(0)) {
-            log.info(e.getErrorCode().getMessage());
             System.out.print(e.getLongDescriptionString());
         } else {
-            log.fatal(e.getErrorCode().getMessage());
             System.err.print(e.toString());
         }
     }
@@ -556,8 +574,6 @@ public class Utils {
 
         for (String path : fileIn) {
             String temp = null;
-            //TODO - Verify this change works
-            //Utils.verifyFileExts(path, new String[]{".java", ".class"}, false);
 
             if ((temp = Utils.retrieveFilePath(path, EngineType.JAVAFILES.getInputExtension(), true, false)) == null)
                 temp = Utils.retrieveFilePath(path, EngineType.CLASSFILES.getInputExtension(), true, false);
@@ -596,6 +612,7 @@ public class Utils {
                 }
 
             } catch (IOException e) {
+                log.fatal("Error parsing file: " + in);
                 throw new ExceptionHandler("Error parsing file: " + in, ExceptionId.FILE_READ);
             }
         } else if (in.toLowerCase().endsWith(".class")) {
@@ -707,9 +724,11 @@ public class Utils {
                     results.add(curLine.replace("import ", "").replace(";", ""));
             }
         } catch (FileNotFoundException e) {
-            //TODO - Add exception here
+            log.fatal("File: " + javaFile + " is not found.");
+            throw new ExceptionHandler(ExceptionId.FILE_READ, "File: " + javaFile + " is not found.");
         } catch (IOException e) {
-            //TODO - Add Exception here
+            log.fatal("Issue reading the file: " + javaFile);
+            throw new ExceptionHandler(ExceptionId.FILE_READ, "Issue reading the file: " + javaFile);
         }
 
         return results;
@@ -749,6 +768,7 @@ public class Utils {
             }
             return classNames;
         } catch (IOException e) {
+            log.fatal("Error with dex file classes.dex");
             throw new ExceptionHandler("Error with dex file classes.dex", ExceptionId.FILE_I);
         }
     }
@@ -923,8 +943,10 @@ public class Utils {
                 }
             }
         } catch (FileNotFoundException e) {
+            log.fatal("File " + jarPath + " is not found.");
             throw new ExceptionHandler("File " + jarPath + " is not found.", ExceptionId.FILE_AFK);
         } catch (IOException e) {
+            log.fatal("Error Reading " + jarPath + ".");
             throw new ExceptionHandler("Error Reading " + jarPath + ".", ExceptionId.FILE_I);
         }
         return classNames;
@@ -936,6 +958,7 @@ public class Utils {
             ZipEntry entry = zipFile.getEntry(file);
             return zipFile.getInputStream(entry);
         } catch (IOException e) {
+            log.fatal("Error Reading " + jarPath + ".");
             throw new ExceptionHandler("Error Reading " + jarPath + ".", ExceptionId.FILE_I);
         }
     }
@@ -1095,16 +1118,17 @@ public class Utils {
         String commonPath = null;
 
         for (String in : sourceFiles) {
+            for (String file : in.split(".")) {
 
-            String tempPath = in.replace(retrievePackageFromJavaFiles(in), "");
+                String tempPath = in.replace(retrievePackageFromJavaFiles(file), "");
 
-            if (commonPath == null)
-                commonPath = tempPath;
-            else if (!commonPath.equals(tempPath)) {
-                String removable = commonPath.replace(in, "");
-                commonPath = commonPath.replace(removable, "");
+                if (commonPath == null)
+                    commonPath = tempPath;
+                else if (!commonPath.equals(tempPath)) {
+                    String removable = commonPath.replace(in, "");
+                    commonPath = commonPath.replace(removable, "");
+                }
             }
-
         }
 
         return commonPath;
@@ -1164,8 +1188,10 @@ public class Utils {
             baseSplit = Arrays.stream(baseDir.split(fileSep)).filter(StringUtils::isNotBlank).toArray(String[]::new);
         }
 
-        if (baseDir.equals(""))
+        if (baseDir.equals("")) {
+            log.fatal("Different file paths sent in.");
             throw new ExceptionHandler("Different file paths sent in.", ExceptionId.ARG_VALID);
+        }
 
         return baseDir;
     }
@@ -1176,7 +1202,7 @@ public class Utils {
      * @param files a {@link java.util.List} object.
      * @return a {@link java.util.List} object.
      */
-    public static List<String> retrieveTrimmedSourcePaths(List<String> files) {
+    public static List<String> retrieveTrimmedSourcePaths(List<String> files) throws ExceptionHandler {
         List<String> filePaths = new ArrayList<>();
         for (String relativeFile : files) {
             String relativeFilePath = "";
@@ -1186,7 +1212,8 @@ public class Utils {
             try {
                 relativeFilePath = file.getCanonicalPath().replace(file.getName(), "");
             } catch (IOException e) {
-                //TODO - Add Catch Here
+                log.fatal("Issue retrieving the file path from file: " + file);
+                throw new ExceptionHandler(ExceptionId.FILE_READ, "Issue retrieving the file path from file: " + file);
             }
 
             if (!filePaths.contains(relativeFilePath))
@@ -1487,6 +1514,7 @@ public class Utils {
 
             return Utils.osPathJoin("~", fullPath.replaceAll(Utils.userPath + fileSep, ""));
         } catch (IOException e) {
+            log.fatal("Error reading file: " + filePath);
             throw new ExceptionHandler("Error reading file: " + filePath, ExceptionId.FILE_I);
         }
     }
@@ -1778,42 +1806,6 @@ public class Utils {
 
         return null;
     }
-
-    //TODO - Marked for Removal
-    /*
-    private static InvokeUnitContainer getDefinedFieldsFromInvoke(SootMethod method, Set<String> usedFields) {
-
-        Chain<SootField> fields = method.getDeclaringClass().getFields();
-
-        InvokeUnitContainer unitContainer = new InvokeUnitContainer();
-
-        for (String usedField : usedFields) {
-            for (SootField field : fields) {
-                if (usedField.contains(field.toString())) {
-                    unitContainer.getDefinedFields().add(usedField);
-                }
-            }
-        }
-
-        for (String field : unitContainer.getDefinedFields()) {
-
-            HeuristicBasedInstructions influencingInstructions = new HeuristicBasedInstructions(method, field);
-
-            HeuristicBasedAnalysisResult propAnalysis = influencingInstructions.getAnalysisResult();
-
-            if (propAnalysis.getAnalysis() != null) {
-
-                // Get args
-                List<Integer> args = Utils.findInfluencingParamters(propAnalysis.getAnalysis());
-                unitContainer.setArgs(args);
-
-                unitContainer.setAnalysisResult(propAnalysis.getAnalysis());
-            }
-        }
-
-        return unitContainer;
-    }
-    */
 
     /**
      * <p>createAnalysisOutput.</p>

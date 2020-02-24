@@ -52,12 +52,12 @@ public class ArgumentsCheck {
 
         //region Printing Version
         if (args.contains(argsIdentifier.HELP.getArg())) {
-            log.trace("Retrieving the help as requested.");
+            log.info("Retrieving the help as requested.");
             throw new ExceptionHandler(parcelHandling.retrieveHelpFromOptions(cmdLineArgs, null), ExceptionId.HELP);
         }
 
         if (args.contains(argsIdentifier.VERSION.getArg())) {
-            log.trace("Retrieving the version as requested.");
+            log.info("Retrieving the version as requested.");
             throw new ExceptionHandler(parcelHandling.retrieveHeaderInfo(), ExceptionId.VERSION);
         }
         //endregion
@@ -82,6 +82,7 @@ public class ArgumentsCheck {
 
             }
 
+            log.fatal(parcelHandling.retrieveHelpFromOptions(cmdLineArgs, arg.toString()));
             throw new ExceptionHandler(parcelHandling.retrieveHelpFromOptions(cmdLineArgs, arg.toString()), ExceptionId.ARG_VALID);
         }
 
@@ -147,8 +148,10 @@ public class ArgumentsCheck {
         String setMainClass = null;
         if (cmd.hasOption(argsIdentifier.MAIN.getId())) {
             setMainClass = StringUtils.trimToNull(cmd.getOptionValue(argsIdentifier.MAIN.getId()));
-            if (setMainClass == null)
+            if (setMainClass == null) {
+                log.fatal("Please Enter a valid main class path.");
                 throw new ExceptionHandler("Please Enter a valid main class path.", ExceptionId.ARG_VALID);
+            }
         }
         //endregion
 
@@ -158,18 +161,6 @@ public class ArgumentsCheck {
 
         Listing messaging = Listing.retrieveListingType(cmd.getOptionValue(argsIdentifier.FORMATOUT.getId()));
         log.info("Using the output: " + messaging.getType());
-
-        //region - TODO - Implement an option to specify the base package
-        /*
-        if (cmd.hasOption(argsIdentifier.BASEPACKAGE.getId())) {
-            String basePackage = cmd.getOptionValue(argsIdentifier.BASEPACKAGE.getId());
-            log.debug("Going to set the Base Package : " + basePackage);
-
-            info.setBasePackage(Utils.verifyDir(basePackage));
-            log.info("Specifying the base package as " + basePackage);
-        }
-        */
-        //endregion
 
         //region Setting the file out
         log.trace("Determining the file out.");
@@ -184,8 +175,7 @@ public class ArgumentsCheck {
                 javaHome, androidHome);
 
         if (!messaging.getTypeOfMessagingInput().inputValidation(info, args.toArray(new String[0]))) {
-            log.error("Issue Validating Output Specific Arguments.");
-            //TODO - Add better output message for this case
+            log.fatal("Issue Validating Input Help For Specific Arguments.");
             throw new ExceptionHandler(messaging.getInputHelp(), ExceptionId.FORMAT_VALID);
         }
 
@@ -281,8 +271,10 @@ public class ArgumentsCheck {
 
         //region verifying current running version
         Version currentVersion = Version.getRunningVersion();
-        if (!currentVersion.supported())
+        if (!currentVersion.supported()) {
+            log.fatal("JRE Version: " + currentVersion + " is not compatible");
             throw new ExceptionHandler("JRE Version: " + currentVersion + " is not compatible, please use JRE Version: " + Utils.supportedVersion, ExceptionId.GEN_VALID);
+        }
         //endregion
 
         //region verifying filePaths
@@ -349,8 +341,10 @@ public class ArgumentsCheck {
         if (StringUtils.isNotEmpty(mainFile)) {
             log.info("Attempting to validate the main method as " + mainFile);
 
-            if (!info.getSource().contains(mainFile))
+            if (!info.getSource().contains(mainFile)) {
+                log.fatal("The main class path is not included within the source file.");
                 throw new ExceptionHandler("The main class path is not included within the source file.", ExceptionId.ARG_VALID);
+            }
 
             log.info("Using the main method from class " + mainFile);
             info.setMain(mainFile);
@@ -407,15 +401,6 @@ public class ArgumentsCheck {
         androidPath.setType(File.class);
         androidPath.setOptionalArg(true);
         cmdLineArgs.addOption(androidPath);
-
-        //region - TODO - Implement an option to specify the base package
-        /*
-        Option baseProject = Option.builder(argsIdentifier.BASEPACKAGE.getId()).hasArg().argName("package").desc(argsIdentifier.BASEPACKAGE.getDesc()).build();
-        baseProject.setType(String.class);
-        baseProject.setOptionalArg(true);
-        cmdLineArgs.addOption(baseProject);
-        */
-        //endregion
 
         Option depth = Option.builder(argsIdentifier.DEPTH.getId()).hasArg().argName(argsIdentifier.DEPTH.getArgName()).desc(argsIdentifier.DEPTH.getDesc()).build();
         depth.setType(String.class);

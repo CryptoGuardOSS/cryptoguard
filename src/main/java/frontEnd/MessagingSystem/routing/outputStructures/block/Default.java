@@ -51,14 +51,9 @@ public class Default extends Structure {
         super.setOutfile(new File(info.getFileOut()));
         super.setType(mapper(struct.getTarget().getType()));
 
-        struct.getIssues().stream().forEach(issue -> {
-            try {
-                super.addIssueToCollection(mapper(issue));
-            } catch (ExceptionHandler exceptionHandler) {
-                //TODO - Catch Here
-            }
-        });
 
+        for (frontEnd.MessagingSystem.routing.structure.Default.Issue issue : struct.getIssues())
+            super.addIssueToCollection(mapper(issue));
     }
     //endregion
 

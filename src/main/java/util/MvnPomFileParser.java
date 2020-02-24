@@ -4,6 +4,7 @@ import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.Interface.outputRouting.ExceptionId;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -27,6 +28,7 @@ import java.util.Map;
  * @version 03.07.01
  * @since V01.00.00
  */
+@Log4j2
 public class MvnPomFileParser implements BuildFileParser {
 
     Map<String, String> moduleVsPath = new HashMap<>();
@@ -78,8 +80,10 @@ public class MvnPomFileParser implements BuildFileParser {
 
 
         } catch (ParserConfigurationException e) {
+            log.fatal("Error creating file parser");
             throw new ExceptionHandler("Error creating file parser", ExceptionId.FILE_CON);
         } catch (org.xml.sax.SAXException | java.io.IOException e) {
+            log.fatal("Error parsing " + fileName);
             throw new ExceptionHandler("Error parsing " + fileName, ExceptionId.FILE_O);
         }
     }

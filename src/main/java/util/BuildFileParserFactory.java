@@ -2,6 +2,7 @@ package util;
 
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.Interface.outputRouting.ExceptionId;
+import lombok.extern.log4j.Log4j2;
 
 import java.io.File;
 
@@ -12,6 +13,7 @@ import java.io.File;
  * @version 03.07.01
  * @since V01.00.00
  */
+@Log4j2
 public class BuildFileParserFactory {
 
     /**
@@ -35,6 +37,7 @@ public class BuildFileParserFactory {
             return new GradleBuildFileParser(projectRoot + "/" + "settings.gradle");
         }
 
+        log.fatal("Only Maven and Gradle Projects are supported");
         throw new ExceptionHandler("Only Maven and Gradle Projects are supported", ExceptionId.ARG_VALID);
 
     }

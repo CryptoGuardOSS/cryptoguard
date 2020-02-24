@@ -10,10 +10,10 @@ package frontEnd.MessagingSystem;
 public class AnalysisLocation {
 
     //region Attributes
-    private Integer lineStart;
-    private Integer lineEnd;
-    private Integer colStart;
-    private Integer colEnd;
+    private Integer lineStart = null;
+    private Integer lineEnd = null;
+    private Integer colStart = null;
+    private Integer colEnd = null;
     private Integer methodNumber = -1;
     //endregion
 
