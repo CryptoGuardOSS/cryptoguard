@@ -196,9 +196,7 @@ public class Default {
         issue.setCWEId(oldIssue.getRule().getCweId()[0]);
         issue.setDescription(oldIssue.getRule().getDesc());
 
-        //TODO - Not implemented yet
-        //issue.setSeverity("TBD");
-
+        issue.setSeverity("1");
 
         return issue;
     }
@@ -231,9 +229,13 @@ public class Default {
         Location loc = new Location();
 
         if (oldLoc.getColStart() != null)
-            loc.setColumnNumber(oldLoc.getColStart());
-
-        loc.setLineNumber(oldLoc.getLineStart());
+            loc.setStartColumn(oldLoc.getColStart());
+        if (oldLoc.getColEnd() != null)
+            loc.setEndColumn(oldLoc.getColEnd());
+        if (oldLoc.getLineStart() != null)
+            loc.setStartLine(oldLoc.getLineStart());
+        if (oldLoc.getLineEnd() != null)
+            loc.setEndLine(oldLoc.getLineEnd());
 
         return loc;
     }
@@ -245,47 +247,13 @@ public class Default {
      * @return a {@link frontEnd.MessagingSystem.AnalysisLocation} object.
      */
     public static AnalysisLocation mapper(Location oldLoc) {
-        AnalysisLocation loc = new AnalysisLocation(oldLoc.getLineNumber());
+        AnalysisLocation loc = new AnalysisLocation((int) oldLoc.getStartLine(), (int) oldLoc.getEndLine());
 
-        if (oldLoc.getColumnNumber() > 0)
-            loc.setColStart(oldLoc.getColumnNumber());
+        loc.setColStart(((int) oldLoc.getStartColumn()));
+        loc.setColEnd(((int) oldLoc.getEndColumn()));
 
         return loc;
     }
-
-    /**
-     * <p>mapper.</p>
-     *
-     * @param info                a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
-     * @param sliceAverageRounded a double.
-     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Heuristics} object.
-     */
-    /*
-    public static Heuristics mapper(EnvironmentInformation info, double sliceAverageRounded) {
-
-        return new Heuristics(
-                info.getNUM_ORTHOGONAL(),
-                info.getNUM_CONSTS_TO_CHECK(),
-                info.getNUM_SLICES(),
-                info.getNUM_HEURISTIC(),
-                sliceAverageRounded,
-                info.getDEPTH_COUNT()
-        );
-    }
-
-    public static Heuristics mapHeuristics(Report report) {
-
-        return new Heuristics(
-                report.getHeuristics().getNumberOfOrthogonal(),
-                report.getHeuristics().getNumberOfConstantsToCheck(),
-                report.getHeuristics().getNumberOfSlices(),
-                report.getHeuristics().getNumberOfHeuristics(),
-                report.getHeuristics().getAverageSlice(),
-                report.getHeuristics().getDepthCount()
-        );
-    }
-    */
-
 
 //endregion
 }

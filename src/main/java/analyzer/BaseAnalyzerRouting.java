@@ -311,9 +311,14 @@ public class BaseAnalyzerRouting {
             log.debug("Loading with the class: " + clazz);
             try {
                 SootClass runningClass;
-                if ((runningClass = Scene.v().loadClassAndSupport(clazz)).isPhantom() && !ignoreLibs.contains(runningClass.getName()))
+                if ((runningClass = Scene.v().loadClassAndSupport(clazz)).isPhantom() && !ignoreLibs.contains(runningClass.getName())) {
+                    log.fatal("Class: " + clazz + " is not properly loaded");
                     throw new ExceptionHandler("Class: " + clazz + " is not properly loaded", ExceptionId.LOADING);
+                }
+            } catch (ExceptionHandler e) {
+                throw e;
             } catch (Error | Exception e) {
+                log.fatal("Error loading Class: " + clazz);
                 throw new ExceptionHandler("Error loading Class: " + clazz, ExceptionId.LOADING);
             }
         }
@@ -325,16 +330,23 @@ public class BaseAnalyzerRouting {
             log.debug("Working with the internal class path: " + clazz);
             try {
                 SootClass runningClass = Scene.v().loadClassAndSupport(clazz);
-                if (runningClass.isPhantom())
+                if (runningClass.isPhantom()) {
+                    log.fatal("Class: " + clazz + " is not properly loaded");
                     throw new ExceptionHandler("Class " + clazz + " is not properly loaded", ExceptionId.LOADING);
+                }
 
-                Boolean containsMain = runningClass.getMethods().stream().anyMatch(m -> m.getName().equals("main"));
+                boolean containsMain = runningClass.getMethods().stream().anyMatch(m -> m.getName().equals("main"));
                 if (!mainMethodFound)
                     mainMethodFound = containsMain;
-                else if (avoidMainKlass && containsMain && StringUtils.isEmpty(mainKlass))
+                else if (avoidMainKlass && containsMain && StringUtils.isEmpty(mainKlass)) {
+                    log.fatal("Multiple Entry-points (main) found within the files included.");
                     throw new ExceptionHandler("Multiple Entry-points (main) found within the files included.", ExceptionId.FILE_READ);
+                }
 
+            } catch (ExceptionHandler e) {
+                throw e;
             } catch (Error | Exception e) {
+                log.fatal("Error loading class " + clazz);
                 throw new ExceptionHandler("Error loading class " + clazz, ExceptionId.LOADING);
             }
         }
@@ -344,19 +356,23 @@ public class BaseAnalyzerRouting {
         Options.v().set_prepend_classpath(true);
         Options.v().set_no_bodies_for_excluded(true);
 
-        if ((StringUtils.isNotEmpty(mainKlass) && avoidMainKlass) && (!Scene.v().hasMainClass() || classNames.stream().noneMatch(str -> str.equals(Scene.v().getMainClass().getName()))))
+        if ((StringUtils.isNotEmpty(mainKlass) && avoidMainKlass) && (!Scene.v().hasMainClass() || classNames.stream().noneMatch(str -> str.equals(Scene.v().getMainClass().getName())))) {
+            log.fatal("Could not detected an entry-point (main method) within any of the files provided.");
             throw new ExceptionHandler("Could not detected an entry-point (main method) within any of the files provided.", ExceptionId.FILE_READ);
+        }
 
         if (StringUtils.isNotEmpty(mainKlass) && avoidMainKlass && !Scene.v().getMainClass().getName().equals(mainKlass)) {
             SootClass mainClass = null;
             try {
                 mainClass = Scene.v().getSootClass(Utils.retrieveFullyQualifiedName(mainKlass));
             } catch (RuntimeException e) {
+                log.fatal("The class " + mainKlass + " was not loaded correctly.");
                 throw new ExceptionHandler("The class " + mainKlass + " was not loaded correctly.", ExceptionId.LOADING);
             }
             try {
                 Scene.v().setMainClass(mainClass);
             } catch (RuntimeException e) {
+                log.fatal("The class " + mainKlass + " does not have a main method.");
                 throw new ExceptionHandler("The class " + mainKlass + " does not have a main method.", ExceptionId.LOADING);
             }
         }

@@ -1,3 +1,4 @@
+
 package frontEnd.MessagingSystem.routing.structure.Default;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -13,34 +14,50 @@ import java.io.Serializable;
 /**
  * LocationType
  * <p>
- *
- * @author franceme
- * @version 03.07.01
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
+    "SourceFile",
+        "StartLine",
+        "EndLine",
+        "StartColumn",
+        "EndColumn",
+        "Explanation",
         "ClassName",
         "MethodName",
-        "LineNumber",
-        "ColumnNumber"
+        "Primary",
+        "-id"
 })
 public class Location implements Serializable {
 
-    private final static long serialVersionUID = 1728740023126089054L;
     /**
      * (Required)
      */
+    @JsonProperty("SourceFile")
+    private String sourceFile;
+    @JsonProperty("StartLine")
+    private long startLine;
+    @JsonProperty("EndLine")
+    private long endLine;
+    @JsonProperty("StartColumn")
+    private long startColumn;
+    @JsonProperty("EndColumn")
+    private long endColumn;
+    @JsonProperty("Explanation")
+    private String explanation;
     @JsonProperty("ClassName")
     private String className;
-    /**
-     * (Required)
-     */
     @JsonProperty("MethodName")
     private String methodName;
-    @JsonProperty("LineNumber")
-    private int lineNumber;
-    @JsonProperty("ColumnNumber")
-    private int columnNumber;
+    @JsonProperty("Primary")
+    private boolean primary;
+    /**
+     * id
+     * <p>
+     */
+    @JsonProperty("-id")
+    private long id = 0L;
+    private final static long serialVersionUID = 8894548646396622400L;
 
     /**
      * No args constructor for use in serialization
@@ -49,164 +66,205 @@ public class Location implements Serializable {
     }
 
     /**
-     * <p>Constructor for Location.</p>
-     *
-     * @param lineNumber   a int.
-     * @param className    a {@link java.lang.String} object.
-     * @param methodName   a {@link java.lang.String} object.
-     * @param columnNumber a int.
+     * @param endLine
+     * @param endColumn
+     * @param startColumn
+     * @param startLine
+     * @param methodName
+     * @param className
+     * @param id
+     * @param explanation
+     * @param sourceFile
+     * @param primary
      */
-    public Location(String className, String methodName, int lineNumber, int columnNumber) {
+    public Location(String sourceFile, long startLine, long endLine, long startColumn, long endColumn, String explanation, String className, String methodName, boolean primary, long id) {
         super();
+        this.sourceFile = sourceFile;
+        this.startLine = startLine;
+        this.endLine = endLine;
+        this.startColumn = startColumn;
+        this.endColumn = endColumn;
+        this.explanation = explanation;
         this.className = className;
         this.methodName = methodName;
-        this.lineNumber = lineNumber;
-        this.columnNumber = columnNumber;
+        this.primary = primary;
+        this.id = id;
     }
 
     /**
      * (Required)
-     *
-     * @return a {@link java.lang.String} object.
      */
+    @JsonProperty("SourceFile")
+    public String getSourceFile() {
+        return sourceFile;
+    }
+
+    /**
+     * (Required)
+     */
+    @JsonProperty("SourceFile")
+    public void setSourceFile(String sourceFile) {
+        this.sourceFile = sourceFile;
+    }
+
+    public Location withSourceFile(String sourceFile) {
+        this.sourceFile = sourceFile;
+        return this;
+    }
+
+    @JsonProperty("StartLine")
+    public long getStartLine() {
+        return startLine;
+    }
+
+    @JsonProperty("StartLine")
+    public void setStartLine(long startLine) {
+        this.startLine = startLine;
+    }
+
+    public Location withStartLine(long startLine) {
+        this.startLine = startLine;
+        return this;
+    }
+
+    @JsonProperty("EndLine")
+    public long getEndLine() {
+        return endLine;
+    }
+
+    @JsonProperty("EndLine")
+    public void setEndLine(long endLine) {
+        this.endLine = endLine;
+    }
+
+    public Location withEndLine(long endLine) {
+        this.endLine = endLine;
+        return this;
+    }
+
+    @JsonProperty("StartColumn")
+    public long getStartColumn() {
+        return startColumn;
+    }
+
+    @JsonProperty("StartColumn")
+    public void setStartColumn(long startColumn) {
+        this.startColumn = startColumn;
+    }
+
+    public Location withStartColumn(long startColumn) {
+        this.startColumn = startColumn;
+        return this;
+    }
+
+    @JsonProperty("EndColumn")
+    public long getEndColumn() {
+        return endColumn;
+    }
+
+    @JsonProperty("EndColumn")
+    public void setEndColumn(long endColumn) {
+        this.endColumn = endColumn;
+    }
+
+    public Location withEndColumn(long endColumn) {
+        this.endColumn = endColumn;
+        return this;
+    }
+
+    @JsonProperty("Explanation")
+    public String getExplanation() {
+        return explanation;
+    }
+
+    @JsonProperty("Explanation")
+    public void setExplanation(String explanation) {
+        this.explanation = explanation;
+    }
+
+    public Location withExplanation(String explanation) {
+        this.explanation = explanation;
+        return this;
+    }
+
     @JsonProperty("ClassName")
     public String getClassName() {
         return className;
     }
 
-    /**
-     * (Required)
-     *
-     * @param className a {@link java.lang.String} object.
-     */
     @JsonProperty("ClassName")
     public void setClassName(String className) {
         this.className = className;
     }
 
-    /**
-     * <p>withClassName.</p>
-     *
-     * @param className a {@link java.lang.String} object.
-     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Location} object.
-     */
     public Location withClassName(String className) {
         this.className = className;
         return this;
     }
 
-    /**
-     * (Required)
-     *
-     * @return a {@link java.lang.String} object.
-     */
     @JsonProperty("MethodName")
     public String getMethodName() {
         return methodName;
     }
 
-    /**
-     * (Required)
-     *
-     * @param methodName a {@link java.lang.String} object.
-     */
     @JsonProperty("MethodName")
     public void setMethodName(String methodName) {
         this.methodName = methodName;
     }
 
-    /**
-     * <p>withMethodName.</p>
-     *
-     * @param methodName a {@link java.lang.String} object.
-     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Location} object.
-     */
     public Location withMethodName(String methodName) {
         this.methodName = methodName;
         return this;
     }
 
-    /**
-     * <p>Getter for the field <code>lineNumber</code>.</p>
-     *
-     * @return a int.
-     */
-    @JsonProperty("LineNumber")
-    public int getLineNumber() {
-        return lineNumber;
+    @JsonProperty("Primary")
+    public boolean isPrimary() {
+        return primary;
     }
 
-    /**
-     * <p>Setter for the field <code>lineNumber</code>.</p>
-     *
-     * @param lineNumber a int.
-     */
-    @JsonProperty("LineNumber")
-    public void setLineNumber(int lineNumber) {
-        this.lineNumber = lineNumber;
+    @JsonProperty("Primary")
+    public void setPrimary(boolean primary) {
+        this.primary = primary;
     }
 
-    /**
-     * <p>withLineNumber.</p>
-     *
-     * @param lineNumber a int.
-     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Location} object.
-     */
-    public Location withLineNumber(int lineNumber) {
-        this.lineNumber = lineNumber;
+    public Location withPrimary(boolean primary) {
+        this.primary = primary;
         return this;
     }
 
     /**
-     * <p>Getter for the field <code>columnNumber</code>.</p>
-     *
-     * @return a int.
+     * id
+     * <p>
      */
-    @JsonProperty("ColumnNumber")
-    public int getColumnNumber() {
-        return columnNumber;
+    @JsonProperty("-id")
+    public long getId() {
+        return id;
     }
 
     /**
-     * <p>Setter for the field <code>columnNumber</code>.</p>
-     *
-     * @param columnNumber a int.
+     * id
+     * <p>
      */
-    @JsonProperty("ColumnNumber")
-    public void setColumnNumber(int columnNumber) {
-        this.columnNumber = columnNumber;
+    @JsonProperty("-id")
+    public void setId(long id) {
+        this.id = id;
     }
 
-    /**
-     * <p>withColumnNumber.</p>
-     *
-     * @param columnNumber a int.
-     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Location} object.
-     */
-    public Location withColumnNumber(int columnNumber) {
-        this.columnNumber = columnNumber;
+    public Location withId(long id) {
+        this.id = id;
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("className", className).append("methodName", methodName).append("lineNumber", lineNumber).append("columnNumber", columnNumber).toString();
+        return new ToStringBuilder(this).append("sourceFile", sourceFile).append("startLine", startLine).append("endLine", endLine).append("startColumn", startColumn).append("endColumn", endColumn).append("explanation", explanation).append("className", className).append("methodName", methodName).append("primary", primary).append("id", id).toString();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(lineNumber).append(className).append(methodName).append(columnNumber).toHashCode();
+        return new HashCodeBuilder().append(endLine).append(endColumn).append(startColumn).append(startLine).append(methodName).append(className).append(id).append(explanation).append(sourceFile).append(primary).toHashCode();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -216,7 +274,7 @@ public class Location implements Serializable {
             return false;
         }
         Location rhs = ((Location) other);
-        return new EqualsBuilder().append(lineNumber, rhs.lineNumber).append(className, rhs.className).append(methodName, rhs.methodName).append(columnNumber, rhs.columnNumber).isEquals();
+        return new EqualsBuilder().append(endLine, rhs.endLine).append(endColumn, rhs.endColumn).append(startColumn, rhs.startColumn).append(startLine, rhs.startLine).append(methodName, rhs.methodName).append(className, rhs.className).append(id, rhs.id).append(explanation, rhs.explanation).append(sourceFile, rhs.sourceFile).append(primary, rhs.primary).isEquals();
     }
 
 }

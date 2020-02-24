@@ -95,7 +95,7 @@ public abstract class Structure extends OutputStructure {
         try {
             Files.write(this.getOutfile().toPath(), in.getBytes(super.getChars()));
         } catch (IOException e) {
-            log.debug("Error: " + e.getMessage());
+            log.fatal("Error: " + e.getMessage());
             throw new ExceptionHandler("Error writing to file: " + this.getSource().getFileOutName(), ExceptionId.FILE_O);
         }
     }
