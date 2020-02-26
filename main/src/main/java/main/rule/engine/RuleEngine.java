@@ -11,6 +11,8 @@ import java.util.Map;
 public class RuleEngine {
     private static List<RuleChecker> ruleCheckerList = new ArrayList<>();
 
+    public static boolean DISABLE_PRINTING_META = true;
+
     static {
 
         ruleCheckerList.add(new InsecureAssymCryptoFinder());
@@ -75,7 +77,7 @@ public class RuleEngine {
 
                 if (!analyzedModules.contains(module)) {
 
-                    String output = "Analyzing Module: ";
+                    StringBuilder output = new StringBuilder("Analyzing Module: ");
 
                     List<String> dependencies = moduleVsDependency.get(module);
                     List<String> otherdependencies = new ArrayList<>();
@@ -94,7 +96,7 @@ public class RuleEngine {
 
                         }
 
-                        output += dependencyModule + ", ";
+                        output.append(dependencyModule).append(", ");
                         analyzedModules.add(dependencyModule);
                     }
 
@@ -110,14 +112,16 @@ public class RuleEngine {
             }
         }
 
-        System.out.println("Total Heuristics: " + Utils.NUM_HEURISTIC);
-        System.out.println("Total Orthogonal: " + Utils.NUM_ORTHOGONAL);
-        System.out.println("Total Constants: " + Utils.NUM_CONSTS_TO_CHECK);
-        System.out.println("Total Slices: " + Utils.NUM_SLICES);
-        System.out.println("Average Length: " + RuleEngine.calculateAverage(Utils.SLICE_LENGTH));
+        if (!DISABLE_PRINTING_META) {
+            System.out.println("Total Heuristics: " + Utils.NUM_HEURISTIC);
+            System.out.println("Total Orthogonal: " + Utils.NUM_ORTHOGONAL);
+            System.out.println("Total Constants: " + Utils.NUM_CONSTS_TO_CHECK);
+            System.out.println("Total Slices: " + Utils.NUM_SLICES);
+            System.out.println("Average Length: " + RuleEngine.calculateAverage(Utils.SLICE_LENGTH));
 
-        for (int i = 0; i < Utils.DEPTH_COUNT.length; i++) {
-            System.out.println(String.format("Depth: %d, Count %d", i + 1, Utils.DEPTH_COUNT[i]));
+            for (int i = 0; i < Utils.DEPTH_COUNT.length; i++) {
+                System.out.println(String.format("Depth: %d, Count %d", i + 1, Utils.DEPTH_COUNT[i]));
+            }
         }
     }
 

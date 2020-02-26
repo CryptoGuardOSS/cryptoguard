@@ -4,6 +4,7 @@ import main.analyzer.backward.Analysis;
 import main.analyzer.backward.AssignInvokeUnitContainer;
 import main.analyzer.backward.InvokeUnitContainer;
 import main.analyzer.backward.UnitContainer;
+import main.rule.engine.RuleEngine;
 import main.util.Utils;
 import soot.*;
 import soot.jimple.AssignStmt;
@@ -280,7 +281,7 @@ public abstract class PredictableSourceRuleChecker extends BaseRuleChecker {
             System.out.println("=======================================");
         }
 
-        if (!others.isEmpty()) {
+        if (!RuleEngine.DISABLE_PRINTING_META && !others.isEmpty()) {
             System.out.println("=======================================");
             String output = getOthersToPrint(configFiles, others, rule, ruleDesc);
             System.out.println(output);
