@@ -166,6 +166,18 @@
         },
         "Explanation": {
           "type": "string"
+        },
+        "ClassName": {
+          "type": "string"
+        },
+        "MethodName": {
+          "type": "string"
+        },
+        "Primary": {
+          "type": "boolean"
+        },
+        "-id": {
+          "$ref": "#/definitions/-id"
         }
       },
       "required": [
@@ -199,6 +211,9 @@
       "properties": {
         "ClassName": {
           "type": "string"
+        },
+        "Severity": {
+          "type": "integer"
         },
         "Method": {
           "type": "array",

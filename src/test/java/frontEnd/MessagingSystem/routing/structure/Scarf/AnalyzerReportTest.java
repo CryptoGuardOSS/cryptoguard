@@ -18,7 +18,6 @@ import static org.junit.Assert.assertNull;
  */
 public class AnalyzerReportTest {
 
-    private AnalyzerReport report;
     private Method method;
 
     /**
@@ -37,7 +36,6 @@ public class AnalyzerReportTest {
      */
     @After
     public void tearDown() throws Exception {
-        report = null;
         method = null;
     }
 

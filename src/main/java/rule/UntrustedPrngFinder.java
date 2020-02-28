@@ -77,7 +77,6 @@ public class UntrustedPrngFinder implements RuleChecker {
                 List<Unit> analysis = analysisLists.get(method);
 
                 if (!analysis.isEmpty()) {
-                    //TODO - Location not showing up
                     AnalysisIssue issue = new AnalysisIssue(method, 13,
                             "Found: Untrused PRNG (java.util.Random)", sourcePaths);
 

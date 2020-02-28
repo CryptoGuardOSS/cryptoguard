@@ -21,6 +21,7 @@ import static org.junit.Assert.*;
 import static test.TestUtilities.*;
 import static util.Utils.makeArg;
 
+
 /**
  * <p>ArgumentsCheckTest class.</p>
  *
@@ -149,6 +150,23 @@ public class ArgumentsCheckTest {
 
 
             assertEquals(Utils.projectName + ": " + Utils.projectVersion, outputFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertNull(e);
+        }
+    }
+
+    @Test
+    public void parameterCheck_HelpOut() {
+        String args =
+                makeArg(argsIdentifier.HELP)
+                        + makeArg(argsIdentifier.NOEXIT);
+
+        try {
+            String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+
+            assertNotNull(outputFile);
         } catch (Exception e) {
             e.printStackTrace();
             assertNull(e);

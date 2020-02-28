@@ -163,17 +163,13 @@ public class Timing implements Serializable {
         return new ToStringBuilder(this).append("total", total).append("scan", scan).append("timeScale", timeScale).toString();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(total).append(timeScale).append(scan).toHashCode();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public boolean equals(Object other) {
         if (other == this) {

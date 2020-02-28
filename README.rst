@@ -1,7 +1,9 @@
 #################################
-CryptoGuard V03.11.06
+CryptoGuard V04.00.00
 #################################
 
+.. image:: https://mybinder.org/badge_logo.svg
+ :target: https://mybinder.org/v2/gh/franceme/cryptoguard/dev?filepath=Notebook%2F
 
 An program analysis tool to find cryptographic misuse in Java and Android.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -10,11 +12,22 @@ CryptoGuard.py
 =====================
 This python file is the wrapper created to assist with various portions of the project.
 You should use it for various commands including:
+
 * setting the environment
 * clean the project
 * building the project
 * running tests
 * building a simple command
+
+`MyBinder <https://mybinder.org/>`_
+=====================
+This is a website hosting a Docker image that actively runs either Java or Python3 samples.
+The Java Notebook is only possible by utilitzing `IJava <https://github.com/SpencerPark/IJava>`_.
+This is still under progress as the following are not active yet:
+
+* Android SDK tests
+* Sample Java Tests
+
 
 Please run the following command to get more information on how to use it :code:`./cryptoguard.py`
 
@@ -141,7 +154,7 @@ Input a single file (list of files)
 
 Help
 ======
-* If you have any questions or suggestions, please email to `cryptoguardorg@gmail.com <mailto:cryptoguardorg@gmail.com>`_.
+* If you have any questions or suggestions, please email to `sazzad114@gmail.com <mailto:sazzad114@gmail.com>`_.
 * Please also run :code:`make help` or :code:`java -jar cryptoguard.jar -h` for argument help.
 * You can also look at the auto-generated USAGE.md file.
 

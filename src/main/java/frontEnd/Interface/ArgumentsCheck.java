@@ -46,18 +46,16 @@ public class ArgumentsCheck {
     public static EnvironmentInformation paramaterCheck(List<String> args) throws ExceptionHandler {
 
         //region CLI Section
-
+        List<String> originalArguments = new ArrayList<String>(args);
         Options cmdLineArgs = setOptions();
         CommandLine cmd = null;
 
         //region Printing Version
         if (args.contains(argsIdentifier.HELP.getArg())) {
-            log.trace("Retrieving the help as requested.");
             throw new ExceptionHandler(parcelHandling.retrieveHelpFromOptions(cmdLineArgs, null), ExceptionId.HELP);
         }
 
         if (args.contains(argsIdentifier.VERSION.getArg())) {
-            log.trace("Retrieving the version as requested.");
             throw new ExceptionHandler(parcelHandling.retrieveHeaderInfo(), ExceptionId.VERSION);
         }
         //endregion
@@ -82,6 +80,7 @@ public class ArgumentsCheck {
 
             }
 
+            log.fatal(parcelHandling.retrieveHelpFromOptions(cmdLineArgs, arg.toString()));
             throw new ExceptionHandler(parcelHandling.retrieveHelpFromOptions(cmdLineArgs, arg.toString()), ExceptionId.ARG_VALID);
         }
 
@@ -147,8 +146,10 @@ public class ArgumentsCheck {
         String setMainClass = null;
         if (cmd.hasOption(argsIdentifier.MAIN.getId())) {
             setMainClass = StringUtils.trimToNull(cmd.getOptionValue(argsIdentifier.MAIN.getId()));
-            if (setMainClass == null)
+            if (setMainClass == null) {
+                log.fatal("Please Enter a valid main class path.");
                 throw new ExceptionHandler("Please Enter a valid main class path.", ExceptionId.ARG_VALID);
+            }
         }
         //endregion
 
@@ -158,18 +159,6 @@ public class ArgumentsCheck {
 
         Listing messaging = Listing.retrieveListingType(cmd.getOptionValue(argsIdentifier.FORMATOUT.getId()));
         log.info("Using the output: " + messaging.getType());
-
-        //region - TODO - Implement an option to specify the base package
-        /*
-        if (cmd.hasOption(argsIdentifier.BASEPACKAGE.getId())) {
-            String basePackage = cmd.getOptionValue(argsIdentifier.BASEPACKAGE.getId());
-            log.debug("Going to set the Base Package : " + basePackage);
-
-            info.setBasePackage(Utils.verifyDir(basePackage));
-            log.info("Specifying the base package as " + basePackage);
-        }
-        */
-        //endregion
 
         //region Setting the file out
         log.trace("Determining the file out.");
@@ -181,13 +170,7 @@ public class ArgumentsCheck {
         EnvironmentInformation info = paramaterCheck(source, dependencies, type,
                 messaging, fileOutPath, cmd.hasOption(argsIdentifier.NEW.getId()),
                 setMainClass, cmd.hasOption(argsIdentifier.TIMESTAMP.getId()),
-                javaHome, androidHome);
-
-        if (!messaging.getTypeOfMessagingInput().inputValidation(info, args.toArray(new String[0]))) {
-            log.error("Issue Validating Output Specific Arguments.");
-            //TODO - Add better output message for this case
-            throw new ExceptionHandler(messaging.getInputHelp(), ExceptionId.FORMAT_VALID);
-        }
+                javaHome, androidHome, args);
 
         //region Logging Information
         info.setPrettyPrint(cmd.hasOption(argsIdentifier.PRETTY.getId()));
@@ -212,7 +195,7 @@ public class ArgumentsCheck {
         //endregion
 
         //Setting the raw command within info
-        info.setRawCommand(Utils.join(" ", args));
+        info.setRawCommand(Utils.join(" ", originalArguments));
 
         return info;
 
@@ -221,17 +204,18 @@ public class ArgumentsCheck {
     /**
      * <p>paramaterCheck.</p>
      *
-     * @param sourceFiles  a {@link java.util.List} object.
-     * @param dependencies a {@link java.util.List} object.
-     * @param eType        a {@link rule.engine.EngineType} object.
-     * @param oType        a {@link frontEnd.MessagingSystem.routing.Listing} object.
-     * @param fileOutPath  a {@link java.lang.String} object.
-     * @param mainFile     a {@link java.lang.String} object.
+     * @param sourceFiles    a {@link java.util.List} object.
+     * @param dependencies   a {@link java.util.List} object.
+     * @param eType          a {@link rule.engine.EngineType} object.
+     * @param oType          a {@link frontEnd.MessagingSystem.routing.Listing} object.
+     * @param fileOutPath    a {@link java.lang.String} object.
+     * @param mainFile       a {@link java.lang.String} object.
+     * @param extraArguments a {@link java.util.List} object.
      * @return a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
-    public static EnvironmentInformation paramaterCheck(List<String> sourceFiles, List<String> dependencies, EngineType eType, Listing oType, String fileOutPath, String mainFile) throws ExceptionHandler {
-        EnvironmentInformation info = paramaterCheck(sourceFiles, dependencies, eType, oType, fileOutPath, true, StringUtils.trimToNull(mainFile), false, null, null);
+    public static EnvironmentInformation paramaterCheck(List<String> sourceFiles, List<String> dependencies, EngineType eType, Listing oType, String fileOutPath, String mainFile, List<String> extraArguments) throws ExceptionHandler {
+        EnvironmentInformation info = paramaterCheck(sourceFiles, dependencies, eType, oType, fileOutPath, true, StringUtils.trimToNull(mainFile), false, null, null, extraArguments);
 
         //Setting base arguments, some might turn into defaults
         info.setShowTimes(true);
@@ -251,7 +235,8 @@ public class ArgumentsCheck {
                         Utils.makeArg(argsIdentifier.TIMEMEASURE, true) +
                         Utils.makeArg(argsIdentifier.STREAM, true) +
                         Utils.makeArg(argsIdentifier.HEURISTICS, true) +
-                        Utils.makeArg(argsIdentifier.DEPTH, 1)
+                        Utils.makeArg(argsIdentifier.DEPTH, 1) +
+                        Utils.join(" ", extraArguments)
         );
 
         return info;
@@ -271,18 +256,21 @@ public class ArgumentsCheck {
      * @param java             a {@link java.lang.String} object.
      * @param android          a {@link java.lang.String} object.
      * @return a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
+     * @param extraArguments a {@link java.util.List} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static EnvironmentInformation paramaterCheck(List<String> sourceFiles, List<String> dependencies,
                                                         EngineType eType, Listing oType, String fileOutPath,
                                                         Boolean overWriteFileOut,
                                                         String mainFile, Boolean timeStamp,
-                                                        String java, String android) throws ExceptionHandler {
+                                                        String java, String android, List<String> extraArguments) throws ExceptionHandler {
 
         //region verifying current running version
         Version currentVersion = Version.getRunningVersion();
-        if (!currentVersion.supported())
+        if (!currentVersion.supported()) {
+            log.fatal("JRE Version: " + currentVersion + " is not compatible");
             throw new ExceptionHandler("JRE Version: " + currentVersion + " is not compatible, please use JRE Version: " + Utils.supportedVersion, ExceptionId.GEN_VALID);
+        }
         //endregion
 
         //region verifying filePaths
@@ -295,7 +283,8 @@ public class ArgumentsCheck {
         //region Setting the dependency path
         log.trace("Retrieving the dependency files.");
         List<String> vDeps = Utils.retrieveFilePathTypes(new ArrayList<>(dependencies), false, false);
-        log.debug("Using the source file(s) :" + retrieveFullyQualifiedName(vDeps).toString());
+        if (vDeps.size() > 0)
+            log.debug("Using the source file(s) :" + retrieveFullyQualifiedName(vDeps).toString());
         //endregion
         //endregion
 
@@ -348,8 +337,10 @@ public class ArgumentsCheck {
         if (StringUtils.isNotEmpty(mainFile)) {
             log.info("Attempting to validate the main method as " + mainFile);
 
-            if (!info.getSource().contains(mainFile))
+            if (!info.getSource().contains(mainFile)) {
+                log.fatal("The main class path is not included within the source file.");
                 throw new ExceptionHandler("The main class path is not included within the source file.", ExceptionId.ARG_VALID);
+            }
 
             log.info("Using the main method from class " + mainFile);
             info.setMain(mainFile);
@@ -357,15 +348,22 @@ public class ArgumentsCheck {
 
         //region Setting the file out
         if (fileOutPath == null) {
-            fileOutPath = Utils.osPathJoin(System.getProperty("user.dir"),
-                    info.getPackageName() + info.getMessagingType().getOutputFileExt());
-
-            String[] tempSplit = fileOutPath.split("\\.\\w+$");
-            fileOutPath = tempSplit[0] + "_" + Utils.getCurrentTimeStamp() + info.getMessagingType().getOutputFileExt();
+            fileOutPath = Utils.getDefaultFileOut(info.getPackageName(), info.getMessagingType().getOutputFileExt());
         } else {
+            String ogFileOutPath = fileOutPath;
             fileOutPath = Utils.retrieveFilePath(fileOutPath, oType.getOutputFileExt(), overWriteFileOut, true);
+            if (fileOutPath == null) {
+                log.warn("Output file: " + ogFileOutPath + " is not available.");
+                fileOutPath = Utils.getDefaultFileOut(info.getPackageName(), info.getMessagingType().getOutputFileExt());
+                log.warn("Defaulting the output to file: " + fileOutPath);
+            }
         }
         info.setFileOut(fileOutPath);
+        //endregion
+
+        //region Specific Parameter Checking
+        if (extraArguments != null && extraArguments.size() > 1)
+            oType.retrieveSpecificArgHandler().inputValidation(info, extraArguments);
         //endregion
 
         return info;
@@ -374,103 +372,100 @@ public class ArgumentsCheck {
     private static Options setOptions() {
         Options cmdLineArgs = new Options();
 
+        //region General Options
         Option format = Option.builder(argsIdentifier.FORMAT.getId()).required().hasArg().argName(argsIdentifier.FORMAT.getArgName()).desc(argsIdentifier.FORMAT.getDesc()).build();
         format.setType(String.class);
-        format.setOptionalArg(false);
+        format.setOptionalArg(argsIdentifier.FORMAT.getRequired());
         cmdLineArgs.addOption(format);
 
         Option sources = Option.builder(argsIdentifier.SOURCE.getId()).required().hasArgs().argName(argsIdentifier.SOURCE.getArgName()).desc(argsIdentifier.SOURCE.getDesc()).build();
         sources.setType(String.class);
         sources.setValueSeparator(' ');
-        sources.setOptionalArg(false);
+        sources.setOptionalArg(argsIdentifier.SOURCE.getRequired());
         cmdLineArgs.addOption(sources);
 
         Option dependency = Option.builder(argsIdentifier.DEPENDENCY.getId()).hasArg().argName(argsIdentifier.DEPENDENCY.getArgName()).desc(argsIdentifier.DEPENDENCY.getDesc()).build();
         dependency.setType(String.class);
-        dependency.setOptionalArg(false);
+        dependency.setOptionalArg(argsIdentifier.DEPENDENCY.getRequired());
         cmdLineArgs.addOption(dependency);
 
         Option mainFile = Option.builder(argsIdentifier.MAIN.getId()).hasArg().argName(argsIdentifier.MAIN.getArgName()).desc(argsIdentifier.MAIN.getDesc()).build();
         mainFile.setType(String.class);
-        mainFile.setOptionalArg(true);
+        mainFile.setOptionalArg(argsIdentifier.MAIN.getRequired());
         cmdLineArgs.addOption(mainFile);
 
         Option javaPath = Option.builder(argsIdentifier.JAVA.getId()).hasArg().argName(argsIdentifier.JAVA.getArgName()).desc(argsIdentifier.JAVA.getDesc()).build();
         javaPath.setType(File.class);
-        javaPath.setOptionalArg(true);
+        javaPath.setOptionalArg(argsIdentifier.JAVA.getRequired());
         cmdLineArgs.addOption(javaPath);
 
         Option androidPath = Option.builder(argsIdentifier.ANDROID.getId()).hasArg().argName(argsIdentifier.ANDROID.getArgName()).desc(argsIdentifier.ANDROID.getDesc()).build();
         androidPath.setType(File.class);
-        androidPath.setOptionalArg(true);
+        androidPath.setOptionalArg(argsIdentifier.ANDROID.getRequired());
         cmdLineArgs.addOption(androidPath);
-
-        //region - TODO - Implement an option to specify the base package
-        /*
-        Option baseProject = Option.builder(argsIdentifier.BASEPACKAGE.getId()).hasArg().argName("package").desc(argsIdentifier.BASEPACKAGE.getDesc()).build();
-        baseProject.setType(String.class);
-        baseProject.setOptionalArg(true);
-        cmdLineArgs.addOption(baseProject);
-        */
-        //endregion
 
         Option depth = Option.builder(argsIdentifier.DEPTH.getId()).hasArg().argName(argsIdentifier.DEPTH.getArgName()).desc(argsIdentifier.DEPTH.getDesc()).build();
         depth.setType(String.class);
-        depth.setOptionalArg(true);
+        depth.setOptionalArg(argsIdentifier.DEPTH.getRequired());
         cmdLineArgs.addOption(depth);
 
         Option output = Option.builder(argsIdentifier.OUT.getId()).hasArg().argName(argsIdentifier.OUT.getArgName()).desc(argsIdentifier.OUT.getDesc()).build();
         output.setType(String.class);
-        output.setOptionalArg(true);
+        output.setOptionalArg(argsIdentifier.OUT.getRequired());
         cmdLineArgs.addOption(output);
 
         Option timing = new Option(argsIdentifier.TIMEMEASURE.getId(), false, argsIdentifier.TIMEMEASURE.getDesc());
-        timing.setOptionalArg(true);
+        timing.setOptionalArg(argsIdentifier.TIMEMEASURE.getRequired());
         cmdLineArgs.addOption(timing);
 
         Option formatOut = Option.builder(argsIdentifier.FORMATOUT.getId()).hasArg().argName(argsIdentifier.FORMATOUT.getArgName()).desc(argsIdentifier.FORMATOUT.getDesc()).build();
-        formatOut.setOptionalArg(false);
+        formatOut.setOptionalArg(argsIdentifier.FORMATOUT.getRequired());
         cmdLineArgs.addOption(formatOut);
 
         Option prettyPrint = new Option(argsIdentifier.PRETTY.getId(), false, argsIdentifier.PRETTY.getDesc());
-        prettyPrint.setOptionalArg(true);
+        prettyPrint.setOptionalArg(argsIdentifier.PRETTY.getRequired());
         cmdLineArgs.addOption(prettyPrint);
 
         Option noExit = new Option(argsIdentifier.NOEXIT.getId(), false, argsIdentifier.NOEXIT.getDesc());
-        prettyPrint.setOptionalArg(true);
+        prettyPrint.setOptionalArg(argsIdentifier.NOEXIT.getRequired());
         cmdLineArgs.addOption(noExit);
 
         Option help = new Option(argsIdentifier.HELP.getId(), false, argsIdentifier.HELP.getDesc());
-        help.setOptionalArg(true);
+        help.setOptionalArg(argsIdentifier.HELP.getRequired());
         cmdLineArgs.addOption(help);
 
         Option version = new Option(argsIdentifier.VERSION.getId(), false, argsIdentifier.VERSION.getDesc());
-        version.setOptionalArg(true);
+        version.setOptionalArg(argsIdentifier.VERSION.getRequired());
         cmdLineArgs.addOption(version);
 
         Option displayHeuristcs = new Option(argsIdentifier.HEURISTICS.getId(), false, argsIdentifier.HEURISTICS.getDesc());
-        displayHeuristcs.setOptionalArg(true);
+        displayHeuristcs.setOptionalArg(argsIdentifier.HEURISTICS.getRequired());
         cmdLineArgs.addOption(displayHeuristcs);
 
         Option timeStamp = new Option(argsIdentifier.TIMESTAMP.getId(), false, argsIdentifier.TIMESTAMP.getDesc());
-        timeStamp.setOptionalArg(true);
+        timeStamp.setOptionalArg(argsIdentifier.TIMESTAMP.getRequired());
         cmdLineArgs.addOption(timeStamp);
 
         Option stream = new Option(argsIdentifier.STREAM.getId(), false, argsIdentifier.STREAM.getDesc());
-        stream.setOptionalArg(true);
+        stream.setOptionalArg(argsIdentifier.STREAM.getRequired());
         cmdLineArgs.addOption(stream);
 
         Option nologs = new Option(argsIdentifier.NOLOGS.getId(), false, argsIdentifier.NOLOGS.getDesc());
-        stream.setOptionalArg(true);
+        stream.setOptionalArg(argsIdentifier.NOLOGS.getRequired());
         cmdLineArgs.addOption(nologs);
 
         Option verbose = new Option(argsIdentifier.VERBOSE.getId(), false, argsIdentifier.VERBOSE.getDesc());
-        stream.setOptionalArg(true);
+        stream.setOptionalArg(argsIdentifier.VERBOSE.getRequired());
         cmdLineArgs.addOption(verbose);
 
         Option vverbose = new Option(argsIdentifier.VERYVERBOSE.getId(), false, argsIdentifier.VERYVERBOSE.getDesc());
-        stream.setOptionalArg(true);
+        stream.setOptionalArg(argsIdentifier.VERYVERBOSE.getRequired());
         cmdLineArgs.addOption(vverbose);
+
+        Option newFile = new Option(argsIdentifier.NEW.getId(), false, argsIdentifier.NEW.getDesc());
+        newFile.setOptionalArg(argsIdentifier.NEW.getRequired());
+        cmdLineArgs.addOption(newFile);
+        //endregion
 
         log.trace("Set the command line options to be used for parsing.");
         return cmdLineArgs;

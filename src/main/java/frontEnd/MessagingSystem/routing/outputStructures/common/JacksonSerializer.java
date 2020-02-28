@@ -43,7 +43,7 @@ public class JacksonSerializer {
         try {
             return serializer.writeValueAsString(obj);
         } catch (JsonProcessingException e) {
-            log.debug("Error marshalling output: " + e.getMessage());
+            log.fatal("Error marshalling output: " + e.getMessage());
             throw new ExceptionHandler("Error marshalling output", ExceptionId.MAR_VAR);
         }
     }

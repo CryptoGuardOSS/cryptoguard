@@ -228,7 +228,7 @@ public class BaseAnalyzer {
             newAnalysis.getAnalysisResult().addAll(methodSlicingResult);
             newAnalysis.getAnalysisResult().addAll(slicingResult.getSlicingResult());
 
-            for (String key : slicingResult.getPropertyUseMap().keySet()) { // TODO Recursively add all analysis
+            for (String key : slicingResult.getPropertyUseMap().keySet()) {
                 for (PropertyAnalysisResult res : slicingResult.getPropertyUseMap().get(key))
                     newAnalysis.getAnalysisResult().addAll(res.getSlicingResult());
             }

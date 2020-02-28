@@ -62,13 +62,8 @@ public class ScarfXML extends Structure {
         super.setSource(info);
         super.setOutfile(new File(info.getFileOut()));
 
-        report.getBugInstance().stream().forEach(instance -> {
-            try {
-                super.addIssueToCollection(marshalling(instance));
-            } catch (ExceptionHandler e) {
-                //TODO - catch here
-            }
-        });
+        for (BugInstance instance : report.getBugInstance())
+            super.addIssueToCollection(marshalling(instance));
 
     }
     //endregion
@@ -93,9 +88,7 @@ public class ScarfXML extends Structure {
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void addIssue(AnalysisIssue issue) throws ExceptionHandler {
         super.addIssue(issue);
@@ -111,9 +104,7 @@ public class ScarfXML extends Structure {
         //endregion
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void writeFooter() throws ExceptionHandler {
 

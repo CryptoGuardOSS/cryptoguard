@@ -4,7 +4,6 @@
 /build/
 /bin/
 /target/
-/release/
 /.settings/
 .project
 /*.jar
@@ -15,7 +14,6 @@
 *gradlew
 *gradlew.bat
 /.ipynb_checkpoints/
-*.ipynb
 /.classpath
 /.vscode/
 /scratchSpace
@@ -24,3 +22,8 @@
 /__pycache__/
 /cfg/
 /docs/
+/samples/base/
+
+/rsc/
+
+Notebook/.ipynb_checkpoints/

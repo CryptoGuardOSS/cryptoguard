@@ -126,7 +126,6 @@ public class EnvironmentInformation {
     String javaHome;
     @Setter
     String androidHome;
-    //endregion
     //region From Outside and defaulted unless set
     @Getter
     @Setter
@@ -163,8 +162,6 @@ public class EnvironmentInformation {
     private Boolean printOut = false;
     @Setter
     private OutputStructure output;
-    //TODO - Implement an option to specify the base package
-    //@Getter @Setter private String basePackage;
     //endregion
     @Setter
     private ByteArrayOutputStream sootErrors = new ByteArrayOutputStream();
@@ -186,6 +183,7 @@ public class EnvironmentInformation {
     @Getter
     @Setter
     private Function<Heuristics, String> heuristicsHandler;
+    //endregion
     //endregion
     //region Constructor
 
@@ -265,16 +263,22 @@ public class EnvironmentInformation {
         switch (this.sourceType) {
             case DIR:
             case JAVAFILES:
-                if (StringUtils.isEmpty(getJavaHome()))
+                if (StringUtils.isEmpty(getJavaHome())) {
+                    log.fatal("Please set JAVA7_HOME or specify via the arguments.");
                     throw new ExceptionHandler("Please set JAVA7_HOME or specify via the arguments.", ExceptionId.ENV_VAR);
+                }
                 break;
             case APK:
-                if (StringUtils.isEmpty(getAndroidHome()))
+                if (StringUtils.isEmpty(getAndroidHome())) {
+                    log.fatal("Please set ANDROID_HOME or specify via the arguments.");
                     throw new ExceptionHandler("Please set ANDROID_HOME or specify via the arguments.", ExceptionId.ENV_VAR);
+                }
             case JAR:
             case CLASSFILES:
-                if (StringUtils.isEmpty(getJavaHome()))
+                if (StringUtils.isEmpty(getJavaHome())) {
+                    log.fatal("Please set JAVA_HOME or specify via the arguments.");
                     throw new ExceptionHandler("Please set JAVA_HOME or specify via the arguments.", ExceptionId.ENV_VAR);
+                }
                 break;
         }
     }
@@ -458,6 +462,7 @@ public class EnvironmentInformation {
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public void setPackageRootDir() throws ExceptionHandler {
+        log.info("Building the Package Root Dir based on type");
         switch (this.getSourceType()) {
             /*case APK:
                 this.packageRootDir = Utils.getBasePackageNameFromApk(this.getSource().get(0));
@@ -491,6 +496,7 @@ public class EnvironmentInformation {
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public void setBuildRootDir() throws ExceptionHandler {
+        log.info("Building the Root Directory");
         try {
             switch (this.getSourceType()) {
                 case APK:
@@ -504,6 +510,7 @@ public class EnvironmentInformation {
                     break;
             }
         } catch (IOException e) {
+            log.fatal("Error reading file: " + buildRootDir);
             throw new ExceptionHandler("Error reading file: " + buildRootDir, ExceptionId.FILE_I);
         }
     }

@@ -2,19 +2,17 @@ package frontEnd.Interface;
 
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.MessagingSystem.routing.Listing;
+import frontEnd.MessagingSystem.routing.structure.Default.Report;
 import frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport;
 import frontEnd.argsIdentifier;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 import rule.engine.EngineType;
 import soot.G;
 import util.Utils;
 
 import java.io.File;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
@@ -57,52 +55,20 @@ public class EntryPointTest_JAVA {
     //endregion
 
     //region Tests
-    //@Test
-    public void main_TestableFile_test_nobreak() {
-        soot.G.v().reset();
-        String source = testRec_tester_test_Java;
-        String fileOut = testRec_tester_test_Java_xml;
-        new File(fileOut).delete();
 
-        if (isLinux) {
-            String args =
-                    makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES) +
-                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
-                            makeArg(argsIdentifier.SOURCE, source) +
-                            makeArg(argsIdentifier.NOEXIT) +
-                            makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
-                            makeArg(argsIdentifier.PRETTY) +
-                            makeArg(argsIdentifier.VERYVERBOSE) +
-                            makeArg(argsIdentifier.OUT, fileOut);
-
-            try {
-                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
-
-                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
-                assertTrue(report.getBugInstance().isEmpty());
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                assertNull(e);
-            }
-        }
-    }
-
-    //@Test
+    @Test
     public void main_TestableFile_VerySimple() {
         soot.G.v().reset();
-        String source = verySimple_Java;
-        String fileOut = verySimple_Java_xml;
+        String source = verySimple_Gradle_File;
+        String fileOut = tempFileOutJson_File;
         new File(fileOut).delete();
 
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES) +
-                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.Default) +
                             makeArg(argsIdentifier.SOURCE, source) +
                             makeArg(argsIdentifier.NOEXIT) +
-                            makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
                             makeArg(argsIdentifier.PRETTY) +
                             makeArg(argsIdentifier.VERYVERBOSE) +
                             makeArg(argsIdentifier.OUT, fileOut);
@@ -110,12 +76,12 @@ public class EntryPointTest_JAVA {
             try {
                 String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
-                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
+                Report report = Report.deserialize(new File(outputFile));
 
-                assertFalse(report.getBugInstance().isEmpty());
-                assertTrue(report.getBugInstance().stream().allMatch(bugInstance -> {
+                assertFalse(report.getIssues().isEmpty());
+                assertTrue(report.getIssues().stream().anyMatch(bugInstance -> {
                     try {
-                        return bugInstance.getClassName().contains(Utils.retrieveFullyQualifiedName(source));
+                        return bugInstance.getFullPath().contains(Utils.retrieveFullyQualifiedName(source));
                     } catch (ExceptionHandler exceptionHandler) {
                         exceptionHandler.printStackTrace();
                         return false;
@@ -129,33 +95,38 @@ public class EntryPointTest_JAVA {
         }
     }
 
-    /**
-     * <p>main_TestableFiles_SingleTest.</p>
-     */
-    //@Test
-    public void main_TestableFiles_SingleTest() {
-        String fileOut = javaFileTwo;
+    @Test
+    public void main_Crypto_Example_File() {
+        soot.G.v().reset();
+        String source = crypto_Example_File;
+        String fileOut = crypto_Example_Json_File;
         new File(fileOut).delete();
 
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES) +
-                            makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
-                            makeArg(argsIdentifier.SOURCE, javaFiles[1]) +
-                            makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
-                            makeArg(argsIdentifier.PRETTY) +
-                            makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.Default) +
+                            makeArg(argsIdentifier.SOURCE, source) +
                             makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
+                            makeArg(argsIdentifier.PRETTY) +
+                            makeArg(argsIdentifier.VERYVERBOSE) +
                             makeArg(argsIdentifier.OUT, fileOut);
 
             try {
                 String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
-                List<String> results = Files.readAllLines(Paths.get(outputFile), StandardCharsets.UTF_8);
-                assertTrue(results.size() >= 10);
+                Report report = Report.deserialize(new File(outputFile));
 
-                results.removeIf(bugInstance -> !bugInstance.contains(getFileNameFromString(fileOut)));
-                assertTrue(results.size() >= 1);
+                assertFalse(report.getIssues().isEmpty());
+                assertTrue(report.getIssues().stream().anyMatch(bugInstance -> {
+                    try {
+                        return bugInstance.getFullPath().contains(Utils.retrieveFullyQualifiedName(source));
+                    } catch (ExceptionHandler exceptionHandler) {
+                        exceptionHandler.printStackTrace();
+                        return false;
+                    }
+                }));
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -164,71 +135,204 @@ public class EntryPointTest_JAVA {
         }
     }
 
-    /**
-     * <p>main_TestableFiles_SingleTest_Scarf.</p>
-     */
-    //@Test
-    public void main_TestableFiles_SingleTest_Scarf() {
-        String fileOut = javaFileOne;
+    @Test
+    public void main_PasswordUtils_Example_File() {
+        soot.G.v().reset();
+        String source = passwordUtils_Example_File;
+        String fileOut = passwordUtils_Example_Json_File;
         new File(fileOut).delete();
 
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES) +
-                            makeArg(argsIdentifier.SOURCE, javaFiles[0]) +
-                            makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
-                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
-                            makeArg(argsIdentifier.OUT, javaFileOne) +
-                            makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.Default) +
+                            makeArg(argsIdentifier.SOURCE, source) +
                             makeArg(argsIdentifier.NOEXIT) +
-                            makeArg(argsIdentifier.PRETTY);
+                            makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
+                            makeArg(argsIdentifier.PRETTY) +
+                            makeArg(argsIdentifier.VERYVERBOSE) +
+                            makeArg(argsIdentifier.OUT, fileOut);
 
             try {
                 String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
-                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
-                assertFalse(report.getBugInstance().isEmpty());
+                Report report = Report.deserialize(new File(outputFile));
 
-                report.getBugInstance().removeIf(bugInstance -> !bugInstance.getClassName().contains(getFileNameFromString(fileOut)));
-                assertFalse(report.getBugInstance().isEmpty());
+                assertFalse(report.getIssues().isEmpty());
+                assertTrue(report.getIssues().stream().anyMatch(bugInstance -> {
+                    try {
+                        return bugInstance.getFullPath().contains(Utils.retrieveFullyQualifiedName(source));
+                    } catch (ExceptionHandler exceptionHandler) {
+                        exceptionHandler.printStackTrace();
+                        return false;
+                    }
+                }));
 
             } catch (Exception e) {
-                assertNull(e);
                 e.printStackTrace();
+                assertNull(e);
             }
-
-
         }
-
     }
 
-
-    /**
-     * <p>main_TestableFiles_MultiTest.</p>
-     */
-    //@Test
-    public void main_TestableFiles_MultiTest() {
-        String fileOut = javaFileThreeXML;
+    @Test
+    public void main_SymCrypto_Example_File() {
+        soot.G.v().reset();
+        String source = symCrypto_Example_File;
+        String fileOut = symCrypto_Example_Json_File;
         new File(fileOut).delete();
 
         if (isLinux) {
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES) +
-                            makeArg(argsIdentifier.SOURCE, String.join(" ", javaFiles)) +
-                            makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.Default) +
+                            makeArg(argsIdentifier.SOURCE, source) +
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.PRETTY) +
+                            makeArg(argsIdentifier.VERYVERBOSE) +
+                            makeArg(argsIdentifier.OUT, fileOut);
+
+            try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+                Report report = Report.deserialize(new File(outputFile));
+
+                assertFalse(report.getIssues().isEmpty());
+                assertTrue(report.getIssues().stream().anyMatch(bugInstance -> {
+                    try {
+                        return bugInstance.getFullPath().contains(Utils.retrieveFullyQualifiedName(source));
+                    } catch (ExceptionHandler exceptionHandler) {
+                        exceptionHandler.printStackTrace();
+                        return false;
+                    }
+                }));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    @Test
+    public void main_SymCrypto_Example_Package_File() {
+        soot.G.v().reset();
+        String source = symCrypto_Example_Package_File;
+
+        String className = source;
+        try {
+            className = Utils.retrieveFullyQualifiedName(source);
+        } catch (ExceptionHandler e) {
+        }
+
+        String fileOut = symCrypto_Example_Package_Json_File;
+        new File(fileOut).delete();
+
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.Default) +
+                            makeArg(argsIdentifier.SOURCE, source) +
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.PRETTY) +
+                            makeArg(argsIdentifier.OUT, fileOut);
+
+            try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+                Report report = Report.deserialize(new File(outputFile));
+
+                assertFalse(report.getIssues().isEmpty());
+                System.out.println(report.getIssues());
+                String finalClassName = className.replaceAll("\\.", "/");
+                assertTrue(report.getIssues().stream().anyMatch(bugInstance -> {
+                    try {
+                        return bugInstance.getFullPath().contains(Utils.retrieveFullyQualifiedName(finalClassName));
+                    } catch (ExceptionHandler exceptionHandler) {
+                        exceptionHandler.printStackTrace();
+                        return false;
+                    }
+                }));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    @Test
+    public void main_SymCrypto_Multiple_File() {
+        soot.G.v().reset();
+        String source_1 = symCrypto_Multiple_Example_File_1;
+        String source_2 = symCrypto_Multiple_Example_File_2;
+        String fileOut = symCrypto_Multiple_Files;
+        new File(fileOut).delete();
+
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.Default) +
+                            makeArg(argsIdentifier.SOURCE, Utils.join(":", source_1, source_2)) +
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.PRETTY) +
+                            makeArg(argsIdentifier.VERYVERBOSE) +
+                            makeArg(argsIdentifier.OUT, fileOut);
+
+            try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+                Report report = Report.deserialize(new File(outputFile));
+
+                assertFalse(report.getIssues().isEmpty());
+                assertTrue(report.getIssues().stream().anyMatch(bugInstance -> {
+                    try {
+                        return bugInstance.getFullPath().contains(Utils.retrieveFullyQualifiedName(source_1)) ||
+                                bugInstance.getFullPath().contains(Utils.retrieveFullyQualifiedName(source_2));
+                    } catch (ExceptionHandler exceptionHandler) {
+                        exceptionHandler.printStackTrace();
+                        return false;
+                    }
+                }));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    @Test
+    public void main_SymCrypto_Example_File_Failure_Test() {
+        soot.G.v().reset();
+        String source = symCrypto_Example_File;
+        String fileOut = symCrypto_Example_Json_File;
+        new File(fileOut).delete();
+
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES) +
                             makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                            makeArg(argsIdentifier.SOURCE, source) +
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
-                            makeArg(argsIdentifier.OUT, javaFileThreeXML);
+                            makeArg(argsIdentifier.PRETTY) +
+                            makeArg(argsIdentifier.OUT, fileOut);
 
             try {
                 String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
                 AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
-                assertFalse(report.getBugInstance().isEmpty());
 
-                report.getBugInstance().removeIf(bugInstance -> !bugInstance.getClassName().contains(getFileNameFromString(fileOut)));
                 assertFalse(report.getBugInstance().isEmpty());
+                assertTrue(report.getBugInstance().stream().anyMatch(bugInstance -> {
+                    try {
+                        return bugInstance.getClassName().contains(Utils.retrieveFullyQualifiedName(source));
+                    } catch (ExceptionHandler exceptionHandler) {
+                        exceptionHandler.printStackTrace();
+                        return false;
+                    }
+                }));
 
             } catch (Exception e) {
                 e.printStackTrace();

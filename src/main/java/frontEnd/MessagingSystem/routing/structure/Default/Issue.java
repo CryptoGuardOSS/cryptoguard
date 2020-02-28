@@ -402,17 +402,13 @@ public class Issue implements Serializable {
         return new ToStringBuilder(this).append("fullPath", fullPath).append("id", id).append("message", message).append("description", description).append("ruleNumber", ruleNumber).append("ruleDesc", ruleDesc).append("cWEId", cWEId).append("severity", severity).append("location", location).toString();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(message).append(id).append(location).append(ruleNumber).append(description).append(ruleDesc).append(severity).append(cWEId).append(fullPath).toHashCode();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public boolean equals(Object other) {
         if (other == this) {

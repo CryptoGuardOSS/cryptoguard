@@ -59,13 +59,8 @@ public class Default extends Structure {
         super.setOutfile(new File(info.getFileOut()));
         super.setType(mapper(struct.getTarget().getType()));
 
-        struct.getIssues().stream().forEach(issue -> {
-            try {
-                super.addIssueToCollection(mapper(issue));
-            } catch (ExceptionHandler exceptionHandler) {
-                //TODO - Catch Here
-            }
-        });
+        for (Issue issue : struct.getIssues())
+            super.addIssueToCollection(mapper(issue));
 
     }
     //endregion
@@ -110,9 +105,7 @@ public class Default extends Structure {
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void addIssue(AnalysisIssue issue) throws ExceptionHandler {
 
@@ -178,9 +171,7 @@ public class Default extends Structure {
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void writeFooter() throws ExceptionHandler {
 

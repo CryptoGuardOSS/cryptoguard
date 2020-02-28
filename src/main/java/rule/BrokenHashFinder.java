@@ -53,17 +53,13 @@ public class BrokenHashFinder extends PatternMatcherRuleChecker {
         return CRITERIA_LIST;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public List<String> getPatternsToMatch() {
         return BROKEN_HASH;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public String getRuleId() {
         return "2";
