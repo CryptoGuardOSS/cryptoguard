@@ -141,9 +141,6 @@ public class ScarfXML {
                 Location newLocation = new Location();
                 AnalysisLocation createdLoc = issue.getLocations().get(locationKtr);
 
-                //newLocation.setId(locationKtr); //TODO - Look at this
-                //newLocation.setPrimary(locationKtr == 0); //TODO - Look at this
-
                 if (createdLoc.getLineStart() != -1)
                     newLocation.setStartLine(createdLoc.getLineStart());
 
@@ -157,7 +154,6 @@ public class ScarfXML {
         } else {
             Location newLocation = new Location();
             newLocation.setSourceFile(issue.getFullPathName());
-            // newLocation.setPrimary(true); //TODO - Look at this
             instance.addBugLocation(newLocation);
         }
         //endregion
@@ -205,10 +201,6 @@ public class ScarfXML {
 
         for (Location old : instance.getlocation()) {
             AnalysisLocation loc = new AnalysisLocation(old.getStartLine(), old.getEndLine());
-
-            //TODO - Fix this?
-            //loc.setMethodNumber(old.get);
-
             issue.getLocations().add(loc);
         }
 
@@ -278,17 +270,4 @@ public class ScarfXML {
         );
     }
     */
-
-    /**
-     * The method for this output to create error messages
-     *
-     * @param message -  the string of the message to be sent to the output
-     * @return string - the xml format of the error message
-     */
-    private String creatingErrorMessage(String message) {
-        String output = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "<ERROR>" +
-                message +
-                "</ERROR>";
-        return output;
-    }
 }

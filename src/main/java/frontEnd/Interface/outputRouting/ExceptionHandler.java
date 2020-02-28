@@ -1,5 +1,6 @@
 package frontEnd.Interface.outputRouting;
 
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import util.Utils;
 
@@ -17,6 +18,7 @@ import java.util.function.Supplier;
  *
  * <p>The Main Exception Handling for the whole project</p>
  */
+@Log4j2
 public class ExceptionHandler extends Exception implements Supplier<String> {
 
     //region Attributes
@@ -65,9 +67,7 @@ public class ExceptionHandler extends Exception implements Supplier<String> {
         return StringUtils.trimToNull(resp).concat("\n\n\n");
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void printStackTrace() {
         System.err.println(this.toString());
@@ -96,6 +96,11 @@ public class ExceptionHandler extends Exception implements Supplier<String> {
         return longDesciption;
     }
 
+    /**
+     * <p>getLongDescriptionString.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getLongDescriptionString() {
         return Utils.join("\n", this.getLongDesciption());
     }

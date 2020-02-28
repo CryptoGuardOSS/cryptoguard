@@ -49,13 +49,8 @@ public class ScarfXML extends Structure {
         super.setSource(info);
         super.setOutfile(new File(info.getFileOut()));
 
-        report.getBugInstance().stream().forEach(instance -> {
-            try {
-                super.addIssueToCollection(marshalling(instance));
-            } catch (ExceptionHandler e) {
-                //TODO - catch here
-            }
-        });
+        for (BugInstance instance : report.getBugInstance())
+            super.addIssueToCollection(marshalling(instance));
 
     }
     //endregion

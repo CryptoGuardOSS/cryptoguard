@@ -78,9 +78,7 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
         return CRITERIA_LIST;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void analyzeSlice(Analysis analysis) {
         if (analysis.getAnalysisResult().isEmpty()) {
@@ -251,30 +249,11 @@ public class ExportGradeKeyInitializationFinder extends BaseRuleChecker {
         this.initializationCallsites = initializationCallsites;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler {
 
-        //region TODO Verify This change works
-        //region Old
-        /*
-        ArrayList<AnalysisIssue> outList = new ArrayList<>();
-
-        for (UnitContainer unit : predictableSourcMap.keySet()) {
-            String sootString = predictableSourcMap.get(unit).size() <= 0 ? ""
-                    : "Found: \"" + predictableSourcMap.get(unit).get(0).replaceAll("\"", "") + "\"";
-
-            output.addIssue(new AnalysisIssue(unit, Integer.parseInt(rule), sootString, sourcePaths));
-        }
-        */
-        //endregion Old
-        //region New
         Utils.createAnalysisOutput(xmlFileStr, sourcePaths, predictableSourcMap, rule, output);
-        //endregion
-        //endregion
-
 
     }
 

@@ -1,11 +1,16 @@
 package frontEnd.MessagingSystem.routing;
 
+import frontEnd.Interface.formatArgument.TypeSpecificArg;
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.Interface.outputRouting.ExceptionId;
 import frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import frontEnd.MessagingSystem.routing.outputStructures.block.Structure;
 import frontEnd.MessagingSystem.routing.outputStructures.common.JacksonSerializer;
 import frontEnd.MessagingSystem.routing.outputStructures.stream.Legacy;
+import frontEnd.argsIdentifier;
+import lombok.extern.log4j.Log4j2;
+
+import java.util.List;
 
 /**
  * The enum containing all of the different messaging types available for the user.
@@ -14,6 +19,7 @@ import frontEnd.MessagingSystem.routing.outputStructures.stream.Legacy;
  * @version 03.07.01
  * @since V01.00.00
  */
+@Log4j2
 public enum Listing {
     //region Values
     Legacy("Legacy", "L", ".txt", true, null),
@@ -24,6 +30,7 @@ public enum Listing {
     private final String blockPath = "frontEnd.MessagingSystem.routing.outputStructures.block.";
     private final String inputPath = "frontEnd.MessagingSystem.routing.inputStructures";
     private final String streamPath = "frontEnd.MessagingSystem.routing.outputStructures.stream.";
+    private final String typeSpecificArgPath = "frontEnd.Interface.formatArgument.";
     private String type;
     private String flag;
     private String outputFileExt;
@@ -58,8 +65,13 @@ public enum Listing {
     public static String getInputFullHelp() {
         StringBuilder out = new StringBuilder();
 
-        for (Listing listingType : Listing.values())
-            out.append(listingType.getInputHelp()).append("\n");
+        for (Listing listingType : Listing.values()) {
+            /*
+            try {
+                out.append(listingType.retrieveSpecificArgHandler().helpInfo()).append("\n");
+            } catch (ExceptionHandler e) {}
+            */
+        }
 
         return out.toString();
     }
@@ -108,6 +120,15 @@ public enum Listing {
     public String getFlag() {
         return flag;
     }
+
+    /**
+     * <p>retrieveArgs.</p>
+     *
+     * @return a {@link java.util.List} object.
+     */
+    public List<argsIdentifier> retrieveArgs() {
+        return argsIdentifier.lookup(this);
+    }
     //endregion
 
     //region Helpers Based on the enum type
@@ -148,9 +169,11 @@ public enum Listing {
     public OutputStructure getTypeOfMessagingOutput(boolean stream, EnvironmentInformation info) throws ExceptionHandler {
 
         if (stream) {
-            if (!this.streamEnabled)
-                throw new ExceptionHandler("Streaming is not supported for the format: " + this.getType(), ExceptionId.GEN_VALID);
-            else {
+            if (!this.streamEnabled) {
+                log.info("Streaming is not supported for the format: " + this.getType());
+                log.info("Defaulting back to block based output.");
+                return getTypeOfMessagingOutput(false, info);
+            } else {
                 try {
                     return (frontEnd.MessagingSystem.routing.outputStructures.stream.Structure) Class.forName(this.streamPath + this.type).getConstructor(EnvironmentInformation.class).newInstance(info);
                 } catch (Exception e) {
@@ -178,14 +201,16 @@ public enum Listing {
      */
     public OutputStructure unmarshall(boolean stream, String filePath) throws ExceptionHandler {
         if (stream) {
-            if (!this.streamEnabled)
-                throw new ExceptionHandler("Streaming is not supported for the format: " + this.getType(), ExceptionId.GEN_VALID);
-            else {
+            if (!this.streamEnabled) {
+                log.info("Streaming is not supported for the format: " + this.getType());
+                log.info("Defaulting to block based output.");
+                return unmarshall(false, filePath);
+            } else {
                 try {
                     return (frontEnd.MessagingSystem.routing.outputStructures.stream.Structure) Class.forName(this.streamPath + this.type).getConstructor(String.class).newInstance(filePath);
                 } catch (Exception e) {
-                    //TODO - Catch Here
-                    return null;
+                    log.fatal("Issue dynamically calling the stream TypeSpecificArg with the filepath: " + filePath);
+                    throw new ExceptionHandler(ExceptionId.ARG_VALID, "Issue dynamically calling the TypeSpecificArg with the filepath: " + filePath);
                 }
             }
         } else //non-streamed
@@ -193,9 +218,24 @@ public enum Listing {
             try {
                 return (Structure) Class.forName(this.blockPath + this.type).getConstructor(String.class).newInstance(filePath);
             } catch (Exception e) {
-                //TODO - Catch Here
-                return null;
+                log.fatal("Issue dynamically calling the blocked TypeSpecificArg with the filepath: " + filePath);
+                throw new ExceptionHandler(ExceptionId.ARG_VALID, "Issue dynamically calling the TypeSpecificArg with the filepath: " + filePath);
             }
+        }
+    }
+
+    /**
+     * <p>retrieveSpecificArgHandler.</p>
+     *
+     * @return a {@link frontEnd.Interface.formatArgument.TypeSpecificArg} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+     */
+    public TypeSpecificArg retrieveSpecificArgHandler() throws ExceptionHandler {
+        try {
+            return (TypeSpecificArg) Class.forName(this.typeSpecificArgPath + this.type).getConstructor().newInstance();
+        } catch (Exception e) {
+            log.warn("Issue dynamically calling the specific argument validator: " + this.typeSpecificArgPath + this.type);
+            throw new ExceptionHandler(ExceptionId.ENV_VAR, "Issue dynamically calling the specific argument validator: " + this.typeSpecificArgPath + this.type);
         }
     }
 
@@ -219,38 +259,6 @@ public enum Listing {
      */
     public JacksonSerializer.JacksonType getJacksonType() {
         return jacksonType;
-    }
-
-    /**
-     * A method to dynamically retrieve the type of messaging structure asked for by the flag type.
-     * NOTE: if there is any kind of issue instantiating the class name, it will default to the Legacy Input
-     *
-     * @return outputStructure - the type of messaging structure to be used to return information
-     */
-    public frontEnd.MessagingSystem.routing.inputStructures.Structure getTypeOfMessagingInput() {
-
-        try {
-            //Return a dynamically loaded instantiation of the class
-            return (frontEnd.MessagingSystem.routing.inputStructures.Structure) Class.forName(inputPath + "." + this.type).newInstance();
-        } catch (Exception e) {
-            return new frontEnd.MessagingSystem.routing.inputStructures.Legacy();
-        }
-    }
-
-    /**
-     * A method to dynamically retrieve the args of messaging structure asked for by the flag type for help
-     * with error checking.
-     *
-     * @return string - the help string provided by each messaging interface
-     */
-    public String getInputHelp() {
-
-        try {
-            //Return a dynamically loaded instantiation of the class
-            return ((frontEnd.MessagingSystem.routing.inputStructures.Structure) Class.forName(inputPath + "." + this.type).newInstance()).helpInfo();
-        } catch (Exception e) {
-            return new frontEnd.MessagingSystem.routing.inputStructures.Legacy().helpInfo();
-        }
     }
     //endregion
 

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import datetime
 import hashlib
 import json
 import os
@@ -20,172 +21,13 @@ curdir = os.path.abspath(os.curdir)
 gitPath = os.path.join(curdir, '.git')
 failFast, offline = False, not os.path.exists(gitPath)
 android, java7, java = os.environ.get('ANDROID_HOME'), os.environ.get('JAVA7_HOME'), os.environ.get('JAVA_HOME')
+generalArg, streamTests = None, False
 
+# // @formatter:off
 # region Offline information
-archivedInformation = {'properties': {'projectName': 'cryptoguard', 'groupName': 'vt.edu', 'versionNumber': 'V03.11.06',
-                                      'buildFrameWork': 'Java', 'buildVersion': '1.8.232', 'org.gradle.daemon': 'false',
-                                      'gradle.version': '4.10.3', 'surveyURL': 'TBD'}, 'rawArgs': {
-    '    FORMAT': {'id': 'in', 'defaultArg': 'format', 'desc': 'Required: The format of input you want to scan',
-                   'Required': True}, '    SOURCE': {'id': 's', 'defaultArg': 'file/files/*.in/dir/ClassPathString',
-                                                     'desc': 'Required: The source to be scanned use the absolute path or send all of the source files via the file input.in; ex. find -type f *.java >> input.in.',
-                                                     'Required': True},
-    '    DEPENDENCY': {'id': 'd', 'defaultArg': 'dir', 'desc': 'The dependency to be scanned use the relative path.',
-                       'Required': False}, '    OUT': {'id': 'o', 'defaultArg': 'file',
-                                                       'desc': 'The file to be created with the output default will be the project name.',
-                                                       'Required': False},
-    '    NEW': {'id': 'new', 'defaultArg': 'null',
-                'desc': 'The file to be created with the output if existing will be overwritten.', 'Required': False},
-    '    TIMEMEASURE': {'id': 't', 'defaultArg': 'null', 'desc': 'Output the time of the internal processes.',
-                        'Required': False},
-    '    FORMATOUT': {'id': 'm', 'defaultArg': 'formatType', 'desc': 'The output format you want to produce',
-                      'Required': False},
-    '    PRETTY': {'id': 'n', 'defaultArg': 'null', 'desc': "Output the analysis information in a 'pretty' format.",
-                   'Required': False},
-    '    NOEXIT': {'id': 'X', 'defaultArg': 'null', 'desc': 'Upon completion of scanning', 'Required': False},
-    '    EXPERIMENTRESULTS': {'id': 'exp', 'defaultArg': 'null', 'desc': 'View the experiment based results.',
-                              'Required': False},
-    '    VERSION': {'id': 'V', 'defaultArg': 'null', 'desc': 'Output the version number.', 'Required': False},
-    '    NOLOGS': {'id': 'vx', 'defaultArg': 'null', 'desc': 'Display logs only from the fatal logs',
-                   'Required': False},
-    '    VERBOSE': {'id': 'v', 'defaultArg': 'null', 'desc': 'Display logs from debug levels', 'Required': False},
-    '    VERYVERBOSE': {'id': 'vv', 'defaultArg': 'null', 'desc': 'Display logs from trace levels', 'Required': False},
-    '    TIMESTAMP': {'id': 'ts', 'defaultArg': 'null', 'desc': 'Add a timestamp to the file output.',
-                      'Required': False},
-    '    DEPTH': {'id': 'depth', 'defaultArg': 'null', 'desc': 'The depth of slicing to go into', 'Required': False},
-    '    LOG': {'id': 'L', 'defaultArg': 'null', 'desc': 'Enable logging to the console.', 'Required': False},
-    '    JAVA': {'id': 'java', 'defaultArg': 'envVariable',
-                 'desc': 'Directory of Java to be used JDK 7 for JavaFiles/Project and JDK 8 for ClassFiles/Jar',
-                 'Required': False},
-    '    ANDROID': {'id': 'android', 'defaultArg': 'envVariable', 'desc': 'Specify of Android SDK', 'Required': False},
-    '    HEURISTICS': {'id': 'H', 'defaultArg': 'null',
-                       'desc': 'The flag determining whether or not to display heuristics.', 'Required': False},
-    '    STREAM': {'id': 'st', 'defaultArg': 'null', 'desc': 'Stream the analysis to the output file.',
-                   'Required': False},
-    '    HELP': {'id': 'h', 'defaultArg': 'null', 'desc': 'Print out the Help Information.', 'Required': False},
-    '    MAIN': {'id': 'main', 'defaultArg': 'className',
-                 'desc': 'Choose the main class if there are multiple main classes in the files given.',
-                 'Required': False}}, 'engineType': {'    JAR': {'name': 'JAR File', 'flag': 'jar', 'extension': '.jar',
-                                                                 'helpInfo': 'To signal a Jar File to be scanned.)'},
-                                                     '    APK': {'name': 'APK File', 'flag': 'apk', 'extension': '.apk',
-                                                                 'helpInfo': 'To signal a APK File to be scanned.)'},
-                                                     '    DIR': {'name': 'Directory of Source Code', 'flag': 'source',
-                                                                 'extension': 'dir',
-                                                                 'helpInfo': 'To signal the source directory of a Maven/Gradle Project.)'},
-                                                     '    JAVAFILES': {'name': 'Java File or Files', 'flag': 'java',
-                                                                       'extension': '.java',
-                                                                       'helpInfo': 'To signal a Java File(s) to be scanned.)'},
-                                                     '    CLASSFILES': {'name': 'Class File or Files', 'flag': 'class',
-                                                                        'extension': '.class',
-                                                                        'helpInfo': 'To signal a Class File(s) to be scanned.);'}},
-                       'outputType': {'    Legacy': {'type': 'Legacy', 'flag': 'L', 'outputExtension': '.txt'},
-                                      '    ScarfXML': {'type': 'ScarfXML', 'flag': 'SX', 'outputExtension': '.xml'},
-                                      '    Default': {'type': 'Default', 'flag': 'D', 'outputExtension': '.json'}},
-                       'exceptionType': {'    SUCCESS': {'id': '0', 'messageType': 'Successful'},
-                                         '    HELP': {'id': '0', 'messageType': 'Asking For Help'},
-                                         '    VERSION': {'id': '0', 'messageType': 'Asking For Version'},
-                                         '    GEN_VALID': {'id': '1', 'messageType': 'General Argument Validation'},
-                                         '    ARG_VALID': {'id': '2', 'messageType': 'Argument Value Validation'},
-                                         '    FORMAT_VALID': {'id': '7',
-                                                              'messageType': 'Format Specific Argument Validation'},
-                                         '    FILE_I': {'id': '15', 'messageType': 'File Input Error'},
-                                         '    FILE_READ': {'id': '16', 'messageType': 'Reading File Error'},
-                                         '    FILE_AFK': {'id': '17', 'messageType': 'File Not Available'},
-                                         '    FILE_O': {'id': '30', 'messageType': 'File Output Error'},
-                                         '    FILE_CON': {'id': '31', 'messageType': 'Output File Creation Error'},
-                                         '    FILE_CUT': {'id': '32', 'messageType': 'Error Closing The File'},
-                                         '    ENV_VAR': {'id': '45', 'messageType': 'Environment Variable Not Set'},
-                                         '    MAR_VAR': {'id': '100', 'messageType': 'Error Marshalling The Output'},
-                                         '    SCAN_GEN': {'id': '120',
-                                                          'messageType': 'General Error Scanning The Program'},
-                                         '    LOADING': {'id': '121', 'messageType': 'Error Loading Class'},
-                                         '    UNKWN': {'id': '127', 'messageType': 'Unknown'}}, 'examples': {
-        'General Project Version': {'type': 'General', 'arg': '-V',
-                                    'explanation': 'The version argument (-V) returns the version of the project and exits.'},
-        'General Project No Logging': {'type': 'General', 'arg': '-vx',
-                                       'explanation': 'The argument (-vx) only displays the fatal logs.'},
-        'General Project Verbose Logging': {'type': 'General', 'arg': '-v',
-                                            'explanation': 'The argument (-v) displays debug logs.'},
-        'General Project Very Verbose Logging': {'type': 'General', 'arg': '-vv',
-                                                 'explanation': 'The argument (-vv) displays the all of the logs available.'},
-        'General Project Stream': {'type': 'General', 'arg': '-st',
-                                   'explanation': 'The argument (-st) enables streaming the results to whatever output file is specified.'},
-        'General Project Heuristics': {'type': 'General', 'arg': '-H',
-                                       'explanation': 'The argument (-H) writes the heuristics picked up in the output file.'},
-        'General Project Specifying the main file': {'type': 'General', 'arg': '-main',
-                                                     'explanation': 'The argument (-main) specifies the main class (containing public static void main) if there are multiple within the project.'},
-        'General Project Java Home': {'type': 'General', 'arg': '-java',
-                                      'explanation': "The argument (-java) sets the Java file path needed for an internal library. This is needed if the environment variable isn't set.\nJDK 7 needed for either a Project or Java File Scanning.\nJDK 8 needed for the other projects."},
-        'General Project Android Home': {'type': 'General', 'arg': '-android',
-                                         'explanation': "The argument (-android) sets the Android file path.needed for an internal library. This is needed if the environment variable isn't set.\nNeeded if an Android project is being scanned."},
-        'General Project PrettyPrint': {'type': 'General', 'arg': '-n',
-                                        'explanation': 'The prettyprint argument (-n) writes the result in the "pretty" format.'},
-        'General Project Time Measurement': {'type': 'General', 'arg': '-t',
-                                             'explanation': 'The time argument (-t) displays the time taken for the scanning.'},
-        'JAR Project Base': {'type': 'JAR', 'arg': '-in jar -s .../project.jar',
-                             'explanation': 'The format argument (-in) specifies the type of project (jar) and the source argument (-s) specifies the location of the project.'},
-        'JAR Project Dependency': {'type': 'JAR', 'arg': '-in jar -s .../project.jar -d .../lib/file(s).jar',
-                                   'explanation': 'The format argument (-d) specifies the directory of the dependencies to be used with the project and picks up the file.jar.'},
-        'JAR Project Fileout': {'type': 'JAR', 'arg': '-in jar -s .../project.jar -m D -o .../fileout.json',
-                                'explanation': 'The output format argument (-m) specifies the type of output to write amd the output argument (-o) specifies the file to write the results to.'},
-        'JAR Project Sample Test ': {'type': 'JAR',
-                                     'arg': '-in jar -s cryptoguard/samples/testable-jar/build/libs/testable-jar.jar  -d cryptoguard/samples/testable-jar/build/dependencies  -m SX  -o cryptoguard/build/tmp/tempJarFile_Scarf_0.xml  -t  -H  -n -java .../jdk8',
-                                     'explanation': 'The output format argument (-in) specifies the type of project (jar).\nThe source argument (-s) specifies the project to be scanned (.../testable-jar.jar).\nThe dependency argument (-d) specifies the directory of the dependencies (.../dependencies).\nThe output format argument (-m) specifies the type of result to write out (Scarf).\nThe output argument (-o) specifies the file to write out to (.../tempJarFile_Scarf_0.xml).\nThe time argument (-t) displays time taken via the project.\nThe heuristic argument (-H) writes various heuristics taken to the output.\nThe prettyprint argument (-n) formats and writes the output into a "pretty" format.\nThe java argument (-java) specifies the java home, either java 7 or 8 for the internal library.'},
-        'Project Scanner Base': {'type': 'Project', 'arg': '-in source -s .../project/',
-                                 'explanation': 'The format argument (-in) specifies the type of project (source) and the source argument (-s) specifies the location of the project.\nThis must either be a gradle or maven based project.'},
-        'Project Scanner Dependency': {'type': 'Project', 'arg': '-in source -s .../project/ -d .../lib/file(s).jar',
-                                       'explanation': 'The format argument (-d) specifies the directory of the dependencies to be used with the project and picks up the file.jar.'},
-        'Project Fileout': {'type': 'Project', 'arg': '-in source -s .../project/ -m D -o .../fileout.json',
-                            'explanation': 'The output format argument (-m) specifies the type of output to write amd the output argument (-o) specifies the file to write the results to.'},
-        'Project Sample Test ': {'type': 'Project',
-                                 'arg': '-in source -s cryptoguard/samples/testable-jar  -d cryptoguard/samples/testable-jar/build/dependencies  -m L  -o cryptoguard/build/tmp/testable-jar.txt  -t  -H  -n ',
-                                 'explanation': 'The output format argument (-in) specifies the type of project (source).\nThe source argument (-s) specifies the project to be scanned (.../testable-jar).\nThe dependency argument (-d) specifies the directory of the dependencies (.../dependencies).\nThe output format argument (-m) specifies the type of result to write out (Legacy).\nThe output argument (-o) specifies the file to write out to (.../testable-jar.txt).\nThe time argument (-t) displays time taken via the project.\nThe heuristic argument (-H) writes various heuristics taken to the output.\nThe prettyprint argument (-n) formats and writes the output into a "pretty" format.'},
-        'Java File(s) Project Base Single File': {'type': 'Java', 'arg': '-in java -s .../test.java',
-                                                  'explanation': 'The format argument (-in) specifies the type of project (java) and the source argument (-s) specifies the file to be used.'},
-        'Java File(s) Project Multiple Files (Split via space)': {'type': 'Java',
-                                                                  'arg': '-in java -s .../test.java .../testTwo.java',
-                                                                  'explanation': 'The argument (-s) specifies the file to be used, retrieving test.java and testTwo.java via the space between the arguments.'},
-        'Java File(s) Project Multiple Files (Split via classpath)': {'type': 'Java',
-                                                                      'arg': '-in java -s .../test.java:.../testTwo.java',
-                                                                      'explanation': 'The argument (-s) specifies the file to be used, retrieving test.java and testTwo.java via the split by classpath (delimited by :).'},
-        'Java File(s) Project Multiple Files (Split via input.in file)': {'type': 'Java',
-                                                                          'arg': '-in java -s .../input.in',
-                                                                          'explanation': 'The argument (-s) specifies the input.in file to be used. This file should contain a line delimited paths to the source file. This also works based on the \nex. \n.../test.java\n.../testTwo.java'},
-        'Java File Fileout': {'type': 'Java', 'arg': '-in java -s .../test.java -m D -o .../fileout.json',
-                              'explanation': 'The output format argument (-m) specifies the type of output to write amd the output argument (-o) specifies the file to write the results to.'},
-        'Java File Dependency': {'type': 'Java', 'arg': '-in java -s .../test.java -d .../lib/file(s).jar',
-                                 'explanation': 'The format argument (-d) specifies the directory of the dependencies to be used with the project and picks up the file.jar.'},
-        'Java File Test ': {'type': 'Java',
-                            'arg': '-in java -s cryptoguard/samples/temp/tester/test.java  -m SX  -o cryptoguard/build/tmp/test_java.xml  -t  -vv  -n ',
-                            'explanation': 'The output format argument (-in) specifies the type of project (java).\nThe source argument (-s) specifies the project to be scanned (.../test.java).\nThe output format argument (-m) specifies the type of result to write out (Scarf).\nThe output argument (-o) specifies the file to write out to (.../test_java.xml).\nThe very verbose argument (-vv) displays all of the logs available.\nThe prettyprint argument (-n) formats and writes the output into a "pretty" format.'},
-        'Java Class File(s) Project Base': {'type': 'Class', 'arg': '-in class -s .../test.class',
-                                            'explanation': 'The format argument (-in) specifies the type of project (class) and the source argument (-s) specifies the location of the project.'},
-        'Java Class File(s) Project Multiple Files (Split via space)': {'type': 'Class',
-                                                                        'arg': '-in class -s .../test.class .../testTwo.class',
-                                                                        'explanation': 'The argument (-s) specifies the file to be used, retrieving test.class and testTwo.class via the space between the arguments.'},
-        'Java Class File(s) Project Multiple Files (Split via classpath)': {'type': 'Class',
-                                                                            'arg': '-in class -s .../test.class:.../testTwo.class',
-                                                                            'explanation': 'The argument (-s) specifies the file to be used, retrieving test.class and testTwo.class via the split by classpath (delimited by :).'},
-        'Java Class File(s) Project Multiple Files (Split via input.in file)': {'type': 'Class',
-                                                                                'arg': '-in class -s .../input.in',
-                                                                                'explanation': 'The argument (-s) specifies the input.in file to be used. This file should contain a line delimited paths to the source file. This also works based on the \nex. \n.../test.class\n.../testTwo.class'},
-        'Java Class File(s) Project Dependency': {'type': 'Class',
-                                                  'arg': '-in class -s .../test.class -d .../lib/file(s).jar',
-                                                  'explanation': 'The format argument (-d) specifies the directory of the dependencies to be used with the project and picks up the file.jar.'},
-        'Java Class File Test ': {'type': 'Class',
-                                  'arg': '-in class -s cryptoguard/samples/VerySimple/very.class -m SX  -o cryptoguard/build/tmp/verySimple_klass.xml  -n ',
-                                  'explanation': 'The output format argument (-in) specifies the type of project (java).\nThe source argument (-s) specifies the project to be scanned (.../test.java).\nThe output format argument (-m) specifies the type of result to write out (Scarf).\nThe output argument (-o) specifies the file to write out to (.../verySimple_klass.xml).\nThe prettyprint argument (-n) formats and writes the output into a "pretty" format.'},
-        'APK Project Base': {'type': 'APK', 'arg': '-in apk -s .../app-debug.apk',
-                             'explanation': 'The format argument (-in) specifies the type of project (apk) and the source argument (-s) specifies the location of the project.'},
-        'APK Project Dependency': {'type': 'APK', 'arg': '-in apk -s  .../app-debug.apk -d .../lib/file(s).jar',
-                                   'explanation': 'The format argument (-d) specifies the directory of the dependencies to be used with the project and picks up the file.jar.'},
-        'APK Project Fileout': {'type': 'APK', 'arg': '-in apk -s .../app-debug.apk -m D -o .../fileout.json',
-                                'explanation': 'The output format argument (-m) specifies the type of output to write amd the output argument (-o) specifies the file to write the results to.'},
-        'APK Project File Test ': {'type': 'APK',
-                                   'arg': '-in apk -s cryptoguard/samples/app-debug.apk -m SX  -o cryptoguard/build/tmp/app-debug.xml  -n -android .../android_home',
-                                   'explanation': 'The output format argument (-in) specifies the type of project (java).\nThe source argument (-s) specifies the project to be scanned (.../test.java).\nThe output format argument (-m) specifies the type of result to write out (Scarf).\nThe output argument (-o) specifies the file to write out to (.../debug.xml).\nThe prettyprint argument (-n) formats and writes the output into a "pretty" format.\nThe android argument (-android) specifies the android home for the internal library.'}}}
-
-
+archivedInformation = {'properties': {'projectName': 'cryptoguard', 'groupName': 'vt.edu', 'versionNumber': 'V03.14.00', 'buildFrameWork': 'Java', 'buildVersion': '1.8.232', 'org.gradle.daemon': 'false', 'gradle.version': '4.10.3', 'surveyURL': 'TBD'}, 'rawArgs': {'    FORMAT': {'id': 'in', 'defaultArg': 'format', 'desc': 'Required: The format of input you want to scan', 'Required': True}, '    SOURCE': {'id': 's', 'defaultArg': 'file/files/*.in/dir/ClassPathString', 'desc': 'Required: The source to be scanned use the absolute path or send all of the source files via the file input.in; ex. find -type f *.java >> input.in.', 'Required': True}, '    DEPENDENCY': {'id': 'd', 'defaultArg': 'dir', 'desc': 'The dependency to be scanned use the relative path.', 'Required': False}, '    OUT': {'id': 'o', 'defaultArg': 'file', 'desc': 'The file to be created with the output default will be the project name.', 'Required': False}, '    NEW': {'id': 'new', 'defaultArg': 'null', 'desc': 'The file to be created with the output if existing will be overwritten.', 'Required': False}, '    TIMEMEASURE': {'id': 't', 'defaultArg': 'null', 'desc': 'Output the time of the internal processes.', 'Required': False}, '    FORMATOUT': {'id': 'm', 'defaultArg': 'formatType', 'desc': 'The output format you want to produce', 'Required': False}, '    PRETTY': {'id': 'n', 'defaultArg': 'null', 'desc': "Output the analysis information in a 'pretty' format.", 'Required': False}, '    NOEXIT': {'id': 'X', 'defaultArg': 'null', 'desc': 'Upon completion of scanning', 'Required': False}, '    VERSION': {'id': 'v', 'defaultArg': 'null', 'desc': 'Output the version number.', 'Required': False}, '    NOLOGS': {'id': 'VX', 'defaultArg': 'null', 'desc': 'Display logs only from the fatal logs', 'Required': False}, '    VERBOSE': {'id': 'V', 'defaultArg': 'null', 'desc': 'Display logs from debug levels', 'Required': False}, '    VERYVERBOSE': {'id': 'VV', 'defaultArg': 'null', 'desc': 'Display logs from trace levels', 'Required': False}, '    TIMESTAMP': {'id': 'ts', 'defaultArg': 'null', 'desc': 'Add a timestamp to the file output.', 'Required': False}, '    DEPTH': {'id': 'depth', 'defaultArg': 'null', 'desc': 'The depth of slicing to go into', 'Required': False}, '    JAVA': {'id': 'java', 'defaultArg': 'envVariable', 'desc': 'Directory of Java to be used JDK 7 for JavaFiles/Project and JDK 8 for ClassFiles/Jar', 'Required': False}, '    ANDROID': {'id': 'android', 'defaultArg': 'envVariable', 'desc': 'Specify of Android SDK', 'Required': False}, '    HEURISTICS': {'id': 'H', 'defaultArg': 'null', 'desc': 'The flag determining whether or not to display heuristics.', 'Required': False}, '    STREAM': {'id': 'st', 'defaultArg': 'null', 'desc': 'Stream the analysis to the output file.', 'Required': False}, '    HELP': {'id': 'h', 'defaultArg': 'null', 'desc': 'Print out the Help Information.', 'Required': False}, '    MAIN': {'id': 'main', 'defaultArg': 'className', 'desc': 'Choose the main class if there are multiple main classes in the files given.', 'Required': False}, '    SCONFIG': {'id': 'Sconfig', 'defaultArg': 'file', 'desc': 'Choose the Scarf property configuration file.', 'Required': False}, '    SASSESSFW': {'id': 'Sassessfw', 'defaultArg': 'variable', 'desc': 'The assessment framework', 'Required': False}, '    SASSESSFWVERSION': {'id': 'Sassessfwversion', 'defaultArg': 'variable', 'desc': 'The assessment framework version', 'Required': False}, '    SASSESSMENTSTARTTS': {'id': 'Sassessmentstartts', 'defaultArg': 'variable', 'desc': 'The assessment start timestamp', 'Required': False}, '    SBUILDFW': {'id': 'Sbuildfw', 'defaultArg': 'variable', 'desc': 'The build framework', 'Required': False}, '    SBUILDFWVERSION': {'id': 'Sbuildfwversion', 'defaultArg': 'variable', 'desc': 'The build framework version', 'Required': False}, '    SBUILDROOTDIR': {'id': 'Sbuildrootdir', 'defaultArg': 'dir', 'desc': 'The build root directory', 'Required': False}, '    SPACKAGENAME': {'id': 'Spackagename', 'defaultArg': 'variable', 'desc': 'The package name', 'Required': False}, '    SPACKAGEROOTDIR': {'id': 'Spackagerootdir', 'defaultArg': 'dir', 'desc': 'The package root directory', 'Required': False}, '    SPACKAGEVERSION': {'id': 'Spackageversion', 'defaultArg': 'variable', 'desc': 'The package version', 'Required': False}, '    SPARSERFW': {'id': 'Sparserfw', 'defaultArg': 'variable', 'desc': 'The parser framework', 'Required': False}, '    SPARSERFWVERSION': {'id': 'Sparserfwversion', 'defaultArg': 'variable', 'desc': 'The parser framework version', 'Required': False}, '    SUUID': {'id': 'Suuid', 'defaultArg': 'uuid', 'desc': 'The uuid of the current pipeline progress', 'Required': False}}, 'engineType': {'    JAR': {'name': 'JAR File', 'flag': 'jar', 'extension': '.jar', 'helpInfo': 'To signal a Jar File to be scanned.)'}, '    APK': {'name': 'APK File', 'flag': 'apk', 'extension': '.apk', 'helpInfo': 'To signal a APK File to be scanned.)'}, '    DIR': {'name': 'Directory of Source Code', 'flag': 'source', 'extension': 'dir', 'helpInfo': 'To signal the source directory of a Maven/Gradle Project.)'}, '    JAVAFILES': {'name': 'Java File or Files', 'flag': 'java', 'extension': '.java', 'helpInfo': 'To signal a Java File(s) to be scanned.)'}, '    CLASSFILES': {'name': 'Class File or Files', 'flag': 'class', 'extension': '.class', 'helpInfo': 'To signal a Class File(s) to be scanned.);'}}, 'outputType': {'    Legacy': {'type': 'Legacy', 'flag': 'L', 'outputExtension': '.txt'}, '    ScarfXML': {'type': 'ScarfXML', 'flag': 'SX', 'outputExtension': '.xml'}, '    Default': {'type': 'Default', 'flag': 'D', 'outputExtension': '.json'}}, 'exceptionType': {'    SUCCESS': {'id': '0', 'messageType': 'Successful'}, '    HELP': {'id': '0', 'messageType': 'Asking For Help'}, '    VERSION': {'id': '0', 'messageType': 'Asking For Version'}, '    GEN_VALID': {'id': '1', 'messageType': 'General Argument Validation'}, '    ARG_VALID': {'id': '2', 'messageType': 'Argument Value Validation'}, '    FORMAT_VALID': {'id': '7', 'messageType': 'Format Specific Argument Validation'}, '    FILE_I': {'id': '15', 'messageType': 'File Input Error'}, '    FILE_READ': {'id': '16', 'messageType': 'Reading File Error'}, '    FILE_AFK': {'id': '17', 'messageType': 'File Not Available'}, '    FILE_O': {'id': '30', 'messageType': 'File Output Error'}, '    FILE_CON': {'id': '31', 'messageType': 'Output File Creation Error'}, '    FILE_CUT': {'id': '32', 'messageType': 'Error Closing The File'}, '    ENV_VAR': {'id': '45', 'messageType': 'Environment Variable Not Set'}, '    MAR_VAR': {'id': '100', 'messageType': 'Error Marshalling The Output'}, '    SCAN_GEN': {'id': '120', 'messageType': 'General Error Scanning The Program'}, '    LOADING': {'id': '121', 'messageType': 'Error Loading Class'}, '    UNKWN': {'id': '127', 'messageType': 'Unknown'}}, 'examples': {'General Project Version': {'type': 'General', 'arg': '-V', 'explanation': 'The version argument (-V) returns the version of the project and exits.'}, 'General Project No Logging': {'type': 'General', 'arg': '-vx', 'explanation': 'The argument (-vx) only displays the fatal logs.'}, 'General Project Verbose Logging': {'type': 'General', 'arg': '-v', 'explanation': 'The argument (-v) displays debug logs.'}, 'General Project Very Verbose Logging': {'type': 'General', 'arg': '-vv', 'explanation': 'The argument (-vv) displays the all of the logs available.'}, 'General Project Stream': {'type': 'General', 'arg': '-st', 'explanation': 'The argument (-st) enables streaming the results to whatever output file is specified.'}, 'General Project Heuristics': {'type': 'General', 'arg': '-H', 'explanation': 'The argument (-H) writes the heuristics picked up in the output file.'}, 'General Project Specifying the main file': {'type': 'General', 'arg': '-main', 'explanation': 'The argument (-main) specifies the main class (containing public static void main) if there are multiple within the project.'}, 'General Project Java Home': {'type': 'General', 'arg': '-java', 'explanation': "The argument (-java) sets the Java file path needed for an internal library. This is needed if the environment variable isn't set.\nJDK 7 needed for either a Project or Java File Scanning.\nJDK 8 needed for the other projects."}, 'General Project Android Home': {'type': 'General', 'arg': '-android', 'explanation': "The argument (-android) sets the Android file path.needed for an internal library. This is needed if the environment variable isn't set.\nNeeded if an Android project is being scanned."}, 'General Project PrettyPrint': {'type': 'General', 'arg': '-n', 'explanation': 'The prettyprint argument (-n) writes the result in the "pretty" format.'}, 'General Project Time Measurement': {'type': 'General', 'arg': '-t', 'explanation': 'The time argument (-t) displays the time taken for the scanning.'}, 'JAR Project Base': {'type': 'JAR', 'arg': '-in jar -s .../project.jar', 'explanation': 'The format argument (-in) specifies the type of project (jar) and the source argument (-s) specifies the location of the project.'}, 'JAR Project Dependency': {'type': 'JAR', 'arg': '-in jar -s .../project.jar -d .../lib/file(s).jar', 'explanation': 'The format argument (-d) specifies the directory of the dependencies to be used with the project and picks up the file.jar.'}, 'JAR Project Fileout': {'type': 'JAR', 'arg': '-in jar -s .../project.jar -m D -o .../fileout.json', 'explanation': 'The output format argument (-m) specifies the type of output to write amd the output argument (-o) specifies the file to write the results to.'}, 'JAR Project Sample Test ': {'type': 'JAR', 'arg': '-in jar -s cryptoguard/samples/testable-jar/build/libs/testable-jar.jar  -d cryptoguard/samples/testable-jar/build/dependencies  -m SX  -o cryptoguard/build/tmp/tempJarFile_Scarf_0.xml  -t  -H  -n -java .../jdk8', 'explanation': 'The output format argument (-in) specifies the type of project (jar).\nThe source argument (-s) specifies the project to be scanned (.../testable-jar.jar).\nThe dependency argument (-d) specifies the directory of the dependencies (.../dependencies).\nThe output format argument (-m) specifies the type of result to write out (Scarf).\nThe output argument (-o) specifies the file to write out to (.../tempJarFile_Scarf_0.xml).\nThe time argument (-t) displays time taken via the project.\nThe heuristic argument (-H) writes various heuristics taken to the output.\nThe prettyprint argument (-n) formats and writes the output into a "pretty" format.\nThe java argument (-java) specifies the java home, either java 7 or 8 for the internal library.'}, 'Project Scanner Base': {'type': 'Project', 'arg': '-in source -s .../project/', 'explanation': 'The format argument (-in) specifies the type of project (source) and the source argument (-s) specifies the location of the project.\nThis must either be a gradle or maven based project.'}, 'Project Scanner Dependency': {'type': 'Project', 'arg': '-in source -s .../project/ -d .../lib/file(s).jar', 'explanation': 'The format argument (-d) specifies the directory of the dependencies to be used with the project and picks up the file.jar.'}, 'Project Fileout': {'type': 'Project', 'arg': '-in source -s .../project/ -m D -o .../fileout.json', 'explanation': 'The output format argument (-m) specifies the type of output to write amd the output argument (-o) specifies the file to write the results to.'}, 'Project Sample Test ': {'type': 'Project', 'arg': '-in source -s cryptoguard/samples/testable-jar  -d cryptoguard/samples/testable-jar/build/dependencies  -m L  -o cryptoguard/build/tmp/testable-jar.txt  -t  -H  -n ', 'explanation': 'The output format argument (-in) specifies the type of project (source).\nThe source argument (-s) specifies the project to be scanned (.../testable-jar).\nThe dependency argument (-d) specifies the directory of the dependencies (.../dependencies).\nThe output format argument (-m) specifies the type of result to write out (Legacy).\nThe output argument (-o) specifies the file to write out to (.../testable-jar.txt).\nThe time argument (-t) displays time taken via the project.\nThe heuristic argument (-H) writes various heuristics taken to the output.\nThe prettyprint argument (-n) formats and writes the output into a "pretty" format.'}, 'Java File(s) Project Base Single File': {'type': 'Java', 'arg': '-in java -s .../test.java', 'explanation': 'The format argument (-in) specifies the type of project (java) and the source argument (-s) specifies the file to be used.'}, 'Java File(s) Project Multiple Files (Split via space)': {'type': 'Java', 'arg': '-in java -s .../test.java .../testTwo.java', 'explanation': 'The argument (-s) specifies the file to be used, retrieving test.java and testTwo.java via the space between the arguments.'}, 'Java File(s) Project Multiple Files (Split via classpath)': {'type': 'Java', 'arg': '-in java -s .../test.java:.../testTwo.java', 'explanation': 'The argument (-s) specifies the file to be used, retrieving test.java and testTwo.java via the split by classpath (delimited by :).'}, 'Java File(s) Project Multiple Files (Split via input.in file)': {'type': 'Java', 'arg': '-in java -s .../input.in', 'explanation': 'The argument (-s) specifies the input.in file to be used. This file should contain a line delimited paths to the source file. This also works based on the \nex. \n.../test.java\n.../testTwo.java'}, 'Java File Fileout': {'type': 'Java', 'arg': '-in java -s .../test.java -m D -o .../fileout.json', 'explanation': 'The output format argument (-m) specifies the type of output to write amd the output argument (-o) specifies the file to write the results to.'}, 'Java File Dependency': {'type': 'Java', 'arg': '-in java -s .../test.java -d .../lib/file(s).jar', 'explanation': 'The format argument (-d) specifies the directory of the dependencies to be used with the project and picks up the file.jar.'}, 'Java File Test ': {'type': 'Java', 'arg': '-in java -s cryptoguard/samples/temp/tester/test.java  -m SX  -o cryptoguard/build/tmp/test_java.xml  -t  -vv  -n ', 'explanation': 'The output format argument (-in) specifies the type of project (java).\nThe source argument (-s) specifies the project to be scanned (.../test.java).\nThe output format argument (-m) specifies the type of result to write out (Scarf).\nThe output argument (-o) specifies the file to write out to (.../test_java.xml).\nThe very verbose argument (-vv) displays all of the logs available.\nThe prettyprint argument (-n) formats and writes the output into a "pretty" format.'}, 'Java Class File(s) Project Base': {'type': 'Class', 'arg': '-in class -s .../test.class', 'explanation': 'The format argument (-in) specifies the type of project (class) and the source argument (-s) specifies the location of the project.'}, 'Java Class File(s) Project Multiple Files (Split via space)': {'type': 'Class', 'arg': '-in class -s .../test.class .../testTwo.class', 'explanation': 'The argument (-s) specifies the file to be used, retrieving test.class and testTwo.class via the space between the arguments.'}, 'Java Class File(s) Project Multiple Files (Split via classpath)': {'type': 'Class', 'arg': '-in class -s .../test.class:.../testTwo.class', 'explanation': 'The argument (-s) specifies the file to be used, retrieving test.class and testTwo.class via the split by classpath (delimited by :).'}, 'Java Class File(s) Project Multiple Files (Split via input.in file)': {'type': 'Class', 'arg': '-in class -s .../input.in', 'explanation': 'The argument (-s) specifies the input.in file to be used. This file should contain a line delimited paths to the source file. This also works based on the \nex. \n.../test.class\n.../testTwo.class'}, 'Java Class File(s) Project Dependency': {'type': 'Class', 'arg': '-in class -s .../test.class -d .../lib/file(s).jar', 'explanation': 'The format argument (-d) specifies the directory of the dependencies to be used with the project and picks up the file.jar.'}, 'Java Class File Test ': {'type': 'Class', 'arg': '-in class -s cryptoguard/samples/VerySimple/very.class -m SX  -o cryptoguard/build/tmp/verySimple_klass.xml  -n ', 'explanation': 'The output format argument (-in) specifies the type of project (java).\nThe source argument (-s) specifies the project to be scanned (.../test.java).\nThe output format argument (-m) specifies the type of result to write out (Scarf).\nThe output argument (-o) specifies the file to write out to (.../verySimple_klass.xml).\nThe prettyprint argument (-n) formats and writes the output into a "pretty" format.'}, 'APK Project Base': {'type': 'APK', 'arg': '-in apk -s .../app-debug.apk', 'explanation': 'The format argument (-in) specifies the type of project (apk) and the source argument (-s) specifies the location of the project.'}, 'APK Project Dependency': {'type': 'APK', 'arg': '-in apk -s  .../app-debug.apk -d .../lib/file(s).jar', 'explanation': 'The format argument (-d) specifies the directory of the dependencies to be used with the project and picks up the file.jar.'}, 'APK Project Fileout': {'type': 'APK', 'arg': '-in apk -s .../app-debug.apk -m D -o .../fileout.json', 'explanation': 'The output format argument (-m) specifies the type of output to write amd the output argument (-o) specifies the file to write the results to.'}, 'APK Project File Test ': {'type': 'APK', 'arg': '-in apk -s cryptoguard/samples/app-debug.apk -m SX  -o cryptoguard/build/tmp/app-debug.xml  -n -android .../android_home', 'explanation': 'The output format argument (-in) specifies the type of project (java).\nThe source argument (-s) specifies the project to be scanned (.../test.java).\nThe output format argument (-m) specifies the type of result to write out (Scarf).\nThe output argument (-o) specifies the file to write out to (.../debug.xml).\nThe prettyprint argument (-n) formats and writes the output into a "pretty" format.\nThe android argument (-android) specifies the android home for the internal library.'}}}
 # endregion
+# // @formatter:on
 # region Loading
 class Loading(object):
     # region Online Reading
@@ -379,15 +221,14 @@ class Reading(object):
 class Utils(object):
 
     def prettyTime(num):
-        string = ""
-        if num // 360 > 0:
-            string = string + str(num // 360) + " H "
-            num = num - ((num // 360) * 360)
-        if num // 60 > 0:
-            string = string + str(num // 60) + " m "
-            num = num - ((num // 60) * 60)
-        if num > 0:
-            string = string + str(num) + " s "
+        H, M, S = str(datetime.timedelta(seconds=num)).split(':')
+
+        string = "S:" + str(S)
+        if (int(M) > 0):
+            string = "M:" + str(M) + " " + string
+        if (int(H) > 0):
+            string = "H:" + str(H) + " " + string
+
         return string
 
     def hash():
@@ -421,7 +262,7 @@ class Utils(object):
     def getWidthOfTerminal():
         try:
             value = int(os.popen('stty size', 'r').read().split()[1])
-            value = value*.75
+            value = value * .75
         except:
             value = 50
         return value
@@ -500,20 +341,27 @@ class Utils(object):
         else:
             print("Failure")
 
+    def refresh():
+        Utils.clean()
+        Utils.build()
+
     # Setting the arguments to be handled by the parser
     def arguments(parser, curChoices):
 
         parser.add_argument("switch", choices=curChoices, nargs='?', default='help',
                             help='Use the q flag to show detailed help')
+        parser.add_argument("extraArg", nargs='?', default=None,
+                            help='Extra argument to be used to tune commands')
         parser.add_argument("-v", action='store_true', help='Print the project version')
 
         return parser
 
-    def help():
+    def help(exit=True):
         Utils.printVersion()
         print(Utils.halfRows())
         Utils.routingInfo('./cryptoguard.py')
-        sys.exit(0)
+        if exit:
+            sys.exit(0)
 
     def routing(switch):
         offline = not os.path.exists(gitPath)
@@ -527,7 +375,7 @@ class Utils(object):
         global offline
         for val in routers:
             if (not offline or (offline and routers[val]['offline'])):
-                print('\t' + str(useage) + ' ' + str(val) + ' ' + str(routers[val]['def']))
+                print('\t' + str(useage) + ': ' + str(val) + ' ' + str(routers[val]['def']))
         return
 
     def start():
@@ -542,6 +390,17 @@ class Utils(object):
             sys.exit()
 
         print(Utils.splitRows() + '\n')
+
+        global generalArg
+        if (args.extraArg):
+            _temp = args.extraArg
+
+            if ('-s' in _temp):
+                global streamTests
+                streamTests = True
+                _temp = _temp.replace('-s', '')
+
+            generalArg = _temp
 
         Utils.routing(args.switch)["func"]()
 
@@ -620,7 +479,7 @@ class argsUtils(object):
         print(Utils.halfRows())
 
         projectName = Loading.getProperties()['projectName']
-        cmd = 'java -jar ' + projectName + ' '
+        cmd = 'java -jar ' + projectName + '.jar '
 
         lookup = Loading.parseEngineType()
         for value in lookup.values():
@@ -646,8 +505,9 @@ class argsUtils(object):
         cmd += '-s ' + source + ' '
         print()
 
-        if (typeOfProject['flag'] != 'dir' and not source.endswith(typeOfProject['extension']) and not source.endswith(
-                ".in")):
+        if (typeOfProject['flag'] != 'source' and not source.endswith(
+                typeOfProject['extension']) and not source.endswith(
+            ".in")):
             print("Please enter a valid file for Scanning");
             sys.exit()
 
@@ -965,14 +825,41 @@ class TestUtils(object):
                             line = foil.readline()
         return dyct
 
-    def test():
-        test = input("Please enter the Class.testName to be run: ")
-        print("Running the test")
-        print(Utils.halfRows())
-        if (TestUtils.runTest(test)):
-            print("Passed")
-        else:
-            print("Failed")
+    def test(dyct=pullTests(), passedtests=None, stream=False):
+        global streamTests
+        streamTests = stream
+
+        tests = []
+        for testType in dyct:
+            for test in dyct[testType]:
+                tests += [str(testType) + '.' + str(test['testName'])]
+
+        tests = None
+
+        if passedtests is not None:
+            tests = passedtests
+
+        global generalArg
+        if tests is None:
+            if (generalArg is None):
+                tests = input("Please enter the Class.testName to be run: ")
+            else:
+                tests = generalArg
+
+        for test in tests.split(','):
+            if test not in tests:
+                print('Test: ' + str(test) + ' is not currently available.')
+                # print('Please use one of the following tests: ')
+                # for test in tests:
+                #    print(test)
+                sys.exit(-1)
+
+            print("Running the test: " + str(test))
+            print(Utils.halfRows())
+            if (TestUtils.runTest(test)):
+                print("Passed")
+            else:
+                print("Failed")
 
     def runTest(test):
         cmd = str(os.path.join(os.path.abspath(os.curdir), 'gradlew')) + ' test --tests ' + str(
@@ -981,29 +868,24 @@ class TestUtils(object):
             proc = subprocess.Popen(
                 shlex.split(cmd),
                 stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE
+                stderr=subprocess.PIPE,
+                universal_newlines=True
             )
-            stdout, stderr = proc.communicate()
+
+            global streamTests
+            if streamTests:
+                for line in proc.stdout:
+                    sys.stdout.write(line)
+            else:
+                stdout, stderr = proc.communicate()
+
         except Exception as e:
             print('Unknown Error ' + str(e))
             sys.exit(0)
 
-        stdout, stderr = stdout.decode('utf-8'), stderr.decode('utf-8')
-        global failFast
-
-        if 'BUILD SUCCESSFUL' in stdout:
+        if not proc.wait():
             return True
-        elif 'BUILD FAILED' in stderr:
-            if failFast:
-                print(stderr)
-                print('Failing on ' + str(test));
-                sys.exit(0)
-            return False
         else:
-            print('Unknown Error: ')
-            if failFast:
-                print('Failing on ' + str(test));
-                sys.exit(0)
             return False
 
     def activeSkipTests(dyct=pullTests()):
@@ -1028,6 +910,43 @@ class TestUtils(object):
                 grouping[testType]['Skipped'] = sum([not x['live'] for x in value])
                 grouping[testType]['Active'] = sum([x['live'] for x in value])
         return liveTests, skippedTests, grouping
+
+    def getDisplayTests(dyct=pullTests(), exit=True):
+        print('Displaying available tests')
+        grouping = [
+            'APK',
+            'JAR',
+            'JAVA',
+            'SOURCE',
+            'CLASS',
+            'OTHER',
+            'ALL'
+        ]
+
+        option = input(
+            "Please enter what kind of test you would like to have run from " + str(grouping) + " : ").upper()
+        if (option not in grouping):
+            print('Option is not valid')
+            sys.exit()
+
+        for key, value in dyct.items():
+            testType = 'OTHER'
+            if ('_' in key):
+                testType = key.strip().strip().split('_')[1]
+            if option == 'ALL' or option == testType:
+                print('Test Type: ' + str(testType))
+
+                print(Utils.halfRows())
+                for test in value:
+                    active = 'Live'
+                    if not test['live']:
+                        active = 'Skip'
+
+                    print(
+                        str(active) + ' | ' + str(key) + ' | ' + str(test['testName']) + ' | ' + str(key) + '.' + test[
+                            'testName'])
+                if exit:
+                    sys.exit(0)
 
     def helptests(dyct=pullTests()):
         liveTests, skippedTests, grouping = TestUtils.getHelpTests(dyct)
@@ -1085,13 +1004,70 @@ class TestUtils(object):
         options = list(grouping.keys())
         options += ['OTHER']
 
-        option = input("Please enter what kind of test you would like to have run from " + str(options) + " : ").upper()
-        if (option not in options):
-            print('Option is not valid')
-            sys.exit()
-        TestUtils.tests(dyct=dyct, filter=option)
+        ktr = 0
+        for key in options:
+            print(str(ktr) + ': ' + str(key))
+            ktr = ktr + 1
 
-    def tests(dyct=pullTests(), filter=None):
+        option = int(input("Please enter what kind of test you would like to have run from (default is OTHER) :"))
+
+        if option >= len(options):
+            option = 'OTHER'
+        else:
+            option = options[option]
+
+        if option != 'OTHER':
+            option = 'EntryPointTest_' + option
+
+        testTracker = []
+
+        for key, values in dyct.items():
+            if (option == 'OTHER' and not key.startswith('EntryPointTest_')) or (key == option):
+                for value in values:
+                    if value['live']:
+                        print(str(len(testTracker)) + ': ' + str(value['testName']))
+                        testTracker += [str(key) + '.' + str(value['testName'])]
+        print(str(len(testTracker)) + ': All of the above (default)')
+
+        testValue = int(input("Please enter the test number you would like to run? : "))
+
+        print(Utils.halfRows())
+
+        if testValue < 0 or testValue >= len(testTracker):
+            print('Running all of the tests')
+
+            ktr = 0
+            for test in testTracker:
+                print(str(ktr) + '/' + str(len(testTracker)) + ' | ' + str(test) + ' | ', end='', flush=True)
+                startTime = time.time()
+
+                if TestUtils.runTest(test):
+                    print('Pass | ', end='', flush=True)
+                else:
+                    print('Fail | ', end='', flush=True)
+
+                testTime = int(time.time() - startTime)
+                print(Utils.prettyTime(testTime))
+
+                ktr = ktr + 1
+
+        else:
+            test = testTracker[testValue]
+            print(str(test) + ' | ', end='', flush=True)
+            startTime = time.time()
+
+            if TestUtils.runTest(test):
+                print('Pass | ', end='', flush=True)
+            else:
+                print('Fail | ', end='', flush=True)
+
+            testTime = int(time.time() - startTime)
+            print(Utils.prettyTime(testTime))
+
+    def tests(dyct=pullTests(), filter=None, stream=False):
+        if stream:
+            global streamTests
+            streamTests = True
         print("Running all of the available tests.")
         dyct = OrderedDict(sorted(dyct.items()))
 
@@ -1145,13 +1121,13 @@ class TestUtils(object):
             sys.exit(1)
 
         if (not android_set or not java7_set):
-            print('==============================')
+            print(Utils.halfRows())
             if not android_set:
                 print('Skipping All Android Tests, no ANDROID_HOME env found')
             else:
                 print('Skipping All Project and Java file Tests, no JAVA7_HOME env found')
 
-        print('==============================')
+        print(Utils.halfRows())
         for key, value in dyct.items():
             subpassed, subfailed, subskipped = 0, 0, 0
 
@@ -1307,6 +1283,11 @@ routers = {
         "def": "Builds the project.",
         'offline': False
     },
+    'refresh': {
+        "func": Utils.refresh,
+        "def": "A shortcut to clean and build the project.",
+        'offline': False
+    },
     'hash': {
         "func": Utils.hash,
         "def": "Determines the hash of a freshly built project.",
@@ -1319,7 +1300,7 @@ routers = {
     },
     'test': {
         "func": TestUtils.test,
-        "def": "Runs a specified test.",
+        "def": "Runs a specified test, can also supply the fullyqualified test names, (i.e. smapleTestOne or sampleTestOne,testCWEListing).",
         'offline': False
     },
     'tests': {
@@ -1335,6 +1316,11 @@ routers = {
     'testsHelp': {
         "func": TestUtils.helptests,
         "def": "Shows helpful information about the tests crawled.",
+        'offline': False
+    },
+    'displayTests': {
+        "func": TestUtils.getDisplayTests,
+        "def": "Displays Tests available.",
         'offline': False
     },
     # 'survey': {
@@ -1353,7 +1339,9 @@ routers = {
         'offline': False
     }
 }
-#endregion
+
+
+# endregion
 
 def signal_handler(sig, frame):
     print('\nExiting...')

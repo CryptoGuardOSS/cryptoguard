@@ -34,8 +34,9 @@ public class EntryPoint_Plugin {
      * @param heuristicsHandler a {@link java.util.function.Function} object.
      * @param debuggingLevel    a int.
      * @return a {@link java.lang.String} object.
+     * @param extraArgs a {@link java.util.List} object.
      */
-    public static String main(List<String> sourceFiles, List<String> dependencies, String outFile, String mainFile, Function<AnalysisIssue, String> errorAddition, Function<HashMap<Integer, Integer>, String> bugSummaryHandler, Function<Heuristics, String> heuristicsHandler, int debuggingLevel) {
+    public static String main(List<String> sourceFiles, List<String> dependencies, String outFile, String mainFile, Function<AnalysisIssue, String> errorAddition, Function<HashMap<Integer, Integer>, String> bugSummaryHandler, Function<Heuristics, String> heuristicsHandler, int debuggingLevel, List<String> extraArgs) {
         String outputFile = null;
 
         //region Setting the logging level
@@ -66,7 +67,7 @@ public class EntryPoint_Plugin {
             EnvironmentInformation info = ArgumentsCheck.paramaterCheck(
                     sourceFiles, dependencies,
                     EngineType.CLASSFILES, Listing.Default,
-                    outFile, mainFile);
+                    outFile, mainFile, extraArgs);
 
             info.setErrorAddition(errorAddition);
             info.setBugSummaryHandler(bugSummaryHandler);

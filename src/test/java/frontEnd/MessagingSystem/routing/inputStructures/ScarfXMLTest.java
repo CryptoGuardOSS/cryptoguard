@@ -2,9 +2,11 @@ package frontEnd.MessagingSystem.routing.inputStructures;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import frontEnd.Interface.formatArgument.ScarfXML;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import frontEnd.MessagingSystem.routing.Listing;
 import frontEnd.MessagingSystem.routing.structure.Scarf.Method;
+import frontEnd.argsIdentifier;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,8 +15,10 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import rule.engine.EngineType;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
@@ -38,7 +42,6 @@ public class ScarfXMLTest {
     private final String dependencies = null;
     //region Attributes
     private EnvironmentInformation testInfo;
-    private String[] args;
     private ScarfXML inputTest;
     private String assessment_start_ts;
     private String build_fw;
@@ -65,8 +68,6 @@ public class ScarfXMLTest {
     @Before
     public void setUp() throws Exception {
         inputTest = spy(ScarfXML.class);
-
-        args = new String[]{"TestSource", type.getName(), dependencies, Listing.ScarfXML.getFlag()};
 
         assess_fw = "java-assess";
         assess_fw_version = "1.0.0c";
@@ -105,7 +106,6 @@ public class ScarfXMLTest {
     @After
     public void tearDown() throws Exception {
         testInfo = null;
-        args = null;
         inputTest = null;
         assess_fw = null;
         assess_fw_version = null;
@@ -150,7 +150,7 @@ public class ScarfXMLTest {
         StringBuilder args = new StringBuilder();
 
         //region Setting the arguments string
-        args.append(makeArg(ScarfXMLId.ConfigFile.getId(), assess_fw));
+        args.append(makeArg(argsIdentifier.SCONFIG.getId(), assess_fw));
         //endregion
 
         try {
@@ -158,7 +158,7 @@ public class ScarfXMLTest {
 
             doReturn(sampleProp).when(inputTest).loadProperties(Mockito.anyString());
 
-            assertTrue(inputTest.inputValidation(testInfo, args.toString().split(" ")));
+            assertTrue(inputTest.inputValidation(testInfo, Arrays.stream(args.toString().split(" ")).collect(Collectors.toList())));
 
             //region Checking arguments
             assertEquals(assess_fw, testInfo.getAssessmentFramework());

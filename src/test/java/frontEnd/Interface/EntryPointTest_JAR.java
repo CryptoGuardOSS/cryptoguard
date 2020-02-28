@@ -148,7 +148,7 @@ public class EntryPointTest_JAR {
             try {
                 String outputFile = captureNewFileOutViaStdOut(args.split(" "));
 
-                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
+                AnalyzerReport.deserialize(new File(outputFile));
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -303,7 +303,6 @@ public class EntryPointTest_JAR {
         new File(fileOut).delete();
 
         if (isLinux) {
-            //TODO - Check out Sconfig, missing from argsIdentifier
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.JAR) +
                             makeArg(argsIdentifier.SOURCE, jarOne) +
@@ -314,7 +313,7 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.TIMEMEASURE) +
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY) +
-                            " -Sconfig " + scarfArgs;
+                            makeArg(argsIdentifier.SCONFIG, scarfArgs);
 
             try {
                 String outputFile = captureNewFileOutViaStdOut(args.split(" "));
@@ -456,7 +455,7 @@ public class EntryPointTest_JAR {
                 List<String> results = Files.readAllLines(Paths.get(outputFile), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 10);
 
-                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
+                AnalyzerReport.deserialize(new File(outputFile));
 
             } catch (Exception e) {
                 e.printStackTrace();

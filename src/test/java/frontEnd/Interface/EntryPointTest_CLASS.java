@@ -4,6 +4,7 @@ import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.MessagingSystem.routing.Listing;
 import frontEnd.MessagingSystem.routing.structure.Default.Report;
 import frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport;
+import frontEnd.MessagingSystem.routing.structure.Scarf.BugInstance;
 import frontEnd.argsIdentifier;
 import org.junit.After;
 import org.junit.Before;
@@ -37,7 +38,6 @@ import static util.Utils.makeArg;
 public class EntryPointTest_CLASS {
 
     //region Attributes
-    private EntryPoint engine;
     //endregion
 
     //region Test Environment Setup
@@ -52,8 +52,6 @@ public class EntryPointTest_CLASS {
         //Cleaning the current scene since setup carries throughout the VM
         //tldr - one test setting up the scene will carry over to the next test, this'll stop that
         G.reset();
-
-        engine = new EntryPoint();
     }
 
     /**
@@ -63,7 +61,6 @@ public class EntryPointTest_CLASS {
      */
     @After
     public void tearDown() throws Exception {
-        engine = null;
     }
     //endregion
 
@@ -72,7 +69,7 @@ public class EntryPointTest_CLASS {
     public void main_TestableFile_VerySimple() {
         soot.G.v().reset();
         String source = verySimple_Klass;
-        String fileOut = verySimple_Klass_xml;
+        String fileOut = verySimple_Klass_xml_0;
         new File(fileOut).delete();
 
         if (isLinux) {
@@ -83,6 +80,7 @@ public class EntryPointTest_CLASS {
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
                             makeArg(argsIdentifier.VERYVERBOSE) +
+                            makeArg(argsIdentifier.STREAM) +
                             makeArg(argsIdentifier.PRETTY) +
                             makeArg(argsIdentifier.OUT, fileOut);
 
@@ -91,7 +89,13 @@ public class EntryPointTest_CLASS {
 
                 AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
                 assertFalse(report.getBugInstance().isEmpty());
-                assertTrue(report.getBugInstance().stream().allMatch(bugInstance -> {
+
+
+                List<String> style = new ArrayList<>();
+                for (BugInstance instance : report.getBugInstance())
+                    style.add(instance.getClassName());
+
+                assertTrue(report.getBugInstance().stream().anyMatch(bugInstance -> {
                     try {
                         return bugInstance.getClassName().contains(Utils.retrieveFullyQualifiedName(source));
                     } catch (ExceptionHandler exceptionHandler) {
@@ -114,9 +118,10 @@ public class EntryPointTest_CLASS {
     @Test
     public void main_TestableFiles_SingleTest() {
         soot.G.v().reset();
+        soot.G.reset();
 
         String source = testablejar_Crypto_class;
-        String fileOut = testablejar_Crypto_class_xml;
+        String fileOut = testablejar_Crypto_class_xml_0;
         new File(fileOut).delete();
 
         if (isLinux) {
@@ -134,7 +139,7 @@ public class EntryPointTest_CLASS {
 
                 AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
                 assertFalse(report.getBugInstance().isEmpty());
-                assertTrue(report.getBugInstance().stream().allMatch(bugInstance -> {
+                assertTrue(report.getBugInstance().stream().anyMatch(bugInstance -> {
                     try {
                         return bugInstance.getClassName().contains(Utils.retrieveFullyQualifiedName(source));
                     } catch (ExceptionHandler exceptionHandler) {
@@ -153,7 +158,7 @@ public class EntryPointTest_CLASS {
 
     @Test
     public void main_TestableFile_NewTestCaseTwo() {
-        String fileOut = newTestCaseTwo_xml;
+        String fileOut = newTestCaseTwo_xml_0;
         String source = newTestCaseTwo_Class;
         new File(fileOut).delete();
 
@@ -172,7 +177,7 @@ public class EntryPointTest_CLASS {
 
                 AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
                 assertFalse(report.getBugInstance().isEmpty());
-                assertTrue(report.getBugInstance().stream().allMatch(bugInstance -> {
+                assertTrue(report.getBugInstance().stream().anyMatch(bugInstance -> {
                     try {
                         return bugInstance.getClassName().contains(Utils.retrieveFullyQualifiedName(source));
                     } catch (ExceptionHandler exceptionHandler) {
@@ -194,7 +199,7 @@ public class EntryPointTest_CLASS {
      */
     @Test
     public void main_TestableFiles_MultiTest() {
-        String fileOut = tempFileOutTxt_two;
+        String fileOut = tempFileOutTxt_two_0;
         String source = Utils.join(" ", TestUtilities.arr(classFiles));
         new File(fileOut).delete();
 
@@ -230,7 +235,7 @@ public class EntryPointTest_CLASS {
      */
     @Test
     public void main_TestableFiles_MultiTest_Scarf() {
-        String fileOut = tempFileOutXML_Class;
+        String fileOut = tempFileOutXML_Class_0;
         String source = String.join(" ", classFiles);
         new File(fileOut).delete();
 
@@ -272,7 +277,7 @@ public class EntryPointTest_CLASS {
      */
     @Test
     public void main_TestableFiles_MultiTest_Scarf_ClassPath() {
-        String fileOut = tempFileOutXML_Class;
+        String fileOut = tempFileOutXML_Class_1;
         String source = String.join(":", classFiles);
         new File(fileOut).delete();
 
@@ -314,7 +319,7 @@ public class EntryPointTest_CLASS {
      */
     @Test
     public void main_TestableFiles_MultiTest_Scarf_Stream() {
-        String fileOut = tempFileOutXML_Class_Stream;
+        String fileOut = tempFileOutXML_Class_Stream_0;
         String source = String.join(" ", classFiles);
         new File(fileOut).delete();
 
@@ -358,7 +363,7 @@ public class EntryPointTest_CLASS {
      */
     @Test
     public void main_TestableFiles_FullProject() {
-        String fileOut = tempFileOutTxt_Class_fullproj;
+        String fileOut = tempFileOutTxt_Class_fullproj_0;
         String source = Utils.join(" ", TestUtilities.arr(srcOneGrvInputArr_Class));
         new File(fileOut).delete();
 
@@ -398,59 +403,22 @@ public class EntryPointTest_CLASS {
     /**
      * <p>main_TestableFiles_SingleTest.</p>
      */
-    //region TODO - Reimplement this after implementing argsIdentifier.BASEPACKAGE
-    //@Test
-    public void main_TestableFiles_SingleTest_ExtremelyBaseTest() {
-        String fileOut = tempFileOutTxt_Class_tester_test;
-        new File(fileOut).delete();
-
-        if (isLinux) {
-            String args =
-                    makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES) +
-                            makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
-                            makeArg(argsIdentifier.SOURCE, testRec_tester_test_Class) +
-                            makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
-                            makeArg(argsIdentifier.NOEXIT) +
-                            makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
-                            makeArg(argsIdentifier.VERYVERBOSE) +
-                            makeArg(argsIdentifier.OUT, fileOut);
-
-            try {
-                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
-
-                List<String> results = Files.readAllLines(Paths.get(outputFile), StandardCharsets.UTF_8);
-                assertTrue(results.size() >= 2);
-
-                results.removeIf(bugInstance -> !bugInstance.contains(getFileNameFromString(fileOut)));
-                assertTrue(results.size() >= 1);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                assertNull(e);
-            }
-        }
-    }
-    //endregion
-
-    /**
-     * <p>main_TestableFiles_SingleTest.</p>
-     */
     @Test
     public void main_TestableFiles_SingleTest_PluginBase_ClassFileOnly() {
         soot.G.v().reset();
 
         String source = testablejar_Crypto_class;
-        String fileOut = testablejar_Crypto_plugin_class_json;
+        String fileOut = testablejar_Crypto_plugin_class_json_0;
         new File(fileOut).delete();
 
         if (isLinux) {
 
             try {
-                String outputFile = EntryPoint_Plugin.main(Arrays.asList(source), new ArrayList<>(), fileOut, null, null, null, null, 0);
+                String outputFile = EntryPoint_Plugin.main(Arrays.asList(source), new ArrayList<>(), fileOut, null, null, null, null, 0, null);
 
                 Report report = Report.deserialize(new File(outputFile));
                 assertFalse(report.getIssues().isEmpty());
-                assertTrue(report.getIssues().stream().allMatch(bugInstance -> {
+                assertTrue(report.getIssues().stream().anyMatch(bugInstance -> {
                     try {
                         return bugInstance.getFullPath().contains(Utils.retrieveFullyQualifiedName(source).replace(".", Utils.fileSep));
                     } catch (ExceptionHandler exceptionHandler) {
@@ -469,14 +437,14 @@ public class EntryPointTest_CLASS {
 
     @Test
     public void main_TestableFiles_MultiTest_Plugin() {
-        String fileOut = tempFileOutTxt_default;
+        String fileOut = tempFileOutTxt_default_0;
         ArrayList<String> source = TestUtilities.arr(classFiles);
         new File(fileOut).delete();
 
         if (isLinux) {
 
             try {
-                String outputFile = EntryPoint_Plugin.main(source, Utils.getJarsInDirectory(srcOneGrvDep), fileOut, classFiles[3], null, null, null, 0);
+                String outputFile = EntryPoint_Plugin.main(source, Utils.getJarsInDirectory(srcOneGrvDep), fileOut, classFiles[3], null, null, null, 0, null);
 
                 Report report = Report.deserialize(new File(outputFile));
                 assertFalse(report.getIssues().isEmpty());

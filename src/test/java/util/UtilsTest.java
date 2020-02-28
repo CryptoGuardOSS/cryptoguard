@@ -13,8 +13,7 @@ import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static test.TestUtilities.classFiles;
-import static test.TestUtilities.classSource;
+import static test.TestUtilities.*;
 import static util.Utils.join;
 import static util.Utils.trimFilePath;
 
@@ -31,7 +30,6 @@ public class UtilsTest {
     private String fullJavaClassFile;
     private String fullJavaFile;
     private String fileSep = System.getProperty("file.separator");
-    private String javaFile = String.join(fileSep, "rsc", "test", "main.java");
 
     //endregion
 
@@ -120,6 +118,34 @@ public class UtilsTest {
         try {
             String fullyQualifiedName = Utils.retrieveFullyQualifiedName(testFile);
             assertEquals(base, fullyQualifiedName);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            assertNull(e);
+        }
+    }
+
+    @Test
+    public void test_retrievePackageFromJavaFiles() {
+        String testFile = pracitceJavaPackage;
+        String pkg = "tester/Crypto_VeryTemp.java";
+
+        try {
+            String fullyQualifiedName = Utils.retrievePackageFromJavaFiles(testFile);
+            assertEquals(pkg, fullyQualifiedName);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            assertNull(e);
+        }
+    }
+
+    @Test
+    public void test_retrieveFullyQualifiedName() {
+        String testFile = pracitceJavaPackage;
+        String pkg = "tester" + ".Crypto_VeryTemp";
+
+        try {
+            String fullyQualifiedName = Utils.retrieveFullyQualifiedName(testFile);
+            assertEquals(pkg, fullyQualifiedName);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             assertNull(e);

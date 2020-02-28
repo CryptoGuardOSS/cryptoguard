@@ -38,13 +38,13 @@ public class SubRunner {
                 handler = new SourceEntry();
                 break;
             case JAVAFILES:
-                log.debug("Chosen JAVAFILES Scanning");
+                log.debug("Chosen JAVA FILE Scanning");
                 log.warn("This is still experimental, this has not stabilized yet.");
                 log.warn("Scanning Java Files is limited to Java 1.7 and lower, otherwise there may be issues.");
                 handler = new JavaFileEntry();
                 break;
             case CLASSFILES:
-                log.debug("Chosen CLASSFILES Scanning");
+                log.debug("Chosen Java CLASS FILE Scanning");
                 handler = new JavaClassFileEntry();
                 break;
         }

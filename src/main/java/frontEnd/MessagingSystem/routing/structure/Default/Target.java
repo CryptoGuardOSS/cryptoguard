@@ -487,17 +487,13 @@ public class Target implements Serializable {
         return new ToStringBuilder(this).append("propertiesFilePath", propertiesFilePath).append("computerOS", computerOS).append("jVMVersion", jVMVersion).append("projectName", projectName).append("projectVersion", projectVersion).append("rawCommand", rawCommand).append("timing", timing).append("fullPath", fullPath).append("type", type).append("projectType", projectType).append("targetSources", targetSources).toString();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(projectVersion).append(propertiesFilePath).append(computerOS).append(targetSources).append(rawCommand).append(projectType).append(fullPath).append(type).append(timing).append(projectName).append(jVMVersion).toHashCode();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public boolean equals(Object other) {
         if (other == this) {

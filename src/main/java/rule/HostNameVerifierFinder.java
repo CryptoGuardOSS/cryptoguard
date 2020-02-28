@@ -75,7 +75,7 @@ public class HostNameVerifierFinder implements RuleChecker {
 
                 List<Value> constants = new ArrayList<>();
 
-                boolean usedFirstParam = false;
+                //boolean usedFirstParam = false;
                 boolean usedSecondParam = false;
 
                 for (UnitContainer unit : analysis) {
