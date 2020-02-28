@@ -88,9 +88,7 @@ public class ScarfXML extends Structure {
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void addIssue(AnalysisIssue issue) throws ExceptionHandler {
         super.addIssue(issue);
@@ -106,9 +104,7 @@ public class ScarfXML extends Structure {
         //endregion
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void writeFooter() throws ExceptionHandler {
 

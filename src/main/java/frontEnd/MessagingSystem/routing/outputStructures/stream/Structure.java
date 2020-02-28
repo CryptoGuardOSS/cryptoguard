@@ -9,7 +9,7 @@ import lombok.extern.log4j.Log4j2;
 import java.io.FileOutputStream;
 
 /**
- * <p>Abstract Structure class.</p>
+ * <p>Abstract TypeSpecificArg class.</p>
  *
  * @author CryptoguardTeam
  * Created on 2/7/19.
@@ -28,7 +28,7 @@ public abstract class Structure extends OutputStructure {
     //region Constructors
 
     /**
-     * <p>Constructor for Structure.</p>
+     * <p>Constructor for TypeSpecificArg.</p>
      *
      * @param info a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
      * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
@@ -44,7 +44,7 @@ public abstract class Structure extends OutputStructure {
     }
 
     /**
-     * <p>Constructor for Structure.</p>
+     * <p>Constructor for TypeSpecificArg.</p>
      */
     public Structure() {
 
@@ -62,9 +62,7 @@ public abstract class Structure extends OutputStructure {
         writeHeader();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void stopAnalyzing() throws ExceptionHandler {
         writeFooter();

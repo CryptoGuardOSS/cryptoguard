@@ -1,10 +1,13 @@
-package frontEnd.MessagingSystem.routing.inputStructures;
+package frontEnd.Interface.formatArgument;
 
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
+import org.apache.commons.cli.Options;
+
+import java.util.List;
 
 /**
- * <p>Structure interface.</p>
+ * <p>TypeSpecificArg interface.</p>
  *
  * @author CryptoguardTeam
  * Created on 12/13/18.
@@ -13,23 +16,22 @@ import frontEnd.MessagingSystem.routing.EnvironmentInformation;
  *
  * <p>The interface containing the commandline check for each messaging useage</p>
  */
-public interface Structure {
+public interface TypeSpecificArg {
 
     /**
      * The interface for each type of routing to handle the raw command line arguments.
      *
      * @param info {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} - the continuation of the environmental info to be added onto.
-     * @param args {@link String[]} - The subset of arguments passed from the command line
+     * @param args {@link List<String>} - The full set of arguments passed from the command line
      * @return {@link java.lang.Boolean} - an indication if the validation passed.
      * @throws {@link frontEnd.Interface.outputRouting.ExceptionHandler} - The main controlled exception.
      */
-    Boolean inputValidation(EnvironmentInformation info, String[] args) throws ExceptionHandler;
+    Boolean inputValidation(EnvironmentInformation info, List<String> args) throws ExceptionHandler;
 
     /**
-     * A method to print out help for using a given messaging input
+     * <p>getOptions.</p>
      *
-     * @return {@link java.lang.String} - the string used for help
+     * @return a {@link org.apache.commons.cli.Options} object.
      */
-    String helpInfo();
-
+    Options getOptions();
 }

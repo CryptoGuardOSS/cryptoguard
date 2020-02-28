@@ -445,17 +445,13 @@ public class Report implements Serializable {
         return new ToStringBuilder(this).append("schemaVersion", schemaVersion).append("dateTime", dateTime).append("uUID", uUID).append("projectName", projectName).append("projectVersion", projectVersion).append("target", target).append("issues", issues).append("heuristics", heuristics).toString();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(projectVersion).append(dateTime).append(heuristics).append(issues).append(target).append(uUID).append(projectName).append(schemaVersion).toHashCode();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public boolean equals(Object other) {
         if (other == this) {

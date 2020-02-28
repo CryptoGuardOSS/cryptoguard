@@ -315,6 +315,7 @@ public class BaseAnalyzerRouting {
                     log.fatal("Class: " + clazz + " is not properly loaded");
                     throw new ExceptionHandler("Class: " + clazz + " is not properly loaded", ExceptionId.LOADING);
                 }
+                log.debug("Successfully loaded the class: " + clazz);
             } catch (ExceptionHandler e) {
                 throw e;
             } catch (Error | Exception e) {
@@ -342,6 +343,7 @@ public class BaseAnalyzerRouting {
                     log.fatal("Multiple Entry-points (main) found within the files included.");
                     throw new ExceptionHandler("Multiple Entry-points (main) found within the files included.", ExceptionId.FILE_READ);
                 }
+                log.debug("Successfully loaded the Class: " + clazz);
 
             } catch (ExceptionHandler e) {
                 throw e;
@@ -381,6 +383,7 @@ public class BaseAnalyzerRouting {
         ArrayList<Integer> slicingParameters = new ArrayList<>();
         slicingParameters.add(criteriaParam);
 
+        log.debug("Starting the slicer");
         BaseAnalyzer.analyzeSliceInternal(criteriaClass, classNames, endPoint, slicingParameters, checker);
     }
 }

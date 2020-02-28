@@ -16,6 +16,9 @@ import java.util.List;
 /**
  * HeuristicsType
  * <p>
+ *
+ * @author maister
+ * @version 03.13.00
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -76,19 +79,19 @@ public class Heuristics implements Serializable {
 
     /**
      * No args constructor for use in serialization
-     *
      */
     public Heuristics() {
     }
 
     /**
+     * <p>Constructor for Heuristics.</p>
      *
-     * @param numberOfConstantsToCheck
-     * @param numberOfOrthogonal
-     * @param averageSlice
-     * @param numberOfHeuristics
-     * @param numberOfSlices
-     * @param depthCount
+     * @param numberOfConstantsToCheck a long.
+     * @param numberOfOrthogonal       a long.
+     * @param averageSlice             a double.
+     * @param numberOfHeuristics       a long.
+     * @param numberOfSlices           a long.
+     * @param depthCount               a {@link java.util.List} object.
      */
     public Heuristics(long numberOfOrthogonal, long numberOfConstantsToCheck, long numberOfSlices, long numberOfHeuristics, double averageSlice, List<String> depthCount) {
         super();
@@ -104,6 +107,7 @@ public class Heuristics implements Serializable {
      *
      * (Required)
      *
+     * @return a long.
      */
     @JsonProperty("NumberOfOrthogonal")
     public long getNumberOfOrthogonal() {
@@ -111,15 +115,21 @@ public class Heuristics implements Serializable {
     }
 
     /**
-     *
      * (Required)
      *
+     * @param numberOfOrthogonal a long.
      */
     @JsonProperty("NumberOfOrthogonal")
     public void setNumberOfOrthogonal(long numberOfOrthogonal) {
         this.numberOfOrthogonal = numberOfOrthogonal;
     }
 
+    /**
+     * <p>withNumberOfOrthogonal.</p>
+     *
+     * @param numberOfOrthogonal a long.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Heuristics} object.
+     */
     public Heuristics withNumberOfOrthogonal(long numberOfOrthogonal) {
         this.numberOfOrthogonal = numberOfOrthogonal;
         return this;
@@ -127,6 +137,8 @@ public class Heuristics implements Serializable {
 
     /**
      * (Required)
+     *
+     * @return a long.
      */
     @JsonProperty("NumberOfConstantsToCheck")
     public long getNumberOfConstantsToCheck() {
@@ -134,15 +146,21 @@ public class Heuristics implements Serializable {
     }
 
     /**
-     * 
      * (Required)
      *
+     * @param numberOfConstantsToCheck a long.
      */
     @JsonProperty("NumberOfConstantsToCheck")
     public void setNumberOfConstantsToCheck(long numberOfConstantsToCheck) {
         this.numberOfConstantsToCheck = numberOfConstantsToCheck;
     }
 
+    /**
+     * <p>withNumberOfConstantsToCheck.</p>
+     *
+     * @param numberOfConstantsToCheck a long.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Heuristics} object.
+     */
     public Heuristics withNumberOfConstantsToCheck(long numberOfConstantsToCheck) {
         this.numberOfConstantsToCheck = numberOfConstantsToCheck;
         return this;
@@ -150,6 +168,8 @@ public class Heuristics implements Serializable {
 
     /**
      * (Required)
+     *
+     * @return a long.
      */
     @JsonProperty("NumberOfSlices")
     public long getNumberOfSlices() {
@@ -157,15 +177,21 @@ public class Heuristics implements Serializable {
     }
 
     /**
-     *
      * (Required)
      *
+     * @param numberOfSlices a long.
      */
     @JsonProperty("NumberOfSlices")
     public void setNumberOfSlices(long numberOfSlices) {
         this.numberOfSlices = numberOfSlices;
     }
 
+    /**
+     * <p>withNumberOfSlices.</p>
+     *
+     * @param numberOfSlices a long.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Heuristics} object.
+     */
     public Heuristics withNumberOfSlices(long numberOfSlices) {
         this.numberOfSlices = numberOfSlices;
         return this;
@@ -173,6 +199,8 @@ public class Heuristics implements Serializable {
 
     /**
      * (Required)
+     *
+     * @return a long.
      */
     @JsonProperty("NumberOfHeuristics")
     public long getNumberOfHeuristics() {
@@ -180,15 +208,21 @@ public class Heuristics implements Serializable {
     }
 
     /**
-     *
      * (Required)
-     * 
+     *
+     * @param numberOfHeuristics a long.
      */
     @JsonProperty("NumberOfHeuristics")
     public void setNumberOfHeuristics(long numberOfHeuristics) {
         this.numberOfHeuristics = numberOfHeuristics;
     }
 
+    /**
+     * <p>withNumberOfHeuristics.</p>
+     *
+     * @param numberOfHeuristics a long.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Heuristics} object.
+     */
     public Heuristics withNumberOfHeuristics(long numberOfHeuristics) {
         this.numberOfHeuristics = numberOfHeuristics;
         return this;
@@ -196,6 +230,8 @@ public class Heuristics implements Serializable {
 
     /**
      * (Required)
+     *
+     * @return a double.
      */
     @JsonProperty("AverageSlice")
     public double getAverageSlice() {
@@ -204,12 +240,20 @@ public class Heuristics implements Serializable {
 
     /**
      * (Required)
+     *
+     * @param averageSlice a double.
      */
     @JsonProperty("AverageSlice")
     public void setAverageSlice(double averageSlice) {
         this.averageSlice = averageSlice;
     }
 
+    /**
+     * <p>withAverageSlice.</p>
+     *
+     * @param averageSlice a double.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Heuristics} object.
+     */
     public Heuristics withAverageSlice(double averageSlice) {
         this.averageSlice = averageSlice;
         return this;
@@ -220,6 +264,8 @@ public class Heuristics implements Serializable {
      * <p>
      * <p>
      * (Required)
+     *
+     * @return a {@link java.util.List} object.
      */
     @JsonProperty("DepthCount")
     public List<String> getDepthCount() {
@@ -229,30 +275,42 @@ public class Heuristics implements Serializable {
     /**
      * DepthCount
      * <p>
-     *
+     * <p>
      * (Required)
-     * 
+     *
+     * @param depthCount a {@link java.util.List} object.
      */
     @JsonProperty("DepthCount")
     public void setDepthCount(List<String> depthCount) {
         this.depthCount = depthCount;
     }
 
+    /**
+     * <p>withDepthCount.</p>
+     *
+     * @param depthCount a {@link java.util.List} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Heuristics} object.
+     */
     public Heuristics withDepthCount(List<String> depthCount) {
         this.depthCount = depthCount;
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("numberOfOrthogonal", numberOfOrthogonal).append("numberOfConstantsToCheck", numberOfConstantsToCheck).append("numberOfSlices", numberOfSlices).append("numberOfHeuristics", numberOfHeuristics).append("averageSlice", averageSlice).append("depthCount", depthCount).toString();
     }
 
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(numberOfConstantsToCheck).append(numberOfOrthogonal).append(averageSlice).append(numberOfHeuristics).append(numberOfSlices).append(depthCount).toHashCode();
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean equals(Object other) {
         if (other == this) {

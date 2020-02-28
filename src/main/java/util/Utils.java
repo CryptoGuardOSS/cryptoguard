@@ -64,9 +64,9 @@ public class Utils {
      */
     public final static String lineSep = System.getProperty("line.separator");
     /**
-     * Constant <code>projectVersion="V03.13.00"</code>
+     * Constant <code>projectVersion="03.14.00"</code>
      */
-    public final static String projectVersion = "V03.13.00";
+    public final static String projectVersion = "V04.00.00";
     /**
      * Constant <code>projectName="CryptoGuard"</code>
      */
@@ -85,7 +85,6 @@ public class Utils {
     private final static Pattern sootMthdPattern = Pattern.compile("<((?:[a-zA-Z0-9]+))>");
     private final static Pattern sootMthdPatternTwo = Pattern.compile("((?:[a-zA-Z0-9_]+))\\(");
     private final static Pattern sootFoundMatchPattern = Pattern.compile("\"{1}(.+)\"{1}");
-    private final static Pattern packagePattern = Pattern.compile("package ([[a-zA-Z]+?.]+);");
     private final static Pattern startComment = Pattern.compile("^\\s?\\/{1}\\*{1}");
     private final static Pattern comment = Pattern.compile("^\\s?\\*{1}");
     private final static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");
@@ -114,7 +113,7 @@ public class Utils {
      */
     public static int DEPTH = 0;
     /**
-     * Constant <code>supportedVersion</code>
+     * Constant <code>supportedVersione</code>
      */
     public static Version supportedVersion = Version.EIGHT;
 
@@ -291,9 +290,8 @@ public class Utils {
         //Handling the file extension
         if (null != type)
             if (!type.equals("dir") && !file.toLowerCase().toLowerCase().endsWith(type)) {
-                log.warn("File " + file + " doesn't have the right file type " + type);
+                log.debug("File " + file + " doesn't have the right file type for " + type);
                 return null;
-                //throw new ExceptionHandler("File " + file + " doesn't have the right file type " + type, ExceptionId.ARG_VALID);
             }
 
         File tempFile = new File(file);
@@ -371,14 +369,26 @@ public class Utils {
         }
     }
 
+    /**
+     * <p>getDefaultFileOut.</p>
+     *
+     * @param packageName   a {@link java.lang.String} object.
+     * @param fileExtension a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String getDefaultFileOut(String packageName, String fileExtension) {
-        String _tempPackage = (packageName == null ? packageName + "_" : null);
-        if (_tempPackage != null && StringUtils.trimToNull(_tempPackage).equalsIgnoreCase("null"))
-            _tempPackage = null;
 
-        return Utils.osPathJoin(System.getProperty("user.dir"),
-                "_Cryptoguard-" + projectVersion + "_" +
-                        _tempPackage + java.util.UUID.randomUUID().toString() + "_" + fileExtension);
+        StringBuilder output = new StringBuilder("_" + projectName + "-");
+
+        if (StringUtils.isNotEmpty(projectVersion))
+            output.append(StringUtils.trimToNull(projectVersion)).append("_");
+
+        if (StringUtils.isNotEmpty(packageName))
+            output.append(StringUtils.trimToNull(packageName)).append("_");
+
+        output.append(java.util.UUID.randomUUID().toString()).append("_").append(fileExtension);
+
+        return Utils.osPathJoin(System.getProperty("user.dir"), output.toString());
     }
     //endregion
 
@@ -626,6 +636,7 @@ public class Utils {
             }
             //Gradle-Class
             else if (fullPath.contains(pathBreak = osSurround("java", "main"))) {
+                String temp = pathBreak;
             }
             //Gen-Classes
             else if (fullPath.contains(pathBreak = osSurround("output"))) {
@@ -1201,6 +1212,7 @@ public class Utils {
      *
      * @param files a {@link java.util.List} object.
      * @return a {@link java.util.List} object.
+     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
      */
     public static List<String> retrieveTrimmedSourcePaths(List<String> files) throws ExceptionHandler {
         List<String> filePaths = new ArrayList<>();
@@ -1349,6 +1361,9 @@ public class Utils {
      * @return a {@link java.lang.String} object.
      */
     public static String join(String delimiter, List<String> elements) {
+        if (elements == null)
+            return null;
+
         StringBuilder tempString = new StringBuilder();
         for (String in : elements) {
             if (null != (in = StringUtils.trimToNull(in))) {

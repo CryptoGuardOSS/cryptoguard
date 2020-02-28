@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 /**
- * <p>Abstract Structure class.</p>
+ * <p>Abstract TypeSpecificArg class.</p>
  *
  * @author CryptoguardTeam
  * Created on 3/2/19.
@@ -30,7 +30,7 @@ public abstract class Structure extends OutputStructure {
     //region Constructor
 
     /**
-     * <p>Constructor for Structure.</p>
+     * <p>Constructor for TypeSpecificArg.</p>
      *
      * @param info a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
      */
@@ -39,7 +39,7 @@ public abstract class Structure extends OutputStructure {
     }
 
     /**
-     * <p>Constructor for Structure.</p>
+     * <p>Constructor for TypeSpecificArg.</p>
      */
     public Structure() {
 
@@ -55,17 +55,13 @@ public abstract class Structure extends OutputStructure {
     public void startAnalyzing() {
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void addIssue(AnalysisIssue issue) throws ExceptionHandler {
         super.addIssueToCollection(issue);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void stopAnalyzing() throws ExceptionHandler {
         WriteIntoFile(StringUtils.stripToNull(this.handleOutput()));

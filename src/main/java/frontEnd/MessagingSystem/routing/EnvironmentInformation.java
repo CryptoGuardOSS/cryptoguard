@@ -126,7 +126,6 @@ public class EnvironmentInformation {
     String javaHome;
     @Setter
     String androidHome;
-    //endregion
     //region From Outside and defaulted unless set
     @Getter
     @Setter
@@ -184,6 +183,7 @@ public class EnvironmentInformation {
     @Getter
     @Setter
     private Function<Heuristics, String> heuristicsHandler;
+    //endregion
     //endregion
     //region Constructor
 

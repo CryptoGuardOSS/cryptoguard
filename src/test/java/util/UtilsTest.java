@@ -151,19 +151,5 @@ public class UtilsTest {
             assertNull(e);
         }
     }
-
-    @Test
-    public void test_qualifiedName_BOLO() {
-        String testFile = "/home/maister/.Projects/Bolo/wavsep/wavsep-v1.2-src-eclipse-archive/trunk/src/main/java/com/sectooladdict/constants/SystemConstants.java";
-        String pkg = "com.sectooladdict.constants.SystemConstants";
-
-        try {
-            String fullyQualifiedName = Utils.retrieveFullyQualifiedName(testFile);
-            assertEquals(pkg, fullyQualifiedName);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            assertNull(e);
-        }
-    }
     //endregion
 }

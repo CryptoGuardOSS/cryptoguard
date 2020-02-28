@@ -63,10 +63,13 @@ public class TestUtilities {
     public static final String[] classFiles = {Utils.osPathJoin(classSource, "PBEUsage.class"), Utils.osPathJoin(classSource, "UrlFrameWorks.class"), Utils.osPathJoin(classSource, "NewTestCase1.class"), Utils.osPathJoin(classSource, "NewTestCase2.class")};
     public static final String newTestCaseTwo_Class = Utils.osPathJoin(classSource, "NewTestCase2.class");
     public static final String newTestCaseTwo_xml = Utils.osPathJoin(testPath, "NewTestCase2-class.xml");
+    public static final String newTestCaseTwo_xml_0 = Utils.osPathJoin(testPath, "NewTestCase2-class_0.xml");
     public static final String testablejar_Crypto_plugin_class_json = Utils.osPathJoin(testPath, "java-plugin-file_One.json");
+    public static final String testablejar_Crypto_plugin_class_json_0 = Utils.osPathJoin(testPath, "java-plugin-file_One_0.json");
     public static final String testablejar_PBEUsage_class_xml = Utils.osPathJoin(testPath, "PBEUsage-class-file_One.xml");
     public static final String testablejar_Crypto_class = Utils.osPathJoin(classSource, "Crypto.class");
     public static final String testablejar_Crypto_class_xml = Utils.osPathJoin(testPath, "java-file_One.xml");
+    public static final String testablejar_Crypto_class_xml_0 = Utils.osPathJoin(testPath, "java-file_One_0.xml");
     public static final String[] javaFiles = {Utils.osPathJoin(javaSource, "PBEUsage.java"), Utils.osPathJoin(javaSource, "UrlFrameWorks.java")};
     public static final String jarOne = Utils.osPathJoin(testRec, "testable-jar", "build", "libs", "testable-jar.jar");
     public static final String srcOneGrvDep = Utils.osPathJoin(testRec, "testable-jar", "build", "dependencies");
@@ -82,13 +85,17 @@ public class TestUtilities {
     public static final String tempTestJJava_Txt = Utils.osPathJoin(testPath, "temp_java-jar.txt");
     public static final String tempStreamXML = Utils.osPathJoin(testPath, "testable-jar_Stream.xml");
     public static final String tempFileOutTxt_two = Utils.osPathJoin(testPath, "testable-jar_classFiles.txt");
+    public static final String tempFileOutTxt_two_0 = Utils.osPathJoin(testPath, "testable-jar_classFiles_0.txt");
     public static final String tempFileOutTxt_default = Utils.osPathJoin(testPath, "testable-jar_classFiles.json");
+    public static final String tempFileOutTxt_default_0 = Utils.osPathJoin(testPath, "testable-jar_classFiles_0.json");
     public static final String tempFileOutXML_two = Utils.osPathJoin(testPath, "testable-jar_classFiles.xml");
     public static final String tempFileOutTxt_Class = Utils.osPathJoin(testPath, "java-class-file.txt");
     public static final String tempFileOutTxt_Class_fullproj = Utils.osPathJoin(testPath, "java-class-proj-file.xml");
+    public static final String tempFileOutTxt_Class_fullproj_0 = Utils.osPathJoin(testPath, "java-class-proj-file_0.xml");
     public static final String tempFileOutTxt_Class_tester_test = Utils.osPathJoin(testPath, "java-class-file_sample_tester-test.txt");
-    public static final String tempFileOutXML_Class = Utils.osPathJoin(testPath, "java-class-file.xml");
-    public static final String tempFileOutXML_Class_Stream = Utils.osPathJoin(testPath, "java-class-file-stream.xml");
+    public static final String tempFileOutXML_Class_0 = Utils.osPathJoin(testPath, "java-class-file_0.xml");
+    public static final String tempFileOutXML_Class_1 = Utils.osPathJoin(testPath, "java-class-file_1.xml");
+    public static final String tempFileOutXML_Class_Stream_0 = Utils.osPathJoin(testPath, "java-class-file-stream_0.xml");
     public static final String tempFileOutApk = Utils.osPathJoin(testPath, "app-debug.txt");
     public static final String tempFileOutApk_Steam = Utils.osPathJoin(testPath, "app-debug_Stream.txt");
     public static final String tempFileOutApk_Scarf = Utils.osPathJoin(testPath, "app-debug.xml");
@@ -126,6 +133,7 @@ public class TestUtilities {
     public static final String verySimple_Java_xml = Utils.osPathJoin(testPath, "verySimple_java.xml");
     public static final String verySimple_Klass = Utils.osPathJoin(verySimple_Path, "very.class");
     public static final String verySimple_Klass_xml = Utils.osPathJoin(testPath, "verySimple_klass.xml");
+    public static final String verySimple_Klass_xml_0 = Utils.osPathJoin(testPath, "verySimple_klass_0.xml");
     public static final ArrayList<String> srcOneGrvInputArr = new ArrayList<>(Arrays.asList(
             Utils.osPathJoin(javaSource, "UrlFrameWorks.java"),
             Utils.osPathJoin(javaSource, "PasswordUtils.java"),
