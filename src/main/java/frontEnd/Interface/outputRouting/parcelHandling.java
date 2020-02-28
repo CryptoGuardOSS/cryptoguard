@@ -1,6 +1,8 @@
 package frontEnd.Interface.outputRouting;
 
+import frontEnd.MessagingSystem.routing.Listing;
 import frontEnd.argsIdentifier;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.lang3.StringUtils;
@@ -8,6 +10,7 @@ import util.Utils;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.List;
 
 /**
  * <p>ExceptionId class.</p>
@@ -19,6 +22,7 @@ import java.io.StringWriter;
  *
  * <p>The enumeration of the error codes.</p>
  */
+@Log4j2
 public class parcelHandling {
 
     private static final int Width = 140;
@@ -43,10 +47,28 @@ public class parcelHandling {
         StringBuilder output = new StringBuilder();
         output.append("java -jar ").append(Utils.projectName.toLowerCase()).append(" ");
 
-        for (argsIdentifier arg : argsIdentifier.values()) {
-            output.append(arg.getArg()).append(" ");
-            if (arg.hasDefaultArg())
-                output.append("<").append(arg.getDefaultArg()).append("> ");
+        for (argsIdentifier arg : argsIdentifier.values())
+            if (arg.getFormatType() == null) {
+                output.append(arg.getArg()).append(" ");
+                if (arg.hasDefaultArg())
+                    output.append("<").append(arg.getDefaultArg()).append("> ");
+
+            }
+
+        output.append("\n");
+
+        for (Listing type : Listing.values()) {
+            List<argsIdentifier> args = type.retrieveArgs();
+            if (args.size() > 1) {
+                output.append("\n").append("FormatType ").append(type.getType()).append(" specific arguments").append("\n");
+                output.append(StringUtils.repeat("#", Width / 4)).append("\n");
+                for (argsIdentifier arg : args) {
+                    output.append(arg.getArg()).append(" ");
+                    if (arg.hasDefaultArg())
+                        output.append("<").append(arg.getDefaultArg()).append("> ");
+                }
+                output.append("\n");
+            }
         }
 
         return output.toString();
@@ -76,7 +98,7 @@ public class parcelHandling {
         headerInfo.append("\n");
 
         if (argIssue == null)
-            headerInfo.append("General Validation Issue");
+            headerInfo.append("General Help");
         else
             headerInfo.append(argIssue);
 
@@ -86,6 +108,16 @@ public class parcelHandling {
             message.append(headerInfo);
         } else {
             helper.printHelp(redirect, Width, getUsage(), headerInfo.toString(), args, 0, 0, null);
+            for (Listing type : Listing.values()) {
+                try {
+                    Options opt = type.retrieveSpecificArgHandler().getOptions();
+                    if (opt != null) {
+                        helper.printHelp(redirect, Width, type.getType() + " specific usage", null, opt, 0, 0, null);
+                    }
+                } catch (ExceptionHandler e) {
+                    log.warn("Issue retrieving arguments from " + type.getType() + " listing type");
+                }
+            }
             message.append(StringUtils.repeat("#", Width)).append("\n");
         }
 

@@ -303,7 +303,6 @@ public class EntryPointTest_JAR {
         new File(fileOut).delete();
 
         if (isLinux) {
-            //TODO - Check out Sconfig, missing from argsIdentifier
             String args =
                     makeArg(argsIdentifier.FORMAT, EngineType.JAR) +
                             makeArg(argsIdentifier.SOURCE, jarOne) +
@@ -314,7 +313,7 @@ public class EntryPointTest_JAR {
                             makeArg(argsIdentifier.TIMEMEASURE) +
                             makeArg(argsIdentifier.NOEXIT) +
                             makeArg(argsIdentifier.PRETTY) +
-                            " -Sconfig " + scarfArgs;
+                            makeArg(argsIdentifier.SCONFIG, scarfArgs);
 
             try {
                 String outputFile = captureNewFileOutViaStdOut(args.split(" "));

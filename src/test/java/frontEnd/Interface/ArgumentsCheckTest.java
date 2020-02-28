@@ -156,6 +156,23 @@ public class ArgumentsCheckTest {
         }
     }
 
+    @Test
+    public void parameterCheck_HelpOut() {
+        String args =
+                makeArg(argsIdentifier.HELP)
+                        + makeArg(argsIdentifier.NOEXIT);
+
+        try {
+            String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+
+            assertNotNull(outputFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertNull(e);
+        }
+    }
+
     /**
      * <p>paramaterCheck_jar.</p>
      */

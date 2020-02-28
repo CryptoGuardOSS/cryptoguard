@@ -79,7 +79,7 @@ public class EntryPointTest_JAVA {
                 Report report = Report.deserialize(new File(outputFile));
 
                 assertFalse(report.getIssues().isEmpty());
-                assertTrue(report.getIssues().stream().allMatch(bugInstance -> {
+                assertTrue(report.getIssues().stream().anyMatch(bugInstance -> {
                     try {
                         return bugInstance.getFullPath().contains(Utils.retrieveFullyQualifiedName(source));
                     } catch (ExceptionHandler exceptionHandler) {
@@ -119,7 +119,7 @@ public class EntryPointTest_JAVA {
                 Report report = Report.deserialize(new File(outputFile));
 
                 assertFalse(report.getIssues().isEmpty());
-                assertTrue(report.getIssues().stream().allMatch(bugInstance -> {
+                assertTrue(report.getIssues().stream().anyMatch(bugInstance -> {
                     try {
                         return bugInstance.getFullPath().contains(Utils.retrieveFullyQualifiedName(source));
                     } catch (ExceptionHandler exceptionHandler) {
@@ -159,7 +159,7 @@ public class EntryPointTest_JAVA {
                 Report report = Report.deserialize(new File(outputFile));
 
                 assertFalse(report.getIssues().isEmpty());
-                assertTrue(report.getIssues().stream().allMatch(bugInstance -> {
+                assertTrue(report.getIssues().stream().anyMatch(bugInstance -> {
                     try {
                         return bugInstance.getFullPath().contains(Utils.retrieveFullyQualifiedName(source));
                     } catch (ExceptionHandler exceptionHandler) {
@@ -198,7 +198,7 @@ public class EntryPointTest_JAVA {
                 Report report = Report.deserialize(new File(outputFile));
 
                 assertFalse(report.getIssues().isEmpty());
-                assertTrue(report.getIssues().stream().allMatch(bugInstance -> {
+                assertTrue(report.getIssues().stream().anyMatch(bugInstance -> {
                     try {
                         return bugInstance.getFullPath().contains(Utils.retrieveFullyQualifiedName(source));
                     } catch (ExceptionHandler exceptionHandler) {
@@ -245,7 +245,7 @@ public class EntryPointTest_JAVA {
                 assertFalse(report.getIssues().isEmpty());
                 System.out.println(report.getIssues());
                 String finalClassName = className.replaceAll("\\.", "/");
-                assertTrue(report.getIssues().stream().allMatch(bugInstance -> {
+                assertTrue(report.getIssues().stream().anyMatch(bugInstance -> {
                     try {
                         return bugInstance.getFullPath().contains(Utils.retrieveFullyQualifiedName(finalClassName));
                     } catch (ExceptionHandler exceptionHandler) {
@@ -285,7 +285,7 @@ public class EntryPointTest_JAVA {
                 Report report = Report.deserialize(new File(outputFile));
 
                 assertFalse(report.getIssues().isEmpty());
-                assertTrue(report.getIssues().stream().allMatch(bugInstance -> {
+                assertTrue(report.getIssues().stream().anyMatch(bugInstance -> {
                     try {
                         return bugInstance.getFullPath().contains(Utils.retrieveFullyQualifiedName(source_1)) ||
                                 bugInstance.getFullPath().contains(Utils.retrieveFullyQualifiedName(source_2));
@@ -325,7 +325,7 @@ public class EntryPointTest_JAVA {
                 AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
 
                 assertFalse(report.getBugInstance().isEmpty());
-                assertTrue(report.getBugInstance().stream().allMatch(bugInstance -> {
+                assertTrue(report.getBugInstance().stream().anyMatch(bugInstance -> {
                     try {
                         return bugInstance.getClassName().contains(Utils.retrieveFullyQualifiedName(source));
                     } catch (ExceptionHandler exceptionHandler) {

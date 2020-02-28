@@ -14,6 +14,9 @@ import java.io.Serializable;
 /**
  * LocationType
  * <p>
+ *
+ * @author maister
+ * @version 03.13.00
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -66,16 +69,18 @@ public class Location implements Serializable {
     }
 
     /**
-     * @param endLine
-     * @param endColumn
-     * @param startColumn
-     * @param startLine
-     * @param methodName
-     * @param className
-     * @param id
-     * @param explanation
-     * @param sourceFile
-     * @param primary
+     * <p>Constructor for Location.</p>
+     *
+     * @param endLine     a long.
+     * @param endColumn   a long.
+     * @param startColumn a long.
+     * @param startLine   a long.
+     * @param methodName  a {@link java.lang.String} object.
+     * @param className   a {@link java.lang.String} object.
+     * @param id          a long.
+     * @param explanation a {@link java.lang.String} object.
+     * @param sourceFile  a {@link java.lang.String} object.
+     * @param primary     a boolean.
      */
     public Location(String sourceFile, long startLine, long endLine, long startColumn, long endColumn, String explanation, String className, String methodName, boolean primary, long id) {
         super();
@@ -93,6 +98,8 @@ public class Location implements Serializable {
 
     /**
      * (Required)
+     *
+     * @return a {@link java.lang.String} object.
      */
     @JsonProperty("SourceFile")
     public String getSourceFile() {
@@ -101,132 +108,268 @@ public class Location implements Serializable {
 
     /**
      * (Required)
+     *
+     * @param sourceFile a {@link java.lang.String} object.
      */
     @JsonProperty("SourceFile")
     public void setSourceFile(String sourceFile) {
         this.sourceFile = sourceFile;
     }
 
+    /**
+     * <p>withSourceFile.</p>
+     *
+     * @param sourceFile a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Location} object.
+     */
     public Location withSourceFile(String sourceFile) {
         this.sourceFile = sourceFile;
         return this;
     }
 
+    /**
+     * <p>Getter for the field <code>startLine</code>.</p>
+     *
+     * @return a long.
+     */
     @JsonProperty("StartLine")
     public long getStartLine() {
         return startLine;
     }
 
+    /**
+     * <p>Setter for the field <code>startLine</code>.</p>
+     *
+     * @param startLine a long.
+     */
     @JsonProperty("StartLine")
     public void setStartLine(long startLine) {
         this.startLine = startLine;
     }
 
+    /**
+     * <p>withStartLine.</p>
+     *
+     * @param startLine a long.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Location} object.
+     */
     public Location withStartLine(long startLine) {
         this.startLine = startLine;
         return this;
     }
 
+    /**
+     * <p>Getter for the field <code>endLine</code>.</p>
+     *
+     * @return a long.
+     */
     @JsonProperty("EndLine")
     public long getEndLine() {
         return endLine;
     }
 
+    /**
+     * <p>Setter for the field <code>endLine</code>.</p>
+     *
+     * @param endLine a long.
+     */
     @JsonProperty("EndLine")
     public void setEndLine(long endLine) {
         this.endLine = endLine;
     }
 
+    /**
+     * <p>withEndLine.</p>
+     *
+     * @param endLine a long.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Location} object.
+     */
     public Location withEndLine(long endLine) {
         this.endLine = endLine;
         return this;
     }
 
+    /**
+     * <p>Getter for the field <code>startColumn</code>.</p>
+     *
+     * @return a long.
+     */
     @JsonProperty("StartColumn")
     public long getStartColumn() {
         return startColumn;
     }
 
+    /**
+     * <p>Setter for the field <code>startColumn</code>.</p>
+     *
+     * @param startColumn a long.
+     */
     @JsonProperty("StartColumn")
     public void setStartColumn(long startColumn) {
         this.startColumn = startColumn;
     }
 
+    /**
+     * <p>withStartColumn.</p>
+     *
+     * @param startColumn a long.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Location} object.
+     */
     public Location withStartColumn(long startColumn) {
         this.startColumn = startColumn;
         return this;
     }
 
+    /**
+     * <p>Getter for the field <code>endColumn</code>.</p>
+     *
+     * @return a long.
+     */
     @JsonProperty("EndColumn")
     public long getEndColumn() {
         return endColumn;
     }
 
+    /**
+     * <p>Setter for the field <code>endColumn</code>.</p>
+     *
+     * @param endColumn a long.
+     */
     @JsonProperty("EndColumn")
     public void setEndColumn(long endColumn) {
         this.endColumn = endColumn;
     }
 
+    /**
+     * <p>withEndColumn.</p>
+     *
+     * @param endColumn a long.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Location} object.
+     */
     public Location withEndColumn(long endColumn) {
         this.endColumn = endColumn;
         return this;
     }
 
+    /**
+     * <p>Getter for the field <code>explanation</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     @JsonProperty("Explanation")
     public String getExplanation() {
         return explanation;
     }
 
+    /**
+     * <p>Setter for the field <code>explanation</code>.</p>
+     *
+     * @param explanation a {@link java.lang.String} object.
+     */
     @JsonProperty("Explanation")
     public void setExplanation(String explanation) {
         this.explanation = explanation;
     }
 
+    /**
+     * <p>withExplanation.</p>
+     *
+     * @param explanation a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Location} object.
+     */
     public Location withExplanation(String explanation) {
         this.explanation = explanation;
         return this;
     }
 
+    /**
+     * <p>Getter for the field <code>className</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     @JsonProperty("ClassName")
     public String getClassName() {
         return className;
     }
 
+    /**
+     * <p>Setter for the field <code>className</code>.</p>
+     *
+     * @param className a {@link java.lang.String} object.
+     */
     @JsonProperty("ClassName")
     public void setClassName(String className) {
         this.className = className;
     }
 
+    /**
+     * <p>withClassName.</p>
+     *
+     * @param className a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Location} object.
+     */
     public Location withClassName(String className) {
         this.className = className;
         return this;
     }
 
+    /**
+     * <p>Getter for the field <code>methodName</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     @JsonProperty("MethodName")
     public String getMethodName() {
         return methodName;
     }
 
+    /**
+     * <p>Setter for the field <code>methodName</code>.</p>
+     *
+     * @param methodName a {@link java.lang.String} object.
+     */
     @JsonProperty("MethodName")
     public void setMethodName(String methodName) {
         this.methodName = methodName;
     }
 
+    /**
+     * <p>withMethodName.</p>
+     *
+     * @param methodName a {@link java.lang.String} object.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Location} object.
+     */
     public Location withMethodName(String methodName) {
         this.methodName = methodName;
         return this;
     }
 
+    /**
+     * <p>isPrimary.</p>
+     *
+     * @return a boolean.
+     */
     @JsonProperty("Primary")
     public boolean isPrimary() {
         return primary;
     }
 
+    /**
+     * <p>Setter for the field <code>primary</code>.</p>
+     *
+     * @param primary a boolean.
+     */
     @JsonProperty("Primary")
     public void setPrimary(boolean primary) {
         this.primary = primary;
     }
 
+    /**
+     * <p>withPrimary.</p>
+     *
+     * @param primary a boolean.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Location} object.
+     */
     public Location withPrimary(boolean primary) {
         this.primary = primary;
         return this;
@@ -235,6 +378,8 @@ public class Location implements Serializable {
     /**
      * id
      * <p>
+     *
+     * @return a long.
      */
     @JsonProperty("-id")
     public long getId() {
@@ -244,27 +389,40 @@ public class Location implements Serializable {
     /**
      * id
      * <p>
+     *
+     * @param id a long.
      */
     @JsonProperty("-id")
     public void setId(long id) {
         this.id = id;
     }
 
+    /**
+     * <p>withId.</p>
+     *
+     * @param id a long.
+     * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Location} object.
+     */
     public Location withId(long id) {
         this.id = id;
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("sourceFile", sourceFile).append("startLine", startLine).append("endLine", endLine).append("startColumn", startColumn).append("endColumn", endColumn).append("explanation", explanation).append("className", className).append("methodName", methodName).append("primary", primary).append("id", id).toString();
     }
 
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(endLine).append(endColumn).append(startColumn).append(startLine).append(methodName).append(className).append(id).append(explanation).append(sourceFile).append(primary).toHashCode();
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean equals(Object other) {
         if (other == this) {

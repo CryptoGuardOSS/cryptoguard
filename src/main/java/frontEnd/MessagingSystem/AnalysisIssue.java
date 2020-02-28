@@ -121,6 +121,8 @@ public class AnalysisIssue {
             this.info = "Found: \"" + this.info + "\"";
 
 
+        this.info = this.info.replace("Found: Found: ", "Found: ");
+
         if (lineNum <= 0) {
             this.addMethod(methodName,
                     new AnalysisLocation(

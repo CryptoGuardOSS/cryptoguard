@@ -358,17 +358,13 @@ public class MetricSummaries implements Serializable {
         return new ToStringBuilder(this).append("type", type).append("count", count).append("sum", sum).append("sumOfSquares", sumOfSquares).append("minimum", minimum).append("maximum", maximum).append("average", average).append("standardDeviation", standardDeviation).toString();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(sumOfSquares).append(count).append(minimum).append(maximum).append(standardDeviation).append(sum).append(type).append(average).toHashCode();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public boolean equals(Object other) {
         if (other == this) {
