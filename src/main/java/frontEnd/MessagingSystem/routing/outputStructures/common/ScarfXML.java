@@ -224,8 +224,8 @@ public class ScarfXML {
 
         StringBuilder commentedFooter = new StringBuilder();
 
-        if (info.getSootErrors() != null && info.getSootErrors().split("\n").length >= 1) {
-            log.info("Adding the Soot Errors");
+        if (info.getSootErrors() != null && info.getSootErrors().split("\n").length >= 2) {
+            log.info("Adding the Soot Errors: " + info.getSootErrors().split("\n").length);
             commentedFooter.append(prettyTab).append(info.getSootErrors().replaceAll("\n", prettyLine)).append(prettyLine);
         }
 

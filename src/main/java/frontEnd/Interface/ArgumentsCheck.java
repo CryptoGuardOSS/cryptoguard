@@ -427,7 +427,7 @@ public class ArgumentsCheck {
         cmdLineArgs.addOption(prettyPrint);
 
         Option noExit = new Option(argsIdentifier.NOEXIT.getId(), false, argsIdentifier.NOEXIT.getDesc());
-        prettyPrint.setOptionalArg(argsIdentifier.NOEXIT.getRequired());
+        noExit.setOptionalArg(argsIdentifier.NOEXIT.getRequired());
         cmdLineArgs.addOption(noExit);
 
         Option help = new Option(argsIdentifier.HELP.getId(), false, argsIdentifier.HELP.getDesc());
@@ -451,15 +451,15 @@ public class ArgumentsCheck {
         cmdLineArgs.addOption(stream);
 
         Option nologs = new Option(argsIdentifier.NOLOGS.getId(), false, argsIdentifier.NOLOGS.getDesc());
-        stream.setOptionalArg(argsIdentifier.NOLOGS.getRequired());
+        nologs.setOptionalArg(argsIdentifier.NOLOGS.getRequired());
         cmdLineArgs.addOption(nologs);
 
         Option verbose = new Option(argsIdentifier.VERBOSE.getId(), false, argsIdentifier.VERBOSE.getDesc());
-        stream.setOptionalArg(argsIdentifier.VERBOSE.getRequired());
+        verbose.setOptionalArg(argsIdentifier.VERBOSE.getRequired());
         cmdLineArgs.addOption(verbose);
 
         Option vverbose = new Option(argsIdentifier.VERYVERBOSE.getId(), false, argsIdentifier.VERYVERBOSE.getDesc());
-        stream.setOptionalArg(argsIdentifier.VERYVERBOSE.getRequired());
+        vverbose.setOptionalArg(argsIdentifier.VERYVERBOSE.getRequired());
         cmdLineArgs.addOption(vverbose);
 
         Option newFile = new Option(argsIdentifier.NEW.getId(), false, argsIdentifier.NEW.getDesc());
