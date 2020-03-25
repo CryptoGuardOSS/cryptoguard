@@ -21,7 +21,8 @@ curdir = os.path.abspath(os.curdir)
 gitPath = os.path.join(curdir, '.git')
 failFast, offline = False, not os.path.exists(gitPath)
 android, java7, java = os.environ.get('ANDROID_HOME'), os.environ.get('JAVA7_HOME'), os.environ.get('JAVA_HOME')
-generalArg, streamTests = None, False
+generalArg, streamTests, generalCmd, generalFile = None, False, None, None
+verify = True
 
 # // @formatter:off
 # region Offline information
@@ -352,6 +353,8 @@ class Utils(object):
                             help='Use the q flag to show detailed help')
         parser.add_argument("extraArg", nargs='?', default=None,
                             help='Extra argument to be used to tune commands')
+        parser.add_argument("extraArgFile", nargs='?', default=None,
+                            help='Extra file to be used to tune commands')
         parser.add_argument("-v", action='store_true', help='Print the project version')
 
         return parser
@@ -392,15 +395,22 @@ class Utils(object):
         print(Utils.splitRows() + '\n')
 
         global generalArg
+        global generalFile
         if (args.extraArg):
             _temp = args.extraArg
 
-            if ('-s' in _temp):
+            if ("-c" in _temp):
+                global generalCmd
+                generalCmd = _temp.replace('-c ','')
+            elif ('-s' in _temp):
                 global streamTests
                 streamTests = True
                 _temp = _temp.replace('-s', '')
 
             generalArg = _temp
+
+        if (args.extraArgFile):
+            generalFile = args.extraArgFile
 
         Utils.routing(args.switch)["func"]()
 
@@ -470,6 +480,278 @@ class envVars(object):
 # endregion
 # region ArgUtils
 class argsUtils(object):
+    def fileStringLooper(strings):
+        global verify
+        output = []
+        for string in strings.split(':'):
+            string = string.strip()
+            if verify:
+                if os.path.isfile(string):
+                    output += [string]
+                else:
+                    print("File doesn't exist: " + str(string))
+                    raise TypeError('Empty')
+            else:
+                output += [string]
+
+        return output
+
+    def customFileDir(string):
+        global verify
+        output = []
+        if isinstance(string, list):
+            if len(string) == 0 and not verify:
+                raise TypeError('Empty')
+
+            for rawString in string:
+                _temp = argsUtils.fileStringLooper(rawString)
+                if _temp is None:
+                    _temp = [argsUtils.customDir(rawString)]
+
+                if _temp is not None:
+                    output = output + _temp 
+
+        if isinstance(string, str):
+            output = argsUtils.fileStringLooper(string)
+
+        if len(output) == 0 and not verify:
+            raise TypeError('Empty')
+
+        return output
+
+    def customDir(string):
+        global verify
+        output = []
+        for string in strings.split(':'):
+            string = string.strip()
+            if verify:
+                if os.path.isdir(string):
+                    output += [string]
+                else:
+                    raise NotADirectoryError(string)
+            else:
+                output += [string]
+
+        return output
+
+    def createCryptoArgs():
+        cryptoParse = argparse.ArgumentParser()
+
+        cryptoParse.add_argument("-in", nargs=1, type=str, choices=['jar','apk','source','java','class'], dest="format", help="The format of input you want to scan.")
+        cryptoParse.add_argument("-s", nargs='+', type=argsUtils.customFileDir, dest="source", help="The source to be scanned use the absolute path or send all of the source files via the file input.in; ex. find -type f *.java >> input.in.")
+        cryptoParse.add_argument("-d", nargs='*', type=argsUtils.customFileDir, dest="dependency", help="The dependency to be scanned use the relative path.")
+        cryptoParse.add_argument("-o", nargs='?', type=argparse.FileType('w'), dest="out", help="The file to be created with the output default will be the project name.")
+        cryptoParse.add_argument("-new", nargs='?', dest="new", help="The file to be created with the output if existing will be overwritten.")
+        cryptoParse.add_argument("-t", nargs='?', dest="timemeasure", help="Output the time of the internal processes.")
+        cryptoParse.add_argument("-m", nargs='?', type=str,  choices=['L','SX','D'], default='D', dest="formatout", help="The output format you want to produce")
+        cryptoParse.add_argument("-n", nargs='?', dest="pretty", help="Output the analysis information in a 'pretty' format.")
+        cryptoParse.add_argument("-X", nargs='?', dest="noexit", help="Upon completion of scanning, don't kill the JVM")
+        cryptoParse.add_argument("-v", nargs='?', dest="version", help="Output the version number.")
+        cryptoParse.add_argument("-VX", nargs='?', dest="nologs", help="Display logs only from the fatal logs")
+        cryptoParse.add_argument("-V", nargs='?', dest="verbose", help="Display logs from debug levels")
+        cryptoParse.add_argument("-VV", nargs='?', dest="veryverbose", help="Display logs from trace levels")
+        cryptoParse.add_argument("-ts", nargs='?', dest="timestamp", help="Add a timestamp to the file output.")
+        cryptoParse.add_argument("-depth", nargs='?', type=int, dest="depth", help="The depth of slicing to go into")
+        cryptoParse.add_argument("-java", nargs='?', type=argsUtils.customDir, dest="java", help="Directory of Java to be used JDK 7 for JavaFiles/Project and JDK 8 for ClassFiles/Jar")
+        cryptoParse.add_argument("-android", nargs='?', type=argsUtils.customDir, dest="android", help="Specify of Android SDK")
+        cryptoParse.add_argument("-H", nargs='?', dest="heuristics", help="The flag determining whether or not to display heuristics.")
+        cryptoParse.add_argument("-st", nargs='?', dest="stream", help="Stream the analysis to the output file.")
+        cryptoParse.add_argument("-main",  nargs='?', dest="main", help="Choose the main class if there are multiple main classes in the files given.")
+        cryptoParse.add_argument("-Sconfig", nargs='?', type=argparse.FileType('r'), dest="Sconfig", help="Choose the Scarf property configuration file.")
+        cryptoParse.add_argument("-Sassessfw", nargs='?', type=str, dest="Sassessfw", help="The assessment framework")
+        cryptoParse.add_argument("-Sassessfwversion", nargs='?', type=str, dest="Sassessfwversion", help="The assessment framework version")
+        cryptoParse.add_argument("-Sassessmentstartts", nargs='?', type=str, dest="Sassessmentstartts", help="The assessment start timestamp")
+        cryptoParse.add_argument("-Sbuildfw", nargs='?', type=str, dest="Sbuildfw", help="The build framework")
+        cryptoParse.add_argument("-Sbuildfwversion", nargs='?', type=str, dest="Sbuildfwversion", help="The build framework version")
+        cryptoParse.add_argument("-Sbuildrootdir", nargs='?', type=str, dest="Sbuildrootdir", help="The build root directory")
+        cryptoParse.add_argument("-Spackagename", nargs='?', type=str, dest="Spackagename", help="The package name")
+        cryptoParse.add_argument("-Spackagerootdir", nargs='?', type=str, dest="Spackagerootdir", help="The package root directory")
+        cryptoParse.add_argument("-Spackageversion", nargs='?', type=str, dest="Spackageversion", help="The package version")
+        cryptoParse.add_argument("-Sparserfw", nargs='?', type=str, dest="Sparserfw", help="The parser framework")
+        cryptoParse.add_argument("-Sparserfwversion", nargs='?', type=str, dest="Sparserfwversion", help="The parser framework version")
+        cryptoParse.add_argument("-Suuid", nargs='?', type=str, dest="Suuid", help="The uuid of the current pipeline progress")
+
+        return cryptoParse
+
+    def generateTest():
+        global generalCmd
+        global generalFile
+
+        if generalCmd is None:
+            print('No commands passed in')
+            sys.exit(0)
+
+        if 'cryptoguard.jar' in generalCmd:
+            generalCmd = generalCmd.split('cryptoguard.jar')[1]
+
+        options = argsUtils.createCryptoArgs().parse_args(shlex.split(generalCmd))
+
+        lineEnding = ".json"
+        checker = """Report report = Report.deserialize(new File(outputFile));
+                                        assertFalse(report.getIssues().isEmpty());
+                                        assertTrue(report.getIssues().stream().anyMatch(bugInstance -> {
+                                            try {
+                                                return Utils.containsAny(bugInstance.getFullPath(), Utils.retrieveFullyQualifiedNameFileSep(tempSource));
+                                            } catch (ExceptionHandler e) {
+                                                assertNull(e);
+                                                e.printStackTrace();
+                                            }
+                                            return false;
+                                        }));
+                                        """
+        listing = "Default"
+
+        if options.formatout == "L":
+            lineEnding = ".txt"
+            checker = """List<String> results = Files.readAllLines(Paths.get(outputFile), StandardCharsets.UTF_8);
+                                        assertTrue(results.size() >= 10);
+
+                                        List<String> filesFound = Utils.retrieveFilesPredicate(tempSource, s -> s.endsWith(".java"), file -> {
+                                            try {
+                                                return Utils.retrieveFullyQualifiedName(file.getAbsolutePath()) + ".java";
+                                            } catch (ExceptionHandler exceptionHandler) {
+                                                exceptionHandler.printStackTrace();
+                                                return null;
+                                            }
+                                        });
+
+                                        assertTrue(results.stream().anyMatch(str -> filesFound.stream().anyMatch(str::contains)));
+                         """
+            listing = "Legacy"
+        elif options.formatout == "SX":
+            lineEnding = ".xml"
+            checker = """AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
+                                        assertFalse(report.getBugInstance().isEmpty());
+                                        assertTrue(report.getBugInstance().stream().anyMatch(bugInstance -> {
+                                            try {
+                                                return bugInstance.getClassName().contains(Utils.retrieveFullyQualifiedName(tempSource));
+                                            } catch (ExceptionHandler exceptionHandler) {
+                                                exceptionHandler.printStackTrace();
+                                                return false;
+                                            }
+                                        }));
+                                        """
+            listing = "ScarfXML"
+
+        engineType = {
+            'jar':'JAR',
+            'apk':'APK',
+            'source':'DIR',
+            'java':'JAVAFILES',
+            'class':'CLASSFILES'
+        }.get(options.format[0])
+
+        fileOut = "_GeneratedTestFile" + str(lineEnding)
+
+        sourcez = ""
+        for string in options.source:
+            sourcez = sourcez + " " + f"add(\"{string[0]}\");\n                            "
+
+        depz = ""
+        if options.dependency is not None:
+            for string in options.dependency:
+                depz = depz + " " + f"add(\"{string[0]}\");\n                            "
+
+        dependency = ""
+        if depz.strip():
+            dependency = f"""String dependency = Utils.join(" ", new ArrayList<String>(){{{{
+                                {depz}
+                             }}}});
+                          """
+
+        argz = f"""
+                                String args = 
+                                    makeArg(argsIdentifier.FORMAT, EngineType.{engineType}) + 
+                                    makeArg(argsIdentifier.FORMATOUT, Listing.{listing}) + """
+
+        clean = argsUtils.createCryptoArgs()
+
+        # Adding the flags
+        for arg in [x.dest for x in clean.__dict__['_actions'] if x.type is None and x.dest.strip() != 'help' and options.__dict__[x.dest] is not None]:
+            argz = argz + f"""
+                                    makeArg(argsIdentifier.{arg.upper()}) + """
+
+        # Adding the strings
+        for arg in [x.dest for x in clean.__dict__['_actions'] if x.type is str and x.nargs is '?' and x.dest.strip().upper() != 'FORMATOUT' and options.__dict__[x.dest] is not None]:
+            argz = argz + f"""
+                                    makeArg(argsIdentifier.{arg.upper()}, "{options.__dict__[arg]}") + """
+        
+        # Adding the out
+        if options.out is not None:
+            argz = argz + f"""
+                                    makeArg(argsIdentifier.OUT, \"{options.out.name}\") + """
+
+        # Adding the new
+        if options.new is not None:
+            argz = argz + f"""
+                                    makeArg(argsIdentifier.NEW, \"{options.new.name}\") + """
+
+        # Adding the depth
+        if options.depth is not None:
+            argz = argz + f"""
+                                    makeArg(argsIdentifier.DEPTH, {options.depth}) + """
+
+        # Adding the java
+        if options.java is not None:
+            argz = argz + f"""
+                                    makeArg(argsIdentifier.JAVA, \"{options.java[0]}\") + """
+
+        # Adding the android
+        if options.android is not None:
+            argz = argz + f"""
+                                    makeArg(argsIdentifier.ANDROID, \"{options.android[0]}\") + """
+
+        # Adding the Sconfig
+        if options.Sconfig is not None:
+            argz = argz + f"""
+                                    makeArg(argsIdentifier.SCONFIG, \"{options.Sconfig.name}\") + """
+
+        argz = argz + """
+                                    makeArg(argsIdentifier.SOURCE, source);
+                      """
+
+        output = f"""
+                    /**
+                     * Generated Test
+                     */
+                    @Test
+                    public void generatedTest() {{
+                        String fileOut = "{fileOut}";
+                        new File(fileOut).delete();
+
+                        ArrayList<String> tempSource = new ArrayList<String>(){{{{
+                            {sourcez}
+                        }}}};
+                        String source = Utils.join(" ", tempSource);
+
+                        {dependency}
+
+                        if (isLinux) {{
+
+                                {argz}
+
+                                try {{
+                                    String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+                                    {checker}
+
+                                }} catch (Exception e) {{
+                                    e.printStackTrace();
+                                    assertNull(e);
+                                }}
+                        }}
+                    }}
+                    """
+
+        if (generalFile is not None):
+            os.remove(generalFile)
+            with open(generalFile, 'w') as file:
+                file.write(output)
+        else:
+            print(output)
+
+        print('Completed')
+
     def basicBuildCommand():
         print("Building a basic command")
         print('Please Note this does not verify whether the directory/files exist')
@@ -1317,6 +1599,11 @@ routers = {
         "func": TestUtils.helptests,
         "def": "Shows helpful information about the tests crawled.",
         'offline': False
+    },
+    'genTest': {
+        "func": argsUtils.generateTest,
+        "def": "Generate a test method from a string command.",
+        'offline': True
     },
     'displayTests': {
         "func": TestUtils.getDisplayTests,
