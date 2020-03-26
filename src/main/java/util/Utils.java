@@ -64,9 +64,9 @@ public class Utils {
      */
     public final static String lineSep = System.getProperty("line.separator");
     /**
-     * Constant <code>projectVersion="03.14.00"</code>
+     * Constant <code>projectVersion="V04.00.02"</code>
      */
-    public final static String projectVersion = "V04.00.01";
+    public final static String projectVersion = "V04.00.02";
     /**
      * Constant <code>projectName="CryptoGuard"</code>
      */
@@ -634,6 +634,10 @@ public class Utils {
 
             //Maven-Class
             if (fullPath.contains(pathBreak = osSurround("target", "classes"))) {
+                fullBreak = pathBreak;
+            }
+            //Maven-Class
+            else if (fullPath.contains(pathBreak = osSurround("target", "test-classes"))) {
                 fullBreak = pathBreak;
             }
             //Gradle-Class
