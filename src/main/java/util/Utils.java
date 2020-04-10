@@ -12,6 +12,7 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.jf.dexlib2.DexFileFactory;
 import org.jf.dexlib2.Opcodes;
+import org.jf.dexlib2.dexbacked.DexBackedDexFile;
 import org.jf.dexlib2.iface.ClassDef;
 import org.jf.dexlib2.iface.DexFile;
 import rule.engine.EngineType;
@@ -64,9 +65,9 @@ public class Utils {
      */
     public final static String lineSep = System.getProperty("line.separator");
     /**
-     * Constant <code>projectVersion="V04.00.02"</code>
+     * Constant <code>projectVersion="V04.00.03"</code>
      */
-    public final static String projectVersion = "V04.00.02";
+    public final static String projectVersion = "V04.00.03";
     /**
      * Constant <code>projectName="CryptoGuard"</code>
      */
@@ -784,7 +785,8 @@ public class Utils {
         File zipFile = new File(apkfile);
 
         try {
-            DexFile dexFile = DexFileFactory.loadDexEntry(zipFile, "classes.dex", true, Opcodes.forApi(23));
+            DexFile dexFile = DexFileFactory.loadDexEntry(zipFile, "classes.dex", true, Opcodes.forApi(23))
+                    .getDexFile();
 
             for (ClassDef classDef : dexFile.getClasses()) {
                 String className = classDef.getType().replace('/', '.');
