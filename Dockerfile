@@ -51,7 +51,7 @@ RUN /bin/bash -c "source $HOME/.sdkman/bin/sdkman-init.sh"
 # Installing Java and Maven, removing some unnecessary SDKMAN files 
 RUN bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && \
     yes | sdk install java 7.0.242-zulu && \
-    yes | sdk install java 8.0.232-open && \
+    yes | sdk install java 8.0.242-zulu && \
     yes | sdk install gradle 4.10.3 && \
     yes | sdk install jbang 0.8.1 && \
     rm -rf $HOME/.sdkman/archives/* && \
