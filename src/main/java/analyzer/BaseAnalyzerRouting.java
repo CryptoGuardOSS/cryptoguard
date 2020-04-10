@@ -324,7 +324,7 @@ public class BaseAnalyzerRouting {
             }
         }
 
-        Boolean mainMethodFound = false;
+        boolean mainMethodFound = false;
         boolean avoidMainKlass = StringUtils.isNotEmpty(mainKlass) && !mainKlass.equals("_JAR_") && !mainKlass.equals("_APK_") && !mainKlass.equals("_DIR_");
 
         for (String clazz : classNames) {

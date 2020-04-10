@@ -1,5 +1,5 @@
 #################################
-CryptoGuard V04.00.00
+CryptoGuard V04.00.03
 #################################
 
 .. image:: https://mybinder.org/badge_logo.svg
@@ -8,7 +8,7 @@ CryptoGuard V04.00.00
 An program analysis tool to find cryptographic misuse in Java and Android.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-CryptoGuard.py
+CryptoSouple.py
 =====================
 This python file is the wrapper created to assist with various portions of the project.
 You should use it for various commands including:
@@ -29,7 +29,7 @@ This is still under progress as the following are not active yet:
 * Sample Java Tests
 
 
-Please run the following command to get more information on how to use it :code:`./cryptoguard.py`
+Please run the following command to get more information on how to use it :code:`./cryptosouple.py`
 
 IMPORTANT NOTICE
 ========================

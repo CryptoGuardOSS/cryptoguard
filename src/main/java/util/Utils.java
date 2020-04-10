@@ -12,6 +12,7 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.jf.dexlib2.DexFileFactory;
 import org.jf.dexlib2.Opcodes;
+import org.jf.dexlib2.dexbacked.DexBackedDexFile;
 import org.jf.dexlib2.iface.ClassDef;
 import org.jf.dexlib2.iface.DexFile;
 import rule.engine.EngineType;
@@ -64,9 +65,9 @@ public class Utils {
      */
     public final static String lineSep = System.getProperty("line.separator");
     /**
-     * Constant <code>projectVersion="03.14.00"</code>
+     * Constant <code>projectVersion="V04.00.03"</code>
      */
-    public final static String projectVersion = "V04.00.00";
+    public final static String projectVersion = "V04.00.03";
     /**
      * Constant <code>projectName="CryptoGuard"</code>
      */
@@ -290,7 +291,7 @@ public class Utils {
         //Handling the file extension
         if (null != type)
             if (!type.equals("dir") && !file.toLowerCase().toLowerCase().endsWith(type)) {
-                log.debug("File " + file + " doesn't have the right file type for " + type);
+                log.debug("File " + file + " doesn't have the right file type for " + type + ", often over-zealous checking.");
                 return null;
             }
 
@@ -629,25 +630,40 @@ public class Utils {
             sourcePackage = sourcePackage.replace(".class", "");
 
             String pathBreak = "";
+            String fullBreak = "";
             String fullPath = Utils.retrieveFullFilePath(in).replace(".class", "");
 
             //Maven-Class
             if (fullPath.contains(pathBreak = osSurround("target", "classes"))) {
+                fullBreak = pathBreak;
+            }
+            //Maven-Class
+            else if (fullPath.contains(pathBreak = osSurround("target", "test-classes"))) {
+                fullBreak = pathBreak;
             }
             //Gradle-Class
+            else if (fullPath.contains(pathBreak = osSurround("build", "classes", "java", "main"))) {
+                fullBreak = pathBreak;
+            }
+            //Gradle-Class #2
             else if (fullPath.contains(pathBreak = osSurround("java", "main"))) {
-                String temp = pathBreak;
+                fullBreak = pathBreak;
+            }
+            //Gradle-Class #3
+            else if (fullPath.contains(pathBreak = osSurround("build", "classes"))) {
+                fullBreak = pathBreak;
             }
             //Gen-Classes
             else if (fullPath.contains(pathBreak = osSurround("output"))) {
+                fullBreak = pathBreak;
             } else {
                 //Base Case
-                fullPath = sourcePackage;
+                fullBreak = sourcePackage;
             }
 
-            int indexOf = fullPath.indexOf(pathBreak);
-            sourcePackage = fullPath.substring(indexOf == -1 ? 0 : indexOf).replace(pathBreak, "").replaceAll(fileSep, ".");
-
+            int indexOf = fullPath.indexOf(fullBreak);
+            sourcePackage = fullPath.substring(indexOf == -1 ? 0 : indexOf).replace(fullBreak, "").replaceAll(fileSep, ".");
+            sourcePackage = StringUtils.isBlank(sourcePackage) ? fullBreak : sourcePackage;
         }
         return sourcePackage;
     }
@@ -769,7 +785,8 @@ public class Utils {
         File zipFile = new File(apkfile);
 
         try {
-            DexFile dexFile = DexFileFactory.loadDexEntry(zipFile, "classes.dex", true, Opcodes.forApi(23));
+            DexFile dexFile = DexFileFactory.loadDexEntry(zipFile, "classes.dex", true, Opcodes.forApi(23))
+                    .getDexFile();
 
             for (ClassDef classDef : dexFile.getClasses()) {
                 String className = classDef.getType().replace('/', '.');
