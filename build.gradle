@@ -157,7 +157,7 @@ task release {
         mkdir './release'
     }
     //Waiting until all tests are cleared
-    def tasks = [clean, test, build, jibBuildTar]
+    def tasks = [jibBuildTar]
     for (int itr = 0; itr < tasks.size() - 1; itr++) {
         tasks[itr + 1].mustRunAfter(tasks[itr])
     }
@@ -212,7 +212,8 @@ task release {
 dependencies {
     compile 'com.google.guava:guava:20.0'
     //compile name: 'soot_j9_20190409'
-    compile name: 'soot-V3.3.0-SNAPSHOT'
+    //compile name: 'soot-V3.3.0-SNAPSHOT'
+    compile name: 'soot-V4.1.0-SNAPSHOT'
     //compile name: 'soot_raw1'
     compile name: 'axml-2.0'
     compile name: 'AXMLPrinter2'
