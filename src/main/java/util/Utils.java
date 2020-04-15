@@ -12,7 +12,6 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.jf.dexlib2.DexFileFactory;
 import org.jf.dexlib2.Opcodes;
-import org.jf.dexlib2.dexbacked.DexBackedDexFile;
 import org.jf.dexlib2.iface.ClassDef;
 import org.jf.dexlib2.iface.DexFile;
 import rule.engine.EngineType;
@@ -65,9 +64,9 @@ public class Utils {
      */
     public final static String lineSep = System.getProperty("line.separator");
     /**
-     * Constant <code>projectVersion="V04.00.03"</code>
+     * Constant <code>projectVersion="V04.01.00"</code>
      */
-    public final static String projectVersion = "V04.00.03";
+    public final static String projectVersion = "V04.01.00";
     /**
      * Constant <code>projectName="CryptoGuard"</code>
      */
