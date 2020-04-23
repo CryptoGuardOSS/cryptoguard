@@ -138,8 +138,9 @@ public class Utils {
 
         for (ClassDef classDef : dexFile.getClasses()) {
             String className = classDef.getType().replace('/', '.');
-            if (!className.contains("android."))
+            if(!className.toLowerCase().startsWith("landroid.")) {
                 classNames.add(className.substring(1, className.length() - 1));
+            }
         }
 
         return classNames;
