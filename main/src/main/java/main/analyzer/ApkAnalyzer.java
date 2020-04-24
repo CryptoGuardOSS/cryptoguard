@@ -32,8 +32,11 @@ public class ApkAnalyzer {
             System.exit(1);
         }
 
+
         List<String> classNames = Utils.getClassNamesFromApkArchive(projectJarPath);
 
+        //enables multi-dex support for soot
+        Options.v().set_process_multiple_dex(true);
         Options.v().set_keep_line_number(true);
         Options.v().set_src_prec(Options.src_prec_apk);
         Options.v().set_android_jars(androidHome + "/platforms");
