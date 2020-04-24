@@ -146,8 +146,6 @@ public class Utils {
                 String className = classDef.getType().replace('/', '.');
                 if (!className.contains("android.")){
                     classNames.add(className.substring(1, className.length() - 1));
-                }else{
-                    System.out.println("- "+className);
                 }
             }
         }
