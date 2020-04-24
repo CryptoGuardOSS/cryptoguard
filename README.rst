@@ -1,5 +1,5 @@
 #################################
-CryptoGuard V04.01.00
+CryptoGuard V04.02.00
 #################################
 
 .. image:: https://mybinder.org/badge_logo.svg

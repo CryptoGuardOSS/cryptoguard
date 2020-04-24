@@ -14,6 +14,7 @@ import org.jf.dexlib2.DexFileFactory;
 import org.jf.dexlib2.Opcodes;
 import org.jf.dexlib2.iface.ClassDef;
 import org.jf.dexlib2.iface.DexFile;
+import org.objectweb.asm.ClassReader;
 import rule.engine.EngineType;
 import slicer.backward.heuristic.HeuristicBasedAnalysisResult;
 import slicer.backward.heuristic.HeuristicBasedInstructions;
@@ -64,9 +65,9 @@ public class Utils {
      */
     public final static String lineSep = System.getProperty("line.separator");
     /**
-     * Constant <code>projectVersion="V04.01.00"</code>
+     * Constant <code>projectVersion="V04.02.00"</code>
      */
-    public final static String projectVersion = "V04.01.00";
+    public final static String projectVersion = "V04.02.00";
     /**
      * Constant <code>projectName="CryptoGuard"</code>
      */
@@ -626,43 +627,16 @@ public class Utils {
                 throw new ExceptionHandler("Error parsing file: " + in, ExceptionId.FILE_READ);
             }
         } else if (in.toLowerCase().endsWith(".class")) {
-            sourcePackage = sourcePackage.replace(".class", "");
-
-            String pathBreak = "";
-            String fullBreak = "";
-            String fullPath = Utils.retrieveFullFilePath(in).replace(".class", "");
-
-            //Maven-Class
-            if (fullPath.contains(pathBreak = osSurround("target", "classes"))) {
-                fullBreak = pathBreak;
+            try {
+                ClassReader reader = new ClassReader(new FileInputStream(in));
+                sourcePackage = reader.getClassName().replace(fileSep, ".");
+            } catch (FileNotFoundException e) {
+                log.fatal("File was not found " + in);
+                throw new ExceptionHandler("File " + in + " not available.", ExceptionId.FILE_READ);
+            } catch (IOException e) {
+                log.fatal("Error parsing file: " + in);
+                throw new ExceptionHandler("Error parsing file: " + in, ExceptionId.FILE_READ);
             }
-            //Maven-Class
-            else if (fullPath.contains(pathBreak = osSurround("target", "test-classes"))) {
-                fullBreak = pathBreak;
-            }
-            //Gradle-Class
-            else if (fullPath.contains(pathBreak = osSurround("build", "classes", "java", "main"))) {
-                fullBreak = pathBreak;
-            }
-            //Gradle-Class #2
-            else if (fullPath.contains(pathBreak = osSurround("java", "main"))) {
-                fullBreak = pathBreak;
-            }
-            //Gradle-Class #3
-            else if (fullPath.contains(pathBreak = osSurround("build", "classes"))) {
-                fullBreak = pathBreak;
-            }
-            //Gen-Classes
-            else if (fullPath.contains(pathBreak = osSurround("output"))) {
-                fullBreak = pathBreak;
-            } else {
-                //Base Case
-                fullBreak = sourcePackage;
-            }
-
-            int indexOf = fullPath.indexOf(fullBreak);
-            sourcePackage = fullPath.substring(indexOf == -1 ? 0 : indexOf).replace(fullBreak, "").replaceAll(fileSep, ".");
-            sourcePackage = StringUtils.isBlank(sourcePackage) ? fullBreak : sourcePackage;
         }
         return sourcePackage;
     }
