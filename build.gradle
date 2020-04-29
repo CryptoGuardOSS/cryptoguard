@@ -1,3 +1,14 @@
+buildscript {
+	repositories {
+		mavenCentral()
+		jcenter()
+	}
+
+	dependencies {
+		classpath 'org.asciidoctor:asciidoctorj-diagram:1.5.4.1'
+	}
+}
+
 import java.nio.file.Files
 import java.text.SimpleDateFormat
 import groovy.io.FileType
@@ -6,27 +17,32 @@ import com.google.common.hash.Hasher
 import com.google.common.hash.Hashing
 
 plugins {
-    id 'com.google.cloud.tools.jib' version '1.5.0'
+	id 'com.google.cloud.tools.jib' version '1.5.0'
+	id "com.diffplug.gradle.spotless" version "3.28.1"
+	id 'org.jbake.site' version '1.4.0'
 }
 apply plugin: "java"
 apply plugin: "maven-publish"
 
 publishing {
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/franceme/cryptoguard")
-            credentials {
-                username = project.findProperty("gpr.user") ?: System.getenv("GPR_USER")
-                password = project.findProperty("gpr.key") ?: System.getenv("GPR_API_KEY")
-            }
-        }
-    }
-    publications {
-        gpr(MavenPublication) {
-            from(components.java)
-        }
-    }
+	repositories {
+		maven {
+			name = "GitHubPackages"
+			url = uri("https://maven.pkg.github.com/franceme/cryptoguard")
+			credentials {
+				username = project.findProperty("gpr.user") ?: System.getenv("GPR_USER")
+				password = project.findProperty("gpr.key") ?: System.getenv("GPR_API_KEY")
+			}
+		}
+	}
+	publications {
+		gpr(MavenPublication) {
+			from(components.java)
+		}
+		maven(MavenPublication) {
+			group
+		}
+	}
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -36,111 +52,117 @@ group = groupName
 version = versionNumber
 
 sourceSets {
-    main {
-        java {
-            srcDir 'src/main/java'
-        }
-        resources {
-            srcDir 'src/main/resources'
-        }
-    }
-    test {
-        java {
-            srcDir 'src/test/java'
-        }
-        resources {
-            srcDir 'src/main/resources'
-        }
-    }
+	main {
+		java {
+			srcDir 'src/main/java'
+		}
+		resources {
+			srcDir 'src/main/resources'
+		}
+	}
+	test {
+		java {
+			srcDir 'src/test/java'
+		}
+		resources {
+			srcDir 'src/main/resources'
+		}
+	}
 }
 
 task updateVersion {
-    Properties props = new Properties()
-    InputStream ins = new FileInputStream(file("gradle.properties"))
-    props.load(ins)
+	Properties props = new Properties()
+	InputStream ins = new FileInputStream(file("gradle.properties"))
+	props.load(ins)
 
-    ant.replaceregexp(
-            match: 'V[0-9]{2}[.][0-9]{2}[.][0-9]{2}',
-            replace: props.getProperty("versionNumber"),
-            flags: 'g',
-            byline: true) {
+	ant.replaceregexp(
+			match: 'V[0-9]{2}[.][0-9]{2}[.][0-9]{2}',
+			replace: props.getProperty("versionNumber"),
+			flags: 'g',
+			byline: true) {
 
-        fileset(
-                dir: '.',
-                includes: 'README.rst'
-        )
-        fileset(
-                dir: '.',
-                includes: 'Makefile'
-        )
-        fileset(
-                dir: 'src/main/java/util',
-                includes: 'Utils.java'
-        )
-    }
+		fileset(
+				dir: '.',
+				includes: 'README.rst'
+		)
+		fileset(
+				dir: '.',
+				includes: 'Makefile'
+		)
+		fileset(
+				dir: 'src/main/java/util',
+				includes: 'Utils.java'
+		)
+	}
 
-    ant.replace(
-            dir: 'src/main/java/',
-            token: '@VERSION@',
-            value: props.getProperty("versionNumber").replace("V", "")
-    )
+	ant.replace(
+			dir: 'src/main/java/',
+			token: '@VERSION@',
+			value: props.getProperty("versionNumber").replace("V", "")
+	)
 
-    ant.replace(
-            dir: 'src/main/java/',
-            token: '@version $Id: $Id',
-            value: '@version ' + props.getProperty("versionNumber").replace("V", "")
-    )
+	ant.replace(
+			dir: 'src/main/java/',
+			token: '@version $Id: $Id',
+			value: '@version ' + props.getProperty("versionNumber").replace("V", "")
+	)
 }
 
 task updateCopyRightYear {
-    Properties props = new Properties()
-    InputStream ins = new FileInputStream(file("gradle.properties"))
-    props.load(ins)
+	Properties props = new Properties()
+	InputStream ins = new FileInputStream(file("gradle.properties"))
+	props.load(ins)
 
-    SimpleDateFormat year = new SimpleDateFormat("yyyy")
+	SimpleDateFormat year = new SimpleDateFormat("yyyy")
 
-    ant.replaceregexp(
-            match: 'Copyright © [0-9]{4} CryptoGuard',
-            replace: 'Copyright © ' + year.format(new Date()) + ' CryptoGuard',
-            flags: 'g',
-            byline: true) {
+	ant.replaceregexp(
+			match: 'Copyright © [0-9]{4} CryptoGuard',
+			replace: 'Copyright © ' + year.format(new Date()) + ' CryptoGuard',
+			flags: 'g',
+			byline: true) {
 
-        fileset(
-                dir: '.',
-                includes: '*.rst'
-        )
-    }
+		fileset(
+				dir: '.',
+				includes: '*.rst'
+		)
+	}
 }
 
 build.dependsOn(updateVersion)
 build.dependsOn(updateCopyRightYear)
 
 repositories {
-    mavenCentral()
-    flatDir {
-        dirs 'libs'
-    }
+	mavenCentral()
+	flatDir {
+		dirs 'libs'
+	}
 }
 
 configurations.all {
-    resolutionStrategy {
-        // fail eagerly on version conflict (includes transitive dependencies)
-        // e.g. multiple different versions of the same dependency (group and name are equal)
-        failOnVersionConflict()
-    }
+	resolutionStrategy {
+		// fail eagerly on version conflict (includes transitive dependencies)
+		// e.g. multiple different versions of the same dependency (group and name are equal)
+		failOnVersionConflict()
+
+		force "commons-io:commons-io:2.6"
+		force "org.apache.commons:commons-lang3:3.4"
+	}
 }
 
 jar {
 
-    from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-    }
+	setBaseName(projectName)
+	setVersion(versionNumber)
 
-    manifest {
-        attributes(
-                'Main-Class': 'frontEnd.Interface.EntryPoint'
-        )
-    }
+	from {
+		configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+	}
+
+	manifest {
+		attributes(
+				'Main-Class': 'frontEnd.Interface.EntryPoint'
+		)
+	}
 }
 
 //Ensuring all of the processors are being used for tests
@@ -152,88 +174,162 @@ test {
 //A Task for specifying explicit release commands
 task release {
 
-    doFirst {
-        delete './release'
-        mkdir './release'
-    }
-    //Waiting until all tests are cleared
-    def tasks = [jibBuildTar]
-    for (int itr = 0; itr < tasks.size() - 1; itr++) {
-        tasks[itr + 1].mustRunAfter(tasks[itr])
-    }
+	doFirst {
+		delete './release'
+		mkdir './release'
+	}
+	//Waiting until all tests are cleared
+	def tasks = [jibBuildTar]
+	for (int itr = 0; itr < tasks.size() - 1; itr++) {
+		tasks[itr + 1].mustRunAfter(tasks[itr])
+	}
 
-    //This task calls the previous tasks in order
-    dependsOn(tasks)
+	//This task calls the previous tasks in order
+	dependsOn(tasks)
 
-    //This will now move the built jar to the current directory under the new name
-    doLast {
-        Properties props = new Properties()
-        InputStream ins = new FileInputStream(file("gradle.properties"))
-        props.load(ins)
+	//This will now move the built jar to the current directory under the new name
+	doLast {
+		Properties props = new Properties()
+		InputStream ins = new FileInputStream(file("gradle.properties"))
+		props.load(ins)
 
-        copy {
-            from "build/jib-image.tar"
-            into './release'
-            rename {
-                String fileName -> props.getProperty("projectName") + ".tar"
-            }
-        }
+		copy {
+			from "build/jib-image.tar"
+			into './release'
+			rename {
+				String fileName -> props.getProperty("projectName") + ".tar"
+			}
+		}
 
-        copy {
-            from "build/libs/" + props.getProperty("projectName") + "-" + props.getProperty("versionNumber") + ".jar"
-            into './release'
-            rename {
-                String fileName -> props.getProperty("projectName") + ".jar"
-            }
-        }
+		copy {
+			from "build/libs/" + props.getProperty("projectName") + "-" + props.getProperty("versionNumber") + ".jar"
+			into './release'
+			rename {
+				String fileName -> props.getProperty("projectName") + ".jar"
+			}
+		}
 
-        ins.close()
+		ins.close()
 
-        //region Writing the hashes of all of the files in the release folder
-        def hashDictionary = [:]
-        new File('./release').eachFileRecurse(FileType.FILES) {
-            file ->
-                Hasher hasher = Hashing.sha512().newHasher()
-                hasher.putBytes(Files.readAllBytes(Paths.get(file.getPath())))
-                hashDictionary[file.name] = hasher.hash().toString()
+		//region Writing the hashes of all of the files in the release folder
+		def hashDictionary = [:]
+		new File('./release').eachFileRecurse(FileType.FILES) {
+			file ->
+				Hasher hasher = Hashing.sha512().newHasher()
+				hasher.putBytes(Files.readAllBytes(Paths.get(file.getPath())))
+				hashDictionary[file.name] = hasher.hash().toString()
 
-        }
+		}
 
-        File hash = new File('./release/sha512.sums')
-        hashDictionary.each {
-            k, v ->
-                hash.append(v + '  ' + k + '\n')
-        }
-        //endregion
+		File hash = new File('./release/sha512.sums')
+		hashDictionary.each {
+			k, v ->
+				hash.append(v + '  ' + k + '\n')
+		}
+		//endregion
 
-    }
+	}
+}
+
+spotless {
+	encoding 'UTF-8'
+	format 'misc', {
+		target '*.gradle', '*.md', '.gitignore', '.gitattributes', '*.rst', '*.txt'
+
+		trimTrailingWhitespace()
+		indentWithTabs() // or spaces. Takes an integer argument if you don't like 4
+		endWithNewline()
+	}
+	freshmark {
+		//target 'README.md'
+		//propertiesFile('gradle.properties')
+		//properties {
+		//it.put('key','value')
+		//}
+	}
+	java {
+		licenseHeader '/* Licensed under GPL-3.0 */'
+		importOrder 'java', 'javax', 'org', 'com', ''
+
+		trimTrailingWhitespace()
+		//indentWithTabs() // or spaces. Takes an integer argument if you don't like 4
+		endWithNewline()
+		removeUnusedImports()
+
+		googleJavaFormat('1.1')
+	}
+	format 'xml', {
+		target fileTree('.') {
+			include '*.xml', '*.xsd'
+			exclude '**/build/**'
+		}
+		eclipseWtp('xml', '4.13.0')
+	}
+	format 'json', {
+		target fileTree('.') {
+			include '*.json'
+			exclude '**/build/**'
+		}
+		eclipseWtp('json', '4.13.0')
+	}
+}
+
+jbake {
+	srcDirName = 'src/documentation'
+	destDirName = 'documentation'
+	configuration['asciidoctor.option.requires'] = "asciidoctor-diagram"
+	configuration['asciidoctor.attributes'] = [
+			"sourceDir=${projectDir}",
+			"imagesDir=diagrams",
+			"imagesoutdir=src/documentation/assets/diagrams"
+	]
+}
+
+bakePreview {
+	port = '8090'
+}
+
+task createjbakeignorefile {
+	group = "documentation"
+	doLast {
+
+		def allFiles = fileTree("src/documentation/content").toList()
+		allFiles.removeAll {
+			it.toString().contains("adoc") || it.toString().contains("json") || it.toString().contains("md")
+		}
+		def ignoreFileName = "src/documentation/content/.jbakeignore"
+		def ignoreFile = new File(ignoreFileName)
+		ignoreFile.write(allFiles.join("\n"))
+	}
+}
+
+clean.doLast {
+	def fileList = fileTree("src/documentation/content").toList()
+
+	fileList.each {
+		if (it.toString().contains("ignore") || it.toString().contains("json") || it.toString().contains("tests") || it.toString().contains("Spec")) {
+			file(it.toString()).delete()
+		}
+	}
 }
 
 dependencies {
-    compile 'com.google.guava:guava:20.0'
-    //compile name: 'soot_j9_20190409'
-    //compile name: 'soot-V3.3.0-SNAPSHOT'
-    compile name: 'soot-V4.1.0-SNAPSHOT'
-    //compile name: 'soot_raw1'
-    compile name: 'axml-2.0'
-    compile name: 'AXMLPrinter2'
-    compile name: 'okhttp-3.9.0'
-    compile name: 'retrofit-2.1.0'
-    compile "org.codehaus.groovy:groovy:2.5.2"
-    compile 'org.ow2.asm:asm:8.0.1'
-    compile group: 'junit', name: 'junit', version: '4.12'
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    compile group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '2.3.0'
-    compile group: 'com.sun.xml.bind', name: 'jaxb-core', version: '2.3.0'
-    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
-    compile 'commons-cli:commons-cli:1.4'
-    compile 'net.sourceforge.plantuml:plantuml:8059'
-    implementation 'org.mockito:mockito-core:2.24.5'
-    compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
-    compileOnly 'org.projectlombok:lombok:1.18.8'
-    annotationProcessor 'org.projectlombok:lombok:1.18.8'
-    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1'
-    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.9.8'
-    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.9.8'
+	compile name: 'soot-V4.1.0-SNAPSHOT'
+	compile name: 'axml-2.0'
+	compile name: 'AXMLPrinter2'
+	compile name: 'okhttp-3.9.0'
+	compile name: 'retrofit-2.1.0'
 
+	compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.9.8'
+	compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.9.8'
+	compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-csv', version: '2.9.8'
+
+	compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1'
+	compile 'commons-cli:commons-cli:1.4'
+	compile 'junit:junit:4.13'
+	compile 'org.codehaus.groovy:groovy:3.0.3'
+	implementation 'org.mockito:mockito-core:3.3.3'
+	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
+	compile 'org.ow2.asm:asm:8.0.1'
 }
+build.finalizedBy(bake)

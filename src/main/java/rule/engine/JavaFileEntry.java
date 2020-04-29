@@ -1,33 +1,39 @@
+/* Licensed under GPL-3.0 */
 package rule.engine;
 
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
-import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.Logger;
 
 /**
- * <p>JavaFileEntry class.</p>
+ * JavaFileEntry class.
  *
- * @author CryptoguardTeam
- * Created on 2019-01-17.
+ * @author CryptoguardTeam Created on 2019-01-17.
  * @version 03.07.01
  * @since 01.01.11
- *
- * <p>The method in the Engine handling Java File(s) Scanning.</p>
+ *     <p>The method in the Engine handling Java File(s) Scanning.
  */
-@Log4j2
 public class JavaFileEntry implements EntryHandler {
 
-    /**
-     * {@inheritDoc}
-     */
-    public void Scan(EnvironmentInformation generalInfo) throws ExceptionHandler {
+  private static final Logger log =
+      org.apache.logging.log4j.LogManager.getLogger(JavaFileEntry.class);
 
-        log.trace("Starting scanner looper");
-        for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
-            log.info("Checking the rule: " + ruleChecker.getClass().getSimpleName());
-            ruleChecker.checkRule(generalInfo.getSourceType(), generalInfo.getSource(), generalInfo.getDependencies(), generalInfo.getSourcePaths(), generalInfo.getOutput(), generalInfo.getMain(), null, generalInfo.getJavaHome());
-        }
-        log.trace("Scanner looper stopped");
+  /** {@inheritDoc} */
+  public void Scan(EnvironmentInformation generalInfo) throws ExceptionHandler {
+
+    log.trace("Starting scanner looper");
+    for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
+      log.info("Checking the rule: " + ruleChecker.getClass().getSimpleName());
+      ruleChecker.checkRule(
+          generalInfo.getSourceType(),
+          generalInfo.getSource(),
+          generalInfo.getDependencies(),
+          generalInfo.getSourcePaths(),
+          generalInfo.getOutput(),
+          generalInfo.getMain(),
+          null,
+          generalInfo.getJavaHome());
     }
-
+    log.trace("Scanner looper stopped");
+  }
 }

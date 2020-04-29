@@ -1,6 +1,7 @@
 FROM openjdk:11.0.3-jdk
 
 RUN apt-get update
+RUN apt update
 
 RUN yes|apt-get install zip
 #RUN yes|apt-get install snapd
@@ -45,8 +46,6 @@ USER $NB_USER
 RUN curl -s "https://get.sdkman.io" | bash
 #RUN apt-get update
 RUN /bin/bash -c "source $HOME/.sdkman/bin/sdkman-init.sh"
-#RUN /bin/bash -c "yes|sdk install java 6.0.242-zulu"
-#RUN /bin/bash -c "yes|sdk install java 7.0.242-zulu"
 
 # Installing Java and Maven, removing some unnecessary SDKMAN files 
 RUN bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && \

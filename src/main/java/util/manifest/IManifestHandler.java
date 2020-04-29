@@ -1,3 +1,4 @@
+/* Licensed under GPL-3.0 */
 package util.manifest;
 
 import java.io.InputStream;
@@ -10,12 +11,10 @@ import java.io.InputStream;
  */
 public interface IManifestHandler {
 
-    /**
-     * Called when the contents of the Android manifest file shall be processed
-     *
-     * @param stream The stream through which the manifest file can be accesses
-     */
-    void handleManifest(InputStream stream);
-
+  /**
+   * Called when the contents of the Android manifest file shall be processed
+   *
+   * @param stream The stream through which the manifest file can be accesses
+   */
+  void handleManifest(InputStream stream);
 }
-
