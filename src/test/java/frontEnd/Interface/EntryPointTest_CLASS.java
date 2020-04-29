@@ -7,6 +7,8 @@ import static org.junit.Assert.assertNull;
 import static test.TestUtilities.*;
 import static util.Utils.makeArg;
 
+import com.binarytweed.test.Quarantine;
+import com.binarytweed.test.QuarantiningRunner;
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.MessagingSystem.routing.Listing;
 import frontEnd.MessagingSystem.routing.structure.Default.Report;
@@ -23,6 +25,7 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import rule.engine.EngineType;
 import soot.G;
 import test.TestUtilities;
@@ -35,6 +38,8 @@ import util.Utils;
  * @version $Id: $Id
  * @since V03.03.10
  */
+@RunWith(QuarantiningRunner.class)
+@Quarantine({"com.binarytweed", "frontEnd.Interface.*"})
 public class EntryPointTest_CLASS {
 
   //region Attributes
@@ -68,7 +73,7 @@ public class EntryPointTest_CLASS {
   public void main_TestableFile_VerySimple() {
     soot.G.v().reset();
     String source = verySimple_Klass;
-    String fileOut = verySimple_Klass_xml_0;
+    String fileOut = verySimple_Klass_xml_1;
     new File(fileOut).delete();
 
     if (isLinux) {
@@ -100,8 +105,13 @@ public class EntryPointTest_CLASS {
                     bugInstance -> {
                       try {
                         return bugInstance
-                            .getClassName()
-                            .contains(Utils.retrieveFullyQualifiedName(source));
+                                .getClassName()
+                                .contains(Utils.retrieveFullyQualifiedName(source))
+                            || bugInstance
+                                .getlocation()
+                                .get(0)
+                                .getSourceFile()
+                                .startsWith(Utils.retrieveFullyQualifiedName(source));
                       } catch (ExceptionHandler exceptionHandler) {
                         exceptionHandler.printStackTrace();
                         return false;

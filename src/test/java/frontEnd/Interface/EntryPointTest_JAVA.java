@@ -7,6 +7,8 @@ import static org.junit.Assert.assertNull;
 import static test.TestUtilities.*;
 import static util.Utils.makeArg;
 
+import com.binarytweed.test.Quarantine;
+import com.binarytweed.test.QuarantiningRunner;
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.MessagingSystem.routing.Listing;
 import frontEnd.MessagingSystem.routing.structure.Default.Report;
@@ -16,6 +18,7 @@ import java.io.File;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import rule.engine.EngineType;
 import soot.G;
 import util.Utils;
@@ -27,6 +30,8 @@ import util.Utils;
  * @version $Id: $Id
  * @since V03.03.10
  */
+@RunWith(QuarantiningRunner.class)
+@Quarantine({"com.binarytweed", "frontEnd.Interface.*"})
 public class EntryPointTest_JAVA {
 
   //region Test Environment Setup

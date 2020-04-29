@@ -6,6 +6,8 @@ import static org.junit.Assert.*;
 import static test.TestUtilities.*;
 import static util.Utils.makeArg;
 
+import com.binarytweed.test.Quarantine;
+import com.binarytweed.test.QuarantiningRunner;
 import frontEnd.MessagingSystem.routing.Listing;
 import frontEnd.MessagingSystem.routing.structure.Default.Report;
 import frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport;
@@ -18,6 +20,7 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import rule.engine.EngineType;
 import soot.G;
 
@@ -28,6 +31,8 @@ import soot.G;
  * @version $Id: $Id
  * @since V03.03.10
  */
+@RunWith(QuarantiningRunner.class)
+@Quarantine({"com.binarytweed", "frontEnd.Interface.*"})
 public class EntryPointTest_APK {
 
   //region Attributes

@@ -48,13 +48,11 @@ public class Legacy {
   public static String marshallingSootErrors(String soot) {
     if (StringUtils.isBlank(soot)) return "";
 
-    String sootOut =
-        "=======================================\n"
-            + "Internal Warnings: \n"
-            + soot
-            + "\n"
-            + "=======================================\n";
-    return sootOut;
+    return "=======================================\n"
+        + "Internal Warnings: \n"
+        + soot
+        + "\n"
+        + "=======================================\n";
   }
 
   /**
@@ -115,13 +113,11 @@ public class Legacy {
    */
   public static String marshalling(Long analysisTime) {
 
-    String out =
-        "=======================================\n"
-            + "Analysis Timing (ms): "
-            + analysisTime
-            + ".\n"
-            + "=======================================\n";
-    return out;
+    return "=======================================\n"
+        + "Analysis Timing (ms): "
+        + analysisTime
+        + ".\n"
+        + "=======================================\n";
   }
 
   /**
