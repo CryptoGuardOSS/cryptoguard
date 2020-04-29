@@ -93,12 +93,9 @@ public class Default extends Structure {
 
     //region Marshalling
     log.trace("Creating the marshaller");
-    String xmlStream =
-        JacksonSerializer.serialize(
-            report, super.getSource().getPrettyPrint(), Listing.Default.getJacksonType());
+    return JacksonSerializer.serialize(
+        report, super.getSource().getPrettyPrint(), Listing.Default.getJacksonType());
     //endregion
-
-    return xmlStream;
   }
 
   //endregion

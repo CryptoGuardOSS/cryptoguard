@@ -6,6 +6,7 @@ buildscript {
 
 	dependencies {
 		classpath 'org.asciidoctor:asciidoctorj-diagram:1.5.4.1'
+		classpath 'net.saliman:gradle-cobertura-plugin:3.0.0'
 	}
 }
 
@@ -22,7 +23,53 @@ plugins {
 	id 'org.jbake.site' version '1.4.0'
 }
 apply plugin: "java"
+apply plugin: "maven"
 apply plugin: "maven-publish"
+apply plugin: "net.saliman.cobertura"
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+group = groupName
+version = versionNumber
+
+/*
+task writeNewPom {
+	pom {
+		project {
+			groupId groupName
+			artifactId projectName
+			version version
+
+			inceptionYear '2018'
+
+			licenses {
+				license {
+					name = 'The GNU General Public, License v3.0'
+					url = 'http://www.gnu.org/licenses/gpl-3.0.txt'
+				}
+			}
+
+			developers {
+				developer {
+					id = 'franceme'
+					name = 'Miles Frantz'
+					url = 'https://franceme.github.io'
+				}
+				developer {
+					id = 'franceme'
+					name = 'Sazzadur Rahamen'
+					url = 'https://sazzadur.com'
+				}
+			}
+		}
+	}.whenConfigured {
+		pom -> pom.dependencies.find {
+			dep -> dep.groupId == 'junit'
+		}
+	}.writeTo("$buildDir/newpom.xml")
+}
+*/
 
 publishing {
 	repositories {
@@ -44,12 +91,6 @@ publishing {
 		}
 	}
 }
-
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
-
-group = groupName
-version = versionNumber
 
 sourceSets {
 	main {
@@ -146,24 +187,34 @@ configurations.all {
 
 		force "commons-io:commons-io:2.6"
 		force "org.apache.commons:commons-lang3:3.4"
+		force "junit:junit:4.13"
 	}
 }
 
 jar {
-
 	setBaseName(projectName)
 	setVersion(versionNumber)
-
 	from {
 		configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
 	}
-
 	manifest {
 		attributes(
 				'Main-Class': 'frontEnd.Interface.EntryPoint'
 		)
 	}
 }
+
+java {
+	//withJavadocJar()
+	//withSourcesJar()
+}
+/*
+javadoc {
+	if (JavaVersion.current().isJava9Compatible()) {
+		options.addBooleanOption('html5', true)
+	}
+}
+*/
 
 //Ensuring all of the processors are being used for tests
 test {
@@ -324,6 +375,7 @@ dependencies {
 	compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.9.8'
 	compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-csv', version: '2.9.8'
 
+	implementation 'com.binarytweed:quarantining-test-runner:0.0.3'
 	compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1'
 	compile 'commons-cli:commons-cli:1.4'
 	compile 'junit:junit:4.13'

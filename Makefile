@@ -49,4 +49,22 @@ tests:
 clean:
 	@$(info Cleaning the project.)
 	@$(runner) clean
+
+docker:
+	@$(info Build the Docker file)
+	@sudo docker build -t cryptoguard .
+
+live:
+	@$(info Running the Docker file)
+	@sudo docker run -p 127.0.0.1:8888:8888 -ti cryptoguard /bin/bash
+
+kill:
+	@$(info Killing all the Dockerfiles)
+	@-sudo docker kill $$(sudo docker ps -q)
+	@-sudo docker rm $$(sudo docker ps -a -q)
+	@-sudo docker rmi $$(sudo docker images -q)
+
+run:
+	@$(info Running the juypter notebook)
+	@jupyter notebook --ip=0.0.0.0 --port=8888
 #endregion

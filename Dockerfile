@@ -49,10 +49,10 @@ RUN /bin/bash -c "source $HOME/.sdkman/bin/sdkman-init.sh"
 
 # Installing Java and Maven, removing some unnecessary SDKMAN files 
 RUN bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && \
-    yes | sdk install java 7.0.242-zulu && \
-    yes | sdk install java 8.0.242-zulu && \
-    yes | sdk install gradle 4.10.3 && \
-    yes | sdk install jbang 0.8.1 && \
+    yes | sdk install java 7.0.262-zulu && \
+    yes | sdk install java 8.0.252-zulu && \
+    yes | sdk install gradle 6.0 && \
+    yes | sdk install jbang 0.20.0 && \
     rm -rf $HOME/.sdkman/archives/* && \
     rm -rf $HOME/.sdkman/tmp/*"
 
@@ -78,6 +78,15 @@ RUN bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && \
 #RUN bash -c "/usr/bin/snap install android-studio --classic"
 #RUN bash -c "snap install androidsdk"
 #RUN bash -c "androidsdk 'platforms;android-28'"
+
+# download and install Android SDK
+# https://developer.android.com/studio#command-tools
+ARG ANDROID_SDK_VERSION=6200805
+ENV ANDROID_HOME /opt/android-sdk
+RUN mkdir -p ${ANDROID_HOME}/cmdline-tools && \
+    wget -q https://dl.google.com/android/repository/commandlinetools-linux-${ANDROID_SDK_VERSION}_latest.zip && \
+    unzip *tools*linux*.zip -d ${ANDROID_HOME}/cmdline-tools && \
+    rm *tools*linux*.zip
 
 # Launch the notebook server
 WORKDIR $HOME

@@ -32,8 +32,7 @@ public class parcelHandling {
    * @return a {@link java.lang.String} object.
    */
   public static String retrieveHeaderInfo() {
-    String output = Utils.projectName + ": " + Utils.projectVersion + "\n";
-    return output;
+    return Utils.projectName + ": " + Utils.projectVersion + "\n";
   }
 
   /**
