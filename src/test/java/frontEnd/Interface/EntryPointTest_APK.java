@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import rule.engine.EngineType;
 import soot.G;
+import test.TestUtilities;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -114,6 +115,37 @@ public class EntryPointTest_APK {
 
                 List<String> results = Files.readAllLines(Paths.get(outputFile), StandardCharsets.UTF_8);
                 assertTrue(results.size() >= 10);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    @Test
+    public void main_TestableApk_Scarf_XArgs() {
+        String fileOut = tempFileOutApk_Scarf_XArgs;
+        new File(fileOut).delete();
+
+        String dataInput = pathToAPK;
+        TestUtilities.setIn(dataInput);
+
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.APK) +
+                            makeArg(argsIdentifier.SOURCE, "xargs") +
+                            makeArg(argsIdentifier.OUT, fileOut) +
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
+                            makeArg(argsIdentifier.PRETTY);
+
+            try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+                AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
+                assertFalse(report.getBugInstance().isEmpty());
 
 
             } catch (Exception e) {
