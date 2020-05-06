@@ -98,8 +98,8 @@ public class ScarfXML {
         //region Setting the instance
 
         instance.setId(id);
-        instance.setBugCode(issue.getRuleId().toString());
-        instance.setBugGroup(issue.getRule().getDesc());
+        instance.setBugCode(issue.getRule().toString());
+        //instance.setBugGroup(issue.getRule().getDesc());
         instance.setBugMessage(issue.getRule().getDesc());
 
         if (buildId != null || xPath != null) {
@@ -171,14 +171,14 @@ public class ScarfXML {
         //endregion
 
         //region Setting BugTrace
+        /*
         BugTrace trace = new BugTrace();
-
         if (buildId != null)
             trace.setBuildId(buildId);
-
         trace.setAssessmentReportFile(fileName);
-
         instance.setBugTrace(trace);
+        */
+        instance.setBugTrace(null);
         //endregion
 
         //endregion

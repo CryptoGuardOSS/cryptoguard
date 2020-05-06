@@ -229,6 +229,45 @@ public class EntryPointTest_CLASS {
         }
     }
 
+    /**
+     * <p>main_TestableFiles_MultiTest.</p>
+     */
+    @Test
+    public void main_TestableFiles_MultiTest_Xargs() {
+        String fileOut = tempFileOutTxt_two_XArgs;
+
+        String dir = classSource;
+        new File(fileOut).delete();
+
+        if (isLinux) {
+
+            String inputSTDIN = TestUtilities.retrieveFilesFromDir(dir, "*.class");
+            TestUtilities.setIn(inputSTDIN);
+
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES) +
+                            makeArg(argsIdentifier.SOURCE, "xargs") +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
+                            makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.ANDROID, "/InvalidPath/") +
+                            makeArg(argsIdentifier.MAIN, classFiles[3]) +
+                            makeArg(argsIdentifier.OUT, fileOut);
+
+            try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+                List<String> results = Files.readAllLines(Paths.get(outputFile), StandardCharsets.UTF_8);
+                assertTrue(results.size() >= 2);
+
+                assertTrue(results.stream().anyMatch(line -> Utils.containsAny(line, inputSTDIN.split(Utils.fileSep))));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
 
     /**
      * <p>main_TestableFiles_MultiTest_Scarf.</p>
