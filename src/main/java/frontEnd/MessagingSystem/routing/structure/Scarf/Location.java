@@ -35,13 +35,13 @@ public class Location implements Serializable {
     @JsonProperty("SourceFile")
     private String sourceFile;
     @JsonProperty("StartLine")
-    private int startLine;
+    private Integer startLine;
     @JsonProperty("EndLine")
-    private int endLine;
+    private Integer endLine;
     @JsonProperty("StartColumn")
-    private int startColumn;
+    private Integer startColumn;
     @JsonProperty("EndColumn")
-    private int endColumn;
+    private Integer endColumn;
     @JsonProperty("Explanation")
     private String explanation;
 
@@ -54,14 +54,14 @@ public class Location implements Serializable {
     /**
      * <p>Constructor for Location.</p>
      *
-     * @param startLine   a int.
+     * @param startLine   a Integer.
      * @param sourceFile  a {@link java.lang.String} object.
      * @param explanation a {@link java.lang.String} object.
-     * @param endLine     a int.
-     * @param startColumn a int.
-     * @param endColumn   a int.
+     * @param endLine     a Integer.
+     * @param startColumn a Integer.
+     * @param endColumn   a Integer.
      */
-    public Location(String sourceFile, int startLine, int endLine, int startColumn, int endColumn, String explanation) {
+    public Location(String sourceFile, Integer startLine, Integer endLine, Integer startColumn, Integer endColumn, String explanation) {
         super();
         this.sourceFile = sourceFile;
         this.startLine = startLine;
@@ -105,30 +105,30 @@ public class Location implements Serializable {
     /**
      * <p>Getter for the field <code>startLine</code>.</p>
      *
-     * @return a int.
+     * @return a Integer.
      */
     @JsonProperty("StartLine")
-    public int getStartLine() {
+    public Integer getStartLine() {
         return startLine;
     }
 
     /**
      * <p>Setter for the field <code>startLine</code>.</p>
      *
-     * @param startLine a int.
+     * @param startLine a Integer.
      */
     @JsonProperty("StartLine")
-    public void setStartLine(int startLine) {
+    public void setStartLine(Integer startLine) {
         this.startLine = startLine;
     }
 
     /**
      * <p>withStartLine.</p>
      *
-     * @param startLine a int.
+     * @param startLine a Integer.
      * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.Location} object.
      */
-    public Location withStartLine(int startLine) {
+    public Location withStartLine(Integer startLine) {
         this.startLine = startLine;
         return this;
     }
@@ -136,30 +136,30 @@ public class Location implements Serializable {
     /**
      * <p>Getter for the field <code>endLine</code>.</p>
      *
-     * @return a int.
+     * @return a Integer.
      */
     @JsonProperty("EndLine")
-    public int getEndLine() {
+    public Integer getEndLine() {
         return endLine;
     }
 
     /**
      * <p>Setter for the field <code>endLine</code>.</p>
      *
-     * @param endLine a int.
+     * @param endLine a Integer.
      */
     @JsonProperty("EndLine")
-    public void setEndLine(int endLine) {
+    public void setEndLine(Integer endLine) {
         this.endLine = endLine;
     }
 
     /**
      * <p>withEndLine.</p>
      *
-     * @param endLine a int.
+     * @param endLine a Integer.
      * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.Location} object.
      */
-    public Location withEndLine(int endLine) {
+    public Location withEndLine(Integer endLine) {
         this.endLine = endLine;
         return this;
     }
@@ -167,30 +167,30 @@ public class Location implements Serializable {
     /**
      * <p>Getter for the field <code>startColumn</code>.</p>
      *
-     * @return a int.
+     * @return a Integer.
      */
     @JsonProperty("StartColumn")
-    public int getStartColumn() {
+    public Integer getStartColumn() {
         return startColumn;
     }
 
     /**
      * <p>Setter for the field <code>startColumn</code>.</p>
      *
-     * @param startColumn a int.
+     * @param startColumn a Integer.
      */
     @JsonProperty("StartColumn")
-    public void setStartColumn(int startColumn) {
+    public void setStartColumn(Integer startColumn) {
         this.startColumn = startColumn;
     }
 
     /**
      * <p>withStartColumn.</p>
      *
-     * @param startColumn a int.
+     * @param startColumn a Integer.
      * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.Location} object.
      */
-    public Location withStartColumn(int startColumn) {
+    public Location withStartColumn(Integer startColumn) {
         this.startColumn = startColumn;
         return this;
     }
@@ -198,30 +198,30 @@ public class Location implements Serializable {
     /**
      * <p>Getter for the field <code>endColumn</code>.</p>
      *
-     * @return a int.
+     * @return a Integer.
      */
     @JsonProperty("EndColumn")
-    public int getEndColumn() {
+    public Integer getEndColumn() {
         return endColumn;
     }
 
     /**
      * <p>Setter for the field <code>endColumn</code>.</p>
      *
-     * @param endColumn a int.
+     * @param endColumn a Integer.
      */
     @JsonProperty("EndColumn")
-    public void setEndColumn(int endColumn) {
+    public void setEndColumn(Integer endColumn) {
         this.endColumn = endColumn;
     }
 
     /**
      * <p>withEndColumn.</p>
      *
-     * @param endColumn a int.
+     * @param endColumn a Integer.
      * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.Location} object.
      */
-    public Location withEndColumn(int endColumn) {
+    public Location withEndColumn(Integer endColumn) {
         this.endColumn = endColumn;
         return this;
     }
