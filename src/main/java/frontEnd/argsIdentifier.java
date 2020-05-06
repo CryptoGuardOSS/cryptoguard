@@ -21,7 +21,7 @@ public enum argsIdentifier {
 
     //region Values
     FORMAT("in", "format", "Required: The format of input you want to scan, available styles " + EngineType.retrieveEngineTypeValues() + ".", "format", null, true),
-    SOURCE("s", "file/files/*.in/dir/ClassPathString", "Required: The source to be scanned use the absolute path or send all of the source files via the file input.in; ex. find -type f *.java >> input.in.", "file(s)/*.in/dir", null, true),
+    SOURCE("s", "file/files/*.in/dir/ClassPathString/xargs", "Required: The source to be scanned use the absolute path or send all of the source files via the file input.in; ex. find -type f *.java >> input.in.", "file(s)/*.in/dir", null, true),
     DEPENDENCY("d", "dir", "The dependency to be scanned use the relative path.", "dir", null, false),
     OUT("o", "file", "The file to be created with the output default will be the project name.", "file", null, false),
     NEW("new", null, "The file to be created with the output if existing will be overwritten.", null, null, false),

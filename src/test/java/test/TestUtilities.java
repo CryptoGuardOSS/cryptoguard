@@ -4,8 +4,7 @@ import frontEnd.Interface.EntryPoint;
 import org.apache.commons.lang3.StringUtils;
 import util.Utils;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -86,6 +85,7 @@ public class TestUtilities {
     public static final String tempStreamXML = Utils.osPathJoin(testPath, "testable-jar_Stream.xml");
     public static final String tempFileOutTxt_two = Utils.osPathJoin(testPath, "testable-jar_classFiles.txt");
     public static final String tempFileOutTxt_two_0 = Utils.osPathJoin(testPath, "testable-jar_classFiles_0.txt");
+    public static final String tempFileOutTxt_two_XArgs = Utils.osPathJoin(testPath, "testable-jar_classFiles_XArgs.txt");
     public static final String tempFileOutTxt_default = Utils.osPathJoin(testPath, "testable-jar_classFiles.json");
     public static final String tempFileOutTxt_default_0 = Utils.osPathJoin(testPath, "testable-jar_classFiles_0.json");
     public static final String tempFileOutXML_two = Utils.osPathJoin(testPath, "testable-jar_classFiles.xml");
@@ -99,6 +99,7 @@ public class TestUtilities {
     public static final String tempFileOutApk = Utils.osPathJoin(testPath, "app-debug.txt");
     public static final String tempFileOutApk_Steam = Utils.osPathJoin(testPath, "app-debug_Stream.txt");
     public static final String tempFileOutApk_Scarf = Utils.osPathJoin(testPath, "app-debug.xml");
+    public static final String tempFileOutApk_Scarf_XArgs = Utils.osPathJoin(testPath, "app-debug_XArgs.xml");
     public static final String tempFileOutApk_Scarf_Steam = Utils.osPathJoin(testPath, "app-debug_Stream.xml");
     public static final String tempFileOutApk_Default = Utils.osPathJoin(testPath, "app-debug.json");
     public static final String tempFileOutApk_Default_Steam = Utils.osPathJoin(testPath, "app-debug_Stream.json");
@@ -225,5 +226,37 @@ public class TestUtilities {
         String fileName = splits[splits.length - 1];
 
         return StringUtils.trimToNull(fileName.substring(0, fileName.indexOf(".")));
+    }
+
+    public static String retrieveFilesFromDir(String dir, String name) {
+
+        ProcessBuilder cmd = new ProcessBuilder();
+
+        cmd.command(("find " + dir + " -name " + name).split(" "));
+
+        StringBuilder output = new StringBuilder();
+
+        try {
+            Process exe = cmd.start();
+            String line;
+
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(exe.getInputStream()))) {
+                while ((line = reader.readLine())!= null) {
+                    output.append(line).append("\n");
+                }
+            } catch (Exception e) {
+
+            }
+
+        } catch (Exception e) {
+
+        }
+        return output.toString();
+    }
+
+    public static InputStream setIn(String string) {
+        InputStream input = System.in;
+        System.setIn(new ByteArrayInputStream(string.getBytes()));
+        return input;
     }
 }
