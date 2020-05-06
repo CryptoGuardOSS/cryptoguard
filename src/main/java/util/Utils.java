@@ -29,6 +29,7 @@ import soot.options.Options;
 import soot.util.Chain;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Function;
@@ -52,6 +53,7 @@ import static soot.SootClass.BODIES;
 @Log4j2
 public class Utils {
 
+    //region Static Variables
     /**
      * Constant <code>SLICE_LENGTH</code>
      */
@@ -65,9 +67,9 @@ public class Utils {
      */
     public final static String lineSep = System.getProperty("line.separator");
     /**
-     * Constant <code>projectVersion="V04.02.00"</code>
+     * Constant <code>projectVersion="V04.02.03"</code>
      */
-    public final static String projectVersion = "V04.02.00";
+    public final static String projectVersion = "V04.02.03";
     /**
      * Constant <code>projectName="CryptoGuard"</code>
      */
@@ -76,7 +78,6 @@ public class Utils {
      * Constant <code>userPath="System.getProperty(user.home)"</code>
      */
     public final static String userPath = System.getProperty("user.home");
-    //region Static Variables
     private static final List<String> ASSIGN_DONT_VISIT = new ArrayList<>();
     private static final List<String> INVOKE_DONT_VISIT = new ArrayList<>();
     private final static Pattern sootClassPattern = Pattern.compile("[<](.+)[:]");
@@ -137,6 +138,29 @@ public class Utils {
 
     //region HotMethods
     //region Wrappers
+
+    public static ArrayList<String> retrievingThroughXArgs(EngineType eType, Boolean deps) throws ExceptionHandler {
+        ArrayList<String> out = new ArrayList<>();
+
+        ArrayList<String> types = deps ? new ArrayList<String>(){{add(".java");add(".class");add(".jar");add("dir");}} : new ArrayList<String>(){{add(eType.getInputExtension());}};
+
+        try (BufferedReader inputStream = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8))) {
+
+            String curLine;
+            while ((curLine = inputStream.readLine()) != null)
+                out.addAll(retrieveFilePathTypesSingle(curLine, types, true, false));
+
+        } catch (IOException | ExceptionHandler e) {
+            throw new ExceptionHandler("Issue running through xArgs", ExceptionId.FILE_I);
+        }
+        return out;
+    }
+
+    public static ArrayList<String> retrieveFilePathTypesSingle(String rawFileString, ArrayList<String> types, Boolean expandPath, Boolean overwrite) throws ExceptionHandler {
+        return retrieveFilePaths(new ArrayList<String>() {{
+            add(rawFileString);
+        }}, types, expandPath, overwrite);
+    }
 
     /**
      * <p>retrieveFilePathTypes.</p>
