@@ -6,7 +6,6 @@ import static frontEnd.MessagingSystem.routing.outputStructures.common.Default.m
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.MessagingSystem.AnalysisIssue;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
-import frontEnd.MessagingSystem.routing.Listing;
 import frontEnd.MessagingSystem.routing.outputStructures.common.JacksonSerializer;
 import frontEnd.MessagingSystem.routing.structure.Default.Report;
 import java.io.File;
@@ -94,7 +93,9 @@ public class Default extends Structure {
     //region Marshalling
     log.trace("Creating the marshaller");
     return JacksonSerializer.serialize(
-        report, super.getSource().getPrettyPrint(), Listing.Default.getJacksonType());
+        report,
+        super.getSource().getPrettyPrint(),
+        super.getSource().getMessagingType().getJacksonType());
     //endregion
   }
 

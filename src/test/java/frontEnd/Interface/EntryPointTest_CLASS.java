@@ -125,6 +125,104 @@ public class EntryPointTest_CLASS {
     }
   }
 
+  @Test
+  public void main_TestableFile_VerySimple_XML() {
+    soot.G.v().reset();
+    String source = verySimple_Klass;
+    String fileOut = verySimple_Klass_xml_2;
+    Listing type = Listing.XMLGeneric;
+    new File(fileOut).delete();
+
+    if (isLinux) {
+      String args =
+          makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES)
+              + makeArg(argsIdentifier.FORMATOUT, type)
+              + makeArg(argsIdentifier.SOURCE, source)
+              + makeArg(argsIdentifier.NOEXIT)
+              + makeArg(argsIdentifier.ANDROID, "/InvalidPath/")
+              + makeArg(argsIdentifier.VERYVERBOSE)
+              //+ makeArg(argsIdentifier.STREAM)
+              + makeArg(argsIdentifier.PRETTY)
+              + makeArg(argsIdentifier.OUT, fileOut);
+
+      try {
+        String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+        Report report = Report.deserialize(new File(outputFile), type);
+        assertFalse(report.getIssues().isEmpty());
+        assertTrue(
+            report
+                .getIssues()
+                .stream()
+                .anyMatch(
+                    bugInstance -> {
+                      try {
+                        return bugInstance
+                            .getFullPath()
+                            .contains(Utils.retrieveFullyQualifiedName(source));
+                      } catch (ExceptionHandler e) {
+                        assertNull(e);
+                        e.printStackTrace();
+                      }
+                      return false;
+                    }));
+
+      } catch (Exception e) {
+        e.printStackTrace();
+        assertNull(e);
+      }
+    }
+  }
+
+  @Test
+  public void main_TestableFile_VerySimple_YAML() {
+    soot.G.v().reset();
+    String source = verySimple_Klass;
+    String fileOut = verySimple_Klass_yaml_1;
+    Listing type = Listing.YAMLGeneric;
+    new File(fileOut).delete();
+
+    if (isLinux) {
+      String args =
+          makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES)
+              + makeArg(argsIdentifier.FORMATOUT, type)
+              + makeArg(argsIdentifier.SOURCE, source)
+              + makeArg(argsIdentifier.NOEXIT)
+              + makeArg(argsIdentifier.ANDROID, "/InvalidPath/")
+              + makeArg(argsIdentifier.VERYVERBOSE)
+              // + makeArg(argsIdentifier.STREAM)
+              + makeArg(argsIdentifier.PRETTY)
+              + makeArg(argsIdentifier.OUT, fileOut);
+
+      try {
+        String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+        Report report = Report.deserialize(new File(outputFile), type);
+        assertFalse(report.getIssues().isEmpty());
+        assertTrue(
+            report
+                .getIssues()
+                .stream()
+                .anyMatch(
+                    bugInstance -> {
+                      try {
+                        return bugInstance
+                            .getFullPath()
+                            .contains(Utils.retrieveFullyQualifiedName(source));
+                      } catch (ExceptionHandler e) {
+                        assertNull(e);
+                        e.printStackTrace();
+                      }
+                      return false;
+                    }));
+
+      } catch (Exception e) {
+        e.printStackTrace();
+        assertNull(e);
+      }
+    }
+  }
+
   /** main_TestableFiles_SingleTest. */
   @Test
   public void main_TestableFiles_SingleTest() {

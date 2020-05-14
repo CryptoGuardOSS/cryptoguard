@@ -23,7 +23,9 @@ public enum Listing {
   //region Values
   Legacy("Legacy", "L", ".txt", true, null),
   ScarfXML("ScarfXML", "SX", null, true, JacksonSerializer.JacksonType.XML),
-  Default("Default", "D", null, true, JacksonSerializer.JacksonType.JSON);
+  Default("Default", "D", null, true, JacksonSerializer.JacksonType.JSON),
+  YAMLGeneric("Default", "Y", null, true, JacksonSerializer.JacksonType.YAML),
+  XMLGeneric("Default", "X", null, true, JacksonSerializer.JacksonType.XML);
   private static final Logger log = org.apache.logging.log4j.LogManager.getLogger(Listing.class);
   //endregion
   //region Attributes

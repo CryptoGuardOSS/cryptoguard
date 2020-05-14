@@ -31,7 +31,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
   "-SchemaVersion",
   "-DateTime",
   "-UUID",
-  "ProjectName",
+  "projectName",
   "ProjectVersion",
   "Target",
   "Issues",
@@ -77,7 +77,7 @@ public class Report implements Serializable {
    *
    * <p>(Required)
    */
-  @JsonProperty("ProjectName")
+  @JsonProperty("projectName")
   private String projectName;
   /**
    * The Project Version
@@ -148,6 +148,10 @@ public class Report implements Serializable {
     this.heuristics = heuristics;
   }
 
+  public static Report deserialize(File file) throws ExceptionHandler {
+    return deserialize(file, Listing.Default);
+  }
+
   /**
    * deserialize.
    *
@@ -155,10 +159,10 @@ public class Report implements Serializable {
    * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport} object.
    * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
    */
-  public static Report deserialize(File file) throws ExceptionHandler {
+  public static Report deserialize(File file, Listing readType) throws ExceptionHandler {
     try {
 
-      ObjectMapper deserializer = Listing.Default.getJacksonType().getOutputMapper();
+      ObjectMapper deserializer = readType.getJacksonType().getOutputMapper();
 
       return deserializer.readValue(file, Report.class);
 
@@ -300,7 +304,7 @@ public class Report implements Serializable {
    *
    * @return a {@link java.lang.String} object.
    */
-  @JsonProperty("ProjectName")
+  @JsonProperty("projectName")
   public String getProjectName() {
     return projectName;
   }
@@ -314,7 +318,7 @@ public class Report implements Serializable {
    *
    * @param projectName a {@link java.lang.String} object.
    */
-  @JsonProperty("ProjectName")
+  @JsonProperty("projectName")
   public void setProjectName(String projectName) {
     this.projectName = projectName;
   }
