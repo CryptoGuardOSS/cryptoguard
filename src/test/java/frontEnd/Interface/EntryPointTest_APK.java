@@ -124,6 +124,98 @@ public class EntryPointTest_APK {
         }
     }
 
+    /**
+     * <p>main_TestableApk.</p>
+     */
+    @Test
+    public void main_TestableApk_CSV() {
+        String fileOut = tempFileOutApk_CSV;
+        new File(fileOut).delete();
+
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.APK) +
+                            makeArg(argsIdentifier.SOURCE, pathToAPK) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.CSVDefault) +
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.OUT, fileOut);
+
+            try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+                List<String> results = Files.readAllLines(Paths.get(outputFile), StandardCharsets.UTF_8);
+                assertTrue(results.size() >= 10);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    /**
+     * <p>main_TestableApk.</p>
+     */
+    @Test
+    public void main_TestableApk_CSV_Stream() {
+        String fileOut = tempFileOutApk_CSVStream;
+        new File(fileOut).delete();
+
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.APK) +
+                            makeArg(argsIdentifier.SOURCE, pathToAPK) +
+                            makeArg(argsIdentifier.FORMATOUT, Listing.CSVDefault) +
+                            makeArg(argsIdentifier.OUT, fileOut) +
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.STREAM);
+
+            try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+                List<String> results = Files.readAllLines(Paths.get(outputFile), StandardCharsets.UTF_8);
+                assertTrue(results.size() >= 10);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
+    /**
+     * <p>main_TestableApk.</p>
+     */
+    //@Test
+    public void main_TestableApk_YAML_Stream() {
+        String fileOut = tempFileOutApk_YAMLStream;
+        new File(fileOut).delete();
+
+        if (isLinux) {
+            String args =
+                    makeArg(argsIdentifier.FORMAT, EngineType.APK) +
+                            makeArg(argsIdentifier.SOURCE, pathToAPK) +
+                            //makeArg(argsIdentifier.FORMATOUT, Listing.YDefault) +
+                            makeArg(argsIdentifier.OUT, fileOut) +
+                            makeArg(argsIdentifier.NOEXIT) +
+                            makeArg(argsIdentifier.STREAM);
+
+            try {
+                String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+                List<String> results = Files.readAllLines(Paths.get(outputFile), StandardCharsets.UTF_8);
+                assertTrue(results.size() >= 10);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                assertNull(e);
+            }
+        }
+    }
+
     @Test
     public void main_TestableApk_Scarf_XArgs() {
         String fileOut = tempFileOutApk_Scarf_XArgs;

@@ -97,7 +97,10 @@ public class TestUtilities {
     public static final String tempFileOutXML_Class_1 = Utils.osPathJoin(testPath, "java-class-file_1.xml");
     public static final String tempFileOutXML_Class_Stream_0 = Utils.osPathJoin(testPath, "java-class-file-stream_0.xml");
     public static final String tempFileOutApk = Utils.osPathJoin(testPath, "app-debug.txt");
+    public static final String tempFileOutApk_CSV = Utils.osPathJoin(testPath, "app-debug.csv");
     public static final String tempFileOutApk_Steam = Utils.osPathJoin(testPath, "app-debug_Stream.txt");
+    public static final String tempFileOutApk_CSVStream = Utils.osPathJoin(testPath, "app-debug_Stream.csv");
+    public static final String tempFileOutApk_YAMLStream = Utils.osPathJoin(testPath, "app-debug_Stream.yaml");
     public static final String tempFileOutApk_Scarf = Utils.osPathJoin(testPath, "app-debug.xml");
     public static final String tempFileOutApk_Scarf_XArgs = Utils.osPathJoin(testPath, "app-debug_XArgs.xml");
     public static final String tempFileOutApk_Scarf_Steam = Utils.osPathJoin(testPath, "app-debug_Stream.xml");

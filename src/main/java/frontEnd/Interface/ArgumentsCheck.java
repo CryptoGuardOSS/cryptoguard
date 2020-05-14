@@ -286,7 +286,7 @@ public class ArgumentsCheck {
         log.trace("Retrieving the dependency files.");
         List<String> vDeps = Utils.retrieveFilePathTypes(new ArrayList<>(dependencies), false, false);
         if (vDeps.size() > 0)
-            log.debug("Using the source file(s) :" + retrieveFullyQualifiedName(vDeps).toString());
+            log.debug("Using the dependency file(s) :" + retrieveFullyQualifiedName(vDeps).toString());
         //endregion
         //endregion
 

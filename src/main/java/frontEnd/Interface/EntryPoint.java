@@ -40,7 +40,6 @@ public class EntryPoint {
         try {
             //Fail Fast on the input validation
             EnvironmentInformation generalInfo = ArgumentsCheck.paramaterCheck(strippedArgs);
-            exitingJVM = generalInfo.getKillJVM();
 
             System.out.println(SubRunner.run(generalInfo));
 

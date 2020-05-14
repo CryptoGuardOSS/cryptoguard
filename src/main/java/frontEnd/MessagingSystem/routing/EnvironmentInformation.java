@@ -525,6 +525,14 @@ public class EnvironmentInformation {
 
         return split[split.length - 1];
     }
+
+    public String getComputerOS() {
+        return Utils.getPlatform();
+    }
+
+    public String getJVM() {
+        return Utils.getJVMInfo();
+    }
     //endregion
     //region Helpful Methods
 
