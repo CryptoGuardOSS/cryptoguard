@@ -1,148 +1,145 @@
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified"
-           elementFormDefault="qualified">
-    <xs:element name="AnalyzerReport">
-        <xs:complexType>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="AnalyzerReport">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="BugInstance" maxOccurs="unbounded" minOccurs="0">
+          <xs:complexType>
             <xs:sequence>
-                <xs:element name="BugInstance" maxOccurs="unbounded" minOccurs="0">
-                    <xs:complexType>
+              <xs:element type="xs:string" name="ClassName" minOccurs="0"/>
+              <xs:element name="Methods" minOccurs="0">
+                <xs:complexType mixed="true">
+                  <xs:sequence>
+                    <xs:element name="Method" maxOccurs="unbounded" minOccurs="0">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:extension base="xs:string">
+                            <xs:attribute type="xs:byte" name="id" />
+                            <xs:attribute type="xs:boolean" name="primary" />
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="BugLocations">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Location" maxOccurs="unbounded" minOccurs="0">
+                      <xs:complexType>
                         <xs:sequence>
-                            <xs:element type="xs:string" name="ClassName" minOccurs="0"/>
-                            <xs:element name="Methods" minOccurs="0">
-                                <xs:complexType mixed="true">
-                                    <xs:sequence>
-                                        <xs:element name="Method" maxOccurs="unbounded" minOccurs="0">
-                                            <xs:complexType>
-                                                <xs:simpleContent>
-                                                    <xs:extension base="xs:string">
-                                                        <xs:attribute type="xs:byte" name="id"/>
-                                                        <xs:attribute type="xs:boolean" name="primary"/>
-                                                    </xs:extension>
-                                                </xs:simpleContent>
-                                            </xs:complexType>
-                                        </xs:element>
-                                    </xs:sequence>
-                                </xs:complexType>
-                            </xs:element>
-                            <xs:element name="BugLocations">
-                                <xs:complexType>
-                                    <xs:sequence>
-                                        <xs:element name="Location" maxOccurs="unbounded" minOccurs="0">
-                                            <xs:complexType>
-                                                <xs:sequence>
-                                                    <xs:element type="xs:string" name="SourceFile"/>
-                                                    <xs:element type="xs:long" name="StartLine" minOccurs="0"/>
-                                                    <xs:element type="xs:long" name="EndLine" minOccurs="0"/>
-                                                    <xs:element type="xs:short" name="StartColumn" minOccurs="0"/>
-                                                    <xs:element type="xs:string" name="Explanation" minOccurs="0"/>
-                                                    <xs:element type="xs:short" name="EndColumn" minOccurs="0"/>
-                                                </xs:sequence>
-                                                <xs:attribute type="xs:long" name="id"/>
-                                                <xs:attribute type="xs:boolean" name="primary"/>
-                                            </xs:complexType>
-                                        </xs:element>
-                                    </xs:sequence>
-                                </xs:complexType>
-                            </xs:element>
-                            <xs:element type="xs:short" name="CweId" maxOccurs="unbounded" minOccurs="0"/>
-                            <xs:element type="xs:string" name="BugGroup" minOccurs="0"/>
-                            <xs:element type="xs:string" name="BugCode" minOccurs="0"/>
-                            <xs:element type="xs:string" name="BugRank" minOccurs="0"/>
-                            <xs:element type="xs:string" name="BugSeverity" minOccurs="0"/>
-                            <xs:element type="xs:string" name="BugMessage"/>
-                            <xs:element type="xs:string" name="ResolutionSuggestion" minOccurs="0"/>
-                            <xs:element name="BugTrace">
-                                <xs:complexType>
-                                    <xs:sequence>
-                                        <xs:element type="xs:string" name="BuildId"/>
-                                        <xs:element type="xs:string" name="AssessmentReportFile"/>
-                                        <xs:element name="InstanceLocation" minOccurs="0">
-                                            <xs:complexType mixed="true">
-                                                <xs:sequence>
-                                                    <xs:element name="LineNum" minOccurs="0">
-                                                        <xs:complexType>
-                                                            <xs:sequence>
-                                                                <xs:element type="xs:long" name="Start"/>
-                                                                <xs:element type="xs:long" name="End"/>
-                                                            </xs:sequence>
-                                                        </xs:complexType>
-                                                    </xs:element>
-                                                    <xs:element type="xs:string" name="Xpath" minOccurs="0"/>
-                                                </xs:sequence>
-                                            </xs:complexType>
-                                        </xs:element>
-                                    </xs:sequence>
-                                </xs:complexType>
-                            </xs:element>
+                          <xs:element type="xs:string" name="SourceFile"/>
+                          <xs:element type="xs:long" name="StartLine" minOccurs="0"/>
+                          <xs:element type="xs:long" name="EndLine" minOccurs="0"/>
+                          <xs:element type="xs:short" name="StartColumn" minOccurs="0"/>
+                          <xs:element type="xs:string" name="Explanation" minOccurs="0"/>
+                          <xs:element type="xs:short" name="EndColumn" minOccurs="0"/>
                         </xs:sequence>
-                        <xs:attribute type="xs:long" name="id"/>
-                    </xs:complexType>
-                </xs:element>
-                <xs:element name="BugSummary" maxOccurs="1" minOccurs="0">
-                    <xs:complexType mixed="true">
+                        <xs:attribute type="xs:long" name="id" />
+                        <xs:attribute type="xs:boolean" name="primary" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element type="xs:short" name="CweId" maxOccurs="unbounded" minOccurs="0"/>
+              <xs:element type="xs:string" name="BugGroup" minOccurs="0"/>
+              <xs:element type="xs:string" name="BugCode" minOccurs="0"/>
+              <xs:element type="xs:string" name="BugRank" minOccurs="0"/>
+              <xs:element type="xs:string" name="BugSeverity" minOccurs="0"/>
+              <xs:element type="xs:string" name="BugMessage"/>
+              <xs:element type="xs:string" name="ResolutionSuggestion" minOccurs="0"/>
+              <xs:element name="BugTrace" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element type="xs:string" name="BuildId" minOccurs="0"/>
+                    <xs:element type="xs:string" name="AssessmentReportFile" minOccurs="0"/>
+                    <xs:element name="InstanceLocation" minOccurs="0">
+                      <xs:complexType mixed="true">
                         <xs:sequence>
-                            <xs:element name="BugCategory" maxOccurs="unbounded" minOccurs="0">
-                                <xs:complexType>
-                                    <xs:attribute type="xs:string" name="group"/>
-                                    <xs:attribute type="xs:string" name="code"/>
-                                    <xs:attribute type="xs:long" name="count"/>
-                                    <xs:attribute type="xs:long" name="bytes"/>
-                                </xs:complexType>
-                            </xs:element>
+                          <xs:element name="LineNum" minOccurs="0">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element type="xs:long" name="Start"/>
+                                <xs:element type="xs:long" name="End"/>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element type="xs:string" name="Xpath" minOccurs="0"/>
                         </xs:sequence>
-                    </xs:complexType>
-                </xs:element>
-                <xs:element name="Metric" maxOccurs="unbounded" minOccurs="0">
-                    <xs:complexType mixed="true">
-                        <xs:sequence>
-                            <xs:element name="Location" minOccurs="0">
-                                <xs:complexType>
-                                    <xs:sequence>
-                                        <xs:element type="xs:string" name="SourceFile" minOccurs="0"/>
-                                    </xs:sequence>
-                                </xs:complexType>
-                            </xs:element>
-                            <xs:element type="xs:string" name="Class" minOccurs="0"/>
-                            <xs:element type="xs:string" name="Method" minOccurs="0"/>
-                            <xs:element type="xs:string" name="Type" minOccurs="0"/>
-                            <xs:element type="xs:string" name="Value" minOccurs="0"/>
-                        </xs:sequence>
-                        <xs:attribute type="xs:long" name="id"/>
-                    </xs:complexType>
-                </xs:element>
-                <xs:element name="MetricSummaries" maxOccurs="1" minOccurs="0">
-                    <xs:complexType mixed="true">
-                        <xs:sequence>
-                            <xs:element name="MetricSummary" maxOccurs="unbounded" minOccurs="0">
-                                <xs:complexType mixed="true">
-                                    <xs:sequence>
-                                        <xs:element type="xs:string" name="Type" minOccurs="0"/>
-                                        <xs:element type="xs:long" name="Count" minOccurs="0"/>
-                                        <xs:element type="xs:long" name="Sum" minOccurs="0"/>
-                                        <xs:element type="xs:decimal" name="SumOfSquares" minOccurs="0"/>
-                                        <xs:element type="xs:long" name="Minimum" minOccurs="0"/>
-                                        <xs:element type="xs:long" name="Maximum" minOccurs="0"/>
-                                        <xs:element type="xs:decimal" name="Average" minOccurs="0"/>
-                                        <xs:element type="xs:decimal" name="StandardDeviation" minOccurs="0"/>
-                                    </xs:sequence>
-                                </xs:complexType>
-                            </xs:element>
-                        </xs:sequence>
-                    </xs:complexType>
-                </xs:element>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
             </xs:sequence>
-            <xs:attribute type="xs:string" name="tool_name"/>
-            <xs:attribute type="xs:string" name="tool_version"/>
-            <xs:attribute type="xs:string" name="parser_fw"/>
-            <xs:attribute type="xs:string" name="parser_fw_version"/>
-            <xs:attribute type="xs:string" name="build_root_dir"/>
-            <xs:attribute type="xs:string" name="platform_name"/>
-            <xs:attribute type="xs:string" name="package_name"/>
-            <xs:attribute type="xs:string" name="package_version"/>
-            <xs:attribute type="xs:string" name="package_root_dir"/>
-            <xs:attribute type="xs:string" name="assessment_start_ts"/>
-            <xs:attribute type="xs:string" name="assess_fw"/>
-            <xs:attribute type="xs:string" name="assess_fw_version"/>
-            <xs:attribute type="xs:string" name="uuid"/>
-        </xs:complexType>
-    </xs:element>
+            <xs:attribute type="xs:long" name="id" />
+          </xs:complexType>
+        </xs:element>
+	<xs:element name="BugSummary" maxOccurs="1" minOccurs="0">
+	   <xs:complexType mixed="true">
+                  <xs:sequence>
+                    <xs:element name="BugCategory" maxOccurs="unbounded" minOccurs="0">
+                      <xs:complexType>
+                            <xs:attribute type="xs:string" name="group" />
+                            <xs:attribute type="xs:string" name="code" />
+			    <xs:attribute type="xs:long" name="count" />
+			    <xs:attribute type="xs:long" name="bytes" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+            </xs:complexType>
+	</xs:element>
+	<xs:element name="Metric" maxOccurs="unbounded" minOccurs="0">
+	  <xs:complexType mixed="true">
+	    <xs:sequence>
+              <xs:element name="Location" minOccurs="0">
+		<xs:complexType>
+		  <xs:sequence>
+		    <xs:element type="xs:string" name="SourceFile" minOccurs="0"/>
+		  </xs:sequence>
+		</xs:complexType>
+	      </xs:element>
+	      <xs:element type="xs:string" name="Class" minOccurs="0"/>
+	      <xs:element type="xs:string" name="Method" minOccurs="0"/>
+  	      <xs:element type="xs:string" name="Type" minOccurs="0"/>
+	      <xs:element type="xs:string" name="Value" minOccurs="0"/>
+	    </xs:sequence>
+            <xs:attribute type="xs:long" name="id" />
+	  </xs:complexType>
+	</xs:element>
+	<xs:element name="MetricSummaries" maxOccurs="1" minOccurs="0">
+	  <xs:complexType mixed="true">
+	    <xs:sequence>
+	      <xs:element name="MetricSummary" maxOccurs="unbounded" minOccurs="0">
+	        <xs:complexType mixed="true">
+		  <xs:sequence>
+		    <xs:element type="xs:string" name="Type" minOccurs="0"/>
+		    <xs:element type="xs:long" name="Count" minOccurs="0"/>
+		    <xs:element type="xs:long" name="Sum" minOccurs="0"/>
+		    <xs:element type="xs:decimal" name="SumOfSquares" minOccurs="0"/>
+		    <xs:element type="xs:long" name="Minimum" minOccurs="0"/>
+		    <xs:element type="xs:long" name="Maximum" minOccurs="0"/>
+		    <xs:element type="xs:decimal" name="Average" minOccurs="0"/>
+		    <xs:element type="xs:decimal" name="StandardDeviation" minOccurs="0"/>
+		  </xs:sequence>
+	        </xs:complexType>
+	      </xs:element>
+	    </xs:sequence>
+	  </xs:complexType>
+	</xs:element>
+      </xs:sequence>
+      <xs:attribute type="xs:string" name="tool_name"/>
+      <xs:attribute type="xs:string" name="tool_version"/>
+      <xs:attribute type="xs:string" name="parser_fw"/>
+      <xs:attribute type="xs:string" name="parser_fw_version"/>
+      <xs:attribute type="xs:string" name="build_root_dir"/>
+      <xs:attribute type="xs:string" name="platform_name"/>
+      <xs:attribute type="xs:string" name="package_name"/>
+      <xs:attribute type="xs:string" name="package_version"/>
+      <xs:attribute type="xs:string" name="package_root_dir"/>
+      <xs:attribute type="xs:string" name="assessment_start_ts"/>
+      <xs:attribute type="xs:string" name="uuid"/>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

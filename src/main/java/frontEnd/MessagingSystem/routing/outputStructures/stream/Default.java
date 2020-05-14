@@ -141,7 +141,7 @@ public class Default extends Structure {
                     break;
                 case YAML:
                     output = output.replace("---\n", "\n ").replace("\n", "\n  ").replaceFirst("\n  ", "\n");
-                    output = output.substring(0, output.lastIndexOf("\n"));
+                    //output = output.substring(0, output.lastIndexOf("\n"));
                     log.debug("Altered output: " + output);
                     break;
             }
@@ -161,7 +161,7 @@ public class Default extends Structure {
                     break;
                 case YAML:
                     output = output.replace("\n", "\n    ").replace("---\n", "\n- ").replace("\n-     ", "\n  - ");
-                    output = output.substring(0, output.lastIndexOf("\n"));
+                    //output = output.substring(0, output.lastIndexOf("\n"));
                     break;
             }
         }

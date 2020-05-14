@@ -24,7 +24,10 @@ public enum Listing {
     //region Values
     Legacy("Legacy", "L", ".txt", true, null),
     ScarfXML("ScarfXML", "SX", null, true, JacksonSerializer.JacksonType.XML),
-    Default("Default", "D", null, true, JacksonSerializer.JacksonType.JSON);
+    Default("Default", "D", null, true, JacksonSerializer.JacksonType.JSON),
+    //YDefault("Default", "DY", null, true, JacksonSerializer.JacksonType.YAML),
+    //XDefault("Default", "DX", null, true, JacksonSerializer.JacksonType.XML),
+    CSVDefault("CSVDefault", "CSV", ".csv", true, null);
     //endregion
     //region Attributes
     private final String blockPath = "frontEnd.MessagingSystem.routing.outputStructures.block.";
