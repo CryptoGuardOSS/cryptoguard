@@ -215,7 +215,13 @@ public class TestUtilities {
   public static final String verySimple_Klass_xml_0 =
       Utils.osPathJoin(testPath, "verySimple_klass_0.xml");
   public static final String verySimple_Klass_xml_1 =
-          Utils.osPathJoin(testPath, "verySimple_klass_1.xml");
+      Utils.osPathJoin(testPath, "verySimple_klass_1.xml");
+  public static final String verySimple_Klass_csv_1 =
+      Utils.osPathJoin(testPath, "verySimple_klass_1.csv");
+  public static final String verySimple_Klass_xml_2 =
+      Utils.osPathJoin(testPath, "verySimple_klass_2.xml");
+  public static final String verySimple_Klass_yaml_1 =
+      Utils.osPathJoin(testPath, "verySimple_klass_2.yaml");
   public static final ArrayList<String> srcOneGrvInputArr =
       new ArrayList<>(
           Arrays.asList(

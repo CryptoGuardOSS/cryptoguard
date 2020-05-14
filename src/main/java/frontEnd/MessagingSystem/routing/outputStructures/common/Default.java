@@ -25,7 +25,6 @@ public class Default {
   /** Constant <code>Version</code> */
   public static final Integer Version = 3;
   //endregion
-
   //region UnMarshallers
 
   /**
@@ -245,6 +244,9 @@ public class Default {
 
     return loc;
   }
+
+  //endregion
+  //region Common Methods
 
   //endregion
 }
