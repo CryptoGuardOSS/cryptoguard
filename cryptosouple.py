@@ -509,7 +509,7 @@ class argsUtils(object):
                     _temp = [argsUtils.customDir(rawString)]
 
                 if _temp is not None:
-                    output = output + _temp 
+                    output = output + _temp
 
         if isinstance(string, str):
             output = argsUtils.fileStringLooper(string)
@@ -652,8 +652,10 @@ class argsUtils(object):
 
         depz = ""
         if options.dependency is not None:
-            for string in options.dependency:
-                depz = depz + " " + f"add(\"{string[0]}\");\n                            "
+            for _temp in options.dependency:
+                for _itr in _temp:
+                    for string in _itr.split(":"):
+                        depz = depz + " " + f"add(\"{string}\");\n                            "
 
         dependency = ""
         if depz.strip():
@@ -715,7 +717,9 @@ class argsUtils(object):
                                     makeArg(argsIdentifier.SCONFIG, \"{options.Sconfig.name}\") + """
 
         argz = argz + """
-                                    makeArg(argsIdentifier.SOURCE, source);
+                                    makeArg(argsIdentifier.SOURCE, source) +
+                                    makeArg(argsIdentifier.PRETTY) +
+                                    makeArg(argsIdentifier.NOEXIT);
                       """
 
         output = f"""

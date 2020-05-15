@@ -1,7 +1,8 @@
+/* Licensed under GPL-3.0 */
 package frontEnd.MessagingSystem;
 
 /**
- * <p>AnalysisLocation class.</p>
+ * AnalysisLocation class.
  *
  * @author franceme
  * @version 03.07.01
@@ -9,152 +10,150 @@ package frontEnd.MessagingSystem;
  */
 public class AnalysisLocation {
 
-    //region Attributes
-    private Integer lineStart = null;
-    private Integer lineEnd = null;
-    private Integer colStart = null;
-    private Integer colEnd = null;
-    private Integer methodNumber = -1;
-    //endregion
+  //region Attributes
+  private Integer lineStart = null;
+  private Integer lineEnd = null;
+  private Integer colStart = null;
+  private Integer colEnd = null;
+  private Integer methodNumber = -1;
+  //endregion
 
-    //region Constructor
+  //region Constructor
 
-    /**
-     * <p>Constructor for AnalysisLocation.</p>
-     *
-     * @param start a {@link java.lang.Integer} object.
-     * @param end   a {@link java.lang.Integer} object.
-     */
-    public AnalysisLocation(Integer start, Integer end) {
-        this.lineStart = start;
-        this.lineEnd = end;
+  /**
+   * Constructor for AnalysisLocation.
+   *
+   * @param start a {@link java.lang.Integer} object.
+   * @param end a {@link java.lang.Integer} object.
+   */
+  public AnalysisLocation(Integer start, Integer end) {
+    this.lineStart = start;
+    this.lineEnd = end;
+  }
+
+  /**
+   * Constructor for AnalysisLocation.
+   *
+   * @param lineNumber a {@link java.lang.Integer} object.
+   */
+  public AnalysisLocation(Integer lineNumber) {
+    this.lineStart = lineNumber;
+    this.lineEnd = lineNumber;
+  }
+
+  /**
+   * Constructor for AnalysisLocation.
+   *
+   * @param start a {@link java.lang.Integer} object.
+   * @param end a {@link java.lang.Integer} object.
+   * @param methodNumber a {@link java.lang.Integer} object.
+   */
+  public AnalysisLocation(Integer start, Integer end, Integer methodNumber) {
+    this.lineStart = start;
+    this.lineEnd = end;
+    this.methodNumber = methodNumber;
+  }
+  //endregion
+
+  //region Overridden Methods
+
+  /** {@inheritDoc} */
+  @Override
+  public String toString() {
+    StringBuilder output = new StringBuilder();
+
+    output.append(this.lineStart);
+
+    if (!this.lineEnd.equals(this.lineStart)) {
+      output.append("-");
+      output.append(this.lineEnd);
     }
 
-    /**
-     * <p>Constructor for AnalysisLocation.</p>
-     *
-     * @param lineNumber a {@link java.lang.Integer} object.
-     */
-    public AnalysisLocation(Integer lineNumber) {
-        this.lineStart = lineNumber;
-        this.lineEnd = lineNumber;
-    }
+    return output.toString();
+  }
+  //endregion
 
-    /**
-     * <p>Constructor for AnalysisLocation.</p>
-     *
-     * @param start        a {@link java.lang.Integer} object.
-     * @param end          a {@link java.lang.Integer} object.
-     * @param methodNumber a {@link java.lang.Integer} object.
-     */
-    public AnalysisLocation(Integer start, Integer end, Integer methodNumber) {
-        this.lineStart = start;
-        this.lineEnd = end;
-        this.methodNumber = methodNumber;
-    }
-    //endregion
+  //region Getters
 
-    //region Overridden Methods
+  /**
+   * Getter for the field <code>lineStart</code>.
+   *
+   * @return a {@link java.lang.Integer} object.
+   */
+  public Integer getLineStart() {
+    return lineStart;
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String toString() {
-        StringBuilder output = new StringBuilder();
+  /**
+   * Getter for the field <code>lineEnd</code>.
+   *
+   * @return a {@link java.lang.Integer} object.
+   */
+  public Integer getLineEnd() {
+    return lineEnd;
+  }
 
-        output.append(this.lineStart);
+  /**
+   * Getter for the field <code>methodNumber</code>.
+   *
+   * @return a {@link java.lang.Integer} object.
+   */
+  public Integer getMethodNumber() {
+    return methodNumber;
+  }
 
-        if (!this.lineEnd.equals(this.lineStart)) {
-            output.append("-");
-            output.append(this.lineEnd);
-        }
+  /**
+   * Setter for the field <code>methodNumber</code>.
+   *
+   * @param methodNumber a {@link java.lang.Integer} object.
+   */
+  public void setMethodNumber(Integer methodNumber) {
+    this.methodNumber = methodNumber;
+  }
 
-        return output.toString();
-    }
-    //endregion
+  /**
+   * Getter for colStart
+   *
+   * <p>getColStart()
+   *
+   * @return {@link java.lang.Integer} - The colStart.
+   */
+  public Integer getColStart() {
+    return colStart;
+  }
 
-    //region Getters
+  /**
+   * Setter for colStart
+   *
+   * <p>setColStart(java.lang.Integer colStart)
+   *
+   * @param colStart {@link java.lang.Integer} - The value to set as colStart
+   */
+  public void setColStart(Integer colStart) {
+    this.colStart = colStart;
+  }
 
-    /**
-     * <p>Getter for the field <code>lineStart</code>.</p>
-     *
-     * @return a {@link java.lang.Integer} object.
-     */
-    public Integer getLineStart() {
-        return lineStart;
-    }
+  /**
+   * Getter for colEnd
+   *
+   * <p>getColEnd()
+   *
+   * @return {@link java.lang.Integer} - The colEnd.
+   */
+  public Integer getColEnd() {
+    return colEnd;
+  }
 
-    /**
-     * <p>Getter for the field <code>lineEnd</code>.</p>
-     *
-     * @return a {@link java.lang.Integer} object.
-     */
-    public Integer getLineEnd() {
-        return lineEnd;
-    }
-
-    /**
-     * <p>Getter for the field <code>methodNumber</code>.</p>
-     *
-     * @return a {@link java.lang.Integer} object.
-     */
-    public Integer getMethodNumber() {
-        return methodNumber;
-    }
-
-    /**
-     * <p>Setter for the field <code>methodNumber</code>.</p>
-     *
-     * @param methodNumber a {@link java.lang.Integer} object.
-     */
-    public void setMethodNumber(Integer methodNumber) {
-        this.methodNumber = methodNumber;
-    }
-
-    /**
-     * Getter for colStart
-     *
-     * <p>getColStart()</p>
-     *
-     * @return {@link java.lang.Integer} - The colStart.
-     */
-    public Integer getColStart() {
-        return colStart;
-    }
-
-    /**
-     * Setter for colStart
-     *
-     * <p>setColStart(java.lang.Integer colStart)</p>
-     *
-     * @param colStart {@link java.lang.Integer} - The value to set as colStart
-     */
-    public void setColStart(Integer colStart) {
-        this.colStart = colStart;
-    }
-
-    /**
-     * Getter for colEnd
-     *
-     * <p>getColEnd()</p>
-     *
-     * @return {@link java.lang.Integer} - The colEnd.
-     */
-    public Integer getColEnd() {
-        return colEnd;
-    }
-
-    /**
-     * Setter for colEnd
-     *
-     * <p>setColEnd(java.lang.Integer colEnd)</p>
-     *
-     * @param colEnd {@link java.lang.Integer} - The value to set as colEnd
-     */
-    public void setColEnd(Integer colEnd) {
-        this.colEnd = colEnd;
-    }
-    //endregion
+  /**
+   * Setter for colEnd
+   *
+   * <p>setColEnd(java.lang.Integer colEnd)
+   *
+   * @param colEnd {@link java.lang.Integer} - The value to set as colEnd
+   */
+  public void setColEnd(Integer colEnd) {
+    this.colEnd = colEnd;
+  }
+  //endregion
 
 }

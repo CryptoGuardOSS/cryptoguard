@@ -1,3 +1,4 @@
+/* Licensed under GPL-3.0 */
 package rule.base;
 
 import analyzer.backward.Analysis;
@@ -6,17 +7,16 @@ import analyzer.backward.InvokeUnitContainer;
 import analyzer.backward.UnitContainer;
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
-import soot.ValueBox;
-import soot.jimple.Constant;
-import util.Utils;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+import soot.ValueBox;
+import soot.jimple.Constant;
+import util.Utils;
 
 /**
- * <p>Abstract PatternMatcherRuleChecker class.</p>
+ * Abstract PatternMatcherRuleChecker class.
  *
  * @author CryptoguardTeam
  * @version 03.07.01
@@ -24,102 +24,104 @@ import java.util.regex.Pattern;
  */
 public abstract class PatternMatcherRuleChecker extends BaseRuleChecker {
 
-    //Todo: Add a field to keep track of all the found patterns ...
+  //Todo: Add a field to keep track of all the found patterns ...
 
-    private final String rule = getRuleId();
-    private final String ruleDesc = RULE_VS_DESCRIPTION.get(rule);
-    private Map<UnitContainer, List<String>> predictableSourcMap = new HashMap<>();
-    private Map<UnitContainer, List<String>> othersSourceMap = new HashMap<>();
+  private final String rule = getRuleId();
+  private final String ruleDesc = RULE_VS_DESCRIPTION.get(rule);
+  private Map<UnitContainer, List<String>> predictableSourcMap = new HashMap<>();
+  private Map<UnitContainer, List<String>> othersSourceMap = new HashMap<>();
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void analyzeSlice(Analysis analysis) {
-        if (analysis.getAnalysisResult().isEmpty()) {
-            return;
-        }
-
-        for (UnitContainer e : analysis.getAnalysisResult()) {
-
-            if (e instanceof AssignInvokeUnitContainer) {
-                List<UnitContainer> resFromInside = ((AssignInvokeUnitContainer) e).getAnalysisResult();
-
-                for (UnitContainer unit : resFromInside) {
-                    checkForMatch(unit);
-                }
-            }
-
-            if (e instanceof InvokeUnitContainer) {
-                List<UnitContainer> resFromInside = ((InvokeUnitContainer) e).getAnalysisResult();
-
-                for (UnitContainer unit : resFromInside) {
-                    checkForMatch(unit);
-                }
-            }
-
-            checkForMatchInternal(e);
-        }
+  /** {@inheritDoc} */
+  @Override
+  public void analyzeSlice(Analysis analysis) {
+    if (analysis.getAnalysisResult().isEmpty()) {
+      return;
     }
 
-    private void checkForMatch(UnitContainer e) {
+    for (UnitContainer e : analysis.getAnalysisResult()) {
 
-        if (e instanceof AssignInvokeUnitContainer) {
-            List<UnitContainer> resFromInside = ((AssignInvokeUnitContainer) e).getAnalysisResult();
+      if (e instanceof AssignInvokeUnitContainer) {
+        List<UnitContainer> resFromInside = ((AssignInvokeUnitContainer) e).getAnalysisResult();
 
-            for (UnitContainer unit : resFromInside) {
-                checkForMatch(unit);
-            }
+        for (UnitContainer unit : resFromInside) {
+          checkForMatch(unit);
         }
+      }
 
-        if (e instanceof InvokeUnitContainer) {
-            List<UnitContainer> resFromInside = ((InvokeUnitContainer) e).getAnalysisResult();
+      if (e instanceof InvokeUnitContainer) {
+        List<UnitContainer> resFromInside = ((InvokeUnitContainer) e).getAnalysisResult();
 
-            for (UnitContainer unit : resFromInside) {
-                checkForMatch(unit);
-            }
+        for (UnitContainer unit : resFromInside) {
+          checkForMatch(unit);
         }
+      }
 
-        checkForMatchInternal(e);
+      checkForMatchInternal(e);
+    }
+  }
+
+  private void checkForMatch(UnitContainer e) {
+
+    if (e instanceof AssignInvokeUnitContainer) {
+      List<UnitContainer> resFromInside = ((AssignInvokeUnitContainer) e).getAnalysisResult();
+
+      for (UnitContainer unit : resFromInside) {
+        checkForMatch(unit);
+      }
     }
 
-    private void checkForMatchInternal(UnitContainer e) {
-        for (ValueBox usebox : e.getUnit().getUseBoxes()) {
-            if (usebox.getValue() instanceof Constant) {
-                boolean found = false;
+    if (e instanceof InvokeUnitContainer) {
+      List<UnitContainer> resFromInside = ((InvokeUnitContainer) e).getAnalysisResult();
 
-                for (String regex : getPatternsToMatch()) {
-                    if (Pattern.compile(regex, Pattern.CASE_INSENSITIVE).matcher(usebox.getValue().toString()).matches()) {
-                        putIntoMap(predictableSourcMap, e, usebox.getValue().toString());
-                        found = true;
-                        break;
-                    }
-                }
+      for (UnitContainer unit : resFromInside) {
+        checkForMatch(unit);
+      }
+    }
 
-                if (!found) {
-                    putIntoMap(othersSourceMap, e, usebox.getValue().toString());
-                }
-            }
+    checkForMatchInternal(e);
+  }
+
+  private void checkForMatchInternal(UnitContainer e) {
+    for (ValueBox usebox : e.getUnit().getUseBoxes()) {
+      if (usebox.getValue() instanceof Constant) {
+        boolean found = false;
+
+        for (String regex : getPatternsToMatch()) {
+          if (Pattern.compile(regex, Pattern.CASE_INSENSITIVE)
+              .matcher(usebox.getValue().toString())
+              .matches()) {
+            putIntoMap(predictableSourcMap, e, usebox.getValue().toString());
+            found = true;
+            break;
+          }
         }
+
+        if (!found) {
+          putIntoMap(othersSourceMap, e, usebox.getValue().toString());
+        }
+      }
     }
+  }
 
-    /** {@inheritDoc} */
-    @Override
-    public void createAnalysisOutput(Map<String, String> xmlFileStr, List<String> sourcePaths, OutputStructure output) throws ExceptionHandler {
-        Utils.createAnalysisOutput(xmlFileStr, sourcePaths, predictableSourcMap, rule, output);
-    }
+  /** {@inheritDoc} */
+  @Override
+  public void createAnalysisOutput(
+      Map<String, String> xmlFileStr, List<String> sourcePaths, OutputStructure output)
+      throws ExceptionHandler {
+    Utils.createAnalysisOutput(xmlFileStr, sourcePaths, predictableSourcMap, rule, output);
+  }
 
-    /**
-     * <p>getPatternsToMatch.</p>
-     *
-     * @return a {@link java.util.List} object.
-     */
-    abstract public List<String> getPatternsToMatch();
+  /**
+   * getPatternsToMatch.
+   *
+   * @return a {@link java.util.List} object.
+   */
+  public abstract List<String> getPatternsToMatch();
 
-    /**
-     * <p>getRuleId.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    abstract public String getRuleId();
+  /**
+   * getRuleId.
+   *
+   * @return a {@link java.lang.String} object.
+   */
+  public abstract String getRuleId();
 }

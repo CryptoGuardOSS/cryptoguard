@@ -1,10 +1,11 @@
+/* Licensed under GPL-3.0 */
 package frontEnd.MessagingSystem.routing.inputStructures;
 
 import org.junit.After;
 import org.junit.Before;
 
 /**
- * <p>LegacyTest class.</p>
+ * LegacyTest class.
  *
  * @author franceme
  * @version $Id: $Id
@@ -12,27 +13,25 @@ import org.junit.Before;
  */
 public class LegacyTest {
 
-    //region Attributes
-    //endregion
+  //region Attributes
+  //endregion
 
-    //region Test Environment Management
+  //region Test Environment Management
 
-    /**
-     * <p>setUp.</p>
-     *
-     * @throws java.lang.Exception if any.
-     */
-    @Before
-    public void setUp() throws Exception {
-    }
+  /**
+   * setUp.
+   *
+   * @throws java.lang.Exception if any.
+   */
+  @Before
+  public void setUp() throws Exception {}
 
-    /**
-     * <p>tearDown.</p>
-     *
-     * @throws java.lang.Exception if any.
-     */
-    @After
-    public void tearDown() throws Exception {
-    }
-    //endregion
+  /**
+   * tearDown.
+   *
+   * @throws java.lang.Exception if any.
+   */
+  @After
+  public void tearDown() throws Exception {}
+  //endregion
 }
