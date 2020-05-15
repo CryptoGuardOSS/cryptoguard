@@ -62,8 +62,8 @@ public class ScarfXML {
   public static EnvironmentInformation marshalling(AnalyzerReport report) {
     EnvironmentInformation info = new EnvironmentInformation();
 
-    info.setAssessmentFramework(report.getAssessFw());
-    info.setAssessmentFrameworkVersion(report.getAssessFwVersion());
+    //info.setAssessmentFramework(report.getAssessFw());
+    //info.setAssessmentFrameworkVersion(report.getAssessFwVersion());
     info.setAssessmentStartTime(report.getAssessmentStartTs());
     info.setBuildFramework(report.getBuildFw());
     info.setBuildFrameworkVersion(report.getBuildFwVersion());

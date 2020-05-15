@@ -25,8 +25,8 @@ public enum Listing {
   ScarfXML("ScarfXML", "SX", null, true, JacksonSerializer.JacksonType.XML),
   Default("Default", "D", null, true, JacksonSerializer.JacksonType.JSON),
   YAMLGeneric("Default", "Y", null, true, JacksonSerializer.JacksonType.YAML),
-  XMLGeneric("Default", "X", null, true, JacksonSerializer.JacksonType.XML);
-  private static final Logger log = org.apache.logging.log4j.LogManager.getLogger(Listing.class);
+  XMLGeneric("Default", "X", null, true, JacksonSerializer.JacksonType.XML),
+  CSVDefault("CSVDefault", "CSV", ".csv", true, null);
   //endregion
   //region Attributes
   private final String blockPath = "frontEnd.MessagingSystem.routing.outputStructures.block.";
@@ -38,6 +38,7 @@ public enum Listing {
   private String outputFileExt;
   private Boolean streamEnabled;
   private JacksonSerializer.JacksonType jacksonType;
+  private Logger log;
   //endregion
 
   //region Constructor
@@ -59,6 +60,7 @@ public enum Listing {
     this.outputFileExt = outputFileExt;
     this.streamEnabled = streamed;
     this.jacksonType = jacksonType;
+    this.log = org.apache.logging.log4j.LogManager.getLogger(EnvironmentInformation.class);
   }
   //endregion
 
