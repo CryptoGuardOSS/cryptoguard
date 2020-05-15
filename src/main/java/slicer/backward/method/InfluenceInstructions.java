@@ -1,3 +1,4 @@
+/* Licensed under GPL-3.0 */
 package slicer.backward.method;
 
 /**
@@ -9,10 +10,10 @@ package slicer.backward.method;
  */
 public interface InfluenceInstructions {
 
-    /**
-     * <p>getMethodSlicingResult.</p>
-     *
-     * @return a {@link slicer.backward.method.MethodSlicingResult} object.
-     */
-    MethodSlicingResult getMethodSlicingResult();
+  /**
+   * getMethodSlicingResult.
+   *
+   * @return a {@link slicer.backward.method.MethodSlicingResult} object.
+   */
+  MethodSlicingResult getMethodSlicingResult();
 }
