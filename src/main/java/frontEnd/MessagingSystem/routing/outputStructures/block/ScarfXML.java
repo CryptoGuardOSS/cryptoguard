@@ -71,7 +71,7 @@ public class ScarfXML extends Structure {
 
     //region Creating Bug Instances
     Integer numOfBugs = 0;
-    log.trace("Adding all of the collected issues");
+    log.debug("Adding all of the collected issues");
     for (AnalysisIssue in : super.getCollection()) {
       log.debug("Marshalling and adding the issue: " + in.getInfo());
       BugInstance marshalled =
@@ -91,7 +91,7 @@ public class ScarfXML extends Structure {
 
     //region Heuristics
     if (super.getSource().getDisplayHeuristics()) {
-      log.trace("Writing the heuristics");
+      log.debug("Writing the heuristics");
       report.setHeuristics(super.getSource().getHeuristics().getScarfXMLHeuristics());
     }
     //endregion
@@ -99,7 +99,7 @@ public class ScarfXML extends Structure {
     //endregion
 
     //region Marshalling
-    log.trace("Creating the marshaller");
+    log.debug("Creating the marshaller");
     String xmlStream =
         JacksonSerializer.serialize(
             report, super.getSource().getPrettyPrint(), Listing.ScarfXML.getJacksonType());

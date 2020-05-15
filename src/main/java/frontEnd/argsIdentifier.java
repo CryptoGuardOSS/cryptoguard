@@ -28,7 +28,7 @@ public enum argsIdentifier {
       true),
   SOURCE(
       "s",
-      "file/files/*.in/dir/ClassPathString",
+      "file/files/*.in/dir/ClassPathString/xargs",
       "Required: The source to be scanned use the absolute path or send all of the source files via the file input.in; ex. find -type f *.java >> input.in.",
       "file(s)/*.in/dir",
       null,

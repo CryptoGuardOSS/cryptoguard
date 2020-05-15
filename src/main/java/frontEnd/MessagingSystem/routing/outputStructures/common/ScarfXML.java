@@ -33,8 +33,8 @@ public class ScarfXML {
     AnalyzerReport report = new AnalyzerReport();
 
     //region Setting Attributes
-    report.setAssessFw(info.getAssessmentFramework());
-    report.setAssessFwVersion(info.getAssessmentFrameworkVersion());
+    //report.setAssessFw(info.getAssessmentFramework());
+    //report.setAssessFwVersion(info.getAssessmentFrameworkVersion());
     report.setAssessmentStartTs(info.getAssessmentStartTime());
     report.setBuildFw(info.getBuildFramework());
     report.setBuildFwVersion(info.getBuildFrameworkVersion());
@@ -104,8 +104,8 @@ public class ScarfXML {
     //region Setting the instance
 
     instance.setId(id);
-    instance.setBugCode(issue.getRuleId().toString());
-    instance.setBugGroup(issue.getRule().getDesc());
+    instance.setBugCode(issue.getRule().toString());
+    //instance.setBugGroup(issue.getRule().getDesc());
     instance.setBugMessage(issue.getRule().getDesc());
 
     if (buildId != null || xPath != null) {
@@ -145,7 +145,7 @@ public class ScarfXML {
         Location newLocation = new Location();
         AnalysisLocation createdLoc = issue.getLocations().get(locationKtr);
 
-        if (createdLoc.getLineStart() != -1) newLocation.setStartLine(createdLoc.getLineStart());
+        if (createdLoc.getLineStart() > 0) newLocation.setStartLine(createdLoc.getLineStart());
 
         newLocation.setSourceFile(issue.getFullPathName());
 
@@ -174,15 +174,20 @@ public class ScarfXML {
     //endregion
 
     //region Setting BugTrace
+    /*
     BugTrace trace = new BugTrace();
-
-    if (buildId != null) trace.setBuildId(buildId);
-
+    if (buildId != null)
+        trace.setBuildId(buildId);
     trace.setAssessmentReportFile(fileName);
-
     instance.setBugTrace(trace);
+    */
     //endregion
 
+    //endregion
+    //region Optional Elements that need to be "nullified"
+    instance.setBugTrace(null);
+    instance.setBugSeverity(null);
+    instance.setBugRank(null);
     //endregion
 
     return instance;

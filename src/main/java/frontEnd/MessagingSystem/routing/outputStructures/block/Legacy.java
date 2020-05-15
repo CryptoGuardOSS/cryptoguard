@@ -67,7 +67,7 @@ public class Legacy extends Structure {
             super.getSource().getSootErrors()));
 
     Map<Integer, List<AnalysisIssue>> groupedRules = new HashMap<>();
-    log.trace("Grouping all of the rules according by number.");
+    log.debug("Grouping all of the rules according by number.");
     if (super.getCollection() != null)
       for (AnalysisIssue issue : super.getCollection()) {
         List<AnalysisIssue> tempList;
@@ -82,7 +82,7 @@ public class Legacy extends Structure {
 
     //region Changing the order of the rules
     Set<Integer> ruleOrdering = new HashSet<>();
-    log.trace("Ordering all of the rules based on the legacy output.");
+    log.debug("Ordering all of the rules based on the legacy output.");
     if (true) {
       Integer[] paperBasedOrdering = new Integer[] {3, 14, 6, 4, 12, 7, 11, 13, 9, 1, 10, 8, 5, 2};
       for (Integer rule : paperBasedOrdering)
@@ -93,7 +93,7 @@ public class Legacy extends Structure {
 
     //region Broken Rule Cycle
     for (Integer ruleNumber : ruleOrdering) {
-      log.trace("Working through the rule group " + ruleNumber);
+      log.debug("Working through the rule group " + ruleNumber);
       output.append("=======================================\n");
       output
           .append("***Violated Rule ")
@@ -115,7 +115,7 @@ public class Legacy extends Structure {
 
     //region Heuristics
     if (super.getSource().getDisplayHeuristics()) {
-      log.trace("Writing the heuristics");
+      log.debug("Writing the heuristics");
       output.append(
           frontEnd.MessagingSystem.routing.outputStructures.common.Legacy.marshalling(
               super.getSource()));
@@ -124,7 +124,7 @@ public class Legacy extends Structure {
 
     //region Timing Section
     if (super.getSource().isShowTimes()) {
-      log.trace("Writing the time measurements.");
+      log.debug("Writing the time measurements.");
       output.append(
           frontEnd.MessagingSystem.routing.outputStructures.common.Legacy.marshalling(
               super.getSource().getAnalysisMilliSeconds()));

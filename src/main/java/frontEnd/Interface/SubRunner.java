@@ -51,7 +51,7 @@ public class SubRunner {
         handler = new JavaClassFileEntry();
         break;
     }
-    log.trace("Initializing the scanning process");
+    log.debug("Initializing the scanning process");
     info.startScanning();
 
     log.info("Starting the scanning process");

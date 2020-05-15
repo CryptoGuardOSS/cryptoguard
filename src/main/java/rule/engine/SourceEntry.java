@@ -28,12 +28,12 @@ public class SourceEntry implements EntryHandler {
   /** {@inheritDoc} */
   public void Scan(EnvironmentInformation generalInfo) throws ExceptionHandler {
 
-    log.trace("Retrieving the specific project-based build parser.");
+    log.debug("Retrieving the specific project-based build parser.");
     BuildFileParser buildFileParser =
         BuildFileParserFactory.getBuildfileParser(generalInfo.getSource().get(0));
     log.debug("Using the build parser: " + buildFileParser.toString());
 
-    log.trace("Setting the project name/version");
+    log.debug("Setting the project name/version");
     generalInfo.setTargetProjectName(buildFileParser.getProjectName());
     generalInfo.setTargetProjectVersion(buildFileParser.getProjectVersion());
 
@@ -42,7 +42,7 @@ public class SourceEntry implements EntryHandler {
     Map<String, List<String>> moduleVsDependency = buildFileParser.getDependencyList();
     List<String> analyzedModules = new ArrayList<>();
 
-    log.trace("Module Iteration Start");
+    log.debug("Module Iteration Start");
     for (String module : moduleVsDependency.keySet()) {
 
       if (!analyzedModules.contains(module)) {
@@ -50,7 +50,7 @@ public class SourceEntry implements EntryHandler {
         List<String> dependencies = moduleVsDependency.get(module);
         List<String> otherdependencies = new ArrayList<>();
 
-        log.trace("Dependency Builder Start");
+        log.debug("Dependency Builder Start");
         for (String dependency : dependencies) {
 
           String dependencyModule;
@@ -73,9 +73,9 @@ public class SourceEntry implements EntryHandler {
           log.debug("Added the module: " + dependencyModule);
           analyzedModules.add(dependencyModule);
         }
-        log.trace("Dependency Builder Stop");
+        log.debug("Dependency Builder Stop");
 
-        log.trace("Starting scanner looper");
+        log.debug("Starting scanner looper");
         for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
           log.info("Checking the rule: " + ruleChecker.getClass().getSimpleName());
           ruleChecker.checkRule(
@@ -88,12 +88,12 @@ public class SourceEntry implements EntryHandler {
               null,
               generalInfo.getJavaHome());
         }
-        log.trace("Scanner looper stopped");
+        log.debug("Scanner looper stopped");
 
         NamedMethodMap.clearCallerCalleeGraph();
         FieldInitializationInstructionMap.reset();
       }
     }
-    log.trace("Module Iteration Stop");
+    log.debug("Module Iteration Stop");
   }
 }

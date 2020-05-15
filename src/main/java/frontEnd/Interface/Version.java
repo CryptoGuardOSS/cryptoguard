@@ -4,6 +4,7 @@ package frontEnd.Interface;
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.Interface.outputRouting.ExceptionId;
 import java.util.Arrays;
+import org.apache.logging.log4j.Logger;
 import util.Utils;
 
 /**
@@ -38,6 +39,7 @@ public enum Version {
   //region Attributes
   private int versionNumber;
   private int majorVersion;
+  private static Logger log = org.apache.logging.log4j.LogManager.getLogger(Version.class);
   //endregion
 
   //region Constructor
@@ -92,6 +94,8 @@ public enum Version {
    */
   public static Version getRunningVersion() throws ExceptionHandler {
     String version = System.getProperty("java.version");
+
+    log.debug("Java Version being used:" + version);
 
     //Used for Java JRE versions below 9
     if (version.startsWith("1.")) version = version.replaceFirst("1.", "");

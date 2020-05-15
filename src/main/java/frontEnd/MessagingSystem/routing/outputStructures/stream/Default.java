@@ -71,10 +71,10 @@ public class Default extends Structure {
 
     Report report = mapper(super.getSource());
 
-    log.trace("Marshalling the Target Info from the Env. Info.");
+    log.debug("Marshalling the Target Info from the Env. Info.");
     report.setTarget(mapper(super.getSource(), Utils.getPlatform(), Utils.getJVMInfo()));
 
-    log.trace("Setting the issues to null to not be output");
+    log.debug("Setting the issues to null to not be output");
     report.setIssues(null);
 
     log.debug("Marshalling the header");
@@ -95,7 +95,7 @@ public class Default extends Structure {
         break;
     }
 
-    log.trace("Current String:\n" + output);
+    log.debug("Current String:\n" + output);
 
     this.write(output);
   }
@@ -114,7 +114,7 @@ public class Default extends Structure {
     if (!this.started) {
 
       //region Instantiating and trimming the wrapper content
-      log.trace("Writing a initialized list");
+      log.debug("Writing a initialized list");
       Issues issueWrapper = new Issues();
       issueWrapper.getIssues().add(instance);
 
@@ -123,7 +123,7 @@ public class Default extends Structure {
           JacksonSerializer.serialize(
               issueWrapper, super.getSource().getPrettyPrint(), Listing.Default.getJacksonType());
 
-      log.trace("Manipulating the output based on the type");
+      log.debug("Manipulating the output based on the type");
       switch (super.getSource().getMessagingType().getJacksonType()) {
         case JSON:
           log.debug("Manipulating the JSON header output");

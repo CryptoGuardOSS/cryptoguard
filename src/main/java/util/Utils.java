@@ -12,6 +12,7 @@ import frontEnd.MessagingSystem.routing.Listing;
 import frontEnd.MessagingSystem.routing.outputStructures.OutputStructure;
 import frontEnd.argsIdentifier;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Function;
@@ -58,8 +59,8 @@ public class Utils {
   public static final String fileSep = System.getProperty("file.separator");
   /** Constant <code>lineSep="System.getProperty(line.separator)"</code> */
   public static final String lineSep = System.getProperty("line.separator");
-  /** Constant <code>projectVersion="V04.02.04"</code> */
-  public static final String projectVersion = "V04.02.04";
+  /** Constant <code>projectVersion="V04.03.00"</code> */
+  public static final String projectVersion = "V04.03.00";
   /** Constant <code>projectName="CryptoGuard"</code> */
   public static final String projectName = "CryptoGuard";
   /** Constant <code>userPath="System.getProperty(user.home)"</code> */
@@ -114,6 +115,53 @@ public class Utils {
 
   //region HotMethods
   //region Wrappers
+
+  public static ArrayList<String> retrievingThroughXArgs(EngineType eType, Boolean deps)
+      throws ExceptionHandler {
+    ArrayList<String> out = new ArrayList<>();
+
+    ArrayList<String> types =
+        deps
+            ? new ArrayList<String>() {
+              {
+                add(".java");
+                add(".class");
+                add(".jar");
+                add("dir");
+              }
+            }
+            : new ArrayList<String>() {
+              {
+                add(eType.getInputExtension());
+              }
+            };
+
+    try (BufferedReader inputStream =
+        new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8))) {
+
+      String curLine;
+      while ((curLine = inputStream.readLine()) != null)
+        out.addAll(retrieveFilePathTypesSingle(curLine, types, true, false));
+
+    } catch (IOException | ExceptionHandler e) {
+      throw new ExceptionHandler("Issue running through xArgs", ExceptionId.FILE_I);
+    }
+    return out;
+  }
+
+  public static ArrayList<String> retrieveFilePathTypesSingle(
+      String rawFileString, ArrayList<String> types, Boolean expandPath, Boolean overwrite)
+      throws ExceptionHandler {
+    return retrieveFilePaths(
+        new ArrayList<String>() {
+          {
+            add(rawFileString);
+          }
+        },
+        types,
+        expandPath,
+        overwrite);
+  }
 
   /**
    * retrieveFilePathTypes.
@@ -301,6 +349,7 @@ public class Utils {
    */
   public static String retrieveFilePath(
       String file, String type, Boolean expandPath, Boolean overwrite) throws ExceptionHandler {
+    log.debug("Retrieving and verifying the file: " + file);
     //Base line string check
     if (StringUtils.isEmpty(file)) return null;
 
@@ -906,7 +955,8 @@ public class Utils {
         }
       }
     } else if (dir.getName().toLowerCase().endsWith(".jar")) {
-      jarFiles.add(dir.getAbsolutePath());
+      //TODO - Verify and see if this is needed
+      //jarFiles.add(dir.getAbsolutePath());
     }
 
     return jarFiles;

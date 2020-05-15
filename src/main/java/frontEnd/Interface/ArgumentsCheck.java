@@ -336,7 +336,9 @@ public class ArgumentsCheck {
     //region Setting the source files
     log.trace("Retrieving the source files.");
     ArrayList<String> vSources =
-        Utils.retrieveFilePathTypes(new ArrayList<>(sourceFiles), eType, true, false);
+        (sourceFiles.size() == 1 && sourceFiles.get(0).equals("xargs"))
+            ? Utils.retrievingThroughXArgs(eType, false)
+            : Utils.retrieveFilePathTypes(new ArrayList<>(sourceFiles), eType, true, false);
     log.info("Using the source file(s): " + retrieveFullyQualifiedName(vSources).toString());
     //endregion
 

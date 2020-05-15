@@ -68,12 +68,12 @@ public class Default extends Structure {
     log.info("Marshalling the Report from the Env. Info.");
     Report report = mapper(super.getSource());
 
-    log.trace("Marshalling the Target Info from the Env. Info.");
+    log.debug("Marshalling the Target Info from the Env. Info.");
     report.setTarget(mapper(super.getSource(), Utils.getPlatform(), Utils.getJVMInfo()));
 
     //region Creating Bug Instances
     Integer bugCounter = 0;
-    log.trace("Adding all of the collected issues");
+    log.debug("Adding all of the collected issues");
     for (AnalysisIssue in : super.getCollection()) {
       log.debug("Marshalling and adding the issue: " + in.getInfo());
       report.getIssues().add(mapper(in, bugCounter));
@@ -83,7 +83,7 @@ public class Default extends Structure {
 
     //region Heuristics
     if (super.getSource().getDisplayHeuristics()) {
-      log.trace("Writing the heuristics");
+      log.debug("Writing the heuristics");
       report.setHeuristics(super.getSource().getHeuristics().getDefaultHeuristics());
     }
     //endregion
@@ -91,7 +91,7 @@ public class Default extends Structure {
     //endregion
 
     //region Marshalling
-    log.trace("Creating the marshaller");
+    log.debug("Creating the marshaller");
     return JacksonSerializer.serialize(
         report,
         super.getSource().getPrettyPrint(),
