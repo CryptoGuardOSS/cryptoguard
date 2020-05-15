@@ -121,7 +121,7 @@ public class ScarfXML extends Structure {
 
     //region Heuristics
     if (super.getSource().getDisplayHeuristics()) {
-      log.trace("Writing the heuristics");
+      log.debug("Writing the heuristics");
       String heuristicsXML =
           JacksonSerializer.serialize(
               super.getSource().getHeuristics().getScarfXMLHeuristics(),

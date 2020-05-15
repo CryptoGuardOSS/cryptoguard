@@ -123,7 +123,7 @@ public abstract class OutputStructure {
    * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.BugSummary} object.
    */
   public BugSummary createBugCategoryList() {
-    log.trace("Creating the Bug Summary");
+    log.debug("Creating the Bug Summary");
 
     BugSummary bugDict = new BugSummary();
     //region Creating A Bug Category with counts per the Broken Rules
@@ -134,7 +134,8 @@ public abstract class OutputStructure {
       ruleType.setCode(String.valueOf(ruleNumber));
       ruleType.setCount(countOfBugs.get(ruleNumber));
 
-      bugDict.addBugSummary(ruleType);
+      if (countOfBugs.get(ruleNumber) > 0) bugDict.addBugSummary(ruleType);
+
       log.debug("Added ruleType: " + ruleType.toString());
     }
     //endregion

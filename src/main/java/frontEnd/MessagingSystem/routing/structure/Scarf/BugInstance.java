@@ -62,10 +62,10 @@ public class BugInstance implements Serializable {
   private String bugCode;
 
   @JsonProperty("BugRank")
-  private int bugRank;
+  private Integer bugRank;
 
   @JsonProperty("BugSeverity")
-  private int bugSeverity;
+  private Integer bugSeverity;
 
   @JsonProperty("BugMessage")
   private String bugMessage;
@@ -82,7 +82,7 @@ public class BugInstance implements Serializable {
    */
   @JsonProperty("-id")
   @JacksonXmlProperty(isAttribute = true, localName = "id")
-  private int id = 0;
+  private Integer id = 0;
 
   /** No args constructor for use in serialization */
   public BugInstance() {}
@@ -90,11 +90,11 @@ public class BugInstance implements Serializable {
   /**
    * Constructor for BugInstance.
    *
-   * @param id a int.
+   * @param id a Integer.
    * @param bugCode a {@link java.lang.String} object.
    * @param bugTrace a {@link frontEnd.MessagingSystem.routing.structure.Scarf.BugTrace} object.
-   * @param bugSeverity a int.
-   * @param bugRank a int.
+   * @param bugSeverity a Integer.
+   * @param bugRank a Integer.
    * @param bugMessage a {@link java.lang.String} object.
    * @param cweId a {@link java.util.List} object.
    * @param method a {@link java.util.List} object.
@@ -110,12 +110,12 @@ public class BugInstance implements Serializable {
       List<String> cweId,
       String bugGroup,
       String bugCode,
-      int bugRank,
-      int bugSeverity,
+      Integer bugRank,
+      Integer bugSeverity,
       String bugMessage,
       String resolutionSuggestion,
       BugTrace bugTrace,
-      int id) {
+      Integer id) {
     super();
     this.className = className;
     this.method = method;
@@ -361,30 +361,30 @@ public class BugInstance implements Serializable {
   /**
    * Getter for the field <code>bugRank</code>.
    *
-   * @return a int.
+   * @return a Integer.
    */
   @JsonProperty("BugRank")
-  public int getBugRank() {
+  public Integer getBugRank() {
     return bugRank;
   }
 
   /**
    * Setter for the field <code>bugRank</code>.
    *
-   * @param bugRank a int.
+   * @param bugRank a Integer.
    */
   @JsonProperty("BugRank")
-  public void setBugRank(int bugRank) {
+  public void setBugRank(Integer bugRank) {
     this.bugRank = bugRank;
   }
 
   /**
    * withBugRank.
    *
-   * @param bugRank a int.
+   * @param bugRank a Integer.
    * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.BugInstance} object.
    */
-  public BugInstance withBugRank(int bugRank) {
+  public BugInstance withBugRank(Integer bugRank) {
     this.bugRank = bugRank;
     return this;
   }
@@ -392,30 +392,30 @@ public class BugInstance implements Serializable {
   /**
    * Getter for the field <code>bugSeverity</code>.
    *
-   * @return a int.
+   * @return a Integer.
    */
   @JsonProperty("BugSeverity")
-  public int getBugSeverity() {
+  public Integer getBugSeverity() {
     return bugSeverity;
   }
 
   /**
    * Setter for the field <code>bugSeverity</code>.
    *
-   * @param bugSeverity a int.
+   * @param bugSeverity a Integer.
    */
   @JsonProperty("BugSeverity")
-  public void setBugSeverity(int bugSeverity) {
+  public void setBugSeverity(Integer bugSeverity) {
     this.bugSeverity = bugSeverity;
   }
 
   /**
    * withBugSeverity.
    *
-   * @param bugSeverity a int.
+   * @param bugSeverity a Integer.
    * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.BugInstance} object.
    */
-  public BugInstance withBugSeverity(int bugSeverity) {
+  public BugInstance withBugSeverity(Integer bugSeverity) {
     this.bugSeverity = bugSeverity;
     return this;
   }
@@ -522,11 +522,11 @@ public class BugInstance implements Serializable {
    *
    * <p>(Required)
    *
-   * @return a int.
+   * @return a Integer.
    */
   @JsonProperty("-id")
   @JacksonXmlProperty(isAttribute = true, localName = "id")
-  public int getId() {
+  public Integer getId() {
     return id;
   }
 
@@ -535,21 +535,21 @@ public class BugInstance implements Serializable {
    *
    * <p>(Required)
    *
-   * @param id a int.
+   * @param id a Integer.
    */
   @JsonProperty("-id")
   @JacksonXmlProperty(isAttribute = true, localName = "id")
-  public void setId(int id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
   /**
    * withId.
    *
-   * @param id a int.
+   * @param id a Integer.
    * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.BugInstance} object.
    */
-  public BugInstance withId(int id) {
+  public BugInstance withId(Integer id) {
     this.id = id;
     return this;
   }

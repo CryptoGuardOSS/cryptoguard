@@ -20,7 +20,7 @@ public class JarEntry implements EntryHandler {
   /** {@inheritDoc} */
   public void Scan(EnvironmentInformation generalInfo) throws ExceptionHandler {
 
-    log.trace("Starting scanner looper");
+    log.debug("Starting scanner looper");
     for (RuleChecker ruleChecker : CommonRules.ruleCheckerList) {
       log.info("Checking the rule: " + ruleChecker.getClass().getSimpleName());
       ruleChecker.checkRule(
@@ -33,6 +33,6 @@ public class JarEntry implements EntryHandler {
           null,
           generalInfo.getJavaHome());
     }
-    log.trace("Scanner looper stopped");
+    log.debug("Scanner looper stopped");
   }
 }

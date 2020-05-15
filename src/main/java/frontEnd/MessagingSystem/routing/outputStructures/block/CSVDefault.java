@@ -73,7 +73,7 @@ public class CSVDefault extends Structure {
     contents.append(mapper.writeHeader()).append("\n");
 
     //region Creating Bug Instances
-    log.trace("Adding all of the collected issues");
+    log.debug("Adding all of the collected issues");
     for (AnalysisIssue in : super.getCollection()) {
       log.debug("Marshalling and adding the issue: " + in.getInfo());
       contents.append(mapper.writeIssue(in)).append("\n");

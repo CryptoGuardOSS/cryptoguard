@@ -81,18 +81,18 @@ public class GradleBuildFileParser implements BuildFileParser {
       }
 
       try {
-        log.trace("Attempting to Read the gradle.property file");
+        log.debug("Attempting to Read the gradle.property file");
         Properties gradleProperties = new Properties();
         gradleProperties.load(
             new FileInputStream(new File(fileName.replace("settings.gradle", "gradle.property"))));
 
-        log.trace("Attempting to retrieve the project name");
+        log.debug("Attempting to retrieve the project name");
         projectName =
             StringUtils.trimToNull(
                 gradleProperties.getProperty(
                     "projectName", gradleProperties.getProperty("groupName")));
 
-        log.trace("Attempting to retrieve the project version");
+        log.debug("Attempting to retrieve the project version");
         projectVersion =
             StringUtils.trimToNull(
                 gradleProperties.getProperty(

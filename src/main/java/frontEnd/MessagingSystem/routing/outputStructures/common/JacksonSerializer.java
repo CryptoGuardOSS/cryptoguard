@@ -41,7 +41,7 @@ public class JacksonSerializer {
     log.debug("Serializing output as " + outputType.name());
     serializer.setSerializationInclusion(Include.NON_EMPTY);
     if (prettyPrint) {
-      log.trace("Writing with the \"pretty\" format");
+      log.debug("Writing with the \"pretty\" format");
       serializer.enable(SerializationFeature.INDENT_OUTPUT);
     }
     try {

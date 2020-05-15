@@ -6,8 +6,6 @@ import static org.junit.Assert.*;
 import static test.TestUtilities.*;
 import static util.Utils.makeArg;
 
-import com.binarytweed.test.Quarantine;
-import com.binarytweed.test.QuarantiningRunner;
 import frontEnd.MessagingSystem.routing.Listing;
 import frontEnd.MessagingSystem.routing.structure.Default.Report;
 import frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport;
@@ -20,9 +18,9 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import rule.engine.EngineType;
 import soot.G;
+import test.TestUtilities;
 
 /**
  * EntryPointTest_APK class.
@@ -31,8 +29,8 @@ import soot.G;
  * @version $Id: $Id
  * @since V03.03.10
  */
-@RunWith(QuarantiningRunner.class)
-@Quarantine({"com.binarytweed", "frontEnd.Interface.*"})
+//@RunWith(QuarantiningRunner.class)
+//@Quarantine({"com.binarytweed", "frontEnd.Interface.*"})
 public class EntryPointTest_APK {
 
   //region Attributes
@@ -228,7 +226,6 @@ public class EntryPointTest_APK {
 
         AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
         assertFalse(report.getBugInstance().isEmpty());
-
       } catch (Exception e) {
         e.printStackTrace();
         assertNull(e);
@@ -256,6 +253,24 @@ public class EntryPointTest_APK {
 
         AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
         assertFalse(report.getBugInstance().isEmpty());
+
+        report
+            .getBugInstance()
+            .forEach(
+                bug -> {
+                  bug.getlocation()
+                      .forEach(
+                          location -> {
+                            if (location.getStartLine() != null)
+                              assertTrue(location.getStartLine() != 0);
+                            if (location.getEndLine() != null)
+                              assertTrue(location.getEndLine() != 0);
+                            if (location.getStartColumn() != null)
+                              assertTrue(location.getStartColumn() != 0);
+                            if (location.getEndColumn() != null)
+                              assertTrue(location.getEndColumn() != 0);
+                          });
+                });
 
       } catch (Exception e) {
         e.printStackTrace();
@@ -342,6 +357,24 @@ public class EntryPointTest_APK {
 
         AnalyzerReport report = AnalyzerReport.deserialize(new File(outputFile));
         assertFalse(report.getBugInstance().isEmpty());
+
+        report
+            .getBugInstance()
+            .forEach(
+                bug -> {
+                  bug.getlocation()
+                      .forEach(
+                          location -> {
+                            if (location.getStartLine() != null)
+                              assertTrue(location.getStartLine() != 0);
+                            if (location.getEndLine() != null)
+                              assertTrue(location.getEndLine() != 0);
+                            if (location.getStartColumn() != null)
+                              assertTrue(location.getStartColumn() != 0);
+                            if (location.getEndColumn() != null)
+                              assertTrue(location.getEndColumn() != 0);
+                          });
+                });
 
       } catch (Exception e) {
         e.printStackTrace();
