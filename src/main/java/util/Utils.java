@@ -51,19 +51,20 @@ import soot.util.Chain;
  */
 public class Utils {
 
+  //region Static Variables
   /** Constant <code>SLICE_LENGTH</code> */
   public static final ArrayList<Integer> SLICE_LENGTH = new ArrayList<>();
   /** Constant <code>lineSep="System.getProperty(file.separator)"</code> */
   public static final String fileSep = System.getProperty("file.separator");
   /** Constant <code>lineSep="System.getProperty(line.separator)"</code> */
   public static final String lineSep = System.getProperty("line.separator");
-  /** Constant <code>projectVersion="V04.02.07"</code> */
-  public static final String projectVersion = "V04.02.07";
+  /** Constant <code>projectVersion="V04.02.04"</code> */
+  public static final String projectVersion = "V04.02.04";
   /** Constant <code>projectName="CryptoGuard"</code> */
   public static final String projectName = "CryptoGuard";
   /** Constant <code>userPath="System.getProperty(user.home)"</code> */
   public static final String userPath = System.getProperty("user.home");
-  //region Static Variables
+
   private static final List<String> ASSIGN_DONT_VISIT = new ArrayList<>();
   private static final List<String> INVOKE_DONT_VISIT = new ArrayList<>();
   private static final Pattern sootClassPattern = Pattern.compile("[<](.+)[:]");

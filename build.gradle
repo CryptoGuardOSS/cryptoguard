@@ -91,6 +91,11 @@ publishing {
 		}
 	}
 }
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+group = groupName
+version = versionNumber
 
 sourceSets {
 	main {
@@ -219,9 +224,9 @@ javadoc {
 
 //Ensuring all of the processors are being used for tests
 test {
-    environment "ANDROID_HOME", System.getenv("ANDROID_HOME") ?: "ANDROIDSDK"
-    environment "JAVA_HOME", System.getenv("JAVA_HOME") ?: "JAVA8SDK"
-    environment "JAVA7_HOME", System.getenv("JAVA7_HOME") ?: "JAVA7SDK"
+	environment "ANDROID_HOME", System.getenv("ANDROID_HOME") ?: "ANDROIDSDK"
+	environment "JAVA_HOME", System.getenv("JAVA_HOME") ?: "JAVA8SDK"
+	environment "JAVA7_HOME", System.getenv("JAVA7_HOME") ?: "JAVA7SDK"
 }
 //A Task for specifying explicit release commands
 task release {
@@ -362,7 +367,7 @@ clean.doLast {
 		}
 	}
 }
- */
+*/
 
 cobertura {
 	coverageFormats = ['html','xml']
@@ -390,4 +395,4 @@ dependencies {
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
 	compile 'org.ow2.asm:asm:8.0.1'
 }
-build.finalizedBy(bake)
+//build.finalizedBy(bake)
