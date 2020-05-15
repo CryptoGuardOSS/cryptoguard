@@ -51,52 +51,32 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 public class AnalyzerReport implements Serializable {
 
   private static final long serialVersionUID = 4656075134214578571L;
-  /**
-   * The -assess_fw Schema
-   *
-   * <p>
-   */
+  /** The -assess_fw Schema */
   @JacksonXmlProperty(isAttribute = true, localName = "assess_fw")
   @JsonProperty("-assess_fw")
   private String assessFw = "";
-  /**
-   * The -assess_fw_version Schema
-   *
-   * <p>
-   */
+  /** The -assess_fw_version Schema */
   @JacksonXmlProperty(isAttribute = true, localName = "assess_fw_version")
   @JsonProperty("-assess_fw_version")
   private String assessFwVersion = "";
   /**
    * The -assessment_start_ts Schema
    *
-   * <p>
-   *
    * <p>(Required)
    */
   @JacksonXmlProperty(isAttribute = true, localName = "assessment_start_ts")
   @JsonProperty("-assessment_start_ts")
   private String assessmentStartTs = "";
-  /**
-   * The -package_name Schema
-   *
-   * <p>
-   */
+  /** The -package_name Schema */
   @JacksonXmlProperty(isAttribute = true, localName = "build_fw")
   @JsonProperty("-build_fw")
   private String buildFw = "";
-  /**
-   * The -package_name Schema
-   *
-   * <p>
-   */
+  /** The -package_name Schema */
   @JacksonXmlProperty(isAttribute = true, localName = "build_fw_version")
   @JsonProperty("-build_fw_version")
   private String buildFwVersion = "";
   /**
    * The -package_name Schema
-   *
-   * <p>
    *
    * <p>(Required)
    */
@@ -106,8 +86,6 @@ public class AnalyzerReport implements Serializable {
   /**
    * The -package_version Schema
    *
-   * <p>
-   *
    * <p>(Required)
    */
   @JacksonXmlProperty(isAttribute = true, localName = "package_version")
@@ -115,8 +93,6 @@ public class AnalyzerReport implements Serializable {
   private String packageVersion = "";
   /**
    * The -build_root_dir Schema
-   *
-   * <p>
    *
    * <p>(Required)
    */
@@ -126,8 +102,6 @@ public class AnalyzerReport implements Serializable {
   /**
    * The -package_root_dir Schema
    *
-   * <p>
-   *
    * <p>(Required)
    */
   @JsonProperty("-package_root_dir")
@@ -135,8 +109,6 @@ public class AnalyzerReport implements Serializable {
   private String packageRootDir = "";
   /**
    * The -parser_fw Schema
-   *
-   * <p>
    *
    * <p>(Required)
    */
@@ -146,8 +118,6 @@ public class AnalyzerReport implements Serializable {
   /**
    * The -parser_fw_version Schema
    *
-   * <p>
-   *
    * <p>(Required)
    */
   @JsonProperty("-parser_fw_version")
@@ -155,8 +125,6 @@ public class AnalyzerReport implements Serializable {
   private String parserFwVersion = "";
   /**
    * The -platform_name Schema
-   *
-   * <p>
    *
    * <p>(Required)
    */
@@ -166,8 +134,6 @@ public class AnalyzerReport implements Serializable {
   /**
    * The -tool_name Schema
    *
-   * <p>
-   *
    * <p>(Required)
    */
   @JsonProperty("-tool_name")
@@ -175,8 +141,6 @@ public class AnalyzerReport implements Serializable {
   private String toolName = "";
   /**
    * The -tool_version Schema
-   *
-   * <p>
    *
    * <p>(Required)
    */
@@ -186,48 +150,26 @@ public class AnalyzerReport implements Serializable {
   /**
    * The -uuid Schema
    *
-   * <p>
-   *
    * <p>(Required)
    */
   @JsonProperty("-uuid")
   @JacksonXmlProperty(isAttribute = true, localName = "uuid")
   private String uuid = "";
-  /**
-   * BugInstance
-   *
-   * <p>
-   */
+  /** BugInstance */
   @JsonProperty("BugInstance")
   @JacksonXmlElementWrapper(useWrapping = false)
   private List<BugInstance> bugInstance = null;
-  /**
-   * BugCategory
-   *
-   * <p>
-   */
+  /** BugCategory */
   @JacksonXmlElementWrapper(localName = "BugSummary")
   @JsonProperty("BugCategory")
   private List<BugCategory> bugCategory = null;
-  /**
-   * Metric
-   *
-   * <p>
-   */
+  /** Metric */
   @JsonProperty("Metric")
   private List<Metric> metric = null;
-  /**
-   * MetricSummaryType
-   *
-   * <p>
-   */
+  /** MetricSummaryType */
   @JsonProperty("MetricSummaries")
   private MetricSummaries metricSummaries;
-  /**
-   * HeuristicsType
-   *
-   * <p>
-   */
+  /** HeuristicsType */
   @JsonProperty("Heuristics")
   private Heuristics heuristics;
 
@@ -326,8 +268,6 @@ public class AnalyzerReport implements Serializable {
   /**
    * The -assess_fw Schema
    *
-   * <p>
-   *
    * @return a {@link java.lang.String} object.
    */
   @JacksonXmlProperty(isAttribute = true, localName = "assess_fw")
@@ -338,8 +278,6 @@ public class AnalyzerReport implements Serializable {
 
   /**
    * The -assess_fw Schema
-   *
-   * <p>
    *
    * @param assessFw a {@link java.lang.String} object.
    */
@@ -363,8 +301,6 @@ public class AnalyzerReport implements Serializable {
   /**
    * The -assess_fw_version Schema
    *
-   * <p>
-   *
    * @return a {@link java.lang.String} object.
    */
   @JacksonXmlProperty(isAttribute = true, localName = "assess_fw_version")
@@ -375,8 +311,6 @@ public class AnalyzerReport implements Serializable {
 
   /**
    * The -assess_fw_version Schema
-   *
-   * <p>
    *
    * @param assessFwVersion a {@link java.lang.String} object.
    */
@@ -400,8 +334,6 @@ public class AnalyzerReport implements Serializable {
   /**
    * The -assessment_start_ts Schema
    *
-   * <p>
-   *
    * <p>(Required)
    *
    * @return a {@link java.lang.String} object.
@@ -414,8 +346,6 @@ public class AnalyzerReport implements Serializable {
 
   /**
    * The -assessment_start_ts Schema
-   *
-   * <p>
    *
    * <p>(Required)
    *
@@ -441,8 +371,6 @@ public class AnalyzerReport implements Serializable {
   /**
    * The -package_name Schema
    *
-   * <p>
-   *
    * @return a {@link java.lang.String} object.
    */
   @JacksonXmlProperty(isAttribute = true, localName = "build_fw")
@@ -453,8 +381,6 @@ public class AnalyzerReport implements Serializable {
 
   /**
    * The -package_name Schema
-   *
-   * <p>
    *
    * @param buildFw a {@link java.lang.String} object.
    */
@@ -478,8 +404,6 @@ public class AnalyzerReport implements Serializable {
   /**
    * The -package_name Schema
    *
-   * <p>
-   *
    * @return a {@link java.lang.String} object.
    */
   @JsonProperty("-build_fw_version")
@@ -490,8 +414,6 @@ public class AnalyzerReport implements Serializable {
 
   /**
    * The -package_name Schema
-   *
-   * <p>
    *
    * @param buildFwVersion a {@link java.lang.String} object.
    */
@@ -515,8 +437,6 @@ public class AnalyzerReport implements Serializable {
   /**
    * The -package_name Schema
    *
-   * <p>
-   *
    * <p>(Required)
    *
    * @return a {@link java.lang.String} object.
@@ -529,8 +449,6 @@ public class AnalyzerReport implements Serializable {
 
   /**
    * The -package_name Schema
-   *
-   * <p>
    *
    * <p>(Required)
    *
@@ -556,8 +474,6 @@ public class AnalyzerReport implements Serializable {
   /**
    * The -package_version Schema
    *
-   * <p>
-   *
    * <p>(Required)
    *
    * @return a {@link java.lang.String} object.
@@ -570,8 +486,6 @@ public class AnalyzerReport implements Serializable {
 
   /**
    * The -package_version Schema
-   *
-   * <p>
    *
    * <p>(Required)
    *
@@ -597,8 +511,6 @@ public class AnalyzerReport implements Serializable {
   /**
    * The -build_root_dir Schema
    *
-   * <p>
-   *
    * <p>(Required)
    *
    * @return a {@link java.lang.String} object.
@@ -611,8 +523,6 @@ public class AnalyzerReport implements Serializable {
 
   /**
    * The -build_root_dir Schema
-   *
-   * <p>
    *
    * <p>(Required)
    *
@@ -638,8 +548,6 @@ public class AnalyzerReport implements Serializable {
   /**
    * The -package_root_dir Schema
    *
-   * <p>
-   *
    * <p>(Required)
    *
    * @return a {@link java.lang.String} object.
@@ -652,8 +560,6 @@ public class AnalyzerReport implements Serializable {
 
   /**
    * The -package_root_dir Schema
-   *
-   * <p>
    *
    * <p>(Required)
    *
@@ -679,8 +585,6 @@ public class AnalyzerReport implements Serializable {
   /**
    * The -parser_fw Schema
    *
-   * <p>
-   *
    * <p>(Required)
    *
    * @return a {@link java.lang.String} object.
@@ -693,8 +597,6 @@ public class AnalyzerReport implements Serializable {
 
   /**
    * The -parser_fw Schema
-   *
-   * <p>
    *
    * <p>(Required)
    *
@@ -720,8 +622,6 @@ public class AnalyzerReport implements Serializable {
   /**
    * The -parser_fw_version Schema
    *
-   * <p>
-   *
    * <p>(Required)
    *
    * @return a {@link java.lang.String} object.
@@ -734,8 +634,6 @@ public class AnalyzerReport implements Serializable {
 
   /**
    * The -parser_fw_version Schema
-   *
-   * <p>
    *
    * <p>(Required)
    *
@@ -761,8 +659,6 @@ public class AnalyzerReport implements Serializable {
   /**
    * The -platform_name Schema
    *
-   * <p>
-   *
    * <p>(Required)
    *
    * @return a {@link java.lang.String} object.
@@ -775,8 +671,6 @@ public class AnalyzerReport implements Serializable {
 
   /**
    * The -platform_name Schema
-   *
-   * <p>
    *
    * <p>(Required)
    *
@@ -802,8 +696,6 @@ public class AnalyzerReport implements Serializable {
   /**
    * The -tool_name Schema
    *
-   * <p>
-   *
    * <p>(Required)
    *
    * @return a {@link java.lang.String} object.
@@ -816,8 +708,6 @@ public class AnalyzerReport implements Serializable {
 
   /**
    * The -tool_name Schema
-   *
-   * <p>
    *
    * <p>(Required)
    *
@@ -843,8 +733,6 @@ public class AnalyzerReport implements Serializable {
   /**
    * The -tool_version Schema
    *
-   * <p>
-   *
    * <p>(Required)
    *
    * @return a {@link java.lang.String} object.
@@ -857,8 +745,6 @@ public class AnalyzerReport implements Serializable {
 
   /**
    * The -tool_version Schema
-   *
-   * <p>
    *
    * <p>(Required)
    *
@@ -884,8 +770,6 @@ public class AnalyzerReport implements Serializable {
   /**
    * The -uuid Schema
    *
-   * <p>
-   *
    * <p>(Required)
    *
    * @return a {@link java.lang.String} object.
@@ -898,8 +782,6 @@ public class AnalyzerReport implements Serializable {
 
   /**
    * The -uuid Schema
-   *
-   * <p>
    *
    * <p>(Required)
    *
@@ -925,8 +807,6 @@ public class AnalyzerReport implements Serializable {
   /**
    * BugInstance
    *
-   * <p>
-   *
    * @return a {@link java.util.List} object.
    */
   @JsonProperty("BugInstance")
@@ -938,8 +818,6 @@ public class AnalyzerReport implements Serializable {
 
   /**
    * BugInstance
-   *
-   * <p>
    *
    * @param bugInstance a {@link java.util.List} object.
    */
@@ -963,8 +841,6 @@ public class AnalyzerReport implements Serializable {
   /**
    * BugCategory
    *
-   * <p>
-   *
    * @return a {@link java.util.List} object.Target
    */
   @JacksonXmlElementWrapper(localName = "BugSummary")
@@ -975,8 +851,6 @@ public class AnalyzerReport implements Serializable {
 
   /**
    * BugCategory
-   *
-   * <p>
    *
    * @param bugCategory a {@link java.util.List} object.
    */
@@ -1000,8 +874,6 @@ public class AnalyzerReport implements Serializable {
   /**
    * Metric
    *
-   * <p>
-   *
    * @return a {@link java.util.List} object.
    */
   @JsonProperty("Metric")
@@ -1012,8 +884,6 @@ public class AnalyzerReport implements Serializable {
 
   /**
    * Metric
-   *
-   * <p>
    *
    * @param metric a {@link java.util.List} object.
    */
@@ -1036,8 +906,6 @@ public class AnalyzerReport implements Serializable {
   /**
    * MetricSummaryType
    *
-   * <p>
-   *
    * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.MetricSummaries} object.
    */
   @JsonProperty("MetricSummaries")
@@ -1047,8 +915,6 @@ public class AnalyzerReport implements Serializable {
 
   /**
    * MetricSummaryType
-   *
-   * <p>
    *
    * @param metricSummaries a {@link
    *     frontEnd.MessagingSystem.routing.structure.Scarf.MetricSummaries} object.
@@ -1082,8 +948,6 @@ public class AnalyzerReport implements Serializable {
 
   /**
    * HeuristicsType
-   *
-   * <p>
    *
    * @param heuristics a {@link frontEnd.MessagingSystem.routing.structure.Scarf.Heuristics} object.
    */

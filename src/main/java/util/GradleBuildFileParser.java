@@ -195,18 +195,38 @@ public class GradleBuildFileParser implements BuildFileParser {
     }
   }
 
+  /**
+   * Getter for the field <code>projectName</code>.
+   *
+   * @return a {@link java.lang.String} object.
+   */
   public String getProjectName() {
     return this.projectName;
   }
 
+  /**
+   * Getter for the field <code>projectVersion</code>.
+   *
+   * @return a {@link java.lang.String} object.
+   */
   public String getProjectVersion() {
     return this.projectVersion;
   }
 
+  /**
+   * Setter for the field <code>projectName</code>.
+   *
+   * @param projectName a {@link java.lang.String} object.
+   */
   public void setProjectName(String projectName) {
     this.projectName = projectName;
   }
 
+  /**
+   * Setter for the field <code>projectVersion</code>.
+   *
+   * @param projectVersion a {@link java.lang.String} object.
+   */
   public void setProjectVersion(String projectVersion) {
     this.projectVersion = projectVersion;
   }

@@ -207,14 +207,29 @@ public abstract class OutputStructure {
     return cwes;
   }
 
+  /**
+   * Setter for the field <code>source</code>.
+   *
+   * @param source a {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} object.
+   */
   public void setSource(EnvironmentInformation source) {
     this.source = source;
   }
 
+  /**
+   * Setter for the field <code>outfile</code>.
+   *
+   * @param outfile a {@link java.io.File} object.
+   */
   public void setOutfile(File outfile) {
     this.outfile = outfile;
   }
 
+  /**
+   * Setter for the field <code>type</code>.
+   *
+   * @param type a {@link rule.engine.EngineType} object.
+   */
   public void setType(EngineType type) {
     this.type = type;
   }

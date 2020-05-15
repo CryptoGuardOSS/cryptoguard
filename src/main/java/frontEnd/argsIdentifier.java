@@ -228,14 +228,29 @@ public enum argsIdentifier {
     return defaultArg;
   }
 
+  /**
+   * Getter for the field <code>formatType</code>.
+   *
+   * @return a {@link frontEnd.MessagingSystem.routing.Listing} object.
+   */
   public Listing getFormatType() {
     return this.formatType;
   }
 
+  /**
+   * Getter for the field <code>argName</code>.
+   *
+   * @return a {@link java.lang.String} object.
+   */
   public String getArgName() {
     return this.argName;
   }
 
+  /**
+   * Getter for the field <code>required</code>.
+   *
+   * @return a {@link java.lang.Boolean} object.
+   */
   public Boolean getRequired() {
     return this.required;
   }

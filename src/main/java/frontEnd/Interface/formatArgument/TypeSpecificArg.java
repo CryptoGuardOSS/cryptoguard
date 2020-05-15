@@ -21,10 +21,9 @@ public interface TypeSpecificArg {
    *
    * @param info {@link frontEnd.MessagingSystem.routing.EnvironmentInformation} - the continuation
    *     of the environmental info to be added onto.
-   * @param args {@link List<String>} - The full set of arguments passed from the command line
+   * @param args String - The full set of arguments passed from the command line
    * @return {@link java.lang.Boolean} - an indication if the validation passed.
-   * @throws {@link frontEnd.Interface.outputRouting.ExceptionHandler} - The main controlled
-   *     exception.
+   * @throws ExceptionHandler - The main controlled exception.
    */
   Boolean inputValidation(EnvironmentInformation info, List<String> args) throws ExceptionHandler;
 

@@ -5,7 +5,7 @@ buildscript {
 	}
 
 	dependencies {
-		classpath 'org.asciidoctor:asciidoctorj-diagram:1.5.4.1'
+		//classpath 'org.asciidoctor:asciidoctorj-diagram:1.5.4.1'
 		classpath 'net.saliman:gradle-cobertura-plugin:3.0.0'
 	}
 }
@@ -20,7 +20,7 @@ import com.google.common.hash.Hashing
 plugins {
 	id 'com.google.cloud.tools.jib' version '1.5.0'
 	id "com.diffplug.gradle.spotless" version "3.28.1"
-	id 'org.jbake.site' version '1.4.0'
+	//id 'org.jbake.site' version '1.4.0'
 }
 apply plugin: "java"
 apply plugin: "maven"
@@ -208,13 +208,14 @@ java {
 	//withJavadocJar()
 	//withSourcesJar()
 }
-/*
+
 javadoc {
+	source = sourceSets.main.allJava
 	if (JavaVersion.current().isJava9Compatible()) {
 		options.addBooleanOption('html5', true)
 	}
+	destinationDir = new File('manual/javadoc')
 }
-*/
 
 //Ensuring all of the processors are being used for tests
 test {
@@ -325,20 +326,18 @@ spotless {
 	}
 }
 
+/*
 jbake {
 	srcDirName = 'src/documentation'
-	destDirName = 'documentation'
-	configuration['asciidoctor.option.requires'] = "asciidoctor-diagram"
-	configuration['asciidoctor.attributes'] = [
-			"sourceDir=${projectDir}",
-			"imagesDir=diagrams",
-			"imagesoutdir=src/documentation/assets/diagrams"
-	]
+	destDirName = './manual/site'
 }
 
 bakePreview {
+	input = project.file('manual/site')
 	port = '8090'
 }
+
+
 
 task createjbakeignorefile {
 	group = "documentation"
@@ -363,6 +362,14 @@ clean.doLast {
 		}
 	}
 }
+ */
+
+cobertura {
+	coverageFormats = ['html','xml']
+	coverageIgnoreTrivial = true
+	coverageIgnores = ['org.slf4j.Logger.*']
+	coverageReportDir = new File('manual/cobertura')
+}
 
 dependencies {
 	compile name: 'soot-V4.1.0-SNAPSHOT'
@@ -373,7 +380,6 @@ dependencies {
 
 	compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.9.8'
 	compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.9.8'
-	compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-csv', version: '2.9.8'
 
 	implementation 'com.binarytweed:quarantining-test-runner:0.0.3'
 	compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1'

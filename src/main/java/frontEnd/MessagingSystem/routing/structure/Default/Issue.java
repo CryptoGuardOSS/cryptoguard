@@ -13,8 +13,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 /**
  * Issue
  *
- * <p>
- *
  * @author franceme
  * @version 03.07.01
  */
@@ -59,11 +57,7 @@ public class Issue implements Serializable {
   /** (Required) */
   @JsonProperty("Severity")
   private String severity;
-  /**
-   * LocationType
-   *
-   * <p>
-   */
+  /** LocationType */
   @JsonProperty("Location")
   private Location location;
 
@@ -361,8 +355,6 @@ public class Issue implements Serializable {
   /**
    * LocationType
    *
-   * <p>
-   *
    * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Location} object.
    */
   @JsonProperty("Location")
@@ -372,8 +364,6 @@ public class Issue implements Serializable {
 
   /**
    * LocationType
-   *
-   * <p>
    *
    * @param location a {@link frontEnd.MessagingSystem.routing.structure.Default.Location} object.
    */

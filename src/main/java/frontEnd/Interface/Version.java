@@ -126,10 +126,20 @@ public enum Version {
     return this.getVersionNumber() <= Utils.supportedVersion.getVersionNumber();
   }
 
+  /**
+   * Getter for the field <code>versionNumber</code>.
+   *
+   * @return a int.
+   */
   public int getVersionNumber() {
     return this.versionNumber;
   }
 
+  /**
+   * Getter for the field <code>majorVersion</code>.
+   *
+   * @return a int.
+   */
   public int getMajorVersion() {
     return this.majorVersion;
   }

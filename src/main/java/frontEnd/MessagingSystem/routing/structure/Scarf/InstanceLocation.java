@@ -23,11 +23,7 @@ public class InstanceLocation implements Serializable {
 
   @JsonProperty("Xpath")
   private String xpath;
-  /**
-   * LineNum
-   *
-   * <p>
-   */
+  /** LineNum */
   @JsonProperty("LineNum")
   private LineNum lineNum;
 
