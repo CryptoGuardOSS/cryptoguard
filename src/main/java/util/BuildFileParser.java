@@ -1,12 +1,12 @@
+/* Licensed under GPL-3.0 */
 package util;
 
 import frontEnd.Interface.outputRouting.ExceptionHandler;
-
 import java.util.List;
 import java.util.Map;
 
 /**
- * <p>BuildFileParser interface.</p>
+ * BuildFileParser interface.
  *
  * @author CryptoguardTeam
  * @version 03.07.01
@@ -14,33 +14,32 @@ import java.util.Map;
  */
 public interface BuildFileParser {
 
-    /**
-     * <p>getDependencyList.</p>
-     *
-     * @return a {@link java.util.Map} object.
-     * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
-     */
-    Map<String, List<String>> getDependencyList() throws ExceptionHandler;
+  /**
+   * getDependencyList.
+   *
+   * @return a {@link java.util.Map} object.
+   * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+   */
+  Map<String, List<String>> getDependencyList() throws ExceptionHandler;
 
-    /**
-     * <p>getProjectName.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    String getProjectName();
+  /**
+   * getProjectName.
+   *
+   * @return a {@link java.lang.String} object.
+   */
+  String getProjectName();
 
-    /**
-     * <p>getProjectVersion.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    String getProjectVersion();
+  /**
+   * getProjectVersion.
+   *
+   * @return a {@link java.lang.String} object.
+   */
+  String getProjectVersion();
 
-    /**
-     * <p>isGradle.</p>
-     *
-     * @return a {@link java.lang.Boolean} object.
-     */
-    Boolean isGradle();
-
+  /**
+   * isGradle.
+   *
+   * @return a {@link java.lang.Boolean} object.
+   */
+  Boolean isGradle();
 }
