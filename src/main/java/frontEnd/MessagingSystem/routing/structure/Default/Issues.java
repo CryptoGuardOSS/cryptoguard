@@ -31,8 +31,6 @@ public class Issues implements Serializable {
   /**
    * Issues
    *
-   * <p>
-   *
    * <p>(Required)
    *
    * @return a {@link java.util.List} object.
@@ -46,8 +44,6 @@ public class Issues implements Serializable {
 
   /**
    * Issues
-   *
-   * <p>
    *
    * <p>(Required)
    *

@@ -49,8 +49,6 @@ public class Heuristics implements Serializable {
   /**
    * DepthCount
    *
-   * <p>
-   *
    * <p>(Required)
    */
   @JsonProperty("DepthCount")
@@ -244,8 +242,6 @@ public class Heuristics implements Serializable {
   /**
    * DepthCount
    *
-   * <p>
-   *
    * <p>(Required)
    *
    * @return a {@link java.util.List} object.
@@ -258,8 +254,6 @@ public class Heuristics implements Serializable {
 
   /**
    * DepthCount
-   *
-   * <p>
    *
    * <p>(Required)
    *

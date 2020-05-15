@@ -27,8 +27,7 @@ public class OtherAnalysisResult {
    * @param instruction a {@link java.lang.String} object.
    * @param method a {@link soot.SootMethod} object.
    * @param analysis a {@link java.util.List} object.
-   * @param propertyUseMap a {@link java.util.Map<java.lang.String,java.util.List<
-   *     PropertyAnalysisResult >>} object.
+   * @param propertyUseMap a Map object.
    */
   public OtherAnalysisResult(
       String instruction,

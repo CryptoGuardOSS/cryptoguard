@@ -21,8 +21,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 /**
  * Report
  *
- * <p>
- *
  * @author franceme
  * @version 03.07.01
  */
@@ -43,8 +41,6 @@ public class Report implements Serializable {
   /**
    * The Schema Version
    *
-   * <p>
-   *
    * <p>(Required)
    */
   @JacksonXmlProperty(isAttribute = true, localName = "SchemaVersion")
@@ -52,8 +48,6 @@ public class Report implements Serializable {
   private int schemaVersion;
   /**
    * Time the scan was instantiated
-   *
-   * <p>
    *
    * <p>(Required)
    */
@@ -63,8 +57,6 @@ public class Report implements Serializable {
   /**
    * string Time the scan was instantiated
    *
-   * <p>
-   *
    * <p>(Required)
    */
   @JacksonXmlProperty(isAttribute = true, localName = "UUID")
@@ -73,8 +65,6 @@ public class Report implements Serializable {
   /**
    * The Project Name
    *
-   * <p>
-   *
    * <p>(Required)
    */
   @JsonProperty("projectName")
@@ -82,33 +72,21 @@ public class Report implements Serializable {
   /**
    * The Project Version
    *
-   * <p>
-   *
    * <p>(Required)
    */
   @JsonProperty("ProjectVersion")
   private String projectVersion;
-  /**
-   * TargetInfo
-   *
-   * <p>
-   */
+  /** TargetInfo */
   @JsonProperty("Target")
   private Target target;
   /**
    * Issues
    *
-   * <p>
-   *
    * <p>(Required)
    */
   @JsonProperty("Issues")
   private List<Issue> issues = new ArrayList<>();
-  /**
-   * HeuristicsType
-   *
-   * <p>
-   */
+  /** HeuristicsType */
   @JsonProperty("Heuristics")
   private Heuristics heuristics;
 
@@ -148,6 +126,13 @@ public class Report implements Serializable {
     this.heuristics = heuristics;
   }
 
+  /**
+   * deserialize.
+   *
+   * @param file a {@link java.io.File} object.
+   * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Report} object.
+   * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
+   */
   public static Report deserialize(File file) throws ExceptionHandler {
     return deserialize(file, Listing.Default);
   }
@@ -157,6 +142,7 @@ public class Report implements Serializable {
    *
    * @param file a {@link java.io.File} object.
    * @return a {@link frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport} object.
+   * @param readType a {@link frontEnd.MessagingSystem.routing.Listing} object.
    * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
    */
   public static Report deserialize(File file, Listing readType) throws ExceptionHandler {
@@ -175,8 +161,6 @@ public class Report implements Serializable {
   /**
    * The Schema Version
    *
-   * <p>
-   *
    * <p>(Required)
    *
    * @return a int.
@@ -189,8 +173,6 @@ public class Report implements Serializable {
 
   /**
    * The Schema Version
-   *
-   * <p>
    *
    * <p>(Required)
    *
@@ -216,8 +198,6 @@ public class Report implements Serializable {
   /**
    * Time the scan was instantiated
    *
-   * <p>
-   *
    * <p>(Required)
    *
    * @return a {@link java.lang.String} object.
@@ -230,8 +210,6 @@ public class Report implements Serializable {
 
   /**
    * Time the scan was instantiated
-   *
-   * <p>
    *
    * <p>(Required)
    *
@@ -257,8 +235,6 @@ public class Report implements Serializable {
   /**
    * string Time the scan was instantiated
    *
-   * <p>
-   *
    * <p>(Required)
    *
    * @return a {@link java.lang.String} object.
@@ -271,8 +247,6 @@ public class Report implements Serializable {
 
   /**
    * string Time the scan was instantiated
-   *
-   * <p>
    *
    * <p>(Required)
    *
@@ -298,8 +272,6 @@ public class Report implements Serializable {
   /**
    * The Project Name
    *
-   * <p>
-   *
    * <p>(Required)
    *
    * @return a {@link java.lang.String} object.
@@ -311,8 +283,6 @@ public class Report implements Serializable {
 
   /**
    * The Project Name
-   *
-   * <p>
    *
    * <p>(Required)
    *
@@ -337,8 +307,6 @@ public class Report implements Serializable {
   /**
    * The Project Version
    *
-   * <p>
-   *
    * <p>(Required)
    *
    * @return a {@link java.lang.String} object.
@@ -350,8 +318,6 @@ public class Report implements Serializable {
 
   /**
    * The Project Version
-   *
-   * <p>
    *
    * <p>(Required)
    *
@@ -376,8 +342,6 @@ public class Report implements Serializable {
   /**
    * TargetInfo
    *
-   * <p>
-   *
    * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Target} object.
    */
   @JsonProperty("Target")
@@ -387,8 +351,6 @@ public class Report implements Serializable {
 
   /**
    * TargetInfo
-   *
-   * <p>
    *
    * @param target a {@link frontEnd.MessagingSystem.routing.structure.Default.Target} object.
    */
@@ -411,8 +373,6 @@ public class Report implements Serializable {
   /**
    * Issues
    *
-   * <p>
-   *
    * <p>(Required)
    *
    * @return a {@link java.util.List} object.
@@ -424,8 +384,6 @@ public class Report implements Serializable {
 
   /**
    * Issues
-   *
-   * <p>
    *
    * <p>(Required)
    *
@@ -450,8 +408,6 @@ public class Report implements Serializable {
   /**
    * HeuristicsType
    *
-   * <p>
-   *
    * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Heuristics} object.
    */
   @JsonProperty("Heuristics")
@@ -461,8 +417,6 @@ public class Report implements Serializable {
 
   /**
    * HeuristicsType
-   *
-   * <p>
    *
    * @param heuristics a {@link frontEnd.MessagingSystem.routing.structure.Default.Heuristics}
    *     object.

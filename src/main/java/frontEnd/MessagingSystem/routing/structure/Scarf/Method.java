@@ -27,8 +27,6 @@ public class Method implements Serializable {
   /**
    * id
    *
-   * <p>
-   *
    * <p>(Required)
    */
   @JsonProperty("-id")
@@ -63,8 +61,6 @@ public class Method implements Serializable {
   /**
    * id
    *
-   * <p>
-   *
    * <p>(Required)
    *
    * @return a int.
@@ -77,8 +73,6 @@ public class Method implements Serializable {
 
   /**
    * id
-   *
-   * <p>
    *
    * <p>(Required)
    *

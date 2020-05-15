@@ -149,6 +149,11 @@ public class CWEList {
     else return this.cweList.get(-1);
   }
 
+  /**
+   * Getter for the field <code>cweVersion</code>.
+   *
+   * @return a {@link java.lang.Double} object.
+   */
   public Double getCweVersion() {
     return this.cweVersion;
   }

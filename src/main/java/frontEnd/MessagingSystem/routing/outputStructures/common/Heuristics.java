@@ -85,6 +85,11 @@ public class Heuristics {
     return output;
   }
 
+  /**
+   * toString.
+   *
+   * @return a {@link java.lang.String} object.
+   */
   public String toString() {
     return "Heuristics(numberOfOrthogonal="
         + this.numberOfOrthogonal
@@ -101,42 +106,92 @@ public class Heuristics {
         + ")";
   }
 
+  /**
+   * Getter for the field <code>numberOfOrthogonal</code>.
+   *
+   * @return a int.
+   */
   public int getNumberOfOrthogonal() {
     return this.numberOfOrthogonal;
   }
 
+  /**
+   * Getter for the field <code>numberOfConstantsToCheck</code>.
+   *
+   * @return a int.
+   */
   public int getNumberOfConstantsToCheck() {
     return this.numberOfConstantsToCheck;
   }
 
+  /**
+   * Getter for the field <code>numberOfHeuristics</code>.
+   *
+   * @return a int.
+   */
   public int getNumberOfHeuristics() {
     return this.numberOfHeuristics;
   }
 
+  /**
+   * Getter for the field <code>numberOfSlices</code>.
+   *
+   * @return a int.
+   */
   public int getNumberOfSlices() {
     return this.numberOfSlices;
   }
 
+  /**
+   * Getter for the field <code>sliceAverage</code>.
+   *
+   * @return a double.
+   */
   public double getSliceAverage() {
     return this.sliceAverage;
   }
 
+  /**
+   * Setter for the field <code>numberOfOrthogonal</code>.
+   *
+   * @param numberOfOrthogonal a int.
+   */
   public void setNumberOfOrthogonal(int numberOfOrthogonal) {
     this.numberOfOrthogonal = numberOfOrthogonal;
   }
 
+  /**
+   * Setter for the field <code>numberOfConstantsToCheck</code>.
+   *
+   * @param numberOfConstantsToCheck a int.
+   */
   public void setNumberOfConstantsToCheck(int numberOfConstantsToCheck) {
     this.numberOfConstantsToCheck = numberOfConstantsToCheck;
   }
 
+  /**
+   * Setter for the field <code>numberOfHeuristics</code>.
+   *
+   * @param numberOfHeuristics a int.
+   */
   public void setNumberOfHeuristics(int numberOfHeuristics) {
     this.numberOfHeuristics = numberOfHeuristics;
   }
 
+  /**
+   * Setter for the field <code>numberOfSlices</code>.
+   *
+   * @param numberOfSlices a int.
+   */
   public void setNumberOfSlices(int numberOfSlices) {
     this.numberOfSlices = numberOfSlices;
   }
 
+  /**
+   * Setter for the field <code>sliceAverage</code>.
+   *
+   * @param sliceAverage a double.
+   */
   public void setSliceAverage(double sliceAverage) {
     this.sliceAverage = sliceAverage;
   }

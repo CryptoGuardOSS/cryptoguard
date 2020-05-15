@@ -42,27 +42,15 @@ public class BugInstance implements Serializable {
 
   @JsonProperty("ClassName")
   private String className;
-  /**
-   * Method
-   *
-   * <p>
-   */
+  /** Method */
   @JacksonXmlElementWrapper(useWrapping = true, localName = "Methods")
   @JsonProperty("Method")
   private List<Method> method = null;
-  /**
-   * Location
-   *
-   * <p>
-   */
+  /** Location */
   @JacksonXmlElementWrapper(useWrapping = true, localName = "BugLocations")
   @JsonProperty("Location")
   private List<Location> location = null;
-  /**
-   * CweId
-   *
-   * <p>
-   */
+  /** CweId */
   @JacksonXmlElementWrapper(useWrapping = false)
   @JsonProperty("CweId")
   private List<String> cweId = null;
@@ -84,17 +72,11 @@ public class BugInstance implements Serializable {
 
   @JsonProperty("ResolutionSuggestion")
   private String resolutionSuggestion;
-  /**
-   * BugTrace
-   *
-   * <p>
-   */
+  /** BugTrace */
   @JsonProperty("BugTrace")
   private BugTrace bugTrace;
   /**
    * id
-   *
-   * <p>
    *
    * <p>(Required)
    */
@@ -231,8 +213,6 @@ public class BugInstance implements Serializable {
   /**
    * BugLocations
    *
-   * <p>
-   *
    * <p>(Required)
    *
    * @return a {@link java.util.List} object.
@@ -256,8 +236,6 @@ public class BugInstance implements Serializable {
 
   /**
    * BugLocations
-   *
-   * <p>
    *
    * <p>(Required)
    *
@@ -542,8 +520,6 @@ public class BugInstance implements Serializable {
   /**
    * id
    *
-   * <p>
-   *
    * <p>(Required)
    *
    * @return a int.
@@ -556,8 +532,6 @@ public class BugInstance implements Serializable {
 
   /**
    * id
-   *
-   * <p>
    *
    * <p>(Required)
    *

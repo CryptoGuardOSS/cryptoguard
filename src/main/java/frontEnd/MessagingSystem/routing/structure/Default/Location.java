@@ -59,11 +59,7 @@ public class Location implements Serializable {
 
   @JsonProperty("Primary")
   private boolean primary;
-  /**
-   * id
-   *
-   * <p>
-   */
+  /** id */
   @JsonProperty("-id")
   private long id = 0L;
 

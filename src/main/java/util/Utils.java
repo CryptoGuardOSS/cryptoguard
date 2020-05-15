@@ -57,8 +57,8 @@ public class Utils {
   public static final String fileSep = System.getProperty("file.separator");
   /** Constant <code>lineSep="System.getProperty(line.separator)"</code> */
   public static final String lineSep = System.getProperty("line.separator");
-  /** Constant <code>projectVersion="V04.02.02"</code> */
-  public static final String projectVersion = "V04.02.02";
+  /** Constant <code>projectVersion="V04.02.07"</code> */
+  public static final String projectVersion = "V04.02.07";
   /** Constant <code>projectName="CryptoGuard"</code> */
   public static final String projectName = "CryptoGuard";
   /** Constant <code>userPath="System.getProperty(user.home)"</code> */
@@ -904,6 +904,8 @@ public class Utils {
           jarFiles.add(file.getAbsolutePath());
         }
       }
+    } else if (dir.getName().toLowerCase().endsWith(".jar")) {
+      jarFiles.add(dir.getAbsolutePath());
     }
 
     return jarFiles;

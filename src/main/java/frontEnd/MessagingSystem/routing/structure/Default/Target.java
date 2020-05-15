@@ -15,8 +15,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 /**
  * TargetInfo
  *
- * <p>
- *
  * @author franceme
  * @version 03.07.01
  */
@@ -60,11 +58,7 @@ public class Target implements Serializable {
   /** (Required) */
   @JsonProperty("RawCommand")
   private String rawCommand;
-  /**
-   * Timing
-   *
-   * <p>
-   */
+  /** Timing */
   @JsonProperty("Timing")
   private Timing timing;
   /** (Required) */
@@ -76,11 +70,7 @@ public class Target implements Serializable {
 
   @JsonProperty("ProjectType")
   private ProjectType projectType;
-  /**
-   * The Sources of the Target
-   *
-   * <p>
-   */
+  /** The Sources of the Target */
   @JsonProperty("TargetSources")
   private List<String> targetSources = new ArrayList<>();
 
@@ -328,8 +318,6 @@ public class Target implements Serializable {
   /**
    * Timing
    *
-   * <p>
-   *
    * @return a {@link frontEnd.MessagingSystem.routing.structure.Default.Timing} object.
    */
   @JsonProperty("Timing")
@@ -339,8 +327,6 @@ public class Target implements Serializable {
 
   /**
    * Timing
-   *
-   * <p>
    *
    * @param timing a {@link frontEnd.MessagingSystem.routing.structure.Default.Timing} object.
    */
@@ -458,8 +444,6 @@ public class Target implements Serializable {
   /**
    * The Sources of the Target
    *
-   * <p>
-   *
    * @return a {@link java.util.List} object.
    */
   @JsonProperty("TargetSources")
@@ -469,8 +453,6 @@ public class Target implements Serializable {
 
   /**
    * The Sources of the Target
-   *
-   * <p>
    *
    * @param targetSources a {@link java.util.List} object.
    */

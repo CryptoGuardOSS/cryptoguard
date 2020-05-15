@@ -26,8 +26,6 @@ public class Metric implements Serializable {
   /**
    * id
    *
-   * <p>
-   *
    * <p>(Required)
    */
   @JsonProperty("-id")
@@ -75,8 +73,6 @@ public class Metric implements Serializable {
   /**
    * id
    *
-   * <p>
-   *
    * <p>(Required)
    *
    * @return a int.
@@ -89,8 +85,6 @@ public class Metric implements Serializable {
 
   /**
    * id
-   *
-   * <p>
    *
    * <p>(Required)
    *
