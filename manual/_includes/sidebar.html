@@ -12,6 +12,7 @@
     <nav class="sidebar-nav">
 
       {% assign pages_list = site.main_pages %}
+      <a class="sidebar-nav-item{% if page.url == node.url %} active{% endif %}" href="https://github.com/franceme/cryptoguard/releases/latest">Latest Release</a>
       {% for node in pages_list %}
         {% if node.title != null%}
           <a class="sidebar-nav-item{% if page.url == node.url %} active{% endif %}" href="{{ node.url }}">{{ node.title }}</a>
