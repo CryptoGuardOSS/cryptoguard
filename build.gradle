@@ -5,22 +5,15 @@ buildscript {
 	}
 
 	dependencies {
-		//classpath 'org.asciidoctor:asciidoctorj-diagram:1.5.4.1'
 		classpath 'net.saliman:gradle-cobertura-plugin:3.0.0'
 	}
 }
 
-import java.nio.file.Files
 import java.text.SimpleDateFormat
-import groovy.io.FileType
-import java.nio.file.Paths
-import com.google.common.hash.Hasher
-import com.google.common.hash.Hashing
 
 plugins {
 	id 'com.google.cloud.tools.jib' version '1.5.0'
 	id "com.diffplug.gradle.spotless" version "3.28.1"
-	//id 'org.jbake.site' version '1.4.0'
 }
 apply plugin: "java"
 apply plugin: "maven"
@@ -32,44 +25,6 @@ targetCompatibility = JavaVersion.VERSION_1_8
 
 group = groupName
 version = versionNumber
-
-/*
-task writeNewPom {
-	pom {
-		project {
-			groupId groupName
-			artifactId projectName
-			version version
-
-			inceptionYear '2018'
-
-			licenses {
-				license {
-					name = 'The GNU General Public, License v3.0'
-					url = 'http://www.gnu.org/licenses/gpl-3.0.txt'
-				}
-			}
-
-			developers {
-				developer {
-					id = 'franceme'
-					name = 'Miles Frantz'
-					url = 'https://franceme.github.io'
-				}
-				developer {
-					id = 'franceme'
-					name = 'Sazzadur Rahamen'
-					url = 'https://sazzadur.com'
-				}
-			}
-		}
-	}.whenConfigured {
-		pom -> pom.dependencies.find {
-			dep -> dep.groupId == 'junit'
-		}
-	}.writeTo("$buildDir/newpom.xml")
-}
-*/
 
 publishing {
 	repositories {
@@ -91,6 +46,7 @@ publishing {
 		}
 	}
 }
+
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
@@ -122,8 +78,8 @@ task updateVersion {
 	props.load(ins)
 
 	ant.replaceregexp(
-			match: 'V[0-9]{2}[.][0-9]{2}[.][0-9]{2}',
-			replace: props.getProperty("versionNumber"),
+			match: '\\${1}CVER.*\\${1}',
+			replace: '$CVER ' + props.getProperty("versionNumber") + '$',
 			flags: 'g',
 			byline: true) {
 
@@ -132,8 +88,8 @@ task updateVersion {
 				includes: 'README.rst'
 		)
 		fileset(
-				dir: '.',
-				includes: 'Makefile'
+				dir: 'manual',
+				includes: '*.md'
 		)
 		fileset(
 				dir: 'src/main/java/util',
@@ -152,6 +108,7 @@ task updateVersion {
 			token: '@version $Id: $Id',
 			value: '@version ' + props.getProperty("versionNumber").replace("V", "")
 	)
+
 }
 
 task updateCopyRightYear {
@@ -169,7 +126,7 @@ task updateCopyRightYear {
 
 		fileset(
 				dir: '.',
-				includes: '*.rst'
+				includes: '*.md'
 		)
 	}
 }
@@ -210,8 +167,8 @@ jar {
 }
 
 java {
-	//withJavadocJar()
-	//withSourcesJar()
+	withJavadocJar()
+	withSourcesJar()
 }
 
 javadoc {
@@ -222,69 +179,49 @@ javadoc {
 	destinationDir = new File('manual/javadoc')
 }
 
+task writeTestInformation {
+	String foil = 'manual/TestSystemInformation.md'
+	delete(foil)
+	File file = new File(foil)
+	file.write('---\n' +
+			'layout: page\n' +
+			'title: System Test Information\n' +
+			'permalink: /testInfo/\n' +
+			'---\n\n')
+
+	file.append('# Latest Testing System Information\n\n')
+	file.append('## OS Information\n')
+	file.append('* Test OS: ' + System.getProperty('os.name') + '\n')
+	file.append('* Test OS Architecture: x' + System.getProperty('sun.arch.data.model') + '\n\n')
+
+	file.append('## Java Version Information\n')
+	file.append('* JVM Major Version: ' + System.getProperty('java.specification.version') + '\n')
+	file.append('* JVM Vendor Version: ' + System.getProperty('java.vm.vendor') + '\n\n')
+}
+
 //Ensuring all of the processors are being used for tests
 test {
 	environment "ANDROID_HOME", System.getenv("ANDROID_HOME") ?: "ANDROIDSDK"
 	environment "JAVA_HOME", System.getenv("JAVA_HOME") ?: "JAVA8SDK"
 	environment "JAVA7_HOME", System.getenv("JAVA7_HOME") ?: "JAVA7SDK"
-}
-//A Task for specifying explicit release commands
-task release {
 
-	doFirst {
-		delete './release'
-		mkdir './release'
-	}
-	//Waiting until all tests are cleared
-	def tasks = [jibBuildTar]
-	for (int itr = 0; itr < tasks.size() - 1; itr++) {
-		tasks[itr + 1].mustRunAfter(tasks[itr])
+	reports {
+		html {
+			destination file("manual/gradleTestCoverage")
+		}
 	}
 
-	//This task calls the previous tasks in order
-	dependsOn(tasks)
+	finalizedBy(tasks.spotlessApply)
+	finalizedBy(tasks.cobertura)
+	finalizedBy(tasks.javadoc)
+	finalizedBy(tasks.writeTestInformation)
 
-	//This will now move the built jar to the current directory under the new name
-	doLast {
-		Properties props = new Properties()
-		InputStream ins = new FileInputStream(file("gradle.properties"))
-		props.load(ins)
-
-		copy {
-			from "build/jib-image.tar"
-			into './release'
-			rename {
-				String fileName -> props.getProperty("projectName") + ".tar"
-			}
+	copy {
+		from 'manual/index.md'
+		into "$projectDir"
+		rename {
+			String fileName -> "README.md"
 		}
-
-		copy {
-			from "build/libs/" + props.getProperty("projectName") + "-" + props.getProperty("versionNumber") + ".jar"
-			into './release'
-			rename {
-				String fileName -> props.getProperty("projectName") + ".jar"
-			}
-		}
-
-		ins.close()
-
-		//region Writing the hashes of all of the files in the release folder
-		def hashDictionary = [:]
-		new File('./release').eachFileRecurse(FileType.FILES) {
-			file ->
-				Hasher hasher = Hashing.sha512().newHasher()
-				hasher.putBytes(Files.readAllBytes(Paths.get(file.getPath())))
-				hashDictionary[file.name] = hasher.hash().toString()
-
-		}
-
-		File hash = new File('./release/sha512.sums')
-		hashDictionary.each {
-			k, v ->
-				hash.append(v + '  ' + k + '\n')
-		}
-		//endregion
-
 	}
 }
 
@@ -331,46 +268,8 @@ spotless {
 	}
 }
 
-/*
-jbake {
-	srcDirName = 'src/documentation'
-	destDirName = './manual/site'
-}
-
-bakePreview {
-	input = project.file('manual/site')
-	port = '8090'
-}
-
-
-
-task createjbakeignorefile {
-	group = "documentation"
-	doLast {
-
-		def allFiles = fileTree("src/documentation/content").toList()
-		allFiles.removeAll {
-			it.toString().contains("adoc") || it.toString().contains("json") || it.toString().contains("md")
-		}
-		def ignoreFileName = "src/documentation/content/.jbakeignore"
-		def ignoreFile = new File(ignoreFileName)
-		ignoreFile.write(allFiles.join("\n"))
-	}
-}
-
-clean.doLast {
-	def fileList = fileTree("src/documentation/content").toList()
-
-	fileList.each {
-		if (it.toString().contains("ignore") || it.toString().contains("json") || it.toString().contains("tests") || it.toString().contains("Spec")) {
-			file(it.toString()).delete()
-		}
-	}
-}
-*/
-
 cobertura {
-	coverageFormats = ['html','xml']
+	coverageFormats = ['html']
 	coverageIgnoreTrivial = true
 	coverageIgnores = ['org.slf4j.Logger.*']
 	coverageReportDir = new File('manual/cobertura')
@@ -395,4 +294,8 @@ dependencies {
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
 	compile 'org.ow2.asm:asm:8.0.1'
 }
-//build.finalizedBy(bake)
+
+build {
+	dependsOn updateVersion
+	dependsOn spotlessApply
+}

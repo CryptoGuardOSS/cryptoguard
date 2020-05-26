@@ -59,7 +59,7 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment"> * @since V01.00.00</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;21</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="comment"> */</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;22</td>  <td class="nbHitsCovered">&nbsp;57</td>  <td class="src"><pre class="src">&nbsp;<span class="keyword">public</span> enum Listing {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;22</td>  <td class="nbHitsCovered">&nbsp;50</td>  <td class="src"><pre class="src">&nbsp;<span class="keyword">public</span> enum Listing {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;23</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;  <span class="comment">//region Values</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;24</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;  Legacy(<span class="string">"Legacy"</span>, <span class="string">"L"</span>, <span class="string">".txt"</span>, <span class="keyword">true</span>, <span class="keyword">null</span>),</pre></td></tr>
@@ -191,7 +191,7 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">   */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;98</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;  <span class="keyword">public</span> <span class="keyword">static</span> Listing retrieveListingType(String flag) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;99</td>  <td class="nbHitsUncovered"><a title="Line 99: Conditional coverage 83% (5/6) [each condition: 100%, 50%, 100%].">&nbsp;55</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 99: Conditional coverage 83% (5/6) [each condition: 100%, 50%, 100%].">    <span class="keyword">if</span> (flag != <span class="keyword">null</span>) <span class="keyword">for</span> (Listing type : Listing.values()) <span class="keyword">if</span> (type.flag.equals(flag)) <span class="keyword">return</span> type;</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;99</td>  <td class="nbHitsUncovered"><a title="Line 99: Conditional coverage 83% (5/6) [each condition: 100%, 50%, 100%].">&nbsp;48</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 99: Conditional coverage 83% (5/6) [each condition: 100%, 50%, 100%].">    <span class="keyword">if</span> (flag != <span class="keyword">null</span>) <span class="keyword">for</span> (Listing type : Listing.values()) <span class="keyword">if</span> (type.flag.equals(flag)) <span class="keyword">return</span> type;</a></span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;100</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;101</td>  <td class="nbHitsCovered">&nbsp;2</td>  <td class="src"><pre class="src">&nbsp;    <span class="keyword">return</span> Listing.Default;</pre></td></tr>
@@ -338,7 +338,7 @@
   <td class="src"><pre class="src">&nbsp;      <span class="keyword">throws</span> ExceptionHandler {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;176</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;177</td>  <td class="nbHitsCovered"><a title="Line 177: Conditional coverage 100% (2/2).">&nbsp;50</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 177: Conditional coverage 100% (2/2).">    <span class="keyword">if</span> (stream) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;177</td>  <td class="nbHitsCovered"><a title="Line 177: Conditional coverage 100% (2/2).">&nbsp;43</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 177: Conditional coverage 100% (2/2).">    <span class="keyword">if</span> (stream) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;178</td>  <td class="nbHitsUncovered"><a title="Line 178: Conditional coverage 50% (1/2).">&nbsp;13</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 178: Conditional coverage 50% (1/2).">      <span class="keyword">if</span> (!<span class="keyword">this</span>.streamEnabled) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;179</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        log.info(<span class="string">"Streaming is not supported for the format: "</span> + <span class="keyword">this</span>.getType());</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;180</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        log.info(<span class="string">"Defaulting back to block based output."</span>);</span></pre></td></tr>
@@ -363,10 +363,10 @@
   <td class="src"><pre class="src">&nbsp;    {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;194</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;      <span class="keyword">try</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;195</td>  <td class="nbHitsCovered">&nbsp;74</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">return</span> (Structure)</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;196</td>  <td class="nbHitsCovered">&nbsp;37</td>  <td class="src"><pre class="src">&nbsp;            Class.forName(<span class="keyword">this</span>.blockPath + <span class="keyword">this</span>.type)</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;197</td>  <td class="nbHitsCovered">&nbsp;37</td>  <td class="src"><pre class="src">&nbsp;                .getConstructor(EnvironmentInformation.<span class="keyword">class</span>)</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;198</td>  <td class="nbHitsCovered">&nbsp;37</td>  <td class="src"><pre class="src">&nbsp;                .newInstance(info);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;195</td>  <td class="nbHitsCovered">&nbsp;60</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">return</span> (Structure)</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;196</td>  <td class="nbHitsCovered">&nbsp;30</td>  <td class="src"><pre class="src">&nbsp;            Class.forName(<span class="keyword">this</span>.blockPath + <span class="keyword">this</span>.type)</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;197</td>  <td class="nbHitsCovered">&nbsp;30</td>  <td class="src"><pre class="src">&nbsp;                .getConstructor(EnvironmentInformation.<span class="keyword">class</span>)</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;198</td>  <td class="nbHitsCovered">&nbsp;30</td>  <td class="src"><pre class="src">&nbsp;                .newInstance(info);</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;199</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;      } <span class="keyword">catch</span> (Exception e) {</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;200</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        <span class="keyword">return</span> <span class="keyword">new</span> frontEnd.MessagingSystem.routing.outputStructures.block.Legacy(info);</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;201</td>  <td class="nbHits">&nbsp;</td>
@@ -505,7 +505,7 @@
   <td class="src"><pre class="src">&nbsp;  <span class="keyword">public</span> String getOutputFileExt() {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;280</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;281</td>  <td class="nbHitsCovered"><a title="Line 281: Conditional coverage 100% (2/2).">&nbsp;58</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 281: Conditional coverage 100% (2/2).">    <span class="keyword">if</span> (outputFileExt == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">this</span>.jacksonType.getExtension();</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;281</td>  <td class="nbHitsCovered"><a title="Line 281: Conditional coverage 100% (2/2).">&nbsp;50</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 281: Conditional coverage 100% (2/2).">    <span class="keyword">if</span> (outputFileExt == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">this</span>.jacksonType.getExtension();</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;282</td>  <td class="nbHitsCovered">&nbsp;8</td>  <td class="src"><pre class="src">&nbsp;    <span class="keyword">else</span> <span class="keyword">return</span> outputFileExt;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;283</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;  }</pre></td></tr>
@@ -541,6 +541,6 @@
   <td class="src"><pre class="src">&nbsp;}</pre></td></tr>
 </table>
 
-<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 2.1.1 on 5/15/20 12:19 PM.</div>
+<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 2.1.1 on 5/26/20 12:38 AM.</div>
 </body>
 </html>

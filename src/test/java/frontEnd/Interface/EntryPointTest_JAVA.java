@@ -35,7 +35,7 @@ import util.Utils;
 public class EntryPointTest_JAVA {
 
   //region Test Environment Setup
-
+  private static final Boolean activate = false;
   /**
    * setUp.
    *
@@ -67,7 +67,7 @@ public class EntryPointTest_JAVA {
     String fileOut = tempFileOutJson_File;
     new File(fileOut).delete();
 
-    if (isLinux) {
+    if (activate && isLinux) {
       String args =
           makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES)
               + makeArg(argsIdentifier.FORMATOUT, Listing.Default)
@@ -113,7 +113,7 @@ public class EntryPointTest_JAVA {
     String fileOut = crypto_Example_Json_File;
     new File(fileOut).delete();
 
-    if (isLinux) {
+    if (activate && isLinux) {
       String args =
           makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES)
               + makeArg(argsIdentifier.FORMATOUT, Listing.Default)
@@ -160,7 +160,7 @@ public class EntryPointTest_JAVA {
     String fileOut = passwordUtils_Example_Json_File;
     new File(fileOut).delete();
 
-    if (isLinux) {
+    if (activate && isLinux) {
       String args =
           makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES)
               + makeArg(argsIdentifier.FORMATOUT, Listing.Default)
@@ -207,7 +207,7 @@ public class EntryPointTest_JAVA {
     String fileOut = symCrypto_Example_Json_File;
     new File(fileOut).delete();
 
-    if (isLinux) {
+    if (activate && isLinux) {
       String args =
           makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES)
               + makeArg(argsIdentifier.FORMATOUT, Listing.Default)
@@ -260,7 +260,7 @@ public class EntryPointTest_JAVA {
     String fileOut = symCrypto_Example_Package_Json_File;
     new File(fileOut).delete();
 
-    if (isLinux) {
+    if (activate && isLinux) {
       String args =
           makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES)
               + makeArg(argsIdentifier.FORMATOUT, Listing.Default)
@@ -308,7 +308,7 @@ public class EntryPointTest_JAVA {
     String fileOut = symCrypto_Multiple_Files;
     new File(fileOut).delete();
 
-    if (isLinux) {
+    if (activate && isLinux) {
       String args =
           makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES)
               + makeArg(argsIdentifier.FORMATOUT, Listing.Default)
@@ -357,7 +357,7 @@ public class EntryPointTest_JAVA {
     String fileOut = symCrypto_Example_Json_File;
     new File(fileOut).delete();
 
-    if (isLinux) {
+    if (activate && isLinux) {
       String args =
           makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES)
               + makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML)
