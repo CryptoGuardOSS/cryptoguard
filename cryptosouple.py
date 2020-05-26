@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 import argparse
+import glob
+import shutil
 import datetime
 import hashlib
 import json
@@ -26,7 +28,7 @@ verify = False
 
 # // @formatter:off
 # region Offline information
-archivedInformation = {'properties': {'projectName': 'cryptoguard', 'groupName': 'vt.edu', 'versionNumber': 'V04.03.00', 'buildFrameWork': 'Java', 'buildVersion': '1.8.232', 'org.gradle.daemon': 'false', 'gradle.version': '6.0'}, 'rawArgs': {}, 'engineType': {}, 'outputType': {'  Legacy': {'type': 'Legacy', 'flag': 'L', 'outputExtension': '.txt'}, '  ScarfXML': {'type': 'ScarfXML', 'flag': 'SX', 'outputExtension': '.xml'}, '  Default': {'type': 'Default', 'flag': 'D', 'outputExtension': '.json'}, '  YAMLGeneric': {'type': 'Default', 'flag': 'Y', 'outputExtension': '.yaml'}, '  XMLGeneric': {'type': 'Default', 'flag': 'X', 'outputExtension': '.xml'}, '  CSVDefault': {'type': 'CSVDefault', 'flag': 'CSV', 'outputExtension': '.csv'}}, 'exceptionType': {'  SUCCESS': {'id': '0', 'messageType': 'Successful'}, '  HELP': {'id': '0', 'messageType': 'Asking For Help'}, '  VERSION': {'id': '0', 'messageType': 'Asking For Version'}, '  GEN_VALID': {'id': '1', 'messageType': 'General Argument Validation'}, '  ARG_VALID': {'id': '2', 'messageType': 'Argument Value Validation'}, '  FORMAT_VALID': {'id': '7', 'messageType': 'Format Specific Argument Validation'}, '  FILE_I': {'id': '15', 'messageType': 'File Input Error'}, '  FILE_READ': {'id': '16', 'messageType': 'Reading File Error'}, '  FILE_AFK': {'id': '17', 'messageType': 'File Not Available'}, '  FILE_O': {'id': '30', 'messageType': 'File Output Error'}, '  FILE_CON': {'id': '31', 'messageType': 'Output File Creation Error'}, '  FILE_CUT': {'id': '32', 'messageType': 'Error Closing The File'}, '  ENV_VAR': {'id': '45', 'messageType': 'Environment Variable Not Set'}, '  MAR_VAR': {'id': '100', 'messageType': 'Error Marshalling The Output'}, '  SCAN_GEN': {'id': '120', 'messageType': 'General Error Scanning The Program'}, '  LOADING': {'id': '121', 'messageType': 'Error Loading Class'}, '  UNKWN': {'id': '127', 'messageType': 'Unknown'}}, 'examples': {'General Project Version': {'type': 'General', 'arg': '-V', 'explanation': 'The version argument (-V) returns the version of the project and exits.'}, 'General Project No Logging': {'type': 'General', 'arg': '-vx', 'explanation': 'The argument (-vx) only displays the fatal logs.'}, 'General Project Verbose Logging': {'type': 'General', 'arg': '-v', 'explanation': 'The argument (-v) displays debug logs.'}, 'General Project Very Verbose Logging': {'type': 'General', 'arg': '-vv', 'explanation': 'The argument (-vv) displays the all of the logs available.'}, 'General Project Stream': {'type': 'General', 'arg': '-st', 'explanation': 'The argument (-st) enables streaming the results to whatever output file is specified.'}, 'General Project Heuristics': {'type': 'General', 'arg': '-H', 'explanation': 'The argument (-H) writes the heuristics picked up in the output file.'}, 'General Project Specifying the main file': {'type': 'General', 'arg': '-main', 'explanation': 'The argument (-main) specifies the main class (containing public static void main) if there are multiple within the project.'}, 'General Project Java Home': {'type': 'General', 'arg': '-java', 'explanation': "The argument (-java) sets the Java file path needed for an internal library. This is needed if the environment variable isn't set.\nJDK 7 needed for either a Project or Java File Scanning.\nJDK 8 needed for the other projects."}, 'General Project Android Home': {'type': 'General', 'arg': '-android', 'explanation': "The argument (-android) sets the Android file path.needed for an internal library. This is needed if the environment variable isn't set.\nNeeded if an Android project is being scanned."}, 'General Project PrettyPrint': {'type': 'General', 'arg': '-n', 'explanation': 'The prettyprint argument (-n) writes the result in the "pretty" format.'}, 'General Project Time Measurement': {'type': 'General', 'arg': '-t', 'explanation': 'The time argument (-t) displays the time taken for the scanning.'}, 'JAR Project Base': {'type': 'JAR', 'arg': '-in jar -s .../project.jar', 'explanation': 'The format argument (-in) specifies the type of project (jar) and the source argument (-s) specifies the location of the project.'}, 'JAR Project Dependency': {'type': 'JAR', 'arg': '-in jar -s .../project.jar -d .../lib/file(s).jar', 'explanation': 'The format argument (-d) specifies the directory of the dependencies to be used with the project and picks up the file.jar.'}, 'JAR Project Fileout': {'type': 'JAR', 'arg': '-in jar -s .../project.jar -m D -o .../fileout.json', 'explanation': 'The output format argument (-m) specifies the type of output to write amd the output argument (-o) specifies the file to write the results to.'}, 'JAR Project Sample Test ': {'type': 'JAR', 'arg': '-in jar -s cryptoguard/samples/testable-jar/build/libs/testable-jar.jar  -d cryptoguard/samples/testable-jar/build/dependencies  -m SX  -o cryptoguard/build/tmp/tempJarFile_Scarf_0.xml  -t  -H  -n -java .../jdk8', 'explanation': 'The output format argument (-in) specifies the type of project (jar).\nThe source argument (-s) specifies the project to be scanned (.../testable-jar.jar).\nThe dependency argument (-d) specifies the directory of the dependencies (.../dependencies).\nThe output format argument (-m) specifies the type of result to write out (Scarf).\nThe output argument (-o) specifies the file to write out to (.../tempJarFile_Scarf_0.xml).\nThe time argument (-t) displays time taken via the project.\nThe heuristic argument (-H) writes various heuristics taken to the output.\nThe prettyprint argument (-n) formats and writes the output into a "pretty" format.\nThe java argument (-java) specifies the java home, either java 7 or 8 for the internal library.'}, 'Project Scanner Base': {'type': 'Project', 'arg': '-in source -s .../project/', 'explanation': 'The format argument (-in) specifies the type of project (source) and the source argument (-s) specifies the location of the project.\nThis must either be a gradle or maven based project.'}, 'Project Scanner Dependency': {'type': 'Project', 'arg': '-in source -s .../project/ -d .../lib/file(s).jar', 'explanation': 'The format argument (-d) specifies the directory of the dependencies to be used with the project and picks up the file.jar.'}, 'Project Fileout': {'type': 'Project', 'arg': '-in source -s .../project/ -m D -o .../fileout.json', 'explanation': 'The output format argument (-m) specifies the type of output to write amd the output argument (-o) specifies the file to write the results to.'}, 'Project Sample Test ': {'type': 'Project', 'arg': '-in source -s cryptoguard/samples/testable-jar  -d cryptoguard/samples/testable-jar/build/dependencies  -m L  -o cryptoguard/build/tmp/testable-jar.txt  -t  -H  -n ', 'explanation': 'The output format argument (-in) specifies the type of project (source).\nThe source argument (-s) specifies the project to be scanned (.../testable-jar).\nThe dependency argument (-d) specifies the directory of the dependencies (.../dependencies).\nThe output format argument (-m) specifies the type of result to write out (Legacy).\nThe output argument (-o) specifies the file to write out to (.../testable-jar.txt).\nThe time argument (-t) displays time taken via the project.\nThe heuristic argument (-H) writes various heuristics taken to the output.\nThe prettyprint argument (-n) formats and writes the output into a "pretty" format.'}, 'Java File(s) Project Base Single File': {'type': 'Java', 'arg': '-in java -s .../test.java', 'explanation': 'The format argument (-in) specifies the type of project (java) and the source argument (-s) specifies the file to be used.'}, 'Java File(s) Project Multiple Files (Split via space)': {'type': 'Java', 'arg': '-in java -s .../test.java .../testTwo.java', 'explanation': 'The argument (-s) specifies the file to be used, retrieving test.java and testTwo.java via the space between the arguments.'}, 'Java File(s) Project Multiple Files (Split via classpath)': {'type': 'Java', 'arg': '-in java -s .../test.java:.../testTwo.java', 'explanation': 'The argument (-s) specifies the file to be used, retrieving test.java and testTwo.java via the split by classpath (delimited by :).'}, 'Java File(s) Project Multiple Files (Split via input.in file)': {'type': 'Java', 'arg': '-in java -s .../input.in', 'explanation': 'The argument (-s) specifies the input.in file to be used. This file should contain a line delimited paths to the source file. This also works based on the \nex. \n.../test.java\n.../testTwo.java'}, 'Java File Fileout': {'type': 'Java', 'arg': '-in java -s .../test.java -m D -o .../fileout.json', 'explanation': 'The output format argument (-m) specifies the type of output to write amd the output argument (-o) specifies the file to write the results to.'}, 'Java File Dependency': {'type': 'Java', 'arg': '-in java -s .../test.java -d .../lib/file(s).jar', 'explanation': 'The format argument (-d) specifies the directory of the dependencies to be used with the project and picks up the file.jar.'}, 'Java File Test ': {'type': 'Java', 'arg': '-in java -s cryptoguard/samples/temp/tester/test.java  -m SX  -o cryptoguard/build/tmp/test_java.xml  -t  -vv  -n ', 'explanation': 'The output format argument (-in) specifies the type of project (java).\nThe source argument (-s) specifies the project to be scanned (.../test.java).\nThe output format argument (-m) specifies the type of result to write out (Scarf).\nThe output argument (-o) specifies the file to write out to (.../test_java.xml).\nThe very verbose argument (-vv) displays all of the logs available.\nThe prettyprint argument (-n) formats and writes the output into a "pretty" format.'}, 'Java Class File(s) Project Base': {'type': 'Class', 'arg': '-in class -s .../test.class', 'explanation': 'The format argument (-in) specifies the type of project (class) and the source argument (-s) specifies the location of the project.'}, 'Java Class File(s) Project Multiple Files (Split via space)': {'type': 'Class', 'arg': '-in class -s .../test.class .../testTwo.class', 'explanation': 'The argument (-s) specifies the file to be used, retrieving test.class and testTwo.class via the space between the arguments.'}, 'Java Class File(s) Project Multiple Files (Split via classpath)': {'type': 'Class', 'arg': '-in class -s .../test.class:.../testTwo.class', 'explanation': 'The argument (-s) specifies the file to be used, retrieving test.class and testTwo.class via the split by classpath (delimited by :).'}, 'Java Class File(s) Project Multiple Files (Split via input.in file)': {'type': 'Class', 'arg': '-in class -s .../input.in', 'explanation': 'The argument (-s) specifies the input.in file to be used. This file should contain a line delimited paths to the source file. This also works based on the \nex. \n.../test.class\n.../testTwo.class'}, 'Java Class File(s) Project Dependency': {'type': 'Class', 'arg': '-in class -s .../test.class -d .../lib/file(s).jar', 'explanation': 'The format argument (-d) specifies the directory of the dependencies to be used with the project and picks up the file.jar.'}, 'Java Class File Test ': {'type': 'Class', 'arg': '-in class -s cryptoguard/samples/VerySimple/very.class -m SX  -o cryptoguard/build/tmp/verySimple_klass.xml  -n ', 'explanation': 'The output format argument (-in) specifies the type of project (java).\nThe source argument (-s) specifies the project to be scanned (.../test.java).\nThe output format argument (-m) specifies the type of result to write out (Scarf).\nThe output argument (-o) specifies the file to write out to (.../verySimple_klass.xml).\nThe prettyprint argument (-n) formats and writes the output into a "pretty" format.'}, 'APK Project Base': {'type': 'APK', 'arg': '-in apk -s .../app-debug.apk', 'explanation': 'The format argument (-in) specifies the type of project (apk) and the source argument (-s) specifies the location of the project.'}, 'APK Project Dependency': {'type': 'APK', 'arg': '-in apk -s  .../app-debug.apk -d .../lib/file(s).jar', 'explanation': 'The format argument (-d) specifies the directory of the dependencies to be used with the project and picks up the file.jar.'}, 'APK Project Fileout': {'type': 'APK', 'arg': '-in apk -s .../app-debug.apk -m D -o .../fileout.json', 'explanation': 'The output format argument (-m) specifies the type of output to write amd the output argument (-o) specifies the file to write the results to.'}, 'APK Project File Test ': {'type': 'APK', 'arg': '-in apk -s cryptoguard/samples/app-debug.apk -m SX  -o cryptoguard/build/tmp/app-debug.xml  -n -android .../android_home', 'explanation': 'The output format argument (-in) specifies the type of project (java).\nThe source argument (-s) specifies the project to be scanned (.../test.java).\nThe output format argument (-m) specifies the type of result to write out (Scarf).\nThe output argument (-o) specifies the file to write out to (.../debug.xml).\nThe prettyprint argument (-n) formats and writes the output into a "pretty" format.\nThe android argument (-android) specifies the android home for the internal library.'}}}
+archivedInformation = {'properties': {'projectName': 'cryptoguard', 'groupName': 'vt.edu', 'versionNumber': '04.03.00', 'buildFrameWork': 'Java', 'buildVersion': '1.8.232', 'org.gradle.daemon': 'false', 'gradle.version': '6.0'}, 'rawArgs': {}, 'engineType': {}, 'outputType': {'  Legacy': {'type': 'Legacy', 'flag': 'L', 'outputExtension': '.txt'}, '  ScarfXML': {'type': 'ScarfXML', 'flag': 'SX', 'outputExtension': '.xml'}, '  Default': {'type': 'Default', 'flag': 'D', 'outputExtension': '.json'}, '  YAMLGeneric': {'type': 'Default', 'flag': 'Y', 'outputExtension': '.yaml'}, '  XMLGeneric': {'type': 'Default', 'flag': 'X', 'outputExtension': '.xml'}, '  CSVDefault': {'type': 'CSVDefault', 'flag': 'CSV', 'outputExtension': '.csv'}}, 'exceptionType': {'  SUCCESS': {'id': '0', 'messageType': 'Successful'}, '  HELP': {'id': '0', 'messageType': 'Asking For Help'}, '  VERSION': {'id': '0', 'messageType': 'Asking For Version'}, '  GEN_VALID': {'id': '1', 'messageType': 'General Argument Validation'}, '  ARG_VALID': {'id': '2', 'messageType': 'Argument Value Validation'}, '  FORMAT_VALID': {'id': '7', 'messageType': 'Format Specific Argument Validation'}, '  FILE_I': {'id': '15', 'messageType': 'File Input Error'}, '  FILE_READ': {'id': '16', 'messageType': 'Reading File Error'}, '  FILE_AFK': {'id': '17', 'messageType': 'File Not Available'}, '  FILE_O': {'id': '30', 'messageType': 'File Output Error'}, '  FILE_CON': {'id': '31', 'messageType': 'Output File Creation Error'}, '  FILE_CUT': {'id': '32', 'messageType': 'Error Closing The File'}, '  ENV_VAR': {'id': '45', 'messageType': 'Environment Variable Not Set'}, '  MAR_VAR': {'id': '100', 'messageType': 'Error Marshalling The Output'}, '  SCAN_GEN': {'id': '120', 'messageType': 'General Error Scanning The Program'}, '  LOADING': {'id': '121', 'messageType': 'Error Loading Class'}, '  UNKWN': {'id': '127', 'messageType': 'Unknown'}}}
 # endregion
 # // @formatter:on
 # region Loading
@@ -144,19 +146,8 @@ class Loading(object):
                 line = java.readline()
         return properties
 
-    def getExamplesRaw(file='exampleUsages.json'):
-        with open(file, 'r') as jsonFile:
-            data = jsonFile.read()
-        data = json.loads(data)
-        return data
-
     # endregion
     # region Online/Offline Reading
-    def getExampleArgs():
-        if offline:
-            return archivedInformation['examples']
-        else:
-            return Loading.getExamplesRaw()
 
     def getProperties():
         if offline:
@@ -200,8 +191,7 @@ class Reading(object):
             'rawArgs': Loading.getRawArgs(),
             'engineType': Loading.getEngineType(),
             'outputType': Loading.getDisplayOutputTypes(),
-            'exceptionType': Loading.getDisplayExceptionTypes(),
-            'examples': Loading.getExampleArgs()
+            'exceptionType': Loading.getDisplayExceptionTypes()
         }
         return data
 
@@ -307,10 +297,49 @@ class Utils(object):
 
         stdout, stderr = stdout.decode('utf-8'), stderr.decode('utf-8')
 
+        print('Removing the Generated files')
+        for foil in glob.glob("*Generate*"):
+            print('Removing the file' + str(foil))
+            os.remove(foil)
+        for foil in glob.glob("_CryptoGuard-V*_*_*"):
+            print('Removing the file' + str(foil))
+            os.remove(foil)
+
+        print('Removing the build file')
+        try:
+            shutil.rmtree('build')
+        except:
+            pass
+
         if 'BUILD SUCCESSFUL' not in stdout:
             print('The build broke, exiting now')
             sys.exit(0)
         print('Successful')
+
+    def custom(argz):
+        print("Custom command " + str(argz))
+        print(Utils.halfRows())
+        print('Building the project using | ./gradlew ' + str(argz) + '' , end='| ', flush=True)
+        start = time.time()
+        cmd = str(os.path.join(os.path.abspath(os.curdir), 'gradlew')) + ' ' + str(argz)
+        try:
+            proc = subprocess.Popen(
+                shlex.split(cmd),
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE
+            )
+            stdout, stderr = proc.communicate()
+        except Exception as e:
+            print('Unknown Error ' + str(e))
+            sys.exit(0)
+
+        stdout, stderr = stdout.decode('utf-8'), stderr.decode('utf-8')
+
+        if 'BUILD SUCCESSFUL' not in stdout:
+            print('The build broke, exiting now')
+            sys.exit(0)
+
+        print('Successful | ' + str(int(time.time() - start)) + ' (s)')
 
     def build():
         print("Building the project")
@@ -350,6 +379,7 @@ class Utils(object):
 
     def refresh():
         Utils.clean()
+        Utils.custom('spotlessApply')
         Utils.build()
 
     # Setting the arguments to be handled by the parser
@@ -993,7 +1023,7 @@ class argsUtils(object):
                 out.write("## Raw Arguments\n")
                 out.write(
                     "**Please Note** the general arguments can be used in any order and in various combinations (except for the version argument)\n")
-                lookup = argsUtils.parseArgs()
+                lookup = Loading.parseArgs()
                 longestOneCol = max(len(x['id']) for x in lookup.values())
                 longestTwoCol = max(len(x['defaultArg']) for x in lookup.values())
                 longestThreeCol = max(len(x['desc']) for x in lookup.values())
@@ -1367,6 +1397,7 @@ class TestUtils(object):
             print(Utils.prettyTime(testTime))
 
     def tests(dyct=pullTests(), filter=None, stream=False):
+        Utils.refresh()
         if stream:
             global streamTests
             streamTests = True
@@ -1432,80 +1463,83 @@ class TestUtils(object):
                 print('Skipping All Project and Java file Tests, no JAVA7_HOME env found')
 
         print(Utils.halfRows())
-        for key, value in dyct.items():
-            subpassed, subfailed, subskipped = 0, 0, 0
+        if False:
+            for key, value in dyct.items():
+                subpassed, subfailed, subskipped = 0, 0, 0
 
-            if ('_' in key):
-                testType = key.strip().strip().split('_')[1]
-            else:
-                testType = 'OTHER'
-
-            for test in value:
-                status, testTime = 'Skip', 0
-
-                envSkip = (not android_set and key.endswith('_APK')) or (
-                        not java7_set and (key.endswith('SOURCE') or key.endswith('JAVA')))
-
-                testName, startTest = str(key) + '.' + str(test['testName']), time.time()
-                skipTestTime = False
-                strTest = str(testNum)
-                if testNum < 10:
-                    strTest = '0' + str(strTest)
-                print(str(strTest) + '/' + str(numTests) + ' | ' + str(testName) + ' | ', end='', flush=True)
-                if not test['live'] or envSkip or (filter is not None and filter != testType):
-                    skipped = skipped + 1
-                    subskipped = subskipped + 1
-                    skipTestTime = True
-                    print('Skip | ', end='', flush=True)
-                    skippedTests += [testName]
+                if ('_' in key):
+                    testType = key.strip().strip().split('_')[1]
                 else:
-                    testResult = TestUtils.runTest(testName)
-                    if (testResult):
-                        passed = passed + 1
-                        subpassed = subpassed + 1
-                        print('Pass | ', end='', flush=True)
-                        status = 'Pass'
+                    testType = 'OTHER'
+
+                for test in value:
+                    status, testTime = 'Skip', 0
+
+                    envSkip = (not android_set and key.endswith('_APK')) or (
+                            not java7_set and (key.endswith('SOURCE') or key.endswith('JAVA')))
+
+                    testName, startTest = str(key) + '.' + str(test['testName']), time.time()
+                    skipTestTime = False
+                    strTest = str(testNum)
+                    if testNum < 10:
+                        strTest = '0' + str(strTest)
+                    print(str(strTest) + '/' + str(numTests) + ' | ' + str(testName) + ' | ', end='', flush=True)
+                    if not test['live'] or envSkip or (filter is not None and filter != testType):
+                        skipped = skipped + 1
+                        subskipped = subskipped + 1
+                        skipTestTime = True
+                        print('Skip | ', end='', flush=True)
+                        skippedTests += [testName]
                     else:
-                        failed = failed + 1
-                        subfailed = subfailed + 1
-                        print('Fail | ', end='', flush=True)
-                        failedTests += [testName]
-                        status = 'Fail'
-                testNum = testNum + 1
-                if (not skipTestTime):
-                    testTime = int(time.time() - startTest)
-                else:
-                    testTime = 0
-                print(Utils.prettyTime(testTime))
-
-                results = TestUtils.addTestResult(results, testType, status, testTime, testName, 0)
-            if verbose:
-                print(
-                    str(key) + ' Skipped/Passed/Fail/(% passed): ' + str(subskipped) + '/' + str(subpassed) + '/' + str(
-                        subfailed) + '/% ' + str(Utils.percent(subpassed, subfailed)))
-        while rerun < rerunLim:
-            print('Rerunning the failed tests')
-            for test in failedTests:
-                print(test, end=' | ', flush=True)
-                start = time.time()
-                result = TestUtils.runTest(test)
-                end = time.time()
-                testTime = int(end - start)
-                if result:
-                    result = 'Pass'
-                    failed = failed - 1
-                    failedTests.remove(test)
-
-                    if ('_' in key):
-                        testType = key.strip().strip().split('_')[1]
+                        testResult = TestUtils.runTest(testName)
+                        if (testResult):
+                            passed = passed + 1
+                            subpassed = subpassed + 1
+                            print('Pass | ', end='', flush=True)
+                            status = 'Pass'
+                        else:
+                            failed = failed + 1
+                            subfailed = subfailed + 1
+                            print('Fail | ', end='', flush=True)
+                            failedTests += [testName]
+                            status = 'Fail'
+                    testNum = testNum + 1
+                    if (not skipTestTime):
+                        testTime = int(time.time() - startTest)
                     else:
-                        testType = 'OTHER'
+                        testTime = 0
+                    print(Utils.prettyTime(testTime))
 
-                    results = TestUtils.reRunTestResult(results, testType, False, test, rerun, testTime)
-                else:
-                    result = 'Fail'
-                print(str(result) + ' | ' + Utils.prettyTime(testTime))
-            rerun = rerun + 1
+                    results = TestUtils.addTestResult(results, testType, status, testTime, testName, 0)
+                if verbose:
+                    print(
+                        str(key) + ' Skipped/Passed/Fail/(% passed): ' + str(subskipped) + '/' + str(subpassed) + '/' + str(
+                            subfailed) + '/% ' + str(Utils.percent(subpassed, subfailed)))
+            while rerun < rerunLim:
+                print('Rerunning the failed tests')
+                for test in failedTests:
+                    print(test, end=' | ', flush=True)
+                    start = time.time()
+                    result = TestUtils.runTest(test)
+                    end = time.time()
+                    testTime = int(end - start)
+                    if result:
+                        result = 'Pass'
+                        failed = failed - 1
+                        failedTests.remove(test)
+
+                        if ('_' in key):
+                            testType = key.strip().strip().split('_')[1]
+                        else:
+                            testType = 'OTHER'
+
+                        results = TestUtils.reRunTestResult(results, testType, False, test, rerun, testTime)
+                    else:
+                        result = 'Fail'
+                    print(str(result) + ' | ' + Utils.prettyTime(testTime))
+                rerun = rerun + 1
+        else:
+            Utils.custom('test')
         print('==============================')
         print('Time Taken : ' + Utils.prettyTime(int(time.time() - start)))
         print('Skipped Tests: ' + str(skipped))
@@ -1533,6 +1567,8 @@ class TestUtils(object):
         # else:
         #    sys.exit(0)
 
+        Utils.custom('jacocoTestTreport jacocoTestCoverageVerification cobertura coberturaReport')
+
         return results
 
 
@@ -1542,41 +1578,41 @@ class TestUtils(object):
 #The dictionary containing the working functions and their respective definitions
 '''  ####################################
 routers = {
-    'rawArgs': {
-        "func": argsUtils.readRawArgs,
-        "def": "Prints the raw arguments of the program.",
-        'offline': True
-    },
-    'exampleArgs': {
-        "func": argsUtils.helpfulArgs,
-        "def": "Sample examples of running the program with arguments and explanations.",
-        'offline': True
-    },
-    'writeUsage': {
-        "func": argsUtils.writeUsage,
-        "def": "Write the example args to a markdown file (USAGE.md).",
-        'offline': True
-    },
+    #'rawArgs': {
+    #    "func": argsUtils.readRawArgs,
+    #    "def": "Prints the raw arguments of the program.",
+    #    'offline': True
+    #},
+    #'exampleArgs': {
+    #    "func": argsUtils.helpfulArgs,
+    #    "def": "Sample examples of running the program with arguments and explanations.",
+    #    'offline': True
+    #},
+    #'writeUsage': {
+    #    "func": argsUtils.writeUsage,
+    #    "def": "Write the example args to a markdown file (USAGE.md).",
+    #    'offline': True
+    #},
     'checkEnv': {
         "func": envVars.checkVariables,
         "def": "Checks (suggestions to set them if missing) the environment variables.",
         'offline': True
     },
-    'projectType': {
-        "func": argsUtils.displayProjectTypes,
-        "def": "Displays some information about the project types available to scan.",
-        'offline': True
-    },
-    'outputType': {
-        "func": argsUtils.displayOutputTypes,
-        "def": "Displays some information about the various output types available to write out as.",
-        'offline': True
-    },
-    'exceptionType': {
-        "func": argsUtils.displayExceptionTypes,
-        "def": "Displays information about the standardized exceptions.",
-        'offline': True
-    },
+    #'projectType': {
+    #    "func": argsUtils.displayProjectTypes,
+    #    "def": "Displays some information about the project types available to scan.",
+    #    'offline': True
+    #},
+    #'outputType': {
+    #    "func": argsUtils.displayOutputTypes,
+    #    "def": "Displays some information about the various output types available to write out as.",
+    #    'offline': True
+    #},
+    #'exceptionType': {
+    #    "func": argsUtils.displayExceptionTypes,
+    #    "def": "Displays information about the standardized exceptions.",
+    #    'offline': True
+    #},
     'clean': {
         "func": Utils.clean,
         "def": "Cleans the project.",

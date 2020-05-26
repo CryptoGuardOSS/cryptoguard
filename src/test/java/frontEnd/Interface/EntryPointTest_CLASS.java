@@ -43,6 +43,7 @@ import util.Utils;
 public class EntryPointTest_CLASS {
 
   //region Attributes
+  private static final Boolean activate = true;
   //endregion
 
   //region Test Environment Setup
@@ -76,7 +77,7 @@ public class EntryPointTest_CLASS {
     String fileOut = verySimple_Klass_xml_1;
     new File(fileOut).delete();
 
-    if (isLinux) {
+    if (activate && isLinux) {
       String args =
           makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES)
               + makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML)
@@ -133,7 +134,7 @@ public class EntryPointTest_CLASS {
     Listing type = Listing.XMLGeneric;
     new File(fileOut).delete();
 
-    if (isLinux) {
+    if (activate && isLinux) {
       String args =
           makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES)
               + makeArg(argsIdentifier.FORMATOUT, type)
@@ -182,7 +183,7 @@ public class EntryPointTest_CLASS {
     Listing type = Listing.YAMLGeneric;
     new File(fileOut).delete();
 
-    if (isLinux) {
+    if (activate && isLinux) {
       String args =
           makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES)
               + makeArg(argsIdentifier.FORMATOUT, type)
@@ -233,7 +234,7 @@ public class EntryPointTest_CLASS {
     String fileOut = testablejar_Crypto_class_xml_0;
     new File(fileOut).delete();
 
-    if (isLinux) {
+    if (activate && isLinux) {
       String args =
           makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES)
               + makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML)
@@ -277,7 +278,7 @@ public class EntryPointTest_CLASS {
     String source = newTestCaseTwo_Class;
     new File(fileOut).delete();
 
-    if (isLinux) {
+    if (activate && isLinux) {
       String args =
           makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES)
               + makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML)
@@ -322,7 +323,7 @@ public class EntryPointTest_CLASS {
     String source = Utils.join(" ", TestUtilities.arr(classFiles));
     new File(fileOut).delete();
 
-    if (isLinux) {
+    if (activate && isLinux) {
       String args =
           makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES)
               + makeArg(argsIdentifier.SOURCE, Utils.join(" ", classFiles))
@@ -355,7 +356,7 @@ public class EntryPointTest_CLASS {
     String source = String.join(" ", classFiles);
     new File(fileOut).delete();
 
-    if (isLinux) {
+    if (activate && isLinux) {
       String args =
           makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES)
               + makeArg(argsIdentifier.SOURCE, source)
@@ -401,7 +402,7 @@ public class EntryPointTest_CLASS {
     String source = String.join(":", classFiles);
     new File(fileOut).delete();
 
-    if (isLinux) {
+    if (activate && isLinux) {
       String args =
           makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES)
               + makeArg(argsIdentifier.SOURCE, source)
@@ -448,7 +449,7 @@ public class EntryPointTest_CLASS {
     String source = String.join(" ", classFiles);
     new File(fileOut).delete();
 
-    if (isLinux) {
+    if (activate && isLinux) {
       String args =
           makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES)
               + makeArg(argsIdentifier.SOURCE, source)
@@ -497,7 +498,7 @@ public class EntryPointTest_CLASS {
     String source = Utils.join(" ", TestUtilities.arr(srcOneGrvInputArr_Class));
     new File(fileOut).delete();
 
-    if (isLinux) {
+    if (activate && isLinux) {
       String args =
           makeArg(argsIdentifier.FORMAT, EngineType.CLASSFILES)
               + makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML)
@@ -546,7 +547,7 @@ public class EntryPointTest_CLASS {
     String fileOut = testablejar_Crypto_plugin_class_json_0;
     new File(fileOut).delete();
 
-    if (isLinux) {
+    if (activate && isLinux) {
 
       try {
         String outputFile =
@@ -586,7 +587,7 @@ public class EntryPointTest_CLASS {
     ArrayList<String> source = TestUtilities.arr(classFiles);
     new File(fileOut).delete();
 
-    if (isLinux) {
+    if (activate && isLinux) {
 
       try {
         String outputFile =

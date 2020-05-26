@@ -50,6 +50,10 @@ clean:
 	@$(info Cleaning the project.)
 	@$(runner) clean
 
+website:
+	@$(info Building the Jekyll website)
+	@cd manual && bundle exec jekyll serve -w
+
 docker:
 	@$(info Build the Docker file)
 	@sudo docker build -t cryptoguard .

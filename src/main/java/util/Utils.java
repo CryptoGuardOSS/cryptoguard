@@ -59,8 +59,9 @@ public class Utils {
   public static final String fileSep = System.getProperty("file.separator");
   /** Constant <code>lineSep="System.getProperty(line.separator)"</code> */
   public static final String lineSep = System.getProperty("line.separator");
-  /** Constant <code>projectVersion="V04.03.00"</code> */
-  public static final String projectVersion = "V04.03.00";
+  /** Constant <code>projectVersion=":$CVER 04.04.00$"</code> */
+  public static final String projectVersion =
+      "$CVER 04.04.00$".replaceAll(",]", "").replace("CVER ", "");
   /** Constant <code>projectName="CryptoGuard"</code> */
   public static final String projectName = "CryptoGuard";
   /** Constant <code>userPath="System.getProperty(user.home)"</code> */
