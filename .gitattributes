@@ -5,6 +5,7 @@
 *.txt text eol=lf
 *.rst text eol=lf
 build.gradle text eol=lf
+build.gradle filter=crypto-keywords
 settings.gradle text eol=lf
 gradlew text eol=lf
 gradlew.bat eol=crlf
