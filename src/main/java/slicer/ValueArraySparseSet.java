@@ -1,306 +1,292 @@
+/* Licensed under GPL-3.0 */
 package slicer;
 
+import java.util.Arrays;
+import java.util.List;
 import soot.EquivTo;
 import soot.toolkits.scalar.ArraySparseSet;
 import soot.toolkits.scalar.FlowSet;
 
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * This class is the exact copy of soot.toolkits.scalar.ArraySparseSet with two exceptions.
+ *
  * <ol>
- * <li>The contains method has been modified to check whether the element being compared
- * implements the soot.EquivTo interface, and if so then use the soot.EquivTo.equivTo
- * method for comparison.
- * soot.Value extends soot.EquivTo, so it only makes sense to take advantage of that
- * instead of using the more naiive equals method inherited from Object (only comparing
- * references).</li>
- * <li>All fields and methods declared as private, changed to protected.</li>
+ *   <li>The contains method has been modified to check whether the element being compared
+ *       implements the soot.EquivTo interface, and if so then use the soot.EquivTo.equivTo method
+ *       for comparison. soot.Value extends soot.EquivTo, so it only makes sense to take advantage
+ *       of that instead of using the more naiive equals method inherited from Object (only
+ *       comparing references).
+ *   <li>All fields and methods declared as private, changed to protected.
  * </ol>
  *
  * @author Changes made by rni Einarsson
  * @version 03.07.01
  */
 public class ValueArraySparseSet extends ArraySparseSet {
-    /**
-     * Constant <code>DEFAULT_SIZE=8</code>
-     */
-    protected static final int DEFAULT_SIZE = 8;
-    protected int numElements;
-    protected int maxElements;
-    protected Object[] elements;
+  /** Constant <code>DEFAULT_SIZE=8</code> */
+  protected static final int DEFAULT_SIZE = 8;
 
-    /**
-     * <p>Constructor for ValueArraySparseSet.</p>
-     */
-    public ValueArraySparseSet() {
-        maxElements = DEFAULT_SIZE;
-        elements = new Object[DEFAULT_SIZE];
-        numElements = 0;
+  protected int numElements;
+  protected int maxElements;
+  protected Object[] elements;
+
+  /** Constructor for ValueArraySparseSet. */
+  public ValueArraySparseSet() {
+    maxElements = DEFAULT_SIZE;
+    elements = new Object[DEFAULT_SIZE];
+    numElements = 0;
+  }
+
+  /**
+   * Constructor for ValueArraySparseSet.
+   *
+   * @param other a {@link slicer.ValueArraySparseSet} object.
+   */
+  protected ValueArraySparseSet(ValueArraySparseSet other) {
+    numElements = other.numElements;
+    maxElements = other.maxElements;
+    elements = other.elements.clone();
+  }
+
+  /**
+   * {@inheritDoc}
+   *
+   * <p>Returns true if flowSet is the same type of flow set as this.
+   */
+  protected boolean sameType(Object flowSet) {
+    return (flowSet instanceof ValueArraySparseSet);
+  }
+
+  /**
+   * clone.
+   *
+   * @return a {@link slicer.ValueArraySparseSet} object.
+   */
+  public ValueArraySparseSet clone() {
+    return new ValueArraySparseSet(this);
+  }
+
+  /**
+   * emptySet.
+   *
+   * @return a {@link slicer.ValueArraySparseSet} object.
+   */
+  public ValueArraySparseSet emptySet() {
+    return new ValueArraySparseSet();
+  }
+
+  /** clear. */
+  public void clear() {
+    numElements = 0;
+  }
+
+  /**
+   * size.
+   *
+   * @return a int.
+   */
+  public int size() {
+    return numElements;
+  }
+
+  /**
+   * isEmpty.
+   *
+   * @return a boolean.
+   */
+  public boolean isEmpty() {
+    return numElements == 0;
+  }
+
+  /**
+   * Returns a unbacked list of elements in this set.
+   *
+   * @return a {@link java.util.List} object.
+   */
+  public List toList() {
+    Object[] copiedElements = new Object[numElements];
+    System.arraycopy(elements, 0, copiedElements, 0, numElements);
+    return Arrays.asList(copiedElements);
+  }
+
+  /*
+   * Expand array only when necessary, pointed out by Florian Loitsch March
+   * 08, 2002
+   */
+
+  /** {@inheritDoc} */
+  public void add(Object e) {
+    /* Expand only if necessary! and removes one if too:) */
+    // Add element
+    if (!contains(e)) {
+      // Expand array if necessary
+      if (numElements == maxElements) {
+        doubleCapacity();
+      }
+      elements[numElements++] = e;
     }
+  }
 
-    /**
-     * <p>Constructor for ValueArraySparseSet.</p>
-     *
-     * @param other a {@link slicer.ValueArraySparseSet} object.
-     */
-    protected ValueArraySparseSet(ValueArraySparseSet other) {
-        numElements = other.numElements;
-        maxElements = other.maxElements;
-        elements = other.elements.clone();
+  /** doubleCapacity. */
+  protected void doubleCapacity() {
+    int newSize = maxElements * 2;
+
+    Object[] newElements = new Object[newSize];
+
+    System.arraycopy(elements, 0, newElements, 0, numElements);
+    elements = newElements;
+    maxElements = newSize;
+  }
+
+  /** {@inheritDoc} */
+  public void remove(Object obj) {
+    int i = 0;
+    while (i < this.numElements) {
+      if (elements[i].equals(obj)) {
+        elements[i] = elements[--numElements];
+        return;
+      } else {
+        i++;
+      }
     }
+  }
 
-    /**
-     * {@inheritDoc}
-     * <p>
-     * Returns true if flowSet is the same type of flow set as this.
-     */
-    protected boolean sameType(Object flowSet) {
-        return (flowSet instanceof ValueArraySparseSet);
-    }
+  /** {@inheritDoc} */
+  public void union(FlowSet otherFlow, FlowSet destFlow) {
+    if (sameType(otherFlow) && sameType(destFlow)) {
+      ValueArraySparseSet other = (ValueArraySparseSet) otherFlow;
+      ValueArraySparseSet dest = (ValueArraySparseSet) destFlow;
 
-    /**
-     * <p>clone.</p>
-     *
-     * @return a {@link slicer.ValueArraySparseSet} object.
-     */
-    public ValueArraySparseSet clone() {
-        return new ValueArraySparseSet(this);
-    }
+      // For the special case that dest == other
+      if (dest == other) {
+        for (int i = 0; i < this.numElements; i++) dest.add(this.elements[i]);
+      }
 
-    /**
-     * <p>emptySet.</p>
-     *
-     * @return a {@link slicer.ValueArraySparseSet} object.
-     */
-    public ValueArraySparseSet emptySet() {
-        return new ValueArraySparseSet();
-    }
-
-    /**
-     * <p>clear.</p>
-     */
-    public void clear() {
-        numElements = 0;
-    }
-
-    /**
-     * <p>size.</p>
-     *
-     * @return a int.
-     */
-    public int size() {
-        return numElements;
-    }
-
-    /**
-     * <p>isEmpty.</p>
-     *
-     * @return a boolean.
-     */
-    public boolean isEmpty() {
-        return numElements == 0;
-    }
-
-    /**
-     * Returns a unbacked list of elements in this set.
-     *
-     * @return a {@link java.util.List} object.
-     */
-    public List toList() {
-        Object[] copiedElements = new Object[numElements];
-        System.arraycopy(elements, 0, copiedElements, 0, numElements);
-        return Arrays.asList(copiedElements);
-    }
-
-    /*
-     * Expand array only when necessary, pointed out by Florian Loitsch March
-     * 08, 2002
-     */
-
-    /**
-     * {@inheritDoc}
-     */
-    public void add(Object e) {
-        /* Expand only if necessary! and removes one if too:) */
-        // Add element
-        if (!contains(e)) {
-            // Expand array if necessary
-            if (numElements == maxElements) {
-                doubleCapacity();
-            }
-            elements[numElements++] = e;
+      // Else, force that dest starts with contents of this
+      else {
+        if (this != dest) {
+          copy(dest);
         }
+
+        for (int i = 0; i < other.numElements; i++) dest.add(other.elements[i]);
+      }
+    } else {
+      super.union(otherFlow, destFlow);
     }
+  }
 
-    /**
-     * <p>doubleCapacity.</p>
-     */
-    protected void doubleCapacity() {
-        int newSize = maxElements * 2;
+  /** {@inheritDoc} */
+  public void intersection(FlowSet otherFlow, FlowSet destFlow) {
+    if (sameType(otherFlow) && sameType(destFlow)) {
+      ValueArraySparseSet other = (ValueArraySparseSet) otherFlow;
+      ValueArraySparseSet dest = (ValueArraySparseSet) destFlow;
+      ValueArraySparseSet workingSet;
 
-        Object[] newElements = new Object[newSize];
+      if (dest == other || dest == this) {
+        workingSet = new ValueArraySparseSet();
+      } else {
+        workingSet = dest;
+        workingSet.clear();
+      }
 
-        System.arraycopy(elements, 0, newElements, 0, numElements);
-        elements = newElements;
-        maxElements = newSize;
-    }
-
-    /** {@inheritDoc} */
-    public void remove(Object obj) {
-        int i = 0;
-        while (i < this.numElements) {
-            if (elements[i].equals(obj)) {
-                elements[i] = elements[--numElements];
-                return;
-            } else {
-                i++;
-            }
+      for (int i = 0; i < this.numElements; i++) {
+        if (other.contains(this.elements[i])) {
+          workingSet.add(this.elements[i]);
         }
+      }
+
+      if (workingSet != dest) {
+        workingSet.copy(dest);
+      }
+    } else {
+      super.intersection(otherFlow, destFlow);
     }
+  }
 
-    /** {@inheritDoc} */
-    public void union(FlowSet otherFlow, FlowSet destFlow) {
-        if (sameType(otherFlow) && sameType(destFlow)) {
-            ValueArraySparseSet other = (ValueArraySparseSet) otherFlow;
-            ValueArraySparseSet dest = (ValueArraySparseSet) destFlow;
+  /** {@inheritDoc} */
+  public void difference(FlowSet otherFlow, FlowSet destFlow) {
+    if (sameType(otherFlow) && sameType(destFlow)) {
+      ValueArraySparseSet other = (ValueArraySparseSet) otherFlow;
+      ValueArraySparseSet dest = (ValueArraySparseSet) destFlow;
+      ValueArraySparseSet workingSet;
 
-            // For the special case that dest == other
-            if (dest == other) {
-                for (int i = 0; i < this.numElements; i++)
-                    dest.add(this.elements[i]);
-            }
+      if (dest == other || dest == this) {
+        workingSet = new ValueArraySparseSet();
+      } else {
+        workingSet = dest;
+        workingSet.clear();
+      }
 
-            // Else, force that dest starts with contents of this
-            else {
-                if (this != dest) {
-                    copy(dest);
-                }
-
-                for (int i = 0; i < other.numElements; i++)
-                    dest.add(other.elements[i]);
-            }
-        } else {
-            super.union(otherFlow, destFlow);
+      for (int i = 0; i < this.numElements; i++) {
+        if (!other.contains(this.elements[i])) {
+          workingSet.add(this.elements[i]);
         }
+      }
+
+      if (workingSet != dest) {
+        workingSet.copy(dest);
+      }
+    } else {
+      super.difference(otherFlow, destFlow);
     }
+  }
 
-    /** {@inheritDoc} */
-    public void intersection(FlowSet otherFlow, FlowSet destFlow) {
-        if (sameType(otherFlow) && sameType(destFlow)) {
-            ValueArraySparseSet other = (ValueArraySparseSet) otherFlow;
-            ValueArraySparseSet dest = (ValueArraySparseSet) destFlow;
-            ValueArraySparseSet workingSet;
+  /** {@inheritDoc} */
+  public boolean contains(Object obj) {
+    for (int i = 0; i < numElements; i++)
+      if (elements[i] instanceof EquivTo && ((EquivTo) elements[i]).equivTo(obj)) {
+        return true;
+      } else if (elements[i].toString().equals(obj.toString())) {
+        return true;
+      }
 
-            if (dest == other || dest == this) {
-                workingSet = new ValueArraySparseSet();
-            } else {
-                workingSet = dest;
-                workingSet.clear();
-            }
+    return false;
+  }
 
-            for (int i = 0; i < this.numElements; i++) {
-                if (other.contains(this.elements[i])) {
-                    workingSet.add(this.elements[i]);
-                }
-            }
+  /** {@inheritDoc} */
+  public boolean equals(Object otherFlow) {
+    if (sameType(otherFlow)) {
+      ValueArraySparseSet other = (ValueArraySparseSet) otherFlow;
 
-            if (workingSet != dest) {
-                workingSet.copy(dest);
-            }
-        } else {
-            super.intersection(otherFlow, destFlow);
-        }
-    }
-
-    /** {@inheritDoc} */
-    public void difference(FlowSet otherFlow, FlowSet destFlow) {
-        if (sameType(otherFlow) && sameType(destFlow)) {
-            ValueArraySparseSet other = (ValueArraySparseSet) otherFlow;
-            ValueArraySparseSet dest = (ValueArraySparseSet) destFlow;
-            ValueArraySparseSet workingSet;
-
-            if (dest == other || dest == this) {
-                workingSet = new ValueArraySparseSet();
-            } else {
-                workingSet = dest;
-                workingSet.clear();
-            }
-
-            for (int i = 0; i < this.numElements; i++) {
-                if (!other.contains(this.elements[i])) {
-                    workingSet.add(this.elements[i]);
-                }
-            }
-
-            if (workingSet != dest) {
-                workingSet.copy(dest);
-            }
-        } else {
-            super.difference(otherFlow, destFlow);
-        }
-    }
-
-    /** {@inheritDoc} */
-    public boolean contains(Object obj) {
-        for (int i = 0; i < numElements; i++)
-            if (elements[i] instanceof EquivTo
-                    && ((EquivTo) elements[i]).equivTo(obj)) {
-                return true;
-            } else if (elements[i].toString().equals(obj.toString())) {
-                return true;
-            }
-
+      if (other.numElements != this.numElements) {
         return false;
-    }
+      }
 
-    /** {@inheritDoc} */
-    public boolean equals(Object otherFlow) {
-        if (sameType(otherFlow)) {
-            ValueArraySparseSet other = (ValueArraySparseSet) otherFlow;
+      int size = this.numElements;
 
-            if (other.numElements != this.numElements) {
-                return false;
-            }
-
-            int size = this.numElements;
-
-            // Make sure that thisFlow is contained in otherFlow
-            for (int i = 0; i < size; i++) {
-                if (!other.contains(this.elements[i])) {
-                    return false;
-                }
-            }
-
-            /*
-             * both arrays have the same size, no element appears twice in one
-             * array, all elements of ThisFlow are in otherFlow -> they are
-             * equal! we don't need to test again! // Make sure that otherFlow
-             * is contained in ThisFlow for(int i = 0; i < size; i++)
-             * if(!this.contains(other.elements[i])) return false;
-             */
-
-            return true;
-        } else {
-            return super.equals(otherFlow);
+      // Make sure that thisFlow is contained in otherFlow
+      for (int i = 0; i < size; i++) {
+        if (!other.contains(this.elements[i])) {
+          return false;
         }
+      }
+
+      /*
+       * both arrays have the same size, no element appears twice in one
+       * array, all elements of ThisFlow are in otherFlow -> they are
+       * equal! we don't need to test again! // Make sure that otherFlow
+       * is contained in ThisFlow for(int i = 0; i < size; i++)
+       * if(!this.contains(other.elements[i])) return false;
+       */
+
+      return true;
+    } else {
+      return super.equals(otherFlow);
     }
+  }
 
-    /** {@inheritDoc} */
-    public void copy(FlowSet destFlow) {
-        if (sameType(destFlow)) {
-            ValueArraySparseSet dest = (ValueArraySparseSet) destFlow;
+  /** {@inheritDoc} */
+  public void copy(FlowSet destFlow) {
+    if (sameType(destFlow)) {
+      ValueArraySparseSet dest = (ValueArraySparseSet) destFlow;
 
-            while (dest.maxElements < this.maxElements)
-                dest.doubleCapacity();
+      while (dest.maxElements < this.maxElements) dest.doubleCapacity();
 
-            dest.numElements = this.numElements;
+      dest.numElements = this.numElements;
 
-            System.arraycopy(this.elements, 0, dest.elements, 0,
-                    this.numElements);
-        } else {
-            super.copy(destFlow);
-        }
+      System.arraycopy(this.elements, 0, dest.elements, 0, this.numElements);
+    } else {
+      super.copy(destFlow);
     }
+  }
 }
