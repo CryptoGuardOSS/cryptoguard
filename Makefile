@@ -52,7 +52,7 @@ clean:
 
 website:
 	@$(info Building the Jekyll website)
-	@cd manual && bundle exec jekyll serve -w
+	@cd docs && bundle exec jekyll serve -w
 
 docker:
 	@$(info Build the Docker file)
