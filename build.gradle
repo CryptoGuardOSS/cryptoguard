@@ -174,11 +174,11 @@ javadoc {
 	if (JavaVersion.current().isJava9Compatible()) {
 		options.addBooleanOption('html5', true)
 	}
-	destinationDir = new File('doc/javadoc')
+	destinationDir = new File('docs/javadoc')
 }
 
 task writeTestInformation {
-	String foil = 'doc/TestSystemInformation.md'
+	String foil = 'docs/TestSystemInformation.md'
 	delete(foil)
 	File file = new File(foil)
 	file.write('---\n' +
@@ -205,7 +205,7 @@ test {
 
 	reports {
 		html {
-			destination file("doc/gradleTestCoverage")
+			destination file("docs/gradleTestCoverage")
 		}
 	}
 
@@ -214,7 +214,7 @@ test {
 	finalizedBy(tasks.writeTestInformation)
 
 	copy {
-		from 'doc/index.md'
+		from 'docs/index.md'
 		into "$projectDir"
 		rename {
 			String fileName -> "README.md"
@@ -269,7 +269,7 @@ cobertura {
 	coverageFormats = ['html']
 	coverageIgnoreTrivial = true
 	coverageIgnores = ['org.slf4j.Logger.*']
-	coverageReportDir = new File('doc/cobertura')
+	coverageReportDir = new File('docs/cobertura')
 }
 
 dependencies {
