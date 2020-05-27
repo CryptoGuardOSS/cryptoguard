@@ -1,3 +1,4 @@
+/* Licensed under GPL-3.0 */
 package slicer.forward;
 
 /**
@@ -9,10 +10,10 @@ package slicer.forward;
  */
 public interface InfluenceInstructions {
 
-    /**
-     * <p>getSlicingResult.</p>
-     *
-     * @return a {@link slicer.forward.SlicingResult} object.
-     */
-    SlicingResult getSlicingResult();
+  /**
+   * getSlicingResult.
+   *
+   * @return a {@link slicer.forward.SlicingResult} object.
+   */
+  SlicingResult getSlicingResult();
 }

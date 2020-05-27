@@ -1,7 +1,8 @@
+/* Licensed under GPL-3.0 */
 package analyzer.backward;
 
 /**
- * <p>PropertyFakeUnitContainer class.</p>
+ * PropertyFakeUnitContainer class.
  *
  * @author CryptoguardTeam
  * @version 03.07.01
@@ -9,23 +10,23 @@ package analyzer.backward;
  */
 public class PropertyFakeUnitContainer extends UnitContainer {
 
-    private String originalProperty;
+  private String originalProperty;
 
-    /**
-     * <p>Getter for the field <code>originalProperty</code>.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    public String getOriginalProperty() {
-        return originalProperty;
-    }
+  /**
+   * Getter for the field <code>originalProperty</code>.
+   *
+   * @return a {@link java.lang.String} object.
+   */
+  public String getOriginalProperty() {
+    return originalProperty;
+  }
 
-    /**
-     * <p>Setter for the field <code>originalProperty</code>.</p>
-     *
-     * @param originalProperty a {@link java.lang.String} object.
-     */
-    public void setOriginalProperty(String originalProperty) {
-        this.originalProperty = originalProperty;
-    }
+  /**
+   * Setter for the field <code>originalProperty</code>.
+   *
+   * @param originalProperty a {@link java.lang.String} object.
+   */
+  public void setOriginalProperty(String originalProperty) {
+    this.originalProperty = originalProperty;
+  }
 }

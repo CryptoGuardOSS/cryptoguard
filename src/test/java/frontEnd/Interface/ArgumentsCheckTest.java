@@ -1,19 +1,5 @@
+/* Licensed under GPL-3.0 */
 package frontEnd.Interface;
-
-import frontEnd.MessagingSystem.routing.EnvironmentInformation;
-import frontEnd.MessagingSystem.routing.Listing;
-import frontEnd.argsIdentifier;
-import org.junit.Before;
-import org.junit.Test;
-import rule.engine.EngineType;
-import util.Utils;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
@@ -21,9 +7,22 @@ import static org.junit.Assert.*;
 import static test.TestUtilities.*;
 import static util.Utils.makeArg;
 
+import frontEnd.MessagingSystem.routing.EnvironmentInformation;
+import frontEnd.MessagingSystem.routing.Listing;
+import frontEnd.argsIdentifier;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import org.junit.Before;
+import org.junit.Test;
+import rule.engine.EngineType;
+import util.Utils;
 
 /**
- * <p>ArgumentsCheckTest class.</p>
+ * ArgumentsCheckTest class.
  *
  * @author franceme
  * @version $Id: $Id
@@ -31,328 +30,304 @@ import static util.Utils.makeArg;
  */
 public class ArgumentsCheckTest {
 
-    //region Attributes
-    private final String fileOut = Utils.osPathJoin(testPath, "txt.xml");
-    private final String fileOutTxt = Utils.osPathJoin(testPath, "txt.txt");
-    private final String fileOutJson = Utils.osPathJoin(testPath, "txt.json");
-    //endregion
+  //region Attributes
+  private final String fileOut = Utils.osPathJoin(testPath, "txt.xml");
+  private final String fileOutTxt = Utils.osPathJoin(testPath, "txt.txt");
+  private final String fileOutJson = Utils.osPathJoin(testPath, "txt.json");
+  //endregion
 
-    //region Test Environment Setup
-    @Before
-    public void setup() {
-        File running = null;
-        try {
-            if (!(running = new File(fileOut)).exists())
-                running.createNewFile();
-            if (!(running = new File(fileOutTxt)).exists())
-                running.createNewFile();
-            if (!(running = new File(fileOutJson)).exists())
-                running.createNewFile();
-        } catch (IOException e) {
-        }
+  //region Test Environment Setup
+  @Before
+  public void setup() {
+    File running = null;
+    try {
+      if (!(running = new File(fileOut)).exists()) running.createNewFile();
+      if (!(running = new File(fileOutTxt)).exists()) running.createNewFile();
+      if (!(running = new File(fileOutJson)).exists()) running.createNewFile();
+    } catch (IOException e) {
     }
-    //endregion
+  }
+  //endregion
 
-    //region Tests
+  //region Tests
 
-    /**
-     * <p>testEnvironmentVariables.</p>
-     */
-    @Test
-    public void testEnvironmentVariables() {
-        String[] fileLists = new String[]{jarOne};
-        String[] dirLists = new String[]{srcOneGrv, srcOneGrvDep};
+  /** testEnvironmentVariables. */
+  @Test
+  public void testEnvironmentVariables() {
+    String[] fileLists = new String[] {jarOne};
+    String[] dirLists = new String[] {srcOneGrv, srcOneGrvDep};
 
-        for (String file : fileLists) {
-            File tempFile = new File(file);
+    for (String file : fileLists) {
+      File tempFile = new File(file);
 
-            assertTrue(tempFile.exists());
-            assertTrue(tempFile.isFile());
-        }
-
-        for (String dir : dirLists) {
-            File tempDir = new File(dir);
-
-            assertTrue(tempDir.exists());
-            assertTrue(tempDir.isDirectory());
-        }
-
-
+      assertTrue(tempFile.exists());
+      assertTrue(tempFile.isFile());
     }
 
-    @Test
-    public void parameterCheck_verifyingJavaSevenHome() {
-        String fileOut = tempFileOutApk_Scarf;
-        String javaHome = System.getenv("JAVA7_HOME");
+    for (String dir : dirLists) {
+      File tempDir = new File(dir);
 
-        new File(fileOut).delete();
+      assertTrue(tempDir.exists());
+      assertTrue(tempDir.isDirectory());
+    }
+  }
 
-        if (isLinux) {
-            String args =
-                    makeArg(argsIdentifier.FORMAT, EngineType.APK) +
-                            makeArg(argsIdentifier.SOURCE, pathToAPK) +
-                            makeArg(argsIdentifier.OUT, fileOut) +
-                            makeArg(argsIdentifier.JAVA, javaHome) +
-                            makeArg(argsIdentifier.NOEXIT) +
-                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
-                            makeArg(argsIdentifier.PRETTY);
+  @Test
+  public void parameterCheck_verifyingJavaSevenHome() {
+    String fileOut = tempFileOutApk_Scarf;
+    String javaHome = System.getenv("JAVA7_HOME");
 
-            try {
-                EnvironmentInformation generalInfo = ArgumentsCheck.paramaterCheck(Utils.stripEmpty(args.split(" ")));
+    new File(fileOut).delete();
 
-                assertEquals(javaHome, generalInfo.getJavaHome());
-            } catch (Exception e) {
-                e.printStackTrace();
-                assertNull(e);
-            }
-        }
+    if (isLinux) {
+      String args =
+          makeArg(argsIdentifier.FORMAT, EngineType.APK)
+              + makeArg(argsIdentifier.SOURCE, pathToAPK)
+              + makeArg(argsIdentifier.OUT, fileOut)
+              + makeArg(argsIdentifier.JAVA, javaHome)
+              + makeArg(argsIdentifier.NOEXIT)
+              + makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML)
+              + makeArg(argsIdentifier.PRETTY);
+
+      try {
+        EnvironmentInformation generalInfo =
+            ArgumentsCheck.paramaterCheck(Utils.stripEmpty(args.split(" ")));
+
+        assertEquals(javaHome, generalInfo.getJavaHome());
+      } catch (Exception e) {
+        e.printStackTrace();
+        assertNull(e);
+      }
+    }
+  }
+
+  @Test
+  public void parameterCheck_verifyingJavaAndroidHome() {
+    String fileOut = tempFileOutApk_Scarf;
+    String javaHome = System.getenv("JAVA_HOME");
+    String androidHome = System.getenv("ANDROID_HOME");
+
+    new File(fileOut).delete();
+
+    if (isLinux) {
+      String args =
+          makeArg(argsIdentifier.FORMAT, EngineType.APK)
+              + makeArg(argsIdentifier.SOURCE, pathToAPK)
+              + makeArg(argsIdentifier.OUT, fileOut)
+              + makeArg(argsIdentifier.ANDROID, androidHome)
+              + makeArg(argsIdentifier.JAVA, javaHome)
+              + makeArg(argsIdentifier.NOEXIT)
+              + makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML)
+              + makeArg(argsIdentifier.PRETTY);
+
+      try {
+        EnvironmentInformation generalInfo =
+            ArgumentsCheck.paramaterCheck(Utils.stripEmpty(args.split(" ")));
+
+        assertEquals(javaHome, generalInfo.getJavaHome());
+        assertEquals(androidHome, generalInfo.getAndroidHome());
+      } catch (Exception e) {
+        e.printStackTrace();
+        assertNull(e);
+      }
+    }
+  }
+
+  @Test
+  public void parameterCheck_VersionOut() {
+    String args = makeArg(argsIdentifier.VERSION) + makeArg(argsIdentifier.NOEXIT);
+
+    try {
+      String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+      assertEquals(Utils.projectName + ": " + Utils.projectVersion, outputFile);
+    } catch (Exception e) {
+      e.printStackTrace();
+      assertNull(e);
+    }
+  }
+
+  @Test
+  public void parameterCheck_HelpOut() {
+    String args = makeArg(argsIdentifier.HELP) + makeArg(argsIdentifier.NOEXIT);
+
+    try {
+      String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+      assertNotNull(outputFile);
+    } catch (Exception e) {
+      e.printStackTrace();
+      assertNull(e);
+    }
+  }
+
+  /** paramaterCheck_jar. */
+  @Test
+  public void paramaterCheck_jar_enhancedInputFile() {
+
+    String args =
+        makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES)
+            + makeArg(argsIdentifier.FORMATOUT, Listing.Legacy)
+            + makeArg(argsIdentifier.SOURCE, srcOneGrvInputFile)
+            + makeArg(argsIdentifier.PRETTY)
+            + makeArg(argsIdentifier.OUT, tempTestJJava_Txt);
+
+    EnvironmentInformation info = null;
+
+    try {
+      info = ArgumentsCheck.paramaterCheck(Arrays.asList(cleaningArgs(args)));
+    } catch (Exception e) {
+      e.printStackTrace();
+      assertNull(e);
     }
 
-    @Test
-    public void parameterCheck_verifyingJavaAndroidHome() {
-        String fileOut = tempFileOutApk_Scarf;
-        String javaHome = System.getenv("JAVA_HOME");
-        String androidHome = System.getenv("ANDROID_HOME");
+    assertNotNull(info);
+    assertEquals(EngineType.JAVAFILES, info.getSourceType());
+    assertEquals(10, info.getSource().size());
+    try {
+      BufferedReader reader = new BufferedReader(new FileReader(srcOneGrvInputFile));
+      String curLine = null;
 
-        new File(fileOut).delete();
+      ArrayList<String> sourceFiles = new ArrayList<>();
+      for (String in : info.getSource()) sourceFiles.add(in.replace(basePath, "."));
 
-        if (isLinux) {
-            String args =
-                    makeArg(argsIdentifier.FORMAT, EngineType.APK) +
-                            makeArg(argsIdentifier.SOURCE, pathToAPK) +
-                            makeArg(argsIdentifier.OUT, fileOut) +
-                            makeArg(argsIdentifier.ANDROID, androidHome) +
-                            makeArg(argsIdentifier.JAVA, javaHome) +
-                            makeArg(argsIdentifier.NOEXIT) +
-                            makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
-                            makeArg(argsIdentifier.PRETTY);
+      while ((curLine = reader.readLine()) != null) assertTrue(sourceFiles.remove(curLine));
 
-            try {
-                EnvironmentInformation generalInfo = ArgumentsCheck.paramaterCheck(Utils.stripEmpty(args.split(" ")));
+      assertTrue(sourceFiles.isEmpty());
 
-                assertEquals(javaHome, generalInfo.getJavaHome());
-                assertEquals(androidHome, generalInfo.getAndroidHome());
-            } catch (Exception e) {
-                e.printStackTrace();
-                assertNull(e);
-            }
-        }
+    } catch (Exception e) {
+      e.printStackTrace();
+      assertNull(e);
+    }
+    assertTrue(info.getPrettyPrint());
+    assertEquals(tempTestJJava_Txt, info.getFileOut());
+    assertEquals(Listing.Legacy, info.getMessagingType());
+  }
+
+  /** paramaterCheck_jar_SkipValidation. */
+  @Test
+  public void paramaterCheck_jar_SkipValidation() {
+
+    String args =
+        makeArg(argsIdentifier.FORMAT, EngineType.JAR)
+            + makeArg(argsIdentifier.SOURCE, jarOne)
+            + makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep)
+            + makeArg(argsIdentifier.OUT, fileOutJson)
+            + makeArg(argsIdentifier.TIMEMEASURE)
+            + makeArg(argsIdentifier.PRETTY);
+
+    EnvironmentInformation info = null;
+
+    try {
+      info = ArgumentsCheck.paramaterCheck(Arrays.asList(cleaningArgs(args)));
+    } catch (Exception e) {
+      e.printStackTrace();
+      assertNull(e);
     }
 
-    @Test
-    public void parameterCheck_VersionOut() {
-        String args =
-                makeArg(argsIdentifier.VERSION)
-                        + makeArg(argsIdentifier.NOEXIT);
+    assertNotNull(info);
+    assertEquals(EngineType.JAR, info.getSourceType());
+    assertEquals(1, info.getSource().size());
+    assertEquals(jarOne, info.getSource().get(0));
+    assertEquals(1, info.getDependencies().size());
+    assertEquals(srcOneGrvDep, info.getDependencies().get(0));
+    assertTrue(info.isShowTimes());
+    assertTrue(info.getPrettyPrint());
+    assertEquals(fileOutTxt.replace(".txt", ".json"), info.getFileOut());
+    assertEquals(Listing.Default, info.getMessagingType());
+  }
 
-        try {
-            String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+  /** paramaterCheck_jar. */
+  @Test
+  public void paramaterCheck_jar() {
 
+    String args =
+        makeArg(argsIdentifier.FORMAT, EngineType.JAR)
+            + makeArg(argsIdentifier.SOURCE, jarOne)
+            + makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep)
+            + makeArg(argsIdentifier.OUT, fileOut)
+            + makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML)
+            + makeArg(argsIdentifier.TIMEMEASURE)
+            + makeArg(argsIdentifier.PRETTY);
 
-            assertEquals(Utils.projectName + ": " + Utils.projectVersion, outputFile);
-        } catch (Exception e) {
-            e.printStackTrace();
-            assertNull(e);
-        }
+    EnvironmentInformation info = null;
+
+    try {
+      info = ArgumentsCheck.paramaterCheck(Arrays.asList(cleaningArgs(args)));
+    } catch (Exception e) {
+      e.printStackTrace();
+      assertNull(e);
     }
 
-    @Test
-    public void parameterCheck_HelpOut() {
-        String args =
-                makeArg(argsIdentifier.HELP)
-                        + makeArg(argsIdentifier.NOEXIT);
+    assertNotNull(info);
+    assertEquals(EngineType.JAR, info.getSourceType());
+    assertEquals(1, info.getSource().size());
+    assertEquals(jarOne, info.getSource().get(0));
+    assertEquals(1, info.getDependencies().size());
+    assertEquals(srcOneGrvDep, info.getDependencies().get(0));
+    assertTrue(info.isShowTimes());
+    assertTrue(info.getPrettyPrint());
+    assertEquals(fileOut, info.getFileOut());
+    assertEquals(Listing.ScarfXML, info.getMessagingType());
+  }
 
-        try {
-            String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+  /** paramaterCheck_Barejar. */
+  @Test
+  public void paramaterCheck_Barejar() {
 
+    String args =
+        makeArg(argsIdentifier.FORMAT, EngineType.JAR) + makeArg(argsIdentifier.SOURCE, jarOne);
 
-            assertNotNull(outputFile);
-        } catch (Exception e) {
-            e.printStackTrace();
-            assertNull(e);
-        }
+    EnvironmentInformation info = null;
+
+    try {
+      info = ArgumentsCheck.paramaterCheck(Arrays.asList(cleaningArgs(args)));
+    } catch (Exception e) {
+      e.printStackTrace();
+      assertNull(e);
     }
 
-    /**
-     * <p>paramaterCheck_jar.</p>
-     */
-    @Test
-    public void paramaterCheck_jar_enhancedInputFile() {
+    assertNotNull(info);
+    assertEquals(EngineType.JAR, info.getSourceType());
+    assertEquals(1, info.getSource().size());
+    assertEquals(jarOne, info.getSource().get(0));
+    assertFalse(info.isShowTimes());
+    assertFalse(info.getPrettyPrint());
+    assertEquals(Listing.Default, info.getMessagingType());
+  }
 
-        String args =
-                makeArg(argsIdentifier.FORMAT, EngineType.JAVAFILES) +
-                        makeArg(argsIdentifier.FORMATOUT, Listing.Legacy) +
-                        makeArg(argsIdentifier.SOURCE, srcOneGrvInputFile) +
-                        makeArg(argsIdentifier.PRETTY) +
-                        makeArg(argsIdentifier.OUT, tempTestJJava_Txt);
+  /** parameterCheck_gdl. */
+  @Test
+  public void parameterCheck_gdl() {
 
-        EnvironmentInformation info = null;
+    String args =
+        makeArg(argsIdentifier.FORMAT, EngineType.DIR)
+            + makeArg(argsIdentifier.SOURCE, srcOneGrv)
+            + makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep)
+            + makeArg(argsIdentifier.OUT, fileOut)
+            + makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML)
+            + makeArg(argsIdentifier.TIMEMEASURE)
+            + makeArg(argsIdentifier.PRETTY);
 
-        try {
-            info = ArgumentsCheck.paramaterCheck(Arrays.asList(cleaningArgs(args)));
-        } catch (Exception e) {
-            e.printStackTrace();
-            assertNull(e);
-        }
+    EnvironmentInformation info = null;
 
-        assertNotNull(info);
-        assertEquals(EngineType.JAVAFILES, info.getSourceType());
-        assertEquals(10, info.getSource().size());
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(srcOneGrvInputFile));
-            String curLine = null;
-
-            ArrayList<String> sourceFiles = new ArrayList<>();
-            for (String in : info.getSource())
-                sourceFiles.add(in.replace(basePath, "."));
-
-            while ((curLine = reader.readLine()) != null)
-                assertTrue(sourceFiles.remove(curLine));
-
-            assertTrue(sourceFiles.isEmpty());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            assertNull(e);
-        }
-        assertTrue(info.getPrettyPrint());
-        assertEquals(tempTestJJava_Txt, info.getFileOut());
-        assertEquals(Listing.Legacy, info.getMessagingType());
+    try {
+      info = ArgumentsCheck.paramaterCheck(Arrays.asList(cleaningArgs(args)));
+    } catch (Exception e) {
+      e.printStackTrace();
+      assertNull(e);
     }
 
-    /**
-     * <p>paramaterCheck_jar_SkipValidation.</p>
-     */
-    @Test
-    public void paramaterCheck_jar_SkipValidation() {
-
-        String args =
-                makeArg(argsIdentifier.FORMAT, EngineType.JAR) +
-                        makeArg(argsIdentifier.SOURCE, jarOne) +
-                        makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
-                        makeArg(argsIdentifier.OUT, fileOutJson) +
-                        makeArg(argsIdentifier.TIMEMEASURE) +
-                        makeArg(argsIdentifier.PRETTY);
-
-        EnvironmentInformation info = null;
-
-        try {
-            info = ArgumentsCheck.paramaterCheck(Arrays.asList(cleaningArgs(args)));
-        } catch (Exception e) {
-            e.printStackTrace();
-            assertNull(e);
-        }
-
-        assertNotNull(info);
-        assertEquals(EngineType.JAR, info.getSourceType());
-        assertEquals(1, info.getSource().size());
-        assertEquals(jarOne, info.getSource().get(0));
-        assertEquals(1, info.getDependencies().size());
-        assertEquals(srcOneGrvDep, info.getDependencies().get(0));
-        assertTrue(info.isShowTimes());
-        assertTrue(info.getPrettyPrint());
-        assertEquals(fileOutTxt.replace(".txt", ".json"), info.getFileOut());
-        assertEquals(Listing.Default, info.getMessagingType());
-    }
-
-    /**
-     * <p>paramaterCheck_jar.</p>
-     */
-    @Test
-    public void paramaterCheck_jar() {
-
-        String args =
-                makeArg(argsIdentifier.FORMAT, EngineType.JAR) +
-                        makeArg(argsIdentifier.SOURCE, jarOne) +
-                        makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
-                        makeArg(argsIdentifier.OUT, fileOut) +
-                        makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
-                        makeArg(argsIdentifier.TIMEMEASURE) +
-                        makeArg(argsIdentifier.PRETTY);
-
-        EnvironmentInformation info = null;
-
-        try {
-            info = ArgumentsCheck.paramaterCheck(Arrays.asList(cleaningArgs(args)));
-        } catch (Exception e) {
-            e.printStackTrace();
-            assertNull(e);
-        }
-
-        assertNotNull(info);
-        assertEquals(EngineType.JAR, info.getSourceType());
-        assertEquals(1, info.getSource().size());
-        assertEquals(jarOne, info.getSource().get(0));
-        assertEquals(1, info.getDependencies().size());
-        assertEquals(srcOneGrvDep, info.getDependencies().get(0));
-        assertTrue(info.isShowTimes());
-        assertTrue(info.getPrettyPrint());
-        assertEquals(fileOut, info.getFileOut());
-        assertEquals(Listing.ScarfXML, info.getMessagingType());
-    }
-
-    /**
-     * <p>paramaterCheck_Barejar.</p>
-     */
-    @Test
-    public void paramaterCheck_Barejar() {
-
-        String args =
-                makeArg(argsIdentifier.FORMAT, EngineType.JAR) +
-                        makeArg(argsIdentifier.SOURCE, jarOne);
-
-        EnvironmentInformation info = null;
-
-        try {
-            info = ArgumentsCheck.paramaterCheck(Arrays.asList(cleaningArgs(args)));
-        } catch (Exception e) {
-            e.printStackTrace();
-            assertNull(e);
-        }
-
-        assertNotNull(info);
-        assertEquals(EngineType.JAR, info.getSourceType());
-        assertEquals(1, info.getSource().size());
-        assertEquals(jarOne, info.getSource().get(0));
-        assertFalse(info.isShowTimes());
-        assertFalse(info.getPrettyPrint());
-        assertEquals(Listing.Default, info.getMessagingType());
-    }
-
-    /**
-     * <p>parameterCheck_gdl.</p>
-     */
-    @Test
-    public void parameterCheck_gdl() {
-
-        String args =
-                makeArg(argsIdentifier.FORMAT, EngineType.DIR) +
-                        makeArg(argsIdentifier.SOURCE, srcOneGrv) +
-                        makeArg(argsIdentifier.DEPENDENCY, srcOneGrvDep) +
-                        makeArg(argsIdentifier.OUT, fileOut) +
-                        makeArg(argsIdentifier.FORMATOUT, Listing.ScarfXML) +
-                        makeArg(argsIdentifier.TIMEMEASURE) +
-                        makeArg(argsIdentifier.PRETTY);
-
-        EnvironmentInformation info = null;
-
-        try {
-            info = ArgumentsCheck.paramaterCheck(Arrays.asList(cleaningArgs(args)));
-        } catch (Exception e) {
-            e.printStackTrace();
-            assertNull(e);
-        }
-
-        assertNotNull(info);
-        assertEquals(EngineType.DIR, info.getSourceType());
-        assertEquals(1, info.getSource().size());
-        assertEquals(srcOneGrv, info.getSource().get(0));
-        assertEquals(1, info.getDependencies().size());
-        assertEquals(srcOneGrvDep, info.getDependencies().get(0));
-        assertTrue(info.isShowTimes());
-        assertTrue(info.getPrettyPrint());
-        assertEquals(fileOut, info.getFileOut());
-        assertEquals(Listing.ScarfXML, info.getMessagingType());
-    }
-    //endregion
+    assertNotNull(info);
+    assertEquals(EngineType.DIR, info.getSourceType());
+    assertEquals(1, info.getSource().size());
+    assertEquals(srcOneGrv, info.getSource().get(0));
+    assertEquals(1, info.getDependencies().size());
+    assertEquals(srcOneGrvDep, info.getDependencies().get(0));
+    assertTrue(info.isShowTimes());
+    assertTrue(info.getPrettyPrint());
+    assertEquals(fileOut, info.getFileOut());
+    assertEquals(Listing.ScarfXML, info.getMessagingType());
+  }
+  //endregion
 }
