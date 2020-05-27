@@ -6,6 +6,7 @@
 *.rst text eol=lf
 build.gradle text eol=lf
 build.gradle filter=crypto-keywords
+docs/_includes/head.html filter=crypto-web
 settings.gradle text eol=lf
 gradlew text eol=lf
 gradlew.bat eol=crlf
