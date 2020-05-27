@@ -88,7 +88,7 @@ task updateVersion {
 				includes: 'README.rst'
 		)
 		fileset(
-				dir: 'manual',
+				dir: 'doc',
 				includes: '*.md'
 		)
 		fileset(
@@ -174,11 +174,11 @@ javadoc {
 	if (JavaVersion.current().isJava9Compatible()) {
 		options.addBooleanOption('html5', true)
 	}
-	destinationDir = new File('manual/javadoc')
+	destinationDir = new File('doc/javadoc')
 }
 
 task writeTestInformation {
-	String foil = 'manual/TestSystemInformation.md'
+	String foil = 'doc/TestSystemInformation.md'
 	delete(foil)
 	File file = new File(foil)
 	file.write('---\n' +
@@ -205,7 +205,7 @@ test {
 
 	reports {
 		html {
-			destination file("manual/gradleTestCoverage")
+			destination file("doc/gradleTestCoverage")
 		}
 	}
 
@@ -214,7 +214,7 @@ test {
 	finalizedBy(tasks.writeTestInformation)
 
 	copy {
-		from 'manual/index.md'
+		from 'doc/index.md'
 		into "$projectDir"
 		rename {
 			String fileName -> "README.md"
@@ -269,7 +269,7 @@ cobertura {
 	coverageFormats = ['html']
 	coverageIgnoreTrivial = true
 	coverageIgnores = ['org.slf4j.Logger.*']
-	coverageReportDir = new File('manual/cobertura')
+	coverageReportDir = new File('doc/cobertura')
 }
 
 dependencies {
