@@ -321,7 +321,7 @@ public class ArgumentsCheck {
 
     //region verifying current running version
     Version currentVersion = Version.getRunningVersion();
-    if (!currentVersion.supported()) {
+    if (!StringUtils.isBlank(java) && !currentVersion.supported()) {
       log.fatal("JRE Version: " + currentVersion + " is not compatible");
       throw new ExceptionHandler(
           "JRE Version: "

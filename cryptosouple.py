@@ -13,6 +13,8 @@ import subprocess
 import sys
 import time
 from collections import OrderedDict
+import re
+import nbformat as nb
 
 # TODO - Add xml/json results verification
 
@@ -264,6 +266,14 @@ class Utils(object):
             value = 50
         return value
 
+    def lremove(string, find):
+        return Utils.lreplace(string, find, '')
+
+    def lreplace(string, find, replace):
+        reverse = string[::-1]
+        replace = reverse.replace(find[::-1],replace[::-1],1)
+        return replace[::-1]
+
     def printVersion():
         props = Loading.getProperties()
         print(props['projectName'] + ': ' + props['versionNumber'])
@@ -370,7 +380,9 @@ class Utils(object):
         print('Copying the jar file to the current directory ', end='| ', flush=True)
 
         projectName = Loading.getProperties()['projectName']
-        os.system('cp build/libs/' + projectName + '*.jar ./' + projectName + '.jar')
+        projectVersion = Loading.getProperties()['versionNumber']
+        os.system('cp build/libs/' + projectName + '-' + projectVersion + '.jar ./' + projectName + '.jar')
+        os.system('cp build/libs/' + projectName + '-' + projectVersion + '.jar ./Notebook/' + projectName + '.jar')
 
         if os.path.exists(projectName + '.jar'):
             print("Successful")
@@ -1132,6 +1144,142 @@ class argsUtils(object):
 # endregion
 # region TestUtils
 class TestUtils(object):
+    def testToNotebook(jtest):
+        cell = None
+
+        jtest = jtest.replace('|','\n').replace('@Test','').strip()
+        cell = nb.v4.new_code_cell(source=jtest)
+
+        return cell
+
+    def genNotebook(testUtils='src/test/java/test/TestUtilities.java'):
+
+        testContents, read = '', False
+        with open(testUtils,'r') as foil:
+            for lin in foil.readlines():
+                if (read):
+                    testContents = str(testContents) + "\n" + str(lin)
+                elif 'public class TestUtilities {' in lin:
+                    read = True
+        
+        testContents = Utils.lremove(testContents, '}')
+
+        fileContents, fileOut, notebook = generalArg, generalFile, None
+        '''
+        if not os.path.exists(fileIn) or (os.path.exists(fileOut) and not fileOut.endswith('.ipynb')):
+            print("FileIn does not exist");sys.exit(0)
+        else:
+            fileIn = os.path.abspath(fileIn)
+            fileOut = fileIn.replace('java','')
+        '''
+        testName = None
+        if fileOut is None or not os.path.exists(fileOut):
+            testName = re.search(r"public void (\w*)()",fileContents)[0].replace('public void ','')
+            fileOut = testName + '.ipynb'
+            notebook = nb.v4.new_notebook()
+            notebook['cells'] += [nb.v4.new_markdown_cell(source="# Generated Test")]
+            notebook['cells'] += [nb.v4.new_markdown_cell(source="## Test " + testName)]
+            imports = '''
+            //Custom Imports
+            List<String> addedJars = %jars *.jar
+            %maven junit:junit:4.12
+
+            //CryptoGuard imports
+            import frontEnd.Interface.EntryPoint;
+            import static org.junit.Assert.assertFalse;
+            import static org.junit.Assert.assertTrue;
+            import static org.junit.Assert.assertEquals;
+            import static org.junit.Assert.assertNull;
+            import static org.junit.Assert.assertNotNull;
+            import static util.Utils.makeArg;
+
+            import frontEnd.Interface.outputRouting.ExceptionHandler;
+            import frontEnd.Interface.ArgumentsCheck;
+            import frontEnd.MessagingSystem.routing.Listing;
+            import frontEnd.MessagingSystem.routing.EnvironmentInformation;
+            import frontEnd.MessagingSystem.routing.structure.Default.Report;
+            import frontEnd.MessagingSystem.routing.structure.Scarf.AnalyzerReport;
+            import frontEnd.MessagingSystem.routing.structure.Scarf.BugInstance;
+            import frontEnd.argsIdentifier;
+            import java.io.File;
+            import java.nio.charset.StandardCharsets;
+            import java.nio.file.Files;
+            import java.nio.file.Paths;
+            import java.util.ArrayList;
+            import java.util.Arrays;
+            import java.util.List;
+            import org.junit.After;
+            import org.junit.Before;
+            import org.junit.Test;
+            import org.junit.runner.RunWith;
+            import rule.engine.EngineType;
+            import soot.G;
+            import util.Utils;
+            '''
+
+            utils = '''
+            //Utililties
+
+            String java_home = "/home/runner/.sdkman/candidates/java/8.0.252-zulu";
+            Boolean isLinux = true;
+
+            public static String captureNewFileOutViaStdOut(String[] args, Boolean exceptionHandler) {
+            //region Redirecting the std out to capture the file out
+            //The new std out
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            PrintStream ps = new PrintStream(baos);
+
+            //Old out
+            PrintStream old = System.out;
+
+            //Redirecting the std out to the capture
+            System.setOut(ps);
+
+            //region Critical Section
+            EntryPoint.main(args);
+            //endregion
+
+            //Resetting the std out
+            System.out.flush();
+            System.setOut(old);
+            //endregion
+
+            //The output string
+            String outputString = StringUtils.trimToNull(baos.toString());
+            if (!exceptionHandler) assertTrue(StringUtils.isNotBlank(outputString));
+
+            String[] lines = baos.toString().split(Utils.lineSep);
+            outputString = StringUtils.trimToNull(lines[lines.length - 1]);
+            if (!exceptionHandler) assertTrue(StringUtils.isNotBlank(outputString));
+
+            return outputString;
+            }
+
+            public static String captureNewFileOutViaStdOut(String[] args) throws Exception {
+
+                return captureNewFileOutViaStdOut(args, false);
+            }
+            public static String[] arr(ArrayList<String> in) {
+                return in.toArray(new String[in.size()]);
+            }
+
+            public static ArrayList<String> arr(String[] in) {
+                return new ArrayList<>(Arrays.asList(in));
+            }
+            '''
+            notebook['cells'] += [nb.v4.new_code_cell(source=imports)]
+            notebook['cells'] += [nb.v4.new_code_cell(source=testContents)]
+            notebook['cells'] += [nb.v4.new_code_cell(source=utils)]
+            notebook['cells'] += [TestUtils.testToNotebook(fileContents)]
+        else:
+            notebook = nb.read(fileOut, 4)
+            notebook['cells'] += [TestUtils.testToNotebook(fileContents)]
+
+        notebook['cells'] += [nb.v4.new_code_cell(source=str(testName)+"()")]
+        nb.write(notebook,fileOut)
+
+        print("Generated File " + str(fileOut))
+
 
     def pullTests(dir=os.path.join(os.path.abspath(os.curdir), "src", "test")):
         dyct = {}
@@ -1597,6 +1745,11 @@ routers = {
         "func": envVars.checkVariables,
         "def": "Checks (suggestions to set them if missing) the environment variables.",
         'offline': True
+    },
+    'genNotebook': {
+        "func": TestUtils.genNotebook,
+        "def": "Write a Jupyter Notebook using a given Junit test String.",
+        'offline': False
     },
     #'projectType': {
     #    "func": argsUtils.displayProjectTypes,
