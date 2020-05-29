@@ -5,7 +5,7 @@ layout: default
 CryptoGuard $CVER 04.04.00$
 =====================
 <p align="center">
-	<a href="https://mybinder.org/v2/gh/franceme/cryptoguard/dev?filepath=Notebook%2F">
+	<a href="https://mybinder.org/v2/gh/franceme/cryptoguard/master?filepath=Notebook%2F">
 		<img src="https://mybinder.org/badge_logo.svg" alt="MyBinder Badge">
 	</a>
 </p>
