@@ -209,7 +209,7 @@ test {
 		}
 	}
 
-	finalizedBy(tasks.spotlessApply)
+	//finalizedBy(tasks.spotlessApply)
 	finalizedBy(tasks.cobertura)
 	finalizedBy(tasks.writeTestInformation)
 
