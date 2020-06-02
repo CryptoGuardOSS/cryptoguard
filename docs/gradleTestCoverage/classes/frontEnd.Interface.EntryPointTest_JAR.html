@@ -29,7 +29,7 @@
 </td>
 <td>
 <div class="infoBox" id="failures">
-<div class="counter">1</div>
+<div class="counter">0</div>
 <p>failures</p>
 </div>
 </td>
@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">1m26.21s</div>
+<div class="counter">3m25.25s</div>
 <p>duration</p>
 </div>
 </td>
@@ -50,8 +50,8 @@
 </div>
 </td>
 <td>
-<div class="infoBox failures" id="successRate">
-<div class="percent">92%</div>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
 <p>successful</p>
 </div>
 </td>
@@ -61,89 +61,13 @@
 <div id="tabs">
 <ul class="tabLinks">
 <li>
-<a href="#tab0">Failed tests</a>
+<a href="#tab0">Tests</a>
 </li>
 <li>
-<a href="#tab1">Tests</a>
-</li>
-<li>
-<a href="#tab2">Standard output</a>
+<a href="#tab1">Standard output</a>
 </li>
 </ul>
 <div id="tab0" class="tab">
-<h2>Failed tests</h2>
-<div class="test">
-<a name="main_VerySimple_Scarf"></a>
-<h3 class="failures">main_VerySimple_Scarf</h3>
-<span class="code">
-<pre>java.lang.AssertionError
-	at org.junit.Assert.fail(Assert.java:87)
-	at org.junit.Assert.assertTrue(Assert.java:42)
-	at org.junit.Assert.assertFalse(Assert.java:65)
-	at org.junit.Assert.assertFalse(Assert.java:75)
-	at frontEnd.Interface.EntryPointTest_JAR.main_VerySimple_Scarf(EntryPointTest_JAR.java:93)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
-	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
-	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
-	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:26)
-	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:27)
-	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
-	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
-	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
-	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
-	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
-	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at com.binarytweed.test.QuarantiningRunner.run(QuarantiningRunner.java:83)
-	at org.gradle.api.internal.tasks.testing.junit.JUnitTestClassExecutor.runTestClass(JUnitTestClassExecutor.java:110)
-	at org.gradle.api.internal.tasks.testing.junit.JUnitTestClassExecutor.execute(JUnitTestClassExecutor.java:58)
-	at org.gradle.api.internal.tasks.testing.junit.JUnitTestClassExecutor.execute(JUnitTestClassExecutor.java:38)
-	at org.gradle.api.internal.tasks.testing.junit.AbstractJUnitTestClassProcessor.processTestClass(AbstractJUnitTestClassProcessor.java:62)
-	at org.gradle.api.internal.tasks.testing.SuiteTestClassProcessor.processTestClass(SuiteTestClassProcessor.java:51)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:36)
-	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24)
-	at org.gradle.internal.dispatch.ContextClassLoaderDispatch.dispatch(ContextClassLoaderDispatch.java:33)
-	at org.gradle.internal.dispatch.ProxyDispatchAdapter$DispatchingInvocationHandler.invoke(ProxyDispatchAdapter.java:94)
-	at com.sun.proxy.$Proxy2.processTestClass(Unknown Source)
-	at org.gradle.api.internal.tasks.testing.worker.TestWorker.processTestClass(TestWorker.java:118)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:36)
-	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24)
-	at org.gradle.internal.remote.internal.hub.MessageHubBackedObjectConnection$DispatchWrapper.dispatch(MessageHubBackedObjectConnection.java:182)
-	at org.gradle.internal.remote.internal.hub.MessageHubBackedObjectConnection$DispatchWrapper.dispatch(MessageHubBackedObjectConnection.java:164)
-	at org.gradle.internal.remote.internal.hub.MessageHub$Handler.run(MessageHub.java:412)
-	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
-	at org.gradle.internal.concurrent.ManagedExecutorImpl$1.run(ManagedExecutorImpl.java:48)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
-	at org.gradle.internal.concurrent.ThreadFactoryImpl$ManagedThreadRunnable.run(ThreadFactoryImpl.java:56)
-	at java.lang.Thread.run(Thread.java:748)
-</pre>
-</span>
-</div>
-</div>
-<div id="tab1" class="tab">
 <h2>Tests</h2>
 <table>
 <thead>
@@ -155,407 +79,407 @@
 </thead>
 <tr>
 <td class="success">main_TestableJar</td>
-<td class="success">5.830s</td>
+<td class="success">16.046s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">main_TestableJar_Default</td>
-<td class="success">8.301s</td>
+<td class="success">15.270s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">main_TestableJar_Default_Heuristics</td>
-<td class="success">6.544s</td>
+<td class="success">14.796s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">main_TestableJar_Default_SpecifyJavaHome</td>
-<td class="success">6.407s</td>
+<td class="success">15.445s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">main_TestableJar_Default_Stream</td>
-<td class="success">5.959s</td>
+<td class="success">15.101s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">main_TestableJar_Default_WithClassPath</td>
-<td class="success">6.552s</td>
+<td class="success">15.067s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">main_TestableJar_Default_WithHeuristics</td>
-<td class="success">7.864s</td>
+<td class="success">16.901s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">main_TestableJar_Scarf</td>
-<td class="success">5.767s</td>
+<td class="success">15.118s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">main_TestableJar_ScarfTimeStamp</td>
-<td class="success">6.189s</td>
+<td class="success">15.859s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">main_TestableJar_ScarfTimeStamp_UsingClassPaths</td>
-<td class="success">5.808s</td>
+<td class="success">14.833s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">main_TestableJar_Scarf_Args</td>
-<td class="success">6.982s</td>
+<td class="success">14.918s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">main_TestableJar_Scarf_Heuristics</td>
-<td class="success">7.400s</td>
+<td class="success">15.049s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">main_TestableJar_Scarf_Stream</td>
-<td class="success">6.474s</td>
+<td class="success">14.751s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
-<td class="failures">main_VerySimple_Scarf</td>
-<td class="failures">0.135s</td>
-<td class="failures">failed</td>
+<td class="success">main_VerySimple_Scarf</td>
+<td class="success">6.095s</td>
+<td class="success">passed</td>
 </tr>
 </table>
 </div>
-<div id="tab2" class="tab">
+<div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre> INFO | 2020-05-27 10:57:33.496 | Interface.ArgumentsCheck (ArgumentsCheck.java:150) | Displaying info level logs
- INFO | 2020-05-27 10:57:33.497 | Interface.ArgumentsCheck (ArgumentsCheck.java:178) | Using the output: Default
- INFO | 2020-05-27 10:57:33.497 | Interface.ArgumentsCheck (ArgumentsCheck.java:342) | Using the source file(s): [testable-jar.jar]
- INFO | 2020-05-27 10:57:33.498 | routing.EnvironmentInformation (EnvironmentInformation.java:376) | Building the Package Root Dir based on type
- INFO | 2020-05-27 10:57:33.498 | routing.EnvironmentInformation (EnvironmentInformation.java:410) | Building the Root Directory
- INFO | 2020-05-27 10:57:33.499 | Interface.SubRunner (SubRunner.java:57) | Starting the scanning process
- INFO | 2020-05-27 10:57:33.500 | engine.JarEntry (JarEntry.java:25) | Checking the rule: InsecureAssymCryptoFinder
- INFO | 2020-05-27 10:57:38.651 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenCryptoFinder
- INFO | 2020-05-27 10:57:38.777 | engine.JarEntry (JarEntry.java:25) | Checking the rule: UntrustedPrngFinder
- INFO | 2020-05-27 10:57:39.019 | engine.JarEntry (JarEntry.java:25) | Checking the rule: SSLSocketFactoryFinder
- INFO | 2020-05-27 10:57:39.631 | engine.JarEntry (JarEntry.java:25) | Checking the rule: CustomTrustManagerFinder
- INFO | 2020-05-27 10:57:39.651 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HostNameVerifierFinder
- INFO | 2020-05-27 10:57:39.672 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenHashFinder
- INFO | 2020-05-27 10:57:39.812 | engine.JarEntry (JarEntry.java:25) | Checking the rule: ConstantKeyFinder
- INFO | 2020-05-27 10:57:40.012 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableIVFinder
- INFO | 2020-05-27 10:57:40.108 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBESaltFinder
- INFO | 2020-05-27 10:57:40.308 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBEInterationCountFinder
- INFO | 2020-05-27 10:57:40.532 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableSeedFinder
- INFO | 2020-05-27 10:57:40.718 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableKeyStorePasswordFinder
- INFO | 2020-05-27 10:57:40.989 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HttpUrlFinder
- INFO | 2020-05-27 10:57:41.356 | Interface.SubRunner (SubRunner.java:59) | Stopped the scanning process
- INFO | 2020-05-27 10:57:41.357 | block.Default (Default.java:68) | Marshalling the Report from the Env. Info.
- INFO | 2020-05-27 10:57:41.358 | Interface.SubRunner (SubRunner.java:62) | Writing the output to the file: /home/maister/.Changes/Repos/Projects/cryptoguard/build/tmp/tempJarFile_Default_0.json
- INFO | 2020-05-27 10:57:41.360 | Interface.ArgumentsCheck (ArgumentsCheck.java:150) | Displaying info level logs
- INFO | 2020-05-27 10:57:41.361 | Interface.ArgumentsCheck (ArgumentsCheck.java:178) | Using the output: Default
- INFO | 2020-05-27 10:57:41.361 | Interface.ArgumentsCheck (ArgumentsCheck.java:342) | Using the source file(s): [testable-jar.jar]
- INFO | 2020-05-27 10:57:41.362 | routing.EnvironmentInformation (EnvironmentInformation.java:376) | Building the Package Root Dir based on type
- INFO | 2020-05-27 10:57:41.362 | routing.EnvironmentInformation (EnvironmentInformation.java:410) | Building the Root Directory
- INFO | 2020-05-27 10:57:41.363 | Interface.SubRunner (SubRunner.java:57) | Starting the scanning process
- INFO | 2020-05-27 10:57:41.363 | engine.JarEntry (JarEntry.java:25) | Checking the rule: InsecureAssymCryptoFinder
- INFO | 2020-05-27 10:57:46.632 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenCryptoFinder
- INFO | 2020-05-27 10:57:46.815 | engine.JarEntry (JarEntry.java:25) | Checking the rule: UntrustedPrngFinder
- INFO | 2020-05-27 10:57:47.217 | engine.JarEntry (JarEntry.java:25) | Checking the rule: SSLSocketFactoryFinder
- INFO | 2020-05-27 10:57:48.185 | engine.JarEntry (JarEntry.java:25) | Checking the rule: CustomTrustManagerFinder
- INFO | 2020-05-27 10:57:48.213 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HostNameVerifierFinder
- INFO | 2020-05-27 10:57:48.242 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenHashFinder
- INFO | 2020-05-27 10:57:48.432 | engine.JarEntry (JarEntry.java:25) | Checking the rule: ConstantKeyFinder
- INFO | 2020-05-27 10:57:48.694 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableIVFinder
- INFO | 2020-05-27 10:57:48.791 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBESaltFinder
- INFO | 2020-05-27 10:57:48.954 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBEInterationCountFinder
- INFO | 2020-05-27 10:57:49.132 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableSeedFinder
- INFO | 2020-05-27 10:57:49.272 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableKeyStorePasswordFinder
- INFO | 2020-05-27 10:57:49.449 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HttpUrlFinder
- INFO | 2020-05-27 10:57:49.659 | Interface.SubRunner (SubRunner.java:59) | Stopped the scanning process
- INFO | 2020-05-27 10:57:49.659 | block.Default (Default.java:68) | Marshalling the Report from the Env. Info.
- INFO | 2020-05-27 10:57:49.660 | Interface.SubRunner (SubRunner.java:62) | Writing the output to the file: /home/maister/.Changes/Repos/Projects/cryptoguard/build/tmp/tempJarFile_Default_0.json
- INFO | 2020-05-27 10:57:49.662 | Interface.ArgumentsCheck (ArgumentsCheck.java:150) | Displaying info level logs
- INFO | 2020-05-27 10:57:49.662 | Interface.ArgumentsCheck (ArgumentsCheck.java:178) | Using the output: ScarfXML
- INFO | 2020-05-27 10:57:49.663 | Interface.ArgumentsCheck (ArgumentsCheck.java:342) | Using the source file(s): [testable-jar.jar]
- INFO | 2020-05-27 10:57:49.664 | routing.EnvironmentInformation (EnvironmentInformation.java:376) | Building the Package Root Dir based on type
- INFO | 2020-05-27 10:57:49.664 | routing.EnvironmentInformation (EnvironmentInformation.java:410) | Building the Root Directory
- INFO | 2020-05-27 10:57:49.665 | Interface.SubRunner (SubRunner.java:57) | Starting the scanning process
- INFO | 2020-05-27 10:57:49.665 | engine.JarEntry (JarEntry.java:25) | Checking the rule: InsecureAssymCryptoFinder
- INFO | 2020-05-27 10:57:54.583 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenCryptoFinder
- INFO | 2020-05-27 10:57:54.713 | engine.JarEntry (JarEntry.java:25) | Checking the rule: UntrustedPrngFinder
- INFO | 2020-05-27 10:57:54.961 | engine.JarEntry (JarEntry.java:25) | Checking the rule: SSLSocketFactoryFinder
- INFO | 2020-05-27 10:57:55.566 | engine.JarEntry (JarEntry.java:25) | Checking the rule: CustomTrustManagerFinder
- INFO | 2020-05-27 10:57:55.586 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HostNameVerifierFinder
- INFO | 2020-05-27 10:57:55.607 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenHashFinder
- INFO | 2020-05-27 10:57:55.740 | engine.JarEntry (JarEntry.java:25) | Checking the rule: ConstantKeyFinder
- INFO | 2020-05-27 10:57:55.948 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableIVFinder
- INFO | 2020-05-27 10:57:56.053 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBESaltFinder
- INFO | 2020-05-27 10:57:56.291 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBEInterationCountFinder
- INFO | 2020-05-27 10:57:56.500 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableSeedFinder
- INFO | 2020-05-27 10:57:56.657 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableKeyStorePasswordFinder
- INFO | 2020-05-27 10:57:56.842 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HttpUrlFinder
- INFO | 2020-05-27 10:57:57.053 | Interface.SubRunner (SubRunner.java:59) | Stopped the scanning process
- INFO | 2020-05-27 10:57:57.053 | block.ScarfXML (ScarfXML.java:69) | Marshalling the AnalyzerReport from the Env. Info.
- INFO | 2020-05-27 10:57:57.054 | block.ScarfXML (ScarfXML.java:89) | Marshalling the bug category summary.
- INFO | 2020-05-27 10:57:57.058 | Interface.SubRunner (SubRunner.java:62) | Writing the output to the file: /home/maister/.Changes/Repos/Projects/cryptoguard/build/tmp/tempJarFile_Scarf_0.xml
- INFO | 2020-05-27 10:57:57.062 | Interface.ArgumentsCheck (ArgumentsCheck.java:150) | Displaying info level logs
- INFO | 2020-05-27 10:57:57.063 | Interface.ArgumentsCheck (ArgumentsCheck.java:178) | Using the output: Default
- INFO | 2020-05-27 10:57:57.063 | Interface.ArgumentsCheck (ArgumentsCheck.java:342) | Using the source file(s): [testable-jar.jar]
- INFO | 2020-05-27 10:57:57.064 | routing.EnvironmentInformation (EnvironmentInformation.java:376) | Building the Package Root Dir based on type
- INFO | 2020-05-27 10:57:57.065 | routing.EnvironmentInformation (EnvironmentInformation.java:410) | Building the Root Directory
- INFO | 2020-05-27 10:57:57.066 | Interface.SubRunner (SubRunner.java:57) | Starting the scanning process
- INFO | 2020-05-27 10:57:57.066 | engine.JarEntry (JarEntry.java:25) | Checking the rule: InsecureAssymCryptoFinder
- INFO | 2020-05-27 10:58:01.043 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenCryptoFinder
- INFO | 2020-05-27 10:58:01.179 | engine.JarEntry (JarEntry.java:25) | Checking the rule: UntrustedPrngFinder
- INFO | 2020-05-27 10:58:01.451 | engine.JarEntry (JarEntry.java:25) | Checking the rule: SSLSocketFactoryFinder
- INFO | 2020-05-27 10:58:02.034 | engine.JarEntry (JarEntry.java:25) | Checking the rule: CustomTrustManagerFinder
- INFO | 2020-05-27 10:58:02.059 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HostNameVerifierFinder
- INFO | 2020-05-27 10:58:02.090 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenHashFinder
- INFO | 2020-05-27 10:58:02.266 | engine.JarEntry (JarEntry.java:25) | Checking the rule: ConstantKeyFinder
- INFO | 2020-05-27 10:58:02.526 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableIVFinder
- INFO | 2020-05-27 10:58:02.652 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBESaltFinder
- INFO | 2020-05-27 10:58:02.864 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBEInterationCountFinder
- INFO | 2020-05-27 10:58:03.055 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableSeedFinder
- INFO | 2020-05-27 10:58:03.206 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableKeyStorePasswordFinder
- INFO | 2020-05-27 10:58:03.394 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HttpUrlFinder
- INFO | 2020-05-27 10:58:03.607 | Interface.SubRunner (SubRunner.java:59) | Stopped the scanning process
- INFO | 2020-05-27 10:58:03.608 | block.Default (Default.java:68) | Marshalling the Report from the Env. Info.
- INFO | 2020-05-27 10:58:03.610 | Interface.SubRunner (SubRunner.java:62) | Writing the output to the file: /home/maister/.Changes/Repos/Projects/cryptoguard/build/tmp/tempJarFile_Default_0.json
- INFO | 2020-05-27 10:58:03.613 | Interface.ArgumentsCheck (ArgumentsCheck.java:150) | Displaying info level logs
- INFO | 2020-05-27 10:58:03.614 | Interface.ArgumentsCheck (ArgumentsCheck.java:178) | Using the output: Legacy
- INFO | 2020-05-27 10:58:03.614 | Interface.ArgumentsCheck (ArgumentsCheck.java:342) | Using the source file(s): [testable-jar.jar]
- INFO | 2020-05-27 10:58:03.615 | routing.EnvironmentInformation (EnvironmentInformation.java:376) | Building the Package Root Dir based on type
- INFO | 2020-05-27 10:58:03.615 | routing.EnvironmentInformation (EnvironmentInformation.java:410) | Building the Root Directory
- INFO | 2020-05-27 10:58:03.616 | Interface.SubRunner (SubRunner.java:57) | Starting the scanning process
- INFO | 2020-05-27 10:58:03.616 | engine.JarEntry (JarEntry.java:25) | Checking the rule: InsecureAssymCryptoFinder
- INFO | 2020-05-27 10:58:07.115 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenCryptoFinder
- INFO | 2020-05-27 10:58:07.273 | engine.JarEntry (JarEntry.java:25) | Checking the rule: UntrustedPrngFinder
- INFO | 2020-05-27 10:58:07.546 | engine.JarEntry (JarEntry.java:25) | Checking the rule: SSLSocketFactoryFinder
- INFO | 2020-05-27 10:58:08.100 | engine.JarEntry (JarEntry.java:25) | Checking the rule: CustomTrustManagerFinder
- INFO | 2020-05-27 10:58:08.120 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HostNameVerifierFinder
- INFO | 2020-05-27 10:58:08.141 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenHashFinder
- INFO | 2020-05-27 10:58:08.272 | engine.JarEntry (JarEntry.java:25) | Checking the rule: ConstantKeyFinder
- INFO | 2020-05-27 10:58:08.478 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableIVFinder
- INFO | 2020-05-27 10:58:08.585 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBESaltFinder
- INFO | 2020-05-27 10:58:08.752 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBEInterationCountFinder
- INFO | 2020-05-27 10:58:08.921 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableSeedFinder
- INFO | 2020-05-27 10:58:09.044 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableKeyStorePasswordFinder
- INFO | 2020-05-27 10:58:09.219 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HttpUrlFinder
- INFO | 2020-05-27 10:58:09.441 | Interface.SubRunner (SubRunner.java:59) | Stopped the scanning process
- INFO | 2020-05-27 10:58:09.442 | Interface.SubRunner (SubRunner.java:62) | Writing the output to the file: /home/maister/.Changes/Repos/Projects/cryptoguard/build/tmp/tempJarFile_txt.txt
- INFO | 2020-05-27 10:58:09.443 | Interface.ArgumentsCheck (ArgumentsCheck.java:150) | Displaying info level logs
- INFO | 2020-05-27 10:58:09.444 | Interface.ArgumentsCheck (ArgumentsCheck.java:178) | Using the output: ScarfXML
- INFO | 2020-05-27 10:58:09.445 | Interface.ArgumentsCheck (ArgumentsCheck.java:342) | Using the source file(s): [testable-jar.jar]
- INFO | 2020-05-27 10:58:09.446 | routing.EnvironmentInformation (EnvironmentInformation.java:376) | Building the Package Root Dir based on type
- INFO | 2020-05-27 10:58:09.446 | routing.EnvironmentInformation (EnvironmentInformation.java:410) | Building the Root Directory
- INFO | 2020-05-27 10:58:09.447 | Interface.SubRunner (SubRunner.java:57) | Starting the scanning process
- INFO | 2020-05-27 10:58:09.447 | engine.JarEntry (JarEntry.java:25) | Checking the rule: InsecureAssymCryptoFinder
- INFO | 2020-05-27 10:58:13.263 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenCryptoFinder
- INFO | 2020-05-27 10:58:13.417 | engine.JarEntry (JarEntry.java:25) | Checking the rule: UntrustedPrngFinder
- INFO | 2020-05-27 10:58:13.698 | engine.JarEntry (JarEntry.java:25) | Checking the rule: SSLSocketFactoryFinder
- INFO | 2020-05-27 10:58:14.289 | engine.JarEntry (JarEntry.java:25) | Checking the rule: CustomTrustManagerFinder
- INFO | 2020-05-27 10:58:14.310 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HostNameVerifierFinder
- INFO | 2020-05-27 10:58:14.333 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenHashFinder
- INFO | 2020-05-27 10:58:14.479 | engine.JarEntry (JarEntry.java:25) | Checking the rule: ConstantKeyFinder
- INFO | 2020-05-27 10:58:14.693 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableIVFinder
- INFO | 2020-05-27 10:58:14.790 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBESaltFinder
- INFO | 2020-05-27 10:58:14.949 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBEInterationCountFinder
- INFO | 2020-05-27 10:58:15.118 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableSeedFinder
- INFO | 2020-05-27 10:58:15.254 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableKeyStorePasswordFinder
- INFO | 2020-05-27 10:58:15.428 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HttpUrlFinder
- INFO | 2020-05-27 10:58:15.627 | Interface.SubRunner (SubRunner.java:59) | Stopped the scanning process
- INFO | 2020-05-27 10:58:15.628 | block.ScarfXML (ScarfXML.java:69) | Marshalling the AnalyzerReport from the Env. Info.
- INFO | 2020-05-27 10:58:15.628 | block.ScarfXML (ScarfXML.java:89) | Marshalling the bug category summary.
- INFO | 2020-05-27 10:58:15.630 | Interface.SubRunner (SubRunner.java:62) | Writing the output to the file: /home/maister/.Changes/Repos/Projects/cryptoguard/build/tmp/tempJarFile_Scarf_2.xml
- INFO | 2020-05-27 10:58:15.632 | Interface.ArgumentsCheck (ArgumentsCheck.java:150) | Displaying info level logs
- INFO | 2020-05-27 10:58:15.633 | Interface.ArgumentsCheck (ArgumentsCheck.java:178) | Using the output: ScarfXML
- INFO | 2020-05-27 10:58:15.633 | Interface.ArgumentsCheck (ArgumentsCheck.java:342) | Using the source file(s): [testable-jar.jar]
- INFO | 2020-05-27 10:58:15.634 | routing.EnvironmentInformation (EnvironmentInformation.java:376) | Building the Package Root Dir based on type
- INFO | 2020-05-27 10:58:15.634 | routing.EnvironmentInformation (EnvironmentInformation.java:410) | Building the Root Directory
- INFO | 2020-05-27 10:58:15.634 | Interface.SubRunner (SubRunner.java:57) | Starting the scanning process
- INFO | 2020-05-27 10:58:15.635 | engine.JarEntry (JarEntry.java:25) | Checking the rule: InsecureAssymCryptoFinder
- INFO | 2020-05-27 10:58:19.087 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenCryptoFinder
- INFO | 2020-05-27 10:58:19.221 | engine.JarEntry (JarEntry.java:25) | Checking the rule: UntrustedPrngFinder
- INFO | 2020-05-27 10:58:19.498 | engine.JarEntry (JarEntry.java:25) | Checking the rule: SSLSocketFactoryFinder
- INFO | 2020-05-27 10:58:20.056 | engine.JarEntry (JarEntry.java:25) | Checking the rule: CustomTrustManagerFinder
- INFO | 2020-05-27 10:58:20.079 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HostNameVerifierFinder
- INFO | 2020-05-27 10:58:20.106 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenHashFinder
- INFO | 2020-05-27 10:58:20.249 | engine.JarEntry (JarEntry.java:25) | Checking the rule: ConstantKeyFinder
- INFO | 2020-05-27 10:58:20.471 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableIVFinder
- INFO | 2020-05-27 10:58:20.567 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBESaltFinder
- INFO | 2020-05-27 10:58:20.734 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBEInterationCountFinder
- INFO | 2020-05-27 10:58:20.899 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableSeedFinder
- INFO | 2020-05-27 10:58:21.030 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableKeyStorePasswordFinder
- INFO | 2020-05-27 10:58:21.210 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HttpUrlFinder
- INFO | 2020-05-27 10:58:21.435 | Interface.SubRunner (SubRunner.java:59) | Stopped the scanning process
- INFO | 2020-05-27 10:58:21.435 | block.ScarfXML (ScarfXML.java:69) | Marshalling the AnalyzerReport from the Env. Info.
- INFO | 2020-05-27 10:58:21.436 | block.ScarfXML (ScarfXML.java:89) | Marshalling the bug category summary.
- INFO | 2020-05-27 10:58:21.437 | Interface.SubRunner (SubRunner.java:62) | Writing the output to the file: /home/maister/.Changes/Repos/Projects/cryptoguard/build/tmp/tempJarFile_Scarf_2.xml
- INFO | 2020-05-27 10:58:21.440 | Interface.ArgumentsCheck (ArgumentsCheck.java:150) | Displaying info level logs
- INFO | 2020-05-27 10:58:21.441 | Interface.ArgumentsCheck (ArgumentsCheck.java:178) | Using the output: ScarfXML
- INFO | 2020-05-27 10:58:21.442 | Interface.ArgumentsCheck (ArgumentsCheck.java:342) | Using the source file(s): [testable-jar.jar]
- INFO | 2020-05-27 10:58:21.442 | routing.EnvironmentInformation (EnvironmentInformation.java:376) | Building the Package Root Dir based on type
- INFO | 2020-05-27 10:58:21.443 | routing.EnvironmentInformation (EnvironmentInformation.java:410) | Building the Root Directory
- INFO | 2020-05-27 10:58:21.444 | Interface.SubRunner (SubRunner.java:57) | Starting the scanning process
- INFO | 2020-05-27 10:58:21.444 | engine.JarEntry (JarEntry.java:25) | Checking the rule: InsecureAssymCryptoFinder
- INFO | 2020-05-27 10:58:25.187 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenCryptoFinder
- INFO | 2020-05-27 10:58:25.341 | engine.JarEntry (JarEntry.java:25) | Checking the rule: UntrustedPrngFinder
- INFO | 2020-05-27 10:58:25.692 | engine.JarEntry (JarEntry.java:25) | Checking the rule: SSLSocketFactoryFinder
- INFO | 2020-05-27 10:58:26.567 | engine.JarEntry (JarEntry.java:25) | Checking the rule: CustomTrustManagerFinder
- INFO | 2020-05-27 10:58:26.601 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HostNameVerifierFinder
- INFO | 2020-05-27 10:58:26.637 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenHashFinder
- INFO | 2020-05-27 10:58:26.852 | engine.JarEntry (JarEntry.java:25) | Checking the rule: ConstantKeyFinder
- INFO | 2020-05-27 10:58:27.117 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableIVFinder
- INFO | 2020-05-27 10:58:27.234 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBESaltFinder
- INFO | 2020-05-27 10:58:27.450 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBEInterationCountFinder
- INFO | 2020-05-27 10:58:27.702 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableSeedFinder
- INFO | 2020-05-27 10:58:27.859 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableKeyStorePasswordFinder
- INFO | 2020-05-27 10:58:28.105 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HttpUrlFinder
- INFO | 2020-05-27 10:58:28.418 | Interface.SubRunner (SubRunner.java:59) | Stopped the scanning process
- INFO | 2020-05-27 10:58:28.419 | block.ScarfXML (ScarfXML.java:69) | Marshalling the AnalyzerReport from the Env. Info.
- INFO | 2020-05-27 10:58:28.419 | block.ScarfXML (ScarfXML.java:89) | Marshalling the bug category summary.
- INFO | 2020-05-27 10:58:28.420 | Interface.SubRunner (SubRunner.java:62) | Writing the output to the file: /home/maister/.Changes/Repos/Projects/cryptoguard/build/tmp/tempJarFile_Scarf_1.xml
- INFO | 2020-05-27 10:58:28.422 | Interface.ArgumentsCheck (ArgumentsCheck.java:150) | Displaying info level logs
- INFO | 2020-05-27 10:58:28.423 | Interface.ArgumentsCheck (ArgumentsCheck.java:178) | Using the output: Default
- INFO | 2020-05-27 10:58:28.424 | Interface.ArgumentsCheck (ArgumentsCheck.java:342) | Using the source file(s): [testable-jar.jar]
- INFO | 2020-05-27 10:58:28.424 | routing.EnvironmentInformation (EnvironmentInformation.java:376) | Building the Package Root Dir based on type
- INFO | 2020-05-27 10:58:28.425 | routing.EnvironmentInformation (EnvironmentInformation.java:410) | Building the Root Directory
- INFO | 2020-05-27 10:58:28.425 | Interface.SubRunner (SubRunner.java:57) | Starting the scanning process
- INFO | 2020-05-27 10:58:28.426 | engine.JarEntry (JarEntry.java:25) | Checking the rule: InsecureAssymCryptoFinder
- INFO | 2020-05-27 10:58:32.382 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenCryptoFinder
- INFO | 2020-05-27 10:58:32.518 | engine.JarEntry (JarEntry.java:25) | Checking the rule: UntrustedPrngFinder
- INFO | 2020-05-27 10:58:32.775 | engine.JarEntry (JarEntry.java:25) | Checking the rule: SSLSocketFactoryFinder
- INFO | 2020-05-27 10:58:33.383 | engine.JarEntry (JarEntry.java:25) | Checking the rule: CustomTrustManagerFinder
- INFO | 2020-05-27 10:58:33.408 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HostNameVerifierFinder
- INFO | 2020-05-27 10:58:33.435 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenHashFinder
- INFO | 2020-05-27 10:58:33.594 | engine.JarEntry (JarEntry.java:25) | Checking the rule: ConstantKeyFinder
- INFO | 2020-05-27 10:58:33.844 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableIVFinder
- INFO | 2020-05-27 10:58:33.960 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBESaltFinder
- INFO | 2020-05-27 10:58:34.185 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBEInterationCountFinder
- INFO | 2020-05-27 10:58:34.407 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableSeedFinder
- INFO | 2020-05-27 10:58:34.569 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableKeyStorePasswordFinder
- INFO | 2020-05-27 10:58:34.754 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HttpUrlFinder
- INFO | 2020-05-27 10:58:34.963 | Interface.SubRunner (SubRunner.java:59) | Stopped the scanning process
- INFO | 2020-05-27 10:58:34.963 | block.Default (Default.java:68) | Marshalling the Report from the Env. Info.
- INFO | 2020-05-27 10:58:34.964 | Interface.SubRunner (SubRunner.java:62) | Writing the output to the file: /home/maister/.Changes/Repos/Projects/cryptoguard/build/tmp/tempJarFile_Default_0.json
- INFO | 2020-05-27 10:58:34.966 | Interface.ArgumentsCheck (ArgumentsCheck.java:150) | Displaying info level logs
- INFO | 2020-05-27 10:58:34.967 | Interface.ArgumentsCheck (ArgumentsCheck.java:178) | Using the output: ScarfXML
- INFO | 2020-05-27 10:58:34.967 | Interface.ArgumentsCheck (ArgumentsCheck.java:342) | Using the source file(s): [testable-jar.jar]
- INFO | 2020-05-27 10:58:34.968 | routing.EnvironmentInformation (EnvironmentInformation.java:376) | Building the Package Root Dir based on type
- INFO | 2020-05-27 10:58:34.968 | routing.EnvironmentInformation (EnvironmentInformation.java:410) | Building the Root Directory
- INFO | 2020-05-27 10:58:34.969 | stream.ScarfXML (ScarfXML.java:74) | Marshalling the header.
- INFO | 2020-05-27 10:58:34.969 | Interface.SubRunner (SubRunner.java:57) | Starting the scanning process
- INFO | 2020-05-27 10:58:34.970 | engine.JarEntry (JarEntry.java:25) | Checking the rule: InsecureAssymCryptoFinder
- INFO | 2020-05-27 10:58:38.729 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenCryptoFinder
- INFO | 2020-05-27 10:58:38.880 | engine.JarEntry (JarEntry.java:25) | Checking the rule: UntrustedPrngFinder
- INFO | 2020-05-27 10:58:39.208 | engine.JarEntry (JarEntry.java:25) | Checking the rule: SSLSocketFactoryFinder
- INFO | 2020-05-27 10:58:39.873 | engine.JarEntry (JarEntry.java:25) | Checking the rule: CustomTrustManagerFinder
- INFO | 2020-05-27 10:58:39.896 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HostNameVerifierFinder
- INFO | 2020-05-27 10:58:39.919 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenHashFinder
- INFO | 2020-05-27 10:58:40.069 | engine.JarEntry (JarEntry.java:25) | Checking the rule: ConstantKeyFinder
- INFO | 2020-05-27 10:58:40.307 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableIVFinder
- INFO | 2020-05-27 10:58:40.421 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBESaltFinder
- INFO | 2020-05-27 10:58:40.632 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBEInterationCountFinder
- INFO | 2020-05-27 10:58:40.826 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableSeedFinder
- INFO | 2020-05-27 10:58:40.974 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableKeyStorePasswordFinder
- INFO | 2020-05-27 10:58:41.183 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HttpUrlFinder
- INFO | 2020-05-27 10:58:41.437 | Interface.SubRunner (SubRunner.java:59) | Stopped the scanning process
- INFO | 2020-05-27 10:58:41.437 | stream.ScarfXML (ScarfXML.java:113) | Marshalling the bug category summary.
- INFO | 2020-05-27 10:58:41.438 | Interface.SubRunner (SubRunner.java:62) | Writing the output to the file: /home/maister/.Changes/Repos/Projects/cryptoguard/build/tmp/tempJarFile_Scarf_Steam_1.xml
- INFO | 2020-05-27 10:58:41.440 | Interface.ArgumentsCheck (ArgumentsCheck.java:150) | Displaying info level logs
- INFO | 2020-05-27 10:58:41.441 | Interface.ArgumentsCheck (ArgumentsCheck.java:178) | Using the output: ScarfXML
- INFO | 2020-05-27 10:58:41.441 | Interface.ArgumentsCheck (ArgumentsCheck.java:342) | Using the source file(s): [very.jar]
- INFO | 2020-05-27 10:58:41.442 | routing.EnvironmentInformation (EnvironmentInformation.java:376) | Building the Package Root Dir based on type
- INFO | 2020-05-27 10:58:41.442 | routing.EnvironmentInformation (EnvironmentInformation.java:410) | Building the Root Directory
- INFO | 2020-05-27 10:58:41.442 | stream.ScarfXML (ScarfXML.java:74) | Marshalling the header.
- INFO | 2020-05-27 10:58:41.443 | Interface.SubRunner (SubRunner.java:57) | Starting the scanning process
- INFO | 2020-05-27 10:58:41.443 | engine.JarEntry (JarEntry.java:25) | Checking the rule: InsecureAssymCryptoFinder
- INFO | 2020-05-27 10:58:41.543 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenCryptoFinder
- INFO | 2020-05-27 10:58:41.545 | engine.JarEntry (JarEntry.java:25) | Checking the rule: UntrustedPrngFinder
- INFO | 2020-05-27 10:58:41.546 | engine.JarEntry (JarEntry.java:25) | Checking the rule: SSLSocketFactoryFinder
- INFO | 2020-05-27 10:58:41.547 | engine.JarEntry (JarEntry.java:25) | Checking the rule: CustomTrustManagerFinder
- INFO | 2020-05-27 10:58:41.548 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HostNameVerifierFinder
- INFO | 2020-05-27 10:58:41.548 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenHashFinder
- INFO | 2020-05-27 10:58:41.551 | engine.JarEntry (JarEntry.java:25) | Checking the rule: ConstantKeyFinder
- INFO | 2020-05-27 10:58:41.555 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableIVFinder
- INFO | 2020-05-27 10:58:41.557 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBESaltFinder
- INFO | 2020-05-27 10:58:41.560 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBEInterationCountFinder
- INFO | 2020-05-27 10:58:41.564 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableSeedFinder
- INFO | 2020-05-27 10:58:41.566 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableKeyStorePasswordFinder
- INFO | 2020-05-27 10:58:41.569 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HttpUrlFinder
- INFO | 2020-05-27 10:58:41.573 | Interface.SubRunner (SubRunner.java:59) | Stopped the scanning process
- INFO | 2020-05-27 10:58:41.574 | stream.ScarfXML (ScarfXML.java:113) | Marshalling the bug category summary.
- INFO | 2020-05-27 10:58:41.574 | Interface.SubRunner (SubRunner.java:62) | Writing the output to the file: /home/maister/.Changes/Repos/Projects/cryptoguard/build/tmp/verySimple_jar.xml
- INFO | 2020-05-27 10:58:41.576 | Interface.ArgumentsCheck (ArgumentsCheck.java:150) | Displaying info level logs
- INFO | 2020-05-27 10:58:41.576 | Interface.ArgumentsCheck (ArgumentsCheck.java:178) | Using the output: Default
- INFO | 2020-05-27 10:58:41.577 | Interface.ArgumentsCheck (ArgumentsCheck.java:342) | Using the source file(s): [testable-jar.jar]
- INFO | 2020-05-27 10:58:41.578 | routing.EnvironmentInformation (EnvironmentInformation.java:376) | Building the Package Root Dir based on type
- INFO | 2020-05-27 10:58:41.579 | routing.EnvironmentInformation (EnvironmentInformation.java:410) | Building the Root Directory
- INFO | 2020-05-27 10:58:41.579 | Interface.SubRunner (SubRunner.java:57) | Starting the scanning process
- INFO | 2020-05-27 10:58:41.580 | engine.JarEntry (JarEntry.java:25) | Checking the rule: InsecureAssymCryptoFinder
- INFO | 2020-05-27 10:58:45.513 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenCryptoFinder
- INFO | 2020-05-27 10:58:45.654 | engine.JarEntry (JarEntry.java:25) | Checking the rule: UntrustedPrngFinder
- INFO | 2020-05-27 10:58:45.913 | engine.JarEntry (JarEntry.java:25) | Checking the rule: SSLSocketFactoryFinder
- INFO | 2020-05-27 10:58:46.522 | engine.JarEntry (JarEntry.java:25) | Checking the rule: CustomTrustManagerFinder
- INFO | 2020-05-27 10:58:46.543 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HostNameVerifierFinder
- INFO | 2020-05-27 10:58:46.564 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenHashFinder
- INFO | 2020-05-27 10:58:46.699 | engine.JarEntry (JarEntry.java:25) | Checking the rule: ConstantKeyFinder
- INFO | 2020-05-27 10:58:46.908 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableIVFinder
- INFO | 2020-05-27 10:58:47.011 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBESaltFinder
- INFO | 2020-05-27 10:58:47.221 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBEInterationCountFinder
- INFO | 2020-05-27 10:58:47.428 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableSeedFinder
- INFO | 2020-05-27 10:58:47.583 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableKeyStorePasswordFinder
- INFO | 2020-05-27 10:58:47.779 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HttpUrlFinder
- INFO | 2020-05-27 10:58:47.980 | Interface.SubRunner (SubRunner.java:59) | Stopped the scanning process
- INFO | 2020-05-27 10:58:47.980 | block.Default (Default.java:68) | Marshalling the Report from the Env. Info.
- INFO | 2020-05-27 10:58:47.981 | Interface.SubRunner (SubRunner.java:62) | Writing the output to the file: /home/maister/.Changes/Repos/Projects/cryptoguard/build/tmp/tempJarFile_Default_0.json
- INFO | 2020-05-27 10:58:47.982 | Interface.ArgumentsCheck (ArgumentsCheck.java:150) | Displaying info level logs
- INFO | 2020-05-27 10:58:47.983 | Interface.ArgumentsCheck (ArgumentsCheck.java:178) | Using the output: Default
- INFO | 2020-05-27 10:58:47.983 | Interface.ArgumentsCheck (ArgumentsCheck.java:342) | Using the source file(s): [testable-jar.jar]
- INFO | 2020-05-27 10:58:47.984 | routing.EnvironmentInformation (EnvironmentInformation.java:376) | Building the Package Root Dir based on type
- INFO | 2020-05-27 10:58:47.984 | routing.EnvironmentInformation (EnvironmentInformation.java:410) | Building the Root Directory
- INFO | 2020-05-27 10:58:47.985 | stream.Default (Default.java:70) | Marshalling the header.
- INFO | 2020-05-27 10:58:47.985 | Interface.SubRunner (SubRunner.java:57) | Starting the scanning process
- INFO | 2020-05-27 10:58:47.985 | engine.JarEntry (JarEntry.java:25) | Checking the rule: InsecureAssymCryptoFinder
- INFO | 2020-05-27 10:58:51.460 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenCryptoFinder
- INFO | 2020-05-27 10:58:51.593 | engine.JarEntry (JarEntry.java:25) | Checking the rule: UntrustedPrngFinder
- INFO | 2020-05-27 10:58:51.848 | engine.JarEntry (JarEntry.java:25) | Checking the rule: SSLSocketFactoryFinder
- INFO | 2020-05-27 10:58:52.504 | engine.JarEntry (JarEntry.java:25) | Checking the rule: CustomTrustManagerFinder
- INFO | 2020-05-27 10:58:52.527 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HostNameVerifierFinder
- INFO | 2020-05-27 10:58:52.551 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenHashFinder
- INFO | 2020-05-27 10:58:52.704 | engine.JarEntry (JarEntry.java:25) | Checking the rule: ConstantKeyFinder
- INFO | 2020-05-27 10:58:52.947 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableIVFinder
- INFO | 2020-05-27 10:58:53.059 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBESaltFinder
- INFO | 2020-05-27 10:58:53.247 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBEInterationCountFinder
- INFO | 2020-05-27 10:58:53.427 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableSeedFinder
- INFO | 2020-05-27 10:58:53.567 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableKeyStorePasswordFinder
- INFO | 2020-05-27 10:58:53.738 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HttpUrlFinder
- INFO | 2020-05-27 10:58:53.939 | Interface.SubRunner (SubRunner.java:59) | Stopped the scanning process
- INFO | 2020-05-27 10:58:53.940 | Interface.SubRunner (SubRunner.java:62) | Writing the output to the file: /home/maister/.Changes/Repos/Projects/cryptoguard/build/tmp/tempJarFile_Default_Stream_0.json
- INFO | 2020-05-27 10:58:53.941 | Interface.ArgumentsCheck (ArgumentsCheck.java:150) | Displaying info level logs
- INFO | 2020-05-27 10:58:53.942 | Interface.ArgumentsCheck (ArgumentsCheck.java:178) | Using the output: ScarfXML
- INFO | 2020-05-27 10:58:53.942 | Interface.ArgumentsCheck (ArgumentsCheck.java:342) | Using the source file(s): [testable-jar.jar]
- INFO | 2020-05-27 10:58:53.943 | routing.EnvironmentInformation (EnvironmentInformation.java:376) | Building the Package Root Dir based on type
- INFO | 2020-05-27 10:58:53.943 | routing.EnvironmentInformation (EnvironmentInformation.java:410) | Building the Root Directory
- INFO | 2020-05-27 10:58:53.944 | Interface.SubRunner (SubRunner.java:57) | Starting the scanning process
- INFO | 2020-05-27 10:58:53.944 | engine.JarEntry (JarEntry.java:25) | Checking the rule: InsecureAssymCryptoFinder
- INFO | 2020-05-27 10:58:57.215 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenCryptoFinder
- INFO | 2020-05-27 10:58:57.355 | engine.JarEntry (JarEntry.java:25) | Checking the rule: UntrustedPrngFinder
- INFO | 2020-05-27 10:58:57.651 | engine.JarEntry (JarEntry.java:25) | Checking the rule: SSLSocketFactoryFinder
- INFO | 2020-05-27 10:58:58.302 | engine.JarEntry (JarEntry.java:25) | Checking the rule: CustomTrustManagerFinder
- INFO | 2020-05-27 10:58:58.327 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HostNameVerifierFinder
- INFO | 2020-05-27 10:58:58.355 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenHashFinder
- INFO | 2020-05-27 10:58:58.510 | engine.JarEntry (JarEntry.java:25) | Checking the rule: ConstantKeyFinder
- INFO | 2020-05-27 10:58:58.732 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableIVFinder
- INFO | 2020-05-27 10:58:58.823 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBESaltFinder
- INFO | 2020-05-27 10:58:58.993 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBEInterationCountFinder
- INFO | 2020-05-27 10:58:59.175 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableSeedFinder
- INFO | 2020-05-27 10:58:59.315 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableKeyStorePasswordFinder
- INFO | 2020-05-27 10:58:59.493 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HttpUrlFinder
- INFO | 2020-05-27 10:58:59.704 | Interface.SubRunner (SubRunner.java:59) | Stopped the scanning process
- INFO | 2020-05-27 10:58:59.705 | block.ScarfXML (ScarfXML.java:69) | Marshalling the AnalyzerReport from the Env. Info.
- INFO | 2020-05-27 10:58:59.705 | block.ScarfXML (ScarfXML.java:89) | Marshalling the bug category summary.
- INFO | 2020-05-27 10:58:59.706 | Interface.SubRunner (SubRunner.java:62) | Writing the output to the file: /home/maister/.Changes/Repos/Projects/cryptoguard/build/tmp/tempJarFile_Scarf_0.xml
+<pre> INFO | 2020-06-01 22:06:27.637 | Interface.ArgumentsCheck (ArgumentsCheck.java:150) | Displaying info level logs
+ INFO | 2020-06-01 22:06:27.638 | Interface.ArgumentsCheck (ArgumentsCheck.java:178) | Using the output: Default
+ INFO | 2020-06-01 22:06:27.639 | Interface.ArgumentsCheck (ArgumentsCheck.java:342) | Using the source file(s): [testable-jar.jar]
+ INFO | 2020-06-01 22:06:27.639 | routing.EnvironmentInformation (EnvironmentInformation.java:376) | Building the Package Root Dir based on type
+ INFO | 2020-06-01 22:06:27.640 | routing.EnvironmentInformation (EnvironmentInformation.java:410) | Building the Root Directory
+ INFO | 2020-06-01 22:06:27.641 | Interface.SubRunner (SubRunner.java:57) | Starting the scanning process
+ INFO | 2020-06-01 22:06:27.641 | engine.JarEntry (JarEntry.java:25) | Checking the rule: InsecureAssymCryptoFinder
+ INFO | 2020-06-01 22:06:33.548 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenCryptoFinder
+ INFO | 2020-06-01 22:06:34.660 | engine.JarEntry (JarEntry.java:25) | Checking the rule: UntrustedPrngFinder
+ INFO | 2020-06-01 22:06:34.924 | engine.JarEntry (JarEntry.java:25) | Checking the rule: SSLSocketFactoryFinder
+ INFO | 2020-06-01 22:06:35.489 | engine.JarEntry (JarEntry.java:25) | Checking the rule: CustomTrustManagerFinder
+ INFO | 2020-06-01 22:06:35.509 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HostNameVerifierFinder
+ INFO | 2020-06-01 22:06:35.529 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenHashFinder
+ INFO | 2020-06-01 22:06:37.074 | engine.JarEntry (JarEntry.java:25) | Checking the rule: ConstantKeyFinder
+ INFO | 2020-06-01 22:06:39.690 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableIVFinder
+ INFO | 2020-06-01 22:06:40.093 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBESaltFinder
+ INFO | 2020-06-01 22:06:40.981 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBEInterationCountFinder
+ INFO | 2020-06-01 22:06:41.789 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableSeedFinder
+ INFO | 2020-06-01 22:06:42.059 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableKeyStorePasswordFinder
+ INFO | 2020-06-01 22:06:42.639 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HttpUrlFinder
+ INFO | 2020-06-01 22:06:44.530 | Interface.SubRunner (SubRunner.java:59) | Stopped the scanning process
+ INFO | 2020-06-01 22:06:44.531 | block.Default (Default.java:68) | Marshalling the Report from the Env. Info.
+ INFO | 2020-06-01 22:06:44.533 | Interface.SubRunner (SubRunner.java:62) | Writing the output to the file: /home/maister/.Changes/Repos/Projects/cryptoguard/build/tmp/tempJarFile_Default_0.json
+ INFO | 2020-06-01 22:06:44.537 | Interface.ArgumentsCheck (ArgumentsCheck.java:150) | Displaying info level logs
+ INFO | 2020-06-01 22:06:44.538 | Interface.ArgumentsCheck (ArgumentsCheck.java:178) | Using the output: Default
+ INFO | 2020-06-01 22:06:44.539 | Interface.ArgumentsCheck (ArgumentsCheck.java:342) | Using the source file(s): [testable-jar.jar]
+ INFO | 2020-06-01 22:06:44.540 | routing.EnvironmentInformation (EnvironmentInformation.java:376) | Building the Package Root Dir based on type
+ INFO | 2020-06-01 22:06:44.540 | routing.EnvironmentInformation (EnvironmentInformation.java:410) | Building the Root Directory
+ INFO | 2020-06-01 22:06:44.541 | Interface.SubRunner (SubRunner.java:57) | Starting the scanning process
+ INFO | 2020-06-01 22:06:44.541 | engine.JarEntry (JarEntry.java:25) | Checking the rule: InsecureAssymCryptoFinder
+ INFO | 2020-06-01 22:06:49.223 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenCryptoFinder
+ INFO | 2020-06-01 22:06:50.267 | engine.JarEntry (JarEntry.java:25) | Checking the rule: UntrustedPrngFinder
+ INFO | 2020-06-01 22:06:50.535 | engine.JarEntry (JarEntry.java:25) | Checking the rule: SSLSocketFactoryFinder
+ INFO | 2020-06-01 22:06:51.061 | engine.JarEntry (JarEntry.java:25) | Checking the rule: CustomTrustManagerFinder
+ INFO | 2020-06-01 22:06:51.081 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HostNameVerifierFinder
+ INFO | 2020-06-01 22:06:51.102 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenHashFinder
+ INFO | 2020-06-01 22:06:52.588 | engine.JarEntry (JarEntry.java:25) | Checking the rule: ConstantKeyFinder
+ INFO | 2020-06-01 22:06:55.163 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableIVFinder
+ INFO | 2020-06-01 22:06:55.590 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBESaltFinder
+ INFO | 2020-06-01 22:06:56.387 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBEInterationCountFinder
+ INFO | 2020-06-01 22:06:57.155 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableSeedFinder
+ INFO | 2020-06-01 22:06:57.453 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableKeyStorePasswordFinder
+ INFO | 2020-06-01 22:06:57.918 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HttpUrlFinder
+ INFO | 2020-06-01 22:06:59.803 | Interface.SubRunner (SubRunner.java:59) | Stopped the scanning process
+ INFO | 2020-06-01 22:06:59.804 | block.Default (Default.java:68) | Marshalling the Report from the Env. Info.
+ INFO | 2020-06-01 22:06:59.805 | Interface.SubRunner (SubRunner.java:62) | Writing the output to the file: /home/maister/.Changes/Repos/Projects/cryptoguard/build/tmp/tempJarFile_Default_0.json
+ INFO | 2020-06-01 22:06:59.807 | Interface.ArgumentsCheck (ArgumentsCheck.java:150) | Displaying info level logs
+ INFO | 2020-06-01 22:06:59.808 | Interface.ArgumentsCheck (ArgumentsCheck.java:178) | Using the output: ScarfXML
+ INFO | 2020-06-01 22:06:59.808 | Interface.ArgumentsCheck (ArgumentsCheck.java:342) | Using the source file(s): [testable-jar.jar]
+ INFO | 2020-06-01 22:06:59.809 | routing.EnvironmentInformation (EnvironmentInformation.java:376) | Building the Package Root Dir based on type
+ INFO | 2020-06-01 22:06:59.809 | routing.EnvironmentInformation (EnvironmentInformation.java:410) | Building the Root Directory
+ INFO | 2020-06-01 22:06:59.810 | Interface.SubRunner (SubRunner.java:57) | Starting the scanning process
+ INFO | 2020-06-01 22:06:59.810 | engine.JarEntry (JarEntry.java:25) | Checking the rule: InsecureAssymCryptoFinder
+ INFO | 2020-06-01 22:07:04.081 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenCryptoFinder
+ INFO | 2020-06-01 22:07:05.158 | engine.JarEntry (JarEntry.java:25) | Checking the rule: UntrustedPrngFinder
+ INFO | 2020-06-01 22:07:05.417 | engine.JarEntry (JarEntry.java:25) | Checking the rule: SSLSocketFactoryFinder
+ INFO | 2020-06-01 22:07:05.944 | engine.JarEntry (JarEntry.java:25) | Checking the rule: CustomTrustManagerFinder
+ INFO | 2020-06-01 22:07:05.964 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HostNameVerifierFinder
+ INFO | 2020-06-01 22:07:05.983 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenHashFinder
+ INFO | 2020-06-01 22:07:07.468 | engine.JarEntry (JarEntry.java:25) | Checking the rule: ConstantKeyFinder
+ INFO | 2020-06-01 22:07:10.018 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableIVFinder
+ INFO | 2020-06-01 22:07:10.452 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBESaltFinder
+ INFO | 2020-06-01 22:07:11.332 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBEInterationCountFinder
+ INFO | 2020-06-01 22:07:12.117 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableSeedFinder
+ INFO | 2020-06-01 22:07:12.421 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableKeyStorePasswordFinder
+ INFO | 2020-06-01 22:07:12.963 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HttpUrlFinder
+ INFO | 2020-06-01 22:07:14.847 | Interface.SubRunner (SubRunner.java:59) | Stopped the scanning process
+ INFO | 2020-06-01 22:07:14.848 | block.ScarfXML (ScarfXML.java:69) | Marshalling the AnalyzerReport from the Env. Info.
+ INFO | 2020-06-01 22:07:14.849 | block.ScarfXML (ScarfXML.java:89) | Marshalling the bug category summary.
+ INFO | 2020-06-01 22:07:14.853 | Interface.SubRunner (SubRunner.java:62) | Writing the output to the file: /home/maister/.Changes/Repos/Projects/cryptoguard/build/tmp/tempJarFile_Scarf_0.xml
+ INFO | 2020-06-01 22:07:14.856 | Interface.ArgumentsCheck (ArgumentsCheck.java:150) | Displaying info level logs
+ INFO | 2020-06-01 22:07:14.856 | Interface.ArgumentsCheck (ArgumentsCheck.java:178) | Using the output: Default
+ INFO | 2020-06-01 22:07:14.857 | Interface.ArgumentsCheck (ArgumentsCheck.java:342) | Using the source file(s): [testable-jar.jar]
+ INFO | 2020-06-01 22:07:14.857 | routing.EnvironmentInformation (EnvironmentInformation.java:376) | Building the Package Root Dir based on type
+ INFO | 2020-06-01 22:07:14.858 | routing.EnvironmentInformation (EnvironmentInformation.java:410) | Building the Root Directory
+ INFO | 2020-06-01 22:07:14.858 | Interface.SubRunner (SubRunner.java:57) | Starting the scanning process
+ INFO | 2020-06-01 22:07:14.859 | engine.JarEntry (JarEntry.java:25) | Checking the rule: InsecureAssymCryptoFinder
+ INFO | 2020-06-01 22:07:19.102 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenCryptoFinder
+ INFO | 2020-06-01 22:07:20.152 | engine.JarEntry (JarEntry.java:25) | Checking the rule: UntrustedPrngFinder
+ INFO | 2020-06-01 22:07:20.424 | engine.JarEntry (JarEntry.java:25) | Checking the rule: SSLSocketFactoryFinder
+ INFO | 2020-06-01 22:07:20.952 | engine.JarEntry (JarEntry.java:25) | Checking the rule: CustomTrustManagerFinder
+ INFO | 2020-06-01 22:07:20.971 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HostNameVerifierFinder
+ INFO | 2020-06-01 22:07:20.991 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenHashFinder
+ INFO | 2020-06-01 22:07:22.517 | engine.JarEntry (JarEntry.java:25) | Checking the rule: ConstantKeyFinder
+ INFO | 2020-06-01 22:07:25.058 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableIVFinder
+ INFO | 2020-06-01 22:07:25.564 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBESaltFinder
+ INFO | 2020-06-01 22:07:26.432 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBEInterationCountFinder
+ INFO | 2020-06-01 22:07:27.201 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableSeedFinder
+ INFO | 2020-06-01 22:07:27.497 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableKeyStorePasswordFinder
+ INFO | 2020-06-01 22:07:27.961 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HttpUrlFinder
+ INFO | 2020-06-01 22:07:29.918 | Interface.SubRunner (SubRunner.java:59) | Stopped the scanning process
+ INFO | 2020-06-01 22:07:29.920 | block.Default (Default.java:68) | Marshalling the Report from the Env. Info.
+ INFO | 2020-06-01 22:07:29.921 | Interface.SubRunner (SubRunner.java:62) | Writing the output to the file: /home/maister/.Changes/Repos/Projects/cryptoguard/build/tmp/tempJarFile_Default_0.json
+ INFO | 2020-06-01 22:07:29.923 | Interface.ArgumentsCheck (ArgumentsCheck.java:150) | Displaying info level logs
+ INFO | 2020-06-01 22:07:29.923 | Interface.ArgumentsCheck (ArgumentsCheck.java:178) | Using the output: Legacy
+ INFO | 2020-06-01 22:07:29.924 | Interface.ArgumentsCheck (ArgumentsCheck.java:342) | Using the source file(s): [testable-jar.jar]
+ INFO | 2020-06-01 22:07:29.925 | routing.EnvironmentInformation (EnvironmentInformation.java:376) | Building the Package Root Dir based on type
+ INFO | 2020-06-01 22:07:29.925 | routing.EnvironmentInformation (EnvironmentInformation.java:410) | Building the Root Directory
+ INFO | 2020-06-01 22:07:29.925 | Interface.SubRunner (SubRunner.java:57) | Starting the scanning process
+ INFO | 2020-06-01 22:07:29.926 | engine.JarEntry (JarEntry.java:25) | Checking the rule: InsecureAssymCryptoFinder
+ INFO | 2020-06-01 22:07:34.113 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenCryptoFinder
+ INFO | 2020-06-01 22:07:35.164 | engine.JarEntry (JarEntry.java:25) | Checking the rule: UntrustedPrngFinder
+ INFO | 2020-06-01 22:07:35.423 | engine.JarEntry (JarEntry.java:25) | Checking the rule: SSLSocketFactoryFinder
+ INFO | 2020-06-01 22:07:35.946 | engine.JarEntry (JarEntry.java:25) | Checking the rule: CustomTrustManagerFinder
+ INFO | 2020-06-01 22:07:35.965 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HostNameVerifierFinder
+ INFO | 2020-06-01 22:07:35.985 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenHashFinder
+ INFO | 2020-06-01 22:07:37.505 | engine.JarEntry (JarEntry.java:25) | Checking the rule: ConstantKeyFinder
+ INFO | 2020-06-01 22:07:40.305 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableIVFinder
+ INFO | 2020-06-01 22:07:40.802 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBESaltFinder
+ INFO | 2020-06-01 22:07:42.064 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBEInterationCountFinder
+ INFO | 2020-06-01 22:07:42.979 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableSeedFinder
+ INFO | 2020-06-01 22:07:43.351 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableKeyStorePasswordFinder
+ INFO | 2020-06-01 22:07:44.001 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HttpUrlFinder
+ INFO | 2020-06-01 22:07:45.963 | Interface.SubRunner (SubRunner.java:59) | Stopped the scanning process
+ INFO | 2020-06-01 22:07:45.966 | Interface.SubRunner (SubRunner.java:62) | Writing the output to the file: /home/maister/.Changes/Repos/Projects/cryptoguard/build/tmp/tempJarFile_txt.txt
+ INFO | 2020-06-01 22:07:45.969 | Interface.ArgumentsCheck (ArgumentsCheck.java:150) | Displaying info level logs
+ INFO | 2020-06-01 22:07:45.969 | Interface.ArgumentsCheck (ArgumentsCheck.java:178) | Using the output: ScarfXML
+ INFO | 2020-06-01 22:07:45.970 | Interface.ArgumentsCheck (ArgumentsCheck.java:342) | Using the source file(s): [testable-jar.jar]
+ INFO | 2020-06-01 22:07:45.971 | routing.EnvironmentInformation (EnvironmentInformation.java:376) | Building the Package Root Dir based on type
+ INFO | 2020-06-01 22:07:45.972 | routing.EnvironmentInformation (EnvironmentInformation.java:410) | Building the Root Directory
+ INFO | 2020-06-01 22:07:45.973 | Interface.SubRunner (SubRunner.java:57) | Starting the scanning process
+ INFO | 2020-06-01 22:07:45.973 | engine.JarEntry (JarEntry.java:25) | Checking the rule: InsecureAssymCryptoFinder
+ INFO | 2020-06-01 22:07:50.291 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenCryptoFinder
+ INFO | 2020-06-01 22:07:51.681 | engine.JarEntry (JarEntry.java:25) | Checking the rule: UntrustedPrngFinder
+ INFO | 2020-06-01 22:07:51.916 | engine.JarEntry (JarEntry.java:25) | Checking the rule: SSLSocketFactoryFinder
+ INFO | 2020-06-01 22:07:52.475 | engine.JarEntry (JarEntry.java:25) | Checking the rule: CustomTrustManagerFinder
+ INFO | 2020-06-01 22:07:52.496 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HostNameVerifierFinder
+ INFO | 2020-06-01 22:07:52.517 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenHashFinder
+ INFO | 2020-06-01 22:07:54.229 | engine.JarEntry (JarEntry.java:25) | Checking the rule: ConstantKeyFinder
+ INFO | 2020-06-01 22:07:56.979 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableIVFinder
+ INFO | 2020-06-01 22:07:57.397 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBESaltFinder
+ INFO | 2020-06-01 22:07:58.374 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBEInterationCountFinder
+ INFO | 2020-06-01 22:07:59.140 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableSeedFinder
+ INFO | 2020-06-01 22:07:59.435 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableKeyStorePasswordFinder
+ INFO | 2020-06-01 22:07:59.893 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HttpUrlFinder
+ INFO | 2020-06-01 22:08:01.819 | Interface.SubRunner (SubRunner.java:59) | Stopped the scanning process
+ INFO | 2020-06-01 22:08:01.820 | block.ScarfXML (ScarfXML.java:69) | Marshalling the AnalyzerReport from the Env. Info.
+ INFO | 2020-06-01 22:08:01.821 | block.ScarfXML (ScarfXML.java:89) | Marshalling the bug category summary.
+ INFO | 2020-06-01 22:08:01.825 | Interface.SubRunner (SubRunner.java:62) | Writing the output to the file: /home/maister/.Changes/Repos/Projects/cryptoguard/build/tmp/tempJarFile_Scarf_2.xml
+ INFO | 2020-06-01 22:08:01.828 | Interface.ArgumentsCheck (ArgumentsCheck.java:150) | Displaying info level logs
+ INFO | 2020-06-01 22:08:01.829 | Interface.ArgumentsCheck (ArgumentsCheck.java:178) | Using the output: ScarfXML
+ INFO | 2020-06-01 22:08:01.829 | Interface.ArgumentsCheck (ArgumentsCheck.java:342) | Using the source file(s): [testable-jar.jar]
+ INFO | 2020-06-01 22:08:01.830 | routing.EnvironmentInformation (EnvironmentInformation.java:376) | Building the Package Root Dir based on type
+ INFO | 2020-06-01 22:08:01.830 | routing.EnvironmentInformation (EnvironmentInformation.java:410) | Building the Root Directory
+ INFO | 2020-06-01 22:08:01.831 | Interface.SubRunner (SubRunner.java:57) | Starting the scanning process
+ INFO | 2020-06-01 22:08:01.831 | engine.JarEntry (JarEntry.java:25) | Checking the rule: InsecureAssymCryptoFinder
+ INFO | 2020-06-01 22:08:06.061 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenCryptoFinder
+ INFO | 2020-06-01 22:08:07.115 | engine.JarEntry (JarEntry.java:25) | Checking the rule: UntrustedPrngFinder
+ INFO | 2020-06-01 22:08:07.375 | engine.JarEntry (JarEntry.java:25) | Checking the rule: SSLSocketFactoryFinder
+ INFO | 2020-06-01 22:08:07.897 | engine.JarEntry (JarEntry.java:25) | Checking the rule: CustomTrustManagerFinder
+ INFO | 2020-06-01 22:08:07.916 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HostNameVerifierFinder
+ INFO | 2020-06-01 22:08:07.935 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenHashFinder
+ INFO | 2020-06-01 22:08:09.428 | engine.JarEntry (JarEntry.java:25) | Checking the rule: ConstantKeyFinder
+ INFO | 2020-06-01 22:08:11.958 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableIVFinder
+ INFO | 2020-06-01 22:08:12.373 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBESaltFinder
+ INFO | 2020-06-01 22:08:13.163 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBEInterationCountFinder
+ INFO | 2020-06-01 22:08:13.945 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableSeedFinder
+ INFO | 2020-06-01 22:08:14.228 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableKeyStorePasswordFinder
+ INFO | 2020-06-01 22:08:14.707 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HttpUrlFinder
+ INFO | 2020-06-01 22:08:16.652 | Interface.SubRunner (SubRunner.java:59) | Stopped the scanning process
+ INFO | 2020-06-01 22:08:16.654 | block.ScarfXML (ScarfXML.java:69) | Marshalling the AnalyzerReport from the Env. Info.
+ INFO | 2020-06-01 22:08:16.654 | block.ScarfXML (ScarfXML.java:89) | Marshalling the bug category summary.
+ INFO | 2020-06-01 22:08:16.656 | Interface.SubRunner (SubRunner.java:62) | Writing the output to the file: /home/maister/.Changes/Repos/Projects/cryptoguard/build/tmp/tempJarFile_Scarf_2.xml
+ INFO | 2020-06-01 22:08:16.661 | Interface.ArgumentsCheck (ArgumentsCheck.java:150) | Displaying info level logs
+ INFO | 2020-06-01 22:08:16.662 | Interface.ArgumentsCheck (ArgumentsCheck.java:178) | Using the output: ScarfXML
+ INFO | 2020-06-01 22:08:16.663 | Interface.ArgumentsCheck (ArgumentsCheck.java:342) | Using the source file(s): [testable-jar.jar]
+ INFO | 2020-06-01 22:08:16.664 | routing.EnvironmentInformation (EnvironmentInformation.java:376) | Building the Package Root Dir based on type
+ INFO | 2020-06-01 22:08:16.665 | routing.EnvironmentInformation (EnvironmentInformation.java:410) | Building the Root Directory
+ INFO | 2020-06-01 22:08:16.666 | Interface.SubRunner (SubRunner.java:57) | Starting the scanning process
+ INFO | 2020-06-01 22:08:16.666 | engine.JarEntry (JarEntry.java:25) | Checking the rule: InsecureAssymCryptoFinder
+ INFO | 2020-06-01 22:08:20.871 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenCryptoFinder
+ INFO | 2020-06-01 22:08:21.910 | engine.JarEntry (JarEntry.java:25) | Checking the rule: UntrustedPrngFinder
+ INFO | 2020-06-01 22:08:22.154 | engine.JarEntry (JarEntry.java:25) | Checking the rule: SSLSocketFactoryFinder
+ INFO | 2020-06-01 22:08:22.686 | engine.JarEntry (JarEntry.java:25) | Checking the rule: CustomTrustManagerFinder
+ INFO | 2020-06-01 22:08:22.705 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HostNameVerifierFinder
+ INFO | 2020-06-01 22:08:22.724 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenHashFinder
+ INFO | 2020-06-01 22:08:24.197 | engine.JarEntry (JarEntry.java:25) | Checking the rule: ConstantKeyFinder
+ INFO | 2020-06-01 22:08:26.755 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableIVFinder
+ INFO | 2020-06-01 22:08:27.160 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBESaltFinder
+ INFO | 2020-06-01 22:08:27.957 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBEInterationCountFinder
+ INFO | 2020-06-01 22:08:28.940 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableSeedFinder
+ INFO | 2020-06-01 22:08:29.218 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableKeyStorePasswordFinder
+ INFO | 2020-06-01 22:08:29.701 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HttpUrlFinder
+ INFO | 2020-06-01 22:08:31.573 | Interface.SubRunner (SubRunner.java:59) | Stopped the scanning process
+ INFO | 2020-06-01 22:08:31.574 | block.ScarfXML (ScarfXML.java:69) | Marshalling the AnalyzerReport from the Env. Info.
+ INFO | 2020-06-01 22:08:31.574 | block.ScarfXML (ScarfXML.java:89) | Marshalling the bug category summary.
+ INFO | 2020-06-01 22:08:31.576 | Interface.SubRunner (SubRunner.java:62) | Writing the output to the file: /home/maister/.Changes/Repos/Projects/cryptoguard/build/tmp/tempJarFile_Scarf_1.xml
+ INFO | 2020-06-01 22:08:31.579 | Interface.ArgumentsCheck (ArgumentsCheck.java:150) | Displaying info level logs
+ INFO | 2020-06-01 22:08:31.580 | Interface.ArgumentsCheck (ArgumentsCheck.java:178) | Using the output: Default
+ INFO | 2020-06-01 22:08:31.581 | Interface.ArgumentsCheck (ArgumentsCheck.java:342) | Using the source file(s): [testable-jar.jar]
+ INFO | 2020-06-01 22:08:31.582 | routing.EnvironmentInformation (EnvironmentInformation.java:376) | Building the Package Root Dir based on type
+ INFO | 2020-06-01 22:08:31.583 | routing.EnvironmentInformation (EnvironmentInformation.java:410) | Building the Root Directory
+ INFO | 2020-06-01 22:08:31.584 | Interface.SubRunner (SubRunner.java:57) | Starting the scanning process
+ INFO | 2020-06-01 22:08:31.585 | engine.JarEntry (JarEntry.java:25) | Checking the rule: InsecureAssymCryptoFinder
+ INFO | 2020-06-01 22:08:35.792 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenCryptoFinder
+ INFO | 2020-06-01 22:08:36.883 | engine.JarEntry (JarEntry.java:25) | Checking the rule: UntrustedPrngFinder
+ INFO | 2020-06-01 22:08:37.125 | engine.JarEntry (JarEntry.java:25) | Checking the rule: SSLSocketFactoryFinder
+ INFO | 2020-06-01 22:08:37.678 | engine.JarEntry (JarEntry.java:25) | Checking the rule: CustomTrustManagerFinder
+ INFO | 2020-06-01 22:08:37.697 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HostNameVerifierFinder
+ INFO | 2020-06-01 22:08:37.717 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenHashFinder
+ INFO | 2020-06-01 22:08:39.183 | engine.JarEntry (JarEntry.java:25) | Checking the rule: ConstantKeyFinder
+ INFO | 2020-06-01 22:08:41.728 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableIVFinder
+ INFO | 2020-06-01 22:08:42.117 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBESaltFinder
+ INFO | 2020-06-01 22:08:42.931 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBEInterationCountFinder
+ INFO | 2020-06-01 22:08:43.741 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableSeedFinder
+ INFO | 2020-06-01 22:08:44.023 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableKeyStorePasswordFinder
+ INFO | 2020-06-01 22:08:44.523 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HttpUrlFinder
+ INFO | 2020-06-01 22:08:46.371 | Interface.SubRunner (SubRunner.java:59) | Stopped the scanning process
+ INFO | 2020-06-01 22:08:46.372 | block.Default (Default.java:68) | Marshalling the Report from the Env. Info.
+ INFO | 2020-06-01 22:08:46.373 | Interface.SubRunner (SubRunner.java:62) | Writing the output to the file: /home/maister/.Changes/Repos/Projects/cryptoguard/build/tmp/tempJarFile_Default_0.json
+ INFO | 2020-06-01 22:08:46.375 | Interface.ArgumentsCheck (ArgumentsCheck.java:150) | Displaying info level logs
+ INFO | 2020-06-01 22:08:46.376 | Interface.ArgumentsCheck (ArgumentsCheck.java:178) | Using the output: ScarfXML
+ INFO | 2020-06-01 22:08:46.377 | Interface.ArgumentsCheck (ArgumentsCheck.java:342) | Using the source file(s): [testable-jar.jar]
+ INFO | 2020-06-01 22:08:46.378 | routing.EnvironmentInformation (EnvironmentInformation.java:376) | Building the Package Root Dir based on type
+ INFO | 2020-06-01 22:08:46.378 | routing.EnvironmentInformation (EnvironmentInformation.java:410) | Building the Root Directory
+ INFO | 2020-06-01 22:08:46.379 | stream.ScarfXML (ScarfXML.java:74) | Marshalling the header.
+ INFO | 2020-06-01 22:08:46.379 | Interface.SubRunner (SubRunner.java:57) | Starting the scanning process
+ INFO | 2020-06-01 22:08:46.380 | engine.JarEntry (JarEntry.java:25) | Checking the rule: InsecureAssymCryptoFinder
+ INFO | 2020-06-01 22:08:50.556 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenCryptoFinder
+ INFO | 2020-06-01 22:08:51.594 | engine.JarEntry (JarEntry.java:25) | Checking the rule: UntrustedPrngFinder
+ INFO | 2020-06-01 22:08:51.834 | engine.JarEntry (JarEntry.java:25) | Checking the rule: SSLSocketFactoryFinder
+ INFO | 2020-06-01 22:08:52.363 | engine.JarEntry (JarEntry.java:25) | Checking the rule: CustomTrustManagerFinder
+ INFO | 2020-06-01 22:08:52.384 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HostNameVerifierFinder
+ INFO | 2020-06-01 22:08:52.407 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenHashFinder
+ INFO | 2020-06-01 22:08:53.954 | engine.JarEntry (JarEntry.java:25) | Checking the rule: ConstantKeyFinder
+ INFO | 2020-06-01 22:08:56.521 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableIVFinder
+ INFO | 2020-06-01 22:08:56.910 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBESaltFinder
+ INFO | 2020-06-01 22:08:57.735 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBEInterationCountFinder
+ INFO | 2020-06-01 22:08:58.523 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableSeedFinder
+ INFO | 2020-06-01 22:08:58.800 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableKeyStorePasswordFinder
+ INFO | 2020-06-01 22:08:59.269 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HttpUrlFinder
+ INFO | 2020-06-01 22:09:01.121 | Interface.SubRunner (SubRunner.java:59) | Stopped the scanning process
+ INFO | 2020-06-01 22:09:01.122 | stream.ScarfXML (ScarfXML.java:113) | Marshalling the bug category summary.
+ INFO | 2020-06-01 22:09:01.123 | Interface.SubRunner (SubRunner.java:62) | Writing the output to the file: /home/maister/.Changes/Repos/Projects/cryptoguard/build/tmp/tempJarFile_Scarf_Steam_1.xml
+ INFO | 2020-06-01 22:09:01.125 | Interface.ArgumentsCheck (ArgumentsCheck.java:150) | Displaying info level logs
+ INFO | 2020-06-01 22:09:01.126 | Interface.ArgumentsCheck (ArgumentsCheck.java:178) | Using the output: ScarfXML
+ INFO | 2020-06-01 22:09:01.127 | Interface.ArgumentsCheck (ArgumentsCheck.java:342) | Using the source file(s): [very.jar]
+ INFO | 2020-06-01 22:09:01.127 | routing.EnvironmentInformation (EnvironmentInformation.java:376) | Building the Package Root Dir based on type
+ INFO | 2020-06-01 22:09:01.128 | routing.EnvironmentInformation (EnvironmentInformation.java:410) | Building the Root Directory
+ INFO | 2020-06-01 22:09:01.128 | stream.ScarfXML (ScarfXML.java:74) | Marshalling the header.
+ INFO | 2020-06-01 22:09:01.129 | Interface.SubRunner (SubRunner.java:57) | Starting the scanning process
+ INFO | 2020-06-01 22:09:01.130 | engine.JarEntry (JarEntry.java:25) | Checking the rule: InsecureAssymCryptoFinder
+ INFO | 2020-06-01 22:09:02.008 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenCryptoFinder
+ INFO | 2020-06-01 22:09:02.665 | engine.JarEntry (JarEntry.java:25) | Checking the rule: UntrustedPrngFinder
+ INFO | 2020-06-01 22:09:02.666 | engine.JarEntry (JarEntry.java:25) | Checking the rule: SSLSocketFactoryFinder
+ INFO | 2020-06-01 22:09:02.667 | engine.JarEntry (JarEntry.java:25) | Checking the rule: CustomTrustManagerFinder
+ INFO | 2020-06-01 22:09:02.668 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HostNameVerifierFinder
+ INFO | 2020-06-01 22:09:02.668 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenHashFinder
+ INFO | 2020-06-01 22:09:03.622 | engine.JarEntry (JarEntry.java:25) | Checking the rule: ConstantKeyFinder
+ INFO | 2020-06-01 22:09:05.372 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableIVFinder
+ INFO | 2020-06-01 22:09:05.604 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBESaltFinder
+ INFO | 2020-06-01 22:09:06.066 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBEInterationCountFinder
+ INFO | 2020-06-01 22:09:06.540 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableSeedFinder
+ INFO | 2020-06-01 22:09:06.653 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableKeyStorePasswordFinder
+ INFO | 2020-06-01 22:09:06.869 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HttpUrlFinder
+ INFO | 2020-06-01 22:09:07.214 | Interface.SubRunner (SubRunner.java:59) | Stopped the scanning process
+ INFO | 2020-06-01 22:09:07.215 | stream.ScarfXML (ScarfXML.java:113) | Marshalling the bug category summary.
+ INFO | 2020-06-01 22:09:07.216 | Interface.SubRunner (SubRunner.java:62) | Writing the output to the file: /home/maister/.Changes/Repos/Projects/cryptoguard/build/tmp/verySimple_jar.xml
+ INFO | 2020-06-01 22:09:07.221 | Interface.ArgumentsCheck (ArgumentsCheck.java:150) | Displaying info level logs
+ INFO | 2020-06-01 22:09:07.222 | Interface.ArgumentsCheck (ArgumentsCheck.java:178) | Using the output: Default
+ INFO | 2020-06-01 22:09:07.223 | Interface.ArgumentsCheck (ArgumentsCheck.java:342) | Using the source file(s): [testable-jar.jar]
+ INFO | 2020-06-01 22:09:07.224 | routing.EnvironmentInformation (EnvironmentInformation.java:376) | Building the Package Root Dir based on type
+ INFO | 2020-06-01 22:09:07.224 | routing.EnvironmentInformation (EnvironmentInformation.java:410) | Building the Root Directory
+ INFO | 2020-06-01 22:09:07.225 | Interface.SubRunner (SubRunner.java:57) | Starting the scanning process
+ INFO | 2020-06-01 22:09:07.226 | engine.JarEntry (JarEntry.java:25) | Checking the rule: InsecureAssymCryptoFinder
+ INFO | 2020-06-01 22:09:11.394 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenCryptoFinder
+ INFO | 2020-06-01 22:09:12.428 | engine.JarEntry (JarEntry.java:25) | Checking the rule: UntrustedPrngFinder
+ INFO | 2020-06-01 22:09:12.672 | engine.JarEntry (JarEntry.java:25) | Checking the rule: SSLSocketFactoryFinder
+ INFO | 2020-06-01 22:09:13.189 | engine.JarEntry (JarEntry.java:25) | Checking the rule: CustomTrustManagerFinder
+ INFO | 2020-06-01 22:09:13.212 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HostNameVerifierFinder
+ INFO | 2020-06-01 22:09:13.234 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenHashFinder
+ INFO | 2020-06-01 22:09:14.768 | engine.JarEntry (JarEntry.java:25) | Checking the rule: ConstantKeyFinder
+ INFO | 2020-06-01 22:09:17.648 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableIVFinder
+ INFO | 2020-06-01 22:09:18.045 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBESaltFinder
+ INFO | 2020-06-01 22:09:18.919 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBEInterationCountFinder
+ INFO | 2020-06-01 22:09:19.833 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableSeedFinder
+ INFO | 2020-06-01 22:09:20.113 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableKeyStorePasswordFinder
+ INFO | 2020-06-01 22:09:20.630 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HttpUrlFinder
+ INFO | 2020-06-01 22:09:22.660 | Interface.SubRunner (SubRunner.java:59) | Stopped the scanning process
+ INFO | 2020-06-01 22:09:22.661 | block.Default (Default.java:68) | Marshalling the Report from the Env. Info.
+ INFO | 2020-06-01 22:09:22.663 | Interface.SubRunner (SubRunner.java:62) | Writing the output to the file: /home/maister/.Changes/Repos/Projects/cryptoguard/build/tmp/tempJarFile_Default_0.json
+ INFO | 2020-06-01 22:09:22.665 | Interface.ArgumentsCheck (ArgumentsCheck.java:150) | Displaying info level logs
+ INFO | 2020-06-01 22:09:22.666 | Interface.ArgumentsCheck (ArgumentsCheck.java:178) | Using the output: Default
+ INFO | 2020-06-01 22:09:22.667 | Interface.ArgumentsCheck (ArgumentsCheck.java:342) | Using the source file(s): [testable-jar.jar]
+ INFO | 2020-06-01 22:09:22.668 | routing.EnvironmentInformation (EnvironmentInformation.java:376) | Building the Package Root Dir based on type
+ INFO | 2020-06-01 22:09:22.669 | routing.EnvironmentInformation (EnvironmentInformation.java:410) | Building the Root Directory
+ INFO | 2020-06-01 22:09:22.669 | stream.Default (Default.java:70) | Marshalling the header.
+ INFO | 2020-06-01 22:09:22.670 | Interface.SubRunner (SubRunner.java:57) | Starting the scanning process
+ INFO | 2020-06-01 22:09:22.671 | engine.JarEntry (JarEntry.java:25) | Checking the rule: InsecureAssymCryptoFinder
+ INFO | 2020-06-01 22:09:26.793 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenCryptoFinder
+ INFO | 2020-06-01 22:09:27.981 | engine.JarEntry (JarEntry.java:25) | Checking the rule: UntrustedPrngFinder
+ INFO | 2020-06-01 22:09:28.240 | engine.JarEntry (JarEntry.java:25) | Checking the rule: SSLSocketFactoryFinder
+ INFO | 2020-06-01 22:09:28.767 | engine.JarEntry (JarEntry.java:25) | Checking the rule: CustomTrustManagerFinder
+ INFO | 2020-06-01 22:09:28.786 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HostNameVerifierFinder
+ INFO | 2020-06-01 22:09:28.807 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenHashFinder
+ INFO | 2020-06-01 22:09:30.291 | engine.JarEntry (JarEntry.java:25) | Checking the rule: ConstantKeyFinder
+ INFO | 2020-06-01 22:09:32.867 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableIVFinder
+ INFO | 2020-06-01 22:09:33.273 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBESaltFinder
+ INFO | 2020-06-01 22:09:34.070 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBEInterationCountFinder
+ INFO | 2020-06-01 22:09:34.935 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableSeedFinder
+ INFO | 2020-06-01 22:09:35.222 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableKeyStorePasswordFinder
+ INFO | 2020-06-01 22:09:35.706 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HttpUrlFinder
+ INFO | 2020-06-01 22:09:37.764 | Interface.SubRunner (SubRunner.java:59) | Stopped the scanning process
+ INFO | 2020-06-01 22:09:37.765 | Interface.SubRunner (SubRunner.java:62) | Writing the output to the file: /home/maister/.Changes/Repos/Projects/cryptoguard/build/tmp/tempJarFile_Default_Stream_0.json
+ INFO | 2020-06-01 22:09:37.767 | Interface.ArgumentsCheck (ArgumentsCheck.java:150) | Displaying info level logs
+ INFO | 2020-06-01 22:09:37.767 | Interface.ArgumentsCheck (ArgumentsCheck.java:178) | Using the output: ScarfXML
+ INFO | 2020-06-01 22:09:37.768 | Interface.ArgumentsCheck (ArgumentsCheck.java:342) | Using the source file(s): [testable-jar.jar]
+ INFO | 2020-06-01 22:09:37.768 | routing.EnvironmentInformation (EnvironmentInformation.java:376) | Building the Package Root Dir based on type
+ INFO | 2020-06-01 22:09:37.769 | routing.EnvironmentInformation (EnvironmentInformation.java:410) | Building the Root Directory
+ INFO | 2020-06-01 22:09:37.769 | Interface.SubRunner (SubRunner.java:57) | Starting the scanning process
+ INFO | 2020-06-01 22:09:37.770 | engine.JarEntry (JarEntry.java:25) | Checking the rule: InsecureAssymCryptoFinder
+ INFO | 2020-06-01 22:09:41.930 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenCryptoFinder
+ INFO | 2020-06-01 22:09:42.975 | engine.JarEntry (JarEntry.java:25) | Checking the rule: UntrustedPrngFinder
+ INFO | 2020-06-01 22:09:43.225 | engine.JarEntry (JarEntry.java:25) | Checking the rule: SSLSocketFactoryFinder
+ INFO | 2020-06-01 22:09:43.754 | engine.JarEntry (JarEntry.java:25) | Checking the rule: CustomTrustManagerFinder
+ INFO | 2020-06-01 22:09:43.773 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HostNameVerifierFinder
+ INFO | 2020-06-01 22:09:43.793 | engine.JarEntry (JarEntry.java:25) | Checking the rule: BrokenHashFinder
+ INFO | 2020-06-01 22:09:45.313 | engine.JarEntry (JarEntry.java:25) | Checking the rule: ConstantKeyFinder
+ INFO | 2020-06-01 22:09:47.852 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableIVFinder
+ INFO | 2020-06-01 22:09:48.253 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBESaltFinder
+ INFO | 2020-06-01 22:09:49.120 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PBEInterationCountFinder
+ INFO | 2020-06-01 22:09:49.940 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableSeedFinder
+ INFO | 2020-06-01 22:09:50.316 | engine.JarEntry (JarEntry.java:25) | Checking the rule: PredictableKeyStorePasswordFinder
+ INFO | 2020-06-01 22:09:50.864 | engine.JarEntry (JarEntry.java:25) | Checking the rule: HttpUrlFinder
+ INFO | 2020-06-01 22:09:52.879 | Interface.SubRunner (SubRunner.java:59) | Stopped the scanning process
+ INFO | 2020-06-01 22:09:52.880 | block.ScarfXML (ScarfXML.java:69) | Marshalling the AnalyzerReport from the Env. Info.
+ INFO | 2020-06-01 22:09:52.881 | block.ScarfXML (ScarfXML.java:89) | Marshalling the bug category summary.
+ INFO | 2020-06-01 22:09:52.882 | Interface.SubRunner (SubRunner.java:62) | Writing the output to the file: /home/maister/.Changes/Repos/Projects/cryptoguard/build/tmp/tempJarFile_Scarf_0.xml
 </pre>
 </span>
 </div>
@@ -567,7 +491,7 @@
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 6.0</a> at May 27, 2020 10:59:36 AM</p>
+<a href="http://www.gradle.org">Gradle 6.0</a> at Jun 1, 2020 10:10:46 PM</p>
 </div>
 </div>
 </body>
