@@ -98,7 +98,8 @@ public class EntryPointTest_SOURCE {
                     exceptionHandler.printStackTrace();
                     return null;
                   }
-                });
+                },
+                false);
 
         assertTrue(results.stream().anyMatch(str -> filesFound.stream().anyMatch(str::contains)));
 
@@ -141,7 +142,8 @@ public class EntryPointTest_SOURCE {
                     exceptionHandler.printStackTrace();
                     return null;
                   }
-                });
+                },
+                false);
 
         assertTrue(results.stream().anyMatch(str -> filesFound.stream().anyMatch(str::contains)));
 

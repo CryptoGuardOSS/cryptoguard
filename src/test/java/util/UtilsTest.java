@@ -85,7 +85,8 @@ public class UtilsTest {
   public void testVerifyClassPathsOne() {
     try {
       ArrayList<String> returnedOutput =
-          Utils.retrieveFilePathTypes(TestUtilities.sampleAuxClassPathOne, null, false, false);
+          Utils.retrieveFilePathTypes(
+              TestUtilities.sampleAuxClassPathOne, null, false, false, true);
       for (String output : returnedOutput)
         assertTrue(TestUtilities.sampleAuxClassPathOneList.contains(output));
     } catch (Exception e) {
@@ -98,7 +99,8 @@ public class UtilsTest {
   public void testVerifyClassPathsTwo() {
     try {
       ArrayList<String> returnedOutput =
-          Utils.retrieveFilePathTypes(TestUtilities.sampleAuxClassPathTwo, null, false, false);
+          Utils.retrieveFilePathTypes(
+              TestUtilities.sampleAuxClassPathTwo, null, false, false, true);
       TestUtilities.sampleAuxClassPathTwoList.forEach(
           str -> assertTrue(returnedOutput.contains(str)));
       assertEquals(TestUtilities.sampleAuxClassPathTwoList.size(), returnedOutput.size());

@@ -59,9 +59,9 @@ public class Utils {
   public static final String fileSep = System.getProperty("file.separator");
   /** Constant <code>lineSep="System.getProperty(line.separator)"</code> */
   public static final String lineSep = System.getProperty("line.separator");
-  /** Constant <code>projectVersion=":$CVER 04.04.00$"</code> */
+  /** Constant <code>projectVersion=":$CVER 04.04.01$"</code> */
   public static final String projectVersion =
-      "$CVER 04.04.00$".replaceAll(",]", "").replace("CVER ", "");
+      "$CVER 04.04.01$".replaceAll(",]", "").replace("CVER ", "");
   /** Constant <code>projectName="CryptoGuard"</code> */
   public static final String projectName = "CryptoGuard";
   /** Constant <code>userPath="System.getProperty(user.home)"</code> */
@@ -117,8 +117,8 @@ public class Utils {
   //region HotMethods
   //region Wrappers
 
-  public static ArrayList<String> retrievingThroughXArgs(EngineType eType, Boolean deps)
-      throws ExceptionHandler {
+  public static ArrayList<String> retrievingThroughXArgs(
+      EngineType eType, Boolean deps, Boolean needstoExist) throws ExceptionHandler {
     ArrayList<String> out = new ArrayList<>();
 
     ArrayList<String> types =
@@ -142,7 +142,7 @@ public class Utils {
 
       String curLine;
       while ((curLine = inputStream.readLine()) != null)
-        out.addAll(retrieveFilePathTypesSingle(curLine, types, true, false));
+        out.addAll(retrieveFilePathTypesSingle(curLine, types, true, false, needstoExist));
 
     } catch (IOException | ExceptionHandler e) {
       throw new ExceptionHandler("Issue running through xArgs", ExceptionId.FILE_I);
@@ -151,7 +151,11 @@ public class Utils {
   }
 
   public static ArrayList<String> retrieveFilePathTypesSingle(
-      String rawFileString, ArrayList<String> types, Boolean expandPath, Boolean overwrite)
+      String rawFileString,
+      ArrayList<String> types,
+      Boolean expandPath,
+      Boolean overwrite,
+      Boolean needstoExist)
       throws ExceptionHandler {
     return retrieveFilePaths(
         new ArrayList<String>() {
@@ -161,7 +165,8 @@ public class Utils {
         },
         types,
         expandPath,
-        overwrite);
+        overwrite,
+        needstoExist);
   }
 
   /**
@@ -174,7 +179,7 @@ public class Utils {
    * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
    */
   public static ArrayList<String> retrieveFilePathTypes(
-      ArrayList<String> rawFileString, Boolean expandPath, Boolean overwrite)
+      ArrayList<String> rawFileString, Boolean expandPath, Boolean overwrite, Boolean needstoExist)
       throws ExceptionHandler {
     return retrieveFilePaths(
         rawFileString,
@@ -187,7 +192,8 @@ public class Utils {
           }
         },
         expandPath,
-        overwrite);
+        overwrite,
+        needstoExist);
   }
 
   /**
@@ -201,7 +207,11 @@ public class Utils {
    * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
    */
   public static ArrayList<String> retrieveFilePathTypes(
-      String rawFileString, EngineType type, Boolean expandPath, Boolean overwrite)
+      String rawFileString,
+      EngineType type,
+      Boolean expandPath,
+      Boolean overwrite,
+      Boolean needstoExist)
       throws ExceptionHandler {
     return retrieveFilePaths(
         new ArrayList<String>() {
@@ -217,7 +227,8 @@ public class Utils {
               }
             },
         expandPath,
-        overwrite);
+        overwrite,
+        needstoExist);
   }
 
   /**
@@ -231,7 +242,11 @@ public class Utils {
    * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
    */
   public static ArrayList<String> retrieveFilePathTypes(
-      ArrayList<String> rawFileString, EngineType type, Boolean expandPath, Boolean overwrite)
+      ArrayList<String> rawFileString,
+      EngineType type,
+      Boolean expandPath,
+      Boolean overwrite,
+      Boolean needstoExist)
       throws ExceptionHandler {
     return retrieveFilePaths(
         rawFileString,
@@ -243,7 +258,8 @@ public class Utils {
               }
             },
         expandPath,
-        overwrite);
+        overwrite,
+        needstoExist);
   }
   //endregion
 
@@ -251,11 +267,16 @@ public class Utils {
    * inputFiles.
    *
    * @param file a {@link java.lang.String} object.
+   * @param needsToExist a {@link java.lang.Boolean} object.
    * @return a {@link java.util.ArrayList} object.
    * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
    */
   static ArrayList<String> inputFiles(
-      String file, ArrayList<String> type, Boolean expandPath, Boolean overwrite)
+      String file,
+      ArrayList<String> type,
+      Boolean expandPath,
+      Boolean overwrite,
+      Boolean needsToExist)
       throws ExceptionHandler {
     ArrayList<String> filePaths = new ArrayList<>();
     String curLine = null;
@@ -265,12 +286,12 @@ public class Utils {
       while ((curLine = StringUtils.trimToNull(reader.readLine())) != null) {
         for (String rawType : type)
           if (curLine.endsWith(rawType))
-            if ((curLine = retrieveFilePath(curLine, rawType, expandPath, overwrite)) != null)
-              filePaths.add(curLine);
+            if ((curLine = retrieveFilePath(curLine, rawType, expandPath, overwrite, needsToExist))
+                != null) filePaths.add(curLine);
 
         if (type == null || type.size() == 0)
-          if ((curLine = retrieveFilePath(curLine, null, expandPath, overwrite)) != null)
-            filePaths.add(curLine);
+          if ((curLine = retrieveFilePath(curLine, null, expandPath, overwrite, needsToExist))
+              != null) filePaths.add(curLine);
       }
 
       return filePaths;
@@ -290,6 +311,7 @@ public class Utils {
    * @param type a {@link java.util.ArrayList} object.
    * @param expandPath a {@link java.lang.Boolean} object.
    * @param overwrite a {@link java.lang.Boolean} object.
+   * @param needsToExist a {@link java.lang.Boolean} object.
    * @return a {@link java.util.ArrayList} object.
    * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
    */
@@ -297,7 +319,8 @@ public class Utils {
       ArrayList<String> rawFileStrings,
       ArrayList<String> type,
       Boolean expandPath,
-      Boolean overwrite)
+      Boolean overwrite,
+      Boolean needsToExist)
       throws ExceptionHandler {
     ArrayList<String> output = new ArrayList<>();
 
@@ -309,7 +332,7 @@ public class Utils {
       throw new ExceptionHandler(
           "Please enter one source argument for this use case.", ExceptionId.GEN_VALID);
     } else if (rawFileStrings.size() == 1 && rawFileStrings.get(0).endsWith(".in"))
-      output = inputFiles(rawFileStrings.get(0), type, expandPath, overwrite);
+      output = inputFiles(rawFileStrings.get(0), type, expandPath, overwrite, needsToExist);
     else
       for (String rawString : rawFileStrings)
         //Splitting the file just in case it is a java class path
@@ -325,9 +348,9 @@ public class Utils {
             if (rawString.startsWith(":")) rawString = rawString.replaceFirst(":", "");
 
             if (null == rawType || rawType.equals("dir"))
-              filePath = retrieveFilePath(fileString, null, expandPath, false);
+              filePath = retrieveFilePath(fileString, null, expandPath, false, needsToExist);
             else if (fileString.endsWith(rawType))
-              filePath = retrieveFilePath(fileString, rawType, expandPath, false);
+              filePath = retrieveFilePath(fileString, rawType, expandPath, false, needsToExist);
 
             if (StringUtils.isNotEmpty(filePath)) {
               output.add(filePath);
@@ -345,11 +368,13 @@ public class Utils {
    * @param type a {@link rule.engine.EngineType} object.
    * @param expandPath a {@link java.lang.Boolean} object.
    * @param overwrite a {@link java.lang.Boolean} object.
+   * @param needsToExist a {@link java.lang.Boolean} object.
    * @return a {@link java.lang.String} object.
    * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
    */
   public static String retrieveFilePath(
-      String file, String type, Boolean expandPath, Boolean overwrite) throws ExceptionHandler {
+      String file, String type, Boolean expandPath, Boolean overwrite, Boolean needsToExist)
+      throws ExceptionHandler {
     log.debug("Retrieving and verifying the file: " + file);
     //Base line string check
     if (StringUtils.isEmpty(file)) return null;
@@ -371,8 +396,10 @@ public class Utils {
     Boolean exists = tempFile.exists() || overwrite;
 
     if (!exists) {
-      log.fatal(tempFile.getName() + " does not exist.");
-      throw new ExceptionHandler(tempFile.getName() + " does not exist.", ExceptionId.ARG_VALID);
+      if (needsToExist) {
+        log.fatal(tempFile.getName() + " does not exist.");
+        throw new ExceptionHandler(tempFile.getName() + " does not exist.", ExceptionId.ARG_VALID);
+      } else return null;
     }
 
     Boolean isDir = tempFile.isDirectory() || overwrite;
@@ -656,7 +683,7 @@ public class Utils {
    * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
    */
   public static String joinSpecialSootClassPath(List<String> fileIn) throws ExceptionHandler {
-    return join(":", retrieveClosePath(fileIn));
+    return join(":", retrieveClosePath(fileIn, true));
   }
 
   /**
@@ -666,16 +693,20 @@ public class Utils {
    * @return a {@link java.util.List} object.
    * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
    */
-  public static List<String> retrieveClosePath(List<String> fileIn) throws ExceptionHandler {
+  public static List<String> retrieveClosePath(List<String> fileIn, Boolean needstoExist)
+      throws ExceptionHandler {
     ArrayList<String> output = new ArrayList<>();
 
     for (String path : fileIn) {
       String temp = null;
 
       if ((temp =
-              Utils.retrieveFilePath(path, EngineType.JAVAFILES.getInputExtension(), true, false))
+              Utils.retrieveFilePath(
+                  path, EngineType.JAVAFILES.getInputExtension(), true, false, needstoExist))
           == null)
-        temp = Utils.retrieveFilePath(path, EngineType.CLASSFILES.getInputExtension(), true, false);
+        temp =
+            Utils.retrieveFilePath(
+                path, EngineType.CLASSFILES.getInputExtension(), true, false, needstoExist);
 
       if (StringUtils.isNotBlank(temp)) {
         temp =
@@ -766,17 +797,22 @@ public class Utils {
    * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
    */
   public static List<String> retrieveFilesPredicate(
-      String path, Predicate<String> fileCheck, Function<File, String> functor)
+      String path,
+      Predicate<String> fileCheck,
+      Function<File, String> functor,
+      Boolean needsToExist)
       throws ExceptionHandler {
 
     List<String> output = new ArrayList<>();
     for (File file :
-        Objects.requireNonNull(new File(retrieveFilePath(path, null, true, false)).listFiles())) {
+        Objects.requireNonNull(
+            new File(retrieveFilePath(path, null, true, false, needsToExist)).listFiles())) {
       if (file.isFile() && fileCheck.test(file.getName())) {
         if (functor == null) output.add(file.getAbsolutePath());
         else output.add(functor.apply(file));
       } else if (file.isDirectory())
-        output.addAll(retrieveFilesPredicate(file.getAbsolutePath(), fileCheck, functor));
+        output.addAll(
+            retrieveFilesPredicate(file.getAbsolutePath(), fileCheck, functor, needsToExist));
     }
 
     return output;
@@ -805,7 +841,7 @@ public class Utils {
   public static Set<String> retrieveJavaFileImports(String path) throws ExceptionHandler {
     Set<String> results = new HashSet<>();
     String javaFile =
-        retrieveFilePath(path, EngineType.JAVAFILES.getInputExtension(), false, false);
+        retrieveFilePath(path, EngineType.JAVAFILES.getInputExtension(), false, false, true);
 
     try (BufferedReader reader = new BufferedReader(new FileReader(javaFile))) {
       String curLine;
