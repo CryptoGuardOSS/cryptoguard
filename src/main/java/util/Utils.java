@@ -60,8 +60,10 @@ public class Utils {
   /** Constant <code>lineSep="System.getProperty(line.separator)"</code> */
   public static final String lineSep = System.getProperty("line.separator");
   /** Constant <code>projectVersion=":$CVER 04.04.01$"</code> */
+  public static final String version = "$CVER 04.04.01$";
+
   public static final String projectVersion =
-      "$CVER 04.04.01$".replaceAll(",]", "").replace("CVER ", "");
+      version.replaceAll(",]", "").replace("CVER ", "").replaceAll("\\$", "");
   /** Constant <code>projectName="CryptoGuard"</code> */
   public static final String projectName = "CryptoGuard";
   /** Constant <code>userPath="System.getProperty(user.home)"</code> */
