@@ -123,12 +123,12 @@ public class ArgumentsCheck {
         if (cmd.hasOption(argsIdentifier.ANDROID.getArg()))
           androidHome =
               Utils.retrieveFilePath(
-                  cmd.getOptionValue(argsIdentifier.ANDROID.getId()), null, false, false);
+                  cmd.getOptionValue(argsIdentifier.ANDROID.getId()), null, false, false, true);
       default:
         if (cmd.hasOption(argsIdentifier.JAVA.getArg()))
           javaHome =
               Utils.retrieveFilePath(
-                  cmd.getOptionValue(argsIdentifier.JAVA.getId()), null, false, false);
+                  cmd.getOptionValue(argsIdentifier.JAVA.getId()), null, false, false, true);
         break;
     }
     //endregion
@@ -337,14 +337,15 @@ public class ArgumentsCheck {
     log.trace("Retrieving the source files.");
     ArrayList<String> vSources =
         (sourceFiles.size() == 1 && sourceFiles.get(0).equals("xargs"))
-            ? Utils.retrievingThroughXArgs(eType, false)
-            : Utils.retrieveFilePathTypes(new ArrayList<>(sourceFiles), eType, true, false);
+            ? Utils.retrievingThroughXArgs(eType, false, true)
+            : Utils.retrieveFilePathTypes(new ArrayList<>(sourceFiles), eType, true, false, true);
     log.info("Using the source file(s): " + retrieveFullyQualifiedName(vSources).toString());
     //endregion
 
     //region Setting the dependency path
     log.trace("Retrieving the dependency files.");
-    List<String> vDeps = Utils.retrieveFilePathTypes(new ArrayList<>(dependencies), false, false);
+    List<String> vDeps =
+        Utils.retrieveFilePathTypes(new ArrayList<>(dependencies), false, false, false);
     if (vDeps.size() > 0)
       log.debug("Using the dependency file(s) :" + retrieveFullyQualifiedName(vDeps).toString());
     //endregion
@@ -418,7 +419,8 @@ public class ArgumentsCheck {
     } else {
       String ogFileOutPath = fileOutPath;
       fileOutPath =
-          Utils.retrieveFilePath(fileOutPath, oType.getOutputFileExt(), overWriteFileOut, true);
+          Utils.retrieveFilePath(
+              fileOutPath, oType.getOutputFileExt(), overWriteFileOut, true, false);
       if (fileOutPath == null) {
         log.warn("Output file: " + ogFileOutPath + " is not available.");
         fileOutPath =
