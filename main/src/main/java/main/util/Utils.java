@@ -139,12 +139,13 @@ public class Utils {
 
         ZipDexContainer zipContainer = (ZipDexContainer) DexFileFactory.loadDexContainer(zipFile,Opcodes.forApi(23));
 
+
         for(String dexEntryName: zipContainer.getDexEntryNames()){
             DexFile dexFile = DexFileFactory.loadDexEntry(zipFile, dexEntryName, true, Opcodes.forApi(23));
 
             for (ClassDef classDef : dexFile.getClasses()) {
                 String className = classDef.getType().replace('/', '.');
-                if (!className.contains("android.")){
+                if(!className.toLowerCase().startsWith("landroid.")) {
                     classNames.add(className.substring(1, className.length() - 1));
                 }
             }
