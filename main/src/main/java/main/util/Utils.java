@@ -8,8 +8,11 @@ import main.slicer.backward.orthogonal.OrthogonalSlicingResult;
 import main.util.manifest.ProcessManifest;
 import org.jf.dexlib2.DexFileFactory;
 import org.jf.dexlib2.Opcodes;
+import org.jf.dexlib2.dexbacked.DexBackedDexFile;
+import org.jf.dexlib2.dexbacked.ZipDexContainer;
 import org.jf.dexlib2.iface.ClassDef;
 import org.jf.dexlib2.iface.DexFile;
+import org.jf.dexlib2.iface.MultiDexContainer;
 import soot.*;
 import soot.jimple.Constant;
 import soot.jimple.InvokeExpr;
@@ -134,12 +137,17 @@ public class Utils {
 
         File zipFile = new File(apkfile);
 
-        DexFile dexFile = DexFileFactory.loadDexEntry(zipFile, "classes.dex", true, Opcodes.forApi(23));
+        ZipDexContainer zipContainer = (ZipDexContainer) DexFileFactory.loadDexContainer(zipFile,Opcodes.forApi(23));
 
-        for (ClassDef classDef : dexFile.getClasses()) {
-            String className = classDef.getType().replace('/', '.');
-            if (!className.contains("android."))
-                classNames.add(className.substring(1, className.length() - 1));
+        for(String dexEntryName: zipContainer.getDexEntryNames()){
+            DexFile dexFile = DexFileFactory.loadDexEntry(zipFile, dexEntryName, true, Opcodes.forApi(23));
+
+            for (ClassDef classDef : dexFile.getClasses()) {
+                String className = classDef.getType().replace('/', '.');
+                if (!className.contains("android.")){
+                    classNames.add(className.substring(1, className.length() - 1));
+                }
+            }
         }
 
         return classNames;
