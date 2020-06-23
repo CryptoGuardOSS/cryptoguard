@@ -198,4 +198,14 @@ along with this program. If not, see
 ### Reference
 
 If you find this project useful, please cite our [CCS\'19 CryptoGuard
-paper](https://dl.acm.org/citation.cfm?doid=3319535.3345659).
+paper](https://dl.acm.org/citation.cfm?doid=3319535.3345659) and the thesis supporting the latest enhancements 
+from within this fork.
+
+```latex
+@phdthesis{frantz2020enhancing,
+	title={Enhancing CryptoGuard's Deployability for Continuous Software Security Scanning},
+	author={Frantz, Miles},
+	year={2020},
+	school={Virginia Tech}
+}
+```
