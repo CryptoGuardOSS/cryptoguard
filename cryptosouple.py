@@ -329,7 +329,7 @@ class Utils(object):
     def custom(argz):
         print("Custom command " + str(argz))
         print(Utils.halfRows())
-        print('Building the project using | ./gradlew ' + str(argz) + '' , end='| ', flush=True)
+        print('Building the project using | ./gradlew ' + str(argz) + ' ' , end='| ', flush=True)
         start = time.time()
         cmd = str(os.path.join(os.path.abspath(os.curdir), 'gradlew')) + ' ' + str(argz)
         try:
