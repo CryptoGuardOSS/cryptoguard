@@ -27,6 +27,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Logger;
 import org.jf.dexlib2.DexFileFactory;
 import org.jf.dexlib2.Opcodes;
+import org.jf.dexlib2.dexbacked.ZipDexContainer;
 import org.jf.dexlib2.iface.ClassDef;
 import org.jf.dexlib2.iface.DexFile;
 import org.objectweb.asm.ClassReader;
@@ -891,14 +892,19 @@ public class Utils {
     File zipFile = new File(apkfile);
 
     try {
-      DexFile dexFile =
-          DexFileFactory.loadDexEntry(zipFile, "classes.dex", true, Opcodes.forApi(23))
-              .getDexFile();
+      ZipDexContainer zipContainer =
+          (ZipDexContainer) DexFileFactory.loadDexContainer(zipFile, Opcodes.forApi(23));
 
-      for (ClassDef classDef : dexFile.getClasses()) {
-        String className = classDef.getType().replace('/', '.');
-        if (!className.contains("android.")) {
-          classNames.add(className.substring(1, className.length() - 1));
+      for (String dexEntryName : zipContainer.getDexEntryNames()) {
+        DexFile dexFile =
+            DexFileFactory.loadDexEntry(zipFile, dexEntryName, true, Opcodes.forApi(23))
+                .getDexFile();
+
+        for (ClassDef classDef : dexFile.getClasses()) {
+          String className = classDef.getType().replace('/', '.');
+          if (!className.toLowerCase().startsWith("landroid.")) {
+            classNames.add(className.substring(1, className.length() - 1));
+          }
         }
       }
       return classNames;
