@@ -60,8 +60,8 @@ public class Utils {
   public static final String fileSep = System.getProperty("file.separator");
   /** Constant <code>lineSep="System.getProperty(line.separator)"</code> */
   public static final String lineSep = System.getProperty("line.separator");
-  /** Constant <code>projectVersion=":$CVER 04.04.01$"</code> */
-  public static final String version = "$CVER 04.04.01$";
+  /** Constant <code>projectVersion=":$CVER 04.05.00$"</code> */
+  public static final String version = "$CVER 04.05.00$";
 
   public static final String projectVersion =
       version.replaceAll(",]", "").replace("CVER ", "").replaceAll("\\$", "");
