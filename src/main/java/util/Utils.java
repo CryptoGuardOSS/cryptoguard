@@ -27,6 +27,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Logger;
 import org.jf.dexlib2.DexFileFactory;
 import org.jf.dexlib2.Opcodes;
+import org.jf.dexlib2.dexbacked.ZipDexContainer;
 import org.jf.dexlib2.iface.ClassDef;
 import org.jf.dexlib2.iface.DexFile;
 import org.objectweb.asm.ClassReader;
@@ -59,8 +60,8 @@ public class Utils {
   public static final String fileSep = System.getProperty("file.separator");
   /** Constant <code>lineSep="System.getProperty(line.separator)"</code> */
   public static final String lineSep = System.getProperty("line.separator");
-  /** Constant <code>projectVersion=":$CVER 04.04.01$"</code> */
-  public static final String version = "$CVER 04.04.01$";
+  /** Constant <code>projectVersion=":$CVER 04.05.00$"</code> */
+  public static final String version = "$CVER 04.05.00$";
 
   public static final String projectVersion =
       version.replaceAll(",]", "").replace("CVER ", "").replaceAll("\\$", "");
@@ -891,14 +892,19 @@ public class Utils {
     File zipFile = new File(apkfile);
 
     try {
-      DexFile dexFile =
-          DexFileFactory.loadDexEntry(zipFile, "classes.dex", true, Opcodes.forApi(23))
-              .getDexFile();
+      ZipDexContainer zipContainer =
+          (ZipDexContainer) DexFileFactory.loadDexContainer(zipFile, Opcodes.forApi(23));
 
-      for (ClassDef classDef : dexFile.getClasses()) {
-        String className = classDef.getType().replace('/', '.');
-        if (!className.contains("android.")) {
-          classNames.add(className.substring(1, className.length() - 1));
+      for (String dexEntryName : zipContainer.getDexEntryNames()) {
+        DexFile dexFile =
+            DexFileFactory.loadDexEntry(zipFile, dexEntryName, true, Opcodes.forApi(23))
+                .getDexFile();
+
+        for (ClassDef classDef : dexFile.getClasses()) {
+          String className = classDef.getType().replace('/', '.');
+          if (!className.toLowerCase().startsWith("landroid.")) {
+            classNames.add(className.substring(1, className.length() - 1));
+          }
         }
       }
       return classNames;

@@ -2,7 +2,7 @@
 layout: default
 ---
 
-CryptoGuard $CVER 04.04.01$
+CryptoGuard $CVER 04.05.00$
 =====================
 <p align="center">
     <a href="https://mybinder.org/v2/gh/franceme/cryptoguard/master?filepath=Notebook%2F">

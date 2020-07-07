@@ -190,6 +190,8 @@ public class BaseAnalyzerRouting {
 
     List<String> classNames = Utils.getClassNamesFromApkArchive(projectJarPath);
 
+    //enables multi-dex support for soot
+    Options.v().set_process_multiple_dex(true);
     Options.v().set_src_prec(Options.src_prec_apk);
     Options.v().set_android_jars(Utils.osPathJoin(androidHome, "platforms"));
     Options.v().set_soot_classpath(Utils.getBaseSoot(javaHome));
