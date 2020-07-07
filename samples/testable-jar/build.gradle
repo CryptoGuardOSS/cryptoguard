@@ -31,5 +31,8 @@ dependencies {
     compile name: 'okhttp-3.9.0'
     compile name: 'okio-1.13.0'
     compile name: 'retrofit-2.1.0'
+    implementation 'javax.xml.bind:jaxb-api:2.3.0'
+    implementation 'com.sun.xml.bind:jaxb-core:2.3.0'
+    implementation 'com.sun.xml.bind:jaxb-impl:2.3.0'
 }
 
