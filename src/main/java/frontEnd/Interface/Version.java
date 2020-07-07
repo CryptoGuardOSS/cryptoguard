@@ -101,7 +101,7 @@ public enum Version {
     if (version.startsWith("1.")) version = version.replaceFirst("1.", "");
 
     //Getting the major number
-    int versionNumber = Integer.parseInt(version.substring(0, 1));
+    int versionNumber = Integer.parseInt(version.substring(0, version.indexOf(".", 0)));
 
     return Arrays.stream(Version.values())
         .filter(v -> v.getVersionNumber() == versionNumber)
