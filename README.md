@@ -30,21 +30,21 @@ An program analysis tool to find cryptographic misuse in Java and Android.
 
 You need to run CryptoGuard on JDK 7 to analyze source codes. If the project does not have any external dependencies then run,
      
-`cd /path/to/cryptoguard &&  /usr/local/jdk1.7.0_80/bin/java -jar main/build/libs/main.jar "source" "/path/to/project/root" ""`
+`cd /path/to/cryptoguard &&  /usr/local/jdk1.7.0_80/bin/java -jar main/build/libs/main.jar "source" "/path/to/project/root" "" 1`
 
 If the project have external dependencies then first gather the dependencies under a folder that is relative to the project root (e.g., “build/dependencies”), then run
 
-`cd /path/to/cryptoguard && /usr/local/jdk1.7.0_80/bin/java -jar main/build/libs/main.jar "source" "/path/to/project/root" "build/dependencies"`
+`cd /path/to/cryptoguard && /usr/local/jdk1.7.0_80/bin/java -jar main/build/libs/main.jar "source" "/path/to/project/root" "build/dependencies" 1`
 
 Note that if you have multiple subprojects with external dependencies, then you have to gather all the corresponding subproject dependencies under a path that is relative to each of the subprojects.
 
 ### Run CryptoGuard to analyze Jar:
 
-`cd /path/to/cryptoguard && java -jar main/build/libs/main.jar "jar" "/path/to/jar/my-jar.jar" ""`
+`cd /path/to/cryptoguard && java -jar main/build/libs/main.jar "jar" "/path/to/jar/my-jar.jar" "" 1`
 
 ### Run CryptoGuard to analyze Apk:
 
-`cd /path/to/cryptoguard && java -jar main/build/libs/main.jar "apk" "/path/to/apk/my-apk.apk" `
+`cd /path/to/cryptoguard && java -jar main/build/libs/main.jar "apk" "/path/to/apk/my-apk.apk" 1`
 
 If you have any questions or suggestions, please email to sazzad114@gmail.com.
 
