@@ -5,7 +5,7 @@ name=cryptoguard
 
 #General Variables used throughout the Makefile
 dir=./
-runner=$(dir)$(name).py
+runner=$(dir)cryptosoule.py
 #endregion
 
 default:: build
