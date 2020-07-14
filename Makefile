@@ -2,10 +2,11 @@
 #Variables dynamically set when the program is being built from the source
 ver=03.14.00
 name=cryptoguard
+py=cryptosouple.py
 
 #General Variables used throughout the Makefile
 dir=./
-runner=$(dir)$(name).py
+runner=$(dir)$(py)
 #endregion
 
 default:: build
@@ -60,7 +61,8 @@ docker:
 
 live:
 	@$(info Running the Docker file)
-	@sudo docker run -p 127.0.0.1:8888:8888 -ti cryptoguard /bin/bash
+	#This exposes port 9000 from the host machine to port 8888 within the docker machine
+	@sudo docker run -p 9000:8888 -ti cryptoguard /bin/bash
 
 kill:
 	@$(info Killing all the Dockerfiles)
@@ -70,5 +72,5 @@ kill:
 
 run:
 	@$(info Running the juypter notebook)
-	@jupyter notebook --ip=0.0.0.0 --port=8888
+	@jupyter notebook --ip=127.0.0.1 --port=9000
 #endregion
