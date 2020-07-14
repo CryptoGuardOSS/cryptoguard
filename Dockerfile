@@ -68,8 +68,6 @@ RUN chmod 777 -R /home/runner/.sdkman
 
 USER $NB_USER
 
-#RUN bash -c "echo \"export JAVA_HOME=/home/runner/.sdkman/candidates/java/8.0.252-zulu\">>/home/runner/.bash_aliases"
-#RUN bash -c "echo \"export JAVA7_HOME=/home/runner/.sdkman/candidates/java/7.0.262-zulu\">>/home/runner/.bash_aliases"
 RUN bash -c "echo \"jupyter lab --ip=0.0.0.0\">>/home/runner/.bash_aliases"
 
 # Launch the notebook server
