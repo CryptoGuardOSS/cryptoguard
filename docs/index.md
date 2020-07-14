@@ -5,8 +5,8 @@ layout: default
 CryptoGuard $CVER 04.05.00$
 =====================
 [![badge](https://img.shields.io/badge/MyBinder-Active-579ACA.svg?logo=data:image/png;base64,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)](https://mybinder.org/v2/gh/franceme/cryptoguard/master?filepath=Notebook%2F)
-![Docker Badge](https://img.shields.io/docker/v/frantzme/cryptoguard?label=Docker&style=plastic)
-![Version Badge](https://img.shields.io/github/v/release/franceme/cryptoguard?style=plastic)
+[![Docker Badge](https://img.shields.io/docker/v/frantzme/cryptoguard?label=Docker&style=plastic)](https://hub.docker.com/r/frantzme/cryptoguard)
+[![Version Badge](https://img.shields.io/github/v/release/franceme/cryptoguard?style=plastic)](https://github.com/franceme/cryptoguard/releases/latest)
 ![GitHub Release Downloads](https://img.shields.io/github/downloads/franceme/cryptoguard/latest/total)
 
 A program analysis tool to find cryptographic misuse in Java and Android.
@@ -33,28 +33,28 @@ Please run the following command to get more information on how to use it `./cry
 ### IMPORTANT NOTICE
 
 -   Due to \'leaky tests\' from the environment and persistent
-    variables, a python test runner was made
+	variables, a python test runner was made
 -   Please run `make tests`
-    -   this ensures isolated environments via gradle calls
+	-   this ensures isolated environments via gradle calls
 
 ### Building From Source
 
 -   Run `make`, this will build CryptoGuard and move the
-    jar to the current directory
+	jar to the current directory
 -   Run `scans` to scan all of the tests included in the source
-    -   There is currently a sample project for each scan type within src/test
+	-   There is currently a sample project for each scan type within src/test
 -   Run `clean` to clean the entire project
 
 ### Prerequisites (Environment Variables)
 
 1.  JAVA\_HOME: Point to a valid Java 8 JDK Installation
-    -   Needed for all of the scans
+	-   Needed for all of the scans
 
 2.  JAVA7\_HOME: Point to a valid Java 7 JDK Installation
-    -   Needed for project scans and java file scans
+	-   Needed for project scans and java file scans
 
 3.  ANDROID\_SDK\_HOME: Point to a valid Android JDK Installation
-    -   Needed for Android
+	-   Needed for Android
 
 #### Note
 
@@ -65,9 +65,9 @@ Please run the following command to get more information on how to use it `./cry
 #### Source (Maven or Gradle Project Directory **only**)
 
 -   raw command (without dependencies)
-    `java -jar cryptoguard.jar -in source -s /rootPath`
+	`java -jar cryptoguard.jar -in source -s /rootPath`
 -   raw command (with dependencies)
-    `java -jar cryptoguard.jar -in source -s /rootPath -d /dependencies`
+	`java -jar cryptoguard.jar -in source -s /rootPath -d /dependencies`
 
 ##### Note
 
@@ -98,9 +98,9 @@ If you have multiple subprojects with external dependencies, then you have to ga
 #### Source/Dependencies options
 
 -   By default, both source and dependencies are expecting a list of files
-    -   or for source the .in file
+	-   or for source the .in file
 -   The source and dependencies can also handle a class path based string
-    -   ex: `-s ~/tester/PBEUsage.class:~/tester/UrlFrameWorks.class:~/tester/NewTestCase1.class:~/tester/NewTestCase2.class`
+	-   ex: `-s ~/tester/PBEUsage.class:~/tester/UrlFrameWorks.class:~/tester/NewTestCase1.class:~/tester/NewTestCase2.class`
 
 #### Output options
 
@@ -109,33 +109,33 @@ If you have multiple subprojects with external dependencies, then you have to ga
 ##### Default
 
 -   Argument `-m D`
-    -   example command `java -jar cryptoguard.jar -in jar -s /path/to/jar/my-jar.jar -m D`
+	-   example command `java -jar cryptoguard.jar -in jar -s /path/to/jar/my-jar.jar -m D`
 
 -   This is a json file that represents a more simplified output
-    -   This will be iterated over time as more functionality is available
+	-   This will be iterated over time as more functionality is available
 
 ##### Legacy
 
 -   Argument `-m L`
-    -   example command `java -jar cryptoguard.jar -in jar -s /path/to/jar/my-jar.jar -m L`
+	-   example command `java -jar cryptoguard.jar -in jar -s /path/to/jar/my-jar.jar -m L`
 -   This will output a txt file used within early CryptoGuard versions
 
 ##### Scarf XML
 
 -   Argument `-m SX`
-    -   example command `java -jar cryptoguard.jar -in jar -s /path/to/jar/my-jar.jar -m SX`
+	-   example command `java -jar cryptoguard.jar -in jar -s /path/to/jar/my-jar.jar -m SX`
 
 -   This will ouput an xml file using the [scarf\_v1.2.xsd](https://github.com/mirswamp/resultparser/blob/master/xsd/scarf_v1.2.xsd) used by [SWAMP](https://continuousassurance.org/open-source-software/).
 -   By using the argument `-Sconfig properties.file`, this will load the properties from within the file
-    -   example command `java -jar cryptoguard.jar -in jar -s /path/to/jar/my-jar.jar -m SX -Sconfig properties.file`
+	-   example command `java -jar cryptoguard.jar -in jar -s /path/to/jar/my-jar.jar -m SX -Sconfig properties.file`
 
 #### Input a single file (list of files)
 
 -   Argument `-s *.in`
 -   By using this argument (and you have to use the .in extension) input a single file containing all of the source input files
 -   example
-    -   command to generate a file like this `find -type f -name \*.java \>\> input.in`
-        -   generated input.in file
+	-   command to generate a file like this `find -type f -name \*.java \>\> input.in`
+		-   generated input.in file
 
 ```bash
 ./samples/testable-jar/src/main/java/tester/UrlFrameWorks.java
@@ -151,7 +151,7 @@ If you have multiple subprojects with external dependencies, then you have to ga
 ```
 
 -   command to be used with cryptoguard `java -jar -s input.in`
-    -   this is similar to `java -jar -s ./samples/testable-jar/src/main/java/tester/UrlFrameWorks.java ... ./samples/testable-jar/src/main/java/tester/PassEncryptor.java`
+	-   this is similar to `java -jar -s ./samples/testable-jar/src/main/java/tester/UrlFrameWorks.java ... ./samples/testable-jar/src/main/java/tester/PassEncryptor.java`
 
 -   **NOTE**: This can be used with any type of input/output marshalling
 
@@ -164,15 +164,15 @@ If you have multiple subprojects with external dependencies, then you have to ga
 #### FAQ
 
 -   There may be **silent failures** if any of the environment variables below are not set.
-    -   This can be checked by running `make env`
+	-   This can be checked by running `make env`
 
 ### Website
 
 -   The generated website uses a slightly modified [Jekyll Hyde template](https://github.com/poole/hyde) under the [MIT License](https://github.com/poole/hyde/blob/master/LICENSE.md).
 - Technology Reports
-    - Gradle Junit Test Reports are generated from [Gradle](https://gradle.org/)
-    - Cobertura Test Coverage Reports are generated from [Cobertura](http://cobertura.sourceforge.net/)
-    - Java Documentation are generated from Java
+	- Gradle Junit Test Reports are generated from [Gradle](https://gradle.org/)
+	- Cobertura Test Coverage Reports are generated from [Cobertura](http://cobertura.sourceforge.net/)
+	- Java Documentation are generated from Java
 
 ### Disclaimer
 
@@ -197,7 +197,7 @@ along with this program. If not, see
 ### Reference
 
 If you find this project useful, please cite our [CCS\'19 CryptoGuard
-paper](https://dl.acm.org/citation.cfm?doid=3319535.3345659) and the thesis supporting the latest enhancements 
+paper](https://dl.acm.org/citation.cfm?doid=3319535.3345659) and the thesis supporting the latest enhancements
 from within this fork.
 
 ```latex
