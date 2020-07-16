@@ -1,3 +1,5 @@
+
+
 ---
 layout: default
 ---
@@ -8,6 +10,9 @@ CryptoGuard $CVER 04.05.00$
 [![Docker Badge](https://img.shields.io/docker/v/frantzme/cryptoguard?label=Docker&style=plastic)](https://hub.docker.com/r/frantzme/cryptoguard)
 [![Version Badge](https://img.shields.io/github/v/release/franceme/cryptoguard?style=plastic)](https://github.com/franceme/cryptoguard/releases/latest)
 ![GitHub Release Downloads](https://img.shields.io/github/downloads/franceme/cryptoguard/latest/total)
+
+Java Vulnerabilities (by [Snyk.io](https://snyk.io)): [![CryptoGuard Vulnerabilities](https://snyk.io/test/github/franceme/cryptoguard/badge.svg?targetFile=build.gradle)](https://snyk.io/test/github/franceme/cryptoguard?targetFile=build.gradle)
+Python3 Vulnerabilities (by [Snyk.io](https://snyk.io)): [![Python Vulnerabilities](https://snyk.io/test/github/franceme/cryptoguard/badge.svg?targetFile=requirements.txt)](https://snyk.io/test/github/franceme/cryptoguard?targetFile=requirements.txt)
 
 A program analysis tool to find cryptographic misuse in Java and Android.
 --------------------------------------------------------------------------
