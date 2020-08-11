@@ -60,8 +60,8 @@ public class Utils {
   public static final String fileSep = System.getProperty("file.separator");
   /** Constant <code>lineSep="System.getProperty(line.separator)"</code> */
   public static final String lineSep = System.getProperty("line.separator");
-  /** Constant <code>projectVersion=":$CVER 04.05.00$"</code> */
-  public static final String version = "$CVER 04.05.00$";
+  /** Constant <code>projectVersion=":$CVER 04.05.01$"</code> */
+  public static final String version = "$CVER 04.05.01$";
 
   public static final String projectVersion =
       version.replaceAll(",]", "").replace("CVER ", "").replaceAll("\\$", "");
@@ -96,8 +96,6 @@ public class Utils {
   public static int[] DEPTH_COUNT;
   /** Constant <code>DEPTH=0</code> */
   public static int DEPTH = 0;
-  /** Constant <code>supportedVersione</code> */
-  public static Version supportedVersion = Version.EIGHT;
 
   static {
     ASSIGN_DONT_VISIT.add("<java.util.Map: java.lang.Object get(java.lang.Object)>");

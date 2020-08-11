@@ -49,14 +49,19 @@ USER $NB_USER
 # Installing SDK Man
 RUN curl -s "https://get.sdkman.io" | bash
 #RUN apt-get update
-RUN /bin/bash -c "source /home/runner/.sdkman/bin/sdkman-init.sh"
+##Trying to dynamically retrieve the latest 8.0 jdk
+#RUN bash -c "source /home/runner/.sdkman/bin/sdkman-init.sh && \
+#    yes|sdk install java $(sdk ls java|grep zulu|grep 8.0|head -n 1|awk -F ' ' '{print $8}') && \
+#    yes|sdk install java $(sdk ls java|grep zulu|grep 7.0|head -n 1|awk -F ' ' '{print $8}')"
+   
 
 # Installing Java and Maven, removing some unnecessary SDKMAN files 
 RUN bash -c "source /home/runner/.sdkman/bin/sdkman-init.sh && \
     yes | sdk install java 7.0.262-zulu && \
-    yes | sdk install java 8.0.252-zulu && \
+    yes | sdk install java 8.0.265-zulu && \
     yes | sdk install gradle 6.0 && \
-    yes | sdk install java 11.0.7.hs-adpt"
+    yes | sdk install java 11.0.8.hs-adpt && \
+    sdk default java 11.0.8.hs-adpt"
 
 USER root
 

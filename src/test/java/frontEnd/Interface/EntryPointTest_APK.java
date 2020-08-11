@@ -33,7 +33,7 @@ import test.TestUtilities;
  * @since V03.03.10
  */
 @RunWith(QuarantiningRunner.class)
-@Quarantine({"com.binarytweed", "frontEnd.Interface.*"})
+@Quarantine({"com.binarytweed", "frontEnd.Interface"})
 public class EntryPointTest_APK {
 
   //region Attributes

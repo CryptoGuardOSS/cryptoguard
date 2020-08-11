@@ -327,7 +327,7 @@ public class ArgumentsCheck {
           "JRE Version: "
               + currentVersion
               + " is not compatible, please use JRE Version: "
-              + Utils.supportedVersion,
+              + Version.EIGHT,
           ExceptionId.GEN_VALID);
     }
     //endregion
@@ -339,7 +339,9 @@ public class ArgumentsCheck {
         (sourceFiles.size() == 1 && sourceFiles.get(0).equals("xargs"))
             ? Utils.retrievingThroughXArgs(eType, false, true)
             : Utils.retrieveFilePathTypes(new ArrayList<>(sourceFiles), eType, true, false, true);
-    log.info("Using the source file(s): " + retrieveFullyQualifiedName(vSources).toString());
+
+    log.info("Scanning " + retrieveFullyQualifiedName(vSources).size() + " source file(s).");
+    log.debug("Using the source file(s): " + retrieveFullyQualifiedName(vSources).toString());
     //endregion
 
     //region Setting the dependency path
