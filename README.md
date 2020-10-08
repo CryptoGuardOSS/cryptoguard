@@ -44,7 +44,7 @@ Note that if you have multiple subprojects with external dependencies, then you 
 
 ### Run CryptoGuard to analyze Apk:
 
-`cd /path/to/cryptoguard && java -jar main/build/libs/main.jar "apk" "/path/to/apk/my-apk.apk" 1`
+`cd /path/to/cryptoguard && java -jar main/build/libs/main.jar "apk" "/path/to/apk/my-apk.apk" "" 1`
 
 If you have any questions or suggestions, please email to sazzad114@gmail.com.
 
