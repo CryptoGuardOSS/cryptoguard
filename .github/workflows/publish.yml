@@ -1,0 +1,104 @@
+name: Create and Release Latex File
+
+on:
+  [push, workflow_dispatch]
+
+jobs:
+  Setup:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+
+    - name: Granting Execution permission
+      run: chmod +x gradlew 
+
+    - name: Setup Android Environment
+      run:  cd /opt && wget --output-document=android-sdk.zip --quiet https://dl.google.com/android/repository/android-22_r02.zip && unzip android-sdk.zip && mv android-5.1.1 android && sudo chown -R 777 android
+
+    - name: Downloading SDK Man
+      run: curl -s "https://get.sdkman.io" | bash
+
+    - name: Initializing SDKMan
+      run: source ~/.sdkman/bin/sdkman-init.sh && chmod 777 -R ~/.sdkman
+
+    - name: Installing Java 7 from SDKMan
+      run: source ~/.sdkman/bin/sdkman-init.sh &&  yes | sdk install java $(sdk ls java|grep 7.0.*-zulu|head -n 1|cut -d '|' -f6|awk '{$1=$1};1')
+
+    - name: Installing Java 8 from SDKMan
+      run: source ~/.sdkman/bin/sdkman-init.sh &&  yes | sdk install java $(sdk ls java|grep 8.0.*-zulu|head -n 1|cut -d '|' -f6|awk '{$1=$1};1')
+
+    - name: Installing Gradle 6 from SDKMan
+      run: source ~/.sdkman/bin/sdkman-init.sh &&  yes | sdk install gradle 6.0
+
+    - name: Setting up Android SDK in SDKMan
+      run: mkdir -p ~/.sdkman/candidates/android/22_r02
+
+    - name: Moving the Android SDK into SDKMan
+      run: mv /opt/android ~/.sdkman/candidates/android/22_r02/platforms
+
+    - name: Linking the latest Android SDK in the SDKMan Structure
+      run: ln -s ~/.sdkman/candidates/android/22_r02/platforms ~/.sdkman/candidates/android/current
+
+    - name: Read version from Properties-file
+      id: read_property_original
+      uses: christian-draeger/read-properties@1.0.1
+      with:
+        path: 'gradle.properties'
+        property: 'versionNumber'
+
+    - name: Get Time
+      id: time
+      uses: nanzm/get-time-action@v1.0
+      with:
+        format: 'YYYY-MM-DD-HH-mm'
+
+    - name: Find and Replace
+      uses: shitiomatic/str-replace@master
+      with:
+        find: "${{steps.read_property_original.outputs.value}}"
+        replace: "${{steps.read_property_original.outputs.value}}_${{ steps.time.outputs.time }}"
+        include: gradle.properties 
+
+    - name: Read version from Properties-file
+      id: read_property
+      uses: christian-draeger/read-properties@1.0.1
+      with:
+        path: 'gradle.properties'
+        property: 'versionNumber'
+
+    - name: Building the project
+      run: ./gradlew clean build # -x test
+
+    - name: Move the Jar File
+      if: github.ref == 'refs/heads/dev'
+      run: mv build/libs/PrivateGuard-${{ steps.read_property.outputs.value }}.jar PrivateGuard.jar
+
+    - name: Create Release
+      if: github.ref == 'refs/heads/dev'
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: Release_${{ steps.read_property.outputs.value }}_${{ steps.time.outputs.value }}
+        release_name: Release_${{ steps.read_property.outputs.value }}}_${{ steps.time.outputs.value }}
+        body: Release_${{ steps.read_property.outputs.value }}}_${{ steps.time.outputs.value }}
+
+    - name: Upload the Jar to the Release
+      if: github.ref == 'refs/heads/dev'
+      id: upload-release-asset-resume 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} 
+        asset_path: ${{ github.workspace }}/PrivateGuard.jar
+        asset_name: PrivateGuard.jar
+        asset_content_type: application/jar
