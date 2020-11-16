@@ -78,7 +78,7 @@ jobs:
 
     - name: Move the Jar File
       if: github.ref == 'refs/heads/dev'
-      run: mv build/libs/PrivateGuard-${{ steps.read_property.outputs.value }}.jar PrivateGuard.jar
+      run: mv build/libs/CryptoGuard-${{ steps.read_property.outputs.value }}.jar CryptoGuard.jar
 
     - name: Create Release
       if: github.ref == 'refs/heads/dev'
