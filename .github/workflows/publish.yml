@@ -78,7 +78,7 @@ jobs:
 
     - name: Move the Jar File
       if: github.ref == 'refs/heads/dev'
-      run: mv build/libs/CryptoGuard-*.jar CryptoGuard.jar
+      run: mv build/libs/cryptoguard-*.jar cryptoguard.jar
 
     - name: Create Release
       if: github.ref == 'refs/heads/dev'
@@ -99,6 +99,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} 
-        asset_path: ${{ github.workspace }}/PrivateGuard.jar
+        asset_path: ${{ github.workspace }}/cryptoguard.jar
         asset_name: PrivateGuard.jar
         asset_content_type: application/jar
