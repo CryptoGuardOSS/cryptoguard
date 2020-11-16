@@ -88,7 +88,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: Release_${{ steps.read_property.outputs.value }}_${{ steps.time.outputs.value }}
-        release_name: Release_${{ steps.read_property.outputs.value }}}_${{ steps.time.outputs.value }}
+        release_name: Release_${{ steps.read_property.outputs.value }}_${{ steps.time.outputs.value }}
         body: Release_${{ steps.read_property.outputs.value }}}_${{ steps.time.outputs.value }}
 
     - name: Upload the Jar to the Release
@@ -100,5 +100,5 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} 
         asset_path: ${{ github.workspace }}/cryptoguard.jar
-        asset_name: PrivateGuard.jar
+        asset_name: cryptoguard.jar
         asset_content_type: application/jar
