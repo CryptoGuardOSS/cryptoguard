@@ -48,20 +48,12 @@ USER $NB_USER
 
 # Installing SDK Man
 RUN curl -s "https://get.sdkman.io" | bash
-#RUN apt-get update
-##Trying to dynamically retrieve the latest 8.0 jdk
-#RUN bash -c "source /home/runner/.sdkman/bin/sdkman-init.sh && \
-#    yes|sdk install java $(sdk ls java|grep zulu|grep 8.0|head -n 1|awk -F ' ' '{print $8}') && \
-#    yes|sdk install java $(sdk ls java|grep zulu|grep 7.0|head -n 1|awk -F ' ' '{print $8}')"
-   
 
 # Installing Java and Maven, removing some unnecessary SDKMAN files 
-RUN bash -c "source /home/runner/.sdkman/bin/sdkman-init.sh && \
-    yes | sdk install java 7.0.262-zulu && \
-    yes | sdk install java 8.0.265-zulu && \
-    yes | sdk install gradle 6.0 && \
-    yes | sdk install java 11.0.8.hs-adpt && \
-    sdk default java 11.0.8.hs-adpt"
+RUN bash -c "/home/runner/.sdkman/bin/sdkman-init.sh &&  yes | sdk install java $(sdk ls java|grep 7.0.*-zulu|head -n 1|cut -d '|' -f6|awk '{$1=$1};1')"
+RUN bash -c "/home/runner/.sdkman/bin/sdkman-init.sh &&  yes | sdk install java $(sdk ls java|grep 8.0.*-zulu|head -n 1|cut -d '|' -f6|awk '{$1=$1};1')"
+RUN bash -c "/home/runner/.sdkman/bin/sdkman-init.sh &&  yes | sdk install java $(sdk ls java|grep 11.0.*-hs-adpt|head -n 1|cut -d '|' -f6|awk '{$1=$1};1')"
+RUN bash -c "source /home/runner/.sdkman/bin/sdkman-init.sh &&  yes | sdk install gradle 6.0"
 
 USER root
 

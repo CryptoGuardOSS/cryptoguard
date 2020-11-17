@@ -2,10 +2,13 @@
 package frontEnd.Interface;
 
 import frontEnd.Interface.outputRouting.ExceptionHandler;
+import frontEnd.Interface.parameterChecks.Core;
 import frontEnd.MessagingSystem.AnalysisIssue;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import frontEnd.MessagingSystem.routing.Listing;
 import frontEnd.MessagingSystem.routing.outputStructures.common.Heuristics;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.Function;
@@ -13,6 +16,8 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.config.Configurator;
 import rule.engine.EngineType;
 import util.Utils;
+
+import static util.Utils.setDebuggingLevel;
 
 /**
  * EntryPoint_Plugin class.
@@ -49,32 +54,12 @@ public class EntryPoint_Plugin {
     String outputFile = null;
 
     //region Setting the logging level
-    switch (debuggingLevel) {
-      case 5:
-        Configurator.setRootLevel(Level.ALL);
-        break;
-      case 4:
-        Configurator.setRootLevel(Level.TRACE);
-        break;
-      case 3:
-        Configurator.setRootLevel(Level.DEBUG);
-        break;
-      case 2:
-        Configurator.setRootLevel(Level.INFO);
-        break;
-      case 0:
-        Configurator.setRootLevel(Level.FATAL);
-        break;
-        //case 1
-      default:
-        Configurator.setRootLevel(Level.WARN);
-        break;
-    }
+    setDebuggingLevel(debuggingLevel);
     //endregion
 
     try {
       EnvironmentInformation info =
-          ArgumentsCheck.paramaterCheck(
+          Core.paramaterCheck(
               sourceFiles,
               dependencies,
               EngineType.CLASSFILES,

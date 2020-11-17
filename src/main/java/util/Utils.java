@@ -24,7 +24,9 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.config.Configurator;
 import org.jf.dexlib2.DexFileFactory;
 import org.jf.dexlib2.Opcodes;
 import org.jf.dexlib2.dexbacked.ZipDexContainer;
@@ -60,8 +62,8 @@ public class Utils {
   public static final String fileSep = System.getProperty("file.separator");
   /** Constant <code>lineSep="System.getProperty(line.separator)"</code> */
   public static final String lineSep = System.getProperty("line.separator");
-  /** Constant <code>projectVersion=":$CVER 04.05.01$"</code> */
-  public static final String version = "$CVER 04.05.01$";
+  /** Constant <code>projectVersion=":$CVER 04.05.02$"</code> */
+  public static final String version = "$CVER 04.05.02$";
 
   public static final String projectVersion =
       version.replaceAll(",]", "").replace("CVER ", "").replaceAll("\\$", "");
@@ -599,6 +601,55 @@ public class Utils {
   //endregion
 
   //region NotHotMethods
+  public static String prep(Object obj) {
+    if (obj == null)
+      return "\"None\"";
+
+    if (obj instanceof EngineType) {
+      return "\"" + obj.toString() + "\"";
+    }
+    else if (obj instanceof String) {
+      return "\"" + obj + "\"";
+    }
+    else if (obj instanceof List) {
+      StringBuilder toReturn = new StringBuilder("[");
+
+      for (Object sub_obj : (List) obj)
+        toReturn.append(prep(sub_obj)).append(",");
+
+      if ( ((List<?>) obj).size() > 0)
+        toReturn.setLength(toReturn.length() - 1);
+
+      toReturn.append("]");
+      return toReturn.toString();
+    }
+    else
+      return obj.toString();
+  }
+
+  public static void setDebuggingLevel(int level) {
+    switch (level) {
+      case 5:
+        Configurator.setRootLevel(Level.ALL);
+        break;
+      case 4:
+        Configurator.setRootLevel(Level.TRACE);
+        break;
+      case 3:
+        Configurator.setRootLevel(Level.DEBUG);
+        break;
+      case 2:
+        Configurator.setRootLevel(Level.INFO);
+        break;
+      case 0:
+        Configurator.setRootLevel(Level.FATAL);
+        break;
+      //case 1
+      default:
+        Configurator.setRootLevel(Level.WARN);
+        break;
+    }
+  }
 
   /**
    * getClassNamesFromJarArchive.
