@@ -62,8 +62,8 @@ public class Utils {
   public static final String fileSep = System.getProperty("file.separator");
   /** Constant <code>lineSep="System.getProperty(line.separator)"</code> */
   public static final String lineSep = System.getProperty("line.separator");
-  /** Constant <code>projectVersion=":$CVER 04.05.02$"</code> */
-  public static final String version = "$CVER 04.05.02$";
+  /** Constant <code>projectVersion=":$CVER 04.05.03$"</code> */
+  public static final String version = "$CVER 04.05.03$";
 
   public static final String projectVersion =
       version.replaceAll(",]", "").replace("CVER ", "").replaceAll("\\$", "");
@@ -178,6 +178,7 @@ public class Utils {
    * @param rawFileString a {@link java.util.ArrayList} object.
    * @param expandPath a {@link java.lang.Boolean} object.
    * @param overwrite a {@link java.lang.Boolean} object.
+   * @param needstoExist a {@link java.lang.Boolean} object.
    * @return a {@link java.util.ArrayList} object.
    * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
    */
@@ -206,6 +207,7 @@ public class Utils {
    * @param type a {@link rule.engine.EngineType} object.
    * @param expandPath a {@link java.lang.Boolean} object.
    * @param overwrite a {@link java.lang.Boolean} object.
+   * @param needstoExist a {@link java.lang.Boolean} object.
    * @return a {@link java.util.ArrayList} object.
    * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
    */
@@ -241,6 +243,7 @@ public class Utils {
    * @param type a {@link rule.engine.EngineType} object.
    * @param expandPath a {@link java.lang.Boolean} object.
    * @param overwrite a {@link java.lang.Boolean} object.
+   * @param needstoExist a {@link java.lang.Boolean}
    * @return a {@link java.util.ArrayList} object.
    * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
    */
@@ -735,6 +738,7 @@ public class Utils {
    * retrieveClosePath.
    *
    * @param fileIn a {@link java.util.List} object.
+   * @param needstoExist a {@link java.lang.Boolean} object.
    * @return a {@link java.util.List} object.
    * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
    */
@@ -838,6 +842,7 @@ public class Utils {
    * @param path a {@link java.lang.String} object.
    * @param fileCheck a {@link java.util.function.Predicate} object.
    * @param functor a {@link java.util.function.Function} object.
+   * @param needsToExist a {@link java.lang.Boolean} object.
    * @return a {@link java.util.List} object.
    * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
    */

@@ -6,6 +6,7 @@ frontEnd
 frontEnd.Interface
 frontEnd.Interface.formatArgument
 frontEnd.Interface.outputRouting
+frontEnd.Interface.parameterChecks
 frontEnd.MessagingSystem
 frontEnd.MessagingSystem.routing
 frontEnd.MessagingSystem.routing.outputStructures
