@@ -50,9 +50,9 @@ USER $NB_USER
 RUN curl -s "https://get.sdkman.io" | bash
 
 # Installing Java and Maven, removing some unnecessary SDKMAN files 
-RUN bash -c "/home/runner/.sdkman/bin/sdkman-init.sh &&  yes | sdk install java $(sdk ls java|grep 7.0.*-zulu|head -n 1|cut -d '|' -f6|awk '{$1=$1};1')"
-RUN bash -c "/home/runner/.sdkman/bin/sdkman-init.sh &&  yes | sdk install java $(sdk ls java|grep 8.0.*-zulu|head -n 1|cut -d '|' -f6|awk '{$1=$1};1')"
-RUN bash -c "/home/runner/.sdkman/bin/sdkman-init.sh &&  yes | sdk install java $(sdk ls java|grep 11.0.*-hs-adpt|head -n 1|cut -d '|' -f6|awk '{$1=$1};1')"
+RUN bash -c "source /home/runner/.sdkman/bin/sdkman-init.sh &&  yes | sdk install java $(sdk ls java|grep 7.0.*-zulu|head -n 1|cut -d '|' -f6|awk '{$1=$1};1')"
+RUN bash -c "source /home/runner/.sdkman/bin/sdkman-init.sh &&  yes | sdk install java $(sdk ls java|grep 8.0.*-zulu|head -n 1|cut -d '|' -f6|awk '{$1=$1};1')"
+RUN bash -c "source /home/runner/.sdkman/bin/sdkman-init.sh &&  yes | sdk install java $(sdk ls java|grep 11.0.*-hs-adpt|head -n 1|cut -d '|' -f6|awk '{$1=$1};1')"
 RUN bash -c "source /home/runner/.sdkman/bin/sdkman-init.sh &&  yes | sdk install gradle 6.0"
 
 USER root
