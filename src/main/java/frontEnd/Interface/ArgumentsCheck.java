@@ -1,8 +1,6 @@
 /* Licensed under GPL-3.0 */
 package frontEnd.Interface;
 
-import static util.Utils.retrieveFullyQualifiedName;
-
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.Interface.outputRouting.ExceptionId;
 import frontEnd.Interface.outputRouting.parcelHandling;
@@ -11,7 +9,6 @@ import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import frontEnd.MessagingSystem.routing.Listing;
 import frontEnd.argsIdentifier;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -186,7 +183,7 @@ public class ArgumentsCheck {
     //endregion
 
     EnvironmentInformation info =
-            Core.paramaterCheck(
+        Core.paramaterCheck(
             source,
             dependencies,
             type,
@@ -226,8 +223,6 @@ public class ArgumentsCheck {
 
     return info;
   }
-
-
 
   private static Options setOptions() {
     Options cmdLineArgs = new Options();

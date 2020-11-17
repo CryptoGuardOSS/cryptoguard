@@ -1,23 +1,19 @@
 /* Licensed under GPL-3.0 */
 package frontEnd.Interface;
 
+import static util.Utils.setDebuggingLevel;
+
 import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.Interface.parameterChecks.Core;
 import frontEnd.MessagingSystem.AnalysisIssue;
 import frontEnd.MessagingSystem.routing.EnvironmentInformation;
 import frontEnd.MessagingSystem.routing.Listing;
 import frontEnd.MessagingSystem.routing.outputStructures.common.Heuristics;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.Function;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.core.config.Configurator;
 import rule.engine.EngineType;
 import util.Utils;
-
-import static util.Utils.setDebuggingLevel;
 
 /**
  * EntryPoint_Plugin class.

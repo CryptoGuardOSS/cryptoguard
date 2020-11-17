@@ -602,29 +602,22 @@ public class Utils {
 
   //region NotHotMethods
   public static String prep(Object obj) {
-    if (obj == null)
-      return "\"None\"";
+    if (obj == null) return "\"None\"";
 
     if (obj instanceof EngineType) {
       return "\"" + obj.toString() + "\"";
-    }
-    else if (obj instanceof String) {
+    } else if (obj instanceof String) {
       return "\"" + obj + "\"";
-    }
-    else if (obj instanceof List) {
+    } else if (obj instanceof List) {
       StringBuilder toReturn = new StringBuilder("[");
 
-      for (Object sub_obj : (List) obj)
-        toReturn.append(prep(sub_obj)).append(",");
+      for (Object sub_obj : (List) obj) toReturn.append(prep(sub_obj)).append(",");
 
-      if ( ((List<?>) obj).size() > 0)
-        toReturn.setLength(toReturn.length() - 1);
+      if (((List<?>) obj).size() > 0) toReturn.setLength(toReturn.length() - 1);
 
       toReturn.append("]");
       return toReturn.toString();
-    }
-    else
-      return obj.toString();
+    } else return obj.toString();
   }
 
   public static void setDebuggingLevel(int level) {
@@ -644,7 +637,7 @@ public class Utils {
       case 0:
         Configurator.setRootLevel(Level.FATAL);
         break;
-      //case 1
+        //case 1
       default:
         Configurator.setRootLevel(Level.WARN);
         break;
