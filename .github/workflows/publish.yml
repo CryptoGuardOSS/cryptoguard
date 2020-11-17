@@ -1,4 +1,4 @@
-name: Create and Release Latex File
+name: Clean, build, test, and release the project.
 
 on:
   [push, workflow_dispatch]
@@ -17,7 +17,7 @@ jobs:
         java-version: 1.8
 
     - name: Granting Execution permission
-      run: chmod +x gradlew 
+      run: chmod +x gradlew
 
     - name: Setup Android Environment
       run:  cd /opt && wget --output-document=android-sdk.zip --quiet https://dl.google.com/android/repository/android-22_r02.zip && unzip android-sdk.zip && mv android-5.1.1 android && sudo chown -R 777 android
@@ -64,7 +64,7 @@ jobs:
       with:
         find: "${{steps.read_property_original.outputs.value}}"
         replace: "${{steps.read_property_original.outputs.value}}_${{ steps.time.outputs.time }}"
-        include: gradle.properties 
+        include: gradle.properties
 
     - name: Read version from Properties-file
       id: read_property
@@ -77,11 +77,11 @@ jobs:
       run: ./gradlew clean build # -x test
 
     - name: Move the Jar File
-      if: github.ref == 'refs/heads/dev'
+      if: github.ref == 'refs/heads/master'
       run: mv build/libs/cryptoguard-*.jar cryptoguard.jar
 
     - name: Create Release
-      if: github.ref == 'refs/heads/dev'
+      if: github.ref == 'refs/heads/master'
       id: create_release
       uses: actions/create-release@v1
       env:
@@ -92,7 +92,7 @@ jobs:
         body: Release_${{ steps.read_property.outputs.value }}}_${{ steps.time.outputs.value }}
 
     - name: Upload the Jar to the Release
-      if: github.ref == 'refs/heads/dev'
+      if: github.ref == 'refs/heads/master'
       id: upload-release-asset-resume 
       uses: actions/upload-release-asset@v1
       env:
