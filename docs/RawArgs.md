@@ -4,7 +4,7 @@ title: Example Raw Arguments for CryptoGuard
 permalink: /raw/
 ---
 
-# CryptoGuard $CVER 04.05.01$ Raw Arguments
+# CryptoGuard $CVER 04.05.02$ Raw Arguments
 
 ## Name: FORMAT
 * Arg: -in
