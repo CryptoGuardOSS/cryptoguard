@@ -512,5 +512,55 @@ public class EntryPointTest_JAR {
       }
     }
   }
+
+  /** main_TestableJar. */
+  @Test
+  public void main_TestableJar_NonVuln() {
+
+    if (isLinux) {
+      String args =
+          makeArg(argsIdentifier.FORMAT, EngineType.JAR)
+              + makeArg(argsIdentifier.FORMATOUT, Listing.Default)
+              + makeArg(argsIdentifier.SOURCE, verySimple_Jar_NonVuln)
+              + makeArg(argsIdentifier.NOEXIT)
+              + makeArg(argsIdentifier.OUT, resetFileOut(verySimple_Jar_json_NonVuln));
+
+      try {
+        String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+        Report report = Report.deserialize(new File(outputFile));
+        assertFalse(report.getIssues().isEmpty());
+
+      } catch (Exception e) {
+        e.printStackTrace();
+        assertNull(e);
+      }
+    }
+  }
+
+  @Test
+  public void main_TestableJar_NonVuln_CSV() {
+
+    if (isLinux) {
+      String args =
+          makeArg(argsIdentifier.FORMAT, EngineType.JAR)
+              + makeArg(argsIdentifier.FORMATOUT, Listing.CSVDefault)
+              + makeArg(argsIdentifier.SOURCE, verySimple_Jar_NonVuln)
+              + makeArg(argsIdentifier.NOEXIT)
+              + makeArg(argsIdentifier.OUT, resetFileOut(verySimple_Jar_csv_NonVuln));
+
+      try {
+        System.out.println(args);
+        String outputFile = captureNewFileOutViaStdOut(args.split(" "));
+
+        List<String> results = Files.readAllLines(Paths.get(outputFile), StandardCharsets.UTF_8);
+        assertTrue(results.size() >= 1);
+
+      } catch (Exception e) {
+        e.printStackTrace();
+        assertNull(e);
+      }
+    }
+  }
   //endregion
 }

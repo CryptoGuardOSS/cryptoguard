@@ -173,8 +173,7 @@ public class Default extends Structure {
   /** {@inheritDoc} */
   @Override
   public void writeFooter() throws ExceptionHandler {
-
-    this.write("\n]\n");
+    if (this.issueID > 0) this.write("\n]\n");
     if (super.getSource().getDisplayHeuristics()) {
       this.write(", \"Heuristics\" : ");
       log.debug("Writing the Heuristics");

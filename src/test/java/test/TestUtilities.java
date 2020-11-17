@@ -209,6 +209,24 @@ public class TestUtilities {
               classFiles[1],
               scarfArgs));
   public static final String sampleAuxClassPathTwo = String.join(":", sampleAuxClassPathTwoList);
+
+  public static final String verySimple_Path_NonVuln =
+      Utils.osPathJoin(testRec, "VerySimple_NonVuln");
+  public static final String verySimple_Jar_NonVuln =
+      Utils.osPathJoin(verySimple_Path_NonVuln, "very.jar");
+  public static final String verySimple_Jar_xml_NonVuln =
+      Utils.osPathJoin(testPath, "verySimple_jar_NonVuln.xml");
+  public static final String verySimple_Jar_json_NonVuln =
+      Utils.osPathJoin(testPath, "verySimple_jar_NonVuln.json");
+  public static final String verySimple_Jar_csv_NonVuln =
+      Utils.osPathJoin(testPath, "verySimple_jar_NonVuln.csv");
+  public static final String verySimple_Java_NonVuln =
+      Utils.osPathJoin(verySimple_Path_NonVuln, "very.java");
+  public static final String verySimple_Java_xml_NonVuln =
+      Utils.osPathJoin(testPath, "verySimple_java_NonVuln.xml");
+  public static final String verySimple_Klass_NonVuln =
+      Utils.osPathJoin(verySimple_Path_NonVuln, "very.class");
+
   public static final String verySimple_Path = Utils.osPathJoin(testRec, "VerySimple");
   public static final String verySimple_Jar = Utils.osPathJoin(verySimple_Path, "very.jar");
   public static final String verySimple_Jar_xml = Utils.osPathJoin(testPath, "verySimple_jar.xml");
@@ -263,6 +281,11 @@ public class TestUtilities {
     ArrayList<String> cleanArgs = new ArrayList<>(Arrays.asList(arg.split(" ")));
     cleanArgs.removeIf(StringUtils::isEmpty);
     return cleanArgs.toArray(new String[cleanArgs.size()]);
+  }
+
+  public static String resetFileOut(String path) {
+    new File(path).delete();
+    return path;
   }
 
   public static String captureNewFileOutViaStdOut(String[] args, Boolean exceptionHandler) {
