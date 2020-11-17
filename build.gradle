@@ -199,6 +199,9 @@ task writeTestInformation {
 
 //Ensuring all of the processors are being used for tests
 test {
+	exclude '**/ArgumentsCheckTest.class'
+	exclude '**/EntryPointTest_SOURCE.class'
+
 	environment "ANDROID_HOME", System.getenv("ANDROID_HOME") ?: "ANDROIDSDK"
 	environment "JAVA_HOME", System.getenv("JAVA_HOME") ?: "JAVA8SDK"
 	environment "JAVA7_HOME", System.getenv("JAVA7_HOME") ?: "JAVA7SDK"

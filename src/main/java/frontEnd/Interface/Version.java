@@ -5,7 +5,6 @@ import frontEnd.Interface.outputRouting.ExceptionHandler;
 import frontEnd.Interface.outputRouting.ExceptionId;
 import java.util.Arrays;
 import org.apache.logging.log4j.Logger;
-import util.Utils;
 
 /**
  * version handling class.
@@ -16,6 +15,7 @@ import util.Utils;
  *     <p>The central point for handling the Java Version ().
  */
 public enum Version {
+
   //region Values
   ONE(1, 45),
   TWO(2, 46),
@@ -39,6 +39,7 @@ public enum Version {
   //region Attributes
   private int versionNumber;
   private int majorVersion;
+  private static Version Supported = Version.EIGHT;
   private static Logger log = org.apache.logging.log4j.LogManager.getLogger(Version.class);
   //endregion
 
@@ -66,7 +67,7 @@ public enum Version {
    * @return a {@link java.lang.Boolean} object.
    */
   public Boolean supported() {
-    return this.majorVersion == Utils.supportedVersion.majorVersion;
+    return this.majorVersion == Supported.majorVersion;
   }
 
   /**
@@ -117,8 +118,7 @@ public enum Version {
    * @throws frontEnd.Interface.outputRouting.ExceptionHandler if any.
    */
   public static boolean supportedByMajor(int majorVersion) throws ExceptionHandler {
-    return retrieveByMajor(majorVersion).getVersionNumber()
-        <= Utils.supportedVersion.getVersionNumber();
+    return retrieveByMajor(majorVersion).getVersionNumber() <= Supported.majorVersion;
   }
 
   /**
@@ -127,7 +127,7 @@ public enum Version {
    * @return a boolean.
    */
   public boolean supportedFile() {
-    return this.getVersionNumber() <= Utils.supportedVersion.getVersionNumber();
+    return this.getVersionNumber() <= Supported.majorVersion;
   }
 
   /**

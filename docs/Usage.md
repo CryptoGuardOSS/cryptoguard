@@ -5,7 +5,7 @@ permalink: /usage/
 ---
 
 
-# cryptoguard:$CVER 04.05.00$ General Usage
+# cryptoguard:$CVER 04.05.02$ General Usage
 ## Raw Arguments
 
 | Id | Default | Description |

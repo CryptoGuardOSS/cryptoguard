@@ -57,18 +57,18 @@ website:
 
 docker:
 	@$(info Build the Docker file)
-	@sudo docker build -t cryptoguard .
+	@docker build -t cryptoguard .
 
 live:
 	@$(info Running the Docker file)
 	#This exposes port 9000 from the host machine to port 8888 within the docker machine
-	@sudo docker run -p 9000:8888 -ti cryptoguard /bin/bash
+	@docker run -p 9000:8888 -ti cryptoguard /bin/bash
 
 kill:
 	@$(info Killing all the Dockerfiles)
-	@-sudo docker kill $$(sudo docker ps -q)
-	@-sudo docker rm $$(sudo docker ps -a -q)
-	@-sudo docker rmi $$(sudo docker images -q)
+	@-docker kill $$(docker ps -q)
+	@-docker rm $$(docker ps -a -q)
+	@-docker rmi $$(docker images -q)
 
 run:
 	@$(info Running the juypter notebook)
