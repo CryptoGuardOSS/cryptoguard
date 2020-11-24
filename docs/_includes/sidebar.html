@@ -1,0 +1,32 @@
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <h2>
+        <a href="{{ "/" | relative_url }}">
+          {{ site.title | escape }}
+        </a>
+      </h2>
+      <p class="lead">{{ site.description }}</p>
+    </div>
+
+    <nav class="sidebar-nav">
+
+      {% assign pages_list = site.main_pages %}
+      <a class="sidebar-nav-item{% if page.url == node.url %} active{% endif %}" href="https://github.com/franceme/cryptoguard/releases/latest">Latest Release</a>
+      {% for node in pages_list %}
+        {% if node.title != null%}
+          <a class="sidebar-nav-item{% if page.url == node.url %} active{% endif %}" href="/cryptoguard{{ node.url }}">{{ node.title }}</a>
+        {% endif %}
+      {% endfor %}
+      <a class="sidebar-nav-item{% if page.url == node.url %} active{% endif %}" href="{{ "/cryptoguard/javadoc/index.html" | relative_url }}">JavaDoc</a>
+      <a class="sidebar-nav-item{% if page.url == node.url %} active{% endif %}" href="{{ "/cryptoguard/cobertura/index.html" | relative_url }}">Cobertura Coverage Test Results</a>
+      <a class="sidebar-nav-item{% if page.url == node.url %} active{% endif %}" href="{{ "/cryptoguard/gradleTestCoverage/index.html" | relative_url }}">Gradle Test Results</a>
+      <a class="sidebar-nav-item{% if page.url == node.url %} active{% endif %}" href="https://www.gnu.org/licenses/gpl-3.0.html">GPLv3 License</a>
+      
+      <span class="sidebar-nav-item">Last updated {{ site.time | date: '%m-%d-%y' }}
+</span>
+    </nav>
+
+    <p>&copy; {{ site.time | date: '%Y' }}. All rights reserved.</p>
+  </div>
+</div>
