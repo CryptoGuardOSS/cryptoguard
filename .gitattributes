@@ -1,0 +1,15 @@
+.gitattributes text eol=lf
+.gitignore text eol=lf
+*.java text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+*.rst text eol=lf
+build.gradle text eol=lf
+build.gradle filter=crypto-keywords
+*.html filter=crypto-website
+settings.gradle text eol=lf
+gradlew text eol=lf
+gradlew.bat eol=crlf
+gradle.properties text eol=lf
+*.ipynb text eol=lf
+Dockerfile text eol=lf

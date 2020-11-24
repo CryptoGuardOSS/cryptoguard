@@ -1,6 +1,301 @@
-subprojects {
+buildscript {
+	repositories {
+		mavenCentral()
+		jcenter()
+	}
 
-    repositories {
-        mavenCentral()
-    }
+	dependencies {
+		classpath 'net.saliman:gradle-cobertura-plugin:3.0.0'
+	}
+}
+
+import java.text.SimpleDateFormat
+
+plugins {
+	id 'com.google.cloud.tools.jib' version '1.5.0'
+	id "com.diffplug.gradle.spotless" version "3.28.1"
+}
+apply plugin: "java"
+apply plugin: "maven"
+apply plugin: "maven-publish"
+apply plugin: "net.saliman.cobertura"
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+group = groupName
+version = versionNumber
+
+publishing {
+	repositories {
+		maven {
+			name = "GitHubPackages"
+			url = uri("https://maven.pkg.github.com/franceme/cryptoguard")
+			credentials {
+				username = project.findProperty("gpr.user") ?: System.getenv("GPR_USER")
+				password = project.findProperty("gpr.key") ?: System.getenv("GPR_API_KEY")
+			}
+		}
+	}
+	publications {
+		gpr(MavenPublication) {
+			from(components.java)
+		}
+		maven(MavenPublication) {
+			group
+		}
+	}
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+group = groupName
+version = versionNumber
+
+sourceSets {
+	main {
+		java {
+			srcDir 'src/main/java'
+		}
+		resources {
+			srcDir 'src/main/resources'
+		}
+	}
+	test {
+		java {
+			srcDir 'src/test/java'
+		}
+		resources {
+			srcDir 'src/main/resources'
+		}
+	}
+}
+
+task updateVersion {
+	Properties props = new Properties()
+	InputStream ins = new FileInputStream(file("gradle.properties"))
+	props.load(ins)
+
+	ant.replaceregexp(
+			match: '\\${1}CVER.*\\${1}',
+			replace: '$CVER ' + props.getProperty("versionNumber") + '$',
+			flags: 'g',
+			byline: true) {
+
+		fileset(
+				dir: '.',
+				includes: 'README.rst'
+		)
+		fileset(
+				dir: 'docs',
+				includes: '*.md'
+		)
+		fileset(
+				dir: 'src/main/java/util',
+				includes: 'Utils.java'
+		)
+	}
+
+	ant.replace(
+			dir: 'src/main/java/',
+			token: '@VERSION@',
+			value: props.getProperty("versionNumber").replace("V", "")
+	)
+
+	ant.replace(
+			dir: 'src/main/java/',
+			token: '@version $Id: $Id',
+			value: '@version ' + props.getProperty("versionNumber").replace("V", "")
+	)
+
+}
+
+task updateCopyRightYear {
+	Properties props = new Properties()
+	InputStream ins = new FileInputStream(file("gradle.properties"))
+	props.load(ins)
+
+	SimpleDateFormat year = new SimpleDateFormat("yyyy")
+
+	ant.replaceregexp(
+			match: 'Copyright © [0-9]{4} CryptoGuard',
+			replace: 'Copyright © ' + year.format(new Date()) + ' CryptoGuard',
+			flags: 'g',
+			byline: true) {
+
+		fileset(
+				dir: '.',
+				includes: '*.md'
+		)
+	}
+}
+
+build.dependsOn(updateVersion)
+build.dependsOn(updateCopyRightYear)
+
+repositories {
+	mavenCentral()
+	flatDir {
+		dirs 'libs'
+	}
+}
+
+configurations.all {
+	resolutionStrategy {
+		// fail eagerly on version conflict (includes transitive dependencies)
+		// e.g. multiple different versions of the same dependency (group and name are equal)
+		failOnVersionConflict()
+
+		force "commons-io:commons-io:2.6"
+		force "org.apache.commons:commons-lang3:3.4"
+		force "junit:junit:4.13"
+	}
+}
+
+jar {
+	setBaseName(projectName)
+	setVersion(versionNumber)
+	from {
+		configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+	}
+	manifest {
+		attributes(
+				'Main-Class': 'frontEnd.Interface.EntryPoint'
+		)
+	}
+}
+
+java {
+}
+
+javadoc {
+	source = sourceSets.main.allJava
+	if (JavaVersion.current().isJava9Compatible()) {
+		options.addBooleanOption('html5', true)
+	}
+	destinationDir = new File('docs/javadoc')
+}
+
+task writeTestInformation {
+	String foil = 'docs/TestSystemInformation.md'
+	delete(foil)
+	File file = new File(foil)
+	file.write('---\n' +
+			'layout: page\n' +
+			'title: System Test Information\n' +
+			'permalink: /testInfo/\n' +
+			'---\n\n')
+
+	file.append('# Latest Testing System Information\n\n')
+	file.append('## OS Information\n')
+	file.append('* Test OS: ' + System.getProperty('os.name') + '\n')
+	file.append('* Test OS Architecture: x' + System.getProperty('sun.arch.data.model') + '\n\n')
+
+	file.append('## Java Version Information\n')
+	file.append('* JVM Major Version: ' + System.getProperty('java.specification.version') + '\n')
+	file.append('* JVM Vendor Version: ' + System.getProperty('java.vm.vendor') + '\n\n')
+}
+
+//Ensuring all of the processors are being used for tests
+test {
+	exclude '**/ArgumentsCheckTest.class'
+	exclude '**/EntryPointTest_SOURCE.class'
+
+	environment "ANDROID_HOME", System.getenv("ANDROID_HOME") ?: "ANDROIDSDK"
+	environment "JAVA_HOME", System.getenv("JAVA_HOME") ?: "JAVA8SDK"
+	environment "JAVA7_HOME", System.getenv("JAVA7_HOME") ?: "JAVA7SDK"
+
+	reports {
+		html {
+			destination file("docs/gradleTestCoverage")
+		}
+	}
+
+	//finalizedBy(tasks.spotlessApply)
+	finalizedBy(tasks.cobertura)
+	finalizedBy(tasks.writeTestInformation)
+
+	copy {
+		from 'docs/index.md'
+		into "$projectDir"
+		rename {
+			String fileName -> "README.md"
+		}
+	}
+}
+
+spotless {
+	encoding 'UTF-8'
+	format 'misc', {
+		target '*.gradle', '*.md', '.gitignore', '.gitattributes', '*.rst', '*.txt'
+
+		trimTrailingWhitespace()
+		indentWithTabs() // or spaces. Takes an integer argument if you don't like 4
+		endWithNewline()
+	}
+	freshmark {
+		//target 'README.md'
+		//propertiesFile('gradle.properties')
+		//properties {
+		//it.put('key','value')
+		//}
+	}
+	java {
+		licenseHeader '/* Licensed under GPL-3.0 */'
+		importOrder 'java', 'javax', 'org', 'com', ''
+
+		trimTrailingWhitespace()
+		//indentWithTabs() // or spaces. Takes an integer argument if you don't like 4
+		endWithNewline()
+		removeUnusedImports()
+
+		googleJavaFormat('1.1')
+	}
+	format 'xml', {
+		target fileTree('.') {
+			include '*.xml', '*.xsd'
+			exclude '**/build/**'
+		}
+		eclipseWtp('xml', '4.13.0')
+	}
+	format 'json', {
+		target fileTree('.') {
+			include '*.json'
+			exclude '**/build/**'
+		}
+		eclipseWtp('json', '4.13.0')
+	}
+}
+
+cobertura {
+	coverageFormats = ['html']
+	coverageIgnoreTrivial = true
+	coverageIgnores = ['org.slf4j.Logger.*']
+	coverageReportDir = new File('docs/cobertura')
+}
+
+dependencies {
+	compile name: 'soot-V4.1.0-SNAPSHOT'
+	compile name: 'axml-2.0'
+	compile name: 'AXMLPrinter2'
+	compile name: 'okhttp-3.9.0'
+	compile name: 'retrofit-2.1.0'
+
+	compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.10.0'
+	compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.10.0'
+
+	implementation 'com.binarytweed:quarantining-test-runner:0.0.3'
+	compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.13.3'
+	compile 'commons-cli:commons-cli:1.4'
+	compile 'junit:junit:4.13'
+	compile 'org.codehaus.groovy:groovy:3.0.3'
+	implementation 'org.mockito:mockito-core:3.3.3'
+	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
+	compile 'org.ow2.asm:asm:8.0.1'
+}
+
+build {
+	dependsOn updateVersion
+	dependsOn spotlessApply
 }

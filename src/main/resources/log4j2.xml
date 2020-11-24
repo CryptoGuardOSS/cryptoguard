@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration xmlns="http://logging.apache.org/log4j/2.0/config">
+    <Appenders>
+        <Console name="DEVOUT" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="${LOG_LEVEL_PATTERN:-%5p} | %d{yyyy-MM-dd HH:mm:ss.SSS} | %C{2}.%t (%F:%L) | %m%n"/>
+        </Console>
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="${LOG_LEVEL_PATTERN:-%5p} | %d{yyyy-MM-dd HH:mm:ss.SSS} | %C{2} (%F:%L) | %m%n"/>
+        </Console>
+        <Console name="STDERR" target="SYSTEM_ERR">
+            <PatternLayout
+                    pattern="${LOG_LEVEL_PATTERN:-%5p} | %d{yyyy-MM-dd HH:mm:ss.SSS} | %C{2} (%F:%L) | %m%n"/>
+        </Console>
+        <Routing name="Sifter">
+            <Routes>
+                <Script name="Mux" language="JavaScript"><![CDATA[logEvent.getLevel();]]></Script>
+                <Route ref="DEVOUT" key="TRACE"/>
+                <Route ref="DEVOUT" key="DEBUG"/>
+                <Route ref="STDOUT" key="INFO"/>
+                <Route ref="STDOUT" key="WARN"/>
+                <Route ref="STDERR" key="ERROR"/>
+                <Route ref="STDERR" key="FATAL"/>
+            </Routes>
+        </Routing>
+    </Appenders>
+    <Loggers>
+        <Logger name="com.jcg" level="info"/>
+        <Root level="info">
+            <AppenderRef ref="Sifter"/>
+        </Root>
+    </Loggers>
+</Configuration>
