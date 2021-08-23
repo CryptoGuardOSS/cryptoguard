@@ -20,7 +20,7 @@ jupyter-console==6.0.0
 jupyter-core==4.4.0
 jupyter==1.0.0
 jupyterlab-server==0.2.0
-jupyterlab==0.35.4
+jupyterlab==1.2.21
 mistune==0.8.4
 nbconvert==5.4.1
 nbformat==4.4.0
