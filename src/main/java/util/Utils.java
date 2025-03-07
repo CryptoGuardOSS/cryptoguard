@@ -1210,6 +1210,10 @@ public class Utils {
     File directory = new File(directoryName);
 
     File[] fList = directory.listFiles();
+    // Add null checking
+    if (fList == null) {
+      return null;
+    }
     List<File> resultList = new ArrayList<>(Arrays.asList(fList));
     for (File file : fList) {
       if (file.isFile()) {
